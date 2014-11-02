@@ -45,7 +45,7 @@
             div.innerHTML = '<pb-s-rectgrid row="a" col="1"></pb-s-rectgrid>';
           });
 
-          it('should throw exception if col is not a number', function() {
+          it('should throw exception if col is not a number', function(done) {
             var div = doc.createElement('div');
             var origOnError = window.onerror;
 

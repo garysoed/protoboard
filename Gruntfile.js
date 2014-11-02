@@ -5,10 +5,10 @@ module.exports = function(grunt) {
 
     'shell': {
       'traceur': {
-        command: 'traceur --out main.js src/modules.js  --source-maps=file --symbols=true --modules=inline'
+        command: 'traceur --out main.js src/modules.js  --source-maps=file --experimental --modules=inline'
       },
       'karma': {
-        command: 'karma start karma.conf.js'
+        command: 'karma start karma.conf.js -- --grep="Region"'
       },
       'mv': {
         command: function(from, to) {

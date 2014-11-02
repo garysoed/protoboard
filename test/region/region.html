@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Region Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/region/region.html">
+</head>
+<body>
+  <pb-region></pb-region>
+  <script>
+    'use strict';
+
+    var Region = pb.Region;
+    var expect = chai.expect;
+    var Spies = spies.Spies;
+
+    (function() {
+      var doc = document.currentScript.ownerDocument;
+
+      describe('Region', function() {
+        describe('#attachedCallback', function() {
+          it('should handle dragover', function() {
+            var r = new Region();
+            Spies.spy(r, 'addEventListener', false);
+
+            var isAFunction = Matchers.isA(Function);
+            r.attachedCallback();
+
+            expect(r.addEventListener).calledWith('dragover', isAFunction).at.least(1);
+
+            var handler = isAFunction.matchingArgs[0];
+            var stubEvent = Spies.stub(Event);
+            Spies.spy(stubEvent, undefined, false);
+            handler.call(r, stubEvent);
+
+            expect(stubEvent.preventDefault).calledWith().at.least(1);
+            expect(stubEvent.dropEffect).to.be.equal('move');
+          });
+
+          it('should handle dragenter', function() {
+            var r = new Region();
+            r.classList = Spies.stub(DOMTokenList);
+
+            Spies.spy(r, 'addEventListener', false);
+            Spies.spy(r.classList, 'add', false);
+
+            var isAFunction = Matchers.isA(Function);
+            r.attachedCallback();
+
+            expect(r.addEventListener).calledWith('dragenter', isAFunction).at.least(1);
+
+            // Now fire the event.
+            var handler = isAFunction.matchingArgs[0];
+            var stubEvent = Spies.stub(Event);
+            Spies.spy(stubEvent, undefined, false);
+            handler.call(r, stubEvent);
+
+            expect(stubEvent.preventDefault).calledWith().at.least(1);
+            expect(r.classList.add).calledWith('over').at.least(1);
+          });
+
+          it('should handle dragleave', function() {
+            var r = new Region();
+            r.classList = Spies.stub(DOMTokenList);
+
+            Spies.spy(r, 'addEventListener', false);
+            Spies.spy(r.classList, 'remove', false);
+
+            var isAFunction = Matchers.isA(Function);
+            r.attachedCallback();
+
+            expect(r.addEventListener).calledWith('dragleave', isAFunction).at.least(1);
+
+            // Now fire the event.
+            var handler = isAFunction.matchingArgs[0];
+            var stubEvent = Spies.stub(Event);
+            Spies.spy(stubEvent, undefined, false);
+            handler.call(r, stubEvent);
+
+            expect(r.classList.remove).calledWith('over').at.least(1);
+          });
+        });
+      });
+    })();
+  </script>
+</body>

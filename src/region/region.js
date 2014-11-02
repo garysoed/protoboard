@@ -1,30 +1,38 @@
+const CLASS_OVER = 'over';
+
 function handleDragOver(event) {
-  event.originalEvent.preventDefault();
-  event.originalEvent.dropEffect = 'move';
+  // TODO: Only enable if the component is compatible.
+  event.preventDefault();
+  event.dropEffect = 'move';
 }
 
-function handleDrop() {
-
+function handleDragEnter(event) {
+  event.preventDefault();
+  this.classList.add(CLASS_OVER);
 }
 
+function handleDragLeave(event) {
+  this.classList.remove(CLASS_OVER);
+}
+
+/**
+ * @class Base class of all regions. These are drop targets.
+ */
 export default class Region extends HTMLElement {
-  constructor(template) {
-    this.doc = doc;
-    this.template = template;
-  }
 
-  createdCallback() {
-    super.createdCallback();
-    this.createShadowRoot().appendChild(this.template);
-  }
+  constructor() {}
 
   attachedCallback() {
-    super.attachedCallback();
-    $(this)
-        .on('dragover', handleDragover.bind(this))
-        .on('dragenter', e => e.originalEvent.preventDefault() )
-        .on('drop', handleDrop.bind(this));
+    this.addEventListener('dragover', handleDragOver);
+    this.addEventListener('dragenter', handleDragEnter);
+    this.addEventListener('dragleave', handleDragLeave);
   }
 }
 
-document.registerElement('pb-r', {prototype: Region.prototype});
+if (window.TEST_MODE) {
+  if (!window.pb) {
+    window.pb = {};
+  }
+
+  window.pb.Region = Region;
+}

@@ -1,3 +1,41 @@
+var $__src_47_region_47_region__ = (function() {
+  "use strict";
+  var __moduleName = "src/region/region";
+  var CLASS_OVER = 'over';
+  function handleDragOver(event) {
+    event.preventDefault();
+    event.dropEffect = 'move';
+  }
+  function handleDragEnter(event) {
+    event.preventDefault();
+    this.classList.add(CLASS_OVER);
+  }
+  function handleDragLeave(event) {
+    this.classList.remove(CLASS_OVER);
+  }
+  var Region = function Region() {};
+  ($traceurRuntime.createClass)(Region, {attachedCallback: function() {
+      this.addEventListener('dragover', handleDragOver);
+      this.addEventListener('dragenter', handleDragEnter);
+      this.addEventListener('dragleave', handleDragLeave);
+    }}, {}, HTMLElement);
+  var $__default = Region;
+  if (window.TEST_MODE) {
+    if (!window.pb) {
+      window.pb = {};
+    }
+    window.pb.Region = Region;
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_region_47_modules__ = (function() {
+  "use strict";
+  var __moduleName = "src/region/modules";
+  $__src_47_region_47_region__;
+  return {};
+})();
 var $__src_47_as__ = (function() {
   "use strict";
   var __moduleName = "src/as";
@@ -60,6 +98,9 @@ var $__src_47_surface_47_rectgrid__ = (function() {
   var As = ($__src_47_as__).default;
   var doc = null;
   var templates = null;
+  var ATTR_ROW = 'row';
+  var ATTR_COL = 'col';
+  var EL_NAME = 'pb-s-rectgrid';
   var RectGrid = function RectGrid() {
     $traceurRuntime.defaultSuperCall(this, $RectGrid.prototype, arguments);
   };
@@ -68,8 +109,8 @@ var $__src_47_surface_47_rectgrid__ = (function() {
     createdCallback: function() {
       var shadowRoot = this.createShadowRoot();
       shadowRoot.appendChild(Utils.activateTemplate(templates.main, doc));
-      var rowCount = As.int($(this).attr('row'));
-      var colCount = As.int($(this).attr('col'));
+      var rowCount = As.int($(this).attr(ATTR_ROW));
+      var colCount = As.int($(this).attr(ATTR_COL));
       var rootEl = shadowRoot.querySelector('#root');
       for (var row = 0; row < rowCount; row++) {
         rootEl.appendChild(Utils.activateTemplate(templates.row, doc));
@@ -77,19 +118,19 @@ var $__src_47_surface_47_rectgrid__ = (function() {
       $(shadowRoot.querySelectorAll('#root > div')).each((function(row, rowEl) {
         for (var col = 0; col < colCount; col++) {
           var colEl = Utils.activateTemplate(templates.col, doc);
-          $(colEl.querySelector('content')).attr('select', ("[row=\"" + row + "\"][col=\"" + col + "\"]")).attr('row', row).attr('col', col);
+          $(colEl.querySelector('content')).attr('select', ("[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]")).attr('row', row).attr('col', col);
           rowEl.appendChild(colEl);
         }
       }));
     },
     get: function(row, col) {
-      var contentEl = this.shadowRoot.querySelector(("content[row=\"" + row + "\"][col=\"" + col + "\"]"));
+      var contentEl = this.shadowRoot.querySelector(("content[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]"));
       return contentEl ? contentEl.getDistributedNodes()[0] : null;
     }
   }, {register: function(currentDoc, gridTemplates) {
       doc = currentDoc;
       templates = gridTemplates;
-      document.registerElement('pb-s-rectgrid', {prototype: $RectGrid.prototype});
+      document.registerElement(EL_NAME, {prototype: $RectGrid.prototype});
     }}, HTMLElement);
   var $__default = RectGrid;
   if (!window.pb) {
@@ -110,6 +151,7 @@ var $__src_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/modules";
   var Util = ($__src_47_utils__).default;
+  $__src_47_region_47_modules__;
   $__src_47_surface_47_modules__;
   return {};
 })();

@@ -4,6 +4,10 @@ import As from 'src/as';
 let doc = null;
 let templates = null;
 
+const ATTR_ROW = 'row';
+const ATTR_COL = 'col';
+const EL_NAME = 'pb-s-rectgrid';
+
 /**
  * @class A surface that lays out its components in a grid. To use this, add attributes "row" and
  *     "col" to the element "pb-s-rectgrid". These are the number of rows and columns in the grid.
@@ -18,8 +22,8 @@ export default class RectGrid extends HTMLElement {
     shadowRoot.appendChild(Utils.activateTemplate(templates.main, doc));
 
     // Initializes the data.
-    let rowCount = As.int($(this).attr('row'));
-    let colCount = As.int($(this).attr('col'));
+    let rowCount = As.int($(this).attr(ATTR_ROW));
+    let colCount = As.int($(this).attr(ATTR_COL));
     let rootEl = shadowRoot.querySelector('#root');
 
     // Add the rows.
@@ -32,7 +36,7 @@ export default class RectGrid extends HTMLElement {
           for (let col = 0; col < colCount; col++) {
             let colEl = Utils.activateTemplate(templates.col, doc);
             $(colEl.querySelector('content'))
-                .attr('select', `[row="${row}"][col="${col}"]`)
+                .attr('select', `[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`)
                 .attr('row', row)
                 .attr('col', col);
             rowEl.appendChild(colEl);
@@ -48,7 +52,8 @@ export default class RectGrid extends HTMLElement {
    *     found.
    */
   get(row, col) {
-    let contentEl = this.shadowRoot .querySelector(`content[row="${row}"][col="${col}"]`);
+    let contentEl = this.shadowRoot
+        .querySelector(`content[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`);
     return contentEl ? contentEl.getDistributedNodes()[0] : null;
   }
 
@@ -57,7 +62,7 @@ export default class RectGrid extends HTMLElement {
     templates = gridTemplates;
 
     // TODO: Check if element is registered.
-    document.registerElement('pb-s-rectgrid', {prototype: RectGrid.prototype});
+    document.registerElement(EL_NAME, {prototype: RectGrid.prototype});
   }
 }
 
