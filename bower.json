@@ -1,0 +1,19 @@
+{
+  "name": "protoboard",
+  "version": "0.0.0",
+  "homepage": "https://github.com/garysoed/protoboard",
+  "authors": [
+    "Gary Soedarsono <garysoed@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}

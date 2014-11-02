@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>RectGrid Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/surface/rectgrid.html">
+</head>
+<body>
+  <pb-s-rectgrid id="grid" row="2" col="3">
+    <div id="region" row="1" col="2"></div>
+  </pb-s-rectgrid>
+  <script>
+    'use strict';
+
+    var RectGrid = pb.RectGrid;
+    var expect = chai.expect;
+    var Spies = spies.Spies;
+
+    (function() {
+      var doc = document.currentScript.ownerDocument;
+
+      describe('RectGrid', function() {
+        describe('#created', function() {
+          it('should create the rows and cols', function() {
+            var grid = doc.querySelector('pb-s-rectgrid#grid');
+            var contentEls = grid.shadowRoot.querySelectorAll('content');
+            expect(contentEls.length).to.be.equal(6);
+
+            var correctCellEl = grid.shadowRoot.querySelector('content[row="1"][col="2"]');
+            var regionEl = doc.querySelector('div#region');
+            expect(correctCellEl.getDistributedNodes()[0]).to.contain(regionEl);
+          });
+
+          it('should throw exception if row is not a number', function(done) {
+            var div = doc.createElement('div');
+            var origOnError = window.onerror;
+
+            window.onerror = function(err) {
+              expect(err).to.contain('a');
+              window.onerror = origOnError;
+              done();
+            };
+
+            div.innerHTML = '<pb-s-rectgrid row="a" col="1"></pb-s-rectgrid>';
+          });
+
+          it('should throw exception if col is not a number', function() {
+            var div = doc.createElement('div');
+            var origOnError = window.onerror;
+
+            window.onerror = function(err) {
+              expect(err).to.contain('b');
+              window.onerror = origOnError;
+              done();
+            };
+
+            div.innerHTML = '<pb-s-rectgrid row="3" col="b"></pb-s-rectgrid>';
+          });
+        });
+
+        describe('#get', function() {
+          it('should return the correct cell', function() {
+            var grid = doc.querySelector('pb-s-rectgrid#grid');
+            expect(grid.get(1, 2)).to.be.equal(doc.querySelector('div#region'));
+          });
+
+          it('should return null if the cell is invalid', function() {
+            var grid = doc.querySelector('pb-s-rectgrid#grid');
+            expect(grid.get(2, 3)).to.not.exist;
+          });
+        });
+      });
+    })();
+  </script>
+</body>

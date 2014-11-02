@@ -1,0 +1,3 @@
+[submodule "lib/spies"]
+	path = lib/spies
+	url = https://github.com/garysoed/spies.git

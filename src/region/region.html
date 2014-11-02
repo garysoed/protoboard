@@ -1,0 +1,9 @@
+<script src="out/region/region.js"></script>
+<script>
+  if (!pb) {
+    pb = {};
+  }
+  pb.Region = System.get('src/region/region').default;
+
+  document.registerElement('pb-r', {prototype: Rect.prototype});
+</script>

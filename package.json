@@ -1,0 +1,36 @@
+{
+  "name": "protoboard",
+  "version": "0.0.0",
+  "description": "Library to make prototyping board games easier",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/garysoed/protoboard.git"
+  },
+  "author": "garysoed@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/garysoed/protoboard/issues"
+  },
+  "homepage": "https://github.com/garysoed/protoboard",
+  "devDependencies": {
+    "bower": "^1.3.12",
+    "chai": "^1.9.2",
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-shell": "^1.1.1",
+    "grunt-traceur": "^0.2.9",
+    "karma": "^0.12.24",
+    "karma-chrome-launcher": "^0.1.5",
+    "karma-mocha": "^0.1.9",
+    "karma-story-reporter": "^0.2.2",
+    "mocha": "^2.0.0",
+    "traceur": "0.0.72"
+  },
+  "dependencies": {
+    "jquery": "^2.1.1"
+  }
+}

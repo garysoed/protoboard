@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Utils Unit Tests</title>
+  <link rel="import" href="testbase.html">
+</head>
+<body>
+  <template id="correctTemplate">Correct</template>
+  <template id="badTemplate">Wrong</template>
+
+  <script>
+    'use strict';
+
+    var Utils = pb.Utils;
+    var expect = chai.expect;
+
+    (function() {
+      var doc = document.currentScript.ownerDocument;
+
+      describe('Utils', function() {
+        describe('#extractTemplate', function() {
+          it('should extract the correct template', function() {
+            var template = Utils.extractTemplate('#correctTemplate', doc);
+            expect(template.textContent).to.be.equal('Correct');
+          })
+        });
+
+        describe('#nonNullFn', function() {
+          it('should return the referenced function if it exists', function() {
+            var o = {
+              f: function() { return 1; }
+            };
+
+            expect(Utils.nonNullFn(o, 'f')).to.be.equal(o.f);
+          });
+
+          it('should return noop function if it does not exist', function() {
+            expect(Utils.nonNullFn({}, 'fn')()).to.be.undefined;
+          });
+        });
+
+        describe('#observe', function() {
+          var o = {a: 1, b: 2};
+
+          it('should listen to a specific property when given the name', function() {
+            var f = {
+              handler: function() {}
+            };
+            Spies.spy(Object, 'observe');
+            Spies.spy(f, 'handler');
+
+            Utils.observe(o, 'a', f.handler);
+            var isAFunction = Matchers.isA(Function);
+            expect(Object.observe).calledWith(o, isAFunction).at.least(1);
+
+            // Emulate a change event on the listened property.
+            var changeA = {
+              name: 'a',
+              type: 'type',
+              oldValue: 'oldValue'
+            };
+
+            var changeB = {
+              name: 'b',
+              type: 'type',
+              oldValue: 'oldValue'
+            };
+            isAFunction.matchingArgs[0]([changeA, changeB]);
+            expect(f.handler).calledWith(changeA.name, changeA.type, changeA.oldValue).at.least(1);
+            expect(f.handler).calledWith(changeB.name, Matchers.any(), Matchers.any()).equal(0);
+          });
+
+
+          it('should listen to all properties when not given any names', function() {
+            var f = {
+              handler: function() {}
+            };
+            Spies.spy(Object, 'observe');
+            Spies.spy(f, 'handler');
+
+            Utils.observe(o, null /* property */, f.handler);
+            var isAFunction = Matchers.isA(Function);
+            expect(Object.observe).calledWith(o, isAFunction).at.least(1);
+
+            // Emulate a change event on the listened property.
+            var changeA = {
+              name: 'a',
+              type: 'typeA',
+              oldValue: 'oldValueA'
+            };
+
+            var changeB = {
+              name: 'b',
+              type: 'typeB',
+              oldValue: 'oldValueB'
+            };
+            isAFunction.matchingArgs[0]([changeA, changeB]);
+            expect(f.handler).calledWith(changeA.name, changeA.type, changeA.oldValue).at.least(1);
+            expect(f.handler).calledWith(changeB.name, changeB.type, changeB.oldValue).at.least(1);
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

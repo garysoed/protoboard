@@ -1,0 +1,39 @@
+<base href="../..">
+
+<link rel="import" href="main.html">
+<template id="main">
+  <style>
+    #root {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+  </style>
+
+  <div id="root"></div>
+</template>
+
+<template id="row">
+  <div class="row"></div>
+</template>
+
+<template id="col">
+  <div>
+    <content></content>
+  </div>
+</template>
+
+<script>
+  var doc = document.currentScript.ownerDocument;
+  pb.RectGrid.register(
+      doc,
+      {
+        main: doc.querySelector('template#main'),
+        row: doc.querySelector('template#row'),
+        col: doc.querySelector('template#col')
+      })
+</script>
