@@ -23,6 +23,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-shell": "^1.1.1",
     "grunt-traceur": "^0.2.9",
+    "http-server": "^0.7.2",
     "karma": "^0.12.24",
     "karma-chrome-launcher": "^0.1.5",
     "karma-mocha": "^0.1.9",
