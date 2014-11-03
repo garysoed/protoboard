@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Component Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="main.html">
+</head>
+<body>
+  <div id="fakeShadowRoot">
+    <div id="root"></div>
+  </div>
+
+  <script>
+    'use strict';
+
+    var Component = pb.Component;
+    var Utils = pb.Utils;
+    var expect = chai.expect;
+    var Spies = spies.Spies;
+    var Matchers = spies.Matchers;
+
+    (function() {
+      var doc = document.currentScript.ownerDocument;
+
+      describe('Component', function() {
+        describe('#attached', function() {
+
+          beforeEach(function(done) {
+            doc.querySelector('#fakeShadowRoot').innerHTML = '<div id="root"></div>';
+            done();
+          });
+
+          it('should setup draggable if attribute is specified', function() {
+            var c = new Component();
+            c.shadowRoot = doc.querySelector('#fakeShadowRoot');
+            c.hasAttribute = function() { return true; };
+            
+            var rootEl = doc.querySelector('#root');
+            Spies.spy(rootEl, 'addEventListener', false);
+            Spies.spy(c, 'hasAttribute');
+
+            c.attachedCallback();
+
+            var isAFunction = Matchers.isA(Function);
+            expect(c.hasAttribute).calledWith('draggable').at.least(1);
+            expect($(rootEl).attr('draggable')).to.be.equal('true');
+            expect(rootEl.addEventListener).calledWith('dragstart', isAFunction).at.least(1);
+
+            // Now call the drag start handler.
+            var event = Spies.stub(Event);
+            event.dataTransfer = Spies.stub(DataTransfer);
+            Spies.spy(event.dataTransfer, 'setData', false);
+
+            isAFunction.matchingArgs[0].call(c, event);
+            expect(event.dataTransfer.setData).calledWith('text/html', c).at.least(1);
+            expect(event.dataTransfer.effectAllowed).to.be.equal('move');
+          });
+
+          it('should not setup draggable if attribute is not specified', function() {
+            var c = new Component();
+            c.shadowRoot = doc.querySelector('#fakeShadowRoot');
+            c.hasAttribute = function() { return false; };
+            
+            Spies.spy(c, 'hasAttribute');
+
+            c.attachedCallback();
+
+            var isAFunction = Matchers.isA(Function);
+            expect(c.hasAttribute).calledWith('draggable').at.least(1);
+            expect($(doc.querySelector('#root')).attr('draggable')).to.not.exist;
+          });
+
+          afterEach(function(done) {
+            Spies.reset(doc.querySelector('#root').addEventListener);
+            done();
+          });
+        });
+      });
+    })();
+  </script>
+</body>

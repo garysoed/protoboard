@@ -1,6 +1,74 @@
+var $__src_47_utils__ = (function() {
+  "use strict";
+  var __moduleName = "src/utils";
+  var Utils = {
+    extractTemplate: function(templateQuery, doc) {
+      return this.activateTemplate(doc.querySelector(templateQuery), doc);
+    },
+    activateTemplate: function(template, doc) {
+      return doc.importNode(template.content, true);
+    },
+    nonNullFn: function(scope, name) {
+      return scope[$traceurRuntime.toProperty(name)] || ((function() {}));
+    },
+    observe: function(object, property, handler) {
+      Object.observe(object, function(changes) {
+        changes.forEach((function(change) {
+          if (!property || change.name === property) {
+            handler(change.name, change.type, change.oldValue);
+          }
+        }));
+      });
+    },
+    getContentElementRoot: function(el) {
+      return el.querySelectorAll(':not(style):not(script)');
+    }
+  };
+  var $__default = Utils = Utils;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.Utils = Utils;
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_component_47_component__ = (function() {
+  "use strict";
+  var __moduleName = "src/component/component";
+  var Utils = ($__src_47_utils__).default;
+  var ATTR_DRAGGABLE = 'draggable';
+  function setupDraggable() {
+    var rootEl = this.shadowRoot.querySelector('#root');
+    $(rootEl).attr('draggable', 'true');
+    rootEl.addEventListener('dragstart', handleDragStart);
+  }
+  function handleDragStart(event) {
+    var dataTransfer = event.dataTransfer;
+    dataTransfer.setData('text/html', this);
+    dataTransfer.effectAllowed = 'move';
+  }
+  var Component = function Component() {};
+  ($traceurRuntime.createClass)(Component, {attachedCallback: function() {
+      if (this.hasAttribute(ATTR_DRAGGABLE)) {
+        setupDraggable.bind(this)();
+      }
+    }}, {}, HTMLElement);
+  var $__default = Component;
+  if (window.TEST_MODE) {
+    if (!window.pb) {
+      window.pb = {};
+    }
+    window.pb.Component = Component;
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_component_47_token__ = (function() {
   "use strict";
   var __moduleName = "src/component/token";
+  var Component = ($__src_47_component_47_component__).default;
   return {};
 })();
 var $__src_47_component_47_modules__ = (function() {
@@ -44,41 +112,6 @@ var $__src_47_region_47_Region__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_utils__ = (function() {
-  "use strict";
-  var __moduleName = "src/utils";
-  var Utils = {
-    extractTemplate: function(templateQuery, doc) {
-      return this.activateTemplate(doc.querySelector(templateQuery), doc);
-    },
-    activateTemplate: function(template, doc) {
-      return doc.importNode(template.content, true);
-    },
-    nonNullFn: function(scope, name) {
-      return scope[$traceurRuntime.toProperty(name)] || ((function() {}));
-    },
-    observe: function(object, property, handler) {
-      Object.observe(object, function(changes) {
-        changes.forEach((function(change) {
-          if (!property || change.name === property) {
-            handler(change.name, change.type, change.oldValue);
-          }
-        }));
-      });
-    },
-    getContentElementRoot: function(el) {
-      return el.querySelectorAll(':not(style):not(script)');
-    }
-  };
-  var $__default = Utils = Utils;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.Utils = Utils;
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_region_47_rect__ = (function() {
   "use strict";
   var __moduleName = "src/region/rect";
@@ -116,6 +149,32 @@ var $__src_47_region_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/region/modules";
   $__src_47_region_47_rect__;
+  return {};
+})();
+var $__src_47_service_47_dragdrop__ = (function() {
+  "use strict";
+  var __moduleName = "src/service/dragdrop";
+  var DragDrop = {
+    EventType: {DRAGGED: 'dragged'},
+    lastDraggedEl: null,
+    dragStart: function(draggedEl) {
+      this.lastDraggedEl = draggedEl;
+      $(this).trigger(this.EventType.DRAGGED, draggedEl);
+    }
+  };
+  var $__default = DragDrop = DragDrop;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.DragDrop = DragDrop;
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_service_47_modules__ = (function() {
+  "use strict";
+  var __moduleName = "src/service/modules";
+  var DragDrop = ($__src_47_service_47_dragdrop__).default;
   return {};
 })();
 var $__src_47_as__ = (function() {
@@ -203,6 +262,7 @@ var $__src_47_modules__ = (function() {
   var Util = ($__src_47_utils__).default;
   $__src_47_component_47_modules__;
   $__src_47_region_47_modules__;
+  $__src_47_service_47_modules__;
   $__src_47_surface_47_modules__;
   return {};
 })();

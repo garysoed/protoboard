@@ -1,21 +1,20 @@
 import Utils from 'src/utils';
-// import DragDropService from 'src/service/dragdrop';
 
 const ATTR_DRAGGABLE = 'draggable';
 
 function setupDraggable() {
   // Propagate the draggable attribute to the root element.
-  let rootEl = Utils.getContentElementRoot(this.shadowRoot);
+  let rootEl = this.shadowRoot.querySelector('#root');
   $(rootEl).attr('draggable', 'true');
   rootEl.addEventListener('dragstart', handleDragStart);
 }
 
 function handleDragStart(event) {
   let dataTransfer = event.dataTransfer;
-  dataTransfer.setData('text/html', event.target);
+  dataTransfer.setData('text/html', this);
   dataTransfer.effectAllowed = 'move';
 
-  // DragDropService.dragStart(this);
+  // TODO: Hook up to DragDrop service.
 }
 
 export default class Component extends HTMLElement {
@@ -26,4 +25,12 @@ export default class Component extends HTMLElement {
       setupDraggable.bind(this)();
     }
   }
+}
+
+if (window.TEST_MODE) {
+  if (!window.pb) {
+    window.pb = {};
+  }
+
+  window.pb.Component = Component;
 }
