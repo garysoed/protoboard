@@ -22,6 +22,8 @@ export default class Region extends HTMLElement {
 
   constructor() {}
 
+  createdCallback() {}
+
   attachedCallback() {
     this.addEventListener('dragover', handleDragOver);
     this.addEventListener('dragenter', handleDragEnter);

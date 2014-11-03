@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Rect Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/region/rect.html">
+</head>
+<body>
+  <script>
+    'use strict';
+
+    var Rect = pb.Rect;
+    var expect = chai.expect;
+    var Spies = spies.Spies;
+
+    (function() {
+      var doc = document.currentScript.ownerDocument;
+
+      describe('Rect', function() {
+        describe('#register', function() {
+          it('should does nothing on second register', function() {
+            Spies.spy(document, 'registerElement', false);
+            Rect.register(document, {});
+            expect(document.registerElement).calledWith(Matchers.any(), Matchers.any()).equal(0);
+          });
+        });
+      });
+    })();
+  </script>
+</body>

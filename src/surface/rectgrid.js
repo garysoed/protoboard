@@ -1,5 +1,5 @@
-import Utils from 'src/utils';
 import As from 'src/as';
+import Utils from 'src/utils';
 
 let doc = null;
 let templates = null;
@@ -58,10 +58,14 @@ export default class RectGrid extends HTMLElement {
   }
 
   static register(currentDoc, gridTemplates) {
+    if (doc || templates) {
+      // Register has already happened.
+      return;
+    }
+
     doc = currentDoc;
     templates = gridTemplates;
 
-    // TODO: Check if element is registered.
     document.registerElement(EL_NAME, {prototype: RectGrid.prototype});
   }
 }

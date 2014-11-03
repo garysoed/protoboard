@@ -1,6 +1,17 @@
-var $__src_47_region_47_region__ = (function() {
+var $__src_47_component_47_token__ = (function() {
   "use strict";
-  var __moduleName = "src/region/region";
+  var __moduleName = "src/component/token";
+  return {};
+})();
+var $__src_47_component_47_modules__ = (function() {
+  "use strict";
+  var __moduleName = "src/component/modules";
+  $__src_47_component_47_token__;
+  return {};
+})();
+var $__src_47_region_47_Region__ = (function() {
+  "use strict";
+  var __moduleName = "src/region/Region";
   var CLASS_OVER = 'over';
   function handleDragOver(event) {
     event.preventDefault();
@@ -14,11 +25,14 @@ var $__src_47_region_47_region__ = (function() {
     this.classList.remove(CLASS_OVER);
   }
   var Region = function Region() {};
-  ($traceurRuntime.createClass)(Region, {attachedCallback: function() {
+  ($traceurRuntime.createClass)(Region, {
+    createdCallback: function() {},
+    attachedCallback: function() {
       this.addEventListener('dragover', handleDragOver);
       this.addEventListener('dragenter', handleDragEnter);
       this.addEventListener('dragleave', handleDragLeave);
-    }}, {}, HTMLElement);
+    }
+  }, {}, HTMLElement);
   var $__default = Region;
   if (window.TEST_MODE) {
     if (!window.pb) {
@@ -26,32 +40,6 @@ var $__src_47_region_47_region__ = (function() {
     }
     window.pb.Region = Region;
   }
-  return {get default() {
-      return $__default;
-    }};
-})();
-var $__src_47_region_47_modules__ = (function() {
-  "use strict";
-  var __moduleName = "src/region/modules";
-  $__src_47_region_47_region__;
-  return {};
-})();
-var $__src_47_as__ = (function() {
-  "use strict";
-  var __moduleName = "src/as";
-  var As = {int: function(input) {
-      var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
-      var output = Number.parseInt(input, radix);
-      if (Number.isNaN(output)) {
-        throw (input + " is not an integer with radix " + radix);
-      }
-      return output;
-    }};
-  var $__default = As = As;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.As = As;
   return {get default() {
       return $__default;
     }};
@@ -91,11 +79,70 @@ var $__src_47_utils__ = (function() {
       return $__default;
     }};
 })();
+var $__src_47_region_47_rect__ = (function() {
+  "use strict";
+  var __moduleName = "src/region/rect";
+  var Region = ($__src_47_region_47_Region__).default;
+  var Utils = ($__src_47_utils__).default;
+  var doc = null;
+  var template = null;
+  var EL_NAME = 'pb-r-rect';
+  var Rect = function Rect() {
+    $traceurRuntime.superCall(this, $Rect.prototype, "constructor", []);
+  };
+  var $Rect = Rect;
+  ($traceurRuntime.createClass)(Rect, {createdCallback: function() {
+      $traceurRuntime.superCall(this, $Rect.prototype, "createdCallback", []);
+      var shadowRoot = this.createShadowRoot();
+      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+    }}, {register: function(currentDoc, rectTemplate) {
+      if (doc || template) {
+        return;
+      }
+      doc = currentDoc;
+      template = rectTemplate;
+      document.registerElement(EL_NAME, {prototype: $Rect.prototype});
+    }}, Region);
+  var $__default = Rect = Rect;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.Rect = Rect;
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_region_47_modules__ = (function() {
+  "use strict";
+  var __moduleName = "src/region/modules";
+  $__src_47_region_47_rect__;
+  return {};
+})();
+var $__src_47_as__ = (function() {
+  "use strict";
+  var __moduleName = "src/as";
+  var As = {int: function(input) {
+      var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
+      var output = Number.parseInt(input, radix);
+      if (Number.isNaN(output)) {
+        throw (input + " is not an integer with radix " + radix);
+      }
+      return output;
+    }};
+  var $__default = As = As;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.As = As;
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_surface_47_rectgrid__ = (function() {
   "use strict";
   var __moduleName = "src/surface/rectgrid";
-  var Utils = ($__src_47_utils__).default;
   var As = ($__src_47_as__).default;
+  var Utils = ($__src_47_utils__).default;
   var doc = null;
   var templates = null;
   var ATTR_ROW = 'row';
@@ -128,6 +175,9 @@ var $__src_47_surface_47_rectgrid__ = (function() {
       return contentEl ? contentEl.getDistributedNodes()[0] : null;
     }
   }, {register: function(currentDoc, gridTemplates) {
+      if (doc || templates) {
+        return;
+      }
       doc = currentDoc;
       templates = gridTemplates;
       document.registerElement(EL_NAME, {prototype: $RectGrid.prototype});
@@ -151,6 +201,7 @@ var $__src_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/modules";
   var Util = ($__src_47_utils__).default;
+  $__src_47_component_47_modules__;
   $__src_47_region_47_modules__;
   $__src_47_surface_47_modules__;
   return {};

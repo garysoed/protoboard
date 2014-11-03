@@ -28,12 +28,14 @@
 </template>
 
 <script>
-  var doc = document.currentScript.ownerDocument;
-  pb.RectGrid.register(
-      doc,
-      {
-        main: doc.querySelector('template#main'),
-        row: doc.querySelector('template#row'),
-        col: doc.querySelector('template#col')
-      })
+  (function() {
+    var doc = document.currentScript.ownerDocument;
+    pb.RectGrid.register(
+        doc,
+        {
+          main: doc.querySelector('template#main'),
+          row: doc.querySelector('template#row'),
+          col: doc.querySelector('template#col')
+        });
+  })();
 </script>

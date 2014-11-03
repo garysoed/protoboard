@@ -70,6 +70,14 @@
             expect(grid.get(2, 3)).to.not.exist;
           });
         });
+
+        describe('#register', function() {
+          it('should does nothing on second call', function() {
+            Spies.spy(document, 'registerElement', false);
+            RectGrid.register(doc, {} /* templates */);
+            expect(document.registerElement).calledWith(Matchers.any(), Matchers.any()).equal(0);
+          });
+        });
       });
     })();
   </script>
