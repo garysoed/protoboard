@@ -2,8 +2,9 @@
 <html>
   <base href="..">
   <head>
-    <link rel="import" href="src/surface/rectgrid.html">
+    <link rel="import" href="src/component/token.html">
     <link rel="import" href="src/region/rect.html">
+    <link rel="import" href="src/surface/rectgrid.html">
   </head>
   <style>
     pb-r-rect::shadow #root {
@@ -18,10 +19,20 @@
     pb-r-rect.white::shadow #root {
       background-color: white;
     }
+
+    div.king {
+      background-color: red;
+      height: 100px;
+      width: 100px;
+    }
   </style>
   <body>
     <pb-s-rectgrid row="8" col="8">
-      <pb-r-rect row="0" col="0" class="black"></pb-r-rect>
+      <pb-r-rect row="0" col="0" class="black">
+        <pb-c-token>
+          <div class="king"></div>
+        </pb-c-token>
+      </pb-r-rect>
       <pb-r-rect row="1" col="0" class="white"></pb-r-rect>
       <pb-r-rect row="2" col="0" class="black"></pb-r-rect>
       <pb-r-rect row="3" col="0" class="white"></pb-r-rect>

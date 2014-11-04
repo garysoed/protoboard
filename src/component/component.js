@@ -2,11 +2,10 @@ import Utils from 'src/utils';
 
 const ATTR_DRAGGABLE = 'draggable';
 
-function setupDraggable() {
+function setupDraggable(draggable) {
   // Propagate the draggable attribute to the root element.
-  let rootEl = this.shadowRoot.querySelector('#root');
-  $(rootEl).attr('draggable', 'true');
-  rootEl.addEventListener('dragstart', handleDragStart);
+  $(draggable).attr('draggable', 'true');
+  draggable.addEventListener('dragstart', handleDragStart);
 }
 
 function handleDragStart(event) {
@@ -17,12 +16,23 @@ function handleDragStart(event) {
   // TODO: Hook up to DragDrop service.
 }
 
+/**
+ * @class  Base class for all components. Classes extending this should call #config at the end of
+ *     createdCallback.
+ */
 export default class Component extends HTMLElement {
   constructor() {}
 
-  attachedCallback() {
-    if (this.hasAttribute(ATTR_DRAGGABLE)) {
-      setupDraggable.bind(this)();
+  createdCallback() {}
+
+  /**
+   * Configures the component.
+   * @param {Object} config Configuration used to configure the behavior of this component.
+   * @param {boolean} config.draggable True iff the component should be draggable.
+   */
+  config(config) {
+    if (config.draggable) {
+      setupDraggable.bind(this)(config.draggable);
     }
   }
 }

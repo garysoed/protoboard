@@ -24,7 +24,7 @@
       var doc = document.currentScript.ownerDocument;
 
       describe('Component', function() {
-        describe('#attached', function() {
+        describe('#config', function() {
 
           beforeEach(function(done) {
             doc.querySelector('#fakeShadowRoot').innerHTML = '<div id="root"></div>';
@@ -34,16 +34,13 @@
           it('should setup draggable if attribute is specified', function() {
             var c = new Component();
             c.shadowRoot = doc.querySelector('#fakeShadowRoot');
-            c.hasAttribute = function() { return true; };
             
             var rootEl = doc.querySelector('#root');
             Spies.spy(rootEl, 'addEventListener', false);
-            Spies.spy(c, 'hasAttribute');
 
-            c.attachedCallback();
+            c.config({ draggable: doc.querySelector('#root') });
 
             var isAFunction = Matchers.isA(Function);
-            expect(c.hasAttribute).calledWith('draggable').at.least(1);
             expect($(rootEl).attr('draggable')).to.be.equal('true');
             expect(rootEl.addEventListener).calledWith('dragstart', isAFunction).at.least(1);
 
@@ -60,14 +57,10 @@
           it('should not setup draggable if attribute is not specified', function() {
             var c = new Component();
             c.shadowRoot = doc.querySelector('#fakeShadowRoot');
-            c.hasAttribute = function() { return false; };
             
-            Spies.spy(c, 'hasAttribute');
-
-            c.attachedCallback();
+            c.config({ });
 
             var isAFunction = Matchers.isA(Function);
-            expect(c.hasAttribute).calledWith('draggable').at.least(1);
             expect($(doc.querySelector('#root')).attr('draggable')).to.not.exist;
           });
 

@@ -38,10 +38,9 @@ var $__src_47_component_47_component__ = (function() {
   var __moduleName = "src/component/component";
   var Utils = ($__src_47_utils__).default;
   var ATTR_DRAGGABLE = 'draggable';
-  function setupDraggable() {
-    var rootEl = this.shadowRoot.querySelector('#root');
-    $(rootEl).attr('draggable', 'true');
-    rootEl.addEventListener('dragstart', handleDragStart);
+  function setupDraggable(draggable) {
+    $(draggable).attr('draggable', 'true');
+    draggable.addEventListener('dragstart', handleDragStart);
   }
   function handleDragStart(event) {
     var dataTransfer = event.dataTransfer;
@@ -49,11 +48,14 @@ var $__src_47_component_47_component__ = (function() {
     dataTransfer.effectAllowed = 'move';
   }
   var Component = function Component() {};
-  ($traceurRuntime.createClass)(Component, {attachedCallback: function() {
-      if (this.hasAttribute(ATTR_DRAGGABLE)) {
-        setupDraggable.bind(this)();
+  ($traceurRuntime.createClass)(Component, {
+    createdCallback: function() {},
+    config: function(config) {
+      if (config.draggable) {
+        setupDraggable.bind(this)(config.draggable);
       }
-    }}, {}, HTMLElement);
+    }
+  }, {}, HTMLElement);
   var $__default = Component;
   if (window.TEST_MODE) {
     if (!window.pb) {
@@ -69,7 +71,37 @@ var $__src_47_component_47_token__ = (function() {
   "use strict";
   var __moduleName = "src/component/token";
   var Component = ($__src_47_component_47_component__).default;
-  return {};
+  var Utils = ($__src_47_utils__).default;
+  var doc = null;
+  var template = null;
+  var EL_NAME = 'pb-c-token';
+  var Token = function Token() {
+    $traceurRuntime.superCall(this, $Token.prototype, "constructor", []);
+  };
+  var $Token = Token;
+  ($traceurRuntime.createClass)(Token, {createdCallback: function() {
+      console.log('created');
+      $traceurRuntime.superCall(this, $Token.prototype, "createdCallback", []);
+      var shadowRoot = this.createShadowRoot();
+      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+      var dragHandler = $(shadowRoot.querySelector('content').getDistributedNodes()).filter('div')[0];
+      this.config({draggable: dragHandler});
+    }}, {register: function(currentDoc, tokenTemplate) {
+      if (doc || template) {
+        return;
+      }
+      doc = currentDoc;
+      template = tokenTemplate;
+      document.registerElement(EL_NAME, {prototype: $Token.prototype});
+    }}, Component);
+  var $__default = Token;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.Token = Token;
+  return {get default() {
+      return $__default;
+    }};
 })();
 var $__src_47_component_47_modules__ = (function() {
   "use strict";

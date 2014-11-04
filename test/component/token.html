@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Token Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/component/token.html">
+</head>
+<body>
+  <pb-c-token id="token">
+    <div id="draggable"></div>
+  </pb-c-token>
+
+  <script>
+    'use strict';
+
+    var Component = pb.Component;
+    var Utils = pb.Utils;
+    var expect = chai.expect;
+    var Spies = spies.Spies;
+    var Matchers = spies.Matchers;
+
+    (function() {
+      var doc = document.currentScript.ownerDocument;
+
+      describe('Token', function() {
+        describe('#config', function() {
+          it('should be draggable', function() {
+            var token = doc.querySelector('#token');
+            var draggableEl = doc.querySelector('#draggable');
+
+            expect($(draggableEl).attr('draggable')).to.be.equal('true');
+          });
+        });
+      });
+    })();
+  </script>
+</body>
