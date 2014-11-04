@@ -1,3 +1,22 @@
+var $__src_47_service_47_dragdrop__ = (function() {
+  "use strict";
+  var __moduleName = "src/service/dragdrop";
+  var DragDrop = {
+    EventType: {DRAGGED: 'dragged'},
+    lastDraggedEl: null,
+    dragStart: function(draggedEl) {
+      this.lastDraggedEl = draggedEl;
+    }
+  };
+  var $__default = DragDrop = DragDrop;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.DragDrop = DragDrop;
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_utils__ = (function() {
   "use strict";
   var __moduleName = "src/utils";
@@ -37,6 +56,7 @@ var $__src_47_component_47_component__ = (function() {
   "use strict";
   var __moduleName = "src/component/component";
   var Utils = ($__src_47_utils__).default;
+  var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var ATTR_DRAGGABLE = 'draggable';
   function setupDraggable(draggable) {
     $(draggable).attr('draggable', 'true');
@@ -44,8 +64,8 @@ var $__src_47_component_47_component__ = (function() {
   }
   function handleDragStart(event) {
     var dataTransfer = event.dataTransfer;
-    dataTransfer.setData('text/html', this);
     dataTransfer.effectAllowed = 'move';
+    DragDropService.dragStart(this);
   }
   var Component = function Component() {};
   ($traceurRuntime.createClass)(Component, {
@@ -80,7 +100,6 @@ var $__src_47_component_47_token__ = (function() {
   };
   var $Token = Token;
   ($traceurRuntime.createClass)(Token, {createdCallback: function() {
-      console.log('created');
       $traceurRuntime.superCall(this, $Token.prototype, "createdCallback", []);
       var shadowRoot = this.createShadowRoot();
       shadowRoot.appendChild(Utils.activateTemplate(template, doc));
@@ -112,6 +131,7 @@ var $__src_47_component_47_modules__ = (function() {
 var $__src_47_region_47_Region__ = (function() {
   "use strict";
   var __moduleName = "src/region/Region";
+  var DragDrop = ($__src_47_service_47_dragdrop__).default;
   var CLASS_OVER = 'over';
   function handleDragOver(event) {
     event.preventDefault();
@@ -124,6 +144,10 @@ var $__src_47_region_47_Region__ = (function() {
   function handleDragLeave(event) {
     this.classList.remove(CLASS_OVER);
   }
+  function handleDrop(event) {
+    this.classList.remove(CLASS_OVER);
+    this.appendChild(DragDrop.lastDraggedEl);
+  }
   var Region = function Region() {};
   ($traceurRuntime.createClass)(Region, {
     createdCallback: function() {},
@@ -131,6 +155,7 @@ var $__src_47_region_47_Region__ = (function() {
       this.addEventListener('dragover', handleDragOver);
       this.addEventListener('dragenter', handleDragEnter);
       this.addEventListener('dragleave', handleDragLeave);
+      this.addEventListener('drop', handleDrop);
     }
   }, {}, HTMLElement);
   var $__default = Region;
@@ -182,26 +207,6 @@ var $__src_47_region_47_modules__ = (function() {
   var __moduleName = "src/region/modules";
   $__src_47_region_47_rect__;
   return {};
-})();
-var $__src_47_service_47_dragdrop__ = (function() {
-  "use strict";
-  var __moduleName = "src/service/dragdrop";
-  var DragDrop = {
-    EventType: {DRAGGED: 'dragged'},
-    lastDraggedEl: null,
-    dragStart: function(draggedEl) {
-      this.lastDraggedEl = draggedEl;
-      $(this).trigger(this.EventType.DRAGGED, draggedEl);
-    }
-  };
-  var $__default = DragDrop = DragDrop;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.DragDrop = DragDrop;
-  return {get default() {
-      return $__default;
-    }};
 })();
 var $__src_47_service_47_modules__ = (function() {
   "use strict";

@@ -16,6 +16,8 @@
 
     var Component = pb.Component;
     var Utils = pb.Utils;
+    var DragDropService = pb.DragDrop;
+
     var expect = chai.expect;
     var Spies = spies.Spies;
     var Matchers = spies.Matchers;
@@ -37,6 +39,7 @@
             
             var rootEl = doc.querySelector('#root');
             Spies.spy(rootEl, 'addEventListener', false);
+            Spies.spy(DragDrop, 'dragStart');
 
             c.config({ draggable: doc.querySelector('#root') });
 
@@ -50,8 +53,8 @@
             Spies.spy(event.dataTransfer, 'setData', false);
 
             isAFunction.matchingArgs[0].call(c, event);
-            expect(event.dataTransfer.setData).calledWith('text/html', c).at.least(1);
             expect(event.dataTransfer.effectAllowed).to.be.equal('move');
+            expect(DragDrop.dragStart).calledWith(c).at.least(1);
           });
 
           it('should not setup draggable if attribute is not specified', function() {
@@ -66,6 +69,7 @@
 
           afterEach(function(done) {
             Spies.reset(doc.querySelector('#root').addEventListener);
+            Spies.reset(DragDrop.dragStart);
             done();
           });
         });

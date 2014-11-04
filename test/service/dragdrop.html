@@ -18,16 +18,8 @@
       describe('#dragStart', function() {
         it('should set the lastDraggedEl and trigger an event', function() {
           var draggedEl = {};
-          var o = {
-            handler: function() {}
-          };
-
-          Spies.spy(o, 'handler');
-
-          $(DragDrop).on(DragDrop.EventType.DRAGGED, o.handler);
           DragDrop.dragStart(draggedEl);
 
-          expect(o.handler).called().at.least(1);
           expect(DragDrop.lastDraggedEl).to.be.equal(draggedEl);
         });
       });

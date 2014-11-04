@@ -1,3 +1,5 @@
+import DragDrop from 'src/service/dragdrop';
+
 const CLASS_OVER = 'over';
 
 function handleDragOver(event) {
@@ -15,6 +17,11 @@ function handleDragLeave(event) {
   this.classList.remove(CLASS_OVER);
 }
 
+function handleDrop(event) {
+  this.classList.remove(CLASS_OVER);
+  this.appendChild(DragDrop.lastDraggedEl);
+}
+
 /**
  * @class Base class of all regions. These are drop targets.
  */
@@ -28,6 +35,7 @@ export default class Region extends HTMLElement {
     this.addEventListener('dragover', handleDragOver);
     this.addEventListener('dragenter', handleDragEnter);
     this.addEventListener('dragleave', handleDragLeave);
+    this.addEventListener('drop', handleDrop);
   }
 }
 

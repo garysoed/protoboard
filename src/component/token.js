@@ -12,7 +12,6 @@ export default class Token extends Component {
   }
 
   createdCallback() {
-    console.log('created');
     super.createdCallback();
     let shadowRoot = this.createShadowRoot();
     shadowRoot.appendChild(Utils.activateTemplate(template, doc));

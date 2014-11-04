@@ -16,7 +16,6 @@ let DragDrop = {
    */
   dragStart(draggedEl) {
     this.lastDraggedEl = draggedEl;
-    $(this).trigger(this.EventType.DRAGGED, draggedEl);
   }
 };
 

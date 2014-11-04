@@ -1,4 +1,5 @@
 import Utils from 'src/utils';
+import DragDropService from 'src/service/dragdrop';
 
 const ATTR_DRAGGABLE = 'draggable';
 
@@ -10,10 +11,9 @@ function setupDraggable(draggable) {
 
 function handleDragStart(event) {
   let dataTransfer = event.dataTransfer;
-  dataTransfer.setData('text/html', this);
   dataTransfer.effectAllowed = 'move';
 
-  // TODO: Hook up to DragDrop service.
+  DragDropService.dragStart(this);
 }
 
 /**

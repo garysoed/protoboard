@@ -10,6 +10,7 @@
     'use strict';
 
     var Region = pb.Region;
+    var DragDrop = pb.DragDrop;
     var expect = chai.expect;
     var Spies = spies.Spies;
 
@@ -77,6 +78,34 @@
             handler.call(r, stubEvent);
 
             expect(r.classList.remove).calledWith('over').at.least(1);
+          });
+
+          it('should handle drop', function() {
+            var r = new Region();
+            r.classList = Spies.stub(DOMTokenList);
+
+            Spies.spy(r, 'addEventListener', false);
+            Spies.spy(r.classList, 'remove', false);
+
+            var isAFunction = Matchers.isA(Function);
+            r.attachedCallback();
+
+            expect(r.addEventListener).calledWith('drop', isAFunction).at.least(1);
+
+            // Now fire the event.
+            DragDrop.lastDraggedEl = {};
+            Spies.spy(r, 'appendChild', false);
+
+            var handler = isAFunction.matchingArgs[0];
+            handler.call(r, Spies.stub(Event));
+
+            expect(r.classList.remove).calledWith('over').at.least(1);
+            expect(r.appendChild).calledWith(DragDrop.lastDraggedEl).at.least(1);
+          });
+
+          afterEach(function(done) {
+            DragDrop.lastDraggedEl = null;
+            done();
           });
         });
       });
