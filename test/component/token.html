@@ -8,7 +8,7 @@
 </head>
 <body>
   <pb-c-token id="token">
-    <div id="draggable"></div>
+    <div id="draggable" draggable="true"></div>
   </pb-c-token>
 
   <script>
@@ -29,7 +29,7 @@
             var token = doc.querySelector('#token');
             var draggableEl = doc.querySelector('#draggable');
 
-            expect($(draggableEl).attr('draggable')).to.be.equal('true');
+            expect($(draggableEl).attr('draggable')).to.not.be.undefined;
           });
         });
       });

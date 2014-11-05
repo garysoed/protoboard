@@ -3,9 +3,10 @@ import DragDropService from 'src/service/dragdrop';
 
 const ATTR_DRAGGABLE = 'draggable';
 
-function setupDraggable(draggable) {
+function setupDraggable() {
+  let draggable = this.querySelector('*[draggable="true"]');
+
   // Propagate the draggable attribute to the root element.
-  $(draggable).attr('draggable', 'true');
   draggable.addEventListener('dragstart', handleDragStart.bind(this));
 }
 
@@ -19,6 +20,9 @@ function handleDragStart(event) {
 /**
  * @class  Base class for all components. Classes extending this should call #config at the end of
  *     createdCallback.
+ *
+ * To make a component draggable, user must have an HTML element with a draggable attribute set to
+ * true as a child of this element.
  */
 export default class Component extends HTMLElement {
   constructor() {}
@@ -32,7 +36,7 @@ export default class Component extends HTMLElement {
    */
   config(config) {
     if (config.draggable) {
-      setupDraggable.bind(this)(config.draggable);
+      setupDraggable.bind(this)();
     }
   }
 }

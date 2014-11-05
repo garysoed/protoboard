@@ -4,9 +4,12 @@ import Utils from 'src/utils';
 let doc = null;
 let template = null;
 
-const EL_NAME = 'pb-c-token';
+const EL_NAME = 'pb-c-card';
 
-export default class Token extends Component {
+/**
+ * A representation of a card.
+ */
+export default class Card extends Component {
   constructor() {
     super();
   }
@@ -15,11 +18,8 @@ export default class Token extends Component {
     super.createdCallback();
     let shadowRoot = this.createShadowRoot();
     shadowRoot.appendChild(Utils.activateTemplate(template, doc));
-
-    // TODO: Make a drag handler component.
-    let dragHandler = $(shadowRoot.querySelector('content').getDistributedNodes())
-        .filter('div')[0];
-    this.config({ draggable: dragHandler });
+    
+    this.config({ draggable: true });
   }
 
   static register(currentDoc, tokenTemplate) {
@@ -30,7 +30,7 @@ export default class Token extends Component {
 
     doc = currentDoc;
     template = tokenTemplate;
-    document.registerElement(EL_NAME,  {prototype: Token.prototype});
+    document.registerElement(EL_NAME,  {prototype: Card.prototype});
   }
 }
 
@@ -38,4 +38,4 @@ if (!window.pb) {
   window.pb = {};
 }
 
-window.pb.Token = Token;
+window.pb.Card = Card;

@@ -58,8 +58,8 @@ var $__src_47_component_47_component__ = (function() {
   var Utils = ($__src_47_utils__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var ATTR_DRAGGABLE = 'draggable';
-  function setupDraggable(draggable) {
-    $(draggable).attr('draggable', 'true');
+  function setupDraggable() {
+    var draggable = this.querySelector('*[draggable="true"]');
     draggable.addEventListener('dragstart', handleDragStart.bind(this));
   }
   function handleDragStart(event) {
@@ -72,7 +72,7 @@ var $__src_47_component_47_component__ = (function() {
     createdCallback: function() {},
     config: function(config) {
       if (config.draggable) {
-        setupDraggable.bind(this)(config.draggable);
+        setupDraggable.bind(this)();
       }
     }
   }, {}, HTMLElement);
@@ -87,9 +87,9 @@ var $__src_47_component_47_component__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_component_47_token__ = (function() {
+var $__src_47_component_47_card__ = (function() {
   "use strict";
-  var __moduleName = "src/component/token";
+  var __moduleName = "src/component/card";
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
@@ -103,8 +103,7 @@ var $__src_47_component_47_token__ = (function() {
       $traceurRuntime.superCall(this, $Token.prototype, "createdCallback", []);
       var shadowRoot = this.createShadowRoot();
       shadowRoot.appendChild(Utils.activateTemplate(template, doc));
-      var dragHandler = $(shadowRoot.querySelector('content').getDistributedNodes()).filter('div')[0];
-      this.config({draggable: dragHandler});
+      this.config({draggable: true});
     }}, {register: function(currentDoc, tokenTemplate) {
       if (doc || template) {
         return;
@@ -122,9 +121,44 @@ var $__src_47_component_47_token__ = (function() {
       return $__default;
     }};
 })();
+var $__src_47_component_47_token__ = (function() {
+  "use strict";
+  var __moduleName = "src/component/token";
+  var Component = ($__src_47_component_47_component__).default;
+  var Utils = ($__src_47_utils__).default;
+  var doc = null;
+  var template = null;
+  var EL_NAME = 'pb-c-card';
+  var Card = function Card() {
+    $traceurRuntime.superCall(this, $Card.prototype, "constructor", []);
+  };
+  var $Card = Card;
+  ($traceurRuntime.createClass)(Card, {createdCallback: function() {
+      $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
+      var shadowRoot = this.createShadowRoot();
+      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+      this.config({draggable: true});
+    }}, {register: function(currentDoc, tokenTemplate) {
+      if (doc || template) {
+        return;
+      }
+      doc = currentDoc;
+      template = tokenTemplate;
+      document.registerElement(EL_NAME, {prototype: $Card.prototype});
+    }}, Component);
+  var $__default = Card;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.Card = Card;
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_component_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/component/modules";
+  $__src_47_component_47_card__;
   $__src_47_component_47_token__;
   return {};
 })();

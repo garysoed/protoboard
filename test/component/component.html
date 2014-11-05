@@ -34,17 +34,19 @@
           });
 
           it('should setup draggable if attribute is specified', function() {
+            var rootEl = doc.querySelector('#root');
             var c = new Component();
             c.shadowRoot = doc.querySelector('#fakeShadowRoot');
+            c.querySelector = function() { return rootEl; };
             
-            var rootEl = doc.querySelector('#root');
+            Spies.spy(c, 'querySelector');
             Spies.spy(rootEl, 'addEventListener', false);
             Spies.spy(DragDrop, 'dragStart');
 
-            c.config({ draggable: doc.querySelector('#root') });
+            c.config({ draggable: true });
 
             var isAFunction = Matchers.isA(Function);
-            expect($(rootEl).attr('draggable')).to.be.equal('true');
+            expect(c.querySelector).calledWith('*[draggable="true"]').at.least(1);
             expect(rootEl.addEventListener).calledWith('dragstart', isAFunction).at.least(1);
 
             // Now call the drag start handler.
@@ -68,8 +70,7 @@
           });
 
           afterEach(function(done) {
-            Spies.reset(doc.querySelector('#root').addEventListener);
-            Spies.reset(DragDrop.dragStart);
+            Spies.reset();
             done();
           });
         });
