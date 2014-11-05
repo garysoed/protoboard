@@ -17,7 +17,7 @@ export default class Token extends Component {
     shadowRoot.appendChild(Utils.activateTemplate(template, doc));
 
     // TODO: Make a drag handler component.
-    var dragHandler = $(shadowRoot.querySelector('content').getDistributedNodes())
+    let dragHandler = $(shadowRoot.querySelector('content').getDistributedNodes())
         .filter('div')[0];
     this.config({ draggable: dragHandler });
   }

@@ -6,7 +6,7 @@ const ATTR_DRAGGABLE = 'draggable';
 function setupDraggable(draggable) {
   // Propagate the draggable attribute to the root element.
   $(draggable).attr('draggable', 'true');
-  draggable.addEventListener('dragstart', handleDragStart);
+  draggable.addEventListener('dragstart', handleDragStart.bind(this));
 }
 
 function handleDragStart(event) {

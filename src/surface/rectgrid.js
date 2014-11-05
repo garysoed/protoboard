@@ -24,14 +24,14 @@ export default class RectGrid extends HTMLElement {
     // Initializes the data.
     let rowCount = As.int($(this).attr(ATTR_ROW));
     let colCount = As.int($(this).attr(ATTR_COL));
-    let rootEl = shadowRoot.querySelector('#root');
+    let rootEl = shadowRoot.querySelector('#content');
 
     // Add the rows.
     for (let row = 0; row < rowCount; row++) {
       rootEl.appendChild(Utils.activateTemplate(templates.row, doc));
     }
 
-    $(shadowRoot.querySelectorAll('#root > div'))
+    $(shadowRoot.querySelectorAll('#content > div'))
         .each((row, rowEl) => {
           for (let col = 0; col < colCount; col++) {
             let colEl = Utils.activateTemplate(templates.col, doc);

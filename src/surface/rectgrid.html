@@ -4,6 +4,10 @@
 <template id="main">
   <style>
     #root {
+      display: inline-block;
+    }
+
+    #content {
       display: flex;
       flex-direction: column;
     }
@@ -14,7 +18,9 @@
     }
   </style>
 
-  <div id="root"></div>
+  <div id="root">
+    <div id="content"></div>
+  </div>
 </template>
 
 <template id="row">

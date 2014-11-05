@@ -52,7 +52,7 @@
             event.dataTransfer = Spies.stub(DataTransfer);
             Spies.spy(event.dataTransfer, 'setData', false);
 
-            isAFunction.matchingArgs[0].call(c, event);
+            isAFunction.matchingArgs[0](event);
             expect(event.dataTransfer.effectAllowed).to.be.equal('move');
             expect(DragDrop.dragStart).calledWith(c).at.least(1);
           });

@@ -7,13 +7,41 @@
     <link rel="import" href="src/surface/rectgrid.html">
   </head>
   <style>
+    body {
+      font-family: Helvetica Arial Sans-Serif;
+      font-weight: bold;
+    }
+
+    #root {
+      display: flex;
+    }
+
+    #capturedContainer {
+      flex: 1;
+    }
+
+    pb-r-rect.captured::shadow #root {
+      background-color: gray;
+      border: 1px solid black;
+      height: 50vh;
+      width: auto;
+    }
+
+    pb-r-rect.captured pb-c-token {
+      display: inline-block;
+    }
+
+    pb-s-rectgrid::shadow #root {
+      border: 1px solid black;
+    }
+
     pb-r-rect::shadow #root {
       height: 100px;
       width: 100px;
     }
 
     pb-r-rect.over::shadow #root {
-      outline: orange solid 4px;
+      outline: gray solid 4px;
       outline-offset: -4px;
     }
 
@@ -25,89 +53,295 @@
       background-color: white;
     }
 
-    div.king {
-      background-color: red;
+    div.piece {
+      align-items: center;
+      display: flex;
+      font-size: 70px;
       height: 100px;
+      justify-content: center;
       width: 100px;
+    }
+
+    .white .piece {
+      text-shadow: 0 0 16px black;
+    }
+
+    .black .piece {
+      text-shadow: 0 0 16px white;
     }
   </style>
   <body>
-    <pb-s-rectgrid row="8" col="8">
-      <pb-r-rect row="0" col="0" class="black">
-        <pb-c-token>
-          <div class="king"></div>
-        </pb-c-token>
-      </pb-r-rect>
-      <pb-r-rect row="1" col="0" class="white"></pb-r-rect>
-      <pb-r-rect row="2" col="0" class="black"></pb-r-rect>
-      <pb-r-rect row="3" col="0" class="white"></pb-r-rect>
-      <pb-r-rect row="4" col="0" class="black"></pb-r-rect>
-      <pb-r-rect row="5" col="0" class="white"></pb-r-rect>
-      <pb-r-rect row="6" col="0" class="black"></pb-r-rect>
-      <pb-r-rect row="7" col="0" class="white"></pb-r-rect>
+    <div id="root">
+      <pb-s-rectgrid row="8" col="8">
+        <pb-r-rect row="0" col="0" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9820; <!-- Black Rook -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="1" col="0" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9823; <!-- Black Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="2" col="0" class="white"></pb-r-rect>
+        <pb-r-rect row="3" col="0" class="black"></pb-r-rect>
+        <pb-r-rect row="4" col="0" class="white"></pb-r-rect>
+        <pb-r-rect row="5" col="0" class="black"></pb-r-rect>
+        <pb-r-rect row="6" col="0" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9817; <!-- White Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="7" col="0" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9814; <!-- White Rook -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
 
-      <pb-r-rect row="0" col="1" class="white"></pb-r-rect>
-      <pb-r-rect row="1" col="1" class="black"></pb-r-rect>
-      <pb-r-rect row="2" col="1" class="white"></pb-r-rect>
-      <pb-r-rect row="3" col="1" class="black"></pb-r-rect>
-      <pb-r-rect row="4" col="1" class="white"></pb-r-rect>
-      <pb-r-rect row="5" col="1" class="black"></pb-r-rect>
-      <pb-r-rect row="6" col="1" class="white"></pb-r-rect>
-      <pb-r-rect row="7" col="1" class="black"></pb-r-rect>
+        <pb-r-rect row="0" col="1" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9822; <!-- Black Knight -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="1" col="1" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9823; <!-- Black Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="2" col="1" class="black"></pb-r-rect>
+        <pb-r-rect row="3" col="1" class="white"></pb-r-rect>
+        <pb-r-rect row="4" col="1" class="black"></pb-r-rect>
+        <pb-r-rect row="5" col="1" class="white"></pb-r-rect>
+        <pb-r-rect row="6" col="1" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9817; <!-- White Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="7" col="1" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9816; <!-- White Knight -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
 
-      <pb-r-rect row="0" col="2" class="black"></pb-r-rect>
-      <pb-r-rect row="1" col="2" class="white"></pb-r-rect>
-      <pb-r-rect row="2" col="2" class="black"></pb-r-rect>
-      <pb-r-rect row="3" col="2" class="white"></pb-r-rect>
-      <pb-r-rect row="4" col="2" class="black"></pb-r-rect>
-      <pb-r-rect row="5" col="2" class="white"></pb-r-rect>
-      <pb-r-rect row="6" col="2" class="black"></pb-r-rect>
-      <pb-r-rect row="7" col="2" class="white"></pb-r-rect>
+        <pb-r-rect row="0" col="2" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9821; <!-- Black Bishop -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="1" col="2" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9823; <!-- Black Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="2" col="2" class="white"></pb-r-rect>
+        <pb-r-rect row="3" col="2" class="black"></pb-r-rect>
+        <pb-r-rect row="4" col="2" class="white"></pb-r-rect>
+        <pb-r-rect row="5" col="2" class="black"></pb-r-rect>
+        <pb-r-rect row="6" col="2" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9817; <!-- White Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="7" col="2" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9815; <!-- White Bishop -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
 
-      <pb-r-rect row="0" col="3" class="white"></pb-r-rect>
-      <pb-r-rect row="1" col="3" class="black"></pb-r-rect>
-      <pb-r-rect row="2" col="3" class="white"></pb-r-rect>
-      <pb-r-rect row="3" col="3" class="black"></pb-r-rect>
-      <pb-r-rect row="4" col="3" class="white"></pb-r-rect>
-      <pb-r-rect row="5" col="3" class="black"></pb-r-rect>
-      <pb-r-rect row="6" col="3" class="white"></pb-r-rect>
-      <pb-r-rect row="7" col="3" class="black"></pb-r-rect>
+        <pb-r-rect row="0" col="3" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9819; <!-- Black Queen -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="1" col="3" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9823; <!-- Black Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="2" col="3" class="black"></pb-r-rect>
+        <pb-r-rect row="3" col="3" class="white"></pb-r-rect>
+        <pb-r-rect row="4" col="3" class="black"></pb-r-rect>
+        <pb-r-rect row="5" col="3" class="white"></pb-r-rect>
+        <pb-r-rect row="6" col="3" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9817; <!-- White Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="7" col="3" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9813; <!-- White Queen -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
 
-      <pb-r-rect row="0" col="4" class="black"></pb-r-rect>
-      <pb-r-rect row="1" col="4" class="white"></pb-r-rect>
-      <pb-r-rect row="2" col="4" class="black"></pb-r-rect>
-      <pb-r-rect row="3" col="4" class="white"></pb-r-rect>
-      <pb-r-rect row="4" col="4" class="black"></pb-r-rect>
-      <pb-r-rect row="5" col="4" class="white"></pb-r-rect>
-      <pb-r-rect row="6" col="4" class="black"></pb-r-rect>
-      <pb-r-rect row="7" col="4" class="white"></pb-r-rect>
+        <pb-r-rect row="0" col="4" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9818; <!-- Black King -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="1" col="4" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9823; <!-- Black Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="2" col="4" class="white"></pb-r-rect>
+        <pb-r-rect row="3" col="4" class="black"></pb-r-rect>
+        <pb-r-rect row="4" col="4" class="white"></pb-r-rect>
+        <pb-r-rect row="5" col="4" class="black"></pb-r-rect>
+        <pb-r-rect row="6" col="4" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9817; <!-- White Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="7" col="4" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9812; <!-- White King -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
 
-      <pb-r-rect row="0" col="5" class="white"></pb-r-rect>
-      <pb-r-rect row="1" col="5" class="black"></pb-r-rect>
-      <pb-r-rect row="2" col="5" class="white"></pb-r-rect>
-      <pb-r-rect row="3" col="5" class="black"></pb-r-rect>
-      <pb-r-rect row="4" col="5" class="white"></pb-r-rect>
-      <pb-r-rect row="5" col="5" class="black"></pb-r-rect>
-      <pb-r-rect row="6" col="5" class="white"></pb-r-rect>
-      <pb-r-rect row="7" col="5" class="black"></pb-r-rect>
+        <pb-r-rect row="0" col="5" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9821; <!-- Black Bishop -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="1" col="5" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9823; <!-- Black Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="2" col="5" class="black"></pb-r-rect>
+        <pb-r-rect row="3" col="5" class="white"></pb-r-rect>
+        <pb-r-rect row="4" col="5" class="black"></pb-r-rect>
+        <pb-r-rect row="5" col="5" class="white"></pb-r-rect>
+        <pb-r-rect row="6" col="5" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9817; <!-- White Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="7" col="5" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9815; <!-- White Bishop -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
 
-      <pb-r-rect row="0" col="6" class="black"></pb-r-rect>
-      <pb-r-rect row="1" col="6" class="white"></pb-r-rect>
-      <pb-r-rect row="2" col="6" class="black"></pb-r-rect>
-      <pb-r-rect row="3" col="6" class="white"></pb-r-rect>
-      <pb-r-rect row="4" col="6" class="black"></pb-r-rect>
-      <pb-r-rect row="5" col="6" class="white"></pb-r-rect>
-      <pb-r-rect row="6" col="6" class="black"></pb-r-rect>
-      <pb-r-rect row="7" col="6" class="white"></pb-r-rect>
+        <pb-r-rect row="0" col="6" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9822; <!-- Black Knight -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="1" col="6" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9823; <!-- Black Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="2" col="6" class="white"></pb-r-rect>
+        <pb-r-rect row="3" col="6" class="black"></pb-r-rect>
+        <pb-r-rect row="4" col="6" class="white"></pb-r-rect>
+        <pb-r-rect row="5" col="6" class="black"></pb-r-rect>
+        <pb-r-rect row="6" col="6" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9817; <!-- White Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="7" col="6" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9816; <!-- White Knight -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
 
-      <pb-r-rect row="0" col="7" class="white"></pb-r-rect>
-      <pb-r-rect row="1" col="7" class="black"></pb-r-rect>
-      <pb-r-rect row="2" col="7" class="white"></pb-r-rect>
-      <pb-r-rect row="3" col="7" class="black"></pb-r-rect>
-      <pb-r-rect row="4" col="7" class="white"></pb-r-rect>
-      <pb-r-rect row="5" col="7" class="black"></pb-r-rect>
-      <pb-r-rect row="6" col="7" class="white"></pb-r-rect>
-      <pb-r-rect row="7" col="7" class="black"></pb-r-rect>
-    </pb-s-rectgrid>
+        <pb-r-rect row="0" col="7" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9820; <!-- Black Rook -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="1" col="7" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9823; <!-- Black Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="2" col="7" class="black"></pb-r-rect>
+        <pb-r-rect row="3" col="7" class="white"></pb-r-rect>
+        <pb-r-rect row="4" col="7" class="black"></pb-r-rect>
+        <pb-r-rect row="5" col="7" class="white"></pb-r-rect>
+        <pb-r-rect row="6" col="7" class="black">
+          <pb-c-token>
+            <div class="piece">
+              &#9817; <!-- White Pawn -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+        <pb-r-rect row="7" col="7" class="white">
+          <pb-c-token>
+            <div class="piece">
+              &#9814; <!-- White Rook -->
+            </div>
+          </pb-c-token>
+        </pb-r-rect>
+      </pb-s-rectgrid>
+
+      <div id="capturedContainer">
+        <pb-r-rect class="captured"></pb-r-rect>
+        <pb-r-rect class="captured"></pb-r-rect>
+      </div>
+    </div>
   </body>
 </html>

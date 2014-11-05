@@ -60,7 +60,7 @@ var $__src_47_component_47_component__ = (function() {
   var ATTR_DRAGGABLE = 'draggable';
   function setupDraggable(draggable) {
     $(draggable).attr('draggable', 'true');
-    draggable.addEventListener('dragstart', handleDragStart);
+    draggable.addEventListener('dragstart', handleDragStart.bind(this));
   }
   function handleDragStart(event) {
     var dataTransfer = event.dataTransfer;
@@ -254,11 +254,11 @@ var $__src_47_surface_47_rectgrid__ = (function() {
       shadowRoot.appendChild(Utils.activateTemplate(templates.main, doc));
       var rowCount = As.int($(this).attr(ATTR_ROW));
       var colCount = As.int($(this).attr(ATTR_COL));
-      var rootEl = shadowRoot.querySelector('#root');
+      var rootEl = shadowRoot.querySelector('#content');
       for (var row = 0; row < rowCount; row++) {
         rootEl.appendChild(Utils.activateTemplate(templates.row, doc));
       }
-      $(shadowRoot.querySelectorAll('#root > div')).each((function(row, rowEl) {
+      $(shadowRoot.querySelectorAll('#content > div')).each((function(row, rowEl) {
         for (var col = 0; col < colCount; col++) {
           var colEl = Utils.activateTemplate(templates.col, doc);
           $(colEl.querySelector('content')).attr('select', ("[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]")).attr('row', row).attr('col', col);
