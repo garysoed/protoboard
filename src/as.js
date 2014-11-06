@@ -6,6 +6,10 @@ let As = {
     }
 
     return output;
+  },
+
+  boolean(input) {
+    return input.toLowerCase() === 'true';
   }
 };
 

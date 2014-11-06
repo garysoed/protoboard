@@ -1,0 +1,43 @@
+<base href="../..">
+<link rel="import" href="main.html">
+
+<template>
+  <style>
+    #root { 
+      position: relative;
+      perspective: 800px;
+    }
+
+    :host-context([showFront="true"])::shadow #container {
+      transform: rotateY(180deg);
+    }
+
+    #container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform .5s;
+    }
+
+    content::content .front {
+      backface-visibility: hidden;
+      position: absolute;
+      transform: rotateY(180deg);
+    }
+  </style>
+
+  <div id="root">
+    <div id="container">
+      <content select=".front"></content>
+      <content select=".back"></content>
+    </div>
+  </div>
+</template>
+
+<script>
+  (function() {
+    var doc = document.currentScript.ownerDocument;
+    pb.Card.register(doc, doc.querySelector('template'));
+  })();
+</script>

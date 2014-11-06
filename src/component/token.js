@@ -4,12 +4,15 @@ import Utils from 'src/utils';
 let doc = null;
 let template = null;
 
-const EL_NAME = 'pb-c-card';
+const EL_NAME = 'pb-c-token';
 
 /**
- * A representation of a card.
+ * A simple movable component with only one state. Examples of token:
+ *   - Chess piece
+ *   - Cubes
+ *   - Damage marker
  */
-export default class Card extends Component {
+export default class Token extends Component {
   constructor() {
     super();
   }
@@ -18,7 +21,7 @@ export default class Card extends Component {
     super.createdCallback();
     let shadowRoot = this.createShadowRoot();
     shadowRoot.appendChild(Utils.activateTemplate(template, doc));
-    
+
     this.config({ draggable: true });
   }
 
@@ -30,7 +33,7 @@ export default class Card extends Component {
 
     doc = currentDoc;
     template = tokenTemplate;
-    document.registerElement(EL_NAME,  {prototype: Card.prototype});
+    document.registerElement(EL_NAME,  {prototype: Token.prototype});
   }
 }
 
@@ -38,4 +41,4 @@ if (!window.pb) {
   window.pb = {};
 }
 
-window.pb.Card = Card;
+window.pb.Token = Token;

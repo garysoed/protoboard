@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Card Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/component/card.html">
+</head>
+<body>
+  <pb-c-card id="card">
+    <div class="front"></div>
+    <div class="back"></div>
+  </pb-c-card>
+  <script>
+    'use strict';
+
+    var Utils = pb.Utils;
+
+    var expect = chai.expect;
+
+    (function() {
+      var doc = document.currentScript.ownerDocument;
+
+      describe('Card', function() {
+        describe('#click', function() {
+          it('should toggle between showFront="true" and showFront="false"', function() {
+            var cardEl = doc.querySelector('#card');
+            cardEl.click();
+
+            expect($(cardEl).attr('showFront')).to.be.equal('true');
+
+            cardEl.click();
+            expect($(cardEl).attr('showFront')).to.be.equal('false');
+          });
+        });
+      });
+    })();
+  </script>
+</body>

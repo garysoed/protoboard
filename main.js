@@ -1,3 +1,28 @@
+var $__src_47_as__ = (function() {
+  "use strict";
+  var __moduleName = "src/as";
+  var As = {
+    int: function(input) {
+      var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
+      var output = Number.parseInt(input, radix);
+      if (Number.isNaN(output)) {
+        throw (input + " is not an integer with radix " + radix);
+      }
+      return output;
+    },
+    boolean: function(input) {
+      return input.toLowerCase() === 'true';
+    }
+  };
+  var $__default = As = As;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.As = As;
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_service_47_dragdrop__ = (function() {
   "use strict";
   var __moduleName = "src/service/dragdrop";
@@ -59,8 +84,10 @@ var $__src_47_component_47_component__ = (function() {
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var ATTR_DRAGGABLE = 'draggable';
   function setupDraggable() {
-    var draggable = this.querySelector('*[draggable="true"]');
-    draggable.addEventListener('dragstart', handleDragStart.bind(this));
+    var draggables = this.querySelectorAll('*[draggable="true"]');
+    for (var i = 0; i < draggables.length; i++) {
+      draggables.item(i).addEventListener('dragstart', handleDragStart.bind(this));
+    }
   }
   function handleDragStart(event) {
     var dataTransfer = event.dataTransfer;
@@ -90,6 +117,47 @@ var $__src_47_component_47_component__ = (function() {
 var $__src_47_component_47_card__ = (function() {
   "use strict";
   var __moduleName = "src/component/card";
+  var As = ($__src_47_as__).default;
+  var Component = ($__src_47_component_47_component__).default;
+  var Utils = ($__src_47_utils__).default;
+  var doc = null;
+  var template = null;
+  var EL_NAME = 'pb-c-card';
+  var ATTR_SHOW_FRONT = 'showFront';
+  function handleClick() {
+    var oldValue = As.boolean($(this).attr(ATTR_SHOW_FRONT) || 'false');
+    $(this).attr(ATTR_SHOW_FRONT, !oldValue);
+  }
+  var Card = function Card() {
+    $traceurRuntime.superCall(this, $Card.prototype, "constructor", []);
+  };
+  var $Card = Card;
+  ($traceurRuntime.createClass)(Card, {createdCallback: function() {
+      $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
+      var shadowRoot = this.createShadowRoot();
+      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+      this.addEventListener('click', handleClick.bind(this));
+      this.config({draggable: true});
+    }}, {register: function(currentDoc, cardTemplate) {
+      if (doc || template) {
+        return;
+      }
+      doc = currentDoc;
+      template = cardTemplate;
+      document.registerElement(EL_NAME, {prototype: $Card.prototype});
+    }}, Component);
+  var $__default = Card;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.Card = Card;
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_component_47_token__ = (function() {
+  "use strict";
+  var __moduleName = "src/component/token";
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
@@ -117,40 +185,6 @@ var $__src_47_component_47_card__ = (function() {
     window.pb = {};
   }
   window.pb.Token = Token;
-  return {get default() {
-      return $__default;
-    }};
-})();
-var $__src_47_component_47_token__ = (function() {
-  "use strict";
-  var __moduleName = "src/component/token";
-  var Component = ($__src_47_component_47_component__).default;
-  var Utils = ($__src_47_utils__).default;
-  var doc = null;
-  var template = null;
-  var EL_NAME = 'pb-c-card';
-  var Card = function Card() {
-    $traceurRuntime.superCall(this, $Card.prototype, "constructor", []);
-  };
-  var $Card = Card;
-  ($traceurRuntime.createClass)(Card, {createdCallback: function() {
-      $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
-      var shadowRoot = this.createShadowRoot();
-      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
-      this.config({draggable: true});
-    }}, {register: function(currentDoc, tokenTemplate) {
-      if (doc || template) {
-        return;
-      }
-      doc = currentDoc;
-      template = tokenTemplate;
-      document.registerElement(EL_NAME, {prototype: $Card.prototype});
-    }}, Component);
-  var $__default = Card;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.Card = Card;
   return {get default() {
       return $__default;
     }};
@@ -247,26 +281,6 @@ var $__src_47_service_47_modules__ = (function() {
   var __moduleName = "src/service/modules";
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
   return {};
-})();
-var $__src_47_as__ = (function() {
-  "use strict";
-  var __moduleName = "src/as";
-  var As = {int: function(input) {
-      var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
-      var output = Number.parseInt(input, radix);
-      if (Number.isNaN(output)) {
-        throw (input + " is not an integer with radix " + radix);
-      }
-      return output;
-    }};
-  var $__default = As = As;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.As = As;
-  return {get default() {
-      return $__default;
-    }};
 })();
 var $__src_47_surface_47_rectgrid__ = (function() {
   "use strict";

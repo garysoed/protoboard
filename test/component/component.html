@@ -21,6 +21,7 @@
     var expect = chai.expect;
     var Spies = spies.Spies;
     var Matchers = spies.Matchers;
+    var Fakes = spies.Fakes;
 
     (function() {
       var doc = document.currentScript.ownerDocument;
@@ -37,16 +38,16 @@
             var rootEl = doc.querySelector('#root');
             var c = new Component();
             c.shadowRoot = doc.querySelector('#fakeShadowRoot');
-            c.querySelector = function() { return rootEl; };
+            c.querySelectorAll = function() { return Fakes.NodeList([rootEl]); };
             
-            Spies.spy(c, 'querySelector');
+            Spies.spy(c, 'querySelectorAll');
             Spies.spy(rootEl, 'addEventListener', false);
             Spies.spy(DragDrop, 'dragStart');
 
             c.config({ draggable: true });
 
             var isAFunction = Matchers.isA(Function);
-            expect(c.querySelector).calledWith('*[draggable="true"]').at.least(1);
+            expect(c.querySelectorAll).calledWith('*[draggable="true"]').at.least(1);
             expect(rootEl.addEventListener).calledWith('dragstart', isAFunction).at.least(1);
 
             // Now call the drag start handler.

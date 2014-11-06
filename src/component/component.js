@@ -4,10 +4,12 @@ import DragDropService from 'src/service/dragdrop';
 const ATTR_DRAGGABLE = 'draggable';
 
 function setupDraggable() {
-  let draggable = this.querySelector('*[draggable="true"]');
+  let draggables = this.querySelectorAll('*[draggable="true"]');
 
   // Propagate the draggable attribute to the root element.
-  draggable.addEventListener('dragstart', handleDragStart.bind(this));
+  for (let i = 0; i < draggables.length; i++) {
+    draggables.item(i).addEventListener('dragstart', handleDragStart.bind(this));
+  }
 }
 
 function handleDragStart(event) {

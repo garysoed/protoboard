@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <base href="..">
+  <head>
+    <link rel="import" href="src/component/card.html">
+  </head>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+    }
+
+    .front {
+      background-color: red;
+    }
+
+    .back {
+      background-color: blue;
+    }
+  </style>
+  <body>
+    <div id="root">
+      <pb-c-card>
+        <div class="front" draggable="true"></div>
+        <div class="back" draggable="true"></div>
+      </pb-c-card>
+    </div>
+  </body>
+</html>
