@@ -19,8 +19,7 @@ export default class Token extends Component {
 
   createdCallback() {
     super.createdCallback();
-    let shadowRoot = this.createShadowRoot();
-    shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
 
     this.config({ draggable: true });
   }

@@ -18,20 +18,20 @@ const EL_NAME = 'pb-s-rectgrid';
 export default class RectGrid extends HTMLElement {
   createdCallback() {
     // Create the shadow DOM.
-    let shadowRoot = this.createShadowRoot();
-    shadowRoot.appendChild(Utils.activateTemplate(templates.main, doc));
+    this.createShadowRoot()
+        .appendChild(Utils.activateTemplate(templates.main, doc));
 
     // Initializes the data.
     let rowCount = As.int($(this).attr(ATTR_ROW));
     let colCount = As.int($(this).attr(ATTR_COL));
-    let rootEl = shadowRoot.querySelector('#content');
+    let rootEl = this.shadowRoot.querySelector('#content');
 
     // Add the rows.
     for (let row = 0; row < rowCount; row++) {
       rootEl.appendChild(Utils.activateTemplate(templates.row, doc));
     }
 
-    $(shadowRoot.querySelectorAll('#content > div'))
+    $(this.shadowRoot.querySelectorAll('#content > div'))
         .each((row, rowEl) => {
           for (let col = 0; col < colCount; col++) {
             let colEl = Utils.activateTemplate(templates.col, doc);

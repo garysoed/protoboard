@@ -13,8 +13,7 @@ class Rect extends Region {
 
   createdCallback() {
     super.createdCallback();
-    let shadowRoot = this.createShadowRoot();
-    shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
   }
 
   static register(currentDoc, rectTemplate) {

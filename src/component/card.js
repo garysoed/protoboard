@@ -23,8 +23,8 @@ export default class Card extends Component {
 
   createdCallback() {
     super.createdCallback();
-    let shadowRoot = this.createShadowRoot();
-    shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+    this.createShadowRoot()
+        .appendChild(Utils.activateTemplate(template, doc));
 
     this.addEventListener('click', handleClick.bind(this));
     this.config({ draggable: true });

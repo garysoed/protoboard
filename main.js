@@ -176,8 +176,7 @@ var $__src_47_component_47_card__ = (function() {
   var $Card = Card;
   ($traceurRuntime.createClass)(Card, {createdCallback: function() {
       $traceurRuntime.superGet(this, $Card.prototype, "createdCallback").call(this);
-      var shadowRoot = this.createShadowRoot();
-      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.addEventListener('click', handleClick.bind(this));
       this.config({draggable: true});
     }}, {register: function(currentDoc, cardTemplate) {
@@ -211,8 +210,7 @@ var $__src_47_component_47_token__ = (function() {
   var $Token = Token;
   ($traceurRuntime.createClass)(Token, {createdCallback: function() {
       $traceurRuntime.superGet(this, $Token.prototype, "createdCallback").call(this);
-      var shadowRoot = this.createShadowRoot();
-      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.config({draggable: true});
     }}, {register: function(currentDoc, tokenTemplate) {
       if (doc || template) {
@@ -307,8 +305,7 @@ var $__src_47_region_47_deck__ = (function() {
   ($traceurRuntime.createClass)(Deck, {
     createdCallback: function() {
       $traceurRuntime.superGet(this, $Deck.prototype, "createdCallback").call(this);
-      var shadowRoot = this.createShadowRoot();
-      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.addEventListener('mousedown', handleClick);
       this.addEventListener('contextmenu', handleContextMenu);
     },
@@ -358,8 +355,7 @@ var $__src_47_region_47_rect__ = (function() {
   var $Rect = Rect;
   ($traceurRuntime.createClass)(Rect, {createdCallback: function() {
       $traceurRuntime.superGet(this, $Rect.prototype, "createdCallback").call(this);
-      var shadowRoot = this.createShadowRoot();
-      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     }}, {register: function(currentDoc, rectTemplate) {
       if (doc || template) {
         return;
@@ -412,15 +408,14 @@ var $__src_47_surface_47_rectgrid__ = (function() {
   var $RectGrid = RectGrid;
   ($traceurRuntime.createClass)(RectGrid, {
     createdCallback: function() {
-      var shadowRoot = this.createShadowRoot();
-      shadowRoot.appendChild(Utils.activateTemplate(templates.main, doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(templates.main, doc));
       var rowCount = As.int($(this).attr(ATTR_ROW));
       var colCount = As.int($(this).attr(ATTR_COL));
-      var rootEl = shadowRoot.querySelector('#content');
+      var rootEl = this.shadowRoot.querySelector('#content');
       for (var row = 0; row < rowCount; row++) {
         rootEl.appendChild(Utils.activateTemplate(templates.row, doc));
       }
-      $(shadowRoot.querySelectorAll('#content > div')).each((function(row, rowEl) {
+      $(this.shadowRoot.querySelectorAll('#content > div')).each((function(row, rowEl) {
         for (var col = 0; col < colCount; col++) {
           var colEl = Utils.activateTemplate(templates.col, doc);
           $(colEl.querySelector('content')).attr('select', ("[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]")).attr('row', row).attr('col', col);
