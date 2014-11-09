@@ -3,6 +3,8 @@
   <base href="..">
   <head>
     <link rel="import" href="src/component/card.html">
+    <link rel="import" href="src/region/deck.html">
+    <link rel="import" href="src/region/rect.html">
   </head>
   <style>
     div {
@@ -10,20 +12,36 @@
       height: 100px;
     }
 
-    .front {
-      background-color: red;
+    pb-r-deck::shadow #root {
+      height: 100px;
+      width: 100px;
     }
 
-    .back {
-      background-color: blue;
+    .reg1::shadow #root {
+      background-color: gray;
+      height: 100px;
+      width: 100px;
     }
   </style>
   <body>
     <div id="root">
-      <pb-c-card>
-        <div class="front" draggable="true"></div>
-        <div class="back" draggable="true"></div>
-      </pb-c-card>
+      <pb-r-deck>
+        <pb-c-card>
+          <div class="front" style="background-color: red;" draggable="true"></div>
+          <div class="back" style="background-color: #ff0;" draggable="true"></div>
+        </pb-c-card>
+        <pb-c-card>
+          <div class="front" style="background-color: green;" draggable="true"></div>
+          <div class="back" style="background-color: #0ff;" draggable="true"></div>
+        </pb-c-card>
+        <pb-c-card>
+          <div class="front" style="background-color: blue;" draggable="true"></div>
+          <div class="back" style="background-color: #f0f;" draggable="true"></div>
+        </pb-c-card>
+      </pb-r-deck>
+
+      <pb-r-rect class="reg1">
+      </pb-r-rect>
     </div>
   </body>
 </html>

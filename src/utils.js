@@ -42,15 +42,53 @@ var Utils = {
     });
   },
 
-  getContentElementRoot(el) {
-    return el.querySelectorAll(':not(style):not(script)');
+  compare(a, b) {
+    if (typeof a === 'number' && typeof b === 'number') {
+      if (a < b) {
+        return -1;
+      } else if (a > b) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+
+    return undefined;
+  },
+
+  toArray(obj) {
+    let array = [];
+    for (let i = 0; i < obj.length; i++) {
+      array[i] = obj[i];
+    }
+    return array;
+  },
+
+  /**
+   * Makes the given target to be globally available.
+   * @param {string} The namespace of the target. This should be separated by '.'.
+   * @param {Object=} target The target object to be made globally available.
+   */
+  makeGlobal(namespace, target) {
+    let currentScope = window;
+    let pathArr = namespace.split('.');
+    pathArr.forEach((path, i) => {
+      if (i === (pathArr.length - 1)) {
+        if (!currentScope[path]) {
+          currentScope[path] = target;
+        } else {
+          throw `${namespace} already exists`; 
+        }
+      } else {
+        if (!currentScope[path]) {
+          currentScope[path] = {}
+        }
+      }
+      currentScope = currentScope[path];
+    });
   }
 };
 
 export default Utils = Utils;
 
-if (!window.pb) {
-  window.pb = {};
-}
-
-window.pb.Utils = Utils;
+Utils.makeGlobal('pb.Utils', Utils);

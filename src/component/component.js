@@ -44,9 +44,6 @@ export default class Component extends HTMLElement {
 }
 
 if (window.TEST_MODE) {
-  if (!window.pb) {
-    window.pb = {};
-  }
-
-  window.pb.Component = Component;
+  Utils.makeGlobal('pb.component.Component', Component);
+  console.log(pb.component.Component);
 }

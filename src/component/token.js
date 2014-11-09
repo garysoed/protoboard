@@ -37,8 +37,4 @@ export default class Token extends Component {
   }
 }
 
-if (!window.pb) {
-  window.pb = {};
-}
-
-window.pb.Token = Token;
+Utils.makeGlobal('pb.component.Token', Token);

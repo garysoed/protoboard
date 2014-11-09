@@ -9,12 +9,12 @@
   <script>
     'use strict';
 
-    var Region = pb.Region;
-    var DragDrop = pb.DragDrop;
-    var expect = chai.expect;
-    var Spies = spies.Spies;
-
     (function() {
+      var Region = pb.region.Region;
+      var DragDrop = pb.service.DragDrop;
+      var expect = chai.expect;
+      var Spies = spies.Spies;
+
       var doc = document.currentScript.ownerDocument;
 
       describe('Region', function() {

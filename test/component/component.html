@@ -14,16 +14,16 @@
   <script>
     'use strict';
 
-    var Component = pb.Component;
-    var Utils = pb.Utils;
-    var DragDropService = pb.DragDrop;
-
-    var expect = chai.expect;
-    var Spies = spies.Spies;
-    var Matchers = spies.Matchers;
-    var Fakes = spies.Fakes;
-
     (function() {
+      var Component = pb.component.Component;
+      var Utils = pb.Utils;
+      var DragDropService = pb.service.DragDrop;
+
+      var expect = chai.expect;
+      var Spies = spies.Spies;
+      var Matchers = spies.Matchers;
+      var Fakes = spies.Fakes;
+
       var doc = document.currentScript.ownerDocument;
 
       describe('Component', function() {
@@ -42,7 +42,7 @@
             
             Spies.spy(c, 'querySelectorAll');
             Spies.spy(rootEl, 'addEventListener', false);
-            Spies.spy(DragDrop, 'dragStart');
+            Spies.spy(DragDropService, 'dragStart');
 
             c.config({ draggable: true });
 
@@ -57,7 +57,7 @@
 
             isAFunction.matchingArgs[0](event);
             expect(event.dataTransfer.effectAllowed).to.be.equal('move');
-            expect(DragDrop.dragStart).calledWith(c).at.least(1);
+            expect(DragDropService.dragStart).calledWith(c).at.least(1);
           });
 
           it('should not setup draggable if attribute is not specified', function() {

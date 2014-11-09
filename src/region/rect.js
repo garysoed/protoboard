@@ -1,4 +1,4 @@
-import Region from 'src/region/Region';
+import Region from 'src/region/region';
 import Utils from 'src/utils';
 
 let doc = null;
@@ -31,8 +31,4 @@ class Rect extends Region {
 
 export default Rect = Rect;
 
-if (!window.pb) {
-  window.pb = {};
-}
-
-window.pb.Rect = Rect;
+Utils.makeGlobal('pb.region.Rect', Rect);

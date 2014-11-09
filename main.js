@@ -1,6 +1,9 @@
 var $__src_47_as__ = (function() {
   "use strict";
   var __moduleName = "src/as";
+  function require(path) {
+    return $traceurRuntime.require("src/as", path);
+  }
   var As = {
     int: function(input) {
       var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
@@ -23,28 +26,12 @@ var $__src_47_as__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_service_47_dragdrop__ = (function() {
-  "use strict";
-  var __moduleName = "src/service/dragdrop";
-  var DragDrop = {
-    EventType: {DRAGGED: 'dragged'},
-    lastDraggedEl: null,
-    dragStart: function(draggedEl) {
-      this.lastDraggedEl = draggedEl;
-    }
-  };
-  var $__default = DragDrop = DragDrop;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.DragDrop = DragDrop;
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_utils__ = (function() {
   "use strict";
   var __moduleName = "src/utils";
+  function require(path) {
+    return $traceurRuntime.require("src/utils", path);
+  }
   var Utils = {
     extractTemplate: function(templateQuery, doc) {
       return this.activateTemplate(doc.querySelector(templateQuery), doc);
@@ -64,15 +51,66 @@ var $__src_47_utils__ = (function() {
         }));
       });
     },
-    getContentElementRoot: function(el) {
-      return el.querySelectorAll(':not(style):not(script)');
+    compare: function(a, b) {
+      if (typeof a === 'number' && typeof b === 'number') {
+        if (a < b) {
+          return -1;
+        } else if (a > b) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+      return undefined;
+    },
+    toArray: function(obj) {
+      var array = [];
+      for (var i = 0; i < obj.length; i++) {
+        array[$traceurRuntime.toProperty(i)] = obj[$traceurRuntime.toProperty(i)];
+      }
+      return array;
+    },
+    makeGlobal: function(namespace, target) {
+      var currentScope = window;
+      var pathArr = namespace.split('.');
+      pathArr.forEach((function(path, i) {
+        if (i === (pathArr.length - 1)) {
+          if (!currentScope[$traceurRuntime.toProperty(path)]) {
+            currentScope[$traceurRuntime.toProperty(path)] = target;
+          } else {
+            throw (namespace + " already exists");
+          }
+        } else {
+          if (!currentScope[$traceurRuntime.toProperty(path)]) {
+            currentScope[$traceurRuntime.toProperty(path)] = {};
+          }
+        }
+        currentScope = currentScope[$traceurRuntime.toProperty(path)];
+      }));
     }
   };
   var $__default = Utils = Utils;
-  if (!window.pb) {
-    window.pb = {};
+  Utils.makeGlobal('pb.Utils', Utils);
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_service_47_dragdrop__ = (function() {
+  "use strict";
+  var __moduleName = "src/service/dragdrop";
+  function require(path) {
+    return $traceurRuntime.require("src/service/dragdrop", path);
   }
-  window.pb.Utils = Utils;
+  var Utils = ($__src_47_utils__).default;
+  var DragDrop = {
+    EventType: {DRAGGED: 'dragged'},
+    lastDraggedEl: null,
+    dragStart: function(draggedEl) {
+      this.lastDraggedEl = draggedEl;
+    }
+  };
+  var $__default = DragDrop = DragDrop;
+  Utils.makeGlobal('pb.service.DragDrop', DragDrop);
   return {get default() {
       return $__default;
     }};
@@ -80,6 +118,9 @@ var $__src_47_utils__ = (function() {
 var $__src_47_component_47_component__ = (function() {
   "use strict";
   var __moduleName = "src/component/component";
+  function require(path) {
+    return $traceurRuntime.require("src/component/component", path);
+  }
   var Utils = ($__src_47_utils__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var ATTR_DRAGGABLE = 'draggable';
@@ -105,10 +146,8 @@ var $__src_47_component_47_component__ = (function() {
   }, {}, HTMLElement);
   var $__default = Component;
   if (window.TEST_MODE) {
-    if (!window.pb) {
-      window.pb = {};
-    }
-    window.pb.Component = Component;
+    Utils.makeGlobal('pb.component.Component', Component);
+    console.log(pb.component.Component);
   }
   return {get default() {
       return $__default;
@@ -117,6 +156,9 @@ var $__src_47_component_47_component__ = (function() {
 var $__src_47_component_47_card__ = (function() {
   "use strict";
   var __moduleName = "src/component/card";
+  function require(path) {
+    return $traceurRuntime.require("src/component/card", path);
+  }
   var As = ($__src_47_as__).default;
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
@@ -129,11 +171,11 @@ var $__src_47_component_47_card__ = (function() {
     $(this).attr(ATTR_SHOW_FRONT, !oldValue);
   }
   var Card = function Card() {
-    $traceurRuntime.superCall(this, $Card.prototype, "constructor", []);
+    $traceurRuntime.superConstructor($Card).call(this);
   };
   var $Card = Card;
   ($traceurRuntime.createClass)(Card, {createdCallback: function() {
-      $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
+      $traceurRuntime.superGet(this, $Card.prototype, "createdCallback").call(this);
       var shadowRoot = this.createShadowRoot();
       shadowRoot.appendChild(Utils.activateTemplate(template, doc));
       this.addEventListener('click', handleClick.bind(this));
@@ -147,10 +189,7 @@ var $__src_47_component_47_card__ = (function() {
       document.registerElement(EL_NAME, {prototype: $Card.prototype});
     }}, Component);
   var $__default = Card;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.Card = Card;
+  Utils.makeGlobal('pb.component.Card', Card);
   return {get default() {
       return $__default;
     }};
@@ -158,17 +197,20 @@ var $__src_47_component_47_card__ = (function() {
 var $__src_47_component_47_token__ = (function() {
   "use strict";
   var __moduleName = "src/component/token";
+  function require(path) {
+    return $traceurRuntime.require("src/component/token", path);
+  }
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-c-token';
   var Token = function Token() {
-    $traceurRuntime.superCall(this, $Token.prototype, "constructor", []);
+    $traceurRuntime.superConstructor($Token).call(this);
   };
   var $Token = Token;
   ($traceurRuntime.createClass)(Token, {createdCallback: function() {
-      $traceurRuntime.superCall(this, $Token.prototype, "createdCallback", []);
+      $traceurRuntime.superGet(this, $Token.prototype, "createdCallback").call(this);
       var shadowRoot = this.createShadowRoot();
       shadowRoot.appendChild(Utils.activateTemplate(template, doc));
       this.config({draggable: true});
@@ -181,10 +223,7 @@ var $__src_47_component_47_token__ = (function() {
       document.registerElement(EL_NAME, {prototype: $Token.prototype});
     }}, Component);
   var $__default = Token;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.Token = Token;
+  Utils.makeGlobal('pb.component.Token', Token);
   return {get default() {
       return $__default;
     }};
@@ -192,14 +231,21 @@ var $__src_47_component_47_token__ = (function() {
 var $__src_47_component_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/component/modules";
+  function require(path) {
+    return $traceurRuntime.require("src/component/modules", path);
+  }
   $__src_47_component_47_card__;
   $__src_47_component_47_token__;
   return {};
 })();
-var $__src_47_region_47_Region__ = (function() {
+var $__src_47_region_47_region__ = (function() {
   "use strict";
-  var __moduleName = "src/region/Region";
+  var __moduleName = "src/region/region";
+  function require(path) {
+    return $traceurRuntime.require("src/region/region", path);
+  }
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
+  var Utils = ($__src_47_utils__).default;
   var CLASS_OVER = 'over';
   function handleDragOver(event) {
     event.preventDefault();
@@ -228,11 +274,69 @@ var $__src_47_region_47_Region__ = (function() {
   }, {}, HTMLElement);
   var $__default = Region;
   if (window.TEST_MODE) {
-    if (!window.pb) {
-      window.pb = {};
-    }
-    window.pb.Region = Region;
+    Utils.makeGlobal('pb.region.Region', Region);
   }
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_region_47_deck__ = (function() {
+  "use strict";
+  var __moduleName = "src/region/deck";
+  function require(path) {
+    return $traceurRuntime.require("src/region/deck", path);
+  }
+  var Region = ($__src_47_region_47_region__).default;
+  var Utils = ($__src_47_utils__).default;
+  var doc = null;
+  var template = null;
+  var EL_NAME = 'pb-r-deck';
+  function handleClick(event) {
+    if (event.which === 3) {
+      this.shuffle();
+    }
+  }
+  function handleContextMenu(event) {
+    event.preventDefault();
+    return false;
+  }
+  var Deck = function Deck() {
+    $traceurRuntime.superConstructor($Deck).call(this);
+  };
+  var $Deck = Deck;
+  ($traceurRuntime.createClass)(Deck, {
+    createdCallback: function() {
+      $traceurRuntime.superGet(this, $Deck.prototype, "createdCallback").call(this);
+      var shadowRoot = this.createShadowRoot();
+      shadowRoot.appendChild(Utils.activateTemplate(template, doc));
+      this.addEventListener('mousedown', handleClick);
+      this.addEventListener('contextmenu', handleContextMenu);
+    },
+    shuffle: function() {
+      var $__2 = this;
+      var pairs = Utils.toArray(this.children).map((function(child) {
+        return [child, Math.random()];
+      }));
+      pairs.sort((function(a, b) {
+        return Utils.compare(a[1], b[1]);
+      }));
+      var shuffled = pairs.map((function(pair) {
+        return pair[0];
+      }));
+      shuffled.forEach(((function(el) {
+        return $__2.appendChild(el);
+      })).bind(this));
+    }
+  }, {register: function(currentDoc, deckTemplate) {
+      if (doc || template) {
+        return;
+      }
+      doc = currentDoc;
+      template = deckTemplate;
+      document.registerElement(EL_NAME, {prototype: $Deck.prototype});
+    }}, Region);
+  var $__default = Deck = Deck;
+  Utils.makeGlobal('pb.region.Deck');
   return {get default() {
       return $__default;
     }};
@@ -240,17 +344,20 @@ var $__src_47_region_47_Region__ = (function() {
 var $__src_47_region_47_rect__ = (function() {
   "use strict";
   var __moduleName = "src/region/rect";
-  var Region = ($__src_47_region_47_Region__).default;
+  function require(path) {
+    return $traceurRuntime.require("src/region/rect", path);
+  }
+  var Region = ($__src_47_region_47_region__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-r-rect';
   var Rect = function Rect() {
-    $traceurRuntime.superCall(this, $Rect.prototype, "constructor", []);
+    $traceurRuntime.superConstructor($Rect).call(this);
   };
   var $Rect = Rect;
   ($traceurRuntime.createClass)(Rect, {createdCallback: function() {
-      $traceurRuntime.superCall(this, $Rect.prototype, "createdCallback", []);
+      $traceurRuntime.superGet(this, $Rect.prototype, "createdCallback").call(this);
       var shadowRoot = this.createShadowRoot();
       shadowRoot.appendChild(Utils.activateTemplate(template, doc));
     }}, {register: function(currentDoc, rectTemplate) {
@@ -262,10 +369,7 @@ var $__src_47_region_47_rect__ = (function() {
       document.registerElement(EL_NAME, {prototype: $Rect.prototype});
     }}, Region);
   var $__default = Rect = Rect;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.Rect = Rect;
+  Utils.makeGlobal('pb.region.Rect', Rect);
   return {get default() {
       return $__default;
     }};
@@ -273,18 +377,28 @@ var $__src_47_region_47_rect__ = (function() {
 var $__src_47_region_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/region/modules";
+  function require(path) {
+    return $traceurRuntime.require("src/region/modules", path);
+  }
+  $__src_47_region_47_deck__;
   $__src_47_region_47_rect__;
   return {};
 })();
 var $__src_47_service_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/service/modules";
+  function require(path) {
+    return $traceurRuntime.require("src/service/modules", path);
+  }
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
   return {};
 })();
 var $__src_47_surface_47_rectgrid__ = (function() {
   "use strict";
   var __moduleName = "src/surface/rectgrid";
+  function require(path) {
+    return $traceurRuntime.require("src/surface/rectgrid", path);
+  }
   var As = ($__src_47_as__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
@@ -293,7 +407,7 @@ var $__src_47_surface_47_rectgrid__ = (function() {
   var ATTR_COL = 'col';
   var EL_NAME = 'pb-s-rectgrid';
   var RectGrid = function RectGrid() {
-    $traceurRuntime.defaultSuperCall(this, $RectGrid.prototype, arguments);
+    $traceurRuntime.superConstructor($RectGrid).apply(this, arguments);
   };
   var $RectGrid = RectGrid;
   ($traceurRuntime.createClass)(RectGrid, {
@@ -327,10 +441,7 @@ var $__src_47_surface_47_rectgrid__ = (function() {
       document.registerElement(EL_NAME, {prototype: $RectGrid.prototype});
     }}, HTMLElement);
   var $__default = RectGrid;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.RectGrid = RectGrid;
+  Utils.makeGlobal('pb.surface.RectGrid', RectGrid);
   return {get default() {
       return $__default;
     }};
@@ -338,12 +449,18 @@ var $__src_47_surface_47_rectgrid__ = (function() {
 var $__src_47_surface_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/surface/modules";
+  function require(path) {
+    return $traceurRuntime.require("src/surface/modules", path);
+  }
   $__src_47_surface_47_rectgrid__;
   return {};
 })();
 var $__src_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/modules";
+  function require(path) {
+    return $traceurRuntime.require("src/modules", path);
+  }
   var Util = ($__src_47_utils__).default;
   $__src_47_component_47_modules__;
   $__src_47_region_47_modules__;

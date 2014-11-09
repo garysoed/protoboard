@@ -1,4 +1,5 @@
 import DragDrop from 'src/service/dragdrop';
+import Utils from 'src/utils';
 
 const CLASS_OVER = 'over';
 
@@ -40,9 +41,5 @@ export default class Region extends HTMLElement {
 }
 
 if (window.TEST_MODE) {
-  if (!window.pb) {
-    window.pb = {};
-  }
-
-  window.pb.Region = Region;
+  Utils.makeGlobal('pb.region.Region', Region);
 }

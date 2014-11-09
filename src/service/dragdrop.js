@@ -1,3 +1,5 @@
+import Utils from 'src/utils';
+
 /**
  * Service that keeps track of drag and drop.
  *
@@ -22,8 +24,4 @@ let DragDrop = {
 
 export default DragDrop = DragDrop;
 
-if (!window.pb) {
-  window.pb = {};
-}
-
-window.pb.DragDrop = DragDrop;
+Utils.makeGlobal('pb.service.DragDrop', DragDrop);

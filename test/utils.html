@@ -11,10 +11,10 @@
   <script>
     'use strict';
 
-    var Utils = pb.Utils;
-    var expect = chai.expect;
-
     (function() {
+      var Utils = pb.Utils;
+      var expect = chai.expect;
+      
       var doc = document.currentScript.ownerDocument;
 
       describe('Utils', function() {
@@ -99,8 +99,23 @@
             expect(f.handler).calledWith(changeB.name, changeB.type, changeB.oldValue).at.least(1);
           });
         });
+
+        describe('#makeGlobal', function() {
+          it('should correctly assign the target', function() {
+            var target = 'target';
+            Utils.makeGlobal('path.to.the.Target', target);
+            expect(path.to.the.Target).to.be.equal(target);
+
+            window.a = undefined;
+          });
+
+          it('should throw exception when target is duplicated', function() {
+            Utils.makeGlobal('a.b.c.Target', {});
+            expect(Utils.makeGlobal.bind(Utils, 'a.b.c.Target', {})).to.throw('Target');
+          });
+        });
       });
-    });
+    })();
   </script>
 </body>
 </html>

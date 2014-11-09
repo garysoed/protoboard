@@ -42,8 +42,4 @@ export default class Card extends Component {
   }
 }
 
-if (!window.pb) {
-  window.pb = {};
-}
-
-window.pb.Card = Card;
+Utils.makeGlobal('pb.component.Card', Card);

@@ -10,19 +10,21 @@
   <script>
     'use strict';
 
-    var DragDrop = pb.DragDrop;
-    var expect = chai.expect;
-    var Spies = spies.Spies;
+    (function() {
+      var DragDrop = pb.service.DragDrop;
+      var expect = chai.expect;
+      var Spies = spies.Spies;
 
-    describe('DragDrop', function() {
-      describe('#dragStart', function() {
-        it('should set the lastDraggedEl and trigger an event', function() {
-          var draggedEl = {};
-          DragDrop.dragStart(draggedEl);
+      describe('DragDrop', function() {
+        describe('#dragStart', function() {
+          it('should set the lastDraggedEl and trigger an event', function() {
+            var draggedEl = {};
+            DragDrop.dragStart(draggedEl);
 
-          expect(DragDrop.lastDraggedEl).to.be.equal(draggedEl);
+            expect(DragDrop.lastDraggedEl).to.be.equal(draggedEl);
+          });
         });
       });
-    });
+    })();
   </script>
 </body>

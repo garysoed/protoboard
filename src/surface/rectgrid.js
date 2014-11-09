@@ -70,8 +70,4 @@ export default class RectGrid extends HTMLElement {
   }
 }
 
-if (!window.pb) {
-  window.pb = {};
-}
-
-window.pb.RectGrid = RectGrid;
+Utils.makeGlobal('pb.surface.RectGrid', RectGrid);
