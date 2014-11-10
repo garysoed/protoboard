@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Context Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/ui/context.html">
+</head>
+<body>
+  <style>
+    #child {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+
+  <div id="parent">
+    <pb-u-context id="context">
+      <div id="child"></div>
+    </pb-u-context>
+  </div>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+
+      var doc = document.currentScript.ownerDocument;
+      var el = doc.querySelector('#context');
+
+      describe('Context', function() {
+        describe('#click', function() {
+          it('should hide if clicking outside the context', function() {
+            _.spy(el, 'hide', false);
+
+            document.body.click();
+            expect(el.hide).calledWith().at.least(1);
+          });
+
+          it('should not hide if clicking in the context', function() {
+            _.spy(el, 'hide', false);
+
+            doc.querySelector('#child').click();
+            expect(el.hide).called().to.be.equal(0);
+          });
+        });
+
+        describe('#contextmenu', function() {
+          it('should show when contextmenu target is parent element', function() {
+            _.spy(el, 'show', false);
+
+            var event = new Event('contextmenu');
+            event.x = 123;
+            event.y = 456;
+            doc.querySelector('#parent').dispatchEvent(event);
+            expect(el.show).calledWith(123, 456).at.least(1);
+          });
+
+          it('should not show when contextmenu target is not parent element', function() {
+            _.spy(el, 'show', false);
+
+            document.body.dispatchEvent(new Event('contextmenu'));
+            expect(el.show).called().to.be.equal(0);
+          });
+        })
+
+        describe('#show', function() {
+          it('should use top left anchor when there is space', function() {
+            el.show();
+            expect(el.shadowRoot.querySelector('#root').classList.contains('shown')).to.be.true;
+          });
+
+          it('should use bottom right anchor when there is no space');
+        });
+
+        describe('#hide', function() {
+          it('should remove the class', function() {
+            el.show();
+            el.hide();
+            expect(el.shadowRoot.querySelector('#root').classList.contains('shown')).to.be.false;
+          });
+        });
+
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+    })();
+  </script>
+</body>

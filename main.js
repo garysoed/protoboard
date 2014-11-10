@@ -289,15 +289,6 @@ var $__src_47_region_47_deck__ = (function() {
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-r-deck';
-  function handleClick(event) {
-    if (event.which === 3) {
-      this.shuffle();
-    }
-  }
-  function handleContextMenu(event) {
-    event.preventDefault();
-    return false;
-  }
   var Deck = function Deck() {
     $traceurRuntime.superConstructor($Deck).call(this);
   };
@@ -306,8 +297,7 @@ var $__src_47_region_47_deck__ = (function() {
     createdCallback: function() {
       $traceurRuntime.superGet(this, $Deck.prototype, "createdCallback").call(this);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.addEventListener('mousedown', handleClick);
-      this.addEventListener('contextmenu', handleContextMenu);
+      this.shadowRoot.querySelector('#shuffle').addEventListener('click', this.shuffle.bind(this));
     },
     shuffle: function() {
       var $__2 = this;
@@ -333,7 +323,7 @@ var $__src_47_region_47_deck__ = (function() {
       document.registerElement(EL_NAME, {prototype: $Deck.prototype});
     }}, Region);
   var $__default = Deck = Deck;
-  Utils.makeGlobal('pb.region.Deck');
+  Utils.makeGlobal('pb.region.Deck', Deck);
   return {get default() {
       return $__default;
     }};
@@ -450,6 +440,98 @@ var $__src_47_surface_47_modules__ = (function() {
   $__src_47_surface_47_rectgrid__;
   return {};
 })();
+var $__src_47_ui_47_context__ = (function() {
+  "use strict";
+  var __moduleName = "src/ui/context";
+  function require(path) {
+    return $traceurRuntime.require("src/ui/context", path);
+  }
+  var Utils = ($__src_47_utils__).default;
+  var template = null;
+  var doc = null;
+  var EL_NAME = "pb-u-context";
+  var SHOWN_CLASS = "shown";
+  function handleContextMenu(event) {
+    this.show(event.x, event.y);
+    event.preventDefault();
+  }
+  function handleClick(event) {
+    if (!this.contains(event.target)) {
+      this.hide();
+    }
+  }
+  var Context = function Context() {};
+  var $Context = Context;
+  ($traceurRuntime.createClass)(Context, {
+    createdCallback: function() {
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this.attachedCallback();
+      document.addEventListener('click', handleClick.bind(this));
+    },
+    attachedCallback: function() {
+      if (this.parentElement) {
+        this.parentElement.addEventListener('contextmenu', handleContextMenu.bind(this));
+      }
+    },
+    show: function(mouseX, mouseY) {
+      var rootEl = this.shadowRoot.querySelector('#root');
+      if (rootEl.classList.contains(SHOWN_CLASS)) {
+        return;
+      }
+      rootEl.classList.add(SHOWN_CLASS);
+      var x = null;
+      var hAnchor = null;
+      var documentEl = this.ownerDocument.documentElement;
+      if (mouseX + rootEl.clientWidth > documentEl.clientWidth) {
+        hAnchor = 'right';
+        x = documentEl.clientWidth - mouseX;
+      } else {
+        hAnchor = 'left';
+        x = mouseX;
+      }
+      var y = null;
+      var vAnchor = null;
+      if (mouseY + rootEl.clientHeight > documentEl.clientHeight) {
+        vAnchor = 'bottom';
+        y = documentEl.clientHeight - mouseY;
+      } else {
+        vAnchor = 'top';
+        y = mouseY;
+      }
+      this.style.position = 'fixed';
+      this.style.top = '';
+      this.style.left = '';
+      this.style.right = '';
+      this.style.bottom = '';
+      this.style[$traceurRuntime.toProperty(hAnchor)] = (x + "px");
+      this.style[$traceurRuntime.toProperty(vAnchor)] = (y + "px");
+    },
+    hide: function() {
+      this.shadowRoot.querySelector('#root').classList.remove(SHOWN_CLASS);
+    }
+  }, {register: function(currentDoc, contextTemplate) {
+      if (doc || template) {
+        return;
+      }
+      doc = currentDoc;
+      template = contextTemplate;
+      document.registerElement(EL_NAME, {prototype: $Context.prototype});
+    }}, HTMLElement);
+  var $__default = Context = Context;
+  Utils.makeGlobal('pb.ui.Context', Context);
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_ui_47_modules__ = (function() {
+  "use strict";
+  var __moduleName = "src/ui/modules";
+  function require(path) {
+    return $traceurRuntime.require("src/ui/modules", path);
+  }
+  $__src_47_ui_47_context__;
+  return {};
+})();
 var $__src_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/modules";
@@ -461,6 +543,7 @@ var $__src_47_modules__ = (function() {
   $__src_47_region_47_modules__;
   $__src_47_service_47_modules__;
   $__src_47_surface_47_modules__;
+  $__src_47_ui_47_modules__;
   return {};
 })();
 

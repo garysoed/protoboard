@@ -8,3 +8,4 @@ import {} from 'src/component/modules';
 import {} from 'src/region/modules';
 import {} from 'src/service/modules';
 import {} from 'src/surface/modules';
+import {} from 'src/ui/modules';

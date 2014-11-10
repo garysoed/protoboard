@@ -5,9 +5,16 @@
     <link rel="import" href="src/component/card.html">
     <link rel="import" href="src/region/deck.html">
     <link rel="import" href="src/region/rect.html">
+    <link rel="import" href="src/ui/context.html">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   </head>
   <style>
-    div {
+    body {
+      font-family: 'Roboto', Sans-Serif;
+    }
+
+    pb-c-card div {
       width: 100px;
       height: 100px;
     }
@@ -17,10 +24,17 @@
       width: 100px;
     }
 
-    .reg1::shadow #root {
+    #region {
       background-color: gray;
       height: 100px;
       width: 100px;
+    }
+
+    pb-u-context div {
+      background-color: #eee;
+      cursor: pointer;
+      padding: 5px;
+      width: 200px;
     }
   </style>
   <body>
@@ -41,6 +55,21 @@
       </pb-r-deck>
 
       <pb-r-rect class="reg1">
+        <div id="region">
+          <pb-u-context>
+            <div>A</div>
+            <div>B</div>
+            <div>C</div>
+            <div>
+              Sub ...
+              <pb-u-context>
+                <div>Sub A</div>
+                <div>Sub B</div>
+                <div>Sub C</div>
+              </pb-u-context>
+            </div>
+          </pb-u-context>
+        </div>
       </pb-r-rect>
     </div>
   </body>
