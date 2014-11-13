@@ -12,8 +12,9 @@
     (function() {
       var Region = pb.region.Region;
       var DragDrop = pb.service.DragDrop;
+      var Distribute = pb.service.Distribute;
       var expect = chai.expect;
-      var Spies = spies.Spies;
+      var _ = spies.Spies;
 
       var doc = document.currentScript.ownerDocument;
 
@@ -21,7 +22,7 @@
         describe('#attachedCallback', function() {
           it('should handle dragover', function() {
             var r = new Region();
-            Spies.spy(r, 'addEventListener', false);
+            _.spy(r, 'addEventListener', false);
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -29,8 +30,8 @@
             expect(r.addEventListener).calledWith('dragover', isAFunction).at.least(1);
 
             var handler = isAFunction.matchingArgs[0];
-            var stubEvent = Spies.stub(Event);
-            Spies.spy(stubEvent, undefined, false);
+            var stubEvent = _.stub(Event);
+            _.spy(stubEvent, undefined, false);
             handler.call(r, stubEvent);
 
             expect(stubEvent.preventDefault).calledWith().at.least(1);
@@ -39,10 +40,10 @@
 
           it('should handle dragenter', function() {
             var r = new Region();
-            r.classList = Spies.stub(DOMTokenList);
+            r.classList = _.stub(DOMTokenList);
 
-            Spies.spy(r, 'addEventListener', false);
-            Spies.spy(r.classList, 'add', false);
+            _.spy(r, 'addEventListener', false);
+            _.spy(r.classList, 'add', false);
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -51,20 +52,20 @@
 
             // Now fire the event.
             var handler = isAFunction.matchingArgs[0];
-            var stubEvent = Spies.stub(Event);
-            Spies.spy(stubEvent, undefined, false);
+            var stubEvent = _.stub(Event);
+            _.spy(stubEvent, undefined, false);
             handler.call(r, stubEvent);
 
             expect(stubEvent.preventDefault).calledWith().at.least(1);
-            expect(r.classList.add).calledWith('over').at.least(1);
+            expect(r.classList.add).calledWith('pb-over').at.least(1);
           });
 
           it('should handle dragleave', function() {
             var r = new Region();
-            r.classList = Spies.stub(DOMTokenList);
+            r.classList = _.stub(DOMTokenList);
 
-            Spies.spy(r, 'addEventListener', false);
-            Spies.spy(r.classList, 'remove', false);
+            _.spy(r, 'addEventListener', false);
+            _.spy(r.classList, 'remove', false);
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -73,19 +74,19 @@
 
             // Now fire the event.
             var handler = isAFunction.matchingArgs[0];
-            var stubEvent = Spies.stub(Event);
-            Spies.spy(stubEvent, undefined, false);
+            var stubEvent = _.stub(Event);
+            _.spy(stubEvent, undefined, false);
             handler.call(r, stubEvent);
 
-            expect(r.classList.remove).calledWith('over').at.least(1);
+            expect(r.classList.remove).calledWith('pb-over').at.least(1);
           });
 
           it('should handle drop', function() {
             var r = new Region();
-            r.classList = Spies.stub(DOMTokenList);
+            r.classList = _.stub(DOMTokenList);
 
-            Spies.spy(r, 'addEventListener', false);
-            Spies.spy(r.classList, 'remove', false);
+            _.spy(r, 'addEventListener', false);
+            _.spy(r.classList, 'remove', false);
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -94,19 +95,146 @@
 
             // Now fire the event.
             DragDrop.lastDraggedEl = {};
-            Spies.spy(r, 'appendChild', false);
+            _.spy(r, 'appendChild', false);
 
             var handler = isAFunction.matchingArgs[0];
-            handler.call(r, Spies.stub(Event));
+            handler.call(r, _.stub(Event));
 
-            expect(r.classList.remove).calledWith('over').at.least(1);
+            expect(r.classList.remove).calledWith('pb-over').at.least(1);
             expect(r.appendChild).calledWith(DragDrop.lastDraggedEl).at.least(1);
+          });
+
+          it('should handle click when Distribute service is active and has next', function() {
+            var r = new Region();
+
+            _.spy(r, 'addEventListener', false);
+
+            var isAFunction = Matchers.isA(Function);
+            r.attachedCallback();
+
+            expect(r.addEventListener).calledWith('click', isAFunction).at.least(1);
+
+            // Call the handler.
+            var origIsActive = pb.service.Distribute.isActive;
+            var origNext = pb.service.Distribute.next;
+
+            var nextEl = {};
+            Distribute.isActive = function() { return true; };
+            Distribute.next = function() { return nextEl; };
+            _.spy(r, 'appendChild', false);
+
+            isAFunction.matchingArgs[0].call(r);
+
+            expect(r.appendChild).calledWith(nextEl).at.least(1);
+
+            Distribute.isActive = origIsActive;
+            Distribute.next = origNext;
+          });
+
+          it('should ignore click when Distribute service is inactive', function() {
+            var r = new Region();
+
+            _.spy(r, 'addEventListener', false);
+
+            var isAFunction = Matchers.isA(Function);
+            r.attachedCallback();
+
+            expect(r.addEventListener).calledWith('click', isAFunction).at.least(1);
+
+            // Call the handler.
+            var origIsActive = pb.service.Distribute.isActive;
+
+            var nextEl = {};
+            Distribute.isActive = function() { return false; };
+            _.spy(r, 'appendChild', false);
+
+            isAFunction.matchingArgs[0].call(r);
+
+            expect(r.appendChild).called().to.be.equal(0);
+
+            Distribute.isActive = origIsActive;
+          });
+
+          it('should ignore click when Distribute service does not have next', function() {
+            var r = new Region();
+
+            _.spy(r, 'addEventListener', false);
+
+            var isAFunction = Matchers.isA(Function);
+            r.attachedCallback();
+
+            expect(r.addEventListener).calledWith('click', isAFunction).at.least(1);
+
+            // Call the handler.
+            var origIsActive = pb.service.Distribute.isActive;
+            var origNext = pb.service.Distribute.next;
+
+            var nextEl = {};
+            Distribute.isActive = function() { return true; };
+            Distribute.next = function() { return null; };
+            _.spy(r, 'appendChild', false);
+
+            isAFunction.matchingArgs[0].call(r);
+
+            expect(r.appendChild).called().to.be.equal(0);
+
+            Distribute.isActive = origIsActive;
+            Distribute.next = origNext;
+          });
+
+          it('should handle distribute begin', function() {
+            var stubClassList = _.stub(DOMTokenList);
+            _.spy(stubClassList, 'add', false);
+
+            // TODO: Make a stub method that stubs everything.
+            _.spy(stubClassList, 'remove', false);
+
+            var r = new Region();
+            r.shadowRoot = _.stub(HTMLShadowElement);
+            r.shadowRoot.querySelector = function() { 
+              return { classList: stubClassList }; 
+            };
+            _.spy(r, 'addEventListener', false);
+
+            r.attachedCallback();
+            _.spy(r.shadowRoot, 'querySelector');
+            
+            $(Distribute).trigger(Distribute.EventType.BEGIN);
+
+            expect(r.shadowRoot.querySelector).calledWith('#root').at.least(1);
+            expect(stubClassList.add).calledWith('pb-distribute').at.least(1);
+          });
+
+          it('should handle distribute end', function() {
+            var stubClassList = _.stub(DOMTokenList);
+            _.spy(stubClassList, 'remove', false);
+
+            var r = new Region();
+            r.shadowRoot = _.stub(HTMLShadowElement);
+            r.shadowRoot.querySelector = function() { 
+              return { classList: stubClassList }; 
+            };
+            _.spy(r, 'addEventListener', false);
+
+            r.attachedCallback();
+            _.spy(r.shadowRoot, 'querySelector');
+            
+            $(Distribute).trigger(Distribute.EventType.END);
+
+            expect(r.shadowRoot.querySelector).calledWith('#root').at.least(1);
+            expect(stubClassList.remove).calledWith('pb-distribute').at.least(1);
           });
 
           afterEach(function(done) {
             DragDrop.lastDraggedEl = null;
+            $(Distribute).off();
             done();
           });
+        });
+
+        afterEach(function(done) {
+          _.reset();
+          done();
         });
       });
     })();

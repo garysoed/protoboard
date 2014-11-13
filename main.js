@@ -236,15 +236,63 @@ var $__src_47_component_47_modules__ = (function() {
   $__src_47_component_47_token__;
   return {};
 })();
+var $__src_47_service_47_distribute__ = (function() {
+  "use strict";
+  var __moduleName = "src/service/distribute";
+  function require(path) {
+    return $traceurRuntime.require("src/service/distribute", path);
+  }
+  var Utils = ($__src_47_utils__).default;
+  var source = null;
+  var CLASS_DISTRIBUTE = 'pb-distribute';
+  var Distribute = {
+    begin: function(distributeSource) {
+      if (!this.isActive()) {
+        source = distributeSource;
+        distributeSource.classList.add(CLASS_DISTRIBUTE);
+        $(this).trigger(this.EventType.BEGIN);
+      }
+    },
+    end: function() {
+      if (this.isActive()) {
+        source.classList.remove(CLASS_DISTRIBUTE);
+        source = null;
+        $(this).trigger(this.EventType.END);
+      }
+    },
+    isActive: function() {
+      return source !== null;
+    },
+    next: function() {
+      return source.next();
+    },
+    EventType: {
+      BEGIN: 'distribute-begin',
+      END: 'distribute-end'
+    }
+  };
+  $(window).on('keydown', (function(event) {
+    if (event.which === 27 && Distribute.isActive()) {
+      Distribute.end();
+    }
+  }));
+  var $__default = Distribute = Distribute;
+  Utils.makeGlobal('pb.service.Distribute', Distribute);
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_region_47_region__ = (function() {
   "use strict";
   var __moduleName = "src/region/region";
   function require(path) {
     return $traceurRuntime.require("src/region/region", path);
   }
+  var Distribute = ($__src_47_service_47_distribute__).default;
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
   var Utils = ($__src_47_utils__).default;
-  var CLASS_OVER = 'over';
+  var CLASS_DISTRIBUTE = 'pb-distribute';
+  var CLASS_OVER = 'pb-over';
   function handleDragOver(event) {
     event.preventDefault();
     event.dropEffect = 'move';
@@ -253,12 +301,27 @@ var $__src_47_region_47_region__ = (function() {
     event.preventDefault();
     this.classList.add(CLASS_OVER);
   }
-  function handleDragLeave(event) {
+  function handleDragLeave() {
     this.classList.remove(CLASS_OVER);
   }
-  function handleDrop(event) {
+  function handleDrop() {
     this.classList.remove(CLASS_OVER);
-    this.appendChild(DragDrop.lastDraggedEl);
+    this.add(DragDrop.lastDraggedEl);
+  }
+  function handleClick() {
+    if (Distribute.isActive() && Distribute.next()) {
+      this.add(Distribute.next());
+    }
+  }
+  function handleDistributeBegin() {
+    if (this.shadowRoot) {
+      this.shadowRoot.querySelector('#root').classList.add(CLASS_DISTRIBUTE);
+    }
+  }
+  function handleDistributeEnd() {
+    if (this.shadowRoot) {
+      this.shadowRoot.querySelector('#root').classList.remove(CLASS_DISTRIBUTE);
+    }
   }
   var Region = function Region() {};
   ($traceurRuntime.createClass)(Region, {
@@ -268,12 +331,63 @@ var $__src_47_region_47_region__ = (function() {
       this.addEventListener('dragenter', handleDragEnter);
       this.addEventListener('dragleave', handleDragLeave);
       this.addEventListener('drop', handleDrop);
+      this.addEventListener('click', handleClick);
+      $(Distribute).on(Distribute.EventType.BEGIN, handleDistributeBegin.bind(this)).on(Distribute.EventType.END, handleDistributeEnd.bind(this));
+    },
+    add: function(el) {
+      this.appendChild(el);
     }
   }, {}, HTMLElement);
   var $__default = Region;
   if (window.TEST_MODE) {
     Utils.makeGlobal('pb.region.Region', Region);
   }
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_region_47_bag__ = (function() {
+  "use strict";
+  var __moduleName = "src/region/bag";
+  function require(path) {
+    return $traceurRuntime.require("src/region/bag", path);
+  }
+  var Region = ($__src_47_region_47_region__).default;
+  var Distribute = ($__src_47_service_47_distribute__).default;
+  var Utils = ($__src_47_utils__).default;
+  var doc = null;
+  var template = null;
+  var EL_NAME = 'pb-r-bag';
+  function handleDistributeClick(event) {
+    this.distribute();
+    event.stopPropagation();
+  }
+  var Bag = function Bag() {
+    $traceurRuntime.superConstructor($Bag).call(this);
+  };
+  var $Bag = Bag;
+  ($traceurRuntime.createClass)(Bag, {
+    createdCallback: function() {
+      $traceurRuntime.superGet(this, $Bag.prototype, "createdCallback").call(this);
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this.shadowRoot.querySelector('#distribute').addEventListener('click', handleDistributeClick.bind(this));
+    },
+    distribute: function() {
+      Distribute.begin(this);
+    },
+    next: function() {
+      return this.children[0];
+    }
+  }, {register: function(currentDoc, deckTemplate) {
+      if (doc || template) {
+        return;
+      }
+      doc = currentDoc;
+      template = deckTemplate;
+      document.registerElement(EL_NAME, {prototype: $Bag.prototype});
+    }}, Region);
+  var $__default = Bag = Bag;
+  Utils.makeGlobal('pb.region.Bag', Bag);
   return {get default() {
       return $__default;
     }};
@@ -297,6 +411,8 @@ var $__src_47_region_47_deck__ = (function() {
     createdCallback: function() {
       $traceurRuntime.superGet(this, $Deck.prototype, "createdCallback").call(this);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    },
+    attachedCallback: function() {
       this.shadowRoot.querySelector('#shuffle').addEventListener('click', this.shuffle.bind(this));
     },
     shuffle: function() {
@@ -366,6 +482,7 @@ var $__src_47_region_47_modules__ = (function() {
   function require(path) {
     return $traceurRuntime.require("src/region/modules", path);
   }
+  $__src_47_region_47_bag__;
   $__src_47_region_47_deck__;
   $__src_47_region_47_rect__;
   return {};
@@ -376,6 +493,7 @@ var $__src_47_service_47_modules__ = (function() {
   function require(path) {
     return $traceurRuntime.require("src/service/modules", path);
   }
+  var Distribute = ($__src_47_service_47_distribute__).default;
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
   return {};
 })();

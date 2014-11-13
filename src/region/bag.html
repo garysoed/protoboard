@@ -11,15 +11,14 @@
       width: 150px;
     }
 
-    #context {
+    pb-u-context {
       background-color: #eee;
       z-index: 500;
     }
   </style>
-
   <div id="root">
-    <pb-u-context id="context">
-      <div id="shuffle">Shuffle</div>
+    <pb-u-context>
+      <div id="distribute">Distribute</div>
     </pb-u-context>
     <content></content>
   </div>
@@ -28,6 +27,6 @@
 <script>
   (function() {
     var doc = document.currentScript.ownerDocument;
-    pb.region.Deck.register(doc, doc.querySelector('template'));
+    pb.region.Bag.register(doc, doc.querySelector('template'));
   })();
 </script>

@@ -24,7 +24,11 @@
       describe('Deck', function() {
         describe('#created', function() {
           it('should call shuffle when clicking on shuffle in menu', function() {
+            var el = doc.createElement('pb-r-deck');
             _.spy(el, 'shuffle', false);
+            
+            el.attachedCallback();
+
             el.shadowRoot.querySelector('#shuffle').click();
             expect(el.shuffle).called().at.least(1);
           });

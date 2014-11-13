@@ -6,6 +6,9 @@ let template = null;
 
 const EL_NAME = 'pb-r-deck';
 
+/**
+ * Represents a collection of items that can be sorted.
+ */
 class Deck extends Region {
   constructor() {
     super();
@@ -14,7 +17,9 @@ class Deck extends Region {
   createdCallback() {
     super.createdCallback();
     this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  }
 
+  attachedCallback() {
     this.shadowRoot
         .querySelector('#shuffle')
         .addEventListener('click', this.shuffle.bind(this));

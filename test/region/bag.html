@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Bag Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/region/bag.html">
+</head>
+<body>
+  <pb-r-bag id="bag">
+    <div id="firstChild"></div>
+  </pb-r-bag>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+      var Distribute = pb.service.Distribute;
+
+      var doc = document.currentScript.ownerDocument;
+      var el = doc.querySelector('#bag');
+
+      describe('Bag', function() {
+        describe('#createdCallback', function() {
+          it('should call distribute on click', function() {
+            _.spy(el, 'distribute');
+            el.shadowRoot.querySelector('#distribute').click();
+
+            expect(el.distribute).calledWith().at.least(1);
+          });
+        });
+
+        describe('#distribute', function() {
+          it('should start distribute', function() {
+            _.spy(Distribute, 'begin');
+            el.distribute();
+
+            expect(Distribute.begin).calledWith(el).at.least(1);
+          });
+
+          afterEach(function(done) {
+            Distribute.end();
+            done();
+          });
+        });
+
+        describe('#next', function() {
+          it('should return the first child', function() {
+            expect(el.next()).to.be.equal(doc.querySelector('#firstChild'));
+          });
+        })
+
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+    })();
+  </script>
+</body>

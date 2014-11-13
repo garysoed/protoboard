@@ -3,6 +3,7 @@
   <base href="..">
   <head>
     <link rel="import" href="src/component/card.html">
+    <link rel="import" href="src/region/bag.html">
     <link rel="import" href="src/region/deck.html">
     <link rel="import" href="src/region/rect.html">
     <link rel="import" href="src/ui/context.html">
@@ -22,6 +23,16 @@
     pb-r-deck::shadow #root {
       height: 100px;
       width: 100px;
+    }
+
+    pb-r-bag::shadow #root {
+      height: 100px;
+      width: 100px;
+    }
+
+    .pb-distribute::shadow #root {
+      outline: 2px solid green;
+      outline-offset: -2px;
     }
 
     #region {
@@ -53,6 +64,8 @@
           <div class="back" style="background-color: #f0f;" draggable="true"></div>
         </pb-c-card>
       </pb-r-deck>
+
+      <pb-r-bag></pb-r-bag>
 
       <pb-r-rect class="reg1">
         <div id="region">
