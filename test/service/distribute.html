@@ -17,45 +17,30 @@
       var Distribute = pb.service.Distribute;
 
       describe('Distribute', function() {
+        var source = _.stub(pb.region.Bag);
+        source.classList = _.stub(DOMTokenList);
+
         describe('#begin', function() {
           it('should activate when inactive', function() {
-            var source = {
-              classList: {
-                add: function() {},
-                remove: function() {}
-              }
-            };
-            var o = {};
-            o.handler = function() {};
-            _.spy(o, 'handler');
+            var handler = _.spiedFunction();
             _.spy(source.classList, 'add');
 
-            $(Distribute).on(Distribute.EventType.BEGIN, o.handler);
+            $(Distribute).on(Distribute.EventType.BEGIN, handler);
             Distribute.begin(source);
 
             expect(source.classList.add).calledWith('pb-distribute').at.least(1);
-            expect(o.handler).called().at.least(1);
+            expect(handler).called().at.least(1);
             expect(Distribute.isActive()).to.be.true;
           });
           it('should be noop when active', function() {
-            var source = {
-              classList: {
-                add: function() {},
-                remove: function() {}
-              }
-            };
-
             Distribute.begin(source);
 
-            var o = {
-              handler: function() {}
-            };
-            _.spy(o, 'handler');
+            var handler = _.spiedFunction();
 
-            $(Distribute).on(Distribute.EventType.BEGIN, o.handler);
+            $(Distribute).on(Distribute.EventType.BEGIN, handler);
             Distribute.begin(source);
 
-            expect(o.handler).called().to.be.equal(0);
+            expect(handler).called().to.be.equal(0);
           });
 
           afterEach(function(done) {
@@ -65,13 +50,6 @@
         });
 
         describe('#end', function() {
-          var source = {
-            classList: {
-              add: function() {},
-              remove: function() {}
-            }
-          };
-
           beforeEach(function(done) {
             Distribute.begin(source);
             done();
@@ -79,40 +57,28 @@
 
           it('should deactivate when active', function() {
             _.spy(source.classList, 'remove');
-            var o = {
-              handler: function() {}
-            };
-            _.spy(o, 'handler');
-            $(Distribute).on(Distribute.EventType.END, o.handler);
+            var handler = _.spiedFunction();
+
+            $(Distribute).on(Distribute.EventType.END, handler);
             Distribute.end();
 
             expect(source.classList.remove).calledWith('pb-distribute').at.least(1);
-            expect(o.handler).called().at.least(1);
+            expect(handler).called().at.least(1);
             expect(Distribute.isActive()).to.be.false;
           });
           it('should be noop when inactive', function() {
             Distribute.end();
 
-            var o = {
-              handler: function() {}
-            };
-            _.spy(o, 'handler');
-            $(Distribute).on(Distribute.EventType.END, o.handler);
+            var handler = _.spiedFunction();
+            $(Distribute).on(Distribute.EventType.END, handler);
 
             Distribute.end();
-            expect(o.handler).called().to.be.equal(0);
+            expect(handler).called().to.be.equal(0);
           });
         });
 
         describe('#isActive', function() {
           it('should return true iff the distribution is active', function() {
-            var source = {
-              classList: {
-                add: function() {},
-                remove: function() {}
-              }
-            };
-
             Distribute.begin(source);
             expect(Distribute.isActive()).to.be.true;
 
@@ -124,13 +90,7 @@
         describe('#next', function() {
           it('should return the first child of the source', function() {
             var child = {};
-            var source = {
-              classList: {
-                add: function() {},
-                remove: function() {}
-              },
-              next: function() { return child; }
-            };
+            _.spy(source, 'next').overrideReturn(child);
 
             Distribute.begin(source);
 
@@ -140,13 +100,6 @@
 
         describe('#onkeydown', function() {
           it('should end distribution when ESC is pressed', function() {
-            var source = {
-              classList: {
-                add: function() {},
-                remove: function() {}
-              }
-            };
-
             Distribute.begin(source);
 
             _.spy(Distribute, 'end');
@@ -159,13 +112,6 @@
             expect(Distribute.end).calledWith().at.least(1);
           });
           it('should be noop if other key is pressed', function() {
-            var source = {
-              classList: {
-                add: function() {},
-                remove: function() {}
-              }
-            };
-
             Distribute.begin(source);
 
             _.spy(Distribute, 'end');

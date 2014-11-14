@@ -22,7 +22,7 @@
         describe('#attachedCallback', function() {
           it('should handle dragover', function() {
             var r = new Region();
-            _.spy(r, 'addEventListener', false);
+            _.spy(r, 'addEventListener').overrideReturn();
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -31,7 +31,7 @@
 
             var handler = isAFunction.matchingArgs[0];
             var stubEvent = _.stub(Event);
-            _.spy(stubEvent, undefined, false);
+            _.spy(stubEvent);
             handler.call(r, stubEvent);
 
             expect(stubEvent.preventDefault).calledWith().at.least(1);
@@ -42,8 +42,8 @@
             var r = new Region();
             r.classList = _.stub(DOMTokenList);
 
-            _.spy(r, 'addEventListener', false);
-            _.spy(r.classList, 'add', false);
+            _.spy(r, 'addEventListener').overrideReturn();
+            _.spy(r.classList, 'add');
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -53,7 +53,7 @@
             // Now fire the event.
             var handler = isAFunction.matchingArgs[0];
             var stubEvent = _.stub(Event);
-            _.spy(stubEvent, undefined, false);
+            _.spy(stubEvent);
             handler.call(r, stubEvent);
 
             expect(stubEvent.preventDefault).calledWith().at.least(1);
@@ -64,8 +64,8 @@
             var r = new Region();
             r.classList = _.stub(DOMTokenList);
 
-            _.spy(r, 'addEventListener', false);
-            _.spy(r.classList, 'remove', false);
+            _.spy(r, 'addEventListener').overrideReturn();
+            _.spy(r.classList, 'remove');
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -75,7 +75,7 @@
             // Now fire the event.
             var handler = isAFunction.matchingArgs[0];
             var stubEvent = _.stub(Event);
-            _.spy(stubEvent, undefined, false);
+            _.spy(stubEvent);
             handler.call(r, stubEvent);
 
             expect(r.classList.remove).calledWith('pb-over').at.least(1);
@@ -85,8 +85,8 @@
             var r = new Region();
             r.classList = _.stub(DOMTokenList);
 
-            _.spy(r, 'addEventListener', false);
-            _.spy(r.classList, 'remove', false);
+            _.spy(r, 'addEventListener').overrideReturn();
+            _.spy(r.classList, 'remove');
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -95,7 +95,7 @@
 
             // Now fire the event.
             DragDrop.lastDraggedEl = {};
-            _.spy(r, 'appendChild', false);
+            _.spy(r, 'appendChild').overrideReturn();
 
             var handler = isAFunction.matchingArgs[0];
             handler.call(r, _.stub(Event));
@@ -107,7 +107,7 @@
           it('should handle click when Distribute service is active and has next', function() {
             var r = new Region();
 
-            _.spy(r, 'addEventListener', false);
+            _.spy(r, 'addEventListener').overrideReturn();
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -115,26 +115,20 @@
             expect(r.addEventListener).calledWith('click', isAFunction).at.least(1);
 
             // Call the handler.
-            var origIsActive = pb.service.Distribute.isActive;
-            var origNext = pb.service.Distribute.next;
-
             var nextEl = {};
-            Distribute.isActive = function() { return true; };
-            Distribute.next = function() { return nextEl; };
-            _.spy(r, 'appendChild', false);
+            _.spy(Distribute, 'isActive').overrideReturn(true);
+            _.spy(Distribute, 'next').overrideReturn(nextEl);
+            _.spy(r, 'appendChild').overrideReturn();
 
             isAFunction.matchingArgs[0].call(r);
 
             expect(r.appendChild).calledWith(nextEl).at.least(1);
-
-            Distribute.isActive = origIsActive;
-            Distribute.next = origNext;
           });
 
           it('should ignore click when Distribute service is inactive', function() {
             var r = new Region();
 
-            _.spy(r, 'addEventListener', false);
+            _.spy(r, 'addEventListener').overrideReturn();
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -145,20 +139,18 @@
             var origIsActive = pb.service.Distribute.isActive;
 
             var nextEl = {};
-            Distribute.isActive = function() { return false; };
-            _.spy(r, 'appendChild', false);
+            _.spy(Distribute, 'isActive').overrideReturn(false);
+            _.spy(r, 'appendChild').overrideReturn();
 
             isAFunction.matchingArgs[0].call(r);
 
             expect(r.appendChild).called().to.be.equal(0);
-
-            Distribute.isActive = origIsActive;
           });
 
           it('should ignore click when Distribute service does not have next', function() {
             var r = new Region();
 
-            _.spy(r, 'addEventListener', false);
+            _.spy(r, 'addEventListener').overrideReturn();
 
             var isAFunction = Matchers.isA(Function);
             r.attachedCallback();
@@ -166,38 +158,26 @@
             expect(r.addEventListener).calledWith('click', isAFunction).at.least(1);
 
             // Call the handler.
-            var origIsActive = pb.service.Distribute.isActive;
-            var origNext = pb.service.Distribute.next;
-
             var nextEl = {};
-            Distribute.isActive = function() { return true; };
-            Distribute.next = function() { return null; };
-            _.spy(r, 'appendChild', false);
+            _.spy(Distribute, 'isActive').overrideReturn(true);
+            _.spy(Distribute, 'next').overrideReturn(null);
+            _.spy(r, 'appendChild').overrideReturn();
 
             isAFunction.matchingArgs[0].call(r);
 
             expect(r.appendChild).called().to.be.equal(0);
-
-            Distribute.isActive = origIsActive;
-            Distribute.next = origNext;
           });
 
           it('should handle distribute begin', function() {
             var stubClassList = _.stub(DOMTokenList);
-            _.spy(stubClassList, 'add', false);
-
-            // TODO: Make a stub method that stubs everything.
-            _.spy(stubClassList, 'remove', false);
+            _.spy(stubClassList, 'add');
 
             var r = new Region();
             r.shadowRoot = _.stub(HTMLShadowElement);
-            r.shadowRoot.querySelector = function() { 
-              return { classList: stubClassList }; 
-            };
-            _.spy(r, 'addEventListener', false);
+            _.spy(r.shadowRoot, 'querySelector').overrideReturn({ classList: stubClassList });
+            _.spy(r, 'addEventListener').overrideReturn();
 
             r.attachedCallback();
-            _.spy(r.shadowRoot, 'querySelector');
             
             $(Distribute).trigger(Distribute.EventType.BEGIN);
 
@@ -207,17 +187,14 @@
 
           it('should handle distribute end', function() {
             var stubClassList = _.stub(DOMTokenList);
-            _.spy(stubClassList, 'remove', false);
+            _.spy(stubClassList, 'remove');
 
             var r = new Region();
             r.shadowRoot = _.stub(HTMLShadowElement);
-            r.shadowRoot.querySelector = function() { 
-              return { classList: stubClassList }; 
-            };
-            _.spy(r, 'addEventListener', false);
+            _.spy(r.shadowRoot, 'querySelector').overrideReturn({ classList: stubClassList });
+            _.spy(r, 'addEventListener').overrideReturn();
 
             r.attachedCallback();
-            _.spy(r.shadowRoot, 'querySelector');
             
             $(Distribute).trigger(Distribute.EventType.END);
 

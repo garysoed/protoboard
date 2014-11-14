@@ -147,7 +147,6 @@ var $__src_47_component_47_component__ = (function() {
   var $__default = Component;
   if (window.TEST_MODE) {
     Utils.makeGlobal('pb.component.Component', Component);
-    console.log(pb.component.Component);
   }
   return {get default() {
       return $__default;

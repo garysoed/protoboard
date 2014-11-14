@@ -16,7 +16,8 @@
     (function() {
       var RectGrid = pb.surface.RectGrid;
       var expect = chai.expect;
-      var Spies = spies.Spies;
+      var _ = spies.Spies;
+      var _M = spies.Matchers;
 
       var doc = document.currentScript.ownerDocument;
 
@@ -73,9 +74,9 @@
 
         describe('#register', function() {
           it('should does nothing on second call', function() {
-            Spies.spy(document, 'registerElement', false);
+            _.spy(document, 'registerElement', false);
             RectGrid.register(doc, {} /* templates */);
-            expect(document.registerElement).calledWith(Matchers.any(), Matchers.any()).equal(0);
+            expect(document.registerElement).called().to.be.equal(0);
           });
         });
       });

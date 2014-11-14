@@ -15,14 +15,14 @@
     (function() {
       var Rect = pb.region.Rect;
       var expect = chai.expect;
-      var Spies = spies.Spies;
+      var _ = spies.Spies;
 
       var doc = document.currentScript.ownerDocument;
 
       describe('Rect', function() {
         describe('#register', function() {
           it('should does nothing on second register', function() {
-            Spies.spy(document, 'registerElement', false);
+            _.spy(document, 'registerElement').overrideReturn();
             Rect.register(document, {});
             expect(document.registerElement).calledWith(Matchers.any(), Matchers.any()).equal(0);
           });

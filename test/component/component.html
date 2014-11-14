@@ -20,9 +20,9 @@
       var DragDropService = pb.service.DragDrop;
 
       var expect = chai.expect;
-      var Spies = spies.Spies;
-      var Matchers = spies.Matchers;
-      var Fakes = spies.Fakes;
+      var _ = spies.Spies;
+      var _M = spies.Matchers;
+      var _F = spies.Fakes;
 
       var doc = document.currentScript.ownerDocument;
 
@@ -38,22 +38,21 @@
             var rootEl = doc.querySelector('#root');
             var c = new Component();
             c.shadowRoot = doc.querySelector('#fakeShadowRoot');
-            c.querySelectorAll = function() { return Fakes.NodeList([rootEl]); };
             
-            Spies.spy(c, 'querySelectorAll');
-            Spies.spy(rootEl, 'addEventListener', false);
-            Spies.spy(DragDropService, 'dragStart');
+            _.spy(c, 'querySelectorAll').overrideReturn(_F.NodeList([ rootEl ]));
+            _.spy(rootEl, 'addEventListener').overrideReturn();
+            _.spy(DragDropService, 'dragStart');
 
             c.config({ draggable: true });
 
-            var isAFunction = Matchers.isA(Function);
+            var isAFunction = _M.isA(Function);
             expect(c.querySelectorAll).calledWith('*[draggable="true"]').at.least(1);
             expect(rootEl.addEventListener).calledWith('dragstart', isAFunction).at.least(1);
 
             // Now call the drag start handler.
-            var event = Spies.stub(Event);
-            event.dataTransfer = Spies.stub(DataTransfer);
-            Spies.spy(event.dataTransfer, 'setData', false);
+            var event = _.stub(Event);
+            event.dataTransfer = _.stub(DataTransfer);
+            _.spy(event.dataTransfer, 'setData');
 
             isAFunction.matchingArgs[0](event);
             expect(event.dataTransfer.effectAllowed).to.be.equal('move');
@@ -66,12 +65,12 @@
             
             c.config({ });
 
-            var isAFunction = Matchers.isA(Function);
+            var isAFunction = _M.isA(Function);
             expect($(doc.querySelector('#root')).attr('draggable')).to.not.exist;
           });
 
           afterEach(function(done) {
-            Spies.reset();
+            _.reset();
             done();
           });
         });
