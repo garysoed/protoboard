@@ -1,0 +1,12 @@
+@import 'theme';
+
+* /deep/ pb-u-context div {
+  background-color: $color-background;
+  cursor: default;
+  padding: 5px;
+  width: 150px;
+}
+
+* /deep/ pb-u-context {
+  @include layer(1);
+}

@@ -1,0 +1,40 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+$font: 'Roboto', Helvetica, Arial, sans-serif;
+
+$color-lighter: #C9C8E2;
+$color-light: #A7A7CF;
+$color-normal: #8584BA;
+$color-dark: #6664A5;
+$color-darker: #4A4991;
+
+$color-background: $color-lighter;
+$color-background-dark: $color-light;
+$color-border: $color-normal;
+$color-shadow: $color-darker;
+$color-highlight: $color-dark;
+
+/* Borders */
+@mixin region-border() {
+  border: 1px solid $color-border;
+}
+
+@mixin card-border() {
+  border-radius: 5px;
+}
+
+@mixin layer($level) {
+  @if $level == 1 {
+    box-shadow: 0 0 10px $color-shadow;
+    z-index: 1;
+  }
+}
+
+/* Sizes */
+$component-height: 100px;
+$component-width: 100px;
+
+$card-height: 100px;
+$card-width: 75px;
+
+$transition-duration: .3s;

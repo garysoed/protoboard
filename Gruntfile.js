@@ -7,9 +7,6 @@ module.exports = function(grunt) {
       'traceur': {
         command: 'traceur --out main.js src/modules.js  --source-maps=file --experimental --modules=inline'
       },
-      'karma': {
-        command: 'karma start karma.conf.js'
-      },
       'mv': {
         command: function(from, to) {
           return 'mv ' + from + ' ' + to;
@@ -26,12 +23,43 @@ module.exports = function(grunt) {
         options: {
           atBegin: true
         }
+      },
+
+      'sass': {
+        files: [
+          'src/**/*.scss'
+        ],
+        tasks: [ 'sass' ],
+        options: {
+          atBegin: true
+        }
+      }
+    },
+
+    'karma': {
+      unit: {
+        configFile: 'karma.conf.js'
+      }
+    },
+
+    'sass': {
+      'dist': {
+        options: {
+          loadPath: 'src/themes'
+        },
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: ['**/*.scss'],
+          dest: 'out/',
+          ext: '.css'
+        }]
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-shell');
-
-  grunt.registerTask('karma', 'shell:karma');
+  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 };

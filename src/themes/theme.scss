@@ -1,0 +1,16 @@
+@import 'default-theme';
+
+body {
+  font-family: $font;
+}
+
+.pb-component::shadow #root {
+  height: $component-height;
+  width: $component-width;
+}
+
+.pb-card::shadow #root {
+  @include card-border();
+  height: $card-height;
+  width: $card-width;
+}

@@ -1,5 +1,6 @@
 import As from 'src/as';
 import Utils from 'src/utils';
+import PbElement from 'src/pbelement';
 
 let doc = null;
 let templates = null;
@@ -15,8 +16,10 @@ const EL_NAME = 'pb-s-rectgrid';
  *     Add the contents of the grid as children of this element. Use "row" and "col" attributes on
  *     them to indicate their positions in the grid.
  */
-export default class RectGrid extends HTMLElement {
+export default class RectGrid extends PbElement {
   createdCallback() {
+    super.createdCallback();
+
     // Create the shadow DOM.
     this.createShadowRoot()
         .appendChild(Utils.activateTemplate(templates.main, doc));
@@ -42,6 +45,10 @@ export default class RectGrid extends HTMLElement {
             rowEl.appendChild(colEl);
           }
         });
+  }
+
+  attachedCallback() {
+    super.attachedCallback();
   }
 
   /**

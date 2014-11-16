@@ -2,19 +2,26 @@ import Utils from 'src/utils';
 import DragDropService from 'src/service/dragdrop';
 
 const ATTR_DRAGGABLE = 'draggable';
+const CLASS_DRAGGED = 'pb-dragged';
 
 function setupDraggable() {
   let draggables = this.querySelectorAll('*[draggable="true"]');
 
   // Propagate the draggable attribute to the root element.
-  for (let i = 0; i < draggables.length; i++) {
-    draggables.item(i).addEventListener('dragstart', handleDragStart.bind(this));
-  }
+  Utils.toArray(draggables).forEach((draggable => {
+    draggable.addEventListener('dragstart', handleDragStart.bind(this));
+    draggable.addEventListener('dragend', handleDragEnd.bind(this));
+  }).bind(this));
+}
+
+function handleDragEnd() {
+  this.classList.remove(CLASS_DRAGGED);
 }
 
 function handleDragStart(event) {
   let dataTransfer = event.dataTransfer;
   dataTransfer.effectAllowed = 'move';
+  this.classList.add(CLASS_DRAGGED);
 
   DragDropService.dragStart(this);
 }

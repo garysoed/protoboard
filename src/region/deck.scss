@@ -1,0 +1,7 @@
+@import 'theme';
+@import 'rect';
+
+pb-r-deck {
+  @extend pb-r-rect;
+  @extend .pb-card;
+}

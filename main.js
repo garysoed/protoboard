@@ -51,6 +51,22 @@ var $__src_47_utils__ = (function() {
         }));
       });
     },
+    waitFor: function(object, property, truth, handler) {
+      var truthFn = (typeof truth === 'function') ? truth : (function(v) {
+        return v === truth;
+      });
+      if (truthFn(object[$traceurRuntime.toProperty(property)])) {
+        handler();
+      } else {
+        var observer = (function(changes) {
+          if (truthFn(object[$traceurRuntime.toProperty(property)])) {
+            Object.unobserve(object, observer);
+            handler();
+          }
+        });
+        Object.observe(object, observer);
+      }
+    },
     compare: function(a, b) {
       if (typeof a === 'number' && typeof b === 'number') {
         if (a < b) {
@@ -124,15 +140,22 @@ var $__src_47_component_47_component__ = (function() {
   var Utils = ($__src_47_utils__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var ATTR_DRAGGABLE = 'draggable';
+  var CLASS_DRAGGED = 'pb-dragged';
   function setupDraggable() {
+    var $__2 = this;
     var draggables = this.querySelectorAll('*[draggable="true"]');
-    for (var i = 0; i < draggables.length; i++) {
-      draggables.item(i).addEventListener('dragstart', handleDragStart.bind(this));
-    }
+    Utils.toArray(draggables).forEach(((function(draggable) {
+      draggable.addEventListener('dragstart', handleDragStart.bind($__2));
+      draggable.addEventListener('dragend', handleDragEnd.bind($__2));
+    })).bind(this));
+  }
+  function handleDragEnd() {
+    this.classList.remove(CLASS_DRAGGED);
   }
   function handleDragStart(event) {
     var dataTransfer = event.dataTransfer;
     dataTransfer.effectAllowed = 'move';
+    this.classList.add(CLASS_DRAGGED);
     DragDropService.dragStart(this);
   }
   var Component = function Component() {};
@@ -173,12 +196,19 @@ var $__src_47_component_47_card__ = (function() {
     $traceurRuntime.superConstructor($Card).call(this);
   };
   var $Card = Card;
-  ($traceurRuntime.createClass)(Card, {createdCallback: function() {
+  ($traceurRuntime.createClass)(Card, {
+    createdCallback: function() {
       $traceurRuntime.superGet(this, $Card.prototype, "createdCallback").call(this);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.addEventListener('click', handleClick.bind(this));
+    },
+    attachedCallback: function() {
+      this.addEventListener('click', handleClick);
       this.config({draggable: true});
-    }}, {register: function(currentDoc, cardTemplate) {
+    },
+    detachedCallback: function() {
+      this.removeEventListener('click', handleClick);
+    }
+  }, {register: function(currentDoc, cardTemplate) {
       if (doc || template) {
         return;
       }
@@ -412,6 +442,7 @@ var $__src_47_region_47_deck__ = (function() {
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     },
     attachedCallback: function() {
+      $traceurRuntime.superGet(this, $Deck.prototype, "attachedCallback").call(this);
       this.shadowRoot.querySelector('#shuffle').addEventListener('click', this.shuffle.bind(this));
     },
     shuffle: function() {
@@ -496,6 +527,31 @@ var $__src_47_service_47_modules__ = (function() {
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
   return {};
 })();
+var $__src_47_pbelement__ = (function() {
+  "use strict";
+  var __moduleName = "src/pbelement";
+  function require(path) {
+    return $traceurRuntime.require("src/pbelement", path);
+  }
+  var Utils = ($__src_47_utils__).default;
+  var PbElement = function PbElement() {
+    $traceurRuntime.superConstructor($PbElement).apply(this, arguments);
+  };
+  var $PbElement = PbElement;
+  ($traceurRuntime.createClass)(PbElement, {
+    createdCallback: function() {
+      this.isCreated = false;
+    },
+    attachedCallback: function() {
+      this.isCreated = true;
+    }
+  }, {}, HTMLElement);
+  var $__default = PbElement;
+  Utils.makeGlobal('pb.PbElement', PbElement);
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_surface_47_rectgrid__ = (function() {
   "use strict";
   var __moduleName = "src/surface/rectgrid";
@@ -504,6 +560,7 @@ var $__src_47_surface_47_rectgrid__ = (function() {
   }
   var As = ($__src_47_as__).default;
   var Utils = ($__src_47_utils__).default;
+  var PbElement = ($__src_47_pbelement__).default;
   var doc = null;
   var templates = null;
   var ATTR_ROW = 'row';
@@ -515,6 +572,7 @@ var $__src_47_surface_47_rectgrid__ = (function() {
   var $RectGrid = RectGrid;
   ($traceurRuntime.createClass)(RectGrid, {
     createdCallback: function() {
+      $traceurRuntime.superGet(this, $RectGrid.prototype, "createdCallback").call(this);
       this.createShadowRoot().appendChild(Utils.activateTemplate(templates.main, doc));
       var rowCount = As.int($(this).attr(ATTR_ROW));
       var colCount = As.int($(this).attr(ATTR_COL));
@@ -530,6 +588,9 @@ var $__src_47_surface_47_rectgrid__ = (function() {
         }
       }));
     },
+    attachedCallback: function() {
+      $traceurRuntime.superGet(this, $RectGrid.prototype, "attachedCallback").call(this);
+    },
     get: function(row, col) {
       var contentEl = this.shadowRoot.querySelector(("content[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]"));
       return contentEl ? contentEl.getDistributedNodes()[0] : null;
@@ -541,7 +602,7 @@ var $__src_47_surface_47_rectgrid__ = (function() {
       doc = currentDoc;
       templates = gridTemplates;
       document.registerElement(EL_NAME, {prototype: $RectGrid.prototype});
-    }}, HTMLElement);
+    }}, PbElement);
   var $__default = RectGrid;
   Utils.makeGlobal('pb.surface.RectGrid', RectGrid);
   return {get default() {

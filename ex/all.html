@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <base href="..">
+  <head>
+    <link rel="import" href="src/component/card.html">
+    <link rel="import" href="src/component/token.html">
+    <link rel="import" href="src/region/bag.html">
+    <link rel="import" href="src/region/deck.html">
+    <link rel="import" href="src/region/rect.html">
+    <link rel="import" href="src/ui/context.html">
+
+    <link rel="stylesheet" type="text/css" href="out/themes/theme.css">
+
+  </head>
+  <style>
+    .front {
+      line-height: 100px;
+      text-align: center;
+    }
+
+    .circle {
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
+    }
+
+    pb-c-token.circle::shadow #root {
+      width: 50px;
+    }
+
+    pb-c-token > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .green {
+      background-color: green;
+    }
+
+    .red {
+      background-color: red;
+    }
+
+    .blue {
+      background-color: blue;
+    }
+
+
+    .pb-distribute::shadow #root {
+      outline: 2px solid green;
+      outline-offset: -2px;
+    }
+
+    pb-u-context div {
+      background-color: #eee;
+      cursor: pointer;
+      padding: 5px;
+      width: 200px;
+    }
+  </style>
+  <body>
+    <table>
+      <tr>
+        <td>Deck (With cards)</td>
+        <td>
+          <pb-r-deck>
+            <pb-c-card>
+              <div class="front" draggable="true">
+                1
+              </div>
+              <div class="back" draggable="true"></div>
+            </pb-c-card>
+            <pb-c-card>
+              <div class="front" draggable="true">
+                2
+              </div>
+              <div class="back" draggable="true"></div>
+            </pb-c-card>
+            <pb-c-card>
+              <div class="front" draggable="true">
+                3
+              </div>
+              <div class="back" draggable="true"></div>
+            </pb-c-card>
+          </pb-r-deck>
+        </td>
+      </tr>
+      <tr>
+        <td>Bag (With tokens)</td>
+        <td>
+          <pb-r-bag>
+            <pb-c-token>
+              <div draggable="true">
+                <div class="green circle"></div>
+              </div>
+            </pb-c-token>
+            <pb-c-token>
+              <div draggable="true">
+                <div class="red circle"></div>
+              </div>
+            </pb-c-token>
+            <pb-c-token>
+              <div draggable="true">
+                <div class="blue circle"></div>
+              </div>
+            </pb-c-token>
+          </pb-r-bag>
+        </td>
+      </tr>
+      <tr>
+        <td>Generic region</td>
+        <td>
+          <pb-r-rect class="reg1">
+            <div id="region">
+              <pb-u-context>
+                <div>A</div>
+                <div>B</div>
+                <div>C</div>
+                <div>
+                  Sub ...
+                  <pb-u-context>
+                    <div>Sub A</div>
+                    <div>Sub B</div>
+                    <div>Sub C</div>
+                  </pb-u-context>
+                </div>
+              </pb-u-context>
+            </div>
+          </pb-r-rect>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

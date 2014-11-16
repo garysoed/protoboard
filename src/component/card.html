@@ -1,32 +1,8 @@
 <base href="../..">
 <link rel="import" href="main.html">
+<link rel="stylesheet" type="text/css" href="out/component/card.css">
 
 <template>
-  <style>
-    #root { 
-      position: relative;
-      perspective: 800px;
-    }
-
-    :host-context([showFront="true"])::shadow #container {
-      transform: rotateY(180deg);
-    }
-
-    #container {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      transform-style: preserve-3d;
-      transition: transform .5s;
-    }
-
-    content::content .front {
-      backface-visibility: hidden;
-      position: absolute;
-      transform: rotateY(180deg);
-    }
-  </style>
-
   <div id="root">
     <div id="container">
       <content select=".front"></content>

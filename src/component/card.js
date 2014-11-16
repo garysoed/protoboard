@@ -25,9 +25,15 @@ export default class Card extends Component {
     super.createdCallback();
     this.createShadowRoot()
         .appendChild(Utils.activateTemplate(template, doc));
+  }
 
-    this.addEventListener('click', handleClick.bind(this));
+  attachedCallback() {
+    this.addEventListener('click', handleClick);
     this.config({ draggable: true });
+  }
+
+  detachedCallback() {
+    this.removeEventListener('click', handleClick);
   }
 
   static register(currentDoc, cardTemplate) {

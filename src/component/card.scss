@@ -1,0 +1,50 @@
+@import 'theme';
+
+/** TODO: Add prefixes */
+pb-c-card::shadow {
+  #root {
+    width: $card-width;
+    perspective: 800px;
+    position: relative;
+  }
+
+  #container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform $transition-duration;
+  }
+
+  content::content .front {
+  }
+}
+
+pb-c-card[showFront="true"]::shadow #container {
+  transform: rotateY(180deg);
+}
+
+pb-c-card > div {
+  @include card-border();
+  height: $card-height;
+  width: $card-width;
+}
+
+pb-c-card > .back {
+  background-color: $color-background-dark;
+}
+
+pb-c-card > .front {
+  background-color: $color-background;
+  backface-visibility: hidden;
+  position: absolute;
+  transform: rotateY(180deg);
+  border: 5px solid $color-border;
+  box-sizing: border-box;
+}
+
+
+pb-c-card.pb-dragged .front,
+pb-c-card.pb-dragged .back {
+  @include layer(1);
+}

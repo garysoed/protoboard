@@ -42,6 +42,23 @@ var Utils = {
     });
   },
 
+  waitFor(object, property, truth, handler) {
+    let truthFn = (typeof truth === 'function') 
+        ? truth 
+        : v => v === truth;
+    if (truthFn(object[property])) {
+      handler();
+    } else {
+      let observer = (changes) => {
+        if (truthFn(object[property])) {
+          Object.unobserve(object, observer)
+          handler();
+        }
+      }
+      Object.observe(object, observer);
+    }
+  },
+
   compare(a, b) {
     if (typeof a === 'number' && typeof b === 'number') {
       if (a < b) {

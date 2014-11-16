@@ -20,6 +20,7 @@ class Deck extends Region {
   }
 
   attachedCallback() {
+    super.attachedCallback();
     this.shadowRoot
         .querySelector('#shuffle')
         .addEventListener('click', this.shuffle.bind(this));

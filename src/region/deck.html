@@ -2,26 +2,16 @@
 
 <link rel="import" href="main.html">
 <link rel="import" href="src/ui/context.html">
+<link rel="stylesheet" type="text/css" href="out/region/deck.css">
 
 <template>
-  <style>
-    pb-u-context div {
-      cursor: default;
-      padding: 5px;
-      width: 150px;
-    }
-
-    #context {
-      background-color: #eee;
-      z-index: 500;
-    }
-  </style>
-
   <div id="root">
     <pb-u-context id="context">
       <div id="shuffle">Shuffle</div>
     </pb-u-context>
-    <content></content>
+    <div>
+      <content></content>
+    </div>
   </div>
 </template>
 
