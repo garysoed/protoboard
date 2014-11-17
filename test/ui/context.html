@@ -26,6 +26,8 @@
       var expect = chai.expect;
       var _ = spies.Spies;
 
+      var ContextService = pb.service.Context;
+
       var doc = document.currentScript.ownerDocument;
       var el = doc.querySelector('#context');
 
@@ -67,8 +69,12 @@
 
         describe('#show', function() {
           it('should use top left anchor when there is space', function() {
-            el.show();
+            _.spy(ContextService, 'setActive');
+
+            el.show(1, 2);
+
             expect(el.shadowRoot.querySelector('#root').classList.contains('shown')).to.be.true;
+            expect(ContextService.setActive).calledWith(el).at.least(1);
           });
 
           // TODO
@@ -80,6 +86,27 @@
             el.show();
             el.hide();
             expect(el.shadowRoot.querySelector('#root').classList.contains('shown')).to.be.false;
+          });
+        });
+
+        describe('#handleContextSwitched', function() {
+          it('should hide if the active context is a different element', function() {
+            var active = {};
+
+            _.spy(el, 'hide');
+            _.spy(ContextService, 'getActive').overrideReturn(active);
+
+            $(ContextService).trigger(ContextService.EventType.SWITCHED);
+
+            expect(el.hide).calledWith().at.least(1);
+          });
+          it('should not hide if the active context is itself', function() {
+            _.spy(el, 'hide');
+            _.spy(ContextService, 'getActive').overrideReturn(el);
+
+            $(ContextService).trigger(ContextService.EventType.SWITCHED);
+
+            expect(el.hide).called().to.be.equal(0);
           });
         });
 

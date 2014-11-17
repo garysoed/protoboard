@@ -22,26 +22,15 @@
       var cardEl = doc.querySelector('#card');
 
       describe('Card', function() {
-        before(function(done) {
-          cardEl.attachedCallback();
-          done();
-        })
-
         describe('#click', function() {
           it('should toggle between showFront="true" and showFront="false"', function() {
             cardEl.click();
-
             expect($(cardEl).attr('showFront')).to.be.equal('true');
 
             cardEl.click();
             expect($(cardEl).attr('showFront')).to.be.equal('false');
           });
         });
-
-        after(function(done) {
-          cardEl.detachedCallback();
-          done();
-        })
       });
     })();
   </script>

@@ -1,4 +1,5 @@
 import Utils from 'src/utils';
+import ContextService from 'src/service/context';
 
 let template = null;
 let doc = null;
@@ -30,6 +31,12 @@ function handleClick(event) {
   }
 }
 
+function handleContextSwitched() {
+  if (ContextService.getActive() !== this) {
+    this.hide();
+  }
+}
+
 /**
  * @class Creates a context menu.
  */
@@ -40,23 +47,18 @@ class Context extends HTMLElement {
     this.createShadowRoot()
         .appendChild(Utils.activateTemplate(template, doc));
     this.attachedCallback();
-    document.addEventListener('click', handleClick.bind(this));
   }
 
   attachedCallback() {
     if (this.parentElement) {
       this.parentElement.addEventListener('contextmenu', handleContextMenu.bind(this));
     }
+    document.addEventListener('click', handleClick.bind(this));
+    $(ContextService).on(ContextService.EventType.SWITCHED, handleContextSwitched.bind(this));
   }
 
   show(mouseX, mouseY) {
     let rootEl = this.shadowRoot.querySelector('#root');
-
-    // Do nothing if it is already shown.
-    if (rootEl.classList.contains(SHOWN_CLASS)) {
-      return;
-    }
-
     rootEl.classList.add(SHOWN_CLASS);
 
     // Handle positioning.
@@ -91,6 +93,8 @@ class Context extends HTMLElement {
 
     this.style[hAnchor] = `${x}px`;
     this.style[vAnchor] = `${y}px`;
+
+    ContextService.setActive(this);
   }
 
   /**
