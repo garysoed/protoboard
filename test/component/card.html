@@ -19,11 +19,16 @@
 
       var expect = chai.expect;
       var doc = document.currentScript.ownerDocument;
+      var cardEl = doc.querySelector('#card');
 
       describe('Card', function() {
+        before(function(done) {
+          cardEl.attachedCallback();
+          done();
+        })
+
         describe('#click', function() {
           it('should toggle between showFront="true" and showFront="false"', function() {
-            var cardEl = doc.querySelector('#card');
             cardEl.click();
 
             expect($(cardEl).attr('showFront')).to.be.equal('true');
@@ -32,6 +37,11 @@
             expect($(cardEl).attr('showFront')).to.be.equal('false');
           });
         });
+
+        after(function(done) {
+          cardEl.detachedCallback();
+          done();
+        })
       });
     })();
   </script>

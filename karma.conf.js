@@ -19,6 +19,7 @@ module.exports = function(config) {
       { pattern: 'main.js', included: false },
       { pattern: 'main.map', included: false },
       { pattern: 'main.html', included: false },
+      { pattern: 'out/**', included: false },
 
       // For source maps
       { pattern: 'src/**/*.js', included: false },

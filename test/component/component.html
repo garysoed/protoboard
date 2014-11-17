@@ -38,8 +38,9 @@
             var rootEl = doc.querySelector('#root');
             var c = new Component();
             c.shadowRoot = doc.querySelector('#fakeShadowRoot');
+            c.classList = _.stub(DOMTokenList);
             
-            _.spy(c, 'querySelectorAll').overrideReturn(_F.NodeList([ rootEl ]));
+            _.spy(c, 'querySelectorAll').overrideReturn([ rootEl ]);
             _.spy(rootEl, 'addEventListener').overrideReturn();
             _.spy(DragDropService, 'dragStart');
 
