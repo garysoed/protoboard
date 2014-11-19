@@ -37,7 +37,6 @@
             expect(stubEvent.preventDefault).calledWith().at.least(1);
             expect(stubEvent.dropEffect).to.be.equal('move');
           });
-
           it('should handle dragenter', function() {
             var r = new Region();
             r.classList = _.stub(DOMTokenList);
@@ -52,14 +51,10 @@
 
             // Now fire the event.
             var handler = isAFunction.matchingArgs[0];
-            var stubEvent = _.stub(Event);
-            _.spy(stubEvent);
-            handler.call(r, stubEvent);
+            handler.call(r);
 
-            expect(stubEvent.preventDefault).calledWith().at.least(1);
             expect(r.classList.add).calledWith('pb-over').at.least(1);
           });
-
           it('should handle dragleave', function() {
             var r = new Region();
             r.classList = _.stub(DOMTokenList);
@@ -80,7 +75,6 @@
 
             expect(r.classList.remove).calledWith('pb-over').at.least(1);
           });
-
           it('should handle drop', function() {
             var r = new Region();
             r.classList = _.stub(DOMTokenList);
@@ -94,16 +88,17 @@
             expect(r.addEventListener).calledWith('drop', isAFunction).at.least(1);
 
             // Now fire the event.
-            DragDrop.lastDraggedEl = {};
+            var lastDraggedEl = {}
+            DragDrop.lastDraggedEl = lastDraggedEl;
             _.spy(r, 'appendChild').overrideReturn();
 
             var handler = isAFunction.matchingArgs[0];
-            handler.call(r, _.stub(Event));
+            handler.call(r);
 
             expect(r.classList.remove).calledWith('pb-over').at.least(1);
-            expect(r.appendChild).calledWith(DragDrop.lastDraggedEl).at.least(1);
+            expect(r.appendChild).calledWith(lastDraggedEl).at.least(1);
+            expect(DragDrop.lastDraggedEl).to.be.null;
           });
-
           it('should handle click when Distribute service is active and has next', function() {
             var r = new Region();
 
@@ -124,7 +119,6 @@
 
             expect(r.appendChild).calledWith(nextEl).at.least(1);
           });
-
           it('should ignore click when Distribute service is inactive', function() {
             var r = new Region();
 
@@ -146,7 +140,6 @@
 
             expect(r.appendChild).called().to.be.equal(0);
           });
-
           it('should ignore click when Distribute service does not have next', function() {
             var r = new Region();
 
@@ -167,7 +160,6 @@
 
             expect(r.appendChild).called().to.be.equal(0);
           });
-
           it('should handle distribute begin', function() {
             var stubClassList = _.stub(DOMTokenList);
             _.spy(stubClassList, 'add');
@@ -184,7 +176,6 @@
             expect(r.shadowRoot.querySelector).calledWith('#root').at.least(1);
             expect(stubClassList.add).calledWith('pb-distribute').at.least(1);
           });
-
           it('should handle distribute end', function() {
             var stubClassList = _.stub(DOMTokenList);
             _.spy(stubClassList, 'remove');
@@ -200,6 +191,26 @@
 
             expect(r.shadowRoot.querySelector).calledWith('#root').at.least(1);
             expect(stubClassList.remove).calledWith('pb-distribute').at.least(1);
+          });
+          it('should not remove over class if dragenter is > dragleave', function() {
+            var r = new Region();
+            r.classList = _.stub(DOMTokenList);
+
+            _.spy(r, 'addEventListener').overrideReturn();
+            _.spy(r.classList, 'remove');
+
+            var enterHandlerMatcher = Matchers.isA(Function);
+            var leaveHandlerMatcher = Matchers.isA(Function);
+            r.attachedCallback();
+
+            expect(r.addEventListener).calledWith('dragenter', enterHandlerMatcher).at.least(1);
+            expect(r.addEventListener).calledWith('dragleave', leaveHandlerMatcher).at.least(1);
+
+            enterHandlerMatcher.matchingArgs[0].call(r);
+            enterHandlerMatcher.matchingArgs[0].call(r);
+            leaveHandlerMatcher.matchingArgs[0].call(r);
+
+            expect(r.classList.remove).called().to.be.equal(0);
           });
 
           afterEach(function(done) {

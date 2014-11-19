@@ -5,24 +5,31 @@ import Utils from 'src/utils';
 const CLASS_DISTRIBUTE = 'pb-distribute';
 const CLASS_OVER = 'pb-over';
 
+const _dragEnterCount = Symbol();
+
 function handleDragOver(event) {
   // TODO: Only enable if the component is compatible.
   event.preventDefault();
   event.dropEffect = 'move';
 }
 
-function handleDragEnter(event) {
-  event.preventDefault();
+function handleDragEnter(e) {
   this.classList.add(CLASS_OVER);
+  this[_dragEnterCount]++;
 }
 
-function handleDragLeave() {
-  this.classList.remove(CLASS_OVER);
+function handleDragLeave(e) {
+  this[_dragEnterCount]--;
+  if (this[_dragEnterCount] <= 0) {
+    this.classList.remove(CLASS_OVER);
+    this[_dragEnterCount] = 0;
+  }
 }
 
 function handleDrop() {
   this.classList.remove(CLASS_OVER);
   this.add(DragDrop.lastDraggedEl);
+  DragDrop.lastDraggedEl = null;
 }
 
 function handleClick() {
@@ -43,14 +50,25 @@ function handleDistributeEnd() {
   }
 }
 
+function handleLastDraggedElChange() {
+  if (!DragDrop.lastDraggedEl) {
+    this.classList.remove(CLASS_OVER);
+    this[_dragEnterCount] = 0;
+  }
+}
+
 /**
  * @class Base class of all regions. These are drop targets.
  */
 export default class Region extends HTMLElement {
 
-  constructor() {}
+  constructor() {
+    this[_dragEnterCount] = 0;
+  }
 
-  createdCallback() {}
+  createdCallback() {
+    this[_dragEnterCount] = 0;
+  }
 
   attachedCallback() {
     this.addEventListener('dragover', handleDragOver);
@@ -62,6 +80,8 @@ export default class Region extends HTMLElement {
     $(Distribute)
         .on(Distribute.EventType.BEGIN, handleDistributeBegin.bind(this))
         .on(Distribute.EventType.END, handleDistributeEnd.bind(this));
+
+    Utils.observe(DragDrop, 'lastDraggedEl', handleLastDraggedElChange.bind(this));
   }
 
   add(el) {

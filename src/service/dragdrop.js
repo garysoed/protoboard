@@ -6,10 +6,6 @@ import Utils from 'src/utils';
  * @type {Object}
  */
 let DragDrop = {
-  EventType: {
-    DRAGGED: 'dragged'
-  },
-
   lastDraggedEl: null,
 
   /**

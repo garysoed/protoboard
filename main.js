@@ -119,7 +119,6 @@ var $__src_47_service_47_dragdrop__ = (function() {
   }
   var Utils = ($__src_47_utils__).default;
   var DragDrop = {
-    EventType: {DRAGGED: 'dragged'},
     lastDraggedEl: null,
     dragStart: function(draggedEl) {
       this.lastDraggedEl = draggedEl;
@@ -323,20 +322,26 @@ var $__src_47_region_47_region__ = (function() {
   var Utils = ($__src_47_utils__).default;
   var CLASS_DISTRIBUTE = 'pb-distribute';
   var CLASS_OVER = 'pb-over';
+  var _dragEnterCount = Symbol();
   function handleDragOver(event) {
     event.preventDefault();
     event.dropEffect = 'move';
   }
-  function handleDragEnter(event) {
-    event.preventDefault();
+  function handleDragEnter(e) {
     this.classList.add(CLASS_OVER);
+    this[$traceurRuntime.toProperty(_dragEnterCount)]++;
   }
-  function handleDragLeave() {
-    this.classList.remove(CLASS_OVER);
+  function handleDragLeave(e) {
+    this[$traceurRuntime.toProperty(_dragEnterCount)]--;
+    if (this[$traceurRuntime.toProperty(_dragEnterCount)] <= 0) {
+      this.classList.remove(CLASS_OVER);
+      this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
+    }
   }
   function handleDrop() {
     this.classList.remove(CLASS_OVER);
     this.add(DragDrop.lastDraggedEl);
+    DragDrop.lastDraggedEl = null;
   }
   function handleClick() {
     if (Distribute.isActive() && Distribute.next()) {
@@ -353,9 +358,19 @@ var $__src_47_region_47_region__ = (function() {
       this.shadowRoot.querySelector('#root').classList.remove(CLASS_DISTRIBUTE);
     }
   }
-  var Region = function Region() {};
+  function handleLastDraggedElChange() {
+    if (!DragDrop.lastDraggedEl) {
+      this.classList.remove(CLASS_OVER);
+      this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
+    }
+  }
+  var Region = function Region() {
+    this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
+  };
   ($traceurRuntime.createClass)(Region, {
-    createdCallback: function() {},
+    createdCallback: function() {
+      this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
+    },
     attachedCallback: function() {
       this.addEventListener('dragover', handleDragOver);
       this.addEventListener('dragenter', handleDragEnter);
@@ -363,6 +378,7 @@ var $__src_47_region_47_region__ = (function() {
       this.addEventListener('drop', handleDrop);
       this.addEventListener('click', handleClick);
       $(Distribute).on(Distribute.EventType.BEGIN, handleDistributeBegin.bind(this)).on(Distribute.EventType.END, handleDistributeEnd.bind(this));
+      Utils.observe(DragDrop, 'lastDraggedEl', handleLastDraggedElChange.bind(this));
     },
     add: function(el) {
       this.appendChild(el);
