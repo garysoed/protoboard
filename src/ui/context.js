@@ -38,7 +38,13 @@ function handleContextSwitched() {
 }
 
 /**
- * @class Creates a context menu.
+ * A context menu. To use this, add `pb-u-context` as a child of the element you want to attach the
+ * menu to. When you right click on the parent element, the context menu will open.
+ *
+ * Each child of the context menu is a menu item.
+ * 
+ * @class ui.Context
+ * @extends HTMLElement
  */
 class Context extends HTMLElement {
   constructor() {}
@@ -57,6 +63,14 @@ class Context extends HTMLElement {
     $(ContextService).on(ContextService.EventType.SWITCHED, handleContextSwitched.bind(this));
   }
 
+  /**
+   * Displays the context menu at the specified coordinate. The menu will position its anchor so it
+   * the menu doesn't go off screen.
+   *
+   * @method show
+   * @param {number} mouseX The X coordinate to display the menu on.
+   * @param {number} mouseY The Y coordinate to display the menu on.
+   */
   show(mouseX, mouseY) {
     let rootEl = this.shadowRoot.querySelector('#root');
     rootEl.classList.add(SHOWN_CLASS);
@@ -104,6 +118,14 @@ class Context extends HTMLElement {
     this.shadowRoot.querySelector('#root').classList.remove(SHOWN_CLASS);
   }
 
+  /**
+   * Registers `pb-u-context` to the document.
+   *
+   * @method register
+   * @static
+   * @param {!Document} currentDoc The document object to register the element to.
+   * @param {!Element} contextTemplate The template for the `pb-u-context`'s element shadow DOM.
+   */
   static register(currentDoc, contextTemplate) {
     if (doc || template) {
       // Register has already happened.

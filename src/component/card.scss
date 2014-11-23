@@ -20,7 +20,7 @@ pb-c-card::shadow {
   }
 }
 
-pb-c-card[showFront="true"]::shadow #container {
+pb-c-card[pb-show-front="true"]::shadow #container {
   transform: rotateY(180deg);
 }
 
@@ -30,11 +30,11 @@ pb-c-card > div {
   width: $card-width;
 }
 
-pb-c-card > .back {
+pb-c-card > .pb-back {
   background-color: $color-background-dark;
 }
 
-pb-c-card > .front {
+pb-c-card > .pb-front {
   background-color: $color-background;
   backface-visibility: hidden;
   position: absolute;
@@ -44,7 +44,7 @@ pb-c-card > .front {
 }
 
 
-pb-c-card.pb-dragged .front,
-pb-c-card.pb-dragged .back {
+pb-c-card.pb-dragged .pb-front,
+pb-c-card.pb-dragged .pb-back {
   @include layer(1);
 }

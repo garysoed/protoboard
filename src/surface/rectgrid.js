@@ -5,16 +5,19 @@ import PbElement from 'src/pbelement';
 let doc = null;
 let templates = null;
 
-const ATTR_ROW = 'row';
-const ATTR_COL = 'col';
+const ATTR_ROW = 'pb-row';
+const ATTR_COL = 'pb-col';
 const EL_NAME = 'pb-s-rectgrid';
 
 /**
- * @class A surface that lays out its components in a grid. To use this, add attributes "row" and
- *     "col" to the element "pb-s-rectgrid". These are the number of rows and columns in the grid.
+ * A surface that lays out its components in a grid. To use this, add attributes `pb-row` and
+ * `pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns in the grid.
  *
- *     Add the contents of the grid as children of this element. Use "row" and "col" attributes on
- *     them to indicate their positions in the grid.
+ * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes on
+ * them to indicate their positions in the grid.
+ *
+ * @class surface.RectGrid
+ * @extends PbElement
  */
 export default class RectGrid extends PbElement {
   createdCallback() {
@@ -40,8 +43,8 @@ export default class RectGrid extends PbElement {
             let colEl = Utils.activateTemplate(templates.col, doc);
             $(colEl.querySelector('content'))
                 .attr('select', `[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`)
-                .attr('row', row)
-                .attr('col', col);
+                .attr(ATTR_ROW, row)
+                .attr(ATTR_COL, col);
             rowEl.appendChild(colEl);
           }
         });
@@ -64,6 +67,18 @@ export default class RectGrid extends PbElement {
     return contentEl ? contentEl.getDistributedNodes()[0] : null;
   }
 
+  /**
+   * Registers `pb-s-rectgrid` to the document.
+   *
+   * @method register
+   * @static
+   * @param {!Document} currentDoc The document object to register the element to.
+   * @param {!Object} gridTemplates Object containing template for the `pb-s-rectgrid`'s element 
+   *     shadow DOM.
+   * @param {!Element} gridTemplates.main The main template for the element.
+   * @param {!Element} gridTemplates.row The template for every row in the grid.
+   * @param {!Element} gridTemplates.col The template for every column in the grid.
+   */
   static register(currentDoc, gridTemplates) {
     if (doc || templates) {
       // Register has already happened.

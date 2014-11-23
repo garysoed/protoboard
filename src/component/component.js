@@ -1,5 +1,6 @@
 import Utils from 'src/utils';
 import DragDropService from 'src/service/dragdrop';
+import PbElement from 'src/pbelement';
 
 const ATTR_DRAGGABLE = 'draggable';
 const CLASS_DRAGGED = 'pb-dragged';
@@ -27,20 +28,33 @@ function handleDragStart(event) {
 }
 
 /**
- * @class  Base class for all components. Classes extending this should call #config at the end of
- *     createdCallback.
+ * Base class for all components. Classes extending this should call 
+ * [[#config|component.Component#config]] at the end of `createdCallback`.
  *
  * To make a component draggable, user must have an HTML element with a draggable attribute set to
  * true as a child of this element.
+ * 
+ * @class component.Component
+ * @extends PbElement  
  */
-export default class Component extends HTMLElement {
-  constructor() {}
+export default class Component extends PbElement {
 
-  createdCallback() {}
+  /**
+   * @constructor
+   */
+  constructor() {
+    super.constructor();
+  }
+
+  createdCallback() {
+    super.createdCallback();
+  }
 
   /**
    * Configures the component.
-   * @param {Object} config Configuration used to configure the behavior of this component.
+   *
+   * @method config
+   * @param {!Object} config Configuration used to configure the behavior of this component.
    * @param {boolean} config.draggable True iff the component should be draggable.
    */
   config(config) {

@@ -111,6 +111,30 @@ var $__src_47_utils__ = (function() {
       return $__default;
     }};
 })();
+var $__src_47_pbelement__ = (function() {
+  "use strict";
+  var __moduleName = "src/pbelement";
+  function require(path) {
+    return $traceurRuntime.require("src/pbelement", path);
+  }
+  var Utils = ($__src_47_utils__).default;
+  var PbElement = function PbElement() {
+    this.isCreated = false;
+  };
+  ($traceurRuntime.createClass)(PbElement, {
+    createdCallback: function() {
+      this.isCreated = false;
+    },
+    attachedCallback: function() {
+      this.isCreated = true;
+    }
+  }, {}, HTMLElement);
+  var $__default = PbElement;
+  Utils.makeGlobal('pb.PbElement', PbElement);
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_service_47_dragdrop__ = (function() {
   "use strict";
   var __moduleName = "src/service/dragdrop";
@@ -138,14 +162,15 @@ var $__src_47_component_47_component__ = (function() {
   }
   var Utils = ($__src_47_utils__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
+  var PbElement = ($__src_47_pbelement__).default;
   var ATTR_DRAGGABLE = 'draggable';
   var CLASS_DRAGGED = 'pb-dragged';
   function setupDraggable() {
-    var $__2 = this;
+    var $__3 = this;
     var draggables = this.querySelectorAll('*[draggable="true"]');
     Utils.toArray(draggables).forEach(((function(draggable) {
-      draggable.addEventListener('dragstart', handleDragStart.bind($__2));
-      draggable.addEventListener('dragend', handleDragEnd.bind($__2));
+      draggable.addEventListener('dragstart', handleDragStart.bind($__3));
+      draggable.addEventListener('dragend', handleDragEnd.bind($__3));
     })).bind(this));
   }
   function handleDragEnd() {
@@ -157,15 +182,20 @@ var $__src_47_component_47_component__ = (function() {
     this.classList.add(CLASS_DRAGGED);
     DragDropService.dragStart(this);
   }
-  var Component = function Component() {};
+  var Component = function Component() {
+    $traceurRuntime.superGet(this, $Component.prototype, "constructor").call(this);
+  };
+  var $Component = Component;
   ($traceurRuntime.createClass)(Component, {
-    createdCallback: function() {},
+    createdCallback: function() {
+      $traceurRuntime.superGet(this, $Component.prototype, "createdCallback").call(this);
+    },
     config: function(config) {
       if (config.draggable) {
         setupDraggable.bind(this)();
       }
     }
-  }, {}, HTMLElement);
+  }, {}, PbElement);
   var $__default = Component;
   if (window.TEST_MODE) {
     Utils.makeGlobal('pb.component.Component', Component);
@@ -186,7 +216,7 @@ var $__src_47_component_47_card__ = (function() {
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-c-card';
-  var ATTR_SHOW_FRONT = 'showFront';
+  var ATTR_SHOW_FRONT = 'pb-show-front';
   function handleClick() {
     var oldValue = As.boolean($(this).attr(ATTR_SHOW_FRONT) || 'false');
     $(this).attr(ATTR_SHOW_FRONT, !oldValue);
@@ -340,12 +370,12 @@ var $__src_47_region_47_region__ = (function() {
   }
   function handleDrop() {
     this.classList.remove(CLASS_OVER);
-    this.add(DragDrop.lastDraggedEl);
+    this.appendChild(DragDrop.lastDraggedEl);
     DragDrop.lastDraggedEl = null;
   }
   function handleClick() {
     if (Distribute.isActive() && Distribute.next()) {
-      this.add(Distribute.next());
+      this.appendChild(Distribute.next());
     }
   }
   function handleDistributeBegin() {
@@ -379,9 +409,6 @@ var $__src_47_region_47_region__ = (function() {
       this.addEventListener('click', handleClick);
       $(Distribute).on(Distribute.EventType.BEGIN, handleDistributeBegin.bind(this)).on(Distribute.EventType.END, handleDistributeEnd.bind(this));
       Utils.observe(DragDrop, 'lastDraggedEl', handleLastDraggedElChange.bind(this));
-    },
-    add: function(el) {
-      this.appendChild(el);
     }
   }, {}, HTMLElement);
   var $__default = Region;
@@ -424,12 +451,12 @@ var $__src_47_region_47_bag__ = (function() {
     next: function() {
       return this.children[0];
     }
-  }, {register: function(currentDoc, deckTemplate) {
+  }, {register: function(currentDoc, bagTemplate) {
       if (doc || template) {
         return;
       }
       doc = currentDoc;
-      template = deckTemplate;
+      template = bagTemplate;
       document.registerElement(EL_NAME, {prototype: $Bag.prototype});
     }}, Region);
   var $__default = Bag = Bag;
@@ -544,31 +571,6 @@ var $__src_47_service_47_modules__ = (function() {
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
   return {};
 })();
-var $__src_47_pbelement__ = (function() {
-  "use strict";
-  var __moduleName = "src/pbelement";
-  function require(path) {
-    return $traceurRuntime.require("src/pbelement", path);
-  }
-  var Utils = ($__src_47_utils__).default;
-  var PbElement = function PbElement() {
-    $traceurRuntime.superConstructor($PbElement).apply(this, arguments);
-  };
-  var $PbElement = PbElement;
-  ($traceurRuntime.createClass)(PbElement, {
-    createdCallback: function() {
-      this.isCreated = false;
-    },
-    attachedCallback: function() {
-      this.isCreated = true;
-    }
-  }, {}, HTMLElement);
-  var $__default = PbElement;
-  Utils.makeGlobal('pb.PbElement', PbElement);
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_surface_47_rectgrid__ = (function() {
   "use strict";
   var __moduleName = "src/surface/rectgrid";
@@ -580,8 +582,8 @@ var $__src_47_surface_47_rectgrid__ = (function() {
   var PbElement = ($__src_47_pbelement__).default;
   var doc = null;
   var templates = null;
-  var ATTR_ROW = 'row';
-  var ATTR_COL = 'col';
+  var ATTR_ROW = 'pb-row';
+  var ATTR_COL = 'pb-col';
   var EL_NAME = 'pb-s-rectgrid';
   var RectGrid = function RectGrid() {
     $traceurRuntime.superConstructor($RectGrid).apply(this, arguments);
@@ -600,7 +602,7 @@ var $__src_47_surface_47_rectgrid__ = (function() {
       $(this.shadowRoot.querySelectorAll('#content > div')).each((function(row, rowEl) {
         for (var col = 0; col < colCount; col++) {
           var colEl = Utils.activateTemplate(templates.col, doc);
-          $(colEl.querySelector('content')).attr('select', ("[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]")).attr('row', row).attr('col', col);
+          $(colEl.querySelector('content')).attr('select', ("[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]")).attr(ATTR_ROW, row).attr(ATTR_COL, col);
           rowEl.appendChild(colEl);
         }
       }));

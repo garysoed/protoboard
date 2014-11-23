@@ -28,13 +28,13 @@ function handleDragLeave(e) {
 
 function handleDrop() {
   this.classList.remove(CLASS_OVER);
-  this.add(DragDrop.lastDraggedEl);
+  this.appendChild(DragDrop.lastDraggedEl);
   DragDrop.lastDraggedEl = null;
 }
 
 function handleClick() {
   if (Distribute.isActive() && Distribute.next()) {
-    this.add(Distribute.next());
+    this.appendChild(Distribute.next());
   }
 }
 
@@ -58,7 +58,9 @@ function handleLastDraggedElChange() {
 }
 
 /**
- * @class Base class of all regions. These are drop targets.
+ * Base class of all regions. All regions are drop targets.
+ * @class region.Region
+ * @extends HTMLElement
  */
 export default class Region extends HTMLElement {
 
@@ -82,10 +84,6 @@ export default class Region extends HTMLElement {
         .on(Distribute.EventType.END, handleDistributeEnd.bind(this));
 
     Utils.observe(DragDrop, 'lastDraggedEl', handleLastDraggedElChange.bind(this));
-  }
-
-  add(el) {
-    this.appendChild(el);
   }
 }
 

@@ -23,12 +23,12 @@
 
       describe('Card', function() {
         describe('#click', function() {
-          it('should toggle between showFront="true" and showFront="false"', function() {
+          it('should toggle between pb-show-front="true" and pb-show-front="false"', function() {
             cardEl.click();
-            expect($(cardEl).attr('showFront')).to.be.equal('true');
+            expect($(cardEl).attr('pb-show-front')).to.be.equal('true');
 
             cardEl.click();
-            expect($(cardEl).attr('showFront')).to.be.equal('false');
+            expect($(cardEl).attr('pb-show-front')).to.be.equal('false');
           });
         });
       });

@@ -7,8 +7,8 @@
   <link rel="import" href="src/surface/rectgrid.html">
 </head>
 <body>
-  <pb-s-rectgrid id="grid" row="2" col="3">
-    <div id="region" row="1" col="2"></div>
+  <pb-s-rectgrid id="grid" pb-row="2" pb-col="3">
+    <div id="region" pb-row="1" pb-col="2"></div>
   </pb-s-rectgrid>
   <script>
     'use strict';
@@ -28,7 +28,7 @@
             var contentEls = grid.shadowRoot.querySelectorAll('content');
             expect(contentEls.length).to.be.equal(6);
 
-            var correctCellEl = grid.shadowRoot.querySelector('content[row="1"][col="2"]');
+            var correctCellEl = grid.shadowRoot.querySelector('content[pb-row="1"][pb-col="2"]');
             var regionEl = doc.querySelector('div#region');
             expect(correctCellEl.getDistributedNodes()[0]).to.contain(regionEl);
           });
@@ -56,7 +56,7 @@
               done();
             };
 
-            div.innerHTML = '<pb-s-rectgrid row="3" col="b"></pb-s-rectgrid>';
+            div.innerHTML = '<pb-s-rectgrid pb-row="3" pb-col="b"></pb-s-rectgrid>';
           });
         });
 
