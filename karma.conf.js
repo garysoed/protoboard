@@ -27,6 +27,7 @@ module.exports = function(config) {
       // Deps
       { pattern: 'src/**/*.html', included: false },
       { pattern: 'bower_components/jquery/dist/jquery.js', included: false },
+      { pattern: 'bower_components/handlebars/handlebars.js', included: false },
       { pattern: 'node_modules/chai/chai.js', included: false },
       { pattern: 'node_modules/jquery/dist/jquery.js', included: false },
       { pattern: 'node_modules/traceur/bin/traceur-runtime.js', included: false },

@@ -1,5 +1,6 @@
 import Distribute from 'src/service/distribute';
 import DragDrop from 'src/service/dragdrop';
+import PbElement from 'src/pbelement';
 import Utils from 'src/utils';
 
 const CLASS_DISTRIBUTE = 'pb-distribute';
@@ -62,17 +63,20 @@ function handleLastDraggedElChange() {
  * @class region.Region
  * @extends HTMLElement
  */
-export default class Region extends HTMLElement {
+export default class Region extends PbElement {
 
   constructor() {
+    super.constructor();
     this[_dragEnterCount] = 0;
   }
 
   createdCallback() {
+    super.createdCallback();
     this[_dragEnterCount] = 0;
   }
 
   attachedCallback() {
+    super.attachedCallback();
     this.addEventListener('dragover', handleDragOver);
     this.addEventListener('dragenter', handleDragEnter);
     this.addEventListener('dragleave', handleDragLeave);

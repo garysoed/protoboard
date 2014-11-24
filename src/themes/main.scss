@@ -1,5 +1,23 @@
 @import 'default-theme';
 
+$elements: (
+  "pb-c-card",
+  "pb-c-token",
+  "pb-r-bag",
+  "pb-r-deck",
+  "pb-r-rect",
+  "pb-s-rectgrid",
+  "pb-u-context",
+  "pb-template"
+);
+
+@each $element in $elements {
+  .pb-debug /deep/ #{$element}:unresolved::before {
+    content: "Unresolved: #{$element}";
+    color: red;
+  }
+}
+
 body {
   font-family: $font;
 }

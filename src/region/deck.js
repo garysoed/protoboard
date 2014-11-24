@@ -21,6 +21,7 @@ class Deck extends Region {
   createdCallback() {
     super.createdCallback();
     this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    this.attachedCallback();
   }
 
   attachedCallback() {

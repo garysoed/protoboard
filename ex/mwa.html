@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <base href="..">
+  <head>
+    <link rel="import" href="src/component/card.html">
+    <link rel="import" href="src/surface/rectgrid.html">
+    <link rel="import" href="src/region/deck.html">
+    <link rel="import" href="src/region/rect.html">
+    <link rel="import" href="src/pbelement.html">
+    <link rel="import" href="src/utils.html">
+    <link rel="import" href="src/template.html">
+
+    <link rel="stylesheet" type="text/css" href="out/themes/main.css">
+
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+  </head>
+
+  <body class="pb-debug">
+    <script>
+      window['chars'] = ['p1', 'p2', 'red', 'blue', 'dud'];
+      window['events'] = {
+        'red': {
+          '1': 5,
+          '2': 2,
+          '4': 3,
+          '8': 5
+        },
+
+        'blue': {
+          '1': 7,
+          '2': 4, 
+          '4': 2,
+          '8': 2,
+        }
+      };
+    </script>
+
+    <pb-s-rectgrid pb-row="6" pb-col="6" id="board">
+      <div pb-row="0" pb-col="0">2 PM</div>
+      <div pb-row="1" pb-col="0">3 PM</div>
+      <div pb-row="2" pb-col="0">4 PM</div>
+      <div pb-row="3" pb-col="0">5 PM</div>
+      <div pb-row="4" pb-col="0">6 PM</div>
+      <div pb-row="5" pb-col="0">7 PM</div>
+    </pb-s-rectgrid>
+
+    <pb-r-deck id="chardeck">
+      <pb-template data-chars="chars">
+        {{#each chars}}
+        <pb-c-card class="char">
+          <div class="pb-front" draggable="true">{{this}}</div>
+          <div class="pb-back" draggable="true"></div>
+        </pb-c-card>
+        {{/each}}
+      </pb-template>
+    </pb-r-deck>
+
+    <pb-r-deck id="eventdeck">
+      <pb-template data-events="events">
+      {{#each events}}
+        {{#each this}}
+          {{#pb-copy this}}
+            <pb-c-card class="event {{@../key}}">
+              <div class="pb-front" draggable="true">{{@../key}} {{this}}</div>
+              <div class="pb-back" draggable="true"></div>
+            </pb-c-card>
+            {{/pb-copy}}
+        {{/each}}
+      {{/each}}
+      </pb-template>
+    </pb-r-deck>
+
+    <script>
+      var board = document.querySelector('#board');
+      pb.Utils.waitFor(board, 'isCreated', true, function() {
+        // Create the board's cells.
+        for (var r = 0; r < 6; r++) {
+          for (var c = 1; c < 6; c++) {
+            var el = document.createElement('pb-r-rect');
+            $(el)
+                .attr('pb-row', r)
+                .attr('pb-col', c)
+                .appendTo(board);
+          }
+        }
+      });
+
+      var chardeck = document.querySelector('#chardeck');
+      pb.Utils.waitFor(chardeck, 'isCreated', true, function() {
+        chardeck.shuffle();
+      });
+
+      var eventdeck = document.querySelector('#eventdeck');
+      pb.Utils.waitFor(eventdeck, 'isCreated', true, function() {
+        eventdeck.shuffle();
+      });
+    </script>
+  </body>
+</html>

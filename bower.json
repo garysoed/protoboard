@@ -14,5 +14,6 @@
     "tests"
   ],
   "dependencies": {
+    "handlebars": "~2.0.0"
   }
 }

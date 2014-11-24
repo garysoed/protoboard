@@ -349,6 +349,7 @@ var $__src_47_region_47_region__ = (function() {
   }
   var Distribute = ($__src_47_service_47_distribute__).default;
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
+  var PbElement = ($__src_47_pbelement__).default;
   var Utils = ($__src_47_utils__).default;
   var CLASS_DISTRIBUTE = 'pb-distribute';
   var CLASS_OVER = 'pb-over';
@@ -395,13 +396,17 @@ var $__src_47_region_47_region__ = (function() {
     }
   }
   var Region = function Region() {
+    $traceurRuntime.superGet(this, $Region.prototype, "constructor").call(this);
     this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
   };
+  var $Region = Region;
   ($traceurRuntime.createClass)(Region, {
     createdCallback: function() {
+      $traceurRuntime.superGet(this, $Region.prototype, "createdCallback").call(this);
       this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
     },
     attachedCallback: function() {
+      $traceurRuntime.superGet(this, $Region.prototype, "attachedCallback").call(this);
       this.addEventListener('dragover', handleDragOver);
       this.addEventListener('dragenter', handleDragEnter);
       this.addEventListener('dragleave', handleDragLeave);
@@ -410,7 +415,7 @@ var $__src_47_region_47_region__ = (function() {
       $(Distribute).on(Distribute.EventType.BEGIN, handleDistributeBegin.bind(this)).on(Distribute.EventType.END, handleDistributeEnd.bind(this));
       Utils.observe(DragDrop, 'lastDraggedEl', handleLastDraggedElChange.bind(this));
     }
-  }, {}, HTMLElement);
+  }, {}, PbElement);
   var $__default = Region;
   if (window.TEST_MODE) {
     Utils.makeGlobal('pb.region.Region', Region);
@@ -484,6 +489,7 @@ var $__src_47_region_47_deck__ = (function() {
     createdCallback: function() {
       $traceurRuntime.superGet(this, $Deck.prototype, "createdCallback").call(this);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this.attachedCallback();
     },
     attachedCallback: function() {
       $traceurRuntime.superGet(this, $Deck.prototype, "attachedCallback").call(this);
@@ -637,6 +643,52 @@ var $__src_47_surface_47_modules__ = (function() {
   $__src_47_surface_47_rectgrid__;
   return {};
 })();
+var $__src_47_template__ = (function() {
+  "use strict";
+  var __moduleName = "src/template";
+  function require(path) {
+    return $traceurRuntime.require("src/template", path);
+  }
+  var Utils = ($__src_47_utils__).default;
+  var PbElement = ($__src_47_pbelement__).default;
+  var As = ($__src_47_as__).default;
+  var doc = null;
+  var handlebars = null;
+  var EL_NAME = 'pb-template';
+  var Template = function Template() {
+    $traceurRuntime.superConstructor($Template).call(this);
+  };
+  var $Template = Template;
+  ($traceurRuntime.createClass)(Template, {createdCallback: function() {
+      $traceurRuntime.superGet(this, $Template.prototype, "createdCallback").call(this);
+      var templateStr = this.innerHTML;
+      var data = {};
+      for (var key in this.dataset)
+        if (!$traceurRuntime.isSymbolString(key)) {
+          var valueStr = this.dataset[$traceurRuntime.toProperty(key)];
+          data[$traceurRuntime.toProperty(key)] = window[$traceurRuntime.toProperty(valueStr)] || valueStr;
+        }
+      $(this).replaceWith(handlebars.compile(this.innerHTML)(data));
+    }}, {register: function(currentDoc, handlebars_ref) {
+      if (!doc && !handlebars) {
+        document.registerElement(EL_NAME, {prototype: $Template.prototype});
+      }
+      doc = currentDoc;
+      handlebars = handlebars_ref;
+      handlebars.registerHelper('pb-copy', function(context, options) {
+        var rv = '';
+        for (var i = 0; i < As.int(context); i++) {
+          rv += options.fn(this);
+        }
+        return rv;
+      });
+    }}, PbElement);
+  var $__default = Template;
+  Utils.makeGlobal('pb.Template', Template);
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_service_47_context__ = (function() {
   "use strict";
   var __moduleName = "src/service/context";
@@ -764,7 +816,8 @@ var $__src_47_modules__ = (function() {
   function require(path) {
     return $traceurRuntime.require("src/modules", path);
   }
-  var Util = ($__src_47_utils__).default;
+  $__src_47_utils__;
+  $__src_47_template__;
   $__src_47_component_47_modules__;
   $__src_47_region_47_modules__;
   $__src_47_service_47_modules__;

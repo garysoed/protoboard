@@ -43,6 +43,7 @@ export default class Component extends PbElement {
    * @constructor
    */
   constructor() {
+    // TODO: Why can't we call super()?
     super.constructor();
   }
 
