@@ -51,21 +51,24 @@ var $__src_47_utils__ = (function() {
         }));
       });
     },
-    waitFor: function(object, property, truth, handler) {
-      var truthFn = (typeof truth === 'function') ? truth : (function(v) {
-        return v === truth;
-      });
-      if (truthFn(object[$traceurRuntime.toProperty(property)])) {
-        handler();
-      } else {
-        var observer = (function(changes) {
-          if (truthFn(object[$traceurRuntime.toProperty(property)])) {
-            Object.unobserve(object, observer);
-            handler();
-          }
+    waitFor: function(object, property, condition) {
+      var promise = new Promise((function(resolve, reject) {
+        var truthFn = (typeof condition === 'function') ? condition : (function(v) {
+          return v === condition;
         });
-        Object.observe(object, observer);
-      }
+        if (truthFn(object[$traceurRuntime.toProperty(property)])) {
+          resolve(object, property);
+        } else {
+          var observer = (function(changes) {
+            if (truthFn(object[$traceurRuntime.toProperty(property)])) {
+              Object.unobserve(object, observer);
+              resolve(object, property);
+            }
+          });
+          Object.observe(object, observer);
+        }
+      }));
+      return promise;
     },
     compare: function(a, b) {
       if (typeof a === 'number' && typeof b === 'number') {

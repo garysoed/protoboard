@@ -1,6 +1,14 @@
+/**
+ * Various miscellaneous utilities.
+ * @class Utils
+ * @static
+ */
+
 var Utils = {
   /**
    * Extracts the given template from the given document.
+   * 
+   * @method  extractTemplate
    * @param  {string} templateQuery The query used to obtain the template.
    * @param  {!Document} doc The document object to obtain the template from.
    * @return {!Node} The node in the template.
@@ -15,6 +23,8 @@ var Utils = {
 
   /**
    * Returns the referenced function, or noop function if the referenced function does not exist.
+   * 
+   * @method  nonNullFn
    * @param  {!Object} scope Object containing the referenced function.
    * @param  {string} name Name of the function to return.
    * @return {!Function} The referenced function, or noop function if the referenced function does
@@ -26,6 +36,8 @@ var Utils = {
 
   /**
    * Observes the given property on the given object.
+   * 
+   * @method  observe
    * @param {!Object} object Object to observe changes to.
    * @param {string|null} property The property name to listen to, or null to listen to all 
    *     properties.
@@ -42,21 +54,36 @@ var Utils = {
     });
   },
 
-  waitFor(object, property, truth, handler) {
-    let truthFn = (typeof truth === 'function') 
-        ? truth 
-        : v => v === truth;
-    if (truthFn(object[property])) {
-      handler();
-    } else {
-      let observer = (changes) => {
-        if (truthFn(object[property])) {
-          Object.unobserve(object, observer)
-          handler();
+  /**
+   * Returns a Promise that waits for the given property of the given object to fulfill the given 
+   * condition.
+   *
+   * @method waitFor
+   * @param {!Object} object Object containing the property to wait for.
+   * @param {string} property The name of the property to wait for.
+   * @param {*} condition If Function, this method will call the function with the property value
+   *     and will wait for the function to return true. Otherwise, this will wait for the property
+   *     to match this.
+   */
+  waitFor(object, property, condition) {
+    let promise = new Promise((resolve, reject) => {
+      let truthFn = (typeof condition === 'function') 
+          ? condition 
+          : v => v === condition;
+      if (truthFn(object[property])) {
+        resolve(object, property);
+      } else {
+        let observer = (changes) => {
+          if (truthFn(object[property])) {
+            Object.unobserve(object, observer)
+            resolve(object, property);
+          }
         }
+        Object.observe(object, observer);
       }
-      Object.observe(object, observer);
-    }
+    });
+
+    return promise;
   },
 
   compare(a, b) {
@@ -83,7 +110,9 @@ var Utils = {
 
   /**
    * Makes the given target to be globally available.
-   * @param {string} The namespace of the target. This should be separated by '.'.
+   *
+   * @method makeGlobal
+   * @param {string} namespace The namespace of the target. This should be separated by '.'.
    * @param {Object=} target The target object to be made globally available.
    */
   makeGlobal(namespace, target) {

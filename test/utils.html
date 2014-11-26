@@ -14,6 +14,7 @@
     (function() {
       var Utils = pb.Utils;
       var expect = chai.expect;
+      var _ = spies.Spies;
       
       var doc = document.currentScript.ownerDocument;
 
@@ -69,8 +70,6 @@
             expect(f.handler).calledWith(changeA.name, changeA.type, changeA.oldValue).at.least(1);
             expect(f.handler).calledWith(changeB.name, Matchers.any(), Matchers.any()).equal(0);
           });
-
-
           it('should listen to all properties when not given any names', function() {
             var f = {
               handler: function() {}
@@ -100,6 +99,31 @@
           });
         });
 
+        describe('#waitFor', function() {
+          it('should immediate resolve when the property matches', function(done) {
+            var o = { a: true };
+            var handler = function() {
+              done();
+            };
+            Utils.waitFor(o, 'a', true).then(handler);
+          });
+          it('should resolve when the property matches', function(done) {
+            var o = { a: false };
+            var handler = function() {
+              done();
+            };
+            Utils.waitFor(o, 'a', true).then(handler);
+            o.a = true;
+          });
+          it('should resolve when given a function', function(done) {
+            var o = { a: 'value' };
+            var handler = function() {
+              done();
+            };
+            Utils.waitFor(o, 'a', function(v) { return v === 'value'; }).then(handler);
+          });
+        });
+
         describe('#makeGlobal', function() {
           it('should correctly assign the target', function() {
             var target = 'target';
@@ -108,7 +132,6 @@
 
             window.a = undefined;
           });
-
           it('should throw exception when target is duplicated', function() {
             Utils.makeGlobal('a.b.c.Target', {});
             expect(Utils.makeGlobal.bind(Utils, 'a.b.c.Target', {})).to.throw('Target');
