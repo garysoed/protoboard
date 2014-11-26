@@ -7,12 +7,15 @@ const CLASS_DISTRIBUTE = 'pb-distribute';
 /**
  * Service that manages the distributing action.
  *
- * @type {Object}
+ * @class service.Distribute
+ * @static
  */
 let Distribute = {
 
   /**
    * Starts the distribution action.
+   *
+   * @method begin
    * @param {!Bag} distributeSource Source to distribute the elements from.
    */
   begin(distributeSource) {
@@ -25,6 +28,8 @@ let Distribute = {
 
   /**
    * Ends the distribution process.
+   *
+   * @method end
    */
   end() {
     if (this.isActive()) {
@@ -35,6 +40,7 @@ let Distribute = {
   },
 
   /**
+   * @method isActive
    * @return {boolean} True iff the distribution is active.
    */
   isActive() {
@@ -42,19 +48,28 @@ let Distribute = {
   },
 
   /**
+   * @method next
    * @return {Element} The first child of the distribution source.
    */
   next() {
     return source.next();
   },
 
-  /**
-   * Types of events that can be fired by the service
-   *
-   * @enum {string}
-   */
   EventType: {
+    /**
+     * Event type dispatched when the distribution is starting.
+     *
+     * @type string
+     * @property EventType.BEGIN
+     */
     BEGIN: 'distribute-begin',
+
+    /**
+     * Event type dispatched when the distribution is ending.
+     *
+     * @type string
+     * @property EventType.END
+     */
     END: 'distribute-end'
   }
 };

@@ -56,19 +56,6 @@ module.exports = function(grunt) {
         }]
       }
     },
-
-    // Configuration to be run (and then tested).
-    'yuimd': {
-      protoboard: {
-        options: {
-          'projectName': 'ProtoBoard',
-          '$home': 'doc-theme/Home.theme',
-          '$class': 'doc-theme/class.theme'
-        },
-        'src': 'src',
-        'dest': 'doc'
-      }
-    },
   });
 
   grunt.loadNpmTasks('grunt-contrib-watch');
