@@ -24,6 +24,22 @@ pb-c-card[pb-show-front="true"]::shadow #container {
   transform: rotateY(180deg);
 }
 
+pb-c-card[pb-show-front="true"] .pb-front {
+  display: block;
+}
+
+pb-c-card[pb-show-front="true"] .pb-back {
+  display: none;
+}
+
+.pb-front {
+  display: none;
+}
+
+.pb-back {
+  display: block;
+}
+
 pb-c-card > div {
   @include card-border();
   height: $card-height;

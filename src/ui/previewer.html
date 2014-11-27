@@ -1,0 +1,14 @@
+<base href="../..">
+
+<link rel="import" href="main.html">
+
+<template>
+  <content></content>
+</template>
+
+<script>
+  (function() {
+    var doc = document.currentScript.ownerDocument;
+    pb.ui.Previewer.register(doc, doc.querySelector('template'));
+  })();
+</script>

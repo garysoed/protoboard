@@ -19,9 +19,6 @@ const EL_NAME = 'pb-c-token';
  * @extends component.Component
  */
 export default class Token extends Component {
-  constructor() {
-    super();
-  }
 
   createdCallback() {
     super.createdCallback();

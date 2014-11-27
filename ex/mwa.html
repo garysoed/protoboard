@@ -6,9 +6,11 @@
     <link rel="import" href="src/surface/rectgrid.html">
     <link rel="import" href="src/region/deck.html">
     <link rel="import" href="src/region/rect.html">
+    <link rel="import" href="src/ui/preview.html">
+    <link rel="import" href="src/ui/previewer.html">
+    <link rel="import" href="src/ui/template.html">
     <link rel="import" href="src/pbelement.html">
     <link rel="import" href="src/utils.html">
-    <link rel="import" href="src/template.html">
 
     <link rel="stylesheet" type="text/css" href="out/themes/main.css">
 
@@ -36,7 +38,23 @@
     </style>
 
     <script>
-      window['chars'] = ['p1', 'p2', 'red', 'blue', 'dud'];
+      window['suspects'] = [
+        {
+          name: 'Miss Scarlet',
+          short_name: 'Scarlet',
+          description: 'Very Sneaky'
+        },
+        {
+          name: 'Colonel Mustard',
+          short_name: 'Mustard',
+          description: 'Not sure ... bumbling fool?'
+        },
+        {
+          name: 'Mrs Peacock',
+          short_name: 'Peacock',
+          description: 'Too arrogant to get her hands dirty, or maybe ...'
+        }
+      ];
       window['events'] = {
         'red': {
           '-2': 3,
@@ -64,29 +82,37 @@
 
     <section id="main">
       <section id="board-area">
-        <pb-s-rectgrid pb-row="10" pb-col="6" id="board">
-          <pb-template data-times="times">
+        <pb-s-rectgrid pb-row="10" pb-col="4" id="board">
+          <pb-u-template data-times="times">
             {{#each times}}
             <div class="time" pb-row="{{@index}}" pb-col="0">{{this}}</div>
             {{/each}}
-          </pb-template>
+          </pb-u-template>
         </pb-s-rectgrid>
       </section>
 
       <section id="deck-area">
         <pb-r-deck id="chardeck">
-          <pb-template data-chars="chars">
-            {{#each chars}}
+          <pb-u-template data-suspects="suspects">
+            {{#each suspects}}
             <pb-c-card class="char">
-              <div class="pb-front" draggable="true">{{this}}</div>
+              <div class="pb-front" draggable="true">
+                <pb-u-preview>
+                  <div>
+                    <h1>{{name}}</h1>
+                    <section>{{description}}</section>
+                  </div>
+                </pb-u-preview>
+                {{short_name}}
+              </div>
               <div class="pb-back" draggable="true"></div>
             </pb-c-card>
             {{/each}}
-          </pb-template>
+          </pb-u-template>
         </pb-r-deck>
 
         <pb-r-deck id="eventdeck">
-          <pb-template data-events="events">
+          <pb-u-template data-events="events">
           {{#each events}}
             {{#each this}}
               {{#pb-copy this}}
@@ -97,8 +123,9 @@
                 {{/pb-copy}}
             {{/each}}
           {{/each}}
-          </pb-template>
+          </pb-u-template>
         </pb-r-deck>
+        <pb-u-previewer></pb-u-previewer>
       </section>
     </section>
 
@@ -110,7 +137,7 @@
       function createBoardCells(board) {
         // Create the board's cells.
         for (var r = 0; r < 10; r++) {
-          for (var c = 1; c < 6; c++) {
+          for (var c = 1; c < 4; c++) {
             var el = document.createElement('pb-r-rect');
             $(el)
                 .attr('pb-row', r)

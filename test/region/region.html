@@ -63,6 +63,7 @@
             _.spy(r.classList, 'remove');
 
             var isAFunction = Matchers.isA(Function);
+            r.createdCallback();
             r.attachedCallback();
 
             expect(r.addEventListener).calledWith('dragleave', isAFunction).at.least(1);

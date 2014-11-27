@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>ui.Previewer Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/ui/previewer.html">
+  <link rel="import" href="src/utils">
+</head>
+<body>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+      var _M = spies.Matchers;
+      var PreviewService = pb.service.Preview;
+      var Utils = pb.Utils;
+
+      var doc = document.currentScript.ownerDocument;
+
+      describe('ui.Previewer', function() {
+        describe('#createdCallback', function() {
+          it('should create a shadow root', function() {
+            var previewer = document.createElement('pb-u-previewer');
+            previewer.createdCallback();
+            expect(previewer.shadowRoot).to.exist;
+          });
+        });
+
+        describe('#attachedCallback', function() {
+          it('should observe previewedEl in PreviewService', function() {
+            _.spy(Utils, 'observe');
+            document.createElement('pb-u-previewer').attachedCallback();
+
+            expect(Utils.observe).calledWith(PreviewService, 'previewedEl', _M.isA(Function));
+          });
+        });
+
+        describe('#detachedCallback', function() {
+          it('should unobserve previewedEl in PreviewService', function() {
+            var spiedFn = _.spiedFunction();
+            _.spy(Utils, 'observe').overrideReturn(spiedFn);
+            _.spy(Object, 'unobserve').overrideReturn();
+
+            var previewer = document.createElement('pb-u-previewer');
+            previewer.attachedCallback();
+            previewer.detachedCallback();
+
+            expect(Object.unobserve).calledWith(PreviewService, spiedFn).at.least(1);
+          });
+        });
+
+        describe('#handlePreviewEl', function() {
+          var previewer;
+          var handler;
+
+          beforeEach(function(done) {
+            previewer = document.createElement('pb-u-previewer');
+
+            _.spy(Utils, 'observe');
+            previewer.attachedCallback();
+
+            var functionMatcher = _M.isA(Function);
+            expect(Utils.observe)
+                .calledWith(PreviewService, 'previewedEl', functionMatcher).at.least(1);
+            _.reset(Utils.observe);
+
+            handler = functionMatcher.matchingArgs[0];
+            done();
+          });
+
+          it('should set the inner HTML of the previewEl', function() {
+            var innerHTML = 'test inner HTML';
+            PreviewService.previewedEl = { innerHTML: innerHTML };
+            handler();
+
+            expect(previewer.innerHTML).to.be.equal(innerHTML);
+          });
+          it('should clear the inner HTML if the previewEl is null', function() {
+            var innerHTML = 'test inner HTML';
+            PreviewService.previewedEl = { innerHTML: innerHTML };
+            handler();
+
+            expect(previewer.innerHTML).to.be.equal(innerHTML);
+          });
+        });
+
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+    })();
+  </script>
+</body>

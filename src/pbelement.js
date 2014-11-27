@@ -8,12 +8,9 @@ import Utils from 'src/utils';
  */
 export default class PbElement extends HTMLElement {
 
-  /**
-   * @constructor
-   */
-  constructor() {
+  createdCallback() {
     /**
-     * True iff the element has been created.
+     * True iff the element has been created and attached.
      *
      * @type boolean
      * @property isCreated
@@ -21,13 +18,11 @@ export default class PbElement extends HTMLElement {
     this.isCreated = false;
   }
 
-  createdCallback() {
-    this.isCreated = false;
-  }
-
   attachedCallback() {
     this.isCreated = true;
   }
+
+  detachedCallback() { }
 }
 
 Utils.makeGlobal('pb.PbElement', PbElement);

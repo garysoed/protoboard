@@ -3,7 +3,6 @@
  */
 
 import {} from 'src/utils';
-import {} from 'src/template';
 
 import {} from 'src/component/modules';
 import {} from 'src/region/modules';

@@ -40,12 +40,9 @@ function handleDragStart(event) {
 export default class Component extends PbElement {
 
   /**
-   * @constructor
+   * For testing only.
    */
-  constructor() {
-    // TODO: Why can't we call super()?
-    super.constructor();
-  }
+  constructor() { }
 
   createdCallback() {
     super.createdCallback();

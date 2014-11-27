@@ -65,10 +65,8 @@ function handleLastDraggedElChange() {
  */
 export default class Region extends PbElement {
 
-  constructor() {
-    super.constructor();
-    this[_dragEnterCount] = 0;
-  }
+  /** For testing only */
+  constructor() { }
 
   createdCallback() {
     super.createdCallback();

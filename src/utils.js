@@ -43,15 +43,19 @@ var Utils = {
    *     properties.
    * @param {Function} handler Handler called when a property has changed. The handler accepts 3
    *     arguments: property name, change type, and the old value of the property.
+   *
+   * @return {Function} The handler used to unobserve the object.
    */
   observe(object, property, handler) {
-    Object.observe(object, function(changes) {
+    var newHandler = function(changes) {
       changes.forEach(change => {
         if (!property || change.name === property) {
           handler(change.name, change.type, change.oldValue);
         }
       });
-    });
+    };
+    Object.observe(object, newHandler);
+    return handler;
   },
 
   /**

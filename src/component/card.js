@@ -25,9 +25,6 @@ function handleClick() {
  * @extends component.Component
  */
 export default class Card extends Component {
-  constructor() {
-    super();
-  }
 
   createdCallback() {
     super.createdCallback();

@@ -12,7 +12,9 @@ let SHOWN_CLASS = "shown";
 /**
  * Handles context menu on the parent element.
  *
+ * @method handleContextMenu
  * @param {!Event} event The event object.
+ * @private
  */
 function handleContextMenu(event) {
   this.show(event.x, event.y);
@@ -22,6 +24,7 @@ function handleContextMenu(event) {
 /**
  * Handles click event in a document.
  *
+ * @method handleClick
  * @param {!Event} event The event object
  * @private
  */
@@ -113,6 +116,8 @@ class Context extends HTMLElement {
 
   /**
    * Hides the context menu.
+   *
+   * @method hide
    */
   hide() {
     this.shadowRoot.querySelector('#root').classList.remove(SHOWN_CLASS);

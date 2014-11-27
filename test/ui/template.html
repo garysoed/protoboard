@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="..">
+  <base href="../..">
   <title>Template Unit Tests</title>
   <link rel="import" href="test/testbase.html">
-  <link rel="import" href="src/template.html">
+  <link rel="import" href="src/ui/template.html">
 </head>
 <body>
   <script>
@@ -13,7 +13,7 @@
     (function() {
       var expect = chai.expect;
       var _ = spies.Spies;
-      var _M =spies.Matchers;
+      var _M = spies.Matchers;
 
       var doc = document.currentScript.ownerDocument;
 
@@ -28,9 +28,9 @@
 
             _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
 
-            pb.Template.register(doc, handlebar);
+            pb.ui.Template.register(doc, handlebar);
 
-            var templateEl = $(doc.body).html('<pb-template>' + templateStr + '</pb-template>')[0];
+            var templateEl = $(doc.body).html('<pb-u-template>' + templateStr + '</pb-template>')[0];
 
             expect(handlebar.compile).calledWith(templateStr).at.least(1);
             expect(templateEl.innerHTML).to.be.equal(compiledTemplateStr);
@@ -41,9 +41,9 @@
 
             _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
 
-            pb.Template.register(doc, handlebar);
+            pb.ui.Template.register(doc, handlebar);
 
-            var templateEl = $(doc.body) .html('<pb-template data-a="a"></pb-template>')[0];
+            var templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-template>')[0];
 
             expect(compiledTemplate).calledWith({a: window['a']}).at.least(1);
           });
@@ -53,9 +53,9 @@
 
             _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
 
-            pb.Template.register(doc, handlebar);
+            pb.ui.Template.register(doc, handlebar);
 
-            var templateEl = $(doc.body) .html('<pb-template data-a="data"></pb-template>')[0];
+            var templateEl = $(doc.body) .html('<pb-u-template data-a="data"></pb-template>')[0];
 
             expect(compiledTemplate).calledWith({a: data}).at.least(1);
           });
@@ -65,7 +65,7 @@
           it('should repeat the inner block a number of times', function() {
             _.spy(handlebar, 'registerHelper');
 
-            pb.Template.register(doc, handlebar);
+            pb.ui.Template.register(doc, handlebar);
 
             var isAFunction = _M.isA(Function);
             expect(handlebar.registerHelper).calledWith('pb-copy', isAFunction).at.least(1);
