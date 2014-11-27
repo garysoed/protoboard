@@ -3,7 +3,9 @@
   <base href="..">
   <head>
     <link rel="import" href="src/component/card.html">
+    <link rel="import" href="src/component/token.html">
     <link rel="import" href="src/surface/rectgrid.html">
+    <link rel="import" href="src/region/bag.html">
     <link rel="import" href="src/region/deck.html">
     <link rel="import" href="src/region/rect.html">
     <link rel="import" href="src/ui/preview.html">
@@ -31,10 +33,94 @@
         flex: 1;
       }
 
+      #bags {
+        display: flex;
+      }
+
       pb-s-rectgrid .time {
         width: 100px;
       }
 
+      pb-c-token > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .token {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+
+      .token.scarlet {
+        background-color: red;
+      }
+
+      .token.peacock {
+        background-color: blue;
+      }
+
+      .token.mustard {
+        background-color: yellow;
+      }
+
+      .star {
+        margin: 25px 0;
+        position: relative;
+        display: block;
+        width: 0px;
+        height: 0px;
+        border-right:  50px solid transparent;
+        border-bottom: 35px  solid red;
+        border-left:   50px solid transparent;
+        -moz-transform:    rotate(35deg);
+        -webkit-transform: rotate(35deg);
+        -ms-transform:     rotate(35deg);
+        -o-transform:      rotate(35deg);
+      }
+      .star::before {
+        border-bottom: 40px solid red;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        position: absolute;
+        height: 0;
+        width: 0;
+        top: -22.5px;
+        left: -32.5px;
+        display: block;
+        content: '';
+        -webkit-transform: rotate(-35deg);
+        -moz-transform:    rotate(-35deg);
+        -ms-transform:     rotate(-35deg);
+        -o-transform:      rotate(-35deg);
+      }
+      .star::after {
+        position: absolute;
+        display: block;
+        top: 1.5px;
+        left: -52.5px;
+        width: 0px;
+        height: 0px;
+        border-right: 50px solid transparent;
+        border-bottom: 35px solid red;
+        border-left: 50px solid transparent;
+        -webkit-transform: rotate(-70deg);
+        -moz-transform:    rotate(-70deg);
+        -ms-transform:     rotate(-70deg);
+        -o-transform:      rotate(-70deg);
+        content: '';
+      }
+
+      .star.p1, .star.p1::after, .star.p1::before {
+        color: #ff8844;
+        border-bottom-color: #ff8844;
+      }
+
+      .star.p2, .star.p2::after, .star.p2::before {
+        color: #44ff88;
+        border-bottom-color: #44ff88;
+      }
     </style>
 
     <script>
@@ -42,42 +128,53 @@
         {
           name: 'Miss Scarlet',
           short_name: 'Scarlet',
-          description: 'Very Sneaky'
+          code: 'scarlet',
+          description: 'Very Sneaky',
+          cards: {
+            '-2': 3,
+            '-1': 1,
+            '0': 2,
+            '1': 1,
+            '2': 3
+          }
         },
         {
           name: 'Colonel Mustard',
           short_name: 'Mustard',
-          description: 'Not sure ... bumbling fool?'
+          code: 'mustard',
+          description: 'Not sure ... bumbling fool?',
+          cards: {
+            '-2': 2,
+            '-1': 2,
+            '0': 2,
+            '1': 2,
+            '2': 2
+          }
         },
         {
           name: 'Mrs Peacock',
           short_name: 'Peacock',
-          description: 'Too arrogant to get her hands dirty, or maybe ...'
+          code: 'peacock',
+          description: 'Too arrogant to get her hands dirty, or maybe ...',
+          cards: {
+            '-2': 3,
+            '-1': 2,
+            '0': 3,
+            '4': 2
+          }
         }
       ];
-      window['events'] = {
-        'red': {
-          '-2': 3,
-          '-1': 1,
-          '0': 2,
-          '1': 1,
-          '2': 3
-        },
 
-        'blue': {
-          '-2': 2,
-          '-1': 2, 
-          '0': 2,
-          '1': 2,
-          '2': 2
-        },
-        
-      };
+      window['times'] = [
+        '12 PM'
+      ];
 
-      window['times'] = [];
+      // Add the rest of the times.
       for (var i = 0; i < 10; i++) {
         window['times'].push((i + 1) + ' PM');
       }
+
+      window['players'] = ['p1', 'p2'];
     </script>
 
     <section id="main">
@@ -92,7 +189,23 @@
       </section>
 
       <section id="deck-area">
-        <pb-r-deck id="chardeck">
+
+        <pb-r-deck id="eventdeck">
+          <pb-u-template data-suspects="suspects">
+          {{#each suspects}}
+            {{#each cards}}
+              {{#pb-copy this}}
+                <pb-c-card class="event {{../../code}}">
+                  <div class="pb-front" draggable="true">{{../../short_name}} {{@key}}</div>
+                  <div class="pb-back" draggable="true"></div>
+                </pb-c-card>
+                {{/pb-copy}}
+            {{/each}}
+          {{/each}}
+          </pb-u-template>
+        </pb-r-deck>
+
+        <pb-r-deck id="suspect-deck">
           <pb-u-template data-suspects="suspects">
             {{#each suspects}}
             <pb-c-card class="char">
@@ -111,27 +224,41 @@
           </pb-u-template>
         </pb-r-deck>
 
-        <pb-r-deck id="eventdeck">
-          <pb-u-template data-events="events">
-          {{#each events}}
-            {{#each this}}
-              {{#pb-copy this}}
-                <pb-c-card class="event {{@../key}}">
-                  <div class="pb-front" draggable="true">{{@../key}} {{this}}</div>
-                  <div class="pb-back" draggable="true"></div>
-                </pb-c-card>
-                {{/pb-copy}}
+        <section id="bags">
+          <pb-u-template data-suspects="suspects">
+            {{#each suspects}}
+            <pb-r-bag>
+              {{#pb-copy 30}}
+              <pb-c-token>
+                <div draggable="true">
+                  <div class="token {{../code}}"></div>
+                </div>
+              </pb-c-token>
+              {{/pb-copy}}
+            </pb-r-bag>
             {{/each}}
+          </pb-u-template>
+        </section>
+
+        <section id="players">
+          <pb-u-template data-players="players">
+          {{#each players}}
+            <pb-c-token>
+              <div draggable="true">
+                <div class="star {{this}}"></div>
+              </div>
+            </pb-c-token>
           {{/each}}
           </pb-u-template>
-        </pb-r-deck>
+        </section>
+
         <pb-u-previewer></pb-u-previewer>
       </section>
     </section>
 
     <script>
       var board = document.querySelector('#board');
-      var chardeck = document.querySelector('#chardeck');
+      var suspectdeck = document.querySelector('#suspect-deck');
       var eventdeck = document.querySelector('#eventdeck');
 
       function createBoardCells(board) {
@@ -152,17 +279,23 @@
       }
 
       function distributeCards() {
-        // Distribute the starting 
+        // Distribute the starting suspects.
+        var suspectCards = document.querySelectorAll('#suspect-deck pb-c-card');
+
+        for (var i = 0; i < 3; i++) {
+          document.querySelector('#board pb-r-rect[pb-row="0"][pb-col="' + (i + 1) + '"]')
+              .appendChild(suspectCards.item(i));
+        }
       }
 
       var boardCreatedPromise = pb.Utils.waitFor(board, 'isCreated', true);
-      var chardeckCreatedPromise = pb.Utils.waitFor(chardeck, 'isCreated', true);
+      var suspectdeckCreatedPromise = pb.Utils.waitFor(suspectdeck, 'isCreated', true);
       var eventdeckCreatedPromise = pb.Utils.waitFor(eventdeck, 'isCreated', true);
 
       // Sequence all the promises.
       Promise.all([
         boardCreatedPromise.then(createBoardCells),
-        chardeckCreatedPromise.then(shuffle),
+        suspectdeckCreatedPromise.then(shuffle),
         eventdeckCreatedPromise.then(shuffle)
       ]).then(distributeCards);
     </script>
