@@ -5,9 +5,7 @@ pb-c-token::shadow #root, pb-c-token::shadow #container {
 }
 
 pb-c-token > div {
-  height: $component-height;
   position: absolute;
-  width: $component-width;
 }
 
 pb-c-token::shadow #container {

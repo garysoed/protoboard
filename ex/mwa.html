@@ -66,28 +66,28 @@
       }
 
       .star {
-        margin: 25px 0;
+        margin: 12.5px 0;
         position: relative;
         display: block;
         width: 0px;
         height: 0px;
-        border-right:  50px solid transparent;
-        border-bottom: 35px  solid red;
-        border-left:   50px solid transparent;
+        border-right:  25px solid transparent;
+        border-bottom: 17.5px  solid red;
+        border-left:   25px solid transparent;
         -moz-transform:    rotate(35deg);
         -webkit-transform: rotate(35deg);
         -ms-transform:     rotate(35deg);
         -o-transform:      rotate(35deg);
       }
       .star::before {
-        border-bottom: 40px solid red;
-        border-left: 15px solid transparent;
-        border-right: 15px solid transparent;
+        border-bottom: 20px solid red;
+        border-left: 7.5px solid transparent;
+        border-right: 7.5px solid transparent;
         position: absolute;
         height: 0;
         width: 0;
-        top: -22.5px;
-        left: -32.5px;
+        top: -11.25px;
+        left: -16.25px;
         display: block;
         content: '';
         -webkit-transform: rotate(-35deg);
@@ -98,13 +98,13 @@
       .star::after {
         position: absolute;
         display: block;
-        top: 1.5px;
-        left: -52.5px;
+        top: 0.75px;
+        left: -26.25px;
         width: 0px;
         height: 0px;
-        border-right: 50px solid transparent;
-        border-bottom: 35px solid red;
-        border-left: 50px solid transparent;
+        border-right: 25px solid transparent;
+        border-bottom: 17.5px solid red;
+        border-left: 25px solid transparent;
         -webkit-transform: rotate(-70deg);
         -moz-transform:    rotate(-70deg);
         -ms-transform:     rotate(-70deg);
@@ -120,6 +120,25 @@
       .star.p2, .star.p2::after, .star.p2::before {
         color: #44ff88;
         border-bottom-color: #44ff88;
+      }
+
+      pb-c-card.char .pb-front {
+        text-align: center;
+        line-height: 90px;
+      }
+
+      pb-c-card.event .name {
+        text-align: center;
+      }
+
+      pb-c-card.event .value {
+        text-align: center;
+        font-size: 125%;
+        line-height: 60px;
+      }
+
+      input {
+        margin-left: 10px;
       }
     </style>
 
@@ -196,7 +215,10 @@
             {{#each cards}}
               {{#pb-copy this}}
                 <pb-c-card class="event {{../../code}}">
-                  <div class="pb-front" draggable="true">{{../../short_name}} {{@key}}</div>
+                  <div class="pb-front" draggable="true">
+                    <div class="name">{{../../short_name}}</div>
+                    <div class="value">{{@key}}</div>
+                  </div>
                   <div class="pb-back" draggable="true"></div>
                 </pb-c-card>
                 {{/pb-copy}}
@@ -252,9 +274,18 @@
           </pb-u-template>
         </section>
 
+        <section>
+          <pb-u-template data-suspects="suspects">
+          {{#each suspects}}
+          <label>{{name}}</label><input type="number" max="99" min="-99" value="0" />
+          {{/each}}
+          </pb-u-template>
+        </section>
+
         <pb-u-previewer></pb-u-previewer>
       </section>
     </section>
+
 
     <script>
       var board = document.querySelector('#board');
