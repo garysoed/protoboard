@@ -71,18 +71,17 @@ var Utils = {
    */
   waitFor(object, property, condition) {
     let promise = new Promise((resolve, reject) => {
-      let truthFn = (typeof condition === 'function') 
-          ? condition 
-          : v => v === condition;
+      let truthFn = (typeof condition === 'function') ? 
+          condition : v => v === condition;
       if (truthFn(object[property])) {
         resolve(object, property);
       } else {
         let observer = (changes) => {
           if (truthFn(object[property])) {
-            Object.unobserve(object, observer)
+            Object.unobserve(object, observer);
             resolve(object, property);
           }
-        }
+        };
         Object.observe(object, observer);
       }
     });
@@ -131,7 +130,7 @@ var Utils = {
         }
       } else {
         if (!currentScope[path]) {
-          currentScope[path] = {}
+          currentScope[path] = {};
         }
       }
       currentScope = currentScope[path];

@@ -1,0 +1,49 @@
+# {{class.name}}
+{{#if class.static}}**Static**{{/if}}
+
+{{#if class.extends}}**Extends**: {{$types class.extends classes}}{{/if}}
+
+{{#if class.subclasses}}**Subclasses**: {{#each class.subclasses}}{{#if @index}} {{/if}}{{$types this @root.classes}}{{/each}}{{/if}}
+
+{{{class.description}}}
+
+{{#unless class.static}}
+## Constructor
+#### {{class.name}}({{$params class.constructor.params classes}})
+{{/unless}}
+
+{{$paramsDesc class.constructor.params classes}}
+
+{{#if class.properties}}
+## Properties
+<table>
+{{#each class.properties}}
+<tr>
+<td>{{name}}</td>
+<td>{{$types type}}</td>
+<td>{{{description}}}</td>
+</tr>
+{{/each}}
+</table>
+{{/if}}
+
+{{#if class.methods}}
+## Methods
+{{#each class.methods}}
+### {{name}}
+
+```javascript
+{{#if static}}static {{/if}}{{#if return}}{{return.type}} {{/if}}{{name}}({{#each params}}{{#if @index}}, {{/if}}{{type}} {{name}}{{/each}})
+```
+
+{{{description}}}
+
+{{$paramsDesc params @root.classes}}
+
+{{#if return}}
+**returns** {{$types return.type @root.classes}}: {{{return.description}}}
+{{/if}}
+
+---
+{{/each}}
+{{/if}}

@@ -15,7 +15,7 @@ let Preview = {
    * @property previewedEl
    */
   previewedEl: null
-}
+};
 
 export default Preview = Preview;
 

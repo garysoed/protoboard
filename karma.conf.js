@@ -31,7 +31,7 @@ module.exports = function(config) {
       { pattern: 'node_modules/chai/chai.js', included: false },
       { pattern: 'node_modules/jquery/dist/jquery.js', included: false },
       { pattern: 'node_modules/traceur/bin/traceur-runtime.js', included: false },
-      { pattern: 'lib/**', included: false },
+      { pattern: 'node_modules/spies/**', included: false },
 
       { pattern: 'test/testbase.html', included: false},
       'test/**/*.html'
