@@ -61,23 +61,53 @@
           });
         });
 
-        describe('#pb-copy', function() {
-          it('should repeat the inner block a number of times', function() {
+        describe('#pb-for', function() {
+          var helperFn = null;
+
+          beforeEach(function(done) {
             _.spy(handlebar, 'registerHelper');
 
             pb.ui.Template.register(doc, handlebar);
 
             var isAFunction = _M.isA(Function);
-            expect(handlebar.registerHelper).calledWith('pb-copy', isAFunction).at.least(1);
+            expect(handlebar.registerHelper).calledWith('pb-for', isAFunction).at.least(1);
+            helperFn = isAFunction.matchingArgs[0];
+            done();
+          });
 
+          it('should repeat the inner block a number of times', function() {
             var content = "content";
             var options = {
               fn: _.spiedFunction().overrideReturn(content)
             };
 
-            var result = isAFunction.matchingArgs[0].call(handlebar, "3", options);
+            var result = helperFn.call(handlebar, "0", "5", "2", options);
             expect(result).to.be.equal(content + content + content);
-            expect(options.fn).calledWith(handlebar).to.be.equal(3);
+
+            var isAObject = _M.isA(Object);
+            expect(options.fn).calledWith(handlebar, isAObject).to.be.equal(3);
+
+            var indexes = isAObject.matchingArgs.map(function(arg) {
+              return arg.data.index;
+            });
+            expect(indexes).to.be.eql([0, 2, 4]);
+          });
+          it('should default step to 1', function() {
+            var content = "content";
+            var options = {
+              fn: _.spiedFunction().overrideReturn(content)
+            };
+
+            var result = helperFn.call(handlebar, "0", "2", options);
+            expect(result).to.be.equal(content + content);
+
+            var isAObject = _M.isA(Object);
+            expect(options.fn).calledWith(handlebar, isAObject).to.be.equal(2);
+
+            var indexes = isAObject.matchingArgs.map(function(arg) {
+              return arg.data.index;
+            });
+            expect(indexes).to.be.eql([0, 1]);
           });
         });
 

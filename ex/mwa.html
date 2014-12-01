@@ -48,8 +48,8 @@
       }
 
       .token {
-        width: 50px;
-        height: 50px;
+        width: 25px;
+        height: 25px;
         border-radius: 50%;
       }
 
@@ -63,6 +63,10 @@
 
       .token.mustard {
         background-color: yellow;
+      }
+
+      .token.green {
+        background-color: green;
       }
 
       .star {
@@ -137,8 +141,19 @@
         line-height: 60px;
       }
 
+      pb-c-card.event .pb-back {
+        font-size: 200%;
+        line-height: 100px;
+        text-align: center;
+      }
+
       input {
         margin-left: 10px;
+      }
+
+      .token-cell::shadow #root {
+        height: 23px;
+        width: 23px;
       }
     </style>
 
@@ -181,6 +196,16 @@
             '0': 3,
             '4': 2
           }
+        },
+        {
+          name: 'Rev Green',
+          short_name: 'Green',
+          code: 'green',
+          description: 'Soothes everyone, except himself',
+          cards: {
+            '-3': 5,
+            '3': 5
+          }
         }
       ];
 
@@ -198,11 +223,29 @@
 
     <section id="main">
       <section id="board-area">
-        <pb-s-rectgrid pb-row="10" pb-col="4" id="board">
+        <pb-s-rectgrid pb-row="10" pb-col="5" id="board">
           <pb-u-template data-times="times">
             {{#each times}}
             <div class="time" pb-row="{{@index}}" pb-col="0">{{this}}</div>
             {{/each}}
+          </pb-u-template>
+
+          <pb-u-template>
+          {{#pb-for 0 10}}
+            {{#pb-for 1 5}}
+            <div pb-row="{{@../index}}" pb-col="{{@index}}" class="cell">
+              <pb-r-rect class="card-cell"></pb-r-rect>
+              <pb-r-rect class="detective-cell"></pb-r-rect>
+              <pb-s-rectgrid pb-row="2" pb-col="4">
+              {{#pb-for 0 2}}
+                {{#pb-for 0 4}}
+                <pb-r-rect pb-row="{{@../index}}" pb-col="{{@index}}" class="token-cell"></pb-r-rect>
+                {{/pb-for}}
+              {{/pb-for}}
+              </pb-s-rectgrid>
+            </div>
+            {{/pb-for}}
+          {{/pb-for}}
           </pb-u-template>
         </pb-s-rectgrid>
       </section>
@@ -213,15 +256,15 @@
           <pb-u-template data-suspects="suspects">
           {{#each suspects}}
             {{#each cards}}
-              {{#pb-copy this}}
-                <pb-c-card class="event {{../../code}}">
-                  <div class="pb-front" draggable="true">
-                    <div class="name">{{../../short_name}}</div>
-                    <div class="value">{{@key}}</div>
-                  </div>
-                  <div class="pb-back" draggable="true"></div>
-                </pb-c-card>
-                {{/pb-copy}}
+              {{#pb-for 0 this}}
+              <pb-c-card class="event {{../../code}}">
+                <div class="pb-front" draggable="true">
+                  <div class="name">{{../../short_name}}</div>
+                  <div class="value">{{@key}}</div>
+                </div>
+                <div class="pb-back" draggable="true">???</div>
+              </pb-c-card>
+              {{/pb-for}}
             {{/each}}
           {{/each}}
           </pb-u-template>
@@ -250,13 +293,13 @@
           <pb-u-template data-suspects="suspects">
             {{#each suspects}}
             <pb-r-bag>
-              {{#pb-copy 30}}
+              {{#pb-for 0 30}}
               <pb-c-token>
                 <div draggable="true">
                   <div class="token {{../code}}"></div>
                 </div>
               </pb-c-token>
-              {{/pb-copy}}
+              {{/pb-for}}
             </pb-r-bag>
             {{/each}}
           </pb-u-template>
@@ -292,19 +335,6 @@
       var suspectdeck = document.querySelector('#suspect-deck');
       var eventdeck = document.querySelector('#eventdeck');
 
-      function createBoardCells(board) {
-        // Create the board's cells.
-        for (var r = 0; r < 10; r++) {
-          for (var c = 1; c < 4; c++) {
-            var el = document.createElement('pb-r-rect');
-            $(el)
-                .attr('pb-row', r)
-                .attr('pb-col', c)
-                .appendTo(board);
-          }
-        }
-      };
-
       function shuffle(element) {
         element.shuffle();
       }
@@ -313,8 +343,8 @@
         // Distribute the starting suspects.
         var suspectCards = document.querySelectorAll('#suspect-deck pb-c-card');
 
-        for (var i = 0; i < 3; i++) {
-          document.querySelector('#board pb-r-rect[pb-row="0"][pb-col="' + (i + 1) + '"]')
+        for (var i = 0; i < 4; i++) {
+          document.querySelector('#board > [pb-row="0"][pb-col="' + (i + 1) + '"] .card-cell')
               .appendChild(suspectCards.item(i));
         }
       }
@@ -325,7 +355,7 @@
 
       // Sequence all the promises.
       Promise.all([
-        boardCreatedPromise.then(createBoardCells),
+        boardCreatedPromise,
         suspectdeckCreatedPromise.then(shuffle),
         eventdeckCreatedPromise.then(shuffle)
       ]).then(distributeCards);

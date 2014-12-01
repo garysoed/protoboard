@@ -15,7 +15,7 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('traceur', ['jshint'], function() {
-  return gulp.src('./src/main.js')
+  return gulp.src('./src/modules.js')
       .pipe(shell([
         'traceur --out <%= out %> <%= file.path %> --source-maps=file --symbols=true --modules=inline'
       ],
@@ -57,3 +57,7 @@ gulp.task('push', ['test', 'doc', 'sass'], shell.task('git push'));
 gulp.task('watch', function() {
   gulp.watch(['src/**/*.js', 'test/**/*.html'], ['test', 'sass']);
 });
+
+gulp.task('watch-traceur', function() {
+  gulp.watch(['src/**/*.js'], ['traceur']);
+})

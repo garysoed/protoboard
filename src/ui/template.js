@@ -13,7 +13,9 @@ const EL_NAME = 'pb-u-template';
  * the template, add `data-<name>="<var>"` attributes to the element, where `name` is the key to be
  * used in the template, and var is the property name accessible globally.
  *
- * This class also registers a `{{#pb-copy <n>}}` block helper. This copies the inner block n times.
+ * This class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for
+ * loop that copies the inner block several times. You can access the index of the loop using the
+ * `@index` variable.
  *
  * @class ui.Template
  */
@@ -50,10 +52,17 @@ export default class Template extends PbElement {
     doc = currentDoc;
     handlebars = handlebars_ref;
 
-    handlebars.registerHelper('pb-copy', function(context, options) {
+    handlebars.registerHelper('pb-for', function(from, to, step, options) {
+      if (options === undefined) {
+        // Shift the args if step is not defined.
+        options = step;
+        step = 1;
+      }
       let rv = '';
-      for (let i = 0; i < As.int(context); i++) {
-        rv += options.fn(this);
+      for (let i = As.int(from); i < As.int(to); i += As.int(step)) {
+        let data = Handlebars.createFrame(options.data || {});
+        data.index = i;
+        rv += options.fn(this, { data: data });
       } 
       return rv;
     });

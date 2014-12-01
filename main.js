@@ -1,9 +1,6 @@
 var $__src_47_as__ = (function() {
   "use strict";
   var __moduleName = "src/as";
-  function require(path) {
-    return $traceurRuntime.require("src/as", path);
-  }
   var As = {
     int: function(input) {
       var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
@@ -29,9 +26,6 @@ var $__src_47_as__ = (function() {
 var $__src_47_utils__ = (function() {
   "use strict";
   var __moduleName = "src/utils";
-  function require(path) {
-    return $traceurRuntime.require("src/utils", path);
-  }
   var Utils = {
     extractTemplate: function(templateQuery, doc) {
       return this.activateTemplate(doc.querySelector(templateQuery), doc);
@@ -119,12 +113,9 @@ var $__src_47_utils__ = (function() {
 var $__src_47_pbelement__ = (function() {
   "use strict";
   var __moduleName = "src/pbelement";
-  function require(path) {
-    return $traceurRuntime.require("src/pbelement", path);
-  }
   var Utils = ($__src_47_utils__).default;
   var PbElement = function PbElement() {
-    $traceurRuntime.superConstructor($PbElement).apply(this, arguments);
+    $traceurRuntime.defaultSuperCall(this, $PbElement.prototype, arguments);
   };
   var $PbElement = PbElement;
   ($traceurRuntime.createClass)(PbElement, {
@@ -145,9 +136,6 @@ var $__src_47_pbelement__ = (function() {
 var $__src_47_service_47_dragdrop__ = (function() {
   "use strict";
   var __moduleName = "src/service/dragdrop";
-  function require(path) {
-    return $traceurRuntime.require("src/service/dragdrop", path);
-  }
   var Utils = ($__src_47_utils__).default;
   var DragDrop = {
     lastDraggedEl: null,
@@ -164,9 +152,6 @@ var $__src_47_service_47_dragdrop__ = (function() {
 var $__src_47_component_47_component__ = (function() {
   "use strict";
   var __moduleName = "src/component/component";
-  function require(path) {
-    return $traceurRuntime.require("src/component/component", path);
-  }
   var Utils = ($__src_47_utils__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var PbElement = ($__src_47_pbelement__).default;
@@ -193,7 +178,7 @@ var $__src_47_component_47_component__ = (function() {
   var $Component = Component;
   ($traceurRuntime.createClass)(Component, {
     createdCallback: function() {
-      $traceurRuntime.superGet(this, $Component.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Component.prototype, "createdCallback", []);
     },
     config: function(config) {
       if (config.draggable) {
@@ -212,9 +197,6 @@ var $__src_47_component_47_component__ = (function() {
 var $__src_47_component_47_card__ = (function() {
   "use strict";
   var __moduleName = "src/component/card";
-  function require(path) {
-    return $traceurRuntime.require("src/component/card", path);
-  }
   var As = ($__src_47_as__).default;
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
@@ -227,12 +209,12 @@ var $__src_47_component_47_card__ = (function() {
     $(this).attr(ATTR_SHOW_FRONT, !oldValue);
   }
   var Card = function Card() {
-    $traceurRuntime.superConstructor($Card).apply(this, arguments);
+    $traceurRuntime.defaultSuperCall(this, $Card.prototype, arguments);
   };
   var $Card = Card;
   ($traceurRuntime.createClass)(Card, {
     createdCallback: function() {
-      $traceurRuntime.superGet(this, $Card.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.attachedCallback();
     },
@@ -260,20 +242,17 @@ var $__src_47_component_47_card__ = (function() {
 var $__src_47_component_47_token__ = (function() {
   "use strict";
   var __moduleName = "src/component/token";
-  function require(path) {
-    return $traceurRuntime.require("src/component/token", path);
-  }
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-c-token';
   var Token = function Token() {
-    $traceurRuntime.superConstructor($Token).apply(this, arguments);
+    $traceurRuntime.defaultSuperCall(this, $Token.prototype, arguments);
   };
   var $Token = Token;
   ($traceurRuntime.createClass)(Token, {createdCallback: function() {
-      $traceurRuntime.superGet(this, $Token.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Token.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.config({draggable: true});
     }}, {register: function(currentDoc, tokenTemplate) {
@@ -293,9 +272,6 @@ var $__src_47_component_47_token__ = (function() {
 var $__src_47_component_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/component/modules";
-  function require(path) {
-    return $traceurRuntime.require("src/component/modules", path);
-  }
   $__src_47_component_47_card__;
   $__src_47_component_47_token__;
   return {};
@@ -303,9 +279,6 @@ var $__src_47_component_47_modules__ = (function() {
 var $__src_47_service_47_distribute__ = (function() {
   "use strict";
   var __moduleName = "src/service/distribute";
-  function require(path) {
-    return $traceurRuntime.require("src/service/distribute", path);
-  }
   var Utils = ($__src_47_utils__).default;
   var source = null;
   var CLASS_DISTRIBUTE = 'pb-distribute';
@@ -349,9 +322,6 @@ var $__src_47_service_47_distribute__ = (function() {
 var $__src_47_region_47_region__ = (function() {
   "use strict";
   var __moduleName = "src/region/region";
-  function require(path) {
-    return $traceurRuntime.require("src/region/region", path);
-  }
   var Distribute = ($__src_47_service_47_distribute__).default;
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
   var PbElement = ($__src_47_pbelement__).default;
@@ -404,11 +374,11 @@ var $__src_47_region_47_region__ = (function() {
   var $Region = Region;
   ($traceurRuntime.createClass)(Region, {
     createdCallback: function() {
-      $traceurRuntime.superGet(this, $Region.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Region.prototype, "createdCallback", []);
       this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
     },
     attachedCallback: function() {
-      $traceurRuntime.superGet(this, $Region.prototype, "attachedCallback").call(this);
+      $traceurRuntime.superCall(this, $Region.prototype, "attachedCallback", []);
       this.addEventListener('dragover', handleDragOver);
       this.addEventListener('dragenter', handleDragEnter);
       this.addEventListener('dragleave', handleDragLeave);
@@ -429,9 +399,6 @@ var $__src_47_region_47_region__ = (function() {
 var $__src_47_region_47_bag__ = (function() {
   "use strict";
   var __moduleName = "src/region/bag";
-  function require(path) {
-    return $traceurRuntime.require("src/region/bag", path);
-  }
   var Region = ($__src_47_region_47_region__).default;
   var Distribute = ($__src_47_service_47_distribute__).default;
   var Utils = ($__src_47_utils__).default;
@@ -443,12 +410,12 @@ var $__src_47_region_47_bag__ = (function() {
     event.stopPropagation();
   }
   var Bag = function Bag() {
-    $traceurRuntime.superConstructor($Bag).call(this);
+    $traceurRuntime.superCall(this, $Bag.prototype, "constructor", []);
   };
   var $Bag = Bag;
   ($traceurRuntime.createClass)(Bag, {
     createdCallback: function() {
-      $traceurRuntime.superGet(this, $Bag.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Bag.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.shadowRoot.querySelector('#distribute').addEventListener('click', handleDistributeClick.bind(this));
     },
@@ -475,26 +442,23 @@ var $__src_47_region_47_bag__ = (function() {
 var $__src_47_region_47_deck__ = (function() {
   "use strict";
   var __moduleName = "src/region/deck";
-  function require(path) {
-    return $traceurRuntime.require("src/region/deck", path);
-  }
   var Region = ($__src_47_region_47_region__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-r-deck';
   var Deck = function Deck() {
-    $traceurRuntime.superConstructor($Deck).call(this);
+    $traceurRuntime.superCall(this, $Deck.prototype, "constructor", []);
   };
   var $Deck = Deck;
   ($traceurRuntime.createClass)(Deck, {
     createdCallback: function() {
-      $traceurRuntime.superGet(this, $Deck.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Deck.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.attachedCallback();
     },
     attachedCallback: function() {
-      $traceurRuntime.superGet(this, $Deck.prototype, "attachedCallback").call(this);
+      $traceurRuntime.superCall(this, $Deck.prototype, "attachedCallback", []);
       this.shadowRoot.querySelector('#shuffle').addEventListener('click', this.shuffle.bind(this));
     },
     shuffle: function() {
@@ -529,20 +493,17 @@ var $__src_47_region_47_deck__ = (function() {
 var $__src_47_region_47_rect__ = (function() {
   "use strict";
   var __moduleName = "src/region/rect";
-  function require(path) {
-    return $traceurRuntime.require("src/region/rect", path);
-  }
   var Region = ($__src_47_region_47_region__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-r-rect';
   var Rect = function Rect() {
-    $traceurRuntime.superConstructor($Rect).call(this);
+    $traceurRuntime.superCall(this, $Rect.prototype, "constructor", []);
   };
   var $Rect = Rect;
   ($traceurRuntime.createClass)(Rect, {createdCallback: function() {
-      $traceurRuntime.superGet(this, $Rect.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Rect.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     }}, {register: function(currentDoc, rectTemplate) {
       if (doc || template) {
@@ -561,9 +522,6 @@ var $__src_47_region_47_rect__ = (function() {
 var $__src_47_region_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/region/modules";
-  function require(path) {
-    return $traceurRuntime.require("src/region/modules", path);
-  }
   $__src_47_region_47_bag__;
   $__src_47_region_47_deck__;
   $__src_47_region_47_rect__;
@@ -572,9 +530,6 @@ var $__src_47_region_47_modules__ = (function() {
 var $__src_47_service_47_context__ = (function() {
   "use strict";
   var __moduleName = "src/service/context";
-  function require(path) {
-    return $traceurRuntime.require("src/service/context", path);
-  }
   var Utils = ($__src_47_utils__).default;
   var activeContext = null;
   var Context = {
@@ -596,9 +551,6 @@ var $__src_47_service_47_context__ = (function() {
 var $__src_47_service_47_preview__ = (function() {
   "use strict";
   var __moduleName = "src/service/preview";
-  function require(path) {
-    return $traceurRuntime.require("src/service/preview", path);
-  }
   var Utils = ($__src_47_utils__).default;
   var Preview = {previewedEl: null};
   var $__default = Preview = Preview;
@@ -610,9 +562,6 @@ var $__src_47_service_47_preview__ = (function() {
 var $__src_47_service_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/service/modules";
-  function require(path) {
-    return $traceurRuntime.require("src/service/modules", path);
-  }
   var Context = ($__src_47_service_47_context__).default;
   var Distribute = ($__src_47_service_47_distribute__).default;
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
@@ -622,9 +571,6 @@ var $__src_47_service_47_modules__ = (function() {
 var $__src_47_surface_47_rectgrid__ = (function() {
   "use strict";
   var __moduleName = "src/surface/rectgrid";
-  function require(path) {
-    return $traceurRuntime.require("src/surface/rectgrid", path);
-  }
   var As = ($__src_47_as__).default;
   var Utils = ($__src_47_utils__).default;
   var PbElement = ($__src_47_pbelement__).default;
@@ -634,12 +580,12 @@ var $__src_47_surface_47_rectgrid__ = (function() {
   var ATTR_COL = 'pb-col';
   var EL_NAME = 'pb-s-rectgrid';
   var RectGrid = function RectGrid() {
-    $traceurRuntime.superConstructor($RectGrid).apply(this, arguments);
+    $traceurRuntime.defaultSuperCall(this, $RectGrid.prototype, arguments);
   };
   var $RectGrid = RectGrid;
   ($traceurRuntime.createClass)(RectGrid, {
     createdCallback: function() {
-      $traceurRuntime.superGet(this, $RectGrid.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $RectGrid.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(templates.main, doc));
       var rowCount = As.int($(this).attr(ATTR_ROW));
       var colCount = As.int($(this).attr(ATTR_COL));
@@ -656,7 +602,7 @@ var $__src_47_surface_47_rectgrid__ = (function() {
       }));
     },
     attachedCallback: function() {
-      $traceurRuntime.superGet(this, $RectGrid.prototype, "attachedCallback").call(this);
+      $traceurRuntime.superCall(this, $RectGrid.prototype, "attachedCallback", []);
     },
     get: function(row, col) {
       var contentEl = this.shadowRoot.querySelector(("content[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]"));
@@ -679,18 +625,12 @@ var $__src_47_surface_47_rectgrid__ = (function() {
 var $__src_47_surface_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/surface/modules";
-  function require(path) {
-    return $traceurRuntime.require("src/surface/modules", path);
-  }
   $__src_47_surface_47_rectgrid__;
   return {};
 })();
 var $__src_47_ui_47_context__ = (function() {
   "use strict";
   var __moduleName = "src/ui/context";
-  function require(path) {
-    return $traceurRuntime.require("src/ui/context", path);
-  }
   var Utils = ($__src_47_utils__).default;
   var ContextService = ($__src_47_service_47_context__).default;
   var template = null;
@@ -776,9 +716,6 @@ var $__src_47_ui_47_context__ = (function() {
 var $__src_47_ui_47_preview__ = (function() {
   "use strict";
   var __moduleName = "src/ui/preview";
-  function require(path) {
-    return $traceurRuntime.require("src/ui/preview", path);
-  }
   var PbElement = ($__src_47_pbelement__).default;
   var Utils = ($__src_47_utils__).default;
   var PreviewService = ($__src_47_service_47_preview__).default;
@@ -793,19 +730,19 @@ var $__src_47_ui_47_preview__ = (function() {
     PreviewService.previewedEl = null;
   }
   var Preview = function Preview() {
-    $traceurRuntime.superConstructor($Preview).apply(this, arguments);
+    $traceurRuntime.defaultSuperCall(this, $Preview.prototype, arguments);
   };
   var $Preview = Preview;
   ($traceurRuntime.createClass)(Preview, {
     createdCallback: function() {
-      $traceurRuntime.superGet(this, $Preview.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Preview.prototype, "createdCallback", []);
       this.createShadowRoot();
       this[$traceurRuntime.toProperty(_mouseOverHandler)] = handleMouseOver.bind(this);
       this[$traceurRuntime.toProperty(_mouseOutHandler)] = handleMouseOut.bind(this);
       this.attachedCallback();
     },
     attachedCallback: function() {
-      $traceurRuntime.superGet(this, $Preview.prototype, "attachedCallback").call(this);
+      $traceurRuntime.superCall(this, $Preview.prototype, "attachedCallback", []);
       if (this.parentElement) {
         this.parentElement.addEventListener('mouseenter', this[$traceurRuntime.toProperty(_mouseOverHandler)]);
         this.parentElement.addEventListener('mouseleave', this[$traceurRuntime.toProperty(_mouseOutHandler)]);
@@ -816,7 +753,7 @@ var $__src_47_ui_47_preview__ = (function() {
         this.parentElement.removeEventListener('mouseenter', this[$traceurRuntime.toProperty(_mouseOverHandler)]);
         this.parentElement.removeEventListener('mouseleave', this[$traceurRuntime.toProperty(_mouseOutHandler)]);
       }
-      $traceurRuntime.superGet(this, $Preview.prototype, "detachedCallback").call(this);
+      $traceurRuntime.superCall(this, $Preview.prototype, "detachedCallback", []);
     }
   }, {register: function() {
       if (!registered) {
@@ -832,9 +769,6 @@ var $__src_47_ui_47_preview__ = (function() {
 var $__src_47_ui_47_previewer__ = (function() {
   "use strict";
   var __moduleName = "src/ui/previewer";
-  function require(path) {
-    return $traceurRuntime.require("src/ui/previewer", path);
-  }
   var PbElement = ($__src_47_pbelement__).default;
   var Utils = ($__src_47_utils__).default;
   var PreviewService = ($__src_47_service_47_preview__).default;
@@ -850,23 +784,23 @@ var $__src_47_ui_47_previewer__ = (function() {
     }
   }
   var Previewer = function Previewer() {
-    $traceurRuntime.superConstructor($Previewer).apply(this, arguments);
+    $traceurRuntime.defaultSuperCall(this, $Previewer.prototype, arguments);
   };
   var $Previewer = Previewer;
   ($traceurRuntime.createClass)(Previewer, {
     createdCallback: function() {
-      $traceurRuntime.superGet(this, $Previewer.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Previewer.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.attachedCallback();
     },
     attachedCallback: function() {
-      $traceurRuntime.superGet(this, $Previewer.prototype, "attachedCallback").call(this);
+      $traceurRuntime.superCall(this, $Previewer.prototype, "attachedCallback", []);
       this[$traceurRuntime.toProperty(_previewElHandler)] = Utils.observe(PreviewService, 'previewedEl', handlePreviewEl.bind(this));
     },
     detachedCallback: function() {
       console.log(this[$traceurRuntime.toProperty(_previewElHandler)]);
       Object.unobserve(PreviewService, this[$traceurRuntime.toProperty(_previewElHandler)]);
-      $traceurRuntime.superGet(this, $Previewer.prototype, "detachedCallback").call(this);
+      $traceurRuntime.superCall(this, $Previewer.prototype, "detachedCallback", []);
     }
   }, {register: function(currentDoc, previewerTemplate) {
       if (!template && !doc) {
@@ -884,9 +818,6 @@ var $__src_47_ui_47_previewer__ = (function() {
 var $__src_47_ui_47_template__ = (function() {
   "use strict";
   var __moduleName = "src/ui/template";
-  function require(path) {
-    return $traceurRuntime.require("src/ui/template", path);
-  }
   var Utils = ($__src_47_utils__).default;
   var PbElement = ($__src_47_pbelement__).default;
   var As = ($__src_47_as__).default;
@@ -894,11 +825,11 @@ var $__src_47_ui_47_template__ = (function() {
   var handlebars = null;
   var EL_NAME = 'pb-u-template';
   var Template = function Template() {
-    $traceurRuntime.superConstructor($Template).call(this);
+    $traceurRuntime.superCall(this, $Template.prototype, "constructor", []);
   };
   var $Template = Template;
   ($traceurRuntime.createClass)(Template, {createdCallback: function() {
-      $traceurRuntime.superGet(this, $Template.prototype, "createdCallback").call(this);
+      $traceurRuntime.superCall(this, $Template.prototype, "createdCallback", []);
       var templateStr = this.innerHTML;
       var data = {};
       for (var key in this.dataset)
@@ -913,10 +844,16 @@ var $__src_47_ui_47_template__ = (function() {
       }
       doc = currentDoc;
       handlebars = handlebars_ref;
-      handlebars.registerHelper('pb-copy', function(context, options) {
+      handlebars.registerHelper('pb-for', function(from, to, step, options) {
+        if (options === undefined) {
+          options = step;
+          step = 1;
+        }
         var rv = '';
-        for (var i = 0; i < As.int(context); i++) {
-          rv += options.fn(this);
+        for (var i = As.int(from); i < As.int(to); i += As.int(step)) {
+          var data = Handlebars.createFrame(options.data || {});
+          data.index = i;
+          rv += options.fn(this, {data: data});
         }
         return rv;
       });
@@ -930,9 +867,6 @@ var $__src_47_ui_47_template__ = (function() {
 var $__src_47_ui_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/ui/modules";
-  function require(path) {
-    return $traceurRuntime.require("src/ui/modules", path);
-  }
   $__src_47_ui_47_context__;
   $__src_47_ui_47_preview__;
   $__src_47_ui_47_previewer__;
@@ -942,9 +876,6 @@ var $__src_47_ui_47_modules__ = (function() {
 var $__src_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/modules";
-  function require(path) {
-    return $traceurRuntime.require("src/modules", path);
-  }
   $__src_47_utils__;
   $__src_47_component_47_modules__;
   $__src_47_region_47_modules__;
