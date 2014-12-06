@@ -2,14 +2,14 @@
 <html>
 <head>
   <base href="../..">
-  <title>Bag Unit Tests</title>
+  <title>Bank Unit Tests</title>
   <link rel="import" href="test/testbase.html">
-  <link rel="import" href="src/region/bag.html">
+  <link rel="import" href="src/region/bank.html">
 </head>
 <body>
-  <pb-r-bag id="bag">
+  <pb-r-bank id="bank">
     <div id="firstChild"></div>
-  </pb-r-bag>
+  </pb-r-bank>
   <script>
     'use strict';
 
@@ -19,9 +19,9 @@
       var Distribute = pb.service.Distribute;
 
       var doc = document.currentScript.ownerDocument;
-      var el = doc.querySelector('#bag');
+      var el = doc.querySelector('#bank');
 
-      describe('Bag', function() {
+      describe('Bank', function() {
         describe('#createdCallback', function() {
           it('should call distribute on click', function() {
             _.spy(el, 'distribute');

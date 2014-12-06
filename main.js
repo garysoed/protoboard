@@ -396,26 +396,26 @@ var $__src_47_region_47_region__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_region_47_bag__ = (function() {
+var $__src_47_region_47_bank__ = (function() {
   "use strict";
-  var __moduleName = "src/region/bag";
+  var __moduleName = "src/region/bank";
   var Region = ($__src_47_region_47_region__).default;
   var Distribute = ($__src_47_service_47_distribute__).default;
   var Utils = ($__src_47_utils__).default;
   var doc = null;
   var template = null;
-  var EL_NAME = 'pb-r-bag';
+  var EL_NAME = 'pb-r-bank';
   function handleDistributeClick(event) {
     this.distribute();
     event.stopPropagation();
   }
-  var Bag = function Bag() {
-    $traceurRuntime.superCall(this, $Bag.prototype, "constructor", []);
+  var Bank = function Bank() {
+    $traceurRuntime.superCall(this, $Bank.prototype, "constructor", []);
   };
-  var $Bag = Bag;
-  ($traceurRuntime.createClass)(Bag, {
+  var $Bank = Bank;
+  ($traceurRuntime.createClass)(Bank, {
     createdCallback: function() {
-      $traceurRuntime.superCall(this, $Bag.prototype, "createdCallback", []);
+      $traceurRuntime.superCall(this, $Bank.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.shadowRoot.querySelector('#distribute').addEventListener('click', handleDistributeClick.bind(this));
     },
@@ -425,16 +425,16 @@ var $__src_47_region_47_bag__ = (function() {
     next: function() {
       return this.children[0];
     }
-  }, {register: function(currentDoc, bagTemplate) {
+  }, {register: function(currentDoc, bankTemplate) {
       if (doc || template) {
         return;
       }
       doc = currentDoc;
-      template = bagTemplate;
-      document.registerElement(EL_NAME, {prototype: $Bag.prototype});
+      template = bankTemplate;
+      document.registerElement(EL_NAME, {prototype: $Bank.prototype});
     }}, Region);
-  var $__default = Bag = Bag;
-  Utils.makeGlobal('pb.region.Bag', Bag);
+  var $__default = Bank = Bank;
+  Utils.makeGlobal('pb.region.Bank', Bank);
   return {get default() {
       return $__default;
     }};
@@ -522,7 +522,7 @@ var $__src_47_region_47_rect__ = (function() {
 var $__src_47_region_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/region/modules";
-  $__src_47_region_47_bag__;
+  $__src_47_region_47_bank__;
   $__src_47_region_47_deck__;
   $__src_47_region_47_rect__;
   return {};

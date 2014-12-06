@@ -1,0 +1,10 @@
+@import 'theme';
+@import 'rect';
+
+pb-r-bank {
+  @extend pb-r-rect;
+}
+
+pb-r-bank *:not(:first-child) {
+  display: none;
+}

@@ -6,6 +6,11 @@ var sass = require('gulp-ruby-sass');
 
 var yuimd = require('yuimd');
 
+var handleError = function(error) {
+  console.log(error.toString());
+  this.emit('end');
+};
+
 gulp.task('jshint', function() {
   return gulp.src('./src/**/*.js')
       .pipe(jshint({
@@ -28,11 +33,14 @@ gulp.task('traceur', ['jshint'], function() {
 
 gulp.task('test', ['traceur'], function() {
   return gulp.src('karma.conf.js')
-    .pipe(shell(['karma start <%= file.path %> --single-run']))
-    .on('error', function(err) {
-      // Make sure failed tests cause gulp to exit non-zero
-      throw err;
-    });
+      .pipe(shell(['karma start <%= file.path %> --single-run']))
+      .on('error', handleError);
+});
+
+gulp.task('test-debug', ['traceur'], function() {
+  return gulp.src('karma.conf.js')
+      .pipe(shell(['karma start <%= file.path %>']))
+      .on('error', handleError);
 });
 
 gulp.task('doc', function() {
@@ -49,13 +57,16 @@ gulp.task('doc', function() {
 gulp.task('sass', function() {
   return gulp.src('./src/**/*.scss')
       .pipe(sass({loadPath: ['src/themes']}))
+      .on('error', handleError)
       .pipe(gulp.dest('out'));
 });
 
 gulp.task('push', ['test', 'doc', 'sass'], shell.task('git push'));
 
 gulp.task('watch', function() {
-  gulp.watch(['src/**/*.js', 'test/**/*.html', 'src/**/*.scss'], ['test', 'sass']);
+  gulp.watch(
+      ['src/**/*.js', 'test/**/*.html', 'src/**/*.scss'], 
+      ['test', 'sass']);
 });
 
 gulp.task('watch-traceur', function() {

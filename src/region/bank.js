@@ -5,7 +5,7 @@ import Utils from 'src/utils';
 let doc = null;
 let template = null;
 
-const EL_NAME = 'pb-r-bag';
+const EL_NAME = 'pb-r-bank';
 
 /**
  * Handles event called when the "Distribute" option in the context menu is clicked.
@@ -19,14 +19,16 @@ function handleDistributeClick(event) {
 }
 
 /**
- * A generic collection of items. To use this, create a `pb-r-bag` element. Set the size of the 
- * element by CSS selector: `pb-r-bag::shadow #root`. Any children of this element are considered in
- * the bag.
+ * A generic collection of items. To use this, create a `pb-r-bank` element. Set the size of the 
+ * element by CSS selector: `pb-r-bank::shadow #root`. Any children of this element are considered 
+ * in the bank.
+ *
+ * Only the first child will be visible.
  * 
- * @class region.Bag
+ * @class region.Bank
  * @extends region.Region
  */
-class Bag extends Region {
+class Bank extends Region {
   constructor() {
     super();
   }
@@ -56,25 +58,25 @@ class Bag extends Region {
   }
 
   /**
-   * Registers `pb-r-bag` to the document.
+   * Registers `pb-r-bank` to the document.
    *
    * @method register
    * @static
    * @param {!Document} currentDoc The document object to register the element to.
-   * @param {!Element} bagTemplate The template for the `pb-r-bag`'s element shadow DOM.
+   * @param {!Element} bankTemplate The template for the `pb-r-bank`'s element shadow DOM.
    */
-  static register(currentDoc, bagTemplate) {
+  static register(currentDoc, bankTemplate) {
     if (doc || template) {
       // Already registered.
       return;
     }
 
     doc = currentDoc;
-    template = bagTemplate;
-    document.registerElement(EL_NAME, {prototype: Bag.prototype});
+    template = bankTemplate;
+    document.registerElement(EL_NAME, {prototype: Bank.prototype});
   }
 }
 
-export default Bag = Bag;
+export default Bank = Bank;
 
-Utils.makeGlobal('pb.region.Bag', Bag);
+Utils.makeGlobal('pb.region.Bank', Bank);
