@@ -4,6 +4,7 @@
 pb-c-card::shadow {
   #root {
     width: $card-width;
+    height: $card-height;
     perspective: 800px;
     position: relative;
   }

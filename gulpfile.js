@@ -55,7 +55,7 @@ gulp.task('sass', function() {
 gulp.task('push', ['test', 'doc', 'sass'], shell.task('git push'));
 
 gulp.task('watch', function() {
-  gulp.watch(['src/**/*.js', 'test/**/*.html'], ['test', 'sass']);
+  gulp.watch(['src/**/*.js', 'test/**/*.html', 'src/**/*.scss'], ['test', 'sass']);
 });
 
 gulp.task('watch-traceur', function() {

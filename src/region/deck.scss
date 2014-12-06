@@ -6,3 +6,12 @@ pb-r-deck {
   @extend pb-r-rect;
   @extend .pb-card;
 }
+
+pb-r-deck > * {
+  position: absolute;
+}
+
+pb-r-deck::shadow #contents {
+  height: $card-height;
+  width: $card-width;
+}
