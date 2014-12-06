@@ -23,7 +23,7 @@ function handleDistributeClick(event) {
  * element by CSS selector: `pb-r-bank::shadow #root`. Any children of this element are considered 
  * in the bank.
  *
- * Only the first child will be visible.
+ * Only the last child will be visible.
  * 
  * @class region.Bank
  * @extends region.Region
