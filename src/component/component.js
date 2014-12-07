@@ -2,16 +2,15 @@ import Utils from 'src/utils';
 import DragDropService from 'src/service/dragdrop';
 import PbElement from 'src/pbelement';
 
-const ATTR_DRAGGABLE = 'draggable';
+const ATTR_DRAGGABLE = 'pb-draggable';
 const CLASS_DRAGGED = 'pb-dragged';
 
 function setupDraggable() {
-  let draggables = this.querySelectorAll('*[draggable="true"]');
-
   // Propagate the draggable attribute to the root element.
-  Utils.toArray(draggables).forEach((draggable => {
-    draggable.addEventListener('dragstart', handleDragStart.bind(this));
-    draggable.addEventListener('dragend', handleDragEnd.bind(this));
+  Utils.toArray(this.children).forEach((child => {
+    $(child).attr('draggable', 'true');
+    child.addEventListener('dragstart', handleDragStart.bind(this));
+    child.addEventListener('dragend', handleDragEnd.bind(this));
   }).bind(this));
 }
 
@@ -30,9 +29,6 @@ function handleDragStart(event) {
 /**
  * Base class for all components. Classes extending this should call 
  * [[#config|component.Component#config]] at the end of `createdCallback`.
- *
- * To make a component draggable, user must have an HTML element with a draggable attribute set to
- * true as a child of this element.
  * 
  * @class component.Component
  * @extends PbElement  
@@ -49,18 +45,39 @@ export default class Component extends PbElement {
   }
 
   /**
-   * Configures the component.
+   * Configures the component by reading from the attributes.
    *
    * @method config
-   * @param {!Object} config Configuration used to configure the behavior of this component.
-   * @param {boolean} config.draggable True iff the component should be draggable.
    */
-  config(config) {
-    if (config.draggable) {
-      setupDraggable.bind(this)();
+  config() {
+    Utils.toArray(this.attributes).forEach(attribute => {
+      switch (attribute.name) {
+        case Component.ATTR_DRAGGABLE:
+          setupDraggable.bind(this)();
+          break;
+      }
+    });
+  }
+
+  /**
+   * Sets the default attribute to the specified value.
+   * @param {string} name Name of the attribute to set.
+   * @param {Object=} value Value of the attribute to set.
+   */
+  setDefaultAttribute(name, value) {
+    if ($(this).attr(name) === undefined) {
+      $(this).attr(name, value);
     }
   }
 }
+
+/**
+ * `pb-draggable`. Set to true to make this element draggable.
+ * @type {string}
+ * @property ATTR_DRAGGABLE
+ * @static
+ */
+Component.ATTR_DRAGGABLE = 'pb-draggable';
 
 if (window.TEST_MODE) {
   Utils.makeGlobal('pb.component.Component', Component);

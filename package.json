@@ -35,6 +35,7 @@
     "yuimd": "git://github.com/garysoed/yuimd"
   },
   "dependencies": {
+    "hammerjs": "^2.0.4",
     "jquery": "^2.1.1",
     "spies": "git://github.com/garysoed/spies.git"
   }

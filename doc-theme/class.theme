@@ -20,7 +20,7 @@
 {{#each class.properties}}
 <tr>
 <td>{{name}}</td>
-<td>{{$types type}}</td>
+<td>{{#if static}}**Static** {{/if}}{{$types type}}</td>
 <td>{{{description}}}</td>
 </tr>
 {{/each}}

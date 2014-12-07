@@ -155,14 +155,14 @@ var $__src_47_component_47_component__ = (function() {
   var Utils = ($__src_47_utils__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var PbElement = ($__src_47_pbelement__).default;
-  var ATTR_DRAGGABLE = 'draggable';
+  var ATTR_DRAGGABLE = 'pb-draggable';
   var CLASS_DRAGGED = 'pb-dragged';
   function setupDraggable() {
     var $__3 = this;
-    var draggables = this.querySelectorAll('*[draggable="true"]');
-    Utils.toArray(draggables).forEach(((function(draggable) {
-      draggable.addEventListener('dragstart', handleDragStart.bind($__3));
-      draggable.addEventListener('dragend', handleDragEnd.bind($__3));
+    Utils.toArray(this.children).forEach(((function(child) {
+      $(child).attr('draggable', 'true');
+      child.addEventListener('dragstart', handleDragStart.bind($__3));
+      child.addEventListener('dragend', handleDragEnd.bind($__3));
     })).bind(this));
   }
   function handleDragEnd() {
@@ -180,13 +180,24 @@ var $__src_47_component_47_component__ = (function() {
     createdCallback: function() {
       $traceurRuntime.superCall(this, $Component.prototype, "createdCallback", []);
     },
-    config: function(config) {
-      if (config.draggable) {
-        setupDraggable.bind(this)();
+    config: function() {
+      var $__3 = this;
+      Utils.toArray(this.attributes).forEach((function(attribute) {
+        switch (attribute.name) {
+          case $Component.ATTR_DRAGGABLE:
+            setupDraggable.bind($__3)();
+            break;
+        }
+      }));
+    },
+    setDefaultAttribute: function(name, value) {
+      if ($(this).attr(name) === undefined) {
+        $(this).attr(name, value);
       }
     }
   }, {}, PbElement);
   var $__default = Component;
+  Component.ATTR_DRAGGABLE = 'pb-draggable';
   if (window.TEST_MODE) {
     Utils.makeGlobal('pb.component.Component', Component);
   }
@@ -216,14 +227,17 @@ var $__src_47_component_47_card__ = (function() {
     createdCallback: function() {
       $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this.setDefaultAttribute(Component.ATTR_DRAGGABLE, '');
+      this.config();
       this.attachedCallback();
     },
     attachedCallback: function() {
+      $traceurRuntime.superCall(this, $Card.prototype, "attachedCallback", []);
       this.addEventListener('click', handleClick);
-      this.config({draggable: true});
     },
     detachedCallback: function() {
       this.removeEventListener('click', handleClick);
+      $traceurRuntime.superCall(this, $Card.prototype, "detachedCallback", []);
     }
   }, {register: function(currentDoc, cardTemplate) {
       if (doc || template) {
@@ -254,7 +268,8 @@ var $__src_47_component_47_token__ = (function() {
   ($traceurRuntime.createClass)(Token, {createdCallback: function() {
       $traceurRuntime.superCall(this, $Token.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.config({draggable: true});
+      this.setDefaultAttribute(Component.ATTR_DRAGGABLE, '');
+      this.config();
     }}, {register: function(currentDoc, tokenTemplate) {
       if (doc || template) {
         return;

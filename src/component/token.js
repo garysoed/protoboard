@@ -24,7 +24,10 @@ export default class Token extends Component {
     super.createdCallback();
     this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
 
-    this.config({ draggable: true });
+    // Sets the default attributes
+    this.setDefaultAttribute(Component.ATTR_DRAGGABLE, '');
+
+    this.config();
   }
 
   /**

@@ -7,10 +7,6 @@
   <link rel="import" href="main.html">
 </head>
 <body>
-  <div id="fakeShadowRoot">
-    <div id="root"></div>
-  </div>
-
   <script>
     'use strict';
 
@@ -28,52 +24,92 @@
 
       describe('Component', function() {
         describe('#config', function() {
-
-          beforeEach(function(done) {
-            doc.querySelector('#fakeShadowRoot').innerHTML = '<div id="root"></div>';
-            done();
-          });
-
           it('should setup draggable if attribute is specified', function() {
-            var rootEl = doc.querySelector('#root');
+            var childEl = doc.createElement('div');
             var c = new Component();
-            c.shadowRoot = doc.querySelector('#fakeShadowRoot');
             c.classList = _.stub(DOMTokenList);
+            c.attributes = [_F.attr(Component.ATTR_DRAGGABLE, '')];
+            c.children = [childEl];
             
-            _.spy(c, 'querySelectorAll').overrideReturn([ rootEl ]);
-            _.spy(rootEl, 'addEventListener').overrideReturn();
+            _.spy(childEl, 'addEventListener').overrideReturn();
             _.spy(DragDropService, 'dragStart');
 
-            c.config({ draggable: true });
+            c.config();
 
-            var isAFunction = _M.isA(Function);
-            expect(c.querySelectorAll).calledWith('*[draggable="true"]').at.least(1);
-            expect(rootEl.addEventListener).calledWith('dragstart', isAFunction).at.least(1);
+            var dragStartCaptor = _M.isA(Function);
+            var dragEndCaptor = _M.isA(Function);
+            expect(childEl.addEventListener).calledWith('dragstart', dragStartCaptor).at.least(1);
+            expect(childEl.addEventListener).calledWith('dragend', dragEndCaptor).at.least(1);
 
             // Now call the drag start handler.
-            var event = _.stub(Event);
-            event.dataTransfer = _.stub(DataTransfer);
-            _.spy(event.dataTransfer, 'setData');
+            var dragStartEvent = _.stub(Event);
+            dragStartEvent.dataTransfer = _.stub(DataTransfer);
 
-            isAFunction.matchingArgs[0](event);
-            expect(event.dataTransfer.effectAllowed).to.be.equal('move');
+            _.spy(c.classList, 'add');
+
+            dragStartCaptor.matchingArgs[0](dragStartEvent);
+            expect(dragStartEvent.dataTransfer.effectAllowed).to.be.equal('move');
+            expect(c.classList.add).calledWith('pb-dragged').at.least(1);
             expect(DragDropService.dragStart).calledWith(c).at.least(1);
-          });
 
+            // Now call the drag end handler.
+            _.spy(c.classList, 'remove');
+
+            dragEndCaptor.matchingArgs[0]();
+            expect(c.classList.remove).calledWith('pb-dragged').at.least(1);
+          });
           it('should not setup draggable if attribute is not specified', function() {
             var c = new Component();
-            c.shadowRoot = doc.querySelector('#fakeShadowRoot');
+            c.attributes = [];
             
-            c.config({ });
+            c.config();
 
             var isAFunction = _M.isA(Function);
             expect($(doc.querySelector('#root')).attr('draggable')).to.not.exist;
           });
+        });
 
-          afterEach(function(done) {
-            _.reset();
+        describe('#setDefaultAttribute', function() {
+          var name = 'name';
+          var c;
+          var $c;
+
+          beforeEach(function(done) {
+            c = new Component();
+            $c = $(c);
+            _.spy(window, '$').overrideReturn($c);
             done();
           });
+
+          it('should set the attribute if not set', function() {
+            var value = 'value';
+            _.spy($c, 'attr').overrideReturn(undefined);
+
+            c.setDefaultAttribute(name, value);
+            expect($c.attr).calledWith(name).at.least(1);
+            expect($c.attr).calledWith(name, value).at.least(1);
+          });
+          it('should be noop if the attribute is set', function() {
+            var newValue = 'newValue';
+            _.spy($c, 'attr').overrideReturn('value');
+
+            c.setDefaultAttribute(name, newValue);
+            expect($c.attr).calledWith(name).at.least(1);
+            expect($c.attr).calledWith(name, newValue).to.be.equal(0);
+          });
+          it('should pay attention to attribute set to false', function() {
+            var newValue = 'newValue';
+            _.spy($c, 'attr').overrideReturn(false);
+
+            c.setDefaultAttribute(name, newValue);
+            expect($c.attr).calledWith(name).at.least(1);
+            expect($c.attr).calledWith(name, newValue).to.be.equal(0);
+          });
+        });
+
+        afterEach(function(done) {
+          _.reset();
+          done();
         });
       });
     })();

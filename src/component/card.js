@@ -30,16 +30,22 @@ export default class Card extends Component {
     super.createdCallback();
     this.createShadowRoot()
         .appendChild(Utils.activateTemplate(template, doc));
+
+    // Default attributes
+    this.setDefaultAttribute(Component.ATTR_DRAGGABLE, '');
+
+    this.config();
     this.attachedCallback();
   }
 
   attachedCallback() {
+    super.attachedCallback();
     this.addEventListener('click', handleClick);
-    this.config({ draggable: true });
   }
 
   detachedCallback() {
     this.removeEventListener('click', handleClick);
+    super.detachedCallback();
   }
 
   /**
