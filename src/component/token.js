@@ -46,7 +46,7 @@ export default class Token extends Component {
 
     doc = currentDoc;
     template = tokenTemplate;
-    document.registerElement(EL_NAME,  {prototype: Token.prototype});
+    document.registerElement(EL_NAME, {prototype: Token.prototype});
   }
 }
 

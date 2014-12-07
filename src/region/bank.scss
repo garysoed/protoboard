@@ -5,6 +5,6 @@ pb-r-bank {
   @extend pb-r-rect;
 }
 
-pb-r-bank *:not(:last-child) {
+pb-r-bank > *:not(:last-child) {
   display: none;
 }

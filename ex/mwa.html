@@ -257,12 +257,12 @@
           {{#each suspects}}
             {{#each cards}}
               {{#pb-for 0 this}}
-              <pb-c-card class="event {{../../code}}">
-                <div class="pb-front" draggable="true">
+              <pb-c-card class="event {{../../code}}" pb-draggable>
+                <div class="pb-front">
                   <div class="name">{{../../short_name}}</div>
                   <div class="value">{{@key}}</div>
                 </div>
-                <div class="pb-back" draggable="true">???</div>
+                <div class="pb-back">???</div>
               </pb-c-card>
               {{/pb-for}}
             {{/each}}
@@ -273,8 +273,8 @@
         <pb-r-deck id="suspect-deck">
           <pb-u-template data-suspects="suspects">
             {{#each suspects}}
-            <pb-c-card class="char">
-              <div class="pb-front" draggable="true">
+            <pb-c-card class="char" pb-draggable>
+              <div class="pb-front">
                 <pb-u-preview>
                   <div>
                     <h1>{{name}}</h1>
@@ -283,7 +283,7 @@
                 </pb-u-preview>
                 {{short_name}}
               </div>
-              <div class="pb-back" draggable="true"></div>
+              <div class="pb-back"></div>
             </pb-c-card>
             {{/each}}
           </pb-u-template>
@@ -294,8 +294,8 @@
             {{#each suspects}}
             <pb-r-bank>
               {{#pb-for 0 30}}
-              <pb-c-token>
-                <div draggable="true">
+              <pb-c-token pb-draggable>
+                <div>
                   <div class="token {{../code}}"></div>
                 </div>
               </pb-c-token>
@@ -308,8 +308,8 @@
         <section id="players">
           <pb-u-template data-players="players">
           {{#each players}}
-            <pb-c-token>
-              <div draggable="true">
+            <pb-c-token pb-draggable>
+              <div>
                 <div class="star {{this}}"></div>
               </div>
             </pb-c-token>

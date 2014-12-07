@@ -16,9 +16,6 @@ pb-c-card::shadow {
     transform-style: preserve-3d;
     transition: transform $transition-duration;
   }
-
-  content::content .front {
-  }
 }
 
 pb-c-card[pb-show-front="true"]::shadow #container {
@@ -27,6 +24,7 @@ pb-c-card[pb-show-front="true"]::shadow #container {
 
 pb-c-card > div {
   @include card-border();
+  backface-visibility: hidden;
   height: $card-height;
   width: $card-width;
 }
@@ -37,7 +35,6 @@ pb-c-card > .pb-back {
 
 pb-c-card > .pb-front {
   background-color: $color-background;
-  backface-visibility: hidden;
   position: absolute;
   transform: rotateY(180deg);
   border: 5px solid $color-border;
@@ -45,7 +42,24 @@ pb-c-card > .pb-front {
 }
 
 
-pb-c-card.pb-dragged .pb-front,
-pb-c-card.pb-dragged .pb-back {
-  @include layer(1);
+pb-c-card[pb-show-front="true"].pb-dragged {
+  .pb-front {
+    @include layer(1);
+    display: block;
+  }
+
+  .pb-back {
+    display: none;
+  }
+}
+
+pb-c-card.pb-dragged {
+  .pb-back {
+    @include layer(1);
+    display: block;
+  }
+
+  .pb-front {
+    display: none;
+  }
 }
