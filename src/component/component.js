@@ -2,7 +2,6 @@ import Utils from 'src/utils';
 import DragDropService from 'src/service/dragdrop';
 import PbElement from 'src/pbelement';
 
-const ATTR_DRAGGABLE = 'pb-draggable';
 const CLASS_DRAGGED = 'pb-dragged';
 
 function setupDraggable() {
@@ -72,12 +71,18 @@ export default class Component extends PbElement {
 }
 
 /**
- * `pb-draggable`. Set to true to make this element draggable.
- * @type {string}
+ * Refers to pb-draggable attribute.
+ * 
+ * @type string
  * @property ATTR_DRAGGABLE
  * @static
  */
 Component.ATTR_DRAGGABLE = 'pb-draggable';
+
+/**
+ * Set to true to make this element draggable.
+ * @attribute pb-draggable
+ */
 
 if (window.TEST_MODE) {
   Utils.makeGlobal('pb.component.Component', Component);

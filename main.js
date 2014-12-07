@@ -155,7 +155,6 @@ var $__src_47_component_47_component__ = (function() {
   var Utils = ($__src_47_utils__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var PbElement = ($__src_47_pbelement__).default;
-  var ATTR_DRAGGABLE = 'pb-draggable';
   var CLASS_DRAGGED = 'pb-dragged';
   function setupDraggable() {
     var $__3 = this;

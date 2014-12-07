@@ -14,13 +14,25 @@
 
 {{$paramsDesc class.constructor.params classes}}
 
+{{#if class.attributes}}
+## Attributes
+<table>
+{{#each class.attributes}}
+<tr>
+<td><code>{{name}}</code></td>
+<td>{{{description}}}</td>
+</tr>
+{{/each}}
+</table>
+{{/if}}
+
 {{#if class.properties}}
 ## Properties
 <table>
 {{#each class.properties}}
 <tr>
 <td>{{name}}</td>
-<td>{{#if static}}**Static** {{/if}}{{$types type}}</td>
+<td>{{#if static}}<b>Static</b> {{/if}}{{$types type}}</td>
 <td>{{{description}}}</td>
 </tr>
 {{/each}}
