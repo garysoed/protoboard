@@ -5,7 +5,7 @@
     <link rel="import" href="src/component/card.html">
     <link rel="import" href="src/component/token.html">
     <link rel="import" href="src/surface/rectgrid.html">
-    <link rel="import" href="src/region/bag.html">
+    <link rel="import" href="src/region/bank.html">
     <link rel="import" href="src/region/deck.html">
     <link rel="import" href="src/region/rect.html">
     <link rel="import" href="src/ui/preview.html">
@@ -33,7 +33,7 @@
         flex: 1;
       }
 
-      #bags {
+      #banks {
         display: flex;
       }
 
@@ -289,10 +289,10 @@
           </pb-u-template>
         </pb-r-deck>
 
-        <section id="bags">
+        <section id="banks">
           <pb-u-template data-suspects="suspects">
             {{#each suspects}}
-            <pb-r-bag>
+            <pb-r-bank>
               {{#pb-for 0 30}}
               <pb-c-token>
                 <div draggable="true">
@@ -300,7 +300,7 @@
                 </div>
               </pb-c-token>
               {{/pb-for}}
-            </pb-r-bag>
+            </pb-r-bank>
             {{/each}}
           </pb-u-template>
         </section>

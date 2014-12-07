@@ -9,9 +9,12 @@ pb-r-deck {
 
 pb-r-deck > * {
   position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-pb-r-deck::shadow #contents {
-  height: $card-height;
-  width: $card-width;
+pb-r-deck::shadow #root {
+  position: relative;
 }

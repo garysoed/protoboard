@@ -12,38 +12,70 @@
     <link rel="stylesheet" type="text/css" href="out/themes/theme.css">
 
   </head>
-  <style>
-    .front {
-      line-height: 100px;
+  <style id="table-style">
+    /** Table styles */
+    table {
+      border-collapse: collapse;
+    }
+
+    td {
+      border: 1px solid #8584ba;
+      padding: 10px;
+    }
+
+    td:nth-child(2), td:nth-child(4) {
+      white-space: nowrap;
+    }
+
+    td:nth-child(2) > * {
+      display: inline-block;
+    }
+
+    td:nth-child(2) {
       text-align: center;
     }
 
-    .circle {
+    thead td {
+      background-color: #8584ba;
+      color: white;
+      padding-left: 20px;
+    }
+  </style>
+
+  <style id="token-style">
+    pb-c-token .rectangle {
+      height: 50px;
+      width: 50px;
+    }
+
+    pb-c-token .circle {
       border-radius: 50%;
       height: 50px;
       width: 50px;
     }
 
-    pb-c-token.circle::shadow #root {
-      width: 50px;
+    pb-c-token .triangle.blue {
+      height: 0;
+      width: 0;
+      border-left: 25px solid transparent;
+      border-right: 25px solid transparent;
+      border-bottom: 50px solid blue;
     }
 
-    pb-c-token > div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .green {
+    pb-c-token .green {
       background-color: green;
     }
 
-    .red {
+    pb-c-token .red {
       background-color: red;
     }
 
-    .blue {
-      background-color: blue;
+  </style>
+
+  <style>
+    .front {
+      line-height: 100px;
+      text-align: center;
     }
 
 
@@ -61,10 +93,45 @@
   </style>
   <body>
     <table>
-      <tr>
-        <td>Deck</td>
-        <td>
-          <pb-r-deck>
+      <thead>
+        <tr>
+          <td colspan="4">
+            <h2>Components</h2>
+            Components are the interactable objects in a game.
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tokens</td>
+          <td>
+            <pb-c-token>
+              <div draggable="true" class="green circle"></div>
+            </pb-c-token>
+            <pb-c-token>
+              <div draggable="true" class="red rectangle"></div>
+            </pb-c-token>
+            <pb-c-token>
+              <div draggable="true" class="blue triangle"></div>
+            </pb-c-token>
+          </td>
+          <td>
+            These are simple draggable objects with only one state. You can drag them to places and
+            drop them. That's all. You can customize their look by adding child elements.
+          </td>
+          <td>
+            <ul>
+              <li>Chess pieces</li>
+              <li>Cubes</li>
+              <li>Meeples</li>
+              <li>Gems</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Cards</td>
+          <td>
             <pb-c-card>
               <div class="pb-front" draggable="true">
                 1
@@ -83,40 +150,63 @@
               </div>
               <div class="pb-back" draggable="true"></div>
             </pb-c-card>
-          </pb-r-deck>
-        </td>
-        <td>
-          A deck is a region where all the components are stacked. The framework doesn't restrict
-          the type of components that go in a deck.
-        </td>
-      </tr>
-      <tr>
-        <td>Bank (With tokens)</td>
-        <td>
-          <pb-r-bank>
-            <pb-c-token>
-              <div draggable="true">
-                <div class="green circle"></div>
-              </div>
-            </pb-c-token>
-            <pb-c-token>
-              <div draggable="true">
-                <div class="red circle"></div>
-              </div>
-            </pb-c-token>
-            <pb-c-token>
-              <div draggable="true">
-                <div class="blue circle"></div>
-              </div>
-            </pb-c-token>
-          </pb-r-bank>
-        </td>
-      </tr>
-      <tr>
-        <td>Generic region</td>
-        <td>
-          <pb-r-rect class="reg1">
-            <div id="region">
+          </td>
+          <td>
+            These are cards, or anything with two faces. You need to provide two children, one with
+            <code>pb-front</code> for the front side of the card, and <code>pb-back</code> for the
+            back side of the card. Cards default to showing the back face.
+          </td>
+          <td>
+            <ul>
+              <li>Cards</li>
+              <li>Coins</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Cubes</td>
+        </tr>
+
+        <tr>
+          
+        </tr>
+      </tbody>
+
+      <thead>
+        <tr>
+          <td colspan="4">
+            <h2>Regions</h2>
+            Regions are areas where you can drop components into. They often hold a collection of
+            components.
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Deck</td>
+          <td>
+            <pb-r-deck></pb-r-deck>
+          </td>
+          <td>
+            A deck is a region where all the components are stacked. The framework doesn't restrict
+            the type of components that go in a deck.
+          </td>
+        </tr>
+        <tr>
+          <td>Bank (With tokens)</td>
+          <td>
+            <pb-r-bank></pb-r-bank>
+          </td>
+          <td>
+            A bank contains an arbitrary number of components. Only one component is displayed at a 
+            time.
+          </td>
+        </tr>
+        <tr>
+          <td>Generic rectangular region</td>
+          <td>
+            <pb-r-rect class="reg1">
               <pb-u-context>
                 <div>A</div>
                 <div>B</div>
@@ -130,10 +220,10 @@
                   </pb-u-context>
                 </div>
               </pb-u-context>
-            </div>
-          </pb-r-rect>
-        </td>
-      </tr>
+            </pb-r-rect>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </body>
 </html>

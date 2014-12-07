@@ -1,18 +1,5 @@
 @import 'theme';
 
-pb-c-token::shadow #root, pb-c-token::shadow #container {
-  height: $component-height;
-  width: $component-width;
-}
-
-pb-c-token > div {
-  position: absolute;
-}
-
-pb-c-token::shadow #container {
-  position: absolute;
-}
-
-pb-c-token.dragged > div {
+pb-c-token.pb-dragged > * {
   @include layer(1);
 }
