@@ -1,6 +1,8 @@
 import As from 'src/as';
 import Component from 'src/component/component';
 import Utils from 'src/utils';
+import Abilities from 'src/ability/abilities';
+import Draggable from 'src/ability/draggable';
 
 let doc = null;
 let template = null;
@@ -31,10 +33,6 @@ export default class Card extends Component {
     this.createShadowRoot()
         .appendChild(Utils.activateTemplate(template, doc));
 
-    // Default attributes
-    this.setDefaultAttribute(Component.ATTR_DRAGGABLE, '');
-
-    this.config();
     this.attachedCallback();
   }
 
@@ -64,7 +62,13 @@ export default class Card extends Component {
 
     doc = currentDoc;
     template = cardTemplate;
-    document.registerElement(EL_NAME,  {prototype: Card.prototype});
+    document.registerElement(EL_NAME,  {
+      prototype: Abilities.config(
+          Card, 
+          new Map([
+            [Draggable, 'true']
+          ])).prototype
+    });
   }
 }
 

@@ -1,5 +1,7 @@
 import Component from 'src/component/component';
 import Utils from 'src/utils';
+import Abilities from 'src/ability/abilities';
+import Draggable from 'src/ability/draggable';
 
 let doc = null;
 let template = null;
@@ -23,11 +25,6 @@ export default class Token extends Component {
   createdCallback() {
     super.createdCallback();
     this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-
-    // Sets the default attributes
-    this.setDefaultAttribute(Component.ATTR_DRAGGABLE, '');
-
-    this.config();
   }
 
   /**
@@ -46,7 +43,13 @@ export default class Token extends Component {
 
     doc = currentDoc;
     template = tokenTemplate;
-    document.registerElement(EL_NAME, {prototype: Token.prototype});
+    document.registerElement(EL_NAME, {
+      prototype: Abilities.config(
+          Token,
+          new Map([
+            [Draggable, 'true']
+          ]))
+    });
   }
 }
 

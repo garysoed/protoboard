@@ -44,7 +44,6 @@ export default class Previewer extends PbElement {
   }
 
   detachedCallback() {
-    console.log(this[_previewElHandler]);
     Object.unobserve(PreviewService, this[_previewElHandler]);
     super.detachedCallback();
   }

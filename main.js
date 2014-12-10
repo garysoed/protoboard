@@ -1,28 +1,3 @@
-var $__src_47_as__ = (function() {
-  "use strict";
-  var __moduleName = "src/as";
-  var As = {
-    int: function(input) {
-      var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
-      var output = Number.parseInt(input, radix);
-      if (Number.isNaN(output)) {
-        throw (input + " is not an integer with radix " + radix);
-      }
-      return output;
-    },
-    boolean: function(input) {
-      return input.toLowerCase() === 'true';
-    }
-  };
-  var $__default = As = As;
-  if (!window.pb) {
-    window.pb = {};
-  }
-  window.pb.As = As;
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_utils__ = (function() {
   "use strict";
   var __moduleName = "src/utils";
@@ -102,6 +77,36 @@ var $__src_47_utils__ = (function() {
         }
         currentScope = currentScope[$traceurRuntime.toProperty(path)];
       }));
+    },
+    extendFn: function(scope, name, fn, callBefore) {
+      var oldFn = scope[$traceurRuntime.toProperty(name)];
+      scope[$traceurRuntime.toProperty(name)] = function() {
+        if (callBefore) {
+          var rv = fn.apply(this, arguments);
+          if (!oldFn) {
+            return rv;
+          }
+        }
+        if (oldFn) {
+          var rv$__0 = oldFn.apply(this, arguments);
+          if (callBefore) {
+            return rv$__0;
+          }
+        }
+        if (!callBefore) {
+          return fn.apply(this, arguments);
+        }
+      };
+    },
+    curry: function(fn) {
+      return function() {
+        if (arguments.length >= fn.length) {
+          return fn.apply(this, arguments);
+        } else {
+          var argArray = Utils.toArray(arguments);
+          return Utils.curry(fn.bind.apply(fn, [this].concat(argArray)));
+        }
+      };
     }
   };
   var $__default = Utils = Utils;
@@ -109,6 +114,168 @@ var $__src_47_utils__ = (function() {
   return {get default() {
       return $__default;
     }};
+})();
+var $__src_47_ability_47_abilities__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/abilities";
+  var Utils = ($__src_47_utils__).default;
+  var Abilities = {config: function(ctor, cfg) {
+      var $__3 = function() {
+        var pair = $__2.value;
+        {
+          var ability = pair[0];
+          Utils.extendFn(ctor.prototype, 'createdCallback', function() {
+            ability.setDefaultValue.call(this, pair[1]);
+          });
+          Utils.extendFn(ctor.prototype, 'attributeChangedCallback', ability.attributeChangedCallback);
+          Utils.extendFn(ctor.prototype, 'attachedCallback', ability.attachedCallback);
+          Utils.extendFn(ctor.prototype, 'detachedCallback', ability.detachedCallback, true);
+        }
+      };
+      for (var $__1 = cfg[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__2; !($__2 = $__1.next()).done; ) {
+        $__3();
+      }
+      return ctor;
+    }};
+  var $__default = Abilities;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.ability.Abilities', Abilities);
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_ability_47_ability__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/ability";
+  var Ability = {
+    setDefaultValue: function(defaultValue) {},
+    attributeChangedCallback: function(name, oldValue, newValue) {},
+    attachedCallback: function() {},
+    detachedCallback: function() {}
+  };
+  var $__default = Ability;
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_as__ = (function() {
+  "use strict";
+  var __moduleName = "src/as";
+  var As = {
+    int: function(input) {
+      var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
+      var output = Number.parseInt(input, radix);
+      if (Number.isNaN(output)) {
+        throw (input + " is not an integer with radix " + radix);
+      }
+      return output;
+    },
+    boolean: function(input) {
+      return input.toLowerCase() === 'true';
+    }
+  };
+  var $__default = As = As;
+  if (!window.pb) {
+    window.pb = {};
+  }
+  window.pb.As = As;
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_service_47_dragdrop__ = (function() {
+  "use strict";
+  var __moduleName = "src/service/dragdrop";
+  var Utils = ($__src_47_utils__).default;
+  var DragDrop = {
+    lastDraggedEl: null,
+    dragStart: function(draggedEl) {
+      this.lastDraggedEl = draggedEl;
+    }
+  };
+  var $__default = DragDrop = DragDrop;
+  Utils.makeGlobal('pb.service.DragDrop', DragDrop);
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_ability_47_draggable__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/draggable";
+  var As = ($__src_47_as__).default;
+  var Utils = ($__src_47_utils__).default;
+  var Ability = ($__src_47_ability_47_ability__).default;
+  var DragDropService = ($__src_47_service_47_dragdrop__).default;
+  var ATTR_NAME = 'pb-draggable';
+  var CLASS_DRAGGED = 'pb-dragged';
+  var _DRAG_START_HANDLER = Symbol();
+  var _DRAG_END_HANDLER = Symbol();
+  function handleDragEnd() {
+    this.classList.remove(CLASS_DRAGGED);
+  }
+  function handleDragStart(event) {
+    var dataTransfer = event.dataTransfer;
+    dataTransfer.effectAllowed = 'move';
+    this.classList.add(CLASS_DRAGGED);
+    DragDropService.dragStart(this);
+  }
+  function register(element) {
+    element[$traceurRuntime.toProperty(_DRAG_START_HANDLER)] = handleDragStart.bind(element);
+    element[$traceurRuntime.toProperty(_DRAG_END_HANDLER)] = handleDragEnd.bind(element);
+    Utils.toArray(element.children).forEach((function(child) {
+      $(child).attr('draggable', 'true');
+      child.addEventListener('dragstart', element[$traceurRuntime.toProperty(_DRAG_START_HANDLER)]);
+      child.addEventListener('dragend', element[$traceurRuntime.toProperty(_DRAG_END_HANDLER)]);
+    }));
+  }
+  function unregister(element) {
+    Utils.toArray(element.children).forEach((function(child) {
+      child.removeEventListener('dragend', element[$traceurRuntime.toProperty(_DRAG_END_HANDLER)]);
+      child.removeEventListener('dragstart', element[$traceurRuntime.toProperty(_DRAG_START_HANDLER)]);
+      $(child).attr('draggable', null);
+    }));
+  }
+  var Draggable = Object.create(Ability, {
+    setDefaultValue: {value: function(defaultValue) {
+        if ($(this).attr(ATTR_NAME) === undefined) {
+          $(this).attr(ATTR_NAME, defaultValue);
+        }
+      }},
+    attributeChangedCallback: {value: function(name, oldValue, newValue) {
+        if (name === ATTR_NAME) {
+          newValue = As.boolean(newValue);
+          if (newValue) {
+            register(this);
+          } else {
+            unregister(this);
+          }
+        }
+      }},
+    attachedCallback: {value: function() {
+        if ($(this).attr(ATTR_NAME) && As.boolean($(this).attr(ATTR_NAME))) {
+          register(this);
+        }
+      }},
+    detachedCallback: {value: function() {
+        unregister(this);
+      }}
+  });
+  var $__default = Draggable = Draggable;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.ability.Draggable', Draggable);
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_ability_47_modules__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/modules";
+  $__src_47_ability_47_abilities__;
+  $__src_47_ability_47_draggable__;
+  return {};
 })();
 var $__src_47_pbelement__ = (function() {
   "use strict";
@@ -133,70 +300,18 @@ var $__src_47_pbelement__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_service_47_dragdrop__ = (function() {
-  "use strict";
-  var __moduleName = "src/service/dragdrop";
-  var Utils = ($__src_47_utils__).default;
-  var DragDrop = {
-    lastDraggedEl: null,
-    dragStart: function(draggedEl) {
-      this.lastDraggedEl = draggedEl;
-    }
-  };
-  var $__default = DragDrop = DragDrop;
-  Utils.makeGlobal('pb.service.DragDrop', DragDrop);
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_component_47_component__ = (function() {
   "use strict";
   var __moduleName = "src/component/component";
   var Utils = ($__src_47_utils__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var PbElement = ($__src_47_pbelement__).default;
-  var CLASS_DRAGGED = 'pb-dragged';
-  function setupDraggable() {
-    var $__3 = this;
-    Utils.toArray(this.children).forEach(((function(child) {
-      $(child).attr('draggable', 'true');
-      child.addEventListener('dragstart', handleDragStart.bind($__3));
-      child.addEventListener('dragend', handleDragEnd.bind($__3));
-    })).bind(this));
-  }
-  function handleDragEnd() {
-    this.classList.remove(CLASS_DRAGGED);
-  }
-  function handleDragStart(event) {
-    var dataTransfer = event.dataTransfer;
-    dataTransfer.effectAllowed = 'move';
-    this.classList.add(CLASS_DRAGGED);
-    DragDropService.dragStart(this);
-  }
   var Component = function Component() {};
   var $Component = Component;
-  ($traceurRuntime.createClass)(Component, {
-    createdCallback: function() {
+  ($traceurRuntime.createClass)(Component, {createdCallback: function() {
       $traceurRuntime.superCall(this, $Component.prototype, "createdCallback", []);
-    },
-    config: function() {
-      var $__3 = this;
-      Utils.toArray(this.attributes).forEach((function(attribute) {
-        switch (attribute.name) {
-          case $Component.ATTR_DRAGGABLE:
-            setupDraggable.bind($__3)();
-            break;
-        }
-      }));
-    },
-    setDefaultAttribute: function(name, value) {
-      if ($(this).attr(name) === undefined) {
-        $(this).attr(name, value);
-      }
-    }
-  }, {}, PbElement);
+    }}, {}, PbElement);
   var $__default = Component;
-  Component.ATTR_DRAGGABLE = 'pb-draggable';
   if (window.TEST_MODE) {
     Utils.makeGlobal('pb.component.Component', Component);
   }
@@ -210,6 +325,8 @@ var $__src_47_component_47_card__ = (function() {
   var As = ($__src_47_as__).default;
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
+  var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Draggable = ($__src_47_ability_47_draggable__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-c-card';
@@ -226,8 +343,6 @@ var $__src_47_component_47_card__ = (function() {
     createdCallback: function() {
       $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.setDefaultAttribute(Component.ATTR_DRAGGABLE, '');
-      this.config();
       this.attachedCallback();
     },
     attachedCallback: function() {
@@ -244,7 +359,7 @@ var $__src_47_component_47_card__ = (function() {
       }
       doc = currentDoc;
       template = cardTemplate;
-      document.registerElement(EL_NAME, {prototype: $Card.prototype});
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Map([[Draggable, 'true']])).prototype});
     }}, Component);
   var $__default = Card;
   Utils.makeGlobal('pb.component.Card', Card);
@@ -257,6 +372,8 @@ var $__src_47_component_47_token__ = (function() {
   var __moduleName = "src/component/token";
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
+  var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Draggable = ($__src_47_ability_47_draggable__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-c-token';
@@ -267,15 +384,13 @@ var $__src_47_component_47_token__ = (function() {
   ($traceurRuntime.createClass)(Token, {createdCallback: function() {
       $traceurRuntime.superCall(this, $Token.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.setDefaultAttribute(Component.ATTR_DRAGGABLE, '');
-      this.config();
     }}, {register: function(currentDoc, tokenTemplate) {
       if (doc || template) {
         return;
       }
       doc = currentDoc;
       template = tokenTemplate;
-      document.registerElement(EL_NAME, {prototype: $Token.prototype});
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Token, new Map([[Draggable, 'true']]))});
     }}, Component);
   var $__default = Token;
   Utils.makeGlobal('pb.component.Token', Token);
@@ -403,6 +518,7 @@ var $__src_47_region_47_region__ = (function() {
     }
   }, {}, PbElement);
   var $__default = Region;
+  Region.ATTR_DROPPABLE = 'pb-droppable';
   if (window.TEST_MODE) {
     Utils.makeGlobal('pb.region.Region', Region);
   }
@@ -812,7 +928,6 @@ var $__src_47_ui_47_previewer__ = (function() {
       this[$traceurRuntime.toProperty(_previewElHandler)] = Utils.observe(PreviewService, 'previewedEl', handlePreviewEl.bind(this));
     },
     detachedCallback: function() {
-      console.log(this[$traceurRuntime.toProperty(_previewElHandler)]);
       Object.unobserve(PreviewService, this[$traceurRuntime.toProperty(_previewElHandler)]);
       $traceurRuntime.superCall(this, $Previewer.prototype, "detachedCallback", []);
     }
@@ -891,6 +1006,7 @@ var $__src_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/modules";
   $__src_47_utils__;
+  $__src_47_ability_47_modules__;
   $__src_47_component_47_modules__;
   $__src_47_region_47_modules__;
   $__src_47_service_47_modules__;

@@ -131,6 +131,60 @@
             expect(Utils.makeGlobal.bind(Utils, 'a.b.c.Target', {})).to.throw('Target');
           });
         });
+
+        describe('#extendFn', function() {
+          it('should call the original function before the new function by default', function() {
+            var oldFn = _.spiedFunction().overrideReturn(1);
+            var newFn = _.spiedFunction().overrideReturn(2);
+
+            var object = {
+              fn: oldFn
+            };
+
+            Utils.extendFn(object, 'fn', newFn);
+            expect(object.fn()).to.be.equal(2);
+            expect(oldFn).calledWith().before(newFn).calledWith();
+          });
+          it('should call the original function after the new function if specified', function() {
+            var oldFn = _.spiedFunction().overrideReturn(1);
+            var newFn = _.spiedFunction().overrideReturn(2);
+
+            var object = {
+              fn: oldFn
+            };
+
+            Utils.extendFn(object, 'fn', newFn, true /* callBefore */);
+            expect(object.fn()).to.be.equal(1);
+            expect(newFn).calledWith().before(oldFn).calledWith();
+          });
+          it('should not crash if original function does not exist', function() {
+            var object = {};
+
+            var fn = _.spiedFunction().overrideReturn(2);
+
+            Utils.extendFn(object, 'fn', fn, true /** callBefore */);
+            expect(object.fn()).to.be.equal(2);
+            expect(fn).calledWith().at.least(1);
+          });
+        });
+
+        describe('#curry', function() {
+          it('should work when called with one argument at a time', function() {
+            var fn = function(a, b) { return a + b; };
+            var curry = Utils.curry(fn);
+            expect(curry(1)).to.be.instanceof(Function);
+            expect(curry(1)(2)).to.be.equal(3);
+          });
+          it('should work when called with multiple arguments', function() {
+            var fn = function(a, b) { return a + b; };
+            var curry = Utils.curry(fn);
+            expect(curry(1, 2)).to.be.equal(3);
+          });
+          it('should work for functions with no arguments', function() {
+            var fn = function() { return 3; };
+            expect(Utils.curry(fn)()).to.be.equal(3);
+          });
+        });
       });
     })();
   </script>

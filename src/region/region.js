@@ -89,6 +89,24 @@ export default class Region extends PbElement {
   }
 }
 
+/**
+ * Refers to pb-droppable attribute
+ *
+ * @type string
+ * @property ATTR_DROPPABLE
+ * @static
+ */
+
+/**
+ * If set to true, this will be droppable for any kind of elements.
+ * If set to false, this will not be droppable.
+ * Otherwise, the string will be treated as a selector for elements that can be dropped into this
+ * element. 
+ *
+ * @ttribute pb-droppable
+ */
+Region.ATTR_DROPPABLE = 'pb-droppable';
+
 if (window.TEST_MODE) {
   Utils.makeGlobal('pb.region.Region', Region);
 }

@@ -135,6 +135,59 @@ var Utils = {
       }
       currentScope = currentScope[path];
     });
+  },
+
+  /**
+   * Replaces the specified function to call the given function before or after the original 
+   * function. The given function will be called with the same arguments and scope as the original
+   * function.
+   *
+   * @method extendFn
+   * @param {Object} scope The object containing the function to replace.
+   * @param {string} name The name of the function to replace.
+   * @param {!Function} fn Function to be called.
+   * @param {boolean} callBefore True iff the function should be called before the original 
+   *     function. Defaults to false.
+   */
+  extendFn(scope, name, fn, callBefore) {
+    let oldFn = scope[name];
+    scope[name] = function() {
+      if (callBefore) {
+        let rv = fn.apply(this, arguments);
+        if (!oldFn) {
+          return rv;
+        }
+      }
+
+      if (oldFn) {
+        let rv = oldFn.apply(this, arguments);
+        if (callBefore) {
+          return rv;
+        }
+      }
+
+      if (!callBefore) {
+        return fn.apply(this, arguments);
+      }
+    };
+  },
+
+  /**
+   * Makes the given function curried.
+   *
+   * @method curry
+   * @param {!Function} fn The function to be curried.
+   * @return {!Function} The curried function.
+   */
+  curry(fn) {
+    return function() {
+      if (arguments.length >= fn.length) {
+        return fn.apply(this, arguments);
+      } else {
+        let argArray = Utils.toArray(arguments);
+        return Utils.curry(fn.bind.apply(fn, [this].concat(argArray)));
+      }
+    };
   }
 };
 

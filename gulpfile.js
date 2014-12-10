@@ -33,13 +33,13 @@ gulp.task('traceur', ['jshint'], function() {
 
 gulp.task('test', ['traceur'], function() {
   return gulp.src('karma.conf.js')
-      .pipe(shell(['karma start <%= file.path %> --single-run']))
+      .pipe(shell(['karma start <%= file.path %> --single-run --color']))
       .on('error', handleError);
 });
 
-gulp.task('test-debug', ['traceur'], function() {
+gulp.task('test-dev', ['traceur'], function() {
   return gulp.src('karma.conf.js')
-      .pipe(shell(['karma start <%= file.path %>']))
+      .pipe(shell(['karma start <%= file.path %> --color']))
       .on('error', handleError);
 });
 
@@ -64,9 +64,8 @@ gulp.task('sass', function() {
 gulp.task('push', ['test', 'doc', 'sass'], shell.task('git push'));
 
 gulp.task('watch', function() {
-  gulp.watch(
-      ['src/**/*.js', 'test/**/*.html', 'src/**/*.scss'], 
-      ['traceur', 'sass']);
+  gulp.watch(['src/**/*.js'], ['traceur']);
+  gulp.watch(['src/**/*.scss'], ['sass']);
 });
 
 gulp.task('watch-traceur', function() {
