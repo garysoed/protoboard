@@ -18,6 +18,23 @@
       var doc = document.currentScript.ownerDocument;
 
       describe('Toggleable', function() {
+        function getTriggerHandler(el, eventName) {
+          var isAFunction = _M.isA(Function);
+          expect(el.addEventListener).calledWith(eventName, isAFunction).at.least(1);
+          return isAFunction.matchingArgs[0];
+        }
+
+        function expectRegistered(el, eventName, shouldShowFront) {
+          var handler = getTriggerHandler(el, eventName);
+          // Call the handler.
+          handler();
+          expect($(el).attr('pb-showfront')).to.be.equal(shouldShowFront);
+        }
+
+        function expectUnregistered(el, eventName, handler) {
+          expect(el.removeEventListener).calledWith(eventName, handler).at.least(1);
+        }
+
         describe('#setDefaultValue', function() {
           var toggleable;
 
@@ -58,23 +75,6 @@
 
         describe('#attributeChangedCallback', function() {
           var toggleable;
-
-          function getTriggerHandler(el, eventName) {
-            var isAFunction = _M.isA(Function);
-            expect(el.addEventListener).calledWith(eventName, isAFunction).at.least(1);
-            return isAFunction.matchingArgs[0];
-          }
-
-          function expectRegistered(el, eventName, shouldShowFront) {
-            var handler = getTriggerHandler(el, eventName);
-            // Call the handler.
-            handler();
-            expect($(el).attr('pb-showfront')).to.be.equal(shouldShowFront);
-          }
-
-          function expectUnregistered(el, eventName, handler) {
-            expect(el.removeEventListener).calledWith(eventName, handler).at.least(1);
-          }
 
           beforeEach(function(done) {
             toggleable = new Toggleable();
@@ -135,6 +135,55 @@
             toggleable.attributeChangedCallback(el, 'pb-click', 'pb-something', 'pb-toggleable');
             expect(el.addEventListener).called().to.be.equal(0);
             expect(el.removeEventListener).called().to.be.equal(0);
+          });
+        });
+
+        describe('#attachedCallback', function() {
+          var toggleable;
+
+          beforeEach(function(done) {
+            toggleable = new Toggleable();
+            done();
+          });
+
+          it('should register if enabled', function() {
+            var el = doc.createElement('div');
+            $(el)
+                .attr('pb-toggleable', 'true')
+                .attr('pb-showfront', 'false')
+                .attr('pb-click', 'pb-toggleable');
+
+            toggleable.setDefaultValue(el);
+
+            _.spy(el, 'addEventListener');
+            toggleable.attachedCallback(el);
+            expectRegistered(el, 'click', 'true' /* shouldShowFront */);
+          });
+          it('should not register if not enabled', function() {
+            var el = doc.createElement('div');
+            $(el).attr('pb-toggleable', 'false');;
+
+            toggleable.setDefaultValue(el);
+
+            _.spy(el, 'addEventListener');
+            toggleable.attachedCallback(el);
+            expect(el.addEventListener).called().to.be.equal(0);
+          });
+        });
+
+        describe('#detachedCallback', function() {
+          it('should unregister', function() {
+            var toggleable = new Toggleable();
+            var el = doc.createElement('div');
+            $(el).attr('pb-toggleable', 'true');
+
+            toggleable.setDefaultValue(el);
+
+            _.spy(el, 'addEventListener');
+            _.spy(el, 'removeEventListener');
+            toggleable.attachedCallback(el);
+            toggleable.detachedCallback(el);
+            expectUnregistered(el, 'click', getTriggerHandler(el, 'click'));
           });
         });
 

@@ -477,6 +477,7 @@ var $__src_47_component_47_card__ = (function() {
   ($traceurRuntime.createClass)(Card, {createdCallback: function() {
       $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this.attachedCallback();
     }}, {register: function(currentDoc, cardTemplate) {
       if (!doc && !template) {
         document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Draggable(true), new Toggleable(true)).prototype});

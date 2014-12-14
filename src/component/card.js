@@ -30,6 +30,7 @@ export default class Card extends Component {
     super.createdCallback();
     this.createShadowRoot()
         .appendChild(Utils.activateTemplate(template, doc));
+    this.attachedCallback();
   }
 
   /**
