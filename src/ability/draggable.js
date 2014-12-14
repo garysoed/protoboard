@@ -11,6 +11,8 @@ const ATTR_NAME = 'pb-draggable';
 
 const CLASS_DRAGGED = 'pb-dragged';
 
+// Private symbols.
+const _DEFAULT_VALUE = Symbol();
 const _DRAG_START_HANDLER = Symbol();
 const _DRAG_END_HANDLER = Symbol();
 
@@ -55,69 +57,66 @@ function unregister(element) {
  * @static
  * @extends ability.Ability
  */
-const Draggable = Object.create(Ability, {
+export default class Draggable extends Ability {
+
+  constructor(defaultValue) {
+    this[_DEFAULT_VALUE] = defaultValue;
+  }
 
   /**
-   * Sets the default values for the element.
+   * Sets the default value of the given element.
    *
    * @method setDefaultValue
-   * @param {boolean} defaultValue Default value for pb-draggable attribute.
+   * @param {!Element} el The element whose default value should be set.
    */
-  setDefaultValue: {
-    value(defaultValue) {
-      if ($(this).attr(ATTR_NAME) === undefined) {
-        $(this).attr(ATTR_NAME, defaultValue);
-      }
+  setDefaultValue(el) {
+    if ($(el).attr(ATTR_NAME) === undefined) {
+      $(el).attr(ATTR_NAME, this[_DEFAULT_VALUE]);
     }
-  },
+  }
 
   /**
    * Handles attribute change.
    *
    * @method attributeChangedCallback
+   * @param {!Element} el The element whose attribute was changed.
    * @param {string} name Name of the attribute that was changed.
    * @param {string} oldValue Old value of the changed attribute.
    * @param {string} newValue New value of the changed attribute.
    */
-  attributeChangedCallback: {
-    value(name, oldValue, newValue) {
-      if (name === ATTR_NAME) {
-        newValue = As.boolean(newValue);
-        if (newValue) {
-          register(this);
-        } else {
-          unregister(this);
-        }
+  attributeChangedCallback(el, name, oldValue, newValue) {
+    if (name === ATTR_NAME) {
+      newValue = As.boolean(newValue);
+      if (newValue) {
+        register(el);
+      } else {
+        unregister(el);
       }
     }
-  },
+  }
 
   /**
    * Handles registration when the element is attached to the document.
    *
    * @method attachedCallback
+   * @param {!Element} el The element that was attached.
    */
-  attachedCallback: {
-    value() {
-      if ($(this).attr(ATTR_NAME) && As.boolean($(this).attr(ATTR_NAME))) {
-        register(this);
-      }
+  attachedCallback(el) {
+    if ($(el).attr(ATTR_NAME) && As.boolean($(el).attr(ATTR_NAME))) {
+      register(el);
     }
-  },
+  }
 
   /**
    * Handles unregistration when the element is detached from the document.
    *
    * @method detachedCallback
+   * @param {!Element} el The element that was detached.
    */
-  detachedCallback: {
-    value() {
-      unregister(this);
-    }
+  detachedCallback(el) {
+    unregister(el);
   }
-});
-
-export default Draggable = Draggable;
+}
 
 if (window['TEST_MODE']) {
   Utils.makeGlobal('pb.ability.Draggable', Draggable);

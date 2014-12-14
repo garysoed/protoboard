@@ -19,27 +19,33 @@ const Abilities = {
    * @param {!Map.<Ability, Object>} cfg Map with the Ability as the key, and a default value object
    *     specific to that ability. Check the Ability's documentation for more information.
    */
-  config(ctor, cfg) {
-    for (let pair of cfg) {
-      let ability = pair[0];
+  config(ctor, ...abilities) {
+    for (let ability of abilities) {
+      // TODO: Curry the functions.
       Utils.extendFn(
           ctor.prototype,
           'createdCallback',
           function() {
-            ability.setDefaultValue.call(this, pair[1]);
+            ability.setDefaultValue.call(ability, this);
           });
       Utils.extendFn(
           ctor.prototype, 
           'attributeChangedCallback', 
-          ability.attributeChangedCallback);
+          function(name, oldValue, newValue) {
+            ability.attributeChangedCallback.call(ability, this, name, oldValue, newValue);
+          });
       Utils.extendFn(
           ctor.prototype, 
           'attachedCallback', 
-          ability.attachedCallback);
+          function() {
+            ability.attachedCallback.call(ability, this);
+          });
       Utils.extendFn(
           ctor.prototype, 
           'detachedCallback', 
-          ability.detachedCallback, 
+          function() {
+            ability.detachedCallback.call(ability, this);
+          }, 
           true /* callBefore */);
     }
     return ctor;

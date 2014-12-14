@@ -25,27 +25,24 @@
               attachedCallback: _.spiedFunction(),
               detachedCallback: _.spiedFunction()
             };
-            var defaultValue = {a: 1, b: 2};
 
             pb.ability.Abilities.config(
                 Ctor, 
-                new Map([
-                  [Ability, defaultValue]
-                ]));
+                Ability);
 
-            var ctor = new Ctor();
-            ctor.createdCallback();
-            expect(Ability.setDefaultValue).calledWith(defaultValue).at.least(1);
+            var el = new Ctor();
+            el.createdCallback();
+            expect(Ability.setDefaultValue).calledWith(el).at.least(1);
 
-            ctor.attributeChangedCallback('attr', 'oldValue', 'newValue');
+            el.attributeChangedCallback('attr', 'oldValue', 'newValue');
             expect(Ability.attributeChangedCallback)
-                .calledWith('attr', 'oldValue', 'newValue').at.least(1);
+                .calledWith(el, 'attr', 'oldValue', 'newValue').at.least(1);
 
-            ctor.attachedCallback();
-            expect(Ability.attachedCallback).calledWith().at.least(1);
+            el.attachedCallback();
+            expect(Ability.attachedCallback).calledWith(el).at.least(1);
 
-            ctor.detachedCallback();
-            expect(Ability.detachedCallback).calledWith().at.least(1);
+            el.detachedCallback();
+            expect(Ability.detachedCallback).calledWith(el).at.least(1);
           });
         });
 

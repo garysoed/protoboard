@@ -30,6 +30,11 @@ function handleDragLeave(e) {
 function handleDrop() {
   this.classList.remove(CLASS_OVER);
   this.appendChild(DragDrop.lastDraggedEl);
+  // TODO: attached callback doesn't seem to be called on appendChild.
+  // https://github.com/webcomponents/webcomponentsjs/issues/18
+  if (DragDrop.lastDraggedEl.attachedCallback) {
+    DragDrop.lastDraggedEl.attachedCallback();
+  }
   DragDrop.lastDraggedEl = null;
 }
 

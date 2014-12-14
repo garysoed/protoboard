@@ -89,7 +89,9 @@
             expect(r.addEventListener).calledWith('drop', isAFunction).at.least(1);
 
             // Now fire the event.
-            var lastDraggedEl = {}
+            var lastDraggedEl = {
+              attachedCallback: _.spiedFunction()
+            };
             DragDrop.lastDraggedEl = lastDraggedEl;
             _.spy(r, 'appendChild').overrideReturn();
 
@@ -98,6 +100,7 @@
 
             expect(r.classList.remove).calledWith('pb-over').at.least(1);
             expect(r.appendChild).calledWith(lastDraggedEl).at.least(1);
+            expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
             expect(DragDrop.lastDraggedEl).to.be.null;
           });
           it('should handle click when Distribute service is active and has next', function() {

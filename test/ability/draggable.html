@@ -80,21 +80,28 @@
 
         describe('#setDefaultValue', function() {
           it('should set the value', function() {
-            Draggable.setDefaultValue.call(el, true);
+            new Draggable(true).setDefaultValue(el);
             expect($(el).attr('pb-draggable')).to.be.equal('true');
           });
           it('should not do anything if value is already set', function() {
             $(el).attr('pb-draggable', false);
-            Draggable.setDefaultValue.call(el)
+            new Draggable(true).setDefaultValue(el)
           });
         });
 
         describe('#attributeChangedCallback', function() {
+          var draggable;
+
+          beforeEach(function(done) {
+            draggable = new Draggable(true);
+            done();
+          });
+
           it('should register if set to enabled', function() {
             _.spy(child1, 'addEventListener');
             _.spy(child2, 'addEventListener');
 
-            Draggable.attributeChangedCallback.call(el, 'pb-draggable', 'false', 'true');
+            draggable.attributeChangedCallback(el, 'pb-draggable', 'false', 'true');
 
             expect($(child1).attr('draggable')).to.be.equal('true');
             expect($(child2).attr('draggable')).to.be.equal('true');
@@ -105,12 +112,12 @@
             _.spy(child1, 'addEventListener');
             _.spy(child2, 'addEventListener');
 
-            Draggable.attributeChangedCallback.call(el, 'pb-draggable', 'false', 'true');
+            draggable.attributeChangedCallback(el, 'pb-draggable', 'false', 'true');
 
             _.spy(child1, 'removeEventListener');
             _.spy(child2, 'removeEventListener');
             
-            Draggable.attributeChangedCallback.call(el, 'pb-draggable', 'true', 'false');
+            draggable.attributeChangedCallback(el, 'pb-draggable', 'true', 'false');
 
             expectUnregistered(
                 getRegisteredHandler(child1, 'dragstart'),
@@ -122,7 +129,7 @@
             _.spy(child1, 'removeEventListener');
             _.spy(child2, 'removeEventListener');
 
-            Draggable.attributeChangedCallback.call(el, 'unsupported-attribute', 'old', 'new');
+            draggable.attributeChangedCallback(el, 'unsupported-attribute', 'old', 'new');
 
             expect(child1.addEventListener).called().to.be.equal(0);
             expect(child2.addEventListener).called().to.be.equal(0);
@@ -132,13 +139,20 @@
         });
 
         describe('#attachedCallback', function() {
+          var draggable;
+          
+          beforeEach(function(done) {
+            draggable = new Draggable(true);
+            done();
+          });
+
           it('should register if enabled', function() {
             $(el).attr('pb-draggable', 'true');
 
             _.spy(child1, 'addEventListener');
             _.spy(child2, 'addEventListener');
 
-            Draggable.attachedCallback.call(el);
+            draggable.attachedCallback(el);
 
             expectRegistered();
           });
@@ -147,7 +161,7 @@
             _.spy(child2, 'addEventListener');
             $(el).attr('pb-draggable', 'false');
 
-            Draggable.attachedCallback.call(el);
+            draggable.attachedCallback(el);
 
             expect(child1.addEventListener).called().to.be.equal(0);
             expect(child2.addEventListener).called().to.be.equal(0);
@@ -156,7 +170,7 @@
             _.spy(child1, 'addEventListener');
             _.spy(child2, 'addEventListener');
 
-            Draggable.attachedCallback.call(el);
+            draggable.attachedCallback(el);
 
             expect(child1.addEventListener).called().to.be.equal(0);
             expect(child2.addEventListener).called().to.be.equal(0);
@@ -164,18 +178,25 @@
         });
 
         describe('#detachedCallback', function() {
+          var draggable;
+
+          beforeEach(function(done) {
+            draggable = new Draggable(true);
+            done();
+          });
+
           it('should unregister', function() {
             _.spy(child1, 'addEventListener');
             _.spy(child2, 'addEventListener');
 
             $(el).attr('pb-draggable', 'true');
 
-            Draggable.attachedCallback.call(el);
+            draggable.attachedCallback(el);
 
             _.spy(child1, 'removeEventListener');
             _.spy(child2, 'removeEventListener');
             
-            Draggable.detachedCallback.call(el);
+            draggable.detachedCallback(el);
 
             expectUnregistered(
                 getRegisteredHandler(child1, 'dragstart'),

@@ -60,9 +60,7 @@ export default class Card extends Component {
       document.registerElement(EL_NAME,  {
         prototype: Abilities.config(
             Card, 
-            new Map([
-              [Draggable, 'true']
-            ])).prototype
+            new Draggable(true)).prototype
       });
     }
 

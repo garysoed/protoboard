@@ -119,22 +119,30 @@ var $__src_47_ability_47_abilities__ = (function() {
   "use strict";
   var __moduleName = "src/ability/abilities";
   var Utils = ($__src_47_utils__).default;
-  var Abilities = {config: function(ctor, cfg) {
-      var $__3 = function() {
-        var pair = $__2.value;
+  var Abilities = {config: function(ctor) {
+      for (var abilities = [],
+          $__3 = 1; $__3 < arguments.length; $__3++)
+        abilities[$traceurRuntime.toProperty($__3 - 1)] = arguments[$traceurRuntime.toProperty($__3)];
+      var $__4 = function() {
+        var ability = $__2.value;
         {
-          var ability = pair[0];
           Utils.extendFn(ctor.prototype, 'createdCallback', function() {
-            ability.setDefaultValue.call(this, pair[1]);
+            ability.setDefaultValue.call(ability, this);
           });
-          Utils.extendFn(ctor.prototype, 'attributeChangedCallback', ability.attributeChangedCallback);
-          Utils.extendFn(ctor.prototype, 'attachedCallback', ability.attachedCallback);
-          Utils.extendFn(ctor.prototype, 'detachedCallback', ability.detachedCallback, true);
+          Utils.extendFn(ctor.prototype, 'attributeChangedCallback', function(name, oldValue, newValue) {
+            ability.attributeChangedCallback.call(ability, this, name, oldValue, newValue);
+          });
+          Utils.extendFn(ctor.prototype, 'attachedCallback', function() {
+            ability.attachedCallback.call(ability, this);
+          });
+          Utils.extendFn(ctor.prototype, 'detachedCallback', function() {
+            ability.detachedCallback.call(ability, this);
+          }, true);
         }
       };
-      for (var $__1 = cfg[$traceurRuntime.toProperty(Symbol.iterator)](),
+      for (var $__1 = abilities[$traceurRuntime.toProperty(Symbol.iterator)](),
           $__2; !($__2 = $__1.next()).done; ) {
-        $__3();
+        $__4();
       }
       return ctor;
     }};
@@ -149,13 +157,15 @@ var $__src_47_ability_47_abilities__ = (function() {
 var $__src_47_ability_47_ability__ = (function() {
   "use strict";
   var __moduleName = "src/ability/ability";
-  var Ability = {
-    setDefaultValue: function(defaultValue) {},
-    attributeChangedCallback: function(name, oldValue, newValue) {},
-    attachedCallback: function() {},
-    detachedCallback: function() {}
-  };
+  var Ability = function Ability() {};
+  ($traceurRuntime.createClass)(Ability, {
+    setDefaultValue: function(el) {},
+    attributeChangedCallback: function(el, name, oldValue, newValue) {},
+    attachedCallback: function(el) {},
+    detachedCallback: function(el) {}
+  }, {});
   var $__default = Ability;
+  ;
   return {get default() {
       return $__default;
     }};
@@ -210,6 +220,7 @@ var $__src_47_ability_47_draggable__ = (function() {
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var ATTR_NAME = 'pb-draggable';
   var CLASS_DRAGGED = 'pb-dragged';
+  var _DEFAULT_VALUE = Symbol();
   var _DRAG_START_HANDLER = Symbol();
   var _DRAG_END_HANDLER = Symbol();
   function handleDragEnd() {
@@ -237,32 +248,35 @@ var $__src_47_ability_47_draggable__ = (function() {
       $(child).attr('draggable', null);
     }));
   }
-  var Draggable = Object.create(Ability, {
-    setDefaultValue: {value: function(defaultValue) {
-        if ($(this).attr(ATTR_NAME) === undefined) {
-          $(this).attr(ATTR_NAME, defaultValue);
+  var Draggable = function Draggable(defaultValue) {
+    this[$traceurRuntime.toProperty(_DEFAULT_VALUE)] = defaultValue;
+  };
+  ($traceurRuntime.createClass)(Draggable, {
+    setDefaultValue: function(el) {
+      if ($(el).attr(ATTR_NAME) === undefined) {
+        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(_DEFAULT_VALUE)]);
+      }
+    },
+    attributeChangedCallback: function(el, name, oldValue, newValue) {
+      if (name === ATTR_NAME) {
+        newValue = As.boolean(newValue);
+        if (newValue) {
+          register(el);
+        } else {
+          unregister(el);
         }
-      }},
-    attributeChangedCallback: {value: function(name, oldValue, newValue) {
-        if (name === ATTR_NAME) {
-          newValue = As.boolean(newValue);
-          if (newValue) {
-            register(this);
-          } else {
-            unregister(this);
-          }
-        }
-      }},
-    attachedCallback: {value: function() {
-        if ($(this).attr(ATTR_NAME) && As.boolean($(this).attr(ATTR_NAME))) {
-          register(this);
-        }
-      }},
-    detachedCallback: {value: function() {
-        unregister(this);
-      }}
-  });
-  var $__default = Draggable = Draggable;
+      }
+    },
+    attachedCallback: function(el) {
+      if ($(el).attr(ATTR_NAME) && As.boolean($(el).attr(ATTR_NAME))) {
+        register(el);
+      }
+    },
+    detachedCallback: function(el) {
+      unregister(el);
+    }
+  }, {}, Ability);
+  var $__default = Draggable;
   if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
     Utils.makeGlobal('pb.ability.Draggable', Draggable);
   }
@@ -326,6 +340,7 @@ var $__src_47_component_47_card__ = (function() {
   var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
   var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Ability = ($__src_47_ability_47_ability__).default;
   var Draggable = ($__src_47_ability_47_draggable__).default;
   var doc = null;
   var template = null;
@@ -355,63 +370,13 @@ var $__src_47_component_47_card__ = (function() {
     }
   }, {register: function(currentDoc, cardTemplate) {
       if (!doc && !template) {
-        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Map([[Draggable, 'true']])).prototype});
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Draggable(true)).prototype});
       }
       doc = currentDoc;
       template = cardTemplate;
     }}, Component);
   var $__default = Card;
   Utils.makeGlobal('pb.component.Card', Card);
-  return {get default() {
-      return $__default;
-    }};
-})();
-var $__src_47_component_47_cube__ = (function() {
-  "use strict";
-  var __moduleName = "src/component/cube";
-  var Utils = ($__src_47_utils__).default;
-  var PbElement = ($__src_47_pbelement__).default;
-  var Abilities = ($__src_47_ability_47_abilities__).default;
-  var Draggable = ($__src_47_ability_47_draggable__).default;
-  var doc = null;
-  var template = null;
-  var EL_NAME = 'pb-c-cube';
-  var ATTR_COLOR = 'pb-color';
-  function updateColor(el) {
-    var color = $(el).attr(ATTR_COLOR);
-    el.shadowRoot.querySelector('#root').style.backgroundColor = color;
-  }
-  var Cube = function Cube() {
-    $traceurRuntime.defaultSuperCall(this, $Cube.prototype, arguments);
-  };
-  var $Cube = Cube;
-  ($traceurRuntime.createClass)(Cube, {
-    createdCallback: function() {
-      $traceurRuntime.superCall(this, $Cube.prototype, "createdCallback", []);
-      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      updateColor(this);
-      this.attachedCallback();
-    },
-    attachedCallback: function() {
-      $traceurRuntime.superCall(this, $Cube.prototype, "attachedCallback", []);
-    },
-    detachedCallback: function() {
-      $traceurRuntime.superCall(this, $Cube.prototype, "detachedCallback", []);
-    },
-    attributeChangedCallback: function(name, oldValue, newValue) {
-      if (name === ATTR_COLOR) {
-        updateColor(this);
-      }
-    }
-  }, {register: function(currentDoc, cubeTemplate) {
-      if (!doc || !template) {
-        doc = currentDoc;
-        template = cubeTemplate;
-      }
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Cube, new Map([[Draggable, 'true']])).prototype});
-    }}, PbElement);
-  var $__default = Cube;
-  Utils.makeGlobal('pb.component.Cube', Cube);
   return {get default() {
       return $__default;
     }};
@@ -439,7 +404,7 @@ var $__src_47_component_47_token__ = (function() {
       }
       doc = currentDoc;
       template = tokenTemplate;
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Token, new Map([[Draggable, 'true']])).prototype});
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Token, new Draggable(true)).prototype});
     }}, Component);
   var $__default = Token;
   Utils.makeGlobal('pb.component.Token', Token);
@@ -451,7 +416,6 @@ var $__src_47_component_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/component/modules";
   $__src_47_component_47_card__;
-  $__src_47_component_47_cube__;
   $__src_47_component_47_token__;
   return {};
 })();
@@ -526,6 +490,9 @@ var $__src_47_region_47_region__ = (function() {
   function handleDrop() {
     this.classList.remove(CLASS_OVER);
     this.appendChild(DragDrop.lastDraggedEl);
+    if (DragDrop.lastDraggedEl.attachedCallback) {
+      DragDrop.lastDraggedEl.attachedCallback();
+    }
     DragDrop.lastDraggedEl = null;
   }
   function handleClick() {
