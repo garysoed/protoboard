@@ -18,7 +18,7 @@ pb-c-card::shadow {
   }
 }
 
-pb-c-card[pb-show-front="true"]::shadow #container {
+pb-c-card[pb-showfront="true"]::shadow #container {
   transform: rotateY(180deg);
 }
 
@@ -42,7 +42,7 @@ pb-c-card > .pb-front {
 }
 
 
-pb-c-card[pb-show-front="true"].pb-dragged {
+pb-c-card[pb-showfront="true"].pb-dragged {
   .pb-front {
     @include layer(1);
     display: block;

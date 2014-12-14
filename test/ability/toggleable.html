@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Toggleable Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+</head>
+<body>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+      var _M = spies.Matchers;
+      var Toggleable = pb.ability.Toggleable;
+
+      var doc = document.currentScript.ownerDocument;
+
+      describe('Toggleable', function() {
+        describe('#setDefaultValue', function() {
+          var toggleable;
+
+          beforeEach(function(done) {
+            toggleable = new Toggleable(
+                false /* defaultEnabled */, 
+                true /* defaultShowFront */,
+                'pb-dblclick' /* defaultTrigger */);
+            done();
+          });
+
+          it('should set the default values', function() {
+            var el = doc.createElement('div');
+            toggleable.setDefaultValue(el);
+            expect($(el).attr('pb-toggleable')).to.be.equal('false');
+            expect($(el).attr('pb-showfront')).to.be.equal('true');
+            expect($(el).attr('pb-dblclick')).to.be.equal('pb-toggleable');
+          });
+          it('should do nothing if enabled is set', function() {
+            var el = doc.createElement('div');
+            $(el).attr('pb-toggleable', 'true');
+            toggleable.setDefaultValue(el);
+            expect($(el).attr('pb-toggleable')).to.be.equal('true');
+          });
+          it('should do nothing if state is set', function() {
+            var el = doc.createElement('div');
+            $(el).attr('pb-showfront', 'false');
+            toggleable.setDefaultValue(el);
+            expect($(el).attr('pb-showfront')).to.be.equal('false');
+          });
+          it('should do nothing if trigger is set', function() {
+            var el = doc.createElement('div');
+            $(el).attr('pb-click', 'pb-toggleable');
+            toggleable.setDefaultValue(el);
+            expect($(el).attr('pb-dblclick')).to.be.equal(undefined);
+          });
+        });
+
+        describe('#attributeChangedCallback', function() {
+          var toggleable;
+
+          function getTriggerHandler(el, eventName) {
+            var isAFunction = _M.isA(Function);
+            expect(el.addEventListener).calledWith(eventName, isAFunction).at.least(1);
+            return isAFunction.matchingArgs[0];
+          }
+
+          function expectRegistered(el, eventName, shouldShowFront) {
+            var handler = getTriggerHandler(el, eventName);
+            // Call the handler.
+            handler();
+            expect($(el).attr('pb-showfront')).to.be.equal(shouldShowFront);
+          }
+
+          function expectUnregistered(el, eventName, handler) {
+            expect(el.removeEventListener).calledWith(eventName, handler).at.least(1);
+          }
+
+          beforeEach(function(done) {
+            toggleable = new Toggleable();
+            done();
+          });
+
+          it('should register if set to enabled', function() {
+            var el = doc.createElement('div');
+            $(el).attr('pb-showfront', 'false');
+
+            _.spy(el, 'addEventListener');
+
+            toggleable.setDefaultValue(el);
+            toggleable.attributeChangedCallback(el, 'pb-toggleable', 'false', 'true');
+            expectRegistered(el, 'click', 'true' /* shouldShowFront */);
+          });
+          it('should unregister if set to disabled', function() {
+            var el = doc.createElement('div');
+            $(el).attr('pb-toggleable', 'true');
+
+            _.spy(el, 'addEventListener');
+            _.spy(el, 'removeEventListener');
+
+            toggleable.setDefaultValue(el);
+            toggleable.attachedCallback(el);
+            toggleable.attributeChangedCallback(el, 'pb-toggleable', 'true', 'false');
+            expectUnregistered(el, 'click', getTriggerHandler(el, 'click'));
+          });
+          it('should reregister if the current trigger is changed to other ability', function() {
+            var el = doc.createElement('div');
+            $(el)
+                .attr('pb-click', 'pb-toggleable')
+                .attr('pb-toggleable', 'true');
+
+            _.spy(el, 'addEventListener');
+            toggleable.setDefaultValue(el);
+            toggleable.attachedCallback(el);
+
+            var handler = getTriggerHandler(el, 'click');
+
+            _.spy(el, 'removeEventListener');
+
+            toggleable.attributeChangedCallback(el, 'pb-click', 'pb-toggleable', 'pb-something');
+            expectUnregistered(el, 'click', handler);
+          });
+          it('should do nothing if disabled and trigger is changed', function() {
+            var el = doc.createElement('div');
+            $(el)
+                .attr('pb-dblclick', 'pb-toggleable')
+                .attr('pb-toggleable', 'false');
+
+            toggleable.setDefaultValue(el);
+            toggleable.attachedCallback(el);
+
+            _.spy(el, 'addEventListener');
+            _.spy(el, 'removeEventListener');
+
+            toggleable.attributeChangedCallback(el, 'pb-click', 'pb-something', 'pb-toggleable');
+            expect(el.addEventListener).called().to.be.equal(0);
+            expect(el.removeEventListener).called().to.be.equal(0);
+          });
+        });
+
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+    })();
+  </script>
+</body>

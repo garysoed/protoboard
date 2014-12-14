@@ -165,7 +165,6 @@ var $__src_47_ability_47_ability__ = (function() {
     detachedCallback: function(el) {}
   }, {});
   var $__default = Ability;
-  ;
   return {get default() {
       return $__default;
     }};
@@ -284,11 +283,136 @@ var $__src_47_ability_47_draggable__ = (function() {
       return $__default;
     }};
 })();
+var $__src_47_ability_47_Ability__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/Ability";
+  var Ability = function Ability() {};
+  ($traceurRuntime.createClass)(Ability, {
+    setDefaultValue: function(el) {},
+    attributeChangedCallback: function(el, name, oldValue, newValue) {},
+    attachedCallback: function(el) {},
+    detachedCallback: function(el) {}
+  }, {});
+  var $__default = Ability;
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_ability_47_toggleable__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/toggleable";
+  var As = ($__src_47_as__).default;
+  var Utils = ($__src_47_utils__).default;
+  var Ability = ($__src_47_ability_47_Ability__).default;
+  var ATTR_NAME = 'pb-toggleable';
+  var ATTR_SHOWFRONT = 'pb-showfront';
+  var _DEFAULT_ENABLED = Symbol();
+  var _DEFAULT_SHOWFRONT = Symbol();
+  var _DEFAULT_TRIGGER = Symbol();
+  var _TRIGGER = Symbol();
+  var _TRIGGER_HANDLER = Symbol();
+  function getEvent(trigger) {
+    switch (trigger) {
+      case 'pb-click':
+        return 'click';
+      case 'pb-dblclick':
+        return 'doubleclick';
+      default:
+        throw 'Unrecognized trigger: ' + trigger;
+    }
+  }
+  function handleTrigger(el) {
+    $(el).attr(ATTR_SHOWFRONT, !isShowFront(el));
+  }
+  function register(el) {
+    el[$traceurRuntime.toProperty(_TRIGGER_HANDLER)] = handleTrigger.bind(this, el);
+    for (var $__4 = ['pb-click', 'pb-dblclick'][$traceurRuntime.toProperty(Symbol.iterator)](),
+        $__5; !($__5 = $__4.next()).done; ) {
+      var trigger = $__5.value;
+      {
+        if ($(el).attr(trigger) === ATTR_NAME) {
+          el[$traceurRuntime.toProperty(_TRIGGER)] = trigger;
+        }
+      }
+    }
+    el.addEventListener(getEvent(el[$traceurRuntime.toProperty(_TRIGGER)]), el[$traceurRuntime.toProperty(_TRIGGER_HANDLER)]);
+  }
+  function unregister(el) {
+    el.removeEventListener(getEvent(el[$traceurRuntime.toProperty(_TRIGGER)]), el[$traceurRuntime.toProperty(_TRIGGER_HANDLER)]);
+  }
+  function isEnabled(el) {
+    return As.boolean($(el).attr(ATTR_NAME));
+  }
+  function isShowFront(el) {
+    return As.boolean($(el).attr(ATTR_SHOWFRONT));
+  }
+  var Toggleable = function Toggleable() {
+    var defaultEnabled = arguments[0] !== (void 0) ? arguments[0] : true;
+    var defaultShowFront = arguments[1] !== (void 0) ? arguments[1] : 'false';
+    var defaultTrigger = arguments[2] !== (void 0) ? arguments[2] : 'pb-click';
+    this[$traceurRuntime.toProperty(_DEFAULT_ENABLED)] = defaultEnabled;
+    this[$traceurRuntime.toProperty(_DEFAULT_SHOWFRONT)] = defaultShowFront;
+    this[$traceurRuntime.toProperty(_DEFAULT_TRIGGER)] = defaultTrigger;
+  };
+  ($traceurRuntime.createClass)(Toggleable, {
+    setDefaultValue: function(el) {
+      if ($(el).attr(ATTR_NAME) === undefined) {
+        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(_DEFAULT_ENABLED)]);
+      }
+      if ($(el).attr(ATTR_SHOWFRONT) === undefined) {
+        $(el).attr(ATTR_SHOWFRONT, this[$traceurRuntime.toProperty(_DEFAULT_SHOWFRONT)]);
+      }
+      var setTrigger = ['pb-click', 'pb-dblclick'].find(function(trigger) {
+        return $(el).attr(trigger) === ATTR_NAME;
+      });
+      if (!setTrigger) {
+        $(el).attr(this[$traceurRuntime.toProperty(_DEFAULT_TRIGGER)], ATTR_NAME);
+      }
+    },
+    attributeChangedCallback: function(el, name, oldValue, newValue) {
+      if (name === ATTR_NAME) {
+        newValue = As.boolean(newValue);
+        if (newValue) {
+          register(el);
+        } else {
+          unregister(el);
+        }
+      }
+      if (['pb-click', 'pb-dblclick'].find((function(trigger) {
+        return name === trigger;
+      }))) {
+        if (oldValue === ATTR_NAME) {
+          unregister(el);
+        }
+        if (newValue === ATTR_NAME && isEnabled(el)) {
+          unregister(el);
+          register(el);
+        }
+      }
+    },
+    attachedCallback: function(el) {
+      if ($(el).attr(ATTR_NAME) && isEnabled(el)) {
+        register(el);
+      }
+    },
+    detachedCallback: function(el) {
+      unregister(el);
+    }
+  }, {}, Ability);
+  var $__default = Toggleable;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.ability.Toggleable', Toggleable);
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_ability_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/ability/modules";
   $__src_47_ability_47_abilities__;
   $__src_47_ability_47_draggable__;
+  $__src_47_ability_47_toggleable__;
   return {};
 })();
 var $__src_47_pbelement__ = (function() {
@@ -337,40 +461,25 @@ var $__src_47_component_47_card__ = (function() {
   "use strict";
   var __moduleName = "src/component/card";
   var As = ($__src_47_as__).default;
-  var Component = ($__src_47_component_47_component__).default;
   var Utils = ($__src_47_utils__).default;
+  var Component = ($__src_47_component_47_component__).default;
   var Abilities = ($__src_47_ability_47_abilities__).default;
   var Ability = ($__src_47_ability_47_ability__).default;
   var Draggable = ($__src_47_ability_47_draggable__).default;
+  var Toggleable = ($__src_47_ability_47_toggleable__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-c-card';
-  var ATTR_SHOW_FRONT = 'pb-show-front';
-  function handleClick() {
-    var oldValue = As.boolean($(this).attr(ATTR_SHOW_FRONT) || 'false');
-    $(this).attr(ATTR_SHOW_FRONT, !oldValue);
-  }
   var Card = function Card() {
     $traceurRuntime.defaultSuperCall(this, $Card.prototype, arguments);
   };
   var $Card = Card;
-  ($traceurRuntime.createClass)(Card, {
-    createdCallback: function() {
+  ($traceurRuntime.createClass)(Card, {createdCallback: function() {
       $traceurRuntime.superCall(this, $Card.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.attachedCallback();
-    },
-    attachedCallback: function() {
-      $traceurRuntime.superCall(this, $Card.prototype, "attachedCallback", []);
-      this.addEventListener('click', handleClick);
-    },
-    detachedCallback: function() {
-      this.removeEventListener('click', handleClick);
-      $traceurRuntime.superCall(this, $Card.prototype, "detachedCallback", []);
-    }
-  }, {register: function(currentDoc, cardTemplate) {
+    }}, {register: function(currentDoc, cardTemplate) {
       if (!doc && !template) {
-        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Draggable(true)).prototype});
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Draggable(true), new Toggleable(true)).prototype});
       }
       doc = currentDoc;
       template = cardTemplate;

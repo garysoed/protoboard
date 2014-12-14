@@ -1,20 +1,17 @@
-import As        from 'src/as';
+import As    from 'src/as';
+import Utils from 'src/utils';
+
 import Component from 'src/component/component';
-import Utils     from 'src/utils';
-import Abilities from 'src/ability/abilities';
-import Ability   from 'src/ability/ability';
-import Draggable from 'src/ability/draggable';
+
+import Abilities  from 'src/ability/abilities';
+import Ability    from 'src/ability/ability';
+import Draggable  from 'src/ability/draggable';
+import Toggleable from 'src/ability/toggleable'; 
 
 let doc = null;
 let template = null;
 
 const EL_NAME = 'pb-c-card';
-const ATTR_SHOW_FRONT = 'pb-show-front';
-
-function handleClick() {
-  let oldValue = As.boolean($(this).attr(ATTR_SHOW_FRONT) || 'false');
-  $(this).attr(ATTR_SHOW_FRONT, !oldValue);
-}
 
 /**
  * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
@@ -22,7 +19,7 @@ function handleClick() {
  * - One must have a `pb-back` class. This is the back face of the card.
  *
  * By default, the card starts by showing its back. If you want to make it start by showing the 
- * front face, add `pb-show-front="true"` to the `pb-c-card`.
+ * front face, add `pb-showfront="true"` to the `pb-c-card`.
  * 
  * @class component.Card
  * @extends component.Component
@@ -33,18 +30,6 @@ export default class Card extends Component {
     super.createdCallback();
     this.createShadowRoot()
         .appendChild(Utils.activateTemplate(template, doc));
-
-    this.attachedCallback();
-  }
-
-  attachedCallback() {
-    super.attachedCallback();
-    this.addEventListener('click', handleClick);
-  }
-
-  detachedCallback() {
-    this.removeEventListener('click', handleClick);
-    super.detachedCallback();
   }
 
   /**
@@ -60,7 +45,8 @@ export default class Card extends Component {
       document.registerElement(EL_NAME,  {
         prototype: Abilities.config(
             Card, 
-            new Draggable(true)).prototype
+            new Draggable(true),
+            new Toggleable(true /* defaultEnabled */)).prototype
       });
     }
 

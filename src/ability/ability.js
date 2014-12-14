@@ -40,4 +40,4 @@ export default class Ability {
    * @param {!Element} el The element that was detached.
    */
   detachedCallback(el) { }
-};
+}
