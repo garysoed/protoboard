@@ -48,7 +48,7 @@ export default class Token extends Component {
           Token,
           new Map([
             [Draggable, 'true']
-          ]))
+          ])).prototype
     });
   }
 }

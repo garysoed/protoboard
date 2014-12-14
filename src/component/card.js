@@ -1,7 +1,8 @@
-import As from 'src/as';
+import As        from 'src/as';
 import Component from 'src/component/component';
-import Utils from 'src/utils';
+import Utils     from 'src/utils';
 import Abilities from 'src/ability/abilities';
+import Ability   from 'src/ability/ability';
 import Draggable from 'src/ability/draggable';
 
 let doc = null;
@@ -55,20 +56,18 @@ export default class Card extends Component {
    * @param {!Element} cardTemplate The template for the pb-c-card's element shadow DOM.
    */
   static register(currentDoc, cardTemplate) {
-    if (doc || template) {
-      // Registration has already happened.
-      return;
+    if (!doc && !template) {
+      document.registerElement(EL_NAME,  {
+        prototype: Abilities.config(
+            Card, 
+            new Map([
+              [Draggable, 'true']
+            ])).prototype
+      });
     }
 
     doc = currentDoc;
     template = cardTemplate;
-    document.registerElement(EL_NAME,  {
-      prototype: Abilities.config(
-          Card, 
-          new Map([
-            [Draggable, 'true']
-          ])).prototype
-    });
   }
 }
 

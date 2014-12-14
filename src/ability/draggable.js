@@ -55,7 +55,7 @@ function unregister(element) {
  * @static
  * @extends ability.Ability
  */
-let Draggable = Object.create(Ability, {
+const Draggable = Object.create(Ability, {
 
   /**
    * Sets the default values for the element.

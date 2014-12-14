@@ -18,6 +18,7 @@ const EL_NAME = 'pb-u-template';
  * `@index` variable.
  *
  * @class ui.Template
+ * @extends PbElement
  */
 export default class Template extends PbElement {
   constructor() {

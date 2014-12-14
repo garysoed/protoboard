@@ -354,15 +354,64 @@ var $__src_47_component_47_card__ = (function() {
       $traceurRuntime.superCall(this, $Card.prototype, "detachedCallback", []);
     }
   }, {register: function(currentDoc, cardTemplate) {
-      if (doc || template) {
-        return;
+      if (!doc && !template) {
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Map([[Draggable, 'true']])).prototype});
       }
       doc = currentDoc;
       template = cardTemplate;
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Map([[Draggable, 'true']])).prototype});
     }}, Component);
   var $__default = Card;
   Utils.makeGlobal('pb.component.Card', Card);
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_component_47_cube__ = (function() {
+  "use strict";
+  var __moduleName = "src/component/cube";
+  var Utils = ($__src_47_utils__).default;
+  var PbElement = ($__src_47_pbelement__).default;
+  var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Draggable = ($__src_47_ability_47_draggable__).default;
+  var doc = null;
+  var template = null;
+  var EL_NAME = 'pb-c-cube';
+  var ATTR_COLOR = 'pb-color';
+  function updateColor(el) {
+    var color = $(el).attr(ATTR_COLOR);
+    el.shadowRoot.querySelector('#root').style.backgroundColor = color;
+  }
+  var Cube = function Cube() {
+    $traceurRuntime.defaultSuperCall(this, $Cube.prototype, arguments);
+  };
+  var $Cube = Cube;
+  ($traceurRuntime.createClass)(Cube, {
+    createdCallback: function() {
+      $traceurRuntime.superCall(this, $Cube.prototype, "createdCallback", []);
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      updateColor(this);
+      this.attachedCallback();
+    },
+    attachedCallback: function() {
+      $traceurRuntime.superCall(this, $Cube.prototype, "attachedCallback", []);
+    },
+    detachedCallback: function() {
+      $traceurRuntime.superCall(this, $Cube.prototype, "detachedCallback", []);
+    },
+    attributeChangedCallback: function(name, oldValue, newValue) {
+      if (name === ATTR_COLOR) {
+        updateColor(this);
+      }
+    }
+  }, {register: function(currentDoc, cubeTemplate) {
+      if (!doc || !template) {
+        doc = currentDoc;
+        template = cubeTemplate;
+      }
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Cube, new Map([[Draggable, 'true']])).prototype});
+    }}, PbElement);
+  var $__default = Cube;
+  Utils.makeGlobal('pb.component.Cube', Cube);
   return {get default() {
       return $__default;
     }};
@@ -390,7 +439,7 @@ var $__src_47_component_47_token__ = (function() {
       }
       doc = currentDoc;
       template = tokenTemplate;
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Token, new Map([[Draggable, 'true']]))});
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Token, new Map([[Draggable, 'true']])).prototype});
     }}, Component);
   var $__default = Token;
   Utils.makeGlobal('pb.component.Token', Token);
@@ -402,6 +451,7 @@ var $__src_47_component_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/component/modules";
   $__src_47_component_47_card__;
+  $__src_47_component_47_cube__;
   $__src_47_component_47_token__;
   return {};
 })();

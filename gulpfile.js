@@ -1,10 +1,10 @@
-var gulp = require('gulp');
+var gulp          = require('gulp');
 
 var jshint = require('gulp-jshint');
-var shell = require('gulp-shell');
-var sass = require('gulp-ruby-sass');
+var shell  = require('gulp-shell');
+var sass   = require('gulp-ruby-sass');
+var yuimd  = require('yuimd');
 
-var yuimd = require('yuimd');
 
 var handleError = function(error) {
   console.log(error.toString());
@@ -70,4 +70,4 @@ gulp.task('watch', function() {
 
 gulp.task('watch-traceur', function() {
   gulp.watch(['src/**/*.js'], ['traceur']);
-})
+});

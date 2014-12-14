@@ -3,6 +3,7 @@
   <base href="..">
   <head>
     <link rel="import" href="src/component/card.html">
+    <link rel="import" href="src/component/cube.html">
     <link rel="import" href="src/component/token.html">
     <link rel="import" href="src/region/bank.html">
     <link rel="import" href="src/region/deck.html">
@@ -33,6 +34,10 @@
 
     td:nth-child(2) {
       text-align: center;
+    }
+
+    td > * {
+      white-space: initial;
     }
 
     thead td {
@@ -133,22 +138,26 @@
           <td>Cards</td>
           <td>
             <pb-c-card>
-              <div class="pb-front" draggable="true">
-                1
+              <div class="pb-front">
+                Default - front
               </div>
-              <div class="pb-back" draggable="true"></div>
+              <div class="pb-back">
+                Default - back
+              </div>
+            </pb-c-card>
+            <pb-c-card pb-dblclick="flip">
+              <div class="pb-front">
+                Double click to flip
+              </div>
+              <div class="pb-back">
+                Click to rotate
+              </div>
             </pb-c-card>
             <pb-c-card>
-              <div class="pb-front" draggable="true">
-                2
-              </div>
-              <div class="pb-back" draggable="true"></div>
-            </pb-c-card>
-            <pb-c-card>
-              <div class="pb-front" draggable="true">
+              <div class="pb-front">
                 3
               </div>
-              <div class="pb-back" draggable="true"></div>
+              <div class="pb-back"></div>
             </pb-c-card>
           </td>
           <td>
@@ -162,14 +171,6 @@
               <li>Coins</li>
             </ul>
           </td>
-        </tr>
-
-        <tr>
-          <td>Cubes</td>
-        </tr>
-
-        <tr>
-          
         </tr>
       </tbody>
 
