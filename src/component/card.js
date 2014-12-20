@@ -45,9 +45,11 @@ export default class Card extends Component {
     if (!doc && !template) {
       document.registerElement(EL_NAME,  {
         prototype: Abilities.config(
-            Card, 
-            new Draggable(true),
-            new Toggleable(true /* defaultEnabled */)).prototype
+            Card,
+            {
+              'pb-click': new Toggleable(true)
+            },
+            new Draggable(true)).prototype
       });
     }
 

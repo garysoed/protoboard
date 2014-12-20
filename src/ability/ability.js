@@ -40,4 +40,20 @@ export default class Ability {
    * @param {!Element} el The element that was detached.
    */
   detachedCallback(el) { }
+
+  /**
+   * Triggers the effect of the ability on the given element.
+   *
+   * @method trigger
+   * @param {!Element} el The element to trigger the ability on.
+   */
+  trigger(el) { }
+
+  /**
+   * The name of the ability.
+   * 
+   * @attribute name
+   * @type string
+   */
+  get name() { throw 'unimplemented'; }
 }

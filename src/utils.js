@@ -188,6 +188,13 @@ var Utils = {
         return Utils.curry(fn.bind.apply(fn, [this].concat(argArray)));
       }
     };
+  },
+
+  // TODO: Move to test utils.
+  getSymbol(obj, name) {
+    return Object.getOwnPropertySymbols(obj).find(symbol => {
+      return `Symbol(${name})` === symbol.toString();
+    });
   }
 };
 

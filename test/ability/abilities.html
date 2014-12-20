@@ -12,37 +12,49 @@
     (function() {
       var expect = chai.expect;
       var _ = spies.Spies;
+      var _M = spies.Matchers;
+
+      var Abilities = pb.ability.Abilities;
 
       var doc = document.currentScript.ownerDocument;
 
       describe('Abilities', function() {
         describe('#config', function() {
-          it('should extend all the expected functions', function() {
+          it('should registers all the abilities and register the correct triggerable', function() {
             var Ctor = function() {};
-            var Ability = {
-              setDefaultValue: _.spiedFunction(),
-              attributeChangedCallback: _.spiedFunction(),
-              attachedCallback: _.spiedFunction(),
-              detachedCallback: _.spiedFunction()
-            };
+            Ctor.prototype.addEventListener = _.spiedFunction();
+            Ctor.prototype.removeEventListener = _.spiedFunction();
 
-            pb.ability.Abilities.config(
-                Ctor, 
-                Ability);
+            var ability1 = pb.t.createFakeAbility('ability1');
+            var ability2 = pb.t.createFakeAbility('ability2');
+
+            Abilities.config(Ctor, {'pb-click': ability1}, ability2);
 
             var el = new Ctor();
             el.createdCallback();
-            expect(Ability.setDefaultValue).calledWith(el).at.least(1);
+            expect(ability1.setDefaultValue).calledWith(el).at.least(1);
+            expect(ability2.setDefaultValue).calledWith(el).at.least(1);
 
             el.attributeChangedCallback('attr', 'oldValue', 'newValue');
-            expect(Ability.attributeChangedCallback)
+            expect(ability1.attributeChangedCallback)
+                .calledWith(el, 'attr', 'oldValue', 'newValue').at.least(1);
+            expect(ability2.attributeChangedCallback)
                 .calledWith(el, 'attr', 'oldValue', 'newValue').at.least(1);
 
             el.attachedCallback();
-            expect(Ability.attachedCallback).calledWith(el).at.least(1);
+            expect(ability1.attachedCallback).calledWith(el).at.least(1);
+            expect(ability2.attachedCallback).calledWith(el).at.least(1);
+
+            var clickHandlerCaptor = _M.isA(Function);
+            expect(el.addEventListener).calledWith('click', clickHandlerCaptor).at.least(1);
+
+            // Trigger the click and check that the correct ability is triggered.
+            clickHandlerCaptor.matchingArgs[0]();
+            expect(ability1.trigger).calledWith(el).at.least(1);
 
             el.detachedCallback();
-            expect(Ability.detachedCallback).calledWith(el).at.least(1);
+            expect(ability1.detachedCallback).calledWith(el).at.least(1);
+            expect(ability2.detachedCallback).calledWith(el).at.least(1);
           });
         });
 

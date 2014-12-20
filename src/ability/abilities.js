@@ -1,5 +1,11 @@
 import Utils from 'src/utils';
 
+import Triggerable from 'src/ability/triggerable';
+
+// Private symbols.
+const __register__ = Symbol();
+
+
 /**
  * Entry point to add any abilities to custom elements. Note that this only works on custom
  * elements.
@@ -8,6 +14,35 @@ import Utils from 'src/utils';
  * @static
  */
 const Abilities = {
+
+  [__register__](ctorProto, ability) {
+    // TODO: Curry the functions.
+    Utils.extendFn(
+        ctorProto,
+        'createdCallback',
+        function() {
+          ability.setDefaultValue.call(ability, this);
+        });
+    Utils.extendFn(
+        ctorProto, 
+        'attributeChangedCallback', 
+        function(name, oldValue, newValue) {
+          ability.attributeChangedCallback.call(ability, this, name, oldValue, newValue);
+        });
+    Utils.extendFn(
+        ctorProto, 
+        'attachedCallback', 
+        function() {
+          ability.attachedCallback.call(ability, this);
+        });
+    Utils.extendFn(
+        ctorProto, 
+        'detachedCallback', 
+        function() {
+          ability.detachedCallback.call(ability, this);
+        }, 
+        true /* callBefore */);
+  },
 
   /**
    * Configures the given constructor to add abilities. This only works if the constructor is used
@@ -19,35 +54,28 @@ const Abilities = {
    * @param {!Map.<Ability, Object>} cfg Map with the Ability as the key, and a default value object
    *     specific to that ability. Check the Ability's documentation for more information.
    */
-  config(ctor, ...abilities) {
-    for (let ability of abilities) {
-      // TODO: Curry the functions.
-      Utils.extendFn(
-          ctor.prototype,
-          'createdCallback',
-          function() {
-            ability.setDefaultValue.call(ability, this);
-          });
-      Utils.extendFn(
-          ctor.prototype, 
-          'attributeChangedCallback', 
-          function(name, oldValue, newValue) {
-            ability.attributeChangedCallback.call(ability, this, name, oldValue, newValue);
-          });
-      Utils.extendFn(
-          ctor.prototype, 
-          'attachedCallback', 
-          function() {
-            ability.attachedCallback.call(ability, this);
-          });
-      Utils.extendFn(
-          ctor.prototype, 
-          'detachedCallback', 
-          function() {
-            ability.detachedCallback.call(ability, this);
-          }, 
-          true /* callBefore */);
+  config(ctor, config, ...abilities) {
+    let ctorProto = ctor.prototype;
+    let triggerConfig = {};
+    // collect the known abilities.
+    let knownAbilities = [];
+
+    // Get from config
+    for (let key in config) {
+      let ability = config[key];
+      knownAbilities.push(ability);
+      this[__register__](ctorProto, ability);
+      triggerConfig[key] = ability.name;
     }
+
+    // Get from the rest of abilities
+    for (let ability of abilities) {
+      knownAbilities.push(ability);
+      this[__register__](ctorProto, ability);
+    }
+
+    this[__register__](ctorProto, new Triggerable(triggerConfig, knownAbilities));
+
     return ctor;
   }
 };

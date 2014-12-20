@@ -46,6 +46,7 @@ export default class Token extends Component {
     document.registerElement(EL_NAME, {
       prototype: Abilities.config(
           Token,
+          {},
           new Draggable(true)).prototype
     });
   }

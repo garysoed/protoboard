@@ -1,3 +1,22 @@
+var $__src_47_ability_47_ability__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/ability";
+  var Ability = function Ability() {};
+  ($traceurRuntime.createClass)(Ability, {
+    setDefaultValue: function(el) {},
+    attributeChangedCallback: function(el, name, oldValue, newValue) {},
+    attachedCallback: function(el) {},
+    detachedCallback: function(el) {},
+    trigger: function(el) {},
+    get name() {
+      throw 'unimplemented';
+    }
+  }, {});
+  var $__default = Ability;
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_utils__ = (function() {
   "use strict";
   var __moduleName = "src/utils";
@@ -107,6 +126,11 @@ var $__src_47_utils__ = (function() {
           return Utils.curry(fn.bind.apply(fn, [this].concat(argArray)));
         }
       };
+    },
+    getSymbol: function(obj, name) {
+      return Object.getOwnPropertySymbols(obj).find((function(symbol) {
+        return ("Symbol(" + name + ")") === symbol.toString();
+      }));
     }
   };
   var $__default = Utils = Utils;
@@ -115,56 +139,222 @@ var $__src_47_utils__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_ability_47_abilities__ = (function() {
+var $__src_47_ability_47_triggerable__ = (function() {
   "use strict";
-  var __moduleName = "src/ability/abilities";
+  var $__3;
+  var __moduleName = "src/ability/triggerable";
   var Utils = ($__src_47_utils__).default;
-  var Abilities = {config: function(ctor) {
-      for (var abilities = [],
-          $__3 = 1; $__3 < arguments.length; $__3++)
-        abilities[$traceurRuntime.toProperty($__3 - 1)] = arguments[$traceurRuntime.toProperty($__3)];
-      var $__4 = function() {
-        var ability = $__2.value;
-        {
-          Utils.extendFn(ctor.prototype, 'createdCallback', function() {
-            ability.setDefaultValue.call(ability, this);
-          });
-          Utils.extendFn(ctor.prototype, 'attributeChangedCallback', function(name, oldValue, newValue) {
-            ability.attributeChangedCallback.call(ability, this, name, oldValue, newValue);
-          });
-          Utils.extendFn(ctor.prototype, 'attachedCallback', function() {
-            ability.attachedCallback.call(ability, this);
-          });
-          Utils.extendFn(ctor.prototype, 'detachedCallback', function() {
-            ability.detachedCallback.call(ability, this);
-          }, true);
-        }
-      };
-      for (var $__1 = abilities[$traceurRuntime.toProperty(Symbol.iterator)](),
-          $__2; !($__2 = $__1.next()).done; ) {
-        $__4();
+  var Ability = ($__src_47_ability_47_ability__).default;
+  var __defaultValue__ = Symbol();
+  var __getEvent__ = Symbol('getEvent');
+  var __getTriggers__ = Symbol('getTriggers');
+  var __isRegistered__ = Symbol('isRegistered');
+  var __knownAbilities__ = Symbol();
+  var __register__ = Symbol('register');
+  var __triggers__ = Symbol();
+  var __unregister__ = Symbol('unregister');
+  var __handler__ = Symbol();
+  var Triggerable = function Triggerable() {
+    var defaultValue = arguments[0] !== (void 0) ? arguments[0] : {};
+    var knownAbilities = arguments[1] !== (void 0) ? arguments[1] : [];
+    this[$traceurRuntime.toProperty(__defaultValue__)] = defaultValue;
+    this[$traceurRuntime.toProperty(__knownAbilities__)] = {};
+    for (var $__4 = knownAbilities[$traceurRuntime.toProperty(Symbol.iterator)](),
+        $__5; !($__5 = $__4.next()).done; ) {
+      var ability = $__5.value;
+      {
+        this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(ability.name)] = ability;
       }
-      return ctor;
-    }};
-  var $__default = Abilities;
+    }
+  };
+  var $Triggerable = Triggerable;
+  ($traceurRuntime.createClass)(Triggerable, ($__3 = {}, Object.defineProperty($__3, __getTriggers__, {
+    value: function(el) {
+      if (!el[$traceurRuntime.toProperty(__triggers__)]) {
+        el[$traceurRuntime.toProperty(__triggers__)] = {};
+      }
+      return el[$traceurRuntime.toProperty(__triggers__)];
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, __getEvent__, {
+    value: function(triggerType) {
+      switch (triggerType) {
+        case $Triggerable.TYPES.CLICK:
+          return 'click';
+        case $Triggerable.TYPES.DOUBLE_CLICK:
+          return 'doubleclick';
+        default:
+          throw 'Unrecognized trigger: ' + triggerType;
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, __isRegistered__, {
+    value: function(el, triggerType, abilityName) {
+      if (!this[$traceurRuntime.toProperty(__getTriggers__)](el)[$traceurRuntime.toProperty(triggerType)]) {
+        return false;
+      }
+      var ability = this[$traceurRuntime.toProperty(__getTriggers__)](el)[$traceurRuntime.toProperty(triggerType)].ability;
+      return ability && abilityName === ability.name;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, __register__, {
+    value: function(el, triggerType, ability) {
+      if (!this[$traceurRuntime.toProperty(__isRegistered__)](el, triggerType, ability.name)) {
+        var handlers = this[$traceurRuntime.toProperty(__getTriggers__)](el);
+        handlers[$traceurRuntime.toProperty(triggerType)] = {
+          ability: ability,
+          handler: ability.trigger.bind(el, el)
+        };
+        el.addEventListener(this[$traceurRuntime.toProperty(__getEvent__)](triggerType), handlers[$traceurRuntime.toProperty(triggerType)].handler);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, __unregister__, {
+    value: function(el, triggerType) {
+      var handlers = this[$traceurRuntime.toProperty(__getTriggers__)](el);
+      if (handlers[$traceurRuntime.toProperty(triggerType)]) {
+        el.removeEventListener(this[$traceurRuntime.toProperty(__getEvent__)](triggerType), handlers[$traceurRuntime.toProperty(triggerType)].handler);
+        delete handlers[$traceurRuntime.toProperty(triggerType)];
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, "setDefaultValue", {
+    value: function(el) {
+      for (var key in $Triggerable.TYPES)
+        if (!$traceurRuntime.isSymbolString(key)) {
+          var type = $Triggerable.TYPES[$traceurRuntime.toProperty(key)];
+          var abilityName = this[$traceurRuntime.toProperty(__defaultValue__)][$traceurRuntime.toProperty(type)];
+          if ($(el).attr(type) === undefined && abilityName && this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(abilityName)]) {
+            $(el).attr(type, abilityName);
+          }
+        }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, "attributeChangedCallback", {
+    value: function(el, name, oldValue, newValue) {
+      for (var key in $Triggerable.TYPES)
+        if (!$traceurRuntime.isSymbolString(key)) {
+          if (name === $Triggerable.TYPES[$traceurRuntime.toProperty(key)]) {
+            if (oldValue && this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(oldValue)]) {
+              this[$traceurRuntime.toProperty(__unregister__)](el, name, this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(oldValue)]);
+            }
+            if (newValue && this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(newValue)]) {
+              this[$traceurRuntime.toProperty(__register__)](el, name, this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(newValue)]);
+            }
+          }
+        }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, "attachedCallback", {
+    value: function(el) {
+      for (var key in $Triggerable.TYPES)
+        if (!$traceurRuntime.isSymbolString(key)) {
+          var triggerType = $Triggerable.TYPES[$traceurRuntime.toProperty(key)];
+          var abilityName = $(el).attr(triggerType);
+          if (abilityName && this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(abilityName)]) {
+            this[$traceurRuntime.toProperty(__register__)](el, triggerType, this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(abilityName)]);
+          }
+        }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, "detachedCallback", {
+    value: function(el) {
+      for (var key in $Triggerable.TYPES)
+        if (!$traceurRuntime.isSymbolString(key)) {
+          this[$traceurRuntime.toProperty(__unregister__)](el, $Triggerable.TYPES[$traceurRuntime.toProperty(key)]);
+        }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__3), {}, Ability);
+  Triggerable.TYPES = {
+    CLICK: 'pb-click',
+    DOUBLE_CLICK: 'pb-dblclick'
+  };
+  var $__default = Triggerable = Triggerable;
   if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
-    Utils.makeGlobal('pb.ability.Abilities', Abilities);
+    Utils.makeGlobal('pb.ability.Triggerable', Triggerable);
   }
   return {get default() {
       return $__default;
     }};
 })();
-var $__src_47_ability_47_ability__ = (function() {
+var $__src_47_ability_47_abilities__ = (function() {
   "use strict";
-  var __moduleName = "src/ability/ability";
-  var Ability = function Ability() {};
-  ($traceurRuntime.createClass)(Ability, {
-    setDefaultValue: function(el) {},
-    attributeChangedCallback: function(el, name, oldValue, newValue) {},
-    attachedCallback: function(el) {},
-    detachedCallback: function(el) {}
-  }, {});
-  var $__default = Ability;
+  var $__2;
+  var __moduleName = "src/ability/abilities";
+  var Utils = ($__src_47_utils__).default;
+  var Triggerable = ($__src_47_ability_47_triggerable__).default;
+  var __register__ = Symbol();
+  var Abilities = ($__2 = {}, Object.defineProperty($__2, __register__, {
+    value: function(ctorProto, ability) {
+      Utils.extendFn(ctorProto, 'createdCallback', function() {
+        ability.setDefaultValue.call(ability, this);
+      });
+      Utils.extendFn(ctorProto, 'attributeChangedCallback', function(name, oldValue, newValue) {
+        ability.attributeChangedCallback.call(ability, this, name, oldValue, newValue);
+      });
+      Utils.extendFn(ctorProto, 'attachedCallback', function() {
+        ability.attachedCallback.call(ability, this);
+      });
+      Utils.extendFn(ctorProto, 'detachedCallback', function() {
+        ability.detachedCallback.call(ability, this);
+      }, true);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__2, "config", {
+    value: function(ctor, config) {
+      for (var abilities = [],
+          $__5 = 2; $__5 < arguments.length; $__5++)
+        abilities[$traceurRuntime.toProperty($__5 - 2)] = arguments[$traceurRuntime.toProperty($__5)];
+      var ctorProto = ctor.prototype;
+      var triggerConfig = {};
+      var knownAbilities = [];
+      for (var key in config)
+        if (!$traceurRuntime.isSymbolString(key)) {
+          var ability = config[$traceurRuntime.toProperty(key)];
+          knownAbilities.push(ability);
+          this[$traceurRuntime.toProperty(__register__)](ctorProto, ability);
+          triggerConfig[$traceurRuntime.toProperty(key)] = ability.name;
+        }
+      for (var $__3 = abilities[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__4; !($__4 = $__3.next()).done; ) {
+        var ability$__6 = $__4.value;
+        {
+          knownAbilities.push(ability$__6);
+          this[$traceurRuntime.toProperty(__register__)](ctorProto, ability$__6);
+        }
+      }
+      this[$traceurRuntime.toProperty(__register__)](ctorProto, new Triggerable(triggerConfig, knownAbilities));
+      return ctor;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__2);
+  var $__default = Abilities;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.ability.Abilities', Abilities);
+  }
   return {get default() {
       return $__default;
     }};
@@ -283,63 +473,17 @@ var $__src_47_ability_47_draggable__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_ability_47_Ability__ = (function() {
-  "use strict";
-  var __moduleName = "src/ability/Ability";
-  var Ability = function Ability() {};
-  ($traceurRuntime.createClass)(Ability, {
-    setDefaultValue: function(el) {},
-    attributeChangedCallback: function(el, name, oldValue, newValue) {},
-    attachedCallback: function(el) {},
-    detachedCallback: function(el) {}
-  }, {});
-  var $__default = Ability;
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_ability_47_toggleable__ = (function() {
   "use strict";
   var __moduleName = "src/ability/toggleable";
   var As = ($__src_47_as__).default;
   var Utils = ($__src_47_utils__).default;
-  var Ability = ($__src_47_ability_47_Ability__).default;
+  var Ability = ($__src_47_ability_47_ability__).default;
+  var Triggerable = ($__src_47_ability_47_triggerable__).default;
   var ATTR_NAME = 'pb-toggleable';
   var ATTR_SHOWFRONT = 'pb-showfront';
-  var _DEFAULT_ENABLED = Symbol();
-  var _DEFAULT_SHOWFRONT = Symbol();
-  var _DEFAULT_TRIGGER = Symbol();
-  var _TRIGGER = Symbol();
-  var _TRIGGER_HANDLER = Symbol();
-  function getEvent(trigger) {
-    switch (trigger) {
-      case 'pb-click':
-        return 'click';
-      case 'pb-dblclick':
-        return 'doubleclick';
-      default:
-        throw 'Unrecognized trigger: ' + trigger;
-    }
-  }
-  function handleTrigger(el) {
-    $(el).attr(ATTR_SHOWFRONT, !isShowFront(el));
-  }
-  function register(el) {
-    el[$traceurRuntime.toProperty(_TRIGGER_HANDLER)] = handleTrigger.bind(this, el);
-    for (var $__4 = ['pb-click', 'pb-dblclick'][$traceurRuntime.toProperty(Symbol.iterator)](),
-        $__5; !($__5 = $__4.next()).done; ) {
-      var trigger = $__5.value;
-      {
-        if ($(el).attr(trigger) === ATTR_NAME) {
-          el[$traceurRuntime.toProperty(_TRIGGER)] = trigger;
-        }
-      }
-    }
-    el.addEventListener(getEvent(el[$traceurRuntime.toProperty(_TRIGGER)]), el[$traceurRuntime.toProperty(_TRIGGER_HANDLER)]);
-  }
-  function unregister(el) {
-    el.removeEventListener(getEvent(el[$traceurRuntime.toProperty(_TRIGGER)]), el[$traceurRuntime.toProperty(_TRIGGER_HANDLER)]);
-  }
+  var __defaultEnabled__ = Symbol();
+  var __defaultShowFront__ = Symbol();
   function isEnabled(el) {
     return As.boolean($(el).attr(ATTR_NAME));
   }
@@ -348,55 +492,26 @@ var $__src_47_ability_47_toggleable__ = (function() {
   }
   var Toggleable = function Toggleable() {
     var defaultEnabled = arguments[0] !== (void 0) ? arguments[0] : true;
-    var defaultShowFront = arguments[1] !== (void 0) ? arguments[1] : 'false';
-    var defaultTrigger = arguments[2] !== (void 0) ? arguments[2] : 'pb-click';
-    this[$traceurRuntime.toProperty(_DEFAULT_ENABLED)] = defaultEnabled;
-    this[$traceurRuntime.toProperty(_DEFAULT_SHOWFRONT)] = defaultShowFront;
-    this[$traceurRuntime.toProperty(_DEFAULT_TRIGGER)] = defaultTrigger;
+    var defaultShowFront = arguments[1] !== (void 0) ? arguments[1] : false;
+    this[$traceurRuntime.toProperty(__defaultEnabled__)] = defaultEnabled;
+    this[$traceurRuntime.toProperty(__defaultShowFront__)] = defaultShowFront;
   };
   ($traceurRuntime.createClass)(Toggleable, {
     setDefaultValue: function(el) {
       if ($(el).attr(ATTR_NAME) === undefined) {
-        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(_DEFAULT_ENABLED)]);
+        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(__defaultEnabled__)]);
       }
       if ($(el).attr(ATTR_SHOWFRONT) === undefined) {
-        $(el).attr(ATTR_SHOWFRONT, this[$traceurRuntime.toProperty(_DEFAULT_SHOWFRONT)]);
-      }
-      var setTrigger = ['pb-click', 'pb-dblclick'].find(function(trigger) {
-        return $(el).attr(trigger) === ATTR_NAME;
-      });
-      if (!setTrigger) {
-        $(el).attr(this[$traceurRuntime.toProperty(_DEFAULT_TRIGGER)], ATTR_NAME);
+        $(el).attr(ATTR_SHOWFRONT, this[$traceurRuntime.toProperty(__defaultShowFront__)]);
       }
     },
-    attributeChangedCallback: function(el, name, oldValue, newValue) {
-      if (name === ATTR_NAME) {
-        newValue = As.boolean(newValue);
-        if (newValue) {
-          register(el);
-        } else {
-          unregister(el);
-        }
-      }
-      if (['pb-click', 'pb-dblclick'].find((function(trigger) {
-        return name === trigger;
-      }))) {
-        if (oldValue === ATTR_NAME) {
-          unregister(el);
-        }
-        if (newValue === ATTR_NAME && isEnabled(el)) {
-          unregister(el);
-          register(el);
-        }
+    trigger: function(el) {
+      if (isEnabled(el)) {
+        $(el).attr(ATTR_SHOWFRONT, !isShowFront(el));
       }
     },
-    attachedCallback: function(el) {
-      if ($(el).attr(ATTR_NAME) && isEnabled(el)) {
-        register(el);
-      }
-    },
-    detachedCallback: function(el) {
-      unregister(el);
+    get name() {
+      return ATTR_NAME;
     }
   }, {}, Ability);
   var $__default = Toggleable;
@@ -412,6 +527,7 @@ var $__src_47_ability_47_modules__ = (function() {
   var __moduleName = "src/ability/modules";
   $__src_47_ability_47_abilities__;
   $__src_47_ability_47_draggable__;
+  $__src_47_ability_47_triggerable__;
   $__src_47_ability_47_toggleable__;
   return {};
 })();
@@ -480,7 +596,7 @@ var $__src_47_component_47_card__ = (function() {
       this.attachedCallback();
     }}, {register: function(currentDoc, cardTemplate) {
       if (!doc && !template) {
-        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, new Draggable(true), new Toggleable(true)).prototype});
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, {'pb-click': new Toggleable(true)}, new Draggable(true)).prototype});
       }
       doc = currentDoc;
       template = cardTemplate;
@@ -514,7 +630,7 @@ var $__src_47_component_47_token__ = (function() {
       }
       doc = currentDoc;
       template = tokenTemplate;
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Token, new Draggable(true)).prototype});
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Token, {}, new Draggable(true)).prototype});
     }}, Component);
   var $__default = Token;
   Utils.makeGlobal('pb.component.Token', Token);
