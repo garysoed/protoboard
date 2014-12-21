@@ -16,7 +16,8 @@ gulp.task('jshint', function() {
       .pipe(jshint({
         esnext: true
       }))
-      .pipe(jshint.reporter('jshint-stylish'));
+      .pipe(jshint.reporter('jshint-stylish'))
+      .on('error', handleError);
 });
 
 gulp.task('traceur', ['jshint'], function() {

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Rotateable Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+</head>
+<body>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+      var Rotateable = pb.ability.Rotateable;
+      var Utils = pb.Utils;
+
+      var doc = document.currentScript.ownerDocument;
+
+      // Private symbols.
+      var __setOrientationIndex__ = Utils.getSymbol(Rotateable.prototype, 'setOrientationIndex');
+
+      describe('Rotateable', function() {
+        var el;
+
+        beforeEach(function(done) {
+          el = doc.createElement('div');
+          done();
+        });
+
+        describe('#setDefaultValue', function() {
+          it('should set the default value if none is specified', function() {
+            var rotateable = new Rotateable([45, 90, 234], 1);
+
+            rotateable.setDefaultValue(el);
+
+            expect($(el).attr('pb-rotateable')).to.be.equal('45 90 234');
+            expect($(el).attr('pb-orientation-index')).to.be.equal('1');
+          });
+          it('should set the default value if pb-rotateable is set to true', function() {
+            var rotateable = new Rotateable([23]);
+            $(el).attr('pb-rotateable', 'true');
+
+            rotateable.setDefaultValue(el);
+
+            expect($(el).attr('pb-rotateable')).to.be.equal('23');
+          });
+          it('should do nothing if pb-rotateable is set to values other than true', function() {
+            var value = 'somevalue';
+            var rotateable = new Rotateable([45]);
+            $(el).attr('pb-rotateable', value);
+
+            rotateable.setDefaultValue(el);
+
+            expect($(el).attr('pb-rotateable')).to.be.equal(value);
+          });
+          it('should do nothing if pb-orientation-index is set', function() {
+            var value = '0';
+            var rotateable = new Rotateable([45, 75], 1);
+            $(el).attr('pb-orientation-index', value);
+
+            rotateable.setDefaultValue(el);
+
+            expect($(el).attr('pb-orientation-index')).to.be.equal(value);
+          });
+        });
+
+        describe('#attributeChangedCallback', function() {
+          var rotateable;
+
+          beforeEach(function(done) {
+            rotateable = new Rotateable();
+            done();
+          });
+
+          it('should __setOrientationIndex__ if the changed attribute is pb-rotateable', function() {
+            $(el).attr('pb-orientation-index', '2');
+
+            _.spy(rotateable, __setOrientationIndex__).overrideReturn();
+
+            rotateable.attributeChangedCallback(el, 'pb-rotateable', '', '1 2 3');
+            expect(rotateable[__setOrientationIndex__]).calledWith(el, 2).at.least(1);
+          });
+          it('should update the style if the changed attribute is pb-orientation-index', function() {
+            $(el)
+                .attr('pb-rotateable', '12 34 56')
+                .attr('pb-orientation-index', '2');
+
+            rotateable.attributeChangedCallback(el, 'pb-orientation-index', '2', '0');
+            expect(el.style.transform).to.be.equal('rotateZ(12deg)');
+          });
+          it('should not throw exception if the changed attribute is not supported', function() {
+            rotateable.attributeChangedCallback(el, 'unknown', 'blah', 'bar');
+          });
+        }); 
+
+        describe('#trigger', function() {
+          it('should call __setOrientationIndex__ with increased orientation index', function() {
+            $(el).attr('pb-orientation-index', '3');
+
+            var rotateable = new Rotateable();
+            _.spy(rotateable, __setOrientationIndex__).overrideReturn();
+
+            rotateable.trigger(el);
+
+            expect(rotateable[__setOrientationIndex__]).calledWith(el, 4).at.least(1);
+          });
+        });
+
+        describe('#__setOrientationIndex__', function() {
+          var rotateable;
+
+          beforeEach(function(done) {
+            rotateable = new Rotateable();
+            done();
+          });
+
+          it('should set the new index', function() {
+            $(el).attr('pb-rotateable', '1 2 3 4');
+            rotateable[__setOrientationIndex__](el, 3);
+            expect($(el).attr('pb-orientation-index')).to.be.equal('3');
+          });
+          it('should do nothing if pb-rotateable is empty', function() {
+            $(el)
+                .attr('pb-rotateable', '')
+                .attr('pb-orientation-index', '2');
+            rotateable[__setOrientationIndex__](el, 3);
+            expect($(el).attr('pb-orientation-index')).to.be.equal('2');
+          });
+          it('should do nothing if pb-rotateable is set to unsupported value', function() {
+            $(el)
+                .attr('pb-rotateable', 'unsupported')
+                .attr('pb-orientation-index', '2');
+            rotateable[__setOrientationIndex__](el, 3);
+            expect($(el).attr('pb-orientation-index')).to.be.equal('2');
+          });
+          it('should handle values that are too large', function() {
+            $(el).attr('pb-rotateable', '1 2 3 4');
+            rotateable[__setOrientationIndex__](el, 7);
+            expect($(el).attr('pb-orientation-index')).to.be.equal('3');
+          });
+          it('should handle negative values', function() {
+            $(el).attr('pb-rotateable', '1 2 3 4');
+            rotateable[__setOrientationIndex__](el, -1);
+            expect($(el).attr('pb-orientation-index')).to.be.equal('3');
+          });
+          it('should handle very negative values', function() {
+            $(el).attr('pb-rotateable', '1 2 3 4');
+            rotateable[__setOrientationIndex__](el, -7);
+            expect($(el).attr('pb-orientation-index')).to.be.equal('1');
+          });
+        });
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+    })();
+  </script>
+</body>

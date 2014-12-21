@@ -184,7 +184,7 @@ var $__src_47_ability_47_triggerable__ = (function() {
         case $Triggerable.TYPES.CLICK:
           return 'click';
         case $Triggerable.TYPES.DOUBLE_CLICK:
-          return 'doubleclick';
+          return 'dblclick';
         default:
           throw 'Unrecognized trigger: ' + triggerType;
       }
@@ -209,7 +209,7 @@ var $__src_47_ability_47_triggerable__ = (function() {
         var handlers = this[$traceurRuntime.toProperty(__getTriggers__)](el);
         handlers[$traceurRuntime.toProperty(triggerType)] = {
           ability: ability,
-          handler: ability.trigger.bind(el, el)
+          handler: ability.trigger.bind(ability, el)
         };
         el.addEventListener(this[$traceurRuntime.toProperty(__getEvent__)](triggerType), handlers[$traceurRuntime.toProperty(triggerType)].handler);
       }
@@ -359,27 +359,76 @@ var $__src_47_ability_47_abilities__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_as__ = (function() {
+var $__src_47_check__ = (function() {
   "use strict";
-  var __moduleName = "src/as";
-  var As = {
-    int: function(input) {
-      var radix = arguments[1] !== (void 0) ? arguments[1] : 10;
-      var output = Number.parseInt(input, radix);
-      if (Number.isNaN(output)) {
-        throw (input + " is not an integer with radix " + radix);
-      }
-      return output;
-    },
-    boolean: function(input) {
-      return input.toLowerCase() === 'true';
-    }
+  var $__2;
+  var __moduleName = "src/check";
+  var Utils = ($__src_47_utils__).default;
+  var __addChecked__ = Symbol();
+  var __checked__ = Symbol();
+  var __input__ = Symbol();
+  var __value__ = Symbol();
+  var Continuation = function Continuation(input) {
+    var value = arguments[1];
+    var checked = arguments[2] !== (void 0) ? arguments[2] : [];
+    this[$traceurRuntime.toProperty(__checked__)] = checked;
+    this[$traceurRuntime.toProperty(__input__)] = input;
+    this[$traceurRuntime.toProperty(__value__)] = value;
   };
-  var $__default = As = As;
-  if (!window.pb) {
-    window.pb = {};
+  var $Continuation = Continuation;
+  ($traceurRuntime.createClass)(Continuation, ($__2 = {}, Object.defineProperty($__2, __addChecked__, {
+    value: function(checked) {
+      return new $Continuation(this[$traceurRuntime.toProperty(__input__)], this[$traceurRuntime.toProperty(__value__)], this[$traceurRuntime.toProperty(__checked__)].concat(checked));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__2, "isInt", {
+    value: function() {
+      var radix = arguments[0] !== (void 0) ? arguments[0] : 10;
+      var output = Number.parseInt(this[$traceurRuntime.toProperty(__input__)], radix);
+      if (Number.isNaN(output)) {
+        return this[$traceurRuntime.toProperty(__addChecked__)](("int(radix = " + radix + ")"));
+      }
+      return new $Continuation(this[$traceurRuntime.toProperty(__input__)], output);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__2, "isBoolean", {
+    value: function() {
+      return new $Continuation(this[$traceurRuntime.toProperty(__input__)], this[$traceurRuntime.toProperty(__input__)].toLowerCase() === 'true');
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__2, "orThrows", {
+    value: function(msg) {
+      if (this[$traceurRuntime.toProperty(__value__)] === undefined) {
+        if (!msg) {
+          msg = ("Illegal Exception. Checked: " + this[$traceurRuntime.toProperty(__checked__)].join(', ') + " ") + ("but was " + this[$traceurRuntime.toProperty(__input__)]);
+        }
+        throw msg;
+      } else {
+        return this[$traceurRuntime.toProperty(__value__)];
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__2, "orUse", {
+    value: function(backup) {
+      return (this[$traceurRuntime.toProperty(__value__)] === undefined) ? backup : this[$traceurRuntime.toProperty(__value__)];
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__2), {});
+  function Check(input) {
+    return new Continuation(input);
   }
-  window.pb.As = As;
+  var $__default = Check = Check;
+  Utils.makeGlobal('pb.Check', Check);
   return {get default() {
       return $__default;
     }};
@@ -403,7 +452,7 @@ var $__src_47_service_47_dragdrop__ = (function() {
 var $__src_47_ability_47_draggable__ = (function() {
   "use strict";
   var __moduleName = "src/ability/draggable";
-  var As = ($__src_47_as__).default;
+  var Check = ($__src_47_check__).default;
   var Utils = ($__src_47_utils__).default;
   var Ability = ($__src_47_ability_47_ability__).default;
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
@@ -448,7 +497,7 @@ var $__src_47_ability_47_draggable__ = (function() {
     },
     attributeChangedCallback: function(el, name, oldValue, newValue) {
       if (name === ATTR_NAME) {
-        newValue = As.boolean(newValue);
+        newValue = Check(newValue).isBoolean(newValue).orThrows();
         if (newValue) {
           register(el);
         } else {
@@ -457,12 +506,15 @@ var $__src_47_ability_47_draggable__ = (function() {
       }
     },
     attachedCallback: function(el) {
-      if ($(el).attr(ATTR_NAME) && As.boolean($(el).attr(ATTR_NAME))) {
+      if ($(el).attr(ATTR_NAME) && Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
         register(el);
       }
     },
     detachedCallback: function(el) {
       unregister(el);
+    },
+    get name() {
+      return ATTR_NAME;
     }
   }, {}, Ability);
   var $__default = Draggable;
@@ -473,10 +525,112 @@ var $__src_47_ability_47_draggable__ = (function() {
       return $__default;
     }};
 })();
+var $__src_47_ability_47_rotateable__ = (function() {
+  "use strict";
+  var $__4;
+  var __moduleName = "src/ability/rotateable";
+  var Check = ($__src_47_check__).default;
+  var Utils = ($__src_47_utils__).default;
+  var Ability = ($__src_47_ability_47_ability__).default;
+  var ATTR_NAME = 'pb-rotateable';
+  var ATTR_INDEX = 'pb-orientation-index';
+  var __defaultIndex__ = Symbol();
+  var __defaultOrientations__ = Symbol();
+  var __getOrientations__ = Symbol();
+  var __getOrientationIndex__ = Symbol();
+  var __setOrientationIndex__ = Symbol('setOrientationIndex');
+  var Rotateable = function Rotateable() {
+    var defaultOrientations = arguments[0] !== (void 0) ? arguments[0] : [0];
+    var defaultIndex = arguments[1] !== (void 0) ? arguments[1] : 0;
+    this[$traceurRuntime.toProperty(__defaultIndex__)] = defaultIndex;
+    this[$traceurRuntime.toProperty(__defaultOrientations__)] = defaultOrientations.join(' ');
+  };
+  ($traceurRuntime.createClass)(Rotateable, ($__4 = {}, Object.defineProperty($__4, __getOrientations__, {
+    value: function(el) {
+      return $(el).attr(ATTR_NAME).split(' ').map((function(str) {
+        return Check(str).isInt().orUse(undefined);
+      })).filter((function(value) {
+        return Number.isInteger(value);
+      }));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, __getOrientationIndex__, {
+    value: function(el) {
+      return Check($(el).attr(ATTR_INDEX)).isInt().orThrows();
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, __setOrientationIndex__, {
+    value: function(el, index) {
+      var orientations = this[$traceurRuntime.toProperty(__getOrientations__)](el);
+      if (orientations.length > 0) {
+        if (index < 0) {
+          index = -(-index % orientations.length);
+          index += orientations.length;
+        }
+        if (index >= orientations.length) {
+          index %= orientations.length;
+        }
+        $(el).attr(ATTR_INDEX, index);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "setDefaultValue", {
+    value: function(el) {
+      if ($(el).attr(ATTR_NAME) === undefined || $(el).attr(ATTR_NAME) === 'true') {
+        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(__defaultOrientations__)]);
+      }
+      if ($(el).attr(ATTR_INDEX) === undefined) {
+        $(el).attr(ATTR_INDEX, this[$traceurRuntime.toProperty(__defaultIndex__)]);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "attributeChangedCallback", {
+    value: function(el, name, oldValue, newValue) {
+      if (name === ATTR_NAME) {
+        this[$traceurRuntime.toProperty(__setOrientationIndex__)](el, this[$traceurRuntime.toProperty(__getOrientationIndex__)](el));
+      }
+      if (name === ATTR_INDEX) {
+        var orientation = this[$traceurRuntime.toProperty(__getOrientations__)](el)[$traceurRuntime.toProperty(Check(newValue).isInt().orThrows())];
+        el.style.transform = ("rotateZ(" + orientation + "deg)");
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "trigger", {
+    value: function(el) {
+      this[$traceurRuntime.toProperty(__setOrientationIndex__)](el, this[$traceurRuntime.toProperty(__getOrientationIndex__)](el) + 1);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "name", {
+    get: function() {
+      return ATTR_NAME;
+    },
+    configurable: true,
+    enumerable: true
+  }), $__4), {}, Ability);
+  var $__default = Rotateable;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.ability.Rotateable', Rotateable);
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_ability_47_toggleable__ = (function() {
   "use strict";
   var __moduleName = "src/ability/toggleable";
-  var As = ($__src_47_as__).default;
+  var Check = ($__src_47_check__).default;
   var Utils = ($__src_47_utils__).default;
   var Ability = ($__src_47_ability_47_ability__).default;
   var Triggerable = ($__src_47_ability_47_triggerable__).default;
@@ -485,10 +639,10 @@ var $__src_47_ability_47_toggleable__ = (function() {
   var __defaultEnabled__ = Symbol();
   var __defaultShowFront__ = Symbol();
   function isEnabled(el) {
-    return As.boolean($(el).attr(ATTR_NAME));
+    return Check($(el).attr(ATTR_NAME)).isBoolean().orThrows();
   }
   function isShowFront(el) {
-    return As.boolean($(el).attr(ATTR_SHOWFRONT));
+    return Check($(el).attr(ATTR_SHOWFRONT)).isBoolean().orThrows();
   }
   var Toggleable = function Toggleable() {
     var defaultEnabled = arguments[0] !== (void 0) ? arguments[0] : true;
@@ -527,8 +681,9 @@ var $__src_47_ability_47_modules__ = (function() {
   var __moduleName = "src/ability/modules";
   $__src_47_ability_47_abilities__;
   $__src_47_ability_47_draggable__;
-  $__src_47_ability_47_triggerable__;
+  $__src_47_ability_47_rotateable__;
   $__src_47_ability_47_toggleable__;
+  $__src_47_ability_47_triggerable__;
   return {};
 })();
 var $__src_47_pbelement__ = (function() {
@@ -576,12 +731,11 @@ var $__src_47_component_47_component__ = (function() {
 var $__src_47_component_47_card__ = (function() {
   "use strict";
   var __moduleName = "src/component/card";
-  var As = ($__src_47_as__).default;
   var Utils = ($__src_47_utils__).default;
   var Component = ($__src_47_component_47_component__).default;
   var Abilities = ($__src_47_ability_47_abilities__).default;
-  var Ability = ($__src_47_ability_47_ability__).default;
   var Draggable = ($__src_47_ability_47_draggable__).default;
+  var Rotateable = ($__src_47_ability_47_rotateable__).default;
   var Toggleable = ($__src_47_ability_47_toggleable__).default;
   var doc = null;
   var template = null;
@@ -596,7 +750,7 @@ var $__src_47_component_47_card__ = (function() {
       this.attachedCallback();
     }}, {register: function(currentDoc, cardTemplate) {
       if (!doc && !template) {
-        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, {'pb-click': new Toggleable(true)}, new Draggable(true)).prototype});
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, {'pb-click': new Toggleable(true)}, new Draggable(true), new Rotateable()).prototype});
       }
       doc = currentDoc;
       template = cardTemplate;
@@ -944,9 +1098,9 @@ var $__src_47_service_47_modules__ = (function() {
 var $__src_47_surface_47_rectgrid__ = (function() {
   "use strict";
   var __moduleName = "src/surface/rectgrid";
-  var As = ($__src_47_as__).default;
-  var Utils = ($__src_47_utils__).default;
+  var Check = ($__src_47_check__).default;
   var PbElement = ($__src_47_pbelement__).default;
+  var Utils = ($__src_47_utils__).default;
   var doc = null;
   var templates = null;
   var ATTR_ROW = 'pb-row';
@@ -960,8 +1114,8 @@ var $__src_47_surface_47_rectgrid__ = (function() {
     createdCallback: function() {
       $traceurRuntime.superCall(this, $RectGrid.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(templates.main, doc));
-      var rowCount = As.int($(this).attr(ATTR_ROW));
-      var colCount = As.int($(this).attr(ATTR_COL));
+      var rowCount = Check($(this).attr(ATTR_ROW)).isInt().orThrows();
+      var colCount = Check($(this).attr(ATTR_COL)).isInt().orThrows();
       var rootEl = this.shadowRoot.querySelector('#content');
       for (var row = 0; row < rowCount; row++) {
         rootEl.appendChild(Utils.activateTemplate(templates.row, doc));
@@ -1190,9 +1344,9 @@ var $__src_47_ui_47_previewer__ = (function() {
 var $__src_47_ui_47_template__ = (function() {
   "use strict";
   var __moduleName = "src/ui/template";
-  var Utils = ($__src_47_utils__).default;
+  var Check = ($__src_47_check__).default;
   var PbElement = ($__src_47_pbelement__).default;
-  var As = ($__src_47_as__).default;
+  var Utils = ($__src_47_utils__).default;
   var doc = null;
   var handlebars = null;
   var EL_NAME = 'pb-u-template';
@@ -1222,7 +1376,7 @@ var $__src_47_ui_47_template__ = (function() {
           step = 1;
         }
         var rv = '';
-        for (var i = As.int(from); i < As.int(to); i += As.int(step)) {
+        for (var i = Check(from).isInt().orThrows(); i < Check(to).isInt().orThrows(); i += Check(step).isInt().orThrows()) {
           var data = Handlebars.createFrame(options.data || {});
           data.index = i;
           rv += options.fn(this, {data: data});
@@ -1248,6 +1402,7 @@ var $__src_47_ui_47_modules__ = (function() {
 var $__src_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/modules";
+  $__src_47_check__;
   $__src_47_utils__;
   $__src_47_ability_47_modules__;
   $__src_47_component_47_modules__;

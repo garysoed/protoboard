@@ -1,7 +1,18 @@
-import As from 'src/as';
+import Check from 'src/check';
 import Utils from 'src/utils';
-import Ability from 'src/ability/ability';
+
+import Ability         from 'src/ability/ability';
 import DragDropService from 'src/service/dragdrop';
+
+/**
+ * Provides decorator to make an element draggable. Use [[Abilities|ability.Abilities]] to decorate
+ * the element. Note that these methods should be called with the element to be decorated as the
+ * scope.
+ *
+ * @class ability.Draggable
+ * @static
+ * @extends ability.Ability
+ */
 
 /**
  * Set to true to make this element draggable.
@@ -48,15 +59,6 @@ function unregister(element) {
   });
 }
 
-/**
- * Provides decorator to make an element draggable. Use [[Abilities|ability.Abilities]] to decorate
- * the element. Note that these methods should be called with the element to be decorated as the
- * scope.
- *
- * @class Draggable
- * @static
- * @extends ability.Ability
- */
 export default class Draggable extends Ability {
 
   constructor(defaultValue) {
@@ -86,7 +88,7 @@ export default class Draggable extends Ability {
    */
   attributeChangedCallback(el, name, oldValue, newValue) {
     if (name === ATTR_NAME) {
-      newValue = As.boolean(newValue);
+      newValue = Check(newValue).isBoolean(newValue).orThrows();
       if (newValue) {
         register(el);
       } else {
@@ -102,7 +104,7 @@ export default class Draggable extends Ability {
    * @param {!Element} el The element that was attached.
    */
   attachedCallback(el) {
-    if ($(el).attr(ATTR_NAME) && As.boolean($(el).attr(ATTR_NAME))) {
+    if ($(el).attr(ATTR_NAME) && Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
       register(el);
     }
   }
@@ -115,6 +117,16 @@ export default class Draggable extends Ability {
    */
   detachedCallback(el) {
     unregister(el);
+  }
+
+  /**
+   * The name of the ability.
+   * 
+   * @attribute name
+   * @type string
+   */
+  get name() {
+    return ATTR_NAME;
   }
 }
 

@@ -1,12 +1,11 @@
-import As    from 'src/as';
 import Utils from 'src/utils';
 
 import Component from 'src/component/component';
 
 import Abilities  from 'src/ability/abilities';
-import Ability    from 'src/ability/ability';
 import Draggable  from 'src/ability/draggable';
-import Toggleable from 'src/ability/toggleable'; 
+import Rotateable from 'src/ability/rotateable';
+import Toggleable from 'src/ability/toggleable';
 
 let doc = null;
 let template = null;
@@ -47,9 +46,10 @@ export default class Card extends Component {
         prototype: Abilities.config(
             Card,
             {
-              'pb-click': new Toggleable(true)
+              'pb-click': new Toggleable(true),
             },
-            new Draggable(true)).prototype
+            new Draggable(true),
+            new Rotateable()).prototype
       });
     }
 

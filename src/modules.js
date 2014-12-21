@@ -2,6 +2,7 @@
  * References all the modules.
  */
 
+import {} from 'src/check';
 import {} from 'src/utils';
 
 import {} from 'src/ability/modules';

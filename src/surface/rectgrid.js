@@ -1,6 +1,6 @@
-import As from 'src/as';
-import Utils from 'src/utils';
+import Check     from 'src/check';
 import PbElement from 'src/pbelement';
+import Utils     from 'src/utils';
 
 let doc = null;
 let templates = null;
@@ -28,8 +28,8 @@ export default class RectGrid extends PbElement {
         .appendChild(Utils.activateTemplate(templates.main, doc));
 
     // Initializes the data.
-    let rowCount = As.int($(this).attr(ATTR_ROW));
-    let colCount = As.int($(this).attr(ATTR_COL));
+    let rowCount = Check($(this).attr(ATTR_ROW)).isInt().orThrows();
+    let colCount = Check($(this).attr(ATTR_COL)).isInt().orThrows();
     let rootEl = this.shadowRoot.querySelector('#content');
 
     // Add the rows.

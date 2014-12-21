@@ -7,6 +7,10 @@
   <link rel="import" href="src/component/card.html">
 </head>
 <body>
+  <script>
+    // Needed to make HammerJS work.
+    document.currentScript.ownerDocument.parentWindow = window;
+  </script>
   <pb-c-card id="card">
     <div class="front"></div>
     <div class="back"></div>

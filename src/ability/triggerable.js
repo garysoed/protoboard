@@ -14,6 +14,7 @@ import Ability from 'src/ability/ability';
  * - `pb-dblclick`: Triggers when the element is double clicked.
  * 
  * @class ability.Triggerable
+ * @extends ability.Ability
  */
 
 // Private symbols.
@@ -59,7 +60,7 @@ class Triggerable extends Ability {
       case Triggerable.TYPES.CLICK:
         return 'click';
       case Triggerable.TYPES.DOUBLE_CLICK:
-        return 'doubleclick';
+        return 'dblclick';
       default:
         throw 'Unrecognized trigger: ' + triggerType;
     }
@@ -97,7 +98,7 @@ class Triggerable extends Ability {
     if (!this[__isRegistered__](el, triggerType, ability.name)) {
       // Only registers if there aren't any triggers registered.
       let handlers = this[__getTriggers__](el);
-      handlers[triggerType] = {ability: ability, handler: ability.trigger.bind(el, el)};
+      handlers[triggerType] = {ability: ability, handler: ability.trigger.bind(ability, el)};
       el.addEventListener(this[__getEvent__](triggerType), handlers[triggerType].handler);
     }
   }

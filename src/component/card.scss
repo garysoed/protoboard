@@ -63,3 +63,8 @@ pb-c-card.pb-dragged {
     display: none;
   }
 }
+
+pb-c-card[pb-rotateable] {
+  /** TODO(gs): Use library to keep track of the prefixes */
+  transition: transform $transition-duration;
+}

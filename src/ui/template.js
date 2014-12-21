@@ -1,6 +1,6 @@
-import Utils from 'src/utils';
+import Check     from 'src/check';
 import PbElement from 'src/pbelement';
-import As from 'src/as';
+import Utils     from 'src/utils';
 
 let doc = null;
 let handlebars = null;
@@ -60,7 +60,9 @@ export default class Template extends PbElement {
         step = 1;
       }
       let rv = '';
-      for (let i = As.int(from); i < As.int(to); i += As.int(step)) {
+      for (let i = Check(from).isInt().orThrows(); 
+          i < Check(to).isInt().orThrows(); 
+          i += Check(step).isInt().orThrows()) {
         let data = Handlebars.createFrame(options.data || {});
         data.index = i;
         rv += options.fn(this, { data: data });

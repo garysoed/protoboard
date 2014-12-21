@@ -144,7 +144,11 @@
                 Default - back
               </div>
             </pb-c-card>
-            <pb-c-card pb-click="pb-toggleable" pb-click='pb-rotateable' pb-showfront="true">
+            <pb-c-card pb-click="pb-rotateable" 
+                       pb-dblclick="pb-toggleable"
+                       pb-orientation-index="0"
+                       pb-rotateable="0 90"
+                       pb-showfront="true">
               <div class="pb-front">
                 <p>Double click to flip</p>
                 <p>Defaults to show front</p>

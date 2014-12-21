@@ -1,4 +1,4 @@
-import As    from 'src/as';
+import Check    from 'src/check';
 import Utils from 'src/utils';
 
 import Ability     from 'src/ability/ability';
@@ -22,11 +22,11 @@ const __defaultEnabled__ = Symbol();
 const __defaultShowFront__ = Symbol();
 
 function isEnabled(el) {
-  return As.boolean($(el).attr(ATTR_NAME));
+  return Check($(el).attr(ATTR_NAME)).isBoolean().orThrows();
 }
 
 function isShowFront(el) {
-  return As.boolean($(el).attr(ATTR_SHOWFRONT));
+  return Check($(el).attr(ATTR_SHOWFRONT)).isBoolean().orThrows();
 }
 
 /**
@@ -77,8 +77,10 @@ export default class Toggleable extends Ability {
   }
 
   /**
+   * The name of the ability.
+   * 
    * @attribute name
-   * @return {string} Name of the ability.
+   * @type string
    */
   get name() {
     return ATTR_NAME;
