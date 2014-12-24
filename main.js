@@ -477,10 +477,11 @@ var $__src_47_check__ = (function() {
     enumerable: true,
     writable: true
   }), $__2), {});
-  var $__default = Check = function(input) {
+  function check(input) {
     return new Continuation(input);
-  };
-  Utils.makeGlobal('pb.Check', Check);
+  }
+  var $__default = check;
+  Utils.makeGlobal('pb.Check', check);
   return {get default() {
       return $__default;
     }};
