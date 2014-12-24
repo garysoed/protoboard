@@ -51,10 +51,8 @@ class Continuation {
   }
 }
 
-function Check(input) {
+export default Check = function(input) {
   return new Continuation(input);
-}
-
-export default Check = Check;
+};
 
 Utils.makeGlobal('pb.Check', Check);

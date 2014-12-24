@@ -9,7 +9,7 @@ import Ability from 'src/ability/ability';
  * @extends ability.Ability
  */
 
-const ATTR_NAME = 'pb-rotateable'
+const ATTR_NAME = 'pb-rotateable';
 const ATTR_INDEX = 'pb-orientation-index';
 
 // Private symbols.
@@ -99,7 +99,7 @@ export default class Rotateable extends Ability {
 
     if (name === ATTR_INDEX) {
       let orientation = this[__getOrientations__](el)[Check(newValue).isInt().orThrows()];
-      el.style.transform = `rotateZ(${orientation}deg)`
+      el.style.transform = `rotateZ(${orientation}deg)`;
     }
   }
 

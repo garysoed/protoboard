@@ -1,4 +1,4 @@
-import HammerWrapper from 'src/hammerwrapper'
+import HammerWrapper from 'src/hammerwrapper';
 import Utils         from 'src/utils';
 
 import Ability from 'src/ability/ability';

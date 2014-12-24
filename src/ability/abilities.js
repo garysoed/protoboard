@@ -54,15 +54,15 @@ const Abilities = {
    * @param {!Map.<Ability, Object>} cfg Map with the Ability as the key, and a default value object
    *     specific to that ability. Check the Ability's documentation for more information.
    */
-  config(ctor, config, ...abilities) {
+  config(ctor, cfg, ...abilities) {
     let ctorProto = ctor.prototype;
     let triggerConfig = {};
     // collect the known abilities.
     let knownAbilities = [];
 
     // Get from config
-    for (let key in config) {
-      let ability = config[key];
+    for (let key in cfg) {
+      let ability = cfg[key];
       knownAbilities.push(ability);
       this[__register__](ctorProto, ability);
       triggerConfig[key] = ability.name;

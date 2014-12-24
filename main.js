@@ -375,16 +375,16 @@ var $__src_47_ability_47_abilities__ = (function() {
     enumerable: true,
     writable: true
   }), Object.defineProperty($__2, "config", {
-    value: function(ctor, config) {
+    value: function(ctor, cfg) {
       for (var abilities = [],
           $__5 = 2; $__5 < arguments.length; $__5++)
         abilities[$traceurRuntime.toProperty($__5 - 2)] = arguments[$traceurRuntime.toProperty($__5)];
       var ctorProto = ctor.prototype;
       var triggerConfig = {};
       var knownAbilities = [];
-      for (var key in config)
+      for (var key in cfg)
         if (!$traceurRuntime.isSymbolString(key)) {
-          var ability = config[$traceurRuntime.toProperty(key)];
+          var ability = cfg[$traceurRuntime.toProperty(key)];
           knownAbilities.push(ability);
           this[$traceurRuntime.toProperty(__register__)](ctorProto, ability);
           triggerConfig[$traceurRuntime.toProperty(key)] = ability.name;
@@ -477,10 +477,9 @@ var $__src_47_check__ = (function() {
     enumerable: true,
     writable: true
   }), $__2), {});
-  function Check(input) {
+  var $__default = Check = function(input) {
     return new Continuation(input);
-  }
-  var $__default = Check = Check;
+  };
   Utils.makeGlobal('pb.Check', Check);
   return {get default() {
       return $__default;

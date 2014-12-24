@@ -9,14 +9,17 @@ var yuimd  = require('yuimd');
 var handleError = function(error) {
   console.log(error.toString());
   this.emit('end');
+  throw error;
 };
 
 gulp.task('jshint', function() {
   return gulp.src('./src/**/*.js')
       .pipe(jshint({
-        esnext: true
+        esnext: true,
+        sub: true
       }))
       .pipe(jshint.reporter('jshint-stylish'))
+      .pipe(jshint.reporter('fail'))
       .on('error', handleError);
 });
 
@@ -29,7 +32,8 @@ gulp.task('traceur', ['jshint'], function() {
         templateData: {
           out: 'main.js'
         }
-      }));
+      }))
+      .on('error', handleError);
 });
 
 gulp.task('test', ['traceur'], function() {
