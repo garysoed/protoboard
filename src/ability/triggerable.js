@@ -1,4 +1,5 @@
-import Utils from 'src/utils';
+import HammerWrapper from 'src/hammerwrapper'
+import Utils         from 'src/utils';
 
 import Ability from 'src/ability/ability';
 
@@ -31,6 +32,26 @@ const __handler__ = Symbol();
 class Triggerable extends Ability {
 
   /**
+   * Returns the event associated with the trigger type.
+   * 
+   * @method __getEvent__
+   * @param {ability.Triggerable.TYPES} triggerType The type of trigger whose event should be 
+   *     returned.
+   * @return {string} The event related to the trigger type.
+   * @private
+   */
+  [__getEvent__](triggerType) {
+    switch (triggerType) {
+      case Triggerable.TYPES.CLICK:
+        return 'singletap';
+      case Triggerable.TYPES.DOUBLE_CLICK:
+        return 'doubletap';
+      default:
+        throw 'Unrecognized trigger: ' + triggerType;
+    }
+  }
+
+  /**
    * Returns the triggers registered to the given element.
    * 
    * @method  __getTriggers__
@@ -44,26 +65,6 @@ class Triggerable extends Ability {
       el[__triggers__] = {};
     }
     return el[__triggers__];
-  }
-
-  /**
-   * Returns the event associated with the trigger type.
-   * 
-   * @method __getEvent__
-   * @param {ability.Triggerable.TYPES} triggerType The type of trigger whose event should be 
-   *     returned.
-   * @return {string} The event related to the trigger type.
-   * @private
-   */
-  [__getEvent__](triggerType) {
-    switch (triggerType) {
-      case Triggerable.TYPES.CLICK:
-        return 'click';
-      case Triggerable.TYPES.DOUBLE_CLICK:
-        return 'dblclick';
-      default:
-        throw 'Unrecognized trigger: ' + triggerType;
-    }
   }
 
   /**
@@ -99,7 +100,7 @@ class Triggerable extends Ability {
       // Only registers if there aren't any triggers registered.
       let handlers = this[__getTriggers__](el);
       handlers[triggerType] = {ability: ability, handler: ability.trigger.bind(ability, el)};
-      el.addEventListener(this[__getEvent__](triggerType), handlers[triggerType].handler);
+      HammerWrapper.on(el, this[__getEvent__](triggerType), handlers[triggerType].handler);
     }
   }
 
@@ -114,7 +115,7 @@ class Triggerable extends Ability {
   [__unregister__](el, triggerType) {
     let handlers = this[__getTriggers__](el);
     if (handlers[triggerType]) {
-      el.removeEventListener(this[__getEvent__](triggerType), handlers[triggerType].handler);
+      HammerWrapper.off(el, this[__getEvent__](triggerType), handlers[triggerType].handler);
       delete handlers[triggerType];
     }
   }

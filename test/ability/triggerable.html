@@ -15,6 +15,7 @@
       var _M = spies.Matchers;
 
       var Triggerable = pb.ability.Triggerable;
+      var HammerWrapper = pb.HammerWrapper;
       var Utils = pb.Utils;
 
       var doc = document.currentScript.ownerDocument;
@@ -186,23 +187,23 @@
             var ability = pb.t.createFakeAbility('ability');
             var triggerable = new Triggerable();
 
-            _.spy(el, 'addEventListener');
+            _.spy(HammerWrapper, 'on');
 
             triggerable[__register__](el, 'pb-click', ability);
 
-            expect(el.addEventListener).calledWith('click', _M.isA(Function)).at.least(1);
+            expect(HammerWrapper.on).calledWith(el, 'singletap', _M.isA(Function)).at.least(1);
           });
           it('should be noop if registered', function() {
             var ability = pb.t.createFakeAbility('ability');
             var triggerable = new Triggerable();
             triggerable[__register__](el, 'pb-click', ability);
 
-            _.spy(el, 'addEventListener');
+            _.spy(HammerWrapper, 'on');
 
             // register the ability again
             triggerable[__register__](el, 'pb-click', ability);
 
-            expect(el.addEventListener).called().to.be.equal(0);
+            expect(HammerWrapper.on).called().to.be.equal(0);
           });
         });
 
@@ -211,15 +212,15 @@
             var ability = pb.t.createFakeAbility('ability');
             var triggerable = new Triggerable();
 
-            _.spy(el, 'addEventListener');
+            _.spy(HammerWrapper, 'on');
             triggerable[__register__](el, 'pb-click', ability);
             var handlerCaptor = _M.isA(Function);
-            expect(el.addEventListener).calledWith('click', handlerCaptor).at.least(1);
+            expect(HammerWrapper.on).calledWith(el, 'singletap', handlerCaptor).at.least(1);
 
-            _.spy(el, 'removeEventListener');
+            _.spy(HammerWrapper, 'off');
             triggerable[__unregister__](el, 'pb-click');
-            expect(el.removeEventListener)
-                .calledWith('click', handlerCaptor.matchingArgs[0]).at.least(1);
+            expect(HammerWrapper.off)
+                .calledWith(el, 'singletap', handlerCaptor.matchingArgs[0]).at.least(1);
           });
           it('should not crash if nothing is registered', function() {
             var triggerable = new Triggerable();

@@ -15,6 +15,7 @@
       var _M = spies.Matchers;
 
       var Abilities = pb.ability.Abilities;
+      var HammerWrapper = pb.HammerWrapper;
 
       var doc = document.currentScript.ownerDocument;
 
@@ -24,13 +25,18 @@
             var Ctor = function() {};
             Ctor.prototype.addEventListener = _.spiedFunction();
             Ctor.prototype.removeEventListener = _.spiedFunction();
+            Ctor.prototype.ownerDocument = doc;
+            Ctor.prototype.style = {};
 
             var ability1 = pb.t.createFakeAbility('ability1');
             var ability2 = pb.t.createFakeAbility('ability2');
 
             Abilities.config(Ctor, {'pb-click': ability1}, ability2);
 
+            _.spy(HammerWrapper, 'on');
+
             var el = new Ctor();
+
             el.createdCallback();
             expect(ability1.setDefaultValue).calledWith(el).at.least(1);
             expect(ability2.setDefaultValue).calledWith(el).at.least(1);
@@ -46,7 +52,7 @@
             expect(ability2.attachedCallback).calledWith(el).at.least(1);
 
             var clickHandlerCaptor = _M.isA(Function);
-            expect(el.addEventListener).calledWith('click', clickHandlerCaptor).at.least(1);
+            expect(HammerWrapper.on).calledWith(el, 'singletap', clickHandlerCaptor).at.least(1);
 
             // Trigger the click and check that the correct ability is triggered.
             clickHandlerCaptor.matchingArgs[0]();

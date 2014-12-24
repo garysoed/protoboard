@@ -139,10 +139,63 @@ var $__src_47_utils__ = (function() {
       return $__default;
     }};
 })();
+var $__src_47_hammerwrapper__ = (function() {
+  "use strict";
+  var $__1;
+  var __moduleName = "src/hammerwrapper";
+  var Utils = ($__src_47_utils__).default;
+  var __hammer__ = Symbol();
+  var __getHammer__ = Symbol();
+  var HammerWrapper = ($__1 = {}, Object.defineProperty($__1, __getHammer__, {
+    value: function(el) {
+      if (!el[$traceurRuntime.toProperty(__hammer__)]) {
+        if (!el.ownerDocument.parentWindow) {
+          el.ownerDocument.parentWindow = window;
+        }
+        var hammer = new Hammer.Manager(el);
+        hammer.add(new Hammer.Tap({
+          event: 'doubletap',
+          taps: 2,
+          interval: 300
+        }));
+        hammer.add(new Hammer.Tap({event: 'singletap'}));
+        hammer.get('doubletap').recognizeWith('singletap');
+        hammer.get('singletap').requireFailure('doubletap');
+        el[$traceurRuntime.toProperty(__hammer__)] = hammer;
+      }
+      return el[$traceurRuntime.toProperty(__hammer__)];
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__1, "on", {
+    value: function(el, gestureType, handler) {
+      this[$traceurRuntime.toProperty(__getHammer__)](el).on(gestureType, handler);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__1, "off", {
+    value: function(el, eventType, handler) {
+      this[$traceurRuntime.toProperty(__getHammer__)](el).on(eventType, handler);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__1);
+  var $__default = HammerWrapper = HammerWrapper;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.HammerWrapper', HammerWrapper);
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_ability_47_triggerable__ = (function() {
   "use strict";
-  var $__3;
+  var $__4;
   var __moduleName = "src/ability/triggerable";
+  var HammerWrapper = ($__src_47_hammerwrapper__).default;
   var Utils = ($__src_47_utils__).default;
   var Ability = ($__src_47_ability_47_ability__).default;
   var __defaultValue__ = Symbol();
@@ -159,16 +212,30 @@ var $__src_47_ability_47_triggerable__ = (function() {
     var knownAbilities = arguments[1] !== (void 0) ? arguments[1] : [];
     this[$traceurRuntime.toProperty(__defaultValue__)] = defaultValue;
     this[$traceurRuntime.toProperty(__knownAbilities__)] = {};
-    for (var $__4 = knownAbilities[$traceurRuntime.toProperty(Symbol.iterator)](),
-        $__5; !($__5 = $__4.next()).done; ) {
-      var ability = $__5.value;
+    for (var $__5 = knownAbilities[$traceurRuntime.toProperty(Symbol.iterator)](),
+        $__6; !($__6 = $__5.next()).done; ) {
+      var ability = $__6.value;
       {
         this[$traceurRuntime.toProperty(__knownAbilities__)][$traceurRuntime.toProperty(ability.name)] = ability;
       }
     }
   };
   var $Triggerable = Triggerable;
-  ($traceurRuntime.createClass)(Triggerable, ($__3 = {}, Object.defineProperty($__3, __getTriggers__, {
+  ($traceurRuntime.createClass)(Triggerable, ($__4 = {}, Object.defineProperty($__4, __getEvent__, {
+    value: function(triggerType) {
+      switch (triggerType) {
+        case $Triggerable.TYPES.CLICK:
+          return 'singletap';
+        case $Triggerable.TYPES.DOUBLE_CLICK:
+          return 'doubletap';
+        default:
+          throw 'Unrecognized trigger: ' + triggerType;
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, __getTriggers__, {
     value: function(el) {
       if (!el[$traceurRuntime.toProperty(__triggers__)]) {
         el[$traceurRuntime.toProperty(__triggers__)] = {};
@@ -178,21 +245,7 @@ var $__src_47_ability_47_triggerable__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__3, __getEvent__, {
-    value: function(triggerType) {
-      switch (triggerType) {
-        case $Triggerable.TYPES.CLICK:
-          return 'click';
-        case $Triggerable.TYPES.DOUBLE_CLICK:
-          return 'dblclick';
-        default:
-          throw 'Unrecognized trigger: ' + triggerType;
-      }
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__3, __isRegistered__, {
+  }), Object.defineProperty($__4, __isRegistered__, {
     value: function(el, triggerType, abilityName) {
       if (!this[$traceurRuntime.toProperty(__getTriggers__)](el)[$traceurRuntime.toProperty(triggerType)]) {
         return false;
@@ -203,7 +256,7 @@ var $__src_47_ability_47_triggerable__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__3, __register__, {
+  }), Object.defineProperty($__4, __register__, {
     value: function(el, triggerType, ability) {
       if (!this[$traceurRuntime.toProperty(__isRegistered__)](el, triggerType, ability.name)) {
         var handlers = this[$traceurRuntime.toProperty(__getTriggers__)](el);
@@ -211,24 +264,24 @@ var $__src_47_ability_47_triggerable__ = (function() {
           ability: ability,
           handler: ability.trigger.bind(ability, el)
         };
-        el.addEventListener(this[$traceurRuntime.toProperty(__getEvent__)](triggerType), handlers[$traceurRuntime.toProperty(triggerType)].handler);
+        HammerWrapper.on(el, this[$traceurRuntime.toProperty(__getEvent__)](triggerType), handlers[$traceurRuntime.toProperty(triggerType)].handler);
       }
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__3, __unregister__, {
+  }), Object.defineProperty($__4, __unregister__, {
     value: function(el, triggerType) {
       var handlers = this[$traceurRuntime.toProperty(__getTriggers__)](el);
       if (handlers[$traceurRuntime.toProperty(triggerType)]) {
-        el.removeEventListener(this[$traceurRuntime.toProperty(__getEvent__)](triggerType), handlers[$traceurRuntime.toProperty(triggerType)].handler);
+        HammerWrapper.off(el, this[$traceurRuntime.toProperty(__getEvent__)](triggerType), handlers[$traceurRuntime.toProperty(triggerType)].handler);
         delete handlers[$traceurRuntime.toProperty(triggerType)];
       }
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__3, "setDefaultValue", {
+  }), Object.defineProperty($__4, "setDefaultValue", {
     value: function(el) {
       for (var key in $Triggerable.TYPES)
         if (!$traceurRuntime.isSymbolString(key)) {
@@ -242,7 +295,7 @@ var $__src_47_ability_47_triggerable__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__3, "attributeChangedCallback", {
+  }), Object.defineProperty($__4, "attributeChangedCallback", {
     value: function(el, name, oldValue, newValue) {
       for (var key in $Triggerable.TYPES)
         if (!$traceurRuntime.isSymbolString(key)) {
@@ -259,7 +312,7 @@ var $__src_47_ability_47_triggerable__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__3, "attachedCallback", {
+  }), Object.defineProperty($__4, "attachedCallback", {
     value: function(el) {
       for (var key in $Triggerable.TYPES)
         if (!$traceurRuntime.isSymbolString(key)) {
@@ -273,7 +326,7 @@ var $__src_47_ability_47_triggerable__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__3, "detachedCallback", {
+  }), Object.defineProperty($__4, "detachedCallback", {
     value: function(el) {
       for (var key in $Triggerable.TYPES)
         if (!$traceurRuntime.isSymbolString(key)) {
@@ -283,7 +336,7 @@ var $__src_47_ability_47_triggerable__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), $__3), {}, Ability);
+  }), $__4), {}, Ability);
   Triggerable.TYPES = {
     CLICK: 'pb-click',
     DOUBLE_CLICK: 'pb-dblclick'
