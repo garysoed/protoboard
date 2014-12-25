@@ -156,9 +156,13 @@ var $__src_47_hammerwrapper__ = (function() {
         hammer.add(new Hammer.Tap({
           event: 'doubletap',
           taps: 2,
-          interval: 300
+          interval: 250
         }));
-        hammer.add(new Hammer.Tap({event: 'singletap'}));
+        hammer.add(new Hammer.Tap({
+          event: 'singletap',
+          taps: 1,
+          interval: 250
+        }));
         hammer.get('doubletap').recognizeWith('singletap');
         hammer.get('singletap').requireFailure('doubletap');
         el[$traceurRuntime.toProperty(__hammer__)] = hammer;

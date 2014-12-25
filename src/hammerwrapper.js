@@ -29,8 +29,8 @@ let HammerWrapper = {
       }
 
       let hammer = new Hammer.Manager(el);
-      hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2, interval: 300 }));
-      hammer.add(new Hammer.Tap({ event: 'singletap', }));
+      hammer.add(new Hammer.Tap({ event: 'doubletap', taps: 2, interval: 250 }));
+      hammer.add(new Hammer.Tap({ event: 'singletap', taps: 1, interval: 250 }));
 
       hammer.get('doubletap').recognizeWith('singletap');
       hammer.get('singletap').requireFailure('doubletap');

@@ -8,6 +8,8 @@
     <link rel="import" href="src/region/deck.html">
     <link rel="import" href="src/region/rect.html">
     <link rel="import" href="src/ui/context.html">
+    <link rel="import" href="src/ui/preview.html">
+    <link rel="import" href="src/ui/previewer.html">
 
     <link rel="stylesheet" type="text/css" href="out/themes/theme.css">
 
@@ -43,6 +45,14 @@
       background-color: #8584ba;
       color: white;
       padding-left: 20px;
+    }
+
+    col.name {
+      width: 200px;
+    }
+
+    col.example {
+      width: 200px;
     }
   </style>
 
@@ -95,8 +105,22 @@
       width: 200px;
     }
   </style>
+
+  <style>
+    pb-u-previewer::shadow #root {
+      height: 125px;
+      width: 250px;
+    }
+  </style>
   <body>
     <table>
+      <colgroup>
+        <col class="name">
+        <col>
+        <col>
+        <col class="example">
+      </colgroup>
+
       <thead>
         <tr>
           <td colspan="4">
@@ -138,7 +162,11 @@
           <td>
             <pb-c-card>
               <div class="pb-front">
-                Default - front
+                <p>Default - front</p>
+                <p>Previewer</p>
+                <pb-u-preview>
+                  You can add more details over here. Look at the Previewer for more details.
+                </pb-u-preview>
               </div>
               <div class="pb-back">
                 Default - back
@@ -228,6 +256,26 @@
           </td>
         </tr>
       </tbody>
+
+      <thead>
+        <tr>
+          <td colspan="4">
+            <h2>UI Components</h2>
+            Various UI components to make your life easier
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="previewer">Previewer</td>
+          <td><pb-u-previewer></pb-u-previewer></td>
+          <td>
+            This displays the content of a <code>pb-u-preview</code> element when a mouse hovers 
+            over its parent element. This is useful to display more details of a component, while
+            preserving screen real estate. See the Card for an example.
+          </td>
+        </tr>
+      </tbody>      
     </table>
   </body>
 </html>
