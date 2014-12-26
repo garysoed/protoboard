@@ -37,7 +37,7 @@ class BagDraggable extends Draggable {
   getMovedElement(el) {
     let candidates = Utils.toArray(this[__bag__].children).filter(
         child => $(child).attr(ATTR_PLACEHOLDER) === undefined);
-    return candidates[Math.round(Math.random() * (candidates.length - 1)];
+    return candidates[Math.round(Math.random() * (candidates.length - 1))];
   }
 }
 

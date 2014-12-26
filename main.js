@@ -1098,7 +1098,7 @@ var $__src_47_region_47_bag__ = (function() {
       var candidates = Utils.toArray(this[$traceurRuntime.toProperty(__bag__)].children).filter((function(child) {
         return $(child).attr(ATTR_PLACEHOLDER) === undefined;
       }));
-      return candidates[$traceurRuntime.toProperty(Math.floor(Math.random() * candidates.length))];
+      return candidates[$traceurRuntime.toProperty(Math.round(Math.random() * (candidates.length - 1)))];
     }}, {}, Draggable);
   var Bag = function Bag() {
     $traceurRuntime.defaultSuperCall(this, $Bag.prototype, arguments);
