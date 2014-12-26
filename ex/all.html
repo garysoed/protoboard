@@ -12,106 +12,115 @@
     <link rel="import" href="src/ui/previewer.html">
 
     <link rel="stylesheet" type="text/css" href="out/themes/theme.css">
+    <style id="table-style">
+      /** Table styles */
+      table {
+        border-collapse: collapse;
+      }
 
+      td {
+        border: 1px solid #8584ba;
+        padding: 10px;
+      }
+
+      td:nth-child(2), td:nth-child(4) {
+        white-space: nowrap;
+      }
+
+      td:nth-child(2) > * {
+        display: inline-block;
+      }
+
+      td:nth-child(2) {
+        text-align: center;
+      }
+
+      td > * {
+        white-space: initial;
+      }
+
+      thead td {
+        background-color: #8584ba;
+        color: white;
+        padding-left: 20px;
+      }
+
+      col.name {
+        width: 200px;
+      }
+
+      col.example {
+        width: 200px;
+      }
+    </style>
+
+    <style id="token-style">
+      pb-c-token .rectangle {
+        height: 50px;
+        width: 50px;
+      }
+
+      pb-c-token .circle {
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+      }
+
+      pb-c-token .triangle.blue {
+        height: 0;
+        width: 0;
+        border-left: 25px solid transparent;
+        border-right: 25px solid transparent;
+        border-bottom: 50px solid blue;
+      }
+
+      pb-c-token .green {
+        background-color: green;
+      }
+
+      pb-c-token .red {
+        background-color: red;
+      }
+
+    </style>
+
+    <style>
+      .front {
+        line-height: 100px;
+        text-align: center;
+      }
+
+
+      .pb-distribute::shadow #root {
+        outline: 2px solid green;
+        outline-offset: -2px;
+      }
+
+      pb-u-context div {
+        background-color: #eee;
+        cursor: pointer;
+        padding: 5px;
+        width: 200px;
+      }
+    </style>
+
+    <style>
+      pb-u-previewer::shadow #root {
+        height: 125px;
+        width: 250px;
+      }
+    </style>
+
+    <style>
+      pb-r-bag [pb-placeholder-content] {
+        background-color: #ff8888;
+        line-height: 50px;
+        height: 50px;
+        text-align: center;
+        width: 50px;
+      }
+    </style>
   </head>
-  <style id="table-style">
-    /** Table styles */
-    table {
-      border-collapse: collapse;
-    }
-
-    td {
-      border: 1px solid #8584ba;
-      padding: 10px;
-    }
-
-    td:nth-child(2), td:nth-child(4) {
-      white-space: nowrap;
-    }
-
-    td:nth-child(2) > * {
-      display: inline-block;
-    }
-
-    td:nth-child(2) {
-      text-align: center;
-    }
-
-    td > * {
-      white-space: initial;
-    }
-
-    thead td {
-      background-color: #8584ba;
-      color: white;
-      padding-left: 20px;
-    }
-
-    col.name {
-      width: 200px;
-    }
-
-    col.example {
-      width: 200px;
-    }
-  </style>
-
-  <style id="token-style">
-    pb-c-token .rectangle {
-      height: 50px;
-      width: 50px;
-    }
-
-    pb-c-token .circle {
-      border-radius: 50%;
-      height: 50px;
-      width: 50px;
-    }
-
-    pb-c-token .triangle.blue {
-      height: 0;
-      width: 0;
-      border-left: 25px solid transparent;
-      border-right: 25px solid transparent;
-      border-bottom: 50px solid blue;
-    }
-
-    pb-c-token .green {
-      background-color: green;
-    }
-
-    pb-c-token .red {
-      background-color: red;
-    }
-
-  </style>
-
-  <style>
-    .front {
-      line-height: 100px;
-      text-align: center;
-    }
-
-
-    .pb-distribute::shadow #root {
-      outline: 2px solid green;
-      outline-offset: -2px;
-    }
-
-    pb-u-context div {
-      background-color: #eee;
-      cursor: pointer;
-      padding: 5px;
-      width: 200px;
-    }
-  </style>
-
-  <style>
-    pb-u-previewer::shadow #root {
-      height: 125px;
-      width: 250px;
-    }
-  </style>
   <body>
     <table>
       <colgroup>
@@ -222,7 +231,12 @@
       <tbody>
         <tr>
           <td>Bag</td>
-          <td><pb-r-bag></pb-r-bag></td>
+          <td>
+            <pb-r-bag></pb-r-bag>
+            <pb-r-bag>
+              <div pb-placeholder-content>Custom</div>
+            </pb-r-bag>
+          </td>
           <td>
             A bag is a collection of components. You cannot see the component until you drag one out
             of it.

@@ -1,0 +1,25 @@
+<base href="../..">
+
+<link rel="import" href="src/component/token.html">
+<link rel="import" href="main.html">
+<link rel="stylesheet" type="text/css" href="out/region/bag.css">
+
+<template id="main">
+  <div id="root">
+    <content></content>
+  </div>
+</template>
+
+<template id="placeholder">
+  <div class="pb-placeholder">???</div>
+</template>
+
+<script>
+  (function() {
+    var doc = document.currentScript.ownerDocument;
+    pb.region.Bag.register(
+        doc, 
+        doc.querySelector('template#main'), 
+        doc.querySelector('template#placeholder'));
+  })();
+</script>

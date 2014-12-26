@@ -508,6 +508,7 @@ var $__src_47_service_47_dragdrop__ = (function() {
 })();
 var $__src_47_ability_47_draggable__ = (function() {
   "use strict";
+  var $__5;
   var __moduleName = "src/ability/draggable";
   var Check = ($__src_47_check__).default;
   var Utils = ($__src_47_utils__).default;
@@ -515,65 +516,110 @@ var $__src_47_ability_47_draggable__ = (function() {
   var DragDropService = ($__src_47_service_47_dragdrop__).default;
   var ATTR_NAME = 'pb-draggable';
   var CLASS_DRAGGED = 'pb-dragged';
-  var _DEFAULT_VALUE = Symbol();
-  var _DRAG_START_HANDLER = Symbol();
-  var _DRAG_END_HANDLER = Symbol();
-  function handleDragEnd() {
-    this.classList.remove(CLASS_DRAGGED);
-  }
-  function handleDragStart(event) {
-    var dataTransfer = event.dataTransfer;
-    dataTransfer.effectAllowed = 'move';
-    this.classList.add(CLASS_DRAGGED);
-    DragDropService.dragStart(this);
-  }
-  function register(element) {
-    element[$traceurRuntime.toProperty(_DRAG_START_HANDLER)] = handleDragStart.bind(element);
-    element[$traceurRuntime.toProperty(_DRAG_END_HANDLER)] = handleDragEnd.bind(element);
-    Utils.toArray(element.children).forEach((function(child) {
-      $(child).attr('draggable', 'true');
-      child.addEventListener('dragstart', element[$traceurRuntime.toProperty(_DRAG_START_HANDLER)]);
-      child.addEventListener('dragend', element[$traceurRuntime.toProperty(_DRAG_END_HANDLER)]);
-    }));
-  }
-  function unregister(element) {
-    Utils.toArray(element.children).forEach((function(child) {
-      child.removeEventListener('dragend', element[$traceurRuntime.toProperty(_DRAG_END_HANDLER)]);
-      child.removeEventListener('dragstart', element[$traceurRuntime.toProperty(_DRAG_START_HANDLER)]);
-      $(child).attr('draggable', null);
-    }));
-  }
+  var __defaultValue__ = Symbol();
+  var __dragEndHandler__ = Symbol();
+  var __dragStartHandler__ = Symbol();
+  var __onDragEnd__ = Symbol();
+  var __onDragStart__ = Symbol();
+  var __register__ = Symbol();
+  var __unregister__ = Symbol();
   var Draggable = function Draggable(defaultValue) {
-    this[$traceurRuntime.toProperty(_DEFAULT_VALUE)] = defaultValue;
+    this[$traceurRuntime.toProperty(__defaultValue__)] = defaultValue;
   };
-  ($traceurRuntime.createClass)(Draggable, {
-    setDefaultValue: function(el) {
+  ($traceurRuntime.createClass)(Draggable, ($__5 = {}, Object.defineProperty($__5, __onDragEnd__, {
+    value: function(el) {
+      el.classList.remove(CLASS_DRAGGED);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onDragStart__, {
+    value: function(el, event) {
+      var dataTransfer = event.dataTransfer;
+      dataTransfer.effectAllowed = 'move';
+      el.classList.add(CLASS_DRAGGED);
+      DragDropService.dragStart(this.getMovedElement(el));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __register__, {
+    value: function(element) {
+      element[$traceurRuntime.toProperty(__dragStartHandler__)] = this[$traceurRuntime.toProperty(__onDragStart__)].bind(this, element);
+      element[$traceurRuntime.toProperty(__dragEndHandler__)] = this[$traceurRuntime.toProperty(__onDragEnd__)].bind(this, element);
+      Utils.toArray(element.children).forEach((function(child) {
+        $(child).attr('draggable', 'true');
+        child.addEventListener('dragstart', element[$traceurRuntime.toProperty(__dragStartHandler__)]);
+        child.addEventListener('dragend', element[$traceurRuntime.toProperty(__dragEndHandler__)]);
+      }));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __unregister__, {
+    value: function(element) {
+      Utils.toArray(element.children).forEach((function(child) {
+        child.removeEventListener('dragend', element[$traceurRuntime.toProperty(__dragEndHandler__)]);
+        child.removeEventListener('dragstart', element[$traceurRuntime.toProperty(__dragStartHandler__)]);
+        $(child).attr('draggable', null);
+      }));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "setDefaultValue", {
+    value: function(el) {
       if ($(el).attr(ATTR_NAME) === undefined) {
-        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(_DEFAULT_VALUE)]);
+        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(__defaultValue__)]);
       }
     },
-    attributeChangedCallback: function(el, name, oldValue, newValue) {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "attributeChangedCallback", {
+    value: function(el, name, oldValue, newValue) {
       if (name === ATTR_NAME) {
         newValue = Check(newValue).isBoolean(newValue).orThrows();
         if (newValue) {
-          register(el);
+          this[$traceurRuntime.toProperty(__register__)](el);
         } else {
-          unregister(el);
+          this[$traceurRuntime.toProperty(__unregister__)](el);
         }
       }
     },
-    attachedCallback: function(el) {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "attachedCallback", {
+    value: function(el) {
       if ($(el).attr(ATTR_NAME) && Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
-        register(el);
+        this[$traceurRuntime.toProperty(__register__)](el);
       }
     },
-    detachedCallback: function(el) {
-      unregister(el);
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "detachedCallback", {
+    value: function(el) {
+      this[$traceurRuntime.toProperty(__unregister__)](el);
     },
-    get name() {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "getMovedElement", {
+    value: function(el) {
+      return el;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "name", {
+    get: function() {
       return ATTR_NAME;
-    }
-  }, {}, Ability);
+    },
+    configurable: true,
+    enumerable: true
+  }), $__5), {}, Ability);
   var $__default = Draggable;
   if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
     Utils.makeGlobal('pb.ability.Draggable', Draggable);
@@ -1031,11 +1077,29 @@ var $__src_47_region_47_region__ = (function() {
 var $__src_47_region_47_bag__ = (function() {
   "use strict";
   var __moduleName = "src/region/bag";
-  var Utils = ($__src_47_utils__).default;
+  var Draggable = ($__src_47_ability_47_draggable__).default;
   var Region = ($__src_47_region_47_region__).default;
+  var Utils = ($__src_47_utils__).default;
+  var EL_NAME = 'pb-r-bag';
+  var ATTR_PLACEHOLDER = 'pb-placeholder';
+  var ATTR_PLACEHOLDER_CONTENT = 'pb-placeholder-content';
+  var __bag__ = Symbol();
+  var __draggable__ = Symbol('draggable');
+  var __placeHolderEl__ = Symbol('placeHolderEl');
   var doc = null;
   var template = null;
-  var EL_NAME = 'pb-r-bag';
+  var placeHolderTmp = null;
+  var BagDraggable = function BagDraggable(bag) {
+    $traceurRuntime.superCall(this, $BagDraggable.prototype, "constructor", [true]);
+    this[$traceurRuntime.toProperty(__bag__)] = bag;
+  };
+  var $BagDraggable = BagDraggable;
+  ($traceurRuntime.createClass)(BagDraggable, {getMovedElement: function(el) {
+      var candidates = Utils.toArray(this[$traceurRuntime.toProperty(__bag__)].children).filter((function(child) {
+        return $(child).attr(ATTR_PLACEHOLDER) === undefined;
+      }));
+      return candidates[$traceurRuntime.toProperty(Math.floor(Math.random() * candidates.length))];
+    }}, {}, Draggable);
   var Bag = function Bag() {
     $traceurRuntime.defaultSuperCall(this, $Bag.prototype, arguments);
   };
@@ -1044,23 +1108,44 @@ var $__src_47_region_47_bag__ = (function() {
     createdCallback: function() {
       $traceurRuntime.superCall(this, $Bag.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this[$traceurRuntime.toProperty(__placeHolderEl__)] = this.querySelector(("[" + ATTR_PLACEHOLDER + "]"));
+      if (!this[$traceurRuntime.toProperty(__placeHolderEl__)]) {
+        var placeHolderContent = this.querySelector(("[" + ATTR_PLACEHOLDER_CONTENT + "]")) || Utils.activateTemplate(placeHolderTmp, doc);
+        this[$traceurRuntime.toProperty(__placeHolderEl__)] = doc.createElement('div');
+        this[$traceurRuntime.toProperty(__placeHolderEl__)].appendChild(placeHolderContent);
+        $(this[$traceurRuntime.toProperty(__placeHolderEl__)]).attr(ATTR_PLACEHOLDER, '');
+        this.insertBefore(this[$traceurRuntime.toProperty(__placeHolderEl__)], this.lastChild);
+      }
+      this[$traceurRuntime.toProperty(__draggable__)] = new BagDraggable(this);
+      this[$traceurRuntime.toProperty(__draggable__)].setDefaultValue(this[$traceurRuntime.toProperty(__placeHolderEl__)]);
       this.attachedCallback();
     },
     attachedCallback: function() {
       $traceurRuntime.superCall(this, $Bag.prototype, "attachedCallback", []);
+      this[$traceurRuntime.toProperty(__draggable__)].attachedCallback(this[$traceurRuntime.toProperty(__placeHolderEl__)]);
     },
     detachedCallback: function() {
+      this[$traceurRuntime.toProperty(__draggable__)].detachedCallback(this[$traceurRuntime.toProperty(__placeHolderEl__)]);
       $traceurRuntime.superCall(this, $Bag.prototype, "detachedCallback", []);
+    },
+    attributeChangedCallback: function(name, oldValue, newValue) {
+      this[$traceurRuntime.toProperty(__draggable__)].attributeChangedCallback(this[$traceurRuntime.toProperty(__placeHolderEl__)], name, oldValue, newValue);
     }
-  }, {register: function(currentDoc, bagTemplate) {
+  }, {register: function(currentDoc, bagTemplate, placeHolderTemplate) {
       if (!doc || !template) {
         doc = currentDoc;
         template = bagTemplate;
+        placeHolderTmp = placeHolderTemplate;
       }
       document.registerElement(EL_NAME, {prototype: $Bag.prototype});
     }}, Region);
   var $__default = Bag;
+  Bag.prototype[$traceurRuntime.toProperty(__draggable__)] = null;
+  Bag.prototype[$traceurRuntime.toProperty(__placeHolderEl__)] = null;
   Utils.makeGlobal('pb.region.Bag', Bag);
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.region.Bag.BagDraggable', BagDraggable);
+  }
   return {get default() {
       return $__default;
     }};

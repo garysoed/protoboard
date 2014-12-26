@@ -23,46 +23,55 @@ const ATTR_NAME = 'pb-draggable';
 const CLASS_DRAGGED = 'pb-dragged';
 
 // Private symbols.
-const _DEFAULT_VALUE = Symbol();
-const _DRAG_START_HANDLER = Symbol();
-const _DRAG_END_HANDLER = Symbol();
-
-function handleDragEnd() {
-  this.classList.remove(CLASS_DRAGGED);
-}
-
-function handleDragStart(event) {
-  let dataTransfer = event.dataTransfer;
-  dataTransfer.effectAllowed = 'move';
-  this.classList.add(CLASS_DRAGGED);
-
-  DragDropService.dragStart(this);
-}
-
-function register(element) {
-  element[_DRAG_START_HANDLER] = handleDragStart.bind(element);
-  element[_DRAG_END_HANDLER] = handleDragEnd.bind(element);
-
-  // Propagate the draggable attribute to the root element.
-  Utils.toArray(element.children).forEach(child => {
-    $(child).attr('draggable', 'true');
-    child.addEventListener('dragstart', element[_DRAG_START_HANDLER]);
-    child.addEventListener('dragend', element[_DRAG_END_HANDLER]);
-  });
-}
-
-function unregister(element) {
-  Utils.toArray(element.children).forEach(child => {
-    child.removeEventListener('dragend', element[_DRAG_END_HANDLER]);
-    child.removeEventListener('dragstart', element[_DRAG_START_HANDLER]);
-    $(child).attr('draggable', null);
-  });
-}
+const __defaultValue__ = Symbol();
+const __dragEndHandler__ = Symbol();
+const __dragStartHandler__ = Symbol();
+const __onDragEnd__ = Symbol();
+const __onDragStart__ = Symbol();
+const __register__ = Symbol();
+const __unregister__ = Symbol();
 
 export default class Draggable extends Ability {
 
+  /**
+   * @constructor
+   * @param  {boolean} defaultValue Default value of the element. True iff the element should be
+   *     enabled by default.
+   */
   constructor(defaultValue) {
-    this[_DEFAULT_VALUE] = defaultValue;
+    this[__defaultValue__] = defaultValue;
+  }
+
+  [__onDragEnd__](el) {
+    el.classList.remove(CLASS_DRAGGED);
+  }
+
+  [__onDragStart__](el, event) {
+    let dataTransfer = event.dataTransfer;
+    dataTransfer.effectAllowed = 'move';
+    el.classList.add(CLASS_DRAGGED);
+
+    DragDropService.dragStart(this.getMovedElement(el));
+  }
+
+  [__register__](element) {
+    element[__dragStartHandler__] = this[__onDragStart__].bind(this, element);
+    element[__dragEndHandler__] = this[__onDragEnd__].bind(this, element);
+
+    // Propagate the draggable attribute to the root element.
+    Utils.toArray(element.children).forEach(child => {
+      $(child).attr('draggable', 'true');
+      child.addEventListener('dragstart', element[__dragStartHandler__]);
+      child.addEventListener('dragend', element[__dragEndHandler__]);
+    });
+  }
+
+  [__unregister__](element) {
+    Utils.toArray(element.children).forEach(child => {
+      child.removeEventListener('dragend', element[__dragEndHandler__]);
+      child.removeEventListener('dragstart', element[__dragStartHandler__]);
+      $(child).attr('draggable', null);
+    });
   }
 
   /**
@@ -73,7 +82,7 @@ export default class Draggable extends Ability {
    */
   setDefaultValue(el) {
     if ($(el).attr(ATTR_NAME) === undefined) {
-      $(el).attr(ATTR_NAME, this[_DEFAULT_VALUE]);
+      $(el).attr(ATTR_NAME, this[__defaultValue__]);
     }
   }
 
@@ -90,9 +99,9 @@ export default class Draggable extends Ability {
     if (name === ATTR_NAME) {
       newValue = Check(newValue).isBoolean(newValue).orThrows();
       if (newValue) {
-        register(el);
+        this[__register__](el);
       } else {
-        unregister(el);
+        this[__unregister__](el);
       }
     }
   }
@@ -105,7 +114,7 @@ export default class Draggable extends Ability {
    */
   attachedCallback(el) {
     if ($(el).attr(ATTR_NAME) && Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
-      register(el);
+      this[__register__](el);
     }
   }
 
@@ -116,7 +125,18 @@ export default class Draggable extends Ability {
    * @param {!Element} el The element that was detached.
    */
   detachedCallback(el) {
-    unregister(el);
+    this[__unregister__](el);
+  }
+
+  /**
+   * Returns the element that will be moved, if the given element were to be dragged and dropped.
+   *
+   * @method  getMovedElement 
+   * @param  {!Element} el The element that is dragged.
+   * @return {!Element} The element that will be moved if the given element was dragged and dropped.
+   */
+  getMovedElement(el) {
+    return el;
   }
 
   /**

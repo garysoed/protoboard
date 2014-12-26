@@ -190,7 +190,7 @@ var Utils = {
     };
   },
 
-  // TODO: Move to test utils.
+  // TODO(gs): Move to test utils.
   getSymbol(obj, name) {
     return Object.getOwnPropertySymbols(obj).find(symbol => {
       return `Symbol(${name})` === symbol.toString();

@@ -54,7 +54,7 @@
           expect(child2.addEventListener).calledWith('dragend', dragEndCaptor).at.least(1);
           expect(dragEndCaptor.matchingArgs).to.have.members([dragEndCaptor.matchingArgs[0]]);
 
-          dragEndCaptor.matchingArgs[0]();
+          dragEndCaptor.matchingArgs[0](el);
 
           expect(el.classList.contains('pb-dragged')).to.be.false;
         }

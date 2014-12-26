@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Bag Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="src/region/bag.html">
+</head>
+<body>
+  <pb-r-bag id="emptyChildren"></pb-r-bag>
+  <pb-r-bag id="hasContent">
+    <div pb-placeholder-content>content</div>
+  </pb-r-bag>
+  <pb-r-bag id="hasPlaceholder">
+    <div pb-placeholder>Placeholder</div>
+  </pb-r-bag>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+      var Bag = pb.region.Bag;
+      var BagDraggable = pb.region.Bag.BagDraggable;
+      var Utils = pb.Utils;
+
+      var doc = document.currentScript.ownerDocument;
+
+      // Private symbols
+      var __draggable__ = Utils.getSymbol(Bag.prototype, 'draggable');
+      var __placeHolderEl__ = Utils.getSymbol(Bag.prototype, 'placeHolderEl');
+
+      describe('Bag', function() {
+        describe('#createdCallback', function() {
+          it('should create placeholder and its content if none is specified', function() {
+            var el = doc.querySelector('#emptyChildren');
+            var placeholder = el.querySelector('[pb-placeholder]');
+            expect(placeholder).to.exist;
+            expect(placeholder.childElementCount).to.be.at.least(1);
+          });
+          it('should not create placeholder content if it is specified', function() {
+            var el = doc.querySelector('#hasContent');
+            var placeholders = el.querySelectorAll('[pb-placeholder]');
+
+            expect(placeholders.length).to.equal(1);
+
+            var placeholder = placeholders.item(0);
+            expect(placeholder.querySelector('[pb-placeholder-content]').innerHTML)
+                .to.equal('content');
+          });
+          it('should not create placeholder or its content if placeholder is specified', function() {
+            var el = doc.querySelector('#hasPlaceholder');
+            var placeholders = el.querySelectorAll('[pb-placeholder]');
+
+            expect(placeholders.length).to.equal(1);
+
+            var placeholder = placeholders.item(0);
+            expect(placeholder.innerHTML).to.equal('Placeholder');
+          });
+        });
+
+        describe('#attachedCallback', function() {
+          it('should call attachedCallback on draggable', function() {
+            var el = doc.createElement('pb-r-bag');
+            _.spy(el[__draggable__], 'attachedCallback');
+            el.attachedCallback();
+            expect(el[__draggable__].attachedCallback)
+                .calledWith(el[__placeHolderEl__]).at.least(1);
+          });
+        });
+
+        describe('#detachedCallback', function() {
+          it('should call detachedCallback on draggable', function() {
+            var el = doc.createElement('pb-r-bag');
+            _.spy(el[__draggable__], 'detachedCallback');
+            el.detachedCallback();
+            expect(el[__draggable__].detachedCallback)
+                .calledWith(el[__placeHolderEl__]).at.least(1);
+          });
+        });
+
+        describe('#attributeChangedCallback', function() {
+          it('should call attributeChangedCallback on draggable', function() {
+            var el = doc.createElement('pb-r-bag');
+            _.spy(el[__draggable__], 'attributeChangedCallback');
+            el.attributeChangedCallback('name', 'oldValue', 'newValue');
+            expect(el[__draggable__].attributeChangedCallback)
+                .calledWith(el[__placeHolderEl__], 'name', 'oldValue', 'newValue').at.least(1);
+          });
+        });
+
+        describe('BagDraggable', function() {
+          describe('#getMovedElement', function() {
+            it('should randomly pick a child element with no pb-placeholder attribute', function() {
+              var placeHolderEl = doc.createElement('div');
+              $(placeHolderEl).attr('pb-placeholder', '');
+
+              var selectedChild = doc.createElement('div');
+              var draggable = new BagDraggable({
+                children: [
+                  placeHolderEl,
+                  doc.createElement('div'), 
+                  selectedChild,
+                  doc.createElement('div')
+                ]
+              });
+
+              _.spy(Math, 'random').overrideReturn(0.5);
+
+              expect(draggable.getMovedElement()).to.be.equal(selectedChild);
+            });
+          });
+        });
+
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+
+    })();
+  </script>
+</body>

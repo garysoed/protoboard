@@ -1,0 +1,39 @@
+@import 'theme';
+
+pb-r-bag {
+  @extend .pb-component;
+}
+
+pb-r-bag > :not([pb-placeholder]) {
+  display: none;
+}
+
+pb-r-bag::shadow #root {
+  @include region-border();
+}
+
+pb-r-bag.pb-over::shadow #root {
+  outline: 6px dashed $color-highlight;
+  outline-offset: -3px;
+}
+
+/* The placeholder */
+.pb-placeholder {
+  background-color: $color-lighter;
+  height: $component-height;
+  line-height: $component-height;
+  text-align: center;
+  width: $component-width;
+}
+
+[pb-placeholder] {
+  position: absolute;
+}
+
+[pb-placeholder]:only-child {
+  display: none;
+}
+
+[pb-placeholder].pb-dragged {
+  @include layer(1);
+}
