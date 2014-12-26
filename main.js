@@ -901,76 +901,124 @@ var $__src_47_service_47_distribute__ = (function() {
 })();
 var $__src_47_region_47_region__ = (function() {
   "use strict";
+  var $__5;
   var __moduleName = "src/region/region";
-  var Distribute = ($__src_47_service_47_distribute__).default;
-  var DragDrop = ($__src_47_service_47_dragdrop__).default;
   var PbElement = ($__src_47_pbelement__).default;
   var Utils = ($__src_47_utils__).default;
+  var Distribute = ($__src_47_service_47_distribute__).default;
+  var DragDrop = ($__src_47_service_47_dragdrop__).default;
   var CLASS_DISTRIBUTE = 'pb-distribute';
   var CLASS_OVER = 'pb-over';
-  var _dragEnterCount = Symbol();
-  function handleDragOver(event) {
-    event.preventDefault();
-    event.dropEffect = 'move';
-  }
-  function handleDragEnter(e) {
-    this.classList.add(CLASS_OVER);
-    this[$traceurRuntime.toProperty(_dragEnterCount)]++;
-  }
-  function handleDragLeave(e) {
-    this[$traceurRuntime.toProperty(_dragEnterCount)]--;
-    if (this[$traceurRuntime.toProperty(_dragEnterCount)] <= 0) {
-      this.classList.remove(CLASS_OVER);
-      this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
-    }
-  }
-  function handleDrop() {
-    this.classList.remove(CLASS_OVER);
-    this.appendChild(DragDrop.lastDraggedEl);
-    if (DragDrop.lastDraggedEl.attachedCallback) {
-      DragDrop.lastDraggedEl.attachedCallback();
-    }
-    DragDrop.lastDraggedEl = null;
-  }
-  function handleClick() {
-    if (Distribute.isActive() && Distribute.next()) {
-      this.appendChild(Distribute.next());
-    }
-  }
-  function handleDistributeBegin() {
-    if (this.shadowRoot) {
-      this.shadowRoot.querySelector('#root').classList.add(CLASS_DISTRIBUTE);
-    }
-  }
-  function handleDistributeEnd() {
-    if (this.shadowRoot) {
-      this.shadowRoot.querySelector('#root').classList.remove(CLASS_DISTRIBUTE);
-    }
-  }
-  function handleLastDraggedElChange() {
-    if (!DragDrop.lastDraggedEl) {
-      this.classList.remove(CLASS_OVER);
-      this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
-    }
-  }
+  var __dragEnterCount__ = Symbol();
+  var __onClick__ = Symbol();
+  var __onDistributeBegin__ = Symbol();
+  var __onDistributeEnd__ = Symbol();
+  var __onDragOver__ = Symbol();
+  var __onDragEnter__ = Symbol();
+  var __onDragLeave__ = Symbol();
+  var __onDrop__ = Symbol();
+  var __onLastDraggedElChange__ = Symbol();
   var Region = function Region() {};
   var $Region = Region;
-  ($traceurRuntime.createClass)(Region, {
-    createdCallback: function() {
-      $traceurRuntime.superCall(this, $Region.prototype, "createdCallback", []);
-      this[$traceurRuntime.toProperty(_dragEnterCount)] = 0;
+  ($traceurRuntime.createClass)(Region, ($__5 = {}, Object.defineProperty($__5, __onClick__, {
+    value: function() {
+      if (Distribute.isActive() && Distribute.next()) {
+        this.appendChild(Distribute.next());
+      }
     },
-    attachedCallback: function() {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onDistributeBegin__, {
+    value: function() {
+      if (this.shadowRoot) {
+        this.shadowRoot.querySelector('#root').classList.add(CLASS_DISTRIBUTE);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onDistributeEnd__, {
+    value: function() {
+      if (this.shadowRoot) {
+        this.shadowRoot.querySelector('#root').classList.remove(CLASS_DISTRIBUTE);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onDragOver__, {
+    value: function(event) {
+      event.preventDefault();
+      event.dropEffect = 'move';
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onDragEnter__, {
+    value: function(event) {
+      this.classList.add(CLASS_OVER);
+      this[$traceurRuntime.toProperty(__dragEnterCount__)]++;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onDragLeave__, {
+    value: function(e) {
+      this[$traceurRuntime.toProperty(__dragEnterCount__)]--;
+      if (this[$traceurRuntime.toProperty(__dragEnterCount__)] <= 0) {
+        this.classList.remove(CLASS_OVER);
+        this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onDrop__, {
+    value: function() {
+      this.classList.remove(CLASS_OVER);
+      this.appendChild(DragDrop.lastDraggedEl);
+      if (DragDrop.lastDraggedEl.attachedCallback) {
+        DragDrop.lastDraggedEl.attachedCallback();
+      }
+      DragDrop.lastDraggedEl = null;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onLastDraggedElChange__, {
+    value: function() {
+      if (!DragDrop.lastDraggedEl) {
+        this.classList.remove(CLASS_OVER);
+        this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "createdCallback", {
+    value: function() {
+      $traceurRuntime.superCall(this, $Region.prototype, "createdCallback", []);
+      this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "attachedCallback", {
+    value: function() {
       $traceurRuntime.superCall(this, $Region.prototype, "attachedCallback", []);
-      this.addEventListener('dragover', handleDragOver);
-      this.addEventListener('dragenter', handleDragEnter);
-      this.addEventListener('dragleave', handleDragLeave);
-      this.addEventListener('drop', handleDrop);
-      this.addEventListener('click', handleClick);
-      $(Distribute).on(Distribute.EventType.BEGIN, handleDistributeBegin.bind(this)).on(Distribute.EventType.END, handleDistributeEnd.bind(this));
-      Utils.observe(DragDrop, 'lastDraggedEl', handleLastDraggedElChange.bind(this));
-    }
-  }, {}, PbElement);
+      this.addEventListener('dragover', this[$traceurRuntime.toProperty(__onDragOver__)]);
+      this.addEventListener('dragenter', this[$traceurRuntime.toProperty(__onDragEnter__)]);
+      this.addEventListener('dragleave', this[$traceurRuntime.toProperty(__onDragLeave__)]);
+      this.addEventListener('drop', this[$traceurRuntime.toProperty(__onDrop__)]);
+      this.addEventListener('click', this[$traceurRuntime.toProperty(__onClick__)]);
+      $(Distribute).on(Distribute.EventType.BEGIN, this[$traceurRuntime.toProperty(__onDistributeBegin__)].bind(this)).on(Distribute.EventType.END, this[$traceurRuntime.toProperty(__onDistributeEnd__)].bind(this));
+      Utils.observe(DragDrop, 'lastDraggedEl', this[$traceurRuntime.toProperty(__onLastDraggedElChange__)].bind(this));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__5), {}, PbElement);
   var $__default = Region;
   Region.ATTR_DROPPABLE = 'pb-droppable';
   if (window.TEST_MODE) {
@@ -980,45 +1028,39 @@ var $__src_47_region_47_region__ = (function() {
       return $__default;
     }};
 })();
-var $__src_47_region_47_bank__ = (function() {
+var $__src_47_region_47_bag__ = (function() {
   "use strict";
-  var __moduleName = "src/region/bank";
-  var Region = ($__src_47_region_47_region__).default;
-  var Distribute = ($__src_47_service_47_distribute__).default;
+  var __moduleName = "src/region/bag";
   var Utils = ($__src_47_utils__).default;
+  var Region = ($__src_47_region_47_region__).default;
   var doc = null;
   var template = null;
-  var EL_NAME = 'pb-r-bank';
-  function handleDistributeClick(event) {
-    this.distribute();
-    event.stopPropagation();
-  }
-  var Bank = function Bank() {
-    $traceurRuntime.superCall(this, $Bank.prototype, "constructor", []);
+  var EL_NAME = 'pb-r-bag';
+  var Bag = function Bag() {
+    $traceurRuntime.defaultSuperCall(this, $Bag.prototype, arguments);
   };
-  var $Bank = Bank;
-  ($traceurRuntime.createClass)(Bank, {
+  var $Bag = Bag;
+  ($traceurRuntime.createClass)(Bag, {
     createdCallback: function() {
-      $traceurRuntime.superCall(this, $Bank.prototype, "createdCallback", []);
+      $traceurRuntime.superCall(this, $Bag.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.shadowRoot.querySelector('#distribute').addEventListener('click', handleDistributeClick.bind(this));
+      this.attachedCallback();
     },
-    distribute: function() {
-      Distribute.begin(this);
+    attachedCallback: function() {
+      $traceurRuntime.superCall(this, $Bag.prototype, "attachedCallback", []);
     },
-    next: function() {
-      return this.children[0];
+    detachedCallback: function() {
+      $traceurRuntime.superCall(this, $Bag.prototype, "detachedCallback", []);
     }
-  }, {register: function(currentDoc, bankTemplate) {
-      if (doc || template) {
-        return;
+  }, {register: function(currentDoc, bagTemplate) {
+      if (!doc || !template) {
+        doc = currentDoc;
+        template = bagTemplate;
       }
-      doc = currentDoc;
-      template = bankTemplate;
-      document.registerElement(EL_NAME, {prototype: $Bank.prototype});
+      document.registerElement(EL_NAME, {prototype: $Bag.prototype});
     }}, Region);
-  var $__default = Bank = Bank;
-  Utils.makeGlobal('pb.region.Bank', Bank);
+  var $__default = Bag;
+  Utils.makeGlobal('pb.region.Bag', Bag);
   return {get default() {
       return $__default;
     }};
@@ -1032,7 +1074,7 @@ var $__src_47_region_47_deck__ = (function() {
   var template = null;
   var EL_NAME = 'pb-r-deck';
   var Deck = function Deck() {
-    $traceurRuntime.superCall(this, $Deck.prototype, "constructor", []);
+    $traceurRuntime.defaultSuperCall(this, $Deck.prototype, arguments);
   };
   var $Deck = Deck;
   ($traceurRuntime.createClass)(Deck, {
@@ -1061,14 +1103,13 @@ var $__src_47_region_47_deck__ = (function() {
       })).bind(this));
     }
   }, {register: function(currentDoc, deckTemplate) {
-      if (doc || template) {
-        return;
+      if (!doc || !template) {
+        doc = currentDoc;
+        template = deckTemplate;
       }
-      doc = currentDoc;
-      template = deckTemplate;
       document.registerElement(EL_NAME, {prototype: $Deck.prototype});
     }}, Region);
-  var $__default = Deck = Deck;
+  var $__default = Deck;
   Utils.makeGlobal('pb.region.Deck', Deck);
   return {get default() {
       return $__default;
@@ -1106,7 +1147,7 @@ var $__src_47_region_47_rect__ = (function() {
 var $__src_47_region_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/region/modules";
-  $__src_47_region_47_bank__;
+  $__src_47_region_47_bag__;
   $__src_47_region_47_deck__;
   $__src_47_region_47_rect__;
   return {};

@@ -13,10 +13,7 @@ const EL_NAME = 'pb-r-deck';
  * @class region.Deck
  * @extends region.Region
  */
-class Deck extends Region {
-  constructor() {
-    super();
-  }
+export default class Deck extends Region {
 
   createdCallback() {
     super.createdCallback();
@@ -52,17 +49,13 @@ class Deck extends Region {
    * @param {!Element} deckTemplate The template for the `pb-r-deck`'s element shadow DOM.
    */
   static register(currentDoc, deckTemplate) {
-    if (doc || template) {
-      // Already registered.
-      return;
+    if (!doc || !template) {
+      doc = currentDoc;
+      template = deckTemplate;
     }
 
-    doc = currentDoc;
-    template = deckTemplate;
     document.registerElement(EL_NAME, {prototype: Deck.prototype});
   }
 }
-
-export default Deck = Deck;
 
 Utils.makeGlobal('pb.region.Deck', Deck);

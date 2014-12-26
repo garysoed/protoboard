@@ -9,7 +9,6 @@ var yuimd  = require('yuimd');
 var handleError = function(error) {
   console.log(error.toString());
   this.emit('end');
-  throw error;
 };
 
 gulp.task('jshint', function() {
@@ -32,8 +31,7 @@ gulp.task('traceur', ['jshint'], function() {
         templateData: {
           out: 'main.js'
         }
-      }))
-      .on('error', handleError);
+      }));
 });
 
 gulp.task('test', ['traceur'], function() {

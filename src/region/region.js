@@ -1,67 +1,25 @@
-import Distribute from 'src/service/distribute';
-import DragDrop from 'src/service/dragdrop';
 import PbElement from 'src/pbelement';
-import Utils from 'src/utils';
+import Utils     from 'src/utils';
+
+import Distribute from 'src/service/distribute';
+import DragDrop   from 'src/service/dragdrop';
 
 const CLASS_DISTRIBUTE = 'pb-distribute';
 const CLASS_OVER = 'pb-over';
 
-const _dragEnterCount = Symbol();
+// TODO(gs): Make Distributable
+// TODO(gs): Make Droppable
 
-function handleDragOver(event) {
-  // TODO: Only enable if the component is compatible.
-  event.preventDefault();
-  event.dropEffect = 'move';
-}
-
-function handleDragEnter(e) {
-  this.classList.add(CLASS_OVER);
-  this[_dragEnterCount]++;
-}
-
-function handleDragLeave(e) {
-  this[_dragEnterCount]--;
-  if (this[_dragEnterCount] <= 0) {
-    this.classList.remove(CLASS_OVER);
-    this[_dragEnterCount] = 0;
-  }
-}
-
-function handleDrop() {
-  this.classList.remove(CLASS_OVER);
-  this.appendChild(DragDrop.lastDraggedEl);
-  // TODO: attached callback doesn't seem to be called on appendChild.
-  // https://github.com/webcomponents/webcomponentsjs/issues/18
-  if (DragDrop.lastDraggedEl.attachedCallback) {
-    DragDrop.lastDraggedEl.attachedCallback();
-  }
-  DragDrop.lastDraggedEl = null;
-}
-
-function handleClick() {
-  if (Distribute.isActive() && Distribute.next()) {
-    this.appendChild(Distribute.next());
-  }
-}
-
-function handleDistributeBegin() {
-  if (this.shadowRoot) {
-    this.shadowRoot.querySelector('#root').classList.add(CLASS_DISTRIBUTE);
-  }
-}
-
-function handleDistributeEnd() {
-  if (this.shadowRoot) {
-    this.shadowRoot.querySelector('#root').classList.remove(CLASS_DISTRIBUTE);
-  }
-}
-
-function handleLastDraggedElChange() {
-  if (!DragDrop.lastDraggedEl) {
-    this.classList.remove(CLASS_OVER);
-    this[_dragEnterCount] = 0;
-  }
-}
+// Private symbols
+const __dragEnterCount__ = Symbol();
+const __onClick__ = Symbol();
+const __onDistributeBegin__ = Symbol();
+const __onDistributeEnd__ = Symbol();
+const __onDragOver__ = Symbol();
+const __onDragEnter__ = Symbol();
+const __onDragLeave__ = Symbol();
+const __onDrop__ = Symbol();
+const __onLastDraggedElChange__ = Symbol();
 
 /**
  * Base class of all regions. All regions are drop targets.
@@ -73,25 +31,81 @@ export default class Region extends PbElement {
   /** For testing only */
   constructor() { }
 
+  [__onClick__]() {
+    if (Distribute.isActive() && Distribute.next()) {
+      this.appendChild(Distribute.next());
+    }
+  }
+
+  [__onDistributeBegin__]() {
+    if (this.shadowRoot) {
+      this.shadowRoot.querySelector('#root').classList.add(CLASS_DISTRIBUTE);
+    }
+  }
+
+  [__onDistributeEnd__]() {
+    if (this.shadowRoot) {
+      this.shadowRoot.querySelector('#root').classList.remove(CLASS_DISTRIBUTE);
+    }
+  }
+
+  [__onDragOver__](event) {
+    event.preventDefault();
+    event.dropEffect = 'move';
+  }
+
+  [__onDragEnter__](event) {
+    this.classList.add(CLASS_OVER);
+    this[__dragEnterCount__]++;
+  }
+
+  [__onDragLeave__](e) {
+    this[__dragEnterCount__]--;
+    if (this[__dragEnterCount__] <= 0) {
+      this.classList.remove(CLASS_OVER);
+      this[__dragEnterCount__] = 0;
+    }
+  }
+
+  [__onDrop__]() {
+    this.classList.remove(CLASS_OVER);
+    this.appendChild(DragDrop.lastDraggedEl);
+    // TODO: attached callback doesn't seem to be called on appendChild.
+    // https://github.com/webcomponents/webcomponentsjs/issues/18
+    if (DragDrop.lastDraggedEl.attachedCallback) {
+      DragDrop.lastDraggedEl.attachedCallback();
+    }
+    DragDrop.lastDraggedEl = null;
+  }
+
+  [__onLastDraggedElChange__]() {
+    if (!DragDrop.lastDraggedEl) {
+      this.classList.remove(CLASS_OVER);
+      this[__dragEnterCount__] = 0;
+    }
+  }
+
   createdCallback() {
     super.createdCallback();
-    this[_dragEnterCount] = 0;
+    this[__dragEnterCount__] = 0;
   }
 
   attachedCallback() {
     super.attachedCallback();
-    this.addEventListener('dragover', handleDragOver);
-    this.addEventListener('dragenter', handleDragEnter);
-    this.addEventListener('dragleave', handleDragLeave);
-    this.addEventListener('drop', handleDrop);
-    this.addEventListener('click', handleClick);
+    this.addEventListener('dragover', this[__onDragOver__]);
+    this.addEventListener('dragenter', this[__onDragEnter__]);
+    this.addEventListener('dragleave', this[__onDragLeave__]);
+    this.addEventListener('drop', this[__onDrop__]);
+    this.addEventListener('click', this[__onClick__]);
 
     $(Distribute)
-        .on(Distribute.EventType.BEGIN, handleDistributeBegin.bind(this))
-        .on(Distribute.EventType.END, handleDistributeEnd.bind(this));
+        .on(Distribute.EventType.BEGIN, this[__onDistributeBegin__].bind(this))
+        .on(Distribute.EventType.END, this[__onDistributeEnd__].bind(this));
 
-    Utils.observe(DragDrop, 'lastDraggedEl', handleLastDraggedElChange.bind(this));
+    Utils.observe(DragDrop, 'lastDraggedEl', this[__onLastDraggedElChange__].bind(this));
   }
+
+  // TODO(gs): Unobserve and unlisten
 }
 
 /**
@@ -108,7 +122,7 @@ export default class Region extends PbElement {
  * Otherwise, the string will be treated as a selector for elements that can be dropped into this
  * element. 
  *
- * @ttribute pb-droppable
+ * @attribute pb-droppable
  */
 Region.ATTR_DROPPABLE = 'pb-droppable';
 
