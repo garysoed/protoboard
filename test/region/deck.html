@@ -16,6 +16,8 @@
     (function() {
       var expect = chai.expect;
       var _ = spies.Spies;
+      var _M = spies.Matchers;
+      var Events = pb.Events;
 
       var doc = document.currentScript.ownerDocument;
 
@@ -45,6 +47,7 @@
             var numbers = [1, 2, 3];
 
             var origRandom = Math.random;
+            // TODO(gs): Use override, once it's implemented.
             Math.random = function() { return numbers.pop(); };
 
             // Add the children.

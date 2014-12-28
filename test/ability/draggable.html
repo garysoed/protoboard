@@ -14,6 +14,7 @@
       var _ = spies.Spies;
       var _M = spies.Matchers;
       var Draggable = pb.ability.Draggable;
+      var Events = pb.Events;
 
       var doc = document.currentScript.ownerDocument;
 
@@ -36,7 +37,6 @@
           var dragStartCaptor = _M.isA(Function);
           expect(child1.addEventListener).calledWith('dragstart', dragStartCaptor).at.least(1);
           expect(child2.addEventListener).calledWith('dragstart', dragStartCaptor).at.least(1);
-          expect(dragStartCaptor.matchingArgs).to.have.members([dragStartCaptor.matchingArgs[0]]);
 
           var dragStartHandler = dragStartCaptor.matchingArgs[0];
           var event = {
@@ -52,7 +52,6 @@
           var dragEndCaptor = _M.isA(Function);
           expect(child1.addEventListener).calledWith('dragend', dragEndCaptor).at.least(1);
           expect(child2.addEventListener).calledWith('dragend', dragEndCaptor).at.least(1);
-          expect(dragEndCaptor.matchingArgs).to.have.members([dragEndCaptor.matchingArgs[0]]);
 
           dragEndCaptor.matchingArgs[0](el);
 
@@ -65,14 +64,12 @@
           return handlerCaptor.matchingArgs[0];
         }
 
-        function expectUnregistered(dragStartHandler, dragEndHandler) {
-          expect(child1.removeEventListener)
-              .calledWith('dragstart', dragStartHandler).at.least(1);
-          expect(child1.removeEventListener) .calledWith('dragend', dragEndHandler).at.least(1);
+        function expectUnregistered(draggable) {
+          expect(Events.of(draggable, child1).isRegistered('dragstart')).to.be.false;
+          expect(Events.of(draggable, child1).isRegistered('dragend')).to.be.false;
 
-          expect(child2.removeEventListener)
-              .calledWith('dragstart', dragStartHandler).at.least(1);
-          expect(child2.removeEventListener) .calledWith('dragend', dragEndHandler).at.least(1);
+          expect(Events.of(draggable, child2).isRegistered('dragstart')).to.be.false;
+          expect(Events.of(draggable, child2).isRegistered('dragend')).to.be.false;
 
           expect($(child1).attr('draggable')).to.not.exist;
           expect($(child2).attr('draggable')).to.not.exist;
@@ -119,9 +116,7 @@
             
             draggable.attributeChangedCallback(el, 'pb-draggable', 'true', 'false');
 
-            expectUnregistered(
-                getRegisteredHandler(child1, 'dragstart'),
-                getRegisteredHandler(child1, 'dragend'));
+            expectUnregistered(draggable);
           });
           it('should ignore unsupported attributes', function() {
             _.spy(child1, 'addEventListener');
@@ -198,9 +193,7 @@
             
             draggable.detachedCallback(el);
 
-            expectUnregistered(
-                getRegisteredHandler(child1, 'dragstart'),
-                getRegisteredHandler(child1, 'dragend'));
+            expectUnregistered(draggable);
           });
         });
 

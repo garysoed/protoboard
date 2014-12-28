@@ -7,7 +7,7 @@ let doc = null;
 let EL_NAME = "pb-u-context";
 
 let SHOWN_CLASS = "shown";
-// TODO: Make subcontext
+// TODO(gs): Make subcontext
 
 /**
  * Handles context menu on the parent element.
@@ -45,6 +45,8 @@ function handleContextSwitched() {
  * menu to. When you right click on the parent element, the context menu will open.
  *
  * Each child of the context menu is a menu item.
+ *
+ * TODO(gs): Redo this with menu polyfill.
  * 
  * @class ui.Context
  * @extends HTMLElement

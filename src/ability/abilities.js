@@ -16,7 +16,6 @@ const __register__ = Symbol();
 const Abilities = {
 
   [__register__](ctorProto, ability) {
-    // TODO: Curry the functions.
     Utils.extendFn(
         ctorProto,
         'createdCallback',

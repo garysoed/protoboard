@@ -1,5 +1,7 @@
+import Events    from 'src/events';
 import PbElement from 'src/pbelement';
-import Utils from 'src/utils';
+import Utils     from 'src/utils';
+
 import PreviewService from 'src/service/preview';
 
 /**
@@ -14,9 +16,6 @@ let registered = false;
 
 const EL_NAME = 'pb-u-preview';
 
-const _mouseOverHandler = Symbol();
-const _mouseOutHandler = Symbol();
-
 function handleMouseOver() {
   PreviewService.previewedEl = this;
 }
@@ -29,26 +28,21 @@ export default class Preview extends PbElement {
   createdCallback() {
     super.createdCallback();
     this.createShadowRoot();
-
-    // Initializes the variables.
-    this[_mouseOverHandler] = handleMouseOver.bind(this);
-    this[_mouseOutHandler] = handleMouseOut.bind(this);
-
     this.attachedCallback();
   }
 
   attachedCallback() {
     super.attachedCallback();
     if (this.parentElement) {
-      this.parentElement.addEventListener('mouseenter', this[_mouseOverHandler]);
-      this.parentElement.addEventListener('mouseleave', this[_mouseOutHandler]);
+      Events.of(this.parentElement, this)
+          .register('mouseenter', handleMouseOver.bind(this))
+          .register('mouseleave', handleMouseOut.bind(this));
     }
   }
 
   detachedCallback() {
     if (this.parentElement) {
-      this.parentElement.removeEventListener('mouseenter', this[_mouseOverHandler]);
-      this.parentElement.removeEventListener('mouseleave', this[_mouseOutHandler]);
+      Events.of(this.parentElement, this).unregister();
     }
     super.detachedCallback();
   }

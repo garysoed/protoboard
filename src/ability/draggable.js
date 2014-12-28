@@ -1,5 +1,6 @@
-import Check from 'src/check';
-import Utils from 'src/utils';
+import Check  from 'src/check';
+import Events from 'src/events';
+import Utils  from 'src/utils';
 
 import Ability         from 'src/ability/ability';
 import DragDropService from 'src/service/dragdrop';
@@ -24,8 +25,6 @@ const CLASS_DRAGGED = 'pb-dragged';
 
 // Private symbols.
 const __defaultValue__ = Symbol();
-const __dragEndHandler__ = Symbol();
-const __dragStartHandler__ = Symbol();
 const __onDragEnd__ = Symbol();
 const __onDragStart__ = Symbol();
 const __register__ = Symbol();
@@ -55,21 +54,18 @@ export default class Draggable extends Ability {
   }
 
   [__register__](element) {
-    element[__dragStartHandler__] = this[__onDragStart__].bind(this, element);
-    element[__dragEndHandler__] = this[__onDragEnd__].bind(this, element);
-
     // Propagate the draggable attribute to the root element.
     Utils.toArray(element.children).forEach(child => {
       $(child).attr('draggable', 'true');
-      child.addEventListener('dragstart', element[__dragStartHandler__]);
-      child.addEventListener('dragend', element[__dragEndHandler__]);
+      Events.of(child, this)
+          .register('dragstart', this[__onDragStart__].bind(this, element))
+          .register('dragend', this[__onDragEnd__].bind(this, element));
     });
   }
 
   [__unregister__](element) {
     Utils.toArray(element.children).forEach(child => {
-      child.removeEventListener('dragend', element[__dragEndHandler__]);
-      child.removeEventListener('dragstart', element[__dragStartHandler__]);
+      Events.of(child, this).unregister();
       $(child).attr('draggable', null);
     });
   }

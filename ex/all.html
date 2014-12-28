@@ -120,6 +120,13 @@
         width: 50px;
       }
     </style>
+
+    <style>
+      pb-r-rect::shadow #root {
+        height: 300px;
+        width: 300px;
+      }
+    </style>
   </head>
   <body>
     <table>
@@ -261,21 +268,7 @@
         <tr>
           <td>Generic rectangular region</td>
           <td>
-            <pb-r-rect class="reg1">
-              <pb-u-context>
-                <div>A</div>
-                <div>B</div>
-                <div>C</div>
-                <div>
-                  Sub ...
-                  <pb-u-context>
-                    <div>Sub A</div>
-                    <div>Sub B</div>
-                    <div>Sub C</div>
-                  </pb-u-context>
-                </div>
-              </pb-u-context>
-            </pb-r-rect>
+            <pb-r-rect class="reg1"></pb-r-rect>
           </td>
         </tr>
       </tbody>

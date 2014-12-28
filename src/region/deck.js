@@ -1,5 +1,6 @@
+import Events from 'src/events';
 import Region from 'src/region/region';
-import Utils from 'src/utils';
+import Utils  from 'src/utils';
 
 let doc = null;
 let template = null;
@@ -21,11 +22,26 @@ export default class Deck extends Region {
     this.attachedCallback();
   }
 
+  /**
+   * Called when the element is attached to the document.
+   *
+   * @method attachedCallback
+   */
   attachedCallback() {
     super.attachedCallback();
-    this.shadowRoot
-        .querySelector('#shuffle')
-        .addEventListener('click', this.shuffle.bind(this));
+    // TODO(gs): Add shuffle as action.
+    Events.of(this.shadowRoot.querySelector('#shuffle'), this)
+        .register('click', this.shuffle.bind(this));
+  }
+
+  /**
+   * Called when the element is detached from the document.
+   *
+   * @method detachedCallback
+   */
+  detachedCallback() {
+    super.detachedCallback();
+    Events.of(this.shadowRoot.querySelector('#shuffle'), this).unregister();
   }
 
   /**

@@ -1,21 +1,15 @@
 @import 'theme';
 
-pb-r-rect {
-  @extend .pb-component;
+
+pb-r-rect > * {
+  position: absolute;
 }
 
 pb-r-rect::shadow #root {
   @include region-border();
-
-  display: flex;
-  justify-content: center;
 }
 
 pb-r-rect.pb-over::shadow #root {
   outline: 6px dashed $color-highlight;
   outline-offset: -3px;
-}
-
-pb-r-rect::shadow content::content {
-  position: absolute;
 }

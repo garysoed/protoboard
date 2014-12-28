@@ -5,8 +5,6 @@ import PbElement from 'src/pbelement';
 /**
  * Base class for all components.
  *
- * TODO: Add map of default abilities.
- *
  * @class component.Component
  * @extends PbElement  
  */

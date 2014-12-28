@@ -92,7 +92,7 @@
             var lastDraggedEl = {
               attachedCallback: _.spiedFunction()
             };
-            DragDrop.lastDraggedEl = lastDraggedEl;
+            DragDrop.dragStart(lastDraggedEl);
             _.spy(r, 'appendChild').overrideReturn();
 
             var handler = isAFunction.matchingArgs[0];
@@ -218,7 +218,7 @@
           });
 
           afterEach(function(done) {
-            DragDrop.lastDraggedEl = null;
+            DragDrop.dragStart(null);
             $(Distribute).off();
             done();
           });

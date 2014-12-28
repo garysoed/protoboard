@@ -1,3 +1,4 @@
+import Events    from 'src/events';
 import PbElement from 'src/pbelement';
 import Utils     from 'src/utils';
 
@@ -12,6 +13,7 @@ const CLASS_OVER = 'pb-over';
 
 // Private symbols
 const __dragEnterCount__ = Symbol();
+const __observeHandler__ = Symbol();
 const __onClick__ = Symbol();
 const __onDistributeBegin__ = Symbol();
 const __onDistributeEnd__ = Symbol();
@@ -67,15 +69,25 @@ export default class Region extends PbElement {
     }
   }
 
-  [__onDrop__]() {
+  [__onDrop__](event) {
     this.classList.remove(CLASS_OVER);
-    this.appendChild(DragDrop.lastDraggedEl);
-    // TODO: attached callback doesn't seem to be called on appendChild.
+
+    let el = DragDrop.lastDraggedEl;
+    this.appendChild(el);
+
+    // let left = 0;
+    // for (let currEl = el; !!currEl.offsetParent; currEl = currEl.offsetParent) {
+    //   left += currEl.offsetLeft;
+    // }
+    // let dLeft = event.clientX - left;
+    // el.style.left = `${el.offsetLeft + dLeft}px`;
+
+    // TODO(gs): attached callback doesn't seem to be called on appendChild.
     // https://github.com/webcomponents/webcomponentsjs/issues/18
     if (DragDrop.lastDraggedEl.attachedCallback) {
       DragDrop.lastDraggedEl.attachedCallback();
     }
-    DragDrop.lastDraggedEl = null;
+    DragDrop.dragEnd();
   }
 
   [__onLastDraggedElChange__]() {
@@ -92,20 +104,28 @@ export default class Region extends PbElement {
 
   attachedCallback() {
     super.attachedCallback();
-    this.addEventListener('dragover', this[__onDragOver__]);
-    this.addEventListener('dragenter', this[__onDragEnter__]);
-    this.addEventListener('dragleave', this[__onDragLeave__]);
-    this.addEventListener('drop', this[__onDrop__]);
-    this.addEventListener('click', this[__onClick__]);
+    Events.of(this, this)
+        .register('dragover', this[__onDragOver__])
+        .register('dragenter', this[__onDragEnter__])
+        .register('dragleave', this[__onDragLeave__])
+        .register('drop', this[__onDrop__])
+        .register('click', this[__onClick__]);
 
     $(Distribute)
         .on(Distribute.EventType.BEGIN, this[__onDistributeBegin__].bind(this))
         .on(Distribute.EventType.END, this[__onDistributeEnd__].bind(this));
 
-    Utils.observe(DragDrop, 'lastDraggedEl', this[__onLastDraggedElChange__].bind(this));
+    this[__observeHandler__] = 
+        Utils.observe(DragDrop, 'lastDraggedEl', this[__onLastDraggedElChange__].bind(this));
   }
 
-  // TODO(gs): Unobserve and unlisten
+  detachedCallback() {
+    if (this[__observeHandler__]) {
+      Object.unobserve(DragDrop, this[__observeHandler__]);
+    }
+
+    Events.of(this, this).unregister();
+  }
 }
 
 /**

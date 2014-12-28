@@ -55,7 +55,7 @@ var Utils = {
       });
     };
     Object.observe(object, newHandler);
-    return handler;
+    return newHandler;
   },
 
   /**
