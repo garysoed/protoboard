@@ -1,6 +1,10 @@
 import Events from 'src/events';
-import Region from 'src/region/region';
 import Utils  from 'src/utils';
+
+import Abilities from 'src/ability/abilities';
+import Droppable from 'src/ability/droppable';
+
+import Region from 'src/region/region';
 
 let doc = null;
 let template = null;
@@ -70,7 +74,12 @@ export default class Deck extends Region {
       template = deckTemplate;
     }
 
-    document.registerElement(EL_NAME, {prototype: Deck.prototype});
+    document.registerElement(EL_NAME, {
+      prototype: Abilities.config(
+          Deck,
+          {},
+          new Droppable(true)).prototype
+    });
   }
 }
 

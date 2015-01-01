@@ -3,6 +3,7 @@ import Events from 'src/events';
 import Utils  from 'src/utils';
 
 import Ability         from 'src/ability/ability';
+
 import DragDropService from 'src/service/dragdrop';
 
 /**
@@ -26,7 +27,7 @@ const CLASS_DRAGGED = 'pb-dragged';
 // Private symbols.
 const __defaultValue__ = Symbol();
 const __onDragEnd__ = Symbol();
-const __onDragStart__ = Symbol();
+const __onDragStart__ = Symbol('onDragStart');
 const __register__ = Symbol();
 const __unregister__ = Symbol();
 
@@ -50,7 +51,11 @@ export default class Draggable extends Ability {
     dataTransfer.effectAllowed = 'move';
     el.classList.add(CLASS_DRAGGED);
 
-    DragDropService.dragStart(this.getMovedElement(el));
+    let boundingRect = el.getBoundingClientRect();
+    DragDropService.dragStart(
+        this.getMovedElement(el),
+        event.clientX - boundingRect.left,
+        event.clientY - boundingRect.top);
   }
 
   [__register__](element) {

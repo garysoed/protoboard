@@ -35,8 +35,13 @@ class Action {
    *     name. Otherwise, true iff there is a handler registered to the event.
    */
   isRegistered(eventName, handler) {
+    // TODO(gs): This check is too strict.
     let eventSet = this[__element__][__scope__][eventName];
-    return handler ? !!eventSet && eventSet.has(handler) : !!eventSet;
+    if (handler) {
+      return !!eventSet && eventSet.has(handler);
+    } else {
+      return !!eventSet && eventSet.size > 0;
+    }
   }
 
   /**

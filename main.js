@@ -506,7 +506,11 @@ var $__src_47_events__ = (function() {
   ($traceurRuntime.createClass)(Action, {
     isRegistered: function(eventName, handler) {
       var eventSet = this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(eventName)];
-      return handler ? !!eventSet && eventSet.has(handler) : !!eventSet;
+      if (handler) {
+        return !!eventSet && eventSet.has(handler);
+      } else {
+        return !!eventSet && eventSet.size > 0;
+      }
     },
     register: function(eventName, handler) {
       if (this.isRegistered(eventName, handler)) {
@@ -572,6 +576,7 @@ var $__src_47_service_47_dragdrop__ = (function() {
       this[$traceurRuntime.toProperty(__lastDraggedEl__)] = draggedEl;
       this[$traceurRuntime.toProperty(__offsetX__)] = offsetX;
       this[$traceurRuntime.toProperty(__offsetY__)] = offsetY;
+      $(this).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
     },
     configurable: true,
     enumerable: true,
@@ -581,6 +586,7 @@ var $__src_47_service_47_dragdrop__ = (function() {
       this[$traceurRuntime.toProperty(__lastDraggedEl__)] = null;
       this[$traceurRuntime.toProperty(__offsetX__)] = undefined;
       this[$traceurRuntime.toProperty(__offsetY__)] = undefined;
+      $(this).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
     },
     configurable: true,
     enumerable: true,
@@ -604,6 +610,7 @@ var $__src_47_service_47_dragdrop__ = (function() {
     configurable: true,
     enumerable: true
   }), $__1);
+  DragDrop.Events = {LAST_DRAGGED_EL_CHANGED: 'dragdrop-last_dragged_el_changed'};
   var $__default = DragDrop = DragDrop;
   Utils.makeGlobal('pb.service.DragDrop', DragDrop);
   return {get default() {
@@ -623,7 +630,7 @@ var $__src_47_ability_47_draggable__ = (function() {
   var CLASS_DRAGGED = 'pb-dragged';
   var __defaultValue__ = Symbol();
   var __onDragEnd__ = Symbol();
-  var __onDragStart__ = Symbol();
+  var __onDragStart__ = Symbol('onDragStart');
   var __register__ = Symbol();
   var __unregister__ = Symbol();
   var Draggable = function Draggable(defaultValue) {
@@ -641,7 +648,8 @@ var $__src_47_ability_47_draggable__ = (function() {
       var dataTransfer = event.dataTransfer;
       dataTransfer.effectAllowed = 'move';
       el.classList.add(CLASS_DRAGGED);
-      DragDropService.dragStart(this.getMovedElement(el));
+      var boundingRect = el.getBoundingClientRect();
+      DragDropService.dragStart(this.getMovedElement(el), event.clientX - boundingRect.left, event.clientY - boundingRect.top);
     },
     configurable: true,
     enumerable: true,
@@ -1003,6 +1011,158 @@ var $__src_47_component_47_modules__ = (function() {
   $__src_47_component_47_token__;
   return {};
 })();
+var $__src_47_ability_47_droppable__ = (function() {
+  "use strict";
+  var $__6;
+  var __moduleName = "src/ability/droppable";
+  var Check = ($__src_47_check__).default;
+  var Events = ($__src_47_events__).default;
+  var Utils = ($__src_47_utils__).default;
+  var Ability = ($__src_47_ability_47_ability__).default;
+  var DragDrop = ($__src_47_service_47_dragdrop__).default;
+  var ATTR_NAME = 'pb-droppable';
+  var CLASS_OVER = 'pb-over';
+  var __defaultValue__ = Symbol();
+  var __dragEnterCount__ = Symbol();
+  var __observeHandler__ = Symbol();
+  var __onDragOver__ = Symbol();
+  var __onDragEnter__ = Symbol('onDragEnter');
+  var __onDragLeave__ = Symbol();
+  var __onLastDraggedElChange__ = Symbol();
+  var __register__ = Symbol('register');
+  var __unregister__ = Symbol('unregister');
+  var Droppable = function Droppable(defaultValue) {
+    this[$traceurRuntime.toProperty(__defaultValue__)] = defaultValue;
+    this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
+  };
+  ($traceurRuntime.createClass)(Droppable, ($__6 = {}, Object.defineProperty($__6, __onDragOver__, {
+    value: function(el, event) {
+      event.preventDefault();
+      event.dropEffect = 'move';
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, __onDragEnter__, {
+    value: function(el) {
+      el.classList.add(CLASS_OVER);
+      this[$traceurRuntime.toProperty(__dragEnterCount__)]++;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, __onDragLeave__, {
+    value: function(el, event) {
+      this[$traceurRuntime.toProperty(__dragEnterCount__)]--;
+      if (this[$traceurRuntime.toProperty(__dragEnterCount__)] <= 0) {
+        this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
+        el.classList.remove(CLASS_OVER);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, __onLastDraggedElChange__, {
+    value: function(el) {
+      if (!DragDrop.lastDraggedEl) {
+        this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
+        el.classList.remove(CLASS_OVER);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, __register__, {
+    value: function(el) {
+      Events.of(el, this).register('dragover', this[$traceurRuntime.toProperty(__onDragOver__)].bind(this, el)).register('dragenter', this[$traceurRuntime.toProperty(__onDragEnter__)].bind(this, el)).register('dragleave', this[$traceurRuntime.toProperty(__onDragLeave__)].bind(this, el)).register('drop', this.trigger.bind(this, el));
+      $(DragDrop).on(DragDrop.Events.LAST_DRAGGED_EL_CHANGED, this[$traceurRuntime.toProperty(__onLastDraggedElChange__)].bind(this, el));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, __unregister__, {
+    value: function(el) {
+      Events.of(el, this).unregister();
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, "setDefaultValue", {
+    value: function(el) {
+      if ($(el).attr(ATTR_NAME) === undefined) {
+        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(__defaultValue__)]);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, "attributeChangedCallback", {
+    value: function(el, name, oldValue, newValue) {
+      if (name === ATTR_NAME) {
+        newValue = Check(newValue).isBoolean(newValue).orThrows();
+        if (newValue) {
+          this[$traceurRuntime.toProperty(__register__)](el);
+        } else {
+          this[$traceurRuntime.toProperty(__unregister__)](el);
+        }
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, "attachedCallback", {
+    value: function(el) {
+      if ($(el).attr(ATTR_NAME) && Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
+        this[$traceurRuntime.toProperty(__register__)](el);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, "detachedCallback", {
+    value: function(el) {
+      this[$traceurRuntime.toProperty(__unregister__)](el);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, "getMovedElement", {
+    value: function(el) {
+      return el;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, "trigger", {
+    value: function(el, event) {
+      el.classList.remove(CLASS_OVER);
+      var lastDraggedEl = DragDrop.lastDraggedEl;
+      if (lastDraggedEl) {
+        el.appendChild(lastDraggedEl);
+        if (DragDrop.lastDraggedEl.attachedCallback) {
+          DragDrop.lastDraggedEl.attachedCallback();
+        }
+      }
+      DragDrop.dragEnd();
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, "name", {
+    get: function() {
+      return ATTR_NAME;
+    },
+    configurable: true,
+    enumerable: true
+  }), $__6), {}, Ability);
+  var $__default = Droppable;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.ability.Droppable', Droppable);
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_service_47_distribute__ = (function() {
   "use strict";
   var __moduleName = "src/service/distribute";
@@ -1056,17 +1216,9 @@ var $__src_47_region_47_region__ = (function() {
   var Distribute = ($__src_47_service_47_distribute__).default;
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
   var CLASS_DISTRIBUTE = 'pb-distribute';
-  var CLASS_OVER = 'pb-over';
-  var __dragEnterCount__ = Symbol();
-  var __observeHandler__ = Symbol();
   var __onClick__ = Symbol();
   var __onDistributeBegin__ = Symbol();
   var __onDistributeEnd__ = Symbol();
-  var __onDragOver__ = Symbol();
-  var __onDragEnter__ = Symbol();
-  var __onDragLeave__ = Symbol();
-  var __onDrop__ = Symbol();
-  var __onLastDraggedElChange__ = Symbol();
   var Region = function Region() {};
   var $Region = Region;
   ($traceurRuntime.createClass)(Region, ($__6 = {}, Object.defineProperty($__6, __onClick__, {
@@ -1096,60 +1248,9 @@ var $__src_47_region_47_region__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__6, __onDragOver__, {
-    value: function(event) {
-      event.preventDefault();
-      event.dropEffect = 'move';
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, __onDragEnter__, {
-    value: function(event) {
-      this.classList.add(CLASS_OVER);
-      this[$traceurRuntime.toProperty(__dragEnterCount__)]++;
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, __onDragLeave__, {
-    value: function(e) {
-      this[$traceurRuntime.toProperty(__dragEnterCount__)]--;
-      if (this[$traceurRuntime.toProperty(__dragEnterCount__)] <= 0) {
-        this.classList.remove(CLASS_OVER);
-        this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
-      }
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, __onDrop__, {
-    value: function(event) {
-      this.classList.remove(CLASS_OVER);
-      var el = DragDrop.lastDraggedEl;
-      this.appendChild(el);
-      if (DragDrop.lastDraggedEl.attachedCallback) {
-        DragDrop.lastDraggedEl.attachedCallback();
-      }
-      DragDrop.dragEnd();
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, __onLastDraggedElChange__, {
-    value: function() {
-      if (!DragDrop.lastDraggedEl) {
-        this.classList.remove(CLASS_OVER);
-        this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
-      }
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
   }), Object.defineProperty($__6, "createdCallback", {
     value: function() {
       $traceurRuntime.superCall(this, $Region.prototype, "createdCallback", []);
-      this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
     },
     configurable: true,
     enumerable: true,
@@ -1157,18 +1258,14 @@ var $__src_47_region_47_region__ = (function() {
   }), Object.defineProperty($__6, "attachedCallback", {
     value: function() {
       $traceurRuntime.superCall(this, $Region.prototype, "attachedCallback", []);
-      Events.of(this, this).register('dragover', this[$traceurRuntime.toProperty(__onDragOver__)]).register('dragenter', this[$traceurRuntime.toProperty(__onDragEnter__)]).register('dragleave', this[$traceurRuntime.toProperty(__onDragLeave__)]).register('drop', this[$traceurRuntime.toProperty(__onDrop__)]).register('click', this[$traceurRuntime.toProperty(__onClick__)]);
+      Events.of(this, this).register('click', this[$traceurRuntime.toProperty(__onClick__)].bind(this));
       $(Distribute).on(Distribute.EventType.BEGIN, this[$traceurRuntime.toProperty(__onDistributeBegin__)].bind(this)).on(Distribute.EventType.END, this[$traceurRuntime.toProperty(__onDistributeEnd__)].bind(this));
-      this[$traceurRuntime.toProperty(__observeHandler__)] = Utils.observe(DragDrop, 'lastDraggedEl', this[$traceurRuntime.toProperty(__onLastDraggedElChange__)].bind(this));
     },
     configurable: true,
     enumerable: true,
     writable: true
   }), Object.defineProperty($__6, "detachedCallback", {
     value: function() {
-      if (this[$traceurRuntime.toProperty(__observeHandler__)]) {
-        Object.unobserve(DragDrop, this[$traceurRuntime.toProperty(__observeHandler__)]);
-      }
       Events.of(this, this).unregister();
     },
     configurable: true,
@@ -1187,9 +1284,11 @@ var $__src_47_region_47_region__ = (function() {
 var $__src_47_region_47_bag__ = (function() {
   "use strict";
   var __moduleName = "src/region/bag";
-  var Draggable = ($__src_47_ability_47_draggable__).default;
-  var Region = ($__src_47_region_47_region__).default;
   var Utils = ($__src_47_utils__).default;
+  var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Draggable = ($__src_47_ability_47_draggable__).default;
+  var Droppable = ($__src_47_ability_47_droppable__).default;
+  var Region = ($__src_47_region_47_region__).default;
   var EL_NAME = 'pb-r-bag';
   var ATTR_PLACEHOLDER = 'pb-placeholder';
   var ATTR_PLACEHOLDER_CONTENT = 'pb-placeholder-content';
@@ -1247,7 +1346,7 @@ var $__src_47_region_47_bag__ = (function() {
         template = bagTemplate;
         placeHolderTmp = placeHolderTemplate;
       }
-      document.registerElement(EL_NAME, {prototype: $Bag.prototype});
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Bag, {}, new Droppable(true)).prototype});
     }}, Region);
   var $__default = Bag;
   Bag.prototype[$traceurRuntime.toProperty(__draggable__)] = null;
@@ -1264,8 +1363,10 @@ var $__src_47_region_47_deck__ = (function() {
   "use strict";
   var __moduleName = "src/region/deck";
   var Events = ($__src_47_events__).default;
-  var Region = ($__src_47_region_47_region__).default;
   var Utils = ($__src_47_utils__).default;
+  var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Droppable = ($__src_47_ability_47_droppable__).default;
+  var Region = ($__src_47_region_47_region__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-r-deck';
@@ -1288,7 +1389,7 @@ var $__src_47_region_47_deck__ = (function() {
       Events.of(this.shadowRoot.querySelector('#shuffle'), this).unregister();
     },
     shuffle: function() {
-      var $__3 = this;
+      var $__5 = this;
       var pairs = Utils.toArray(this.children).map((function(child) {
         return [child, Math.random()];
       }));
@@ -1299,7 +1400,7 @@ var $__src_47_region_47_deck__ = (function() {
         return pair[0];
       }));
       shuffled.forEach(((function(el) {
-        return $__3.appendChild(el);
+        return $__5.appendChild(el);
       })).bind(this));
     }
   }, {register: function(currentDoc, deckTemplate) {
@@ -1307,7 +1408,7 @@ var $__src_47_region_47_deck__ = (function() {
         doc = currentDoc;
         template = deckTemplate;
       }
-      document.registerElement(EL_NAME, {prototype: $Deck.prototype});
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Deck, {}, new Droppable(true)).prototype});
     }}, Region);
   var $__default = Deck;
   Utils.makeGlobal('pb.region.Deck', Deck);
@@ -1318,11 +1419,35 @@ var $__src_47_region_47_deck__ = (function() {
 var $__src_47_region_47_rect__ = (function() {
   "use strict";
   var __moduleName = "src/region/rect";
-  var Region = ($__src_47_region_47_region__).default;
   var Utils = ($__src_47_utils__).default;
+  var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Droppable = ($__src_47_ability_47_droppable__).default;
+  var Region = ($__src_47_region_47_region__).default;
+  var DragDrop = ($__src_47_service_47_dragdrop__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-r-rect';
+  var SmartDroppable = function SmartDroppable(defaultValue) {
+    $traceurRuntime.superCall(this, $SmartDroppable.prototype, "constructor", [defaultValue]);
+  };
+  var $SmartDroppable = SmartDroppable;
+  ($traceurRuntime.createClass)(SmartDroppable, {trigger: function(el, event) {
+      el.classList.remove('pb-over');
+      var lastDraggedEl = DragDrop.lastDraggedEl;
+      if (!lastDraggedEl) {
+        return;
+      }
+      el.appendChild(lastDraggedEl);
+      var screenCoord = lastDraggedEl.getBoundingClientRect();
+      var dLeft = event.clientX - screenCoord.left - DragDrop.offsetX;
+      var dTop = event.clientY - screenCoord.top - DragDrop.offsetY;
+      lastDraggedEl.style.left = ((lastDraggedEl.offsetLeft + dLeft) + "px");
+      lastDraggedEl.style.top = ((lastDraggedEl.offsetTop + dTop) + "px");
+      if (DragDrop.lastDraggedEl.attachedCallback) {
+        DragDrop.lastDraggedEl.attachedCallback();
+      }
+      DragDrop.dragEnd();
+    }}, {}, Droppable);
   var Rect = function Rect() {
     $traceurRuntime.superCall(this, $Rect.prototype, "constructor", []);
   };
@@ -1336,10 +1461,13 @@ var $__src_47_region_47_rect__ = (function() {
       }
       doc = currentDoc;
       template = rectTemplate;
-      document.registerElement(EL_NAME, {prototype: $Rect.prototype});
+      document.registerElement(EL_NAME, {prototype: Abilities.config($Rect, {}, new SmartDroppable(true)).prototype});
     }}, Region);
   var $__default = Rect = Rect;
   Utils.makeGlobal('pb.region.Rect', Rect);
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.region.Rect.SmartDroppable', SmartDroppable);
+  }
   return {get default() {
       return $__default;
     }};

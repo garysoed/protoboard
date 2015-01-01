@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Droppable Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+</head>
+<body>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+      var _M = spies.Matchers;
+      var Droppable = pb.ability.Droppable;
+      var Utils = pb.Utils;
+      var Events = pb.Events;
+      var DragDrop = pb.service.DragDrop;
+
+      var doc = document.currentScript.ownerDocument;
+
+      // Private symbols
+      var __onDragEnter__ = Utils.getSymbol(Droppable.prototype, 'onDragEnter');
+      var __register__ = Utils.getSymbol(Droppable.prototype, 'register');
+      var __unregister__ = Utils.getSymbol(Droppable.prototype, 'unregister');
+
+      describe('Droppable', function() {
+        var el;
+        var droppable;
+
+        beforeEach(function(done) {
+          el = doc.createElement('div');
+          droppable = new Droppable(true);
+          done();
+        });
+
+        describe('#setDefaultValue', function() {
+          it('should set the default value if not set', function() {
+            (new Droppable(true)).setDefaultValue(el);
+            expect($(el).attr('pb-droppable')).to.be.equal('true');
+          });
+          it('should be noop if the value is set', function() {
+            $(el).attr('pb-droppable', 'false');
+            (new Droppable(true)).setDefaultValue(el);
+            expect($(el).attr('pb-droppable')).to.be.equal('false');
+          });
+        });
+
+        describe('#attributeChangedCallback', function() {
+          it('should register if set to enabled', function() {
+            _.spy(droppable, __register__);
+            droppable.attributeChangedCallback(el, 'pb-droppable', 'false', 'true');
+            expect(droppable[__register__]).calledWith(el).at.least(1);
+          });
+          it('should unregister if set to disabled', function() {
+            _.spy(droppable, __unregister__);
+            droppable.attributeChangedCallback(el, 'pb-droppable', 'true', 'false');
+            expect(droppable[__unregister__]).calledWith(el).at.least(1);
+          });
+          it('should ignore unsupported attribute', function() {
+            _.spy(droppable, __register__);
+            _.spy(droppable, __unregister__);
+            droppable.attributeChangedCallback(el, 'unsupported', 'true', 'false');
+            expect(droppable[__register__]).called().to.be.equal(0);
+            expect(droppable[__unregister__]).called().to.be.equal(0);
+          });
+        });
+
+        describe('#attachedCallback', function() {
+          it('should register if enabled', function() {
+            $(el).attr('pb-droppable', 'true');
+            _.spy(droppable, __register__);
+            droppable.attachedCallback(el);
+            expect(droppable[__register__]).calledWith(el).at.least(1);
+          });
+          it('should do nothing if not enabled', function() {
+            $(el).attr('pb-droppable', 'false');
+            _.spy(droppable, __register__);
+            droppable.attachedCallback(el);
+            expect(droppable[__register__]).called().to.be.equal(0);
+          });
+          it('should do nothing if attribute is not set', function() {
+            _.spy(droppable, __register__);
+            droppable.attachedCallback(el);
+            expect(droppable[__register__]).called().to.be.equal(0);
+          });
+        });
+
+        describe('#detachedCallback', function() {
+          it('should call unregister', function() {
+            _.spy(droppable, __unregister__);
+            droppable.detachedCallback(el);
+            expect(droppable[__unregister__]).calledWith(el).at.least(1);
+          });
+        });
+
+        describe('#trigger', function() {
+          it('should remove pb-over, append the last dragged element as last child, and ends the dragdrop', function() {
+            var lastDraggedEl = doc.createElement('div');
+            DragDrop.dragStart(lastDraggedEl, 0, 0);
+            el.classList.add('pb-over');
+
+            _.spy(lastDraggedEl, 'attachedCallback');
+            _.spy(DragDrop, 'dragEnd');
+
+            droppable.trigger(el);
+            expect(el.classList.contains('pb-over')).to.be.false();
+            expect(el.children[0]).to.be.equal(lastDraggedEl);
+            expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
+            expect(DragDrop.dragEnd).calledWith().at.least(1);
+          });
+          it('should only remove pb-over and ends drag if the last dragged element is null', function() {
+            DragDrop.dragStart(null, 0, 0);
+            el.classList.add('pb-over');
+
+            _.spy(DragDrop, 'dragEnd');
+
+            droppable.trigger(el);
+            expect(el.classList.contains('pb-over')).to.be.false();
+            expect(DragDrop.dragEnd).calledWith().at.least(1);
+          });
+        });
+
+        describe('#__register__', function() {
+          var fakeEvents;
+
+          beforeEach(function(done) {
+            fakeEvents = {
+              register: function() {
+                return fakeEvents;
+              }
+            };
+            _.spy(fakeEvents, 'register');
+            _.spy(Events, 'of').overrideReturn(fakeEvents);
+            done();
+          });
+
+          it('should set dropEffect on dragover', function() {
+            droppable[__register__](el);
+
+            var handlerCaptor = _M.isA(Function);
+            expect(fakeEvents.register).calledWith('dragover', handlerCaptor).at.least(1);
+
+            var event = {
+              preventDefault: _.spiedFunction()
+            };
+            handlerCaptor.matchingArgs[0](event);
+            expect(event.preventDefault).calledWith().at.least(1);
+            expect(event.dropEffect).to.be.equal('move');
+          });
+          it('should add pb-over on dragenter', function() {
+            droppable[__register__](el);
+
+            var handlerCaptor = _M.isA(Function);
+            expect(fakeEvents.register).calledWith('dragenter', handlerCaptor).at.least(1);
+
+            handlerCaptor.matchingArgs[0]();
+            expect(el.classList.contains('pb-over')).to.be.true();
+          });
+          it('should remove pb-over on dragleave', function() {
+            droppable[__register__](el);
+
+            var handlerCaptor = _M.isA(Function);
+            expect(fakeEvents.register).calledWith('dragleave', handlerCaptor).at.least(1);
+
+            droppable[__onDragEnter__](el);
+            handlerCaptor.matchingArgs[0]();
+            expect(el.classList.contains('pb-over')).to.be.false();
+          });
+          it('should be noop on dragleave if there are more dragenters than dragleaves', function() {
+            droppable[__register__](el);
+
+            var handlerCaptor = _M.isA(Function);
+            expect(fakeEvents.register).calledWith('dragleave', handlerCaptor).at.least(1);
+
+            droppable[__onDragEnter__](el);
+            droppable[__onDragEnter__](el);
+
+            handlerCaptor.matchingArgs[0]();
+            expect(el.classList.contains('pb-over')).to.be.true();
+          });
+          it('should call trigger on drop', function() {
+            _.spy(droppable, 'trigger');
+
+            droppable[__register__](el);
+
+            var handlerCaptor = _M.isA(Function);
+            expect(fakeEvents.register).calledWith('drop', handlerCaptor).at.least(1);
+
+            handlerCaptor.matchingArgs[0]();
+            expect(droppable.trigger).calledWith(el).at.least(1);
+          });
+          it('should remove pb-over on if lastDraggedEl is set to null', function() {
+            DragDrop.dragStart(null, 0, 0);
+
+            droppable[__register__](el);
+
+            droppable[__onDragEnter__](el);
+            $(DragDrop).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
+
+            expect(el.classList.contains('pb-over')).to.be.false();
+          });
+          it('should be noop if lastDraggedEl is set to an element', function() {
+            DragDrop.dragStart(doc.createElement('div'), 0, 0);
+
+            droppable[__register__](el);
+
+            droppable[__onDragEnter__](el);
+            $(DragDrop).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
+
+            expect(el.classList.contains('pb-over')).to.be.true();
+          });
+        });
+
+        describe('#__unregister__', function() {
+          it('should unregister all events', function() {
+            var unregisterFn = _.spiedFunction();
+            _.spy(Events, 'of').overrideReturn({
+              unregister: unregisterFn
+            });
+
+            droppable[__unregister__](el);
+            expect(Events.of).calledWith(el, droppable).at.least(1);
+            expect(unregisterFn).calledWith().at.least(1);
+          });
+        });
+
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+    })();
+  </script>
+</body>

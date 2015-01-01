@@ -15,8 +15,13 @@
       var _M = spies.Matchers;
       var Draggable = pb.ability.Draggable;
       var Events = pb.Events;
+      var DragDrop = pb.service.DragDrop;
+      var Utils = pb.Utils;
 
       var doc = document.currentScript.ownerDocument;
+
+      // Private symbols.
+      var __onDragStart__ = Utils.getSymbol(Draggable.prototype, 'onDragStart');
 
       describe('Draggable', function() {
         var el;
@@ -194,6 +199,30 @@
             draggable.detachedCallback(el);
 
             expectUnregistered(draggable);
+          });
+        });
+
+        describe('#__onDragStart__', function() {
+          it('should set the data transfer object, add the CSS class, and call DragDrop service', function() {
+            var draggable = new Draggable(true);
+            var dataTransfer = {};
+            var event = {
+              clientX: 1,
+              clientY: 2,
+              dataTransfer: dataTransfer
+            };
+
+            _.spy(el, 'getBoundingClientRect').overrideReturn({
+              left: 4,
+              top: 8
+            });
+            _.spy(DragDrop, 'dragStart');
+
+            draggable[__onDragStart__](el, event);
+
+            expect(dataTransfer.effectAllowed).to.be.equal('move');
+            expect(el.classList.contains('pb-dragged')).to.be.true();
+            expect(DragDrop.dragStart).calledWith(el, -3, -6);
           });
         });
 

@@ -43,6 +43,7 @@ var Utils = {
    *     properties.
    * @param {Function} handler Handler called when a property has changed. The handler accepts 3
    *     arguments: property name, change type, and the old value of the property.
+   * TODO(gs): Make this work with scopes.
    *
    * @return {Function} The handler used to unobserve the object.
    */

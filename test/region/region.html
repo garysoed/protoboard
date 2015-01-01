@@ -20,89 +20,6 @@
 
       describe('Region', function() {
         describe('#attachedCallback', function() {
-          it('should handle dragover', function() {
-            var r = new Region();
-            _.spy(r, 'addEventListener').overrideReturn();
-
-            var isAFunction = Matchers.isA(Function);
-            r.attachedCallback();
-
-            expect(r.addEventListener).calledWith('dragover', isAFunction).at.least(1);
-
-            var handler = isAFunction.matchingArgs[0];
-            var stubEvent = _.stub(Event);
-            _.spy(stubEvent);
-            handler.call(r, stubEvent);
-
-            expect(stubEvent.preventDefault).calledWith().at.least(1);
-            expect(stubEvent.dropEffect).to.be.equal('move');
-          });
-          it('should handle dragenter', function() {
-            var r = new Region();
-            r.classList = _.stub(DOMTokenList);
-
-            _.spy(r, 'addEventListener').overrideReturn();
-            _.spy(r.classList, 'add');
-
-            var isAFunction = Matchers.isA(Function);
-            r.attachedCallback();
-
-            expect(r.addEventListener).calledWith('dragenter', isAFunction).at.least(1);
-
-            // Now fire the event.
-            var handler = isAFunction.matchingArgs[0];
-            handler.call(r);
-
-            expect(r.classList.add).calledWith('pb-over').at.least(1);
-          });
-          it('should handle dragleave', function() {
-            var r = new Region();
-            r.classList = _.stub(DOMTokenList);
-
-            _.spy(r, 'addEventListener').overrideReturn();
-            _.spy(r.classList, 'remove');
-
-            var isAFunction = Matchers.isA(Function);
-            r.createdCallback();
-            r.attachedCallback();
-
-            expect(r.addEventListener).calledWith('dragleave', isAFunction).at.least(1);
-
-            // Now fire the event.
-            var handler = isAFunction.matchingArgs[0];
-            var stubEvent = _.stub(Event);
-            _.spy(stubEvent);
-            handler.call(r, stubEvent);
-
-            expect(r.classList.remove).calledWith('pb-over').at.least(1);
-          });
-          it('should handle drop', function() {
-            var r = new Region();
-            r.classList = _.stub(DOMTokenList);
-
-            _.spy(r, 'addEventListener').overrideReturn();
-            _.spy(r.classList, 'remove');
-
-            var isAFunction = Matchers.isA(Function);
-            r.attachedCallback();
-
-            expect(r.addEventListener).calledWith('drop', isAFunction).at.least(1);
-
-            // Now fire the event.
-            var lastDraggedEl = {
-              attachedCallback: _.spiedFunction()
-            };
-            DragDrop.dragStart(lastDraggedEl);
-            _.spy(r, 'appendChild').overrideReturn();
-
-            var handler = isAFunction.matchingArgs[0];
-            handler.call(r);
-
-            expect(r.classList.remove).calledWith('pb-over').at.least(1);
-            expect(r.appendChild).calledWith(lastDraggedEl).at.least(1);
-            expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
-            expect(DragDrop.lastDraggedEl).to.be.null;
-          });
           it('should handle click when Distribute service is active and has next', function() {
             var r = new Region();
 
@@ -195,26 +112,6 @@
 
             expect(r.shadowRoot.querySelector).calledWith('#root').at.least(1);
             expect(stubClassList.remove).calledWith('pb-distribute').at.least(1);
-          });
-          it('should not remove over class if dragenter is > dragleave', function() {
-            var r = new Region();
-            r.classList = _.stub(DOMTokenList);
-
-            _.spy(r, 'addEventListener').overrideReturn();
-            _.spy(r.classList, 'remove');
-
-            var enterHandlerMatcher = Matchers.isA(Function);
-            var leaveHandlerMatcher = Matchers.isA(Function);
-            r.attachedCallback();
-
-            expect(r.addEventListener).calledWith('dragenter', enterHandlerMatcher).at.least(1);
-            expect(r.addEventListener).calledWith('dragleave', leaveHandlerMatcher).at.least(1);
-
-            enterHandlerMatcher.matchingArgs[0].call(r);
-            enterHandlerMatcher.matchingArgs[0].call(r);
-            leaveHandlerMatcher.matchingArgs[0].call(r);
-
-            expect(r.classList.remove).called().to.be.equal(0);
           });
 
           afterEach(function(done) {

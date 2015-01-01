@@ -1,6 +1,10 @@
-import Draggable from 'src/ability/draggable';
-import Region    from 'src/region/region';
 import Utils     from 'src/utils';
+
+import Abilities from 'src/ability/abilities';
+import Draggable from 'src/ability/draggable';
+import Droppable from 'src/ability/droppable';
+
+import Region    from 'src/region/region';
 
 /**
  * A collection of components. You cannot see the component until you drag one out of it.
@@ -118,7 +122,12 @@ export default class Bag extends Region {
       placeHolderTmp = placeHolderTemplate;
     }
 
-    document.registerElement(EL_NAME, {prototype: Bag.prototype});
+    document.registerElement(EL_NAME, {
+      prototype: Abilities.config(
+          Bag,
+          {},
+          new Droppable(true)).prototype
+    });
   } 
 }
 

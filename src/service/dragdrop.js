@@ -28,6 +28,7 @@ let DragDrop = {
     this[__lastDraggedEl__] = draggedEl;
     this[__offsetX__] = offsetX;
     this[__offsetY__] = offsetY;
+    $(this).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
   },
 
   /**
@@ -39,6 +40,7 @@ let DragDrop = {
     this[__lastDraggedEl__] = null;
     this[__offsetX__] = undefined;
     this[__offsetY__] = undefined;
+    $(this).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
   },
 
   /**
@@ -75,6 +77,9 @@ let DragDrop = {
   }
 };
 
+DragDrop.Events = {
+  LAST_DRAGGED_EL_CHANGED: 'dragdrop-last_dragged_el_changed'
+};
 
 export default DragDrop = DragDrop;
 
