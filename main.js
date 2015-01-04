@@ -1359,13 +1359,60 @@ var $__src_47_region_47_bag__ = (function() {
       return $__default;
     }};
 })();
+var $__src_47_ability_47_shuffleable__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/shuffleable";
+  var Check = ($__src_47_check__).default;
+  var Utils = ($__src_47_utils__).default;
+  var Ability = ($__src_47_ability_47_ability__).default;
+  var ATTR_NAME = 'pb-shuffleable';
+  var __defaultEnabled__ = Symbol();
+  var Shuffleable = function Shuffleable() {
+    var defaultEnabled = arguments[0] !== (void 0) ? arguments[0] : true;
+    this[$traceurRuntime.toProperty(__defaultEnabled__)] = defaultEnabled;
+  };
+  ($traceurRuntime.createClass)(Shuffleable, {
+    setDefaultValue: function(el) {
+      if ($(el).attr(ATTR_NAME) === undefined) {
+        $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(__defaultEnabled__)]);
+      }
+    },
+    trigger: function(el) {
+      if (Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
+        var pairs = Utils.toArray(el.children).map((function(child) {
+          return [child, Math.random()];
+        }));
+        pairs.sort((function(a, b) {
+          return Utils.compare(a[1], b[1]);
+        }));
+        var shuffled = pairs.map((function(pair) {
+          return pair[0];
+        }));
+        shuffled.forEach((function(shuffledEl) {
+          return el.appendChild(shuffledEl);
+        }));
+      }
+    },
+    get name() {
+      return ATTR_NAME;
+    }
+  }, {}, Ability);
+  var $__default = Shuffleable;
+  Utils.makeGlobal('pb.ability.Shuffleable', Shuffleable);
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_region_47_deck__ = (function() {
   "use strict";
+  var $__9;
   var __moduleName = "src/region/deck";
   var Events = ($__src_47_events__).default;
   var Utils = ($__src_47_utils__).default;
   var Abilities = ($__src_47_ability_47_abilities__).default;
   var Droppable = ($__src_47_ability_47_droppable__).default;
+  var Shuffleable = ($__src_47_ability_47_shuffleable__).default;
+  var Triggerable = ($__src_47_ability_47_triggerable__).default;
   var Region = ($__src_47_region_47_region__).default;
   var doc = null;
   var template = null;
@@ -1389,7 +1436,7 @@ var $__src_47_region_47_deck__ = (function() {
       Events.of(this.shadowRoot.querySelector('#shuffle'), this).unregister();
     },
     shuffle: function() {
-      var $__5 = this;
+      var $__7 = this;
       var pairs = Utils.toArray(this.children).map((function(child) {
         return [child, Math.random()];
       }));
@@ -1400,16 +1447,33 @@ var $__src_47_region_47_deck__ = (function() {
         return pair[0];
       }));
       shuffled.forEach(((function(el) {
-        return $__5.appendChild(el);
+        return $__7.appendChild(el);
       })).bind(this));
     }
-  }, {register: function(currentDoc, deckTemplate) {
+  }, ($__9 = {}, Object.defineProperty($__9, "register", {
+    value: function(currentDoc, deckTemplate) {
+      var $__9,
+          $__10;
       if (!doc || !template) {
         doc = currentDoc;
         template = deckTemplate;
       }
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Deck, {}, new Droppable(true)).prototype});
-    }}, Region);
+      document.registerElement(EL_NAME, ($__10 = {}, Object.defineProperty($__10, "prototype", {
+        value: Abilities.config($Deck, ($__9 = {}, Object.defineProperty($__9, Triggerable.TYPES.DOUBLE_CLICK, {
+          value: new Shuffleable(true),
+          configurable: true,
+          enumerable: true,
+          writable: true
+        }), $__9), new Droppable(true)).prototype,
+        configurable: true,
+        enumerable: true,
+        writable: true
+      }), $__10));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__9), Region);
   var $__default = Deck;
   Utils.makeGlobal('pb.region.Deck', Deck);
   return {get default() {

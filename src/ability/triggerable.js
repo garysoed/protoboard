@@ -121,12 +121,12 @@ class Triggerable extends Ability {
   }
 
   /**
+   * @constructor
    * @param {Object=} defaultValue An object with the triggerable type string as the key, and 
    *     the triggered ability's name as the value. These keys correspond to the element's 
    *     attributes. Defaults to empty object.
    * @param {Array.<ability.Ability>=} knownAbilities A list of known abilities. This is used 
    *     when the element's attribute value is changed. Defaults to empty array.
-   * @constructor
    */
   constructor(defaultValue = {}, knownAbilities = []) {
     this[__defaultValue__] = defaultValue;

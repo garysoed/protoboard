@@ -1,8 +1,10 @@
 import Events from 'src/events';
 import Utils  from 'src/utils';
 
-import Abilities from 'src/ability/abilities';
-import Droppable from 'src/ability/droppable';
+import Abilities   from 'src/ability/abilities';
+import Droppable   from 'src/ability/droppable';
+import Shuffleable from 'src/ability/shuffleable';
+import Triggerable from 'src/ability/triggerable';
 
 import Region from 'src/region/region';
 
@@ -77,7 +79,9 @@ export default class Deck extends Region {
     document.registerElement(EL_NAME, {
       prototype: Abilities.config(
           Deck,
-          {},
+          {
+            [Triggerable.TYPES.DOUBLE_CLICK]: new Shuffleable(true)
+          },
           new Droppable(true)).prototype
     });
   }

@@ -7,6 +7,7 @@ pb-r-rect > * {
 
 pb-r-rect::shadow #root {
   @include region-border();
+  position: relative;
 }
 
 pb-r-rect.pb-over::shadow #root {

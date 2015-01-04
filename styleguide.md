@@ -21,6 +21,9 @@ more than 1 classes, group them by directories. The `from` at for every group sh
   - Public Constants
   - Public Static Methods
 - All attributes have to be private. They can only be exposed publicly through getters and setters.
+- String constants have to be refered by reference only.
+
+# JS Doc styles
 
 
 # Tests
@@ -33,3 +36,6 @@ more than 1 classes, group them by directories. The `from` at for every group sh
 are multiple positive cases, do the negative cases of the first case before proceeded to the next
 one.
 - The it line should be one line. It is not restricted to 100 cols long.
+- Empty line between the describes
+- No empty line between the its
+- Constant names should not refer to the constant variable.
