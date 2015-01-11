@@ -1639,45 +1639,9 @@ var $__src_47_region_47_modules__ = (function() {
   $__src_47_region_47_rect__;
   return {};
 })();
-var $__src_47_service_47_context__ = (function() {
-  "use strict";
-  var __moduleName = "src/service/context";
-  var Utils = ($__src_47_utils__).default;
-  var activeContext = null;
-  var Context = {
-    setActive: function(active) {
-      activeContext = active;
-      $(this).trigger(this.EventType.SWITCHED);
-    },
-    getActive: function() {
-      return activeContext;
-    },
-    EventType: {SWITCHED: 'context-switched'}
-  };
-  var $__default = Context = Context;
-  Utils.makeGlobal('pb.service.Context', Context);
-  return {get default() {
-      return $__default;
-    }};
-})();
-var $__src_47_service_47_preview__ = (function() {
-  "use strict";
-  var __moduleName = "src/service/preview";
-  var Utils = ($__src_47_utils__).default;
-  var Preview = {previewedEl: null};
-  var $__default = Preview = Preview;
-  Utils.makeGlobal('pb.service.Preview', Preview);
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_service_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/service/modules";
-  var Context = ($__src_47_service_47_context__).default;
-  var Distribute = ($__src_47_service_47_distribute__).default;
-  var DragDrop = ($__src_47_service_47_dragdrop__).default;
-  var Preview = ($__src_47_service_47_preview__).default;
   return {};
 })();
 var $__src_47_surface_47_rectgrid__ = (function() {
@@ -1739,6 +1703,17 @@ var $__src_47_surface_47_modules__ = (function() {
   var __moduleName = "src/surface/modules";
   $__src_47_surface_47_rectgrid__;
   return {};
+})();
+var $__src_47_service_47_preview__ = (function() {
+  "use strict";
+  var __moduleName = "src/service/preview";
+  var Utils = ($__src_47_utils__).default;
+  var Preview = {previewedEl: null};
+  var $__default = Preview = Preview;
+  Utils.makeGlobal('pb.service.Preview', Preview);
+  return {get default() {
+      return $__default;
+    }};
 })();
 var $__src_47_ui_47_preview__ = (function() {
   "use strict";

@@ -1,5 +1,9 @@
 @import 'theme';
 
+.pb-contextable.context-menu-root {
+  margin-top: 2px;
+}
+
 .pb-contextable.context-menu-list {
   @include layer(1);
 }

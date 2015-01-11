@@ -20,12 +20,12 @@ import Ability from 'src/ability/ability';
  */
 
 // Private symbols.
-let __abilities__ = Symbol();
-let __createMenuEl__ = Symbol();
-let __currentEl__ = Symbol('currentEl');
-let __menuEl__ = Symbol('menuEl');
-let __onShow__ = Symbol();
-let __trigger__ = Symbol();
+const __abilities__ = Symbol();
+const __createMenuEl__ = Symbol();
+const __currentEl__ = Symbol('currentEl');
+const __menuEl__ = Symbol('menuEl');
+const __onShow__ = Symbol();
+const __trigger__ = Symbol();
 
 export default class Contextable extends Ability {
 
