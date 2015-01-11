@@ -203,6 +203,16 @@ class Triggerable extends Ability {
       this[__unregister__](el, Triggerable.TYPES[key]);
     }
   }
+
+  /**
+   * The name of the ability.
+   * 
+   * @attribute name
+   * @type string
+   */
+  get name() {
+    return 'pb-triggerable';
+  }
 }
 
 Triggerable.TYPES = {

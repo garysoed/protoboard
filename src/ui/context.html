@@ -1,27 +1,3 @@
 <base href="../..">
 
-<link rel="import" href="main.html">
-
-<link rel="stylesheet" type="text/css" href="out/ui/context.css">
-
-<template>
-  <style>
-    #root {
-      display: none;
-    }
-
-    #root.shown {
-      display: block;
-    }
-  </style>
-  <div id="root"> 
-    <content></content>
-  </div>
-</template>
-
-<script>
-  (function() {
-    var doc = document.currentScript.ownerDocument;
-    pb.ui.Context.register(doc, doc.querySelector('template'));
-  })();
-</script>
+<link rel="stylesheet" href="out/ui/context.css">

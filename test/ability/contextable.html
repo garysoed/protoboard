@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Contextable Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+</head>
+<body>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+      var _F = spies.Fakes;
+      var _M = spies.Matchers;
+      var Contextable = pb.ability.Contextable;
+      var Ability = pb.ability.Ability;
+      var Utils = pb.Utils;
+
+      var doc = document.currentScript.ownerDocument;
+
+      describe('Contextable', function() {
+        var el;
+
+        beforeEach(function(done) {
+          el = document.createElement('div');
+          done();
+        });
+
+        describe('#constructor', function() {
+          it('should create simple label to trigger ability', function() {
+            var ability = _F.ofType(Ability);
+            var contextable = new Contextable({
+              'Label': ability
+            });
+
+            var __menuEl__ = Utils.getSymbol(contextable, 'menuEl');
+            var __currentEl__ = Utils.getSymbol(contextable, 'currentEl');
+
+            var menuEl = contextable[__menuEl__];
+            expect(menuEl.children.length).to.be.equal(1);
+
+            var menuItemEl = menuEl.childNodes[0];
+            expect(menuItemEl.nodeName).to.be.equal('MENUITEM');
+            expect($(menuItemEl).attr('label')).to.be.equal('Label');
+
+            _.spy(ability, 'trigger');
+
+            contextable[__currentEl__] = el;
+            menuItemEl.click();
+            expect(ability.trigger).calledWith(el).at.least(1);
+          });
+          it('should create horizontal line', function() {
+            var contextable = new Contextable({
+              'ignored': undefined
+            });
+
+            var __menuEl__ = Utils.getSymbol(contextable, 'menuEl');
+
+            var menuEl = contextable[__menuEl__];
+            expect(menuEl.children.length).to.be.equal(1);
+
+            var menuItemEl = menuEl.childNodes[0];
+            expect(menuItemEl.nodeName).to.be.equal('HR');
+          });
+          it('should create submenu', function() {
+            var contextable = new Contextable({
+              'submenu': {
+                'label': _F.ofType(Ability)
+              }
+            });
+
+            var __menuEl__ = Utils.getSymbol(contextable, 'menuEl');
+
+            var menuEl = contextable[__menuEl__];
+            expect(menuEl.children.length).to.be.equal(1);
+
+            var submenuEl = menuEl.childNodes[0];
+            expect(submenuEl.nodeName).to.be.equal('MENU');
+            expect($(submenuEl).attr('label')).to.be.equal('submenu');
+            expect(submenuEl.children.length).to.be.equal(1);
+
+            var menuItemEl = submenuEl.childNodes[0];
+            expect(menuItemEl.nodeName).to.be.equal('MENUITEM');
+            expect($(menuItemEl).attr('label')).to.be.equal('label');
+          });
+        });
+
+        describe('#setDefaultValue', function() {
+          var contextable;
+
+          beforeEach(function(done) {
+            contextable = new Contextable({});
+            _.spy($, 'contextMenu').overrideReturn();
+            $.contextMenu.fromMenu = _.spiedFunction();
+            done();
+          });
+
+          it('should register the context menu', function() {
+            var tmpId = 1234;
+
+            _.spy(Math, 'random').overrideReturn(tmpId);
+
+            contextable.setDefaultValue(el);
+
+            var configCaptor = _M.isA(Object);
+            expect($.contextMenu).calledWith(configCaptor).at.least(1);
+
+            var contextConfig = configCaptor.matchingArgs[0];
+            expect(contextConfig['pb-el']).to.be.equal(el);
+            expect(contextConfig.selector).to.be.equal('[pb-id="' + tmpId + '"]');
+
+            // Check that the temporary ID is set to the element.
+            expect($(el).attr('pb-id')).to.be.equal('' + 1234);
+          });
+          it('should handle show event, which sets the current element', function() {
+            var __currentEl__ = Utils.getSymbol(contextable, 'currentEl');
+
+            contextable.setDefaultValue(el);
+
+            var configCaptor = _M.isA(Object);
+            expect($.contextMenu).calledWith(configCaptor).at.least(1);
+
+            var contextConfig = configCaptor.matchingArgs[0];
+            contextConfig.events.show(contextConfig);
+            expect(contextable[__currentEl__]).to.be.equal(el);
+          });
+        });
+
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+    })();
+  </script>
+</body>

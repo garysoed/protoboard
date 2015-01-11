@@ -26,8 +26,28 @@ $color-highlight: $color-dark;
 
 @mixin layer($level) {
   @if $level == 1 {
-    -webkit-filter: drop-shadow(0 0 10px $color-shadow);
+    -webkit-filter: drop-shadow(0px 2px 5px rgba($color-shadow, 1));
     z-index: 1;
+  }
+
+  @if $level == 2 {
+    -webkit-filter: drop-shadow(0 4px 10px rgba($color-shadow, .8));
+    z-index: 2;
+  }
+
+  @if $level == 3 {
+    -webkit-filter: drop-shadow(0 6px 15px rgba($color-shadow, .8));
+    z-index: 3;
+  }
+
+  @if $level == 4 {
+    -webkit-filter: drop-shadow(0 8px 20px rgba($color-shadow, .9));
+    z-index: 4;
+  }
+
+  @if $level == 5 {
+    -webkit-filter: drop-shadow(0 10px 25px rgba($color-shadow, .8));
+    z-index: 5;
   }
 }
 

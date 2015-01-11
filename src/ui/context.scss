@@ -1,12 +1,35 @@
 @import 'theme';
 
-* /deep/ pb-u-context div {
-  background-color: $color-background;
-  cursor: default;
-  padding: 5px;
-  width: 150px;
+.pb-contextable.context-menu-list {
+  @include layer(1);
 }
 
-* /deep/ pb-u-context {
-  @include layer(1);
+.pb-contextable.context-menu-list,
+.pb-contextable .context-menu-list {
+  background-color: $color-background;
+  border: none;
+  font-family: $font;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.pb-contextable .context-menu-submenu::after {
+  color: black;
+  top: auto;
+}
+
+.pb-contextable .context-menu-item {
+  background-color: $color-background;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.pb-contextable .context-menu-item:hover {
+  background-color: $color-highlight;
+}
+
+.pb-contextable .context-menu-item.context-menu-separator {
+  border-color: $color-border;
+  padding-top: 0;
+  padding-bottom: 0;
 }

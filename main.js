@@ -1,22 +1,3 @@
-var $__src_47_ability_47_ability__ = (function() {
-  "use strict";
-  var __moduleName = "src/ability/ability";
-  var Ability = function Ability() {};
-  ($traceurRuntime.createClass)(Ability, {
-    setDefaultValue: function(el) {},
-    attributeChangedCallback: function(el, name, oldValue, newValue) {},
-    attachedCallback: function(el) {},
-    detachedCallback: function(el) {},
-    trigger: function(el) {},
-    get name() {
-      throw 'unimplemented';
-    }
-  }, {});
-  var $__default = Ability;
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_utils__ = (function() {
   "use strict";
   var __moduleName = "src/utils";
@@ -135,6 +116,29 @@ var $__src_47_utils__ = (function() {
   };
   var $__default = Utils = Utils;
   Utils.makeGlobal('pb.Utils', Utils);
+  return {get default() {
+      return $__default;
+    }};
+})();
+var $__src_47_ability_47_ability__ = (function() {
+  "use strict";
+  var __moduleName = "src/ability/ability";
+  var Utils = ($__src_47_utils__).default;
+  var Ability = function Ability() {};
+  ($traceurRuntime.createClass)(Ability, {
+    setDefaultValue: function(el) {},
+    attributeChangedCallback: function(el, name, oldValue, newValue) {},
+    attachedCallback: function(el) {},
+    detachedCallback: function(el) {},
+    trigger: function(el) {},
+    get name() {
+      throw 'unimplemented';
+    }
+  }, {});
+  var $__default = Ability;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.ability.Ability', Ability);
+  }
   return {get default() {
       return $__default;
     }};
@@ -340,6 +344,12 @@ var $__src_47_ability_47_triggerable__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
+  }), Object.defineProperty($__4, "name", {
+    get: function() {
+      return 'pb-triggerable';
+    },
+    configurable: true,
+    enumerable: true
   }), $__4), {}, Ability);
   Triggerable.TYPES = {
     CLICK: 'pb-click',
@@ -359,10 +369,15 @@ var $__src_47_ability_47_abilities__ = (function() {
   var __moduleName = "src/ability/abilities";
   var Utils = ($__src_47_utils__).default;
   var Triggerable = ($__src_47_ability_47_triggerable__).default;
+  var __abilities__ = Symbol();
   var __register__ = Symbol();
   var Abilities = ($__2 = {}, Object.defineProperty($__2, __register__, {
     value: function(ctorProto, ability) {
       Utils.extendFn(ctorProto, 'createdCallback', function() {
+        if (!this[$traceurRuntime.toProperty(__abilities__)]) {
+          this[$traceurRuntime.toProperty(__abilities__)] = {};
+        }
+        this[$traceurRuntime.toProperty(__abilities__)][$traceurRuntime.toProperty(ability.name)] = ability;
         ability.setDefaultValue.call(ability, this);
       });
       Utils.extendFn(ctorProto, 'attributeChangedCallback', function(name, oldValue, newValue) {
@@ -385,11 +400,11 @@ var $__src_47_ability_47_abilities__ = (function() {
         abilities[$traceurRuntime.toProperty($__5 - 2)] = arguments[$traceurRuntime.toProperty($__5)];
       var ctorProto = ctor.prototype;
       var triggerConfig = {};
-      var knownAbilities = [];
+      var knownAbilities = new Set();
       for (var key in cfg)
         if (!$traceurRuntime.isSymbolString(key)) {
           var ability = cfg[$traceurRuntime.toProperty(key)];
-          knownAbilities.push(ability);
+          knownAbilities.add(ability);
           this[$traceurRuntime.toProperty(__register__)](ctorProto, ability);
           triggerConfig[$traceurRuntime.toProperty(key)] = ability.name;
         }
@@ -397,7 +412,7 @@ var $__src_47_ability_47_abilities__ = (function() {
           $__4; !($__4 = $__3.next()).done; ) {
         var ability$__6 = $__4.value;
         {
-          knownAbilities.push(ability$__6);
+          knownAbilities.add(ability$__6);
           this[$traceurRuntime.toProperty(__register__)](ctorProto, ability$__6);
         }
       }
@@ -898,6 +913,93 @@ var $__src_47_ability_47_modules__ = (function() {
   $__src_47_ability_47_triggerable__;
   return {};
 })();
+var $__src_47_ability_47_contextable__ = (function() {
+  "use strict";
+  var $__3;
+  var __moduleName = "src/ability/contextable";
+  var Utils = ($__src_47_utils__).default;
+  var Ability = ($__src_47_ability_47_ability__).default;
+  var __abilities__ = Symbol();
+  var __createMenuEl__ = Symbol();
+  var __currentEl__ = Symbol('currentEl');
+  var __menuEl__ = Symbol('menuEl');
+  var __onShow__ = Symbol();
+  var __trigger__ = Symbol();
+  var Contextable = function Contextable(config) {
+    this[$traceurRuntime.toProperty(__menuEl__)] = this[$traceurRuntime.toProperty(__createMenuEl__)](config);
+    this[$traceurRuntime.toProperty(__currentEl__)] = null;
+  };
+  ($traceurRuntime.createClass)(Contextable, ($__3 = {}, Object.defineProperty($__3, __createMenuEl__, {
+    value: function(config) {
+      var menuEl = document.createElement('menu');
+      $(menuEl).attr('type', 'context');
+      for (var label in config)
+        if (!$traceurRuntime.isSymbolString(label)) {
+          var value = config[$traceurRuntime.toProperty(label)];
+          var child = null;
+          if (value instanceof Ability) {
+            child = document.createElement('menuitem');
+            $(child).attr('label', label);
+            child.addEventListener('click', this[$traceurRuntime.toProperty(__trigger__)].bind(this, value));
+          } else if (value === undefined) {
+            child = document.createElement('hr');
+          } else if (value instanceof Object) {
+            child = this[$traceurRuntime.toProperty(__createMenuEl__)](value);
+            $(child).attr('label', label);
+          } else {
+            throw ("Item with label " + label + " is invalid");
+          }
+          menuEl.appendChild(child);
+        }
+      return menuEl;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, __trigger__, {
+    value: function(ability) {
+      ability.trigger(this[$traceurRuntime.toProperty(__currentEl__)]);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, __onShow__, {
+    value: function(config) {
+      this[$traceurRuntime.toProperty(__currentEl__)] = config[$traceurRuntime.toProperty('pb-el')];
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, "setDefaultValue", {
+    value: function(el) {
+      var tmpId = Math.random();
+      $(el).attr('pb-id', tmpId);
+      $.contextMenu({
+        className: 'pb-contextable',
+        selector: ("[pb-id=\"" + tmpId + "\"]"),
+        items: $.contextMenu.fromMenu(this[$traceurRuntime.toProperty(__menuEl__)]),
+        events: {show: this[$traceurRuntime.toProperty(__onShow__)].bind(this)},
+        'pb-el': el
+      });
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, "name", {
+    get: function() {
+      return 'pb-contextable';
+    },
+    configurable: true,
+    enumerable: true
+  }), $__3), {}, Ability);
+  var $__default = Contextable;
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.ability.Contextable', Contextable);
+  }
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_pbelement__ = (function() {
   "use strict";
   var __moduleName = "src/pbelement";
@@ -946,6 +1048,7 @@ var $__src_47_component_47_card__ = (function() {
   var Utils = ($__src_47_utils__).default;
   var Component = ($__src_47_component_47_component__).default;
   var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Contextable = ($__src_47_ability_47_contextable__).default;
   var Draggable = ($__src_47_ability_47_draggable__).default;
   var Rotateable = ($__src_47_ability_47_rotateable__).default;
   var Toggleable = ($__src_47_ability_47_toggleable__).default;
@@ -962,7 +1065,16 @@ var $__src_47_component_47_card__ = (function() {
       this.attachedCallback();
     }}, {register: function(currentDoc, cardTemplate) {
       if (!doc && !template) {
-        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, {'pb-click': new Toggleable(true)}, new Draggable(true), new Rotateable()).prototype});
+        var toggleable = new Toggleable(true);
+        var rotateable = new Rotateable();
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, {'pb-click': toggleable}, new Draggable(true), rotateable, new Contextable({
+            'Flip': toggleable,
+            '-': undefined,
+            'sub': {
+              'Flip': toggleable,
+              'Tap / Untap': rotateable
+            }
+          })).prototype});
       }
       doc = currentDoc;
       template = cardTemplate;
@@ -1405,7 +1517,7 @@ var $__src_47_ability_47_shuffleable__ = (function() {
 })();
 var $__src_47_region_47_deck__ = (function() {
   "use strict";
-  var $__9;
+  var $__8;
   var __moduleName = "src/region/deck";
   var Events = ($__src_47_events__).default;
   var Utils = ($__src_47_utils__).default;
@@ -1429,51 +1541,34 @@ var $__src_47_region_47_deck__ = (function() {
     },
     attachedCallback: function() {
       $traceurRuntime.superCall(this, $Deck.prototype, "attachedCallback", []);
-      Events.of(this.shadowRoot.querySelector('#shuffle'), this).register('click', this.shuffle.bind(this));
     },
     detachedCallback: function() {
       $traceurRuntime.superCall(this, $Deck.prototype, "detachedCallback", []);
-      Events.of(this.shadowRoot.querySelector('#shuffle'), this).unregister();
-    },
-    shuffle: function() {
-      var $__7 = this;
-      var pairs = Utils.toArray(this.children).map((function(child) {
-        return [child, Math.random()];
-      }));
-      pairs.sort((function(a, b) {
-        return Utils.compare(a[1], b[1]);
-      }));
-      var shuffled = pairs.map((function(pair) {
-        return pair[0];
-      }));
-      shuffled.forEach(((function(el) {
-        return $__7.appendChild(el);
-      })).bind(this));
     }
-  }, ($__9 = {}, Object.defineProperty($__9, "register", {
+  }, ($__8 = {}, Object.defineProperty($__8, "register", {
     value: function(currentDoc, deckTemplate) {
-      var $__9,
-          $__10;
+      var $__8,
+          $__9;
       if (!doc || !template) {
         doc = currentDoc;
         template = deckTemplate;
       }
-      document.registerElement(EL_NAME, ($__10 = {}, Object.defineProperty($__10, "prototype", {
-        value: Abilities.config($Deck, ($__9 = {}, Object.defineProperty($__9, Triggerable.TYPES.DOUBLE_CLICK, {
+      document.registerElement(EL_NAME, ($__9 = {}, Object.defineProperty($__9, "prototype", {
+        value: Abilities.config($Deck, ($__8 = {}, Object.defineProperty($__8, Triggerable.TYPES.DOUBLE_CLICK, {
           value: new Shuffleable(true),
           configurable: true,
           enumerable: true,
           writable: true
-        }), $__9), new Droppable(true)).prototype,
+        }), $__8), new Droppable(true)).prototype,
         configurable: true,
         enumerable: true,
         writable: true
-      }), $__10));
+      }), $__9));
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), $__9), Region);
+  }), $__8), Region);
   var $__default = Deck;
   Utils.makeGlobal('pb.region.Deck', Deck);
   return {get default() {
@@ -1645,91 +1740,6 @@ var $__src_47_surface_47_modules__ = (function() {
   $__src_47_surface_47_rectgrid__;
   return {};
 })();
-var $__src_47_ui_47_context__ = (function() {
-  "use strict";
-  var __moduleName = "src/ui/context";
-  var Utils = ($__src_47_utils__).default;
-  var ContextService = ($__src_47_service_47_context__).default;
-  var template = null;
-  var doc = null;
-  var EL_NAME = "pb-u-context";
-  var SHOWN_CLASS = "shown";
-  function handleContextMenu(event) {
-    this.show(event.x, event.y);
-    event.preventDefault();
-  }
-  function handleClick(event) {
-    if (!this.contains(event.target)) {
-      this.hide();
-    }
-  }
-  function handleContextSwitched() {
-    if (ContextService.getActive() !== this) {
-      this.hide();
-    }
-  }
-  var Context = function Context() {};
-  var $Context = Context;
-  ($traceurRuntime.createClass)(Context, {
-    createdCallback: function() {
-      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.attachedCallback();
-    },
-    attachedCallback: function() {
-      if (this.parentElement) {
-        this.parentElement.addEventListener('contextmenu', handleContextMenu.bind(this));
-      }
-      document.addEventListener('click', handleClick.bind(this));
-      $(ContextService).on(ContextService.EventType.SWITCHED, handleContextSwitched.bind(this));
-    },
-    show: function(mouseX, mouseY) {
-      var rootEl = this.shadowRoot.querySelector('#root');
-      rootEl.classList.add(SHOWN_CLASS);
-      var x = null;
-      var hAnchor = null;
-      var documentEl = this.ownerDocument.documentElement;
-      if (mouseX + rootEl.clientWidth > documentEl.clientWidth) {
-        hAnchor = 'right';
-        x = documentEl.clientWidth - mouseX;
-      } else {
-        hAnchor = 'left';
-        x = mouseX;
-      }
-      var y = null;
-      var vAnchor = null;
-      if (mouseY + rootEl.clientHeight > documentEl.clientHeight) {
-        vAnchor = 'bottom';
-        y = documentEl.clientHeight - mouseY;
-      } else {
-        vAnchor = 'top';
-        y = mouseY;
-      }
-      this.style.position = 'fixed';
-      this.style.top = '';
-      this.style.left = '';
-      this.style.right = '';
-      this.style.bottom = '';
-      this.style[$traceurRuntime.toProperty(hAnchor)] = (x + "px");
-      this.style[$traceurRuntime.toProperty(vAnchor)] = (y + "px");
-      ContextService.setActive(this);
-    },
-    hide: function() {
-      this.shadowRoot.querySelector('#root').classList.remove(SHOWN_CLASS);
-    }
-  }, {register: function(currentDoc, contextTemplate) {
-      if (doc || template) {
-        return;
-      }
-      doc = currentDoc;
-      template = contextTemplate;
-      document.registerElement(EL_NAME, {prototype: $Context.prototype});
-    }}, HTMLElement);
-  var $__default = Context = Context;
-  Utils.makeGlobal('pb.ui.Context', Context);
-  return {get default() {
-      return $__default;
-    }};
-})();
 var $__src_47_ui_47_preview__ = (function() {
   "use strict";
   var __moduleName = "src/ui/preview";
@@ -1878,7 +1888,6 @@ var $__src_47_ui_47_template__ = (function() {
 var $__src_47_ui_47_modules__ = (function() {
   "use strict";
   var __moduleName = "src/ui/modules";
-  $__src_47_ui_47_context__;
   $__src_47_ui_47_preview__;
   $__src_47_ui_47_previewer__;
   $__src_47_ui_47_template__;

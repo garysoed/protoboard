@@ -3,6 +3,7 @@ import Utils from 'src/utils';
 import Triggerable from 'src/ability/triggerable';
 
 // Private symbols.
+const __abilities__ = Symbol();
 const __register__ = Symbol();
 
 
@@ -20,6 +21,10 @@ const Abilities = {
         ctorProto,
         'createdCallback',
         function() {
+          if (!this[__abilities__]) {
+            this[__abilities__] = {};
+          }
+          this[__abilities__][ability.name] = ability;
           ability.setDefaultValue.call(ability, this);
         });
     Utils.extendFn(
@@ -50,26 +55,28 @@ const Abilities = {
    * Look at other classes in ability module to see what are supported.
    * 
    * @param {!Function} ctor Constructor of the element to add the abilities to.
-   * @param {!Map.<Ability, Object>} cfg Map with the Ability as the key, and a default value object
-   *     specific to that ability. Check the Ability's documentation for more information.
+   * @param {!Map.<string, ability.Ability>} cfg Map with the trigger type as the key, and ability
+   *    to be triggered as the value.
+   * @param {Array.<ability.Ability>} contextual Array of abilities to show on the context menu.
+   * @param {ability.Ability} [...abilities] Other abilities to register.
    */
   config(ctor, cfg, ...abilities) {
     let ctorProto = ctor.prototype;
     let triggerConfig = {};
     // collect the known abilities.
-    let knownAbilities = [];
+    let knownAbilities = new Set();
 
     // Get from config
     for (let key in cfg) {
       let ability = cfg[key];
-      knownAbilities.push(ability);
+      knownAbilities.add(ability);
       this[__register__](ctorProto, ability);
       triggerConfig[key] = ability.name;
     }
 
     // Get from the rest of abilities
     for (let ability of abilities) {
-      knownAbilities.push(ability);
+      knownAbilities.add(ability);
       this[__register__](ctorProto, ability);
     }
 

@@ -2,10 +2,11 @@ import Utils from 'src/utils';
 
 import Component from 'src/component/component';
 
-import Abilities  from 'src/ability/abilities';
-import Draggable  from 'src/ability/draggable';
-import Rotateable from 'src/ability/rotateable';
-import Toggleable from 'src/ability/toggleable';
+import Abilities   from 'src/ability/abilities';
+import Contextable from 'src/ability/contextable';
+import Draggable   from 'src/ability/draggable';
+import Rotateable  from 'src/ability/rotateable';
+import Toggleable  from 'src/ability/toggleable';
 
 let doc = null;
 let template = null;
@@ -42,14 +43,24 @@ export default class Card extends Component {
    */
   static register(currentDoc, cardTemplate) {
     if (!doc && !template) {
+      let toggleable = new Toggleable(true);
+      let rotateable = new Rotateable();
       document.registerElement(EL_NAME,  {
         prototype: Abilities.config(
             Card,
             {
-              'pb-click': new Toggleable(true),
+              'pb-click': toggleable
             },
             new Draggable(true),
-            new Rotateable()).prototype
+            rotateable,
+            new Contextable({
+              'Flip': toggleable,
+              '-': undefined,
+              'sub': {
+                'Flip': toggleable,
+                'Tap / Untap': rotateable
+              }
+            })).prototype
       });
     }
 

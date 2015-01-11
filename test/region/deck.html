@@ -24,56 +24,6 @@
       var el = doc.querySelector('#deck');
 
       describe('Deck', function() {
-        describe('#created', function() {
-          it('should call shuffle when clicking on shuffle in menu', function() {
-            var el = doc.createElement('pb-r-deck');
-            _.spy(el, 'shuffle', false);
-            
-            el.attachedCallback();
-
-            el.shadowRoot.querySelector('#shuffle').click();
-            expect(el.shuffle).called().at.least(1);
-          });
-        });
-
-        describe('#shuffle', function() {
-          var origRandom = null;
-          beforeEach(function(done) {
-            origRandom = Math.random;
-            done();
-          });
-
-          it('should reorder the child nodes', function() {
-            var numbers = [1, 2, 3];
-
-            var origRandom = Math.random;
-            // TODO(gs): Use override, once it's implemented.
-            Math.random = function() { return numbers.pop(); };
-
-            // Add the children.
-            ['1', '2', '3'].forEach(function(text) {
-              var childEl = doc.createElement('div');
-              childEl.textContent = text;
-              el.appendChild(childEl);
-            });
-
-            el.shuffle();
-            expect(el.children[0].textContent).to.be.equal('3');
-            expect(el.children[1].textContent).to.be.equal('2');
-            expect(el.children[2].textContent).to.be.equal('1');
-          });
-
-          afterEach(function(done) {
-            Math.random = origRandom;
-
-            while (el.childElementCount > 0) {
-              el.removeChild(el.children[0]);
-            }
-
-            done();
-          });
-        });
-
         afterEach(function(done) {
           _.reset();
           done();

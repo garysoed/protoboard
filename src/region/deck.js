@@ -35,9 +35,6 @@ export default class Deck extends Region {
    */
   attachedCallback() {
     super.attachedCallback();
-    // TODO(gs): Add shuffle as action.
-    Events.of(this.shadowRoot.querySelector('#shuffle'), this)
-        .register('click', this.shuffle.bind(this));
   }
 
   /**
@@ -47,19 +44,6 @@ export default class Deck extends Region {
    */
   detachedCallback() {
     super.detachedCallback();
-    Events.of(this.shadowRoot.querySelector('#shuffle'), this).unregister();
-  }
-
-  /**
-   * Shuffles the children of this element.
-   *
-   * @method shuffle
-   */
-  shuffle() {
-    let pairs = Utils.toArray(this.children).map(child => [child, Math.random()]);
-    pairs.sort((a, b) => Utils.compare(a[1], b[1]));
-    let shuffled = pairs.map(pair => pair[0]);
-    shuffled.forEach((el => this.appendChild(el)).bind(this));
   }
 
   /**

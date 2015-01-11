@@ -1,3 +1,5 @@
+import Utils from 'src/utils';
+
 /**
  * Base class for all abilities.
  *
@@ -56,4 +58,8 @@ export default class Ability {
    * @type string
    */
   get name() { throw 'unimplemented'; }
+}
+
+if (window['TEST_MODE']) {
+  Utils.makeGlobal('pb.ability.Ability', Ability);
 }
