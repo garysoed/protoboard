@@ -22,6 +22,7 @@
 
       // Private symbols
       var __onDragEnter__ = Utils.getSymbol(Droppable.prototype, 'onDragEnter');
+      var __onLastDraggedElChange__ = Utils.getSymbol(Droppable.prototype, 'onLastDraggedElChange');
       var __register__ = Utils.getSymbol(Droppable.prototype, 'register');
       var __unregister__ = Utils.getSymbol(Droppable.prototype, 'unregister');
 
@@ -127,11 +128,14 @@
 
           beforeEach(function(done) {
             fakeEvents = {
-              register: function() {
+              listen: function() {
+                return fakeEvents;
+              },
+              on: function() {
                 return fakeEvents;
               }
             };
-            _.spy(fakeEvents, 'register');
+            _.spy(fakeEvents, 'listen');
             _.spy(Events, 'of').overrideReturn(fakeEvents);
             done();
           });
@@ -140,7 +144,7 @@
             droppable[__register__](el);
 
             var handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.register).calledWith('dragover', handlerCaptor).at.least(1);
+            expect(fakeEvents.listen).calledWith('dragover', handlerCaptor).at.least(1);
 
             var event = {
               preventDefault: _.spiedFunction()
@@ -153,7 +157,7 @@
             droppable[__register__](el);
 
             var handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.register).calledWith('dragenter', handlerCaptor).at.least(1);
+            expect(fakeEvents.listen).calledWith('dragenter', handlerCaptor).at.least(1);
 
             handlerCaptor.matchingArgs[0]();
             expect(el.classList.contains('pb-over')).to.be.true();
@@ -162,7 +166,7 @@
             droppable[__register__](el);
 
             var handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.register).calledWith('dragleave', handlerCaptor).at.least(1);
+            expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
 
             droppable[__onDragEnter__](el);
             handlerCaptor.matchingArgs[0]();
@@ -172,7 +176,7 @@
             droppable[__register__](el);
 
             var handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.register).calledWith('dragleave', handlerCaptor).at.least(1);
+            expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
 
             droppable[__onDragEnter__](el);
             droppable[__onDragEnter__](el);
@@ -186,7 +190,7 @@
             droppable[__register__](el);
 
             var handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.register).calledWith('drop', handlerCaptor).at.least(1);
+            expect(fakeEvents.listen).calledWith('drop', handlerCaptor).at.least(1);
 
             handlerCaptor.matchingArgs[0]();
             expect(droppable.trigger).calledWith(el).at.least(1);
@@ -197,7 +201,7 @@
             droppable[__register__](el);
 
             droppable[__onDragEnter__](el);
-            $(DragDrop).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
+            droppable[__onLastDraggedElChange__](el);
 
             expect(el.classList.contains('pb-over')).to.be.false();
           });
@@ -207,7 +211,7 @@
             droppable[__register__](el);
 
             droppable[__onDragEnter__](el);
-            $(DragDrop).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
+            droppable[__onLastDraggedElChange__](el);
 
             expect(el.classList.contains('pb-over')).to.be.true();
           });
@@ -215,14 +219,17 @@
 
         describe('#__unregister__', function() {
           it('should unregister all events', function() {
-            var unregisterFn = _.spiedFunction();
+            var unlistenFn = _.spiedFunction();
+            var offFn = _.spiedFunction();
             _.spy(Events, 'of').overrideReturn({
-              unregister: unregisterFn
+              unlisten: unlistenFn,
+              off: offFn
             });
 
             droppable[__unregister__](el);
             expect(Events.of).calledWith(el, droppable).at.least(1);
-            expect(unregisterFn).calledWith().at.least(1);
+            expect(unlistenFn).calledWith().at.least(1);
+            expect(offFn).calledWith().at.least(1);
           });
         });
 

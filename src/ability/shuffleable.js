@@ -4,10 +4,17 @@ import Utils from 'src/utils';
 import Ability from 'src/ability/ability';
 
 /**
+ * Provides decorator to make the component be able to shuffle the child elements.
+ * 
  * @class ability.Shuffleable
  * @extends ability.Ability
  */
 
+/**
+ * Set to true to enable this element to be shuffleable.
+ *
+ * @attribute pb-shuffleable
+ */
 const ATTR_NAME = 'pb-shuffleable';
 
 // Private symbols.
@@ -53,10 +60,11 @@ export default class Shuffleable extends Ability {
   }
 
   /**
-   * The name of the ability.
+   * The name of the ability. This is used as an ID to refer to the registered abilities.
    * 
-   * @attribute name
+   * @property name
    * @type string
+   * @readonly
    */
   get name() {
     return ATTR_NAME;

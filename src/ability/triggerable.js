@@ -20,17 +20,33 @@ import Ability from 'src/ability/ability';
 
 // Private symbols.
 const __defaultValue__ = Symbol();
+const __knownAbilities__ = Symbol();
+const __triggers__ = Symbol();
+
 const __getEvent__ = Symbol('getEvent');
 const __getTriggers__ = Symbol('getTriggers');
 const __isRegistered__ = Symbol('isRegistered');
-const __knownAbilities__ = Symbol();
 const __register__ = Symbol('register');
-const __triggers__ = Symbol();
 const __unregister__ = Symbol('unregister');
-const __handler__ = Symbol();
 
 class Triggerable extends Ability {
 
+  /**
+   * @constructor
+   * @param {Object=} defaultValue An object with the triggerable type string as the key, and 
+   *     the triggered ability's name as the value. These keys correspond to the element's 
+   *     attributes. Defaults to empty object.
+   * @param {Array.<ability.Ability>=} knownAbilities A list of known abilities. This is used 
+   *     when the element's attribute value is changed. Defaults to empty array.
+   */
+  constructor(defaultValue = {}, knownAbilities = []) {
+    this[__defaultValue__] = defaultValue;
+    this[__knownAbilities__] = {};
+    for (let ability of knownAbilities) {
+      this[__knownAbilities__][ability.name] = ability;
+    }
+  }
+  
   /**
    * Returns the event associated with the trigger type.
    * 
@@ -121,22 +137,6 @@ class Triggerable extends Ability {
   }
 
   /**
-   * @constructor
-   * @param {Object=} defaultValue An object with the triggerable type string as the key, and 
-   *     the triggered ability's name as the value. These keys correspond to the element's 
-   *     attributes. Defaults to empty object.
-   * @param {Array.<ability.Ability>=} knownAbilities A list of known abilities. This is used 
-   *     when the element's attribute value is changed. Defaults to empty array.
-   */
-  constructor(defaultValue = {}, knownAbilities = []) {
-    this[__defaultValue__] = defaultValue;
-    this[__knownAbilities__] = {};
-    for (let ability of knownAbilities) {
-      this[__knownAbilities__][ability.name] = ability;
-    }
-  }
-
-  /**
    * Sets the default value of the given element.
    *
    * @method setDefaultValue
@@ -205,10 +205,11 @@ class Triggerable extends Ability {
   }
 
   /**
-   * The name of the ability.
+   * The name of the ability. This is used as an ID to refer to the registered abilities.
    * 
-   * @attribute name
+   * @property name
    * @type string
+   * @readonly
    */
   get name() {
     return 'pb-triggerable';

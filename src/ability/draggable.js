@@ -2,7 +2,7 @@ import Check  from 'src/check';
 import Events from 'src/events';
 import Utils  from 'src/utils';
 
-import Ability         from 'src/ability/ability';
+import Ability from 'src/ability/ability';
 
 import DragDropService from 'src/service/dragdrop';
 
@@ -12,7 +12,6 @@ import DragDropService from 'src/service/dragdrop';
  * scope.
  *
  * @class ability.Draggable
- * @static
  * @extends ability.Ability
  */
 
@@ -26,6 +25,7 @@ const CLASS_DRAGGED = 'pb-dragged';
 
 // Private symbols.
 const __defaultValue__ = Symbol();
+
 const __onDragEnd__ = Symbol();
 const __onDragStart__ = Symbol('onDragStart');
 const __register__ = Symbol();
@@ -35,17 +35,32 @@ export default class Draggable extends Ability {
 
   /**
    * @constructor
-   * @param  {boolean} defaultValue Default value of the element. True iff the element should be
+   * @param {boolean} defaultValue Default value of the element. True iff the element should be
    *     enabled by default.
    */
   constructor(defaultValue) {
     this[__defaultValue__] = defaultValue;
   }
 
+  /**
+   * Handler called when the dragging has ended.
+   *
+   * @method __onDragEnd__
+   * @param {!Element} el Element being dragged.
+   * @private
+   */
   [__onDragEnd__](el) {
     el.classList.remove(CLASS_DRAGGED);
   }
 
+  /**
+   * Handler called when dragging has started.
+   *
+   * @method __onDragStart__
+   * @param {!Element} el Element being dragged.
+   * @param {!Event} event The drag start event.
+   * @private
+   */
   [__onDragStart__](el, event) {
     let dataTransfer = event.dataTransfer;
     dataTransfer.effectAllowed = 'move';
@@ -58,19 +73,33 @@ export default class Draggable extends Ability {
         event.clientY - boundingRect.top);
   }
 
+  /**
+   * Registers the handlers associated with this ability to the given element.
+   *
+   * @method __register__
+   * @param {!Element} element The element to register the handlers to.
+   * @private
+   */
   [__register__](element) {
     // Propagate the draggable attribute to the root element.
     Utils.toArray(element.children).forEach(child => {
       $(child).attr('draggable', 'true');
       Events.of(child, this)
-          .register('dragstart', this[__onDragStart__].bind(this, element))
-          .register('dragend', this[__onDragEnd__].bind(this, element));
+          .listen('dragstart', this[__onDragStart__].bind(this, element))
+          .listen('dragend', this[__onDragEnd__].bind(this, element));
     });
   }
 
+  /**
+   * Unregisters the handlers associated with this ability from the given element.
+   *
+   * @method __unregister__
+   * @param {!Element} element The element to unregister the handlers from.
+   * @private
+   */
   [__unregister__](element) {
     Utils.toArray(element.children).forEach(child => {
-      Events.of(child, this).unregister();
+      Events.of(child, this).unlisten();
       $(child).attr('draggable', null);
     });
   }
@@ -132,8 +161,8 @@ export default class Draggable extends Ability {
   /**
    * Returns the element that will be moved, if the given element were to be dragged and dropped.
    *
-   * @method  getMovedElement 
-   * @param  {!Element} el The element that is dragged.
+   * @method getMovedElement 
+   * @param {!Element} el The element that is dragged.
    * @return {!Element} The element that will be moved if the given element was dragged and dropped.
    */
   getMovedElement(el) {
@@ -141,10 +170,11 @@ export default class Draggable extends Ability {
   }
 
   /**
-   * The name of the ability.
+   * The name of the ability. This is used as an ID to refer to the registered abilities.
    * 
-   * @attribute name
+   * @property name
    * @type string
+   * @readonly
    */
   get name() {
     return ATTR_NAME;

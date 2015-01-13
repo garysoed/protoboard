@@ -126,6 +126,20 @@
             contextConfig.events.show(contextConfig);
             expect(contextable[__currentEl__]).to.be.equal(el);
           });
+          it('should handle hide event, which unsets the current element', function() {
+            var __currentEl__ = Utils.getSymbol(contextable, 'currentEl');
+
+            contextable.setDefaultValue(el);
+
+            var configCaptor = _M.isA(Object);
+            expect($.contextMenu).calledWith(configCaptor).at.least(1);
+
+            contextable[__currentEl__] = el;
+
+            var contextConfig = configCaptor.matchingArgs[0];
+            contextConfig.events.hide(contextConfig);
+            expect(contextable[__currentEl__]).to.be.null();
+          });
         });
 
         afterEach(function(done) {

@@ -8,11 +8,6 @@ import Draggable   from 'src/ability/draggable';
 import Rotateable  from 'src/ability/rotateable';
 import Toggleable  from 'src/ability/toggleable';
 
-let doc = null;
-let template = null;
-
-const EL_NAME = 'pb-c-card';
-
 /**
  * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
  * - One must have a `pb-front` class. This is the front face of the card.
@@ -20,12 +15,36 @@ const EL_NAME = 'pb-c-card';
  *
  * By default, the card starts by showing its back. If you want to make it start by showing the 
  * front face, add `pb-showfront="true"` to the `pb-c-card`.
+ *
+ * ```html
+ * <!-- Example: Create a card that starts by displaying its front side -->
+ * <pb-c-card pb-showfront="true">
+ *   <div class="pb-front">Front side</div>
+ *   <div class="pb-back">Back side</div>
+ * </pb-c-card>
+ * ```
+ *
+ * Supported abilities:
+ * - [[Draggable|ability.Draggable]]: Default enabled.
+ * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
+ * - [[Rotateable|ability.Rotateable]]: Default disabled.
  * 
  * @class component.Card
  * @extends component.Component
  */
+
+let doc = null;
+let template = null;
+
+const EL_NAME = 'pb-c-card';
+
 export default class Card extends Component {
 
+  /**
+   * Called when the element is created
+   *
+   * @method createdCallback
+   */
   createdCallback() {
     super.createdCallback();
     this.createShadowRoot()
@@ -45,13 +64,14 @@ export default class Card extends Component {
     if (!doc && !template) {
       let toggleable = new Toggleable(true);
       let rotateable = new Rotateable();
+      let draggable = new Draggable(true);
       document.registerElement(EL_NAME,  {
         prototype: Abilities.config(
             Card,
             {
               'pb-click': toggleable
             },
-            new Draggable(true),
+            draggable,
             rotateable,
             new Contextable({
               'Flip': toggleable,

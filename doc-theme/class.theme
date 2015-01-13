@@ -1,15 +1,16 @@
 # {{class.name}}
-{{#if class.static}}**Static**{{/if}}
+{{#if class.static}}**static**{{/if}}
 
-{{#if class.extends}}**Extends**: {{$types class.extends classes}}{{/if}}
+{{#if class.extends}}**extends**: {{$types class.extends classes}}{{/if}}
 
-{{#if class.subclasses}}**Subclasses**: {{#each class.subclasses}}{{#if @index}} {{/if}}{{$types this @root.classes}}{{/each}}{{/if}}
+{{#if class.subclasses}}**subclasses**: {{#each class.subclasses}}{{#if @index}} {{/if}}{{$types this @root.classes}}{{/each}}{{/if}}
 
 {{{class.description}}}
 
 {{#unless class.static}}
-## Constructor
-#### {{class.name}}({{$params class.constructor.params classes}})
+```javascript
+new {{class.name}}({{#each class.constructor.params}}{{#if @index}}, {{/if}}{{{type}}} {{#if multiple}}...{{/if}}{{name}}{{/each}})
+```
 {{/unless}}
 
 {{$paramsDesc class.constructor.params classes}}
@@ -32,8 +33,8 @@
 {{#each class.properties}}
 <tr>
 <td>{{name}}</td>
-<td>{{#if static}}<b>Static</b> {{/if}}{{$types type}}</td>
-<td>{{{description}}}</td>
+<td>{{#if static}}<b>static</b> {{/if}}{{$types type}}</td>
+<td>{{#if readonly}}<b>readonly</b> {{/if}}{{{description}}}</td>
 </tr>
 {{/each}}
 </table>
@@ -42,10 +43,10 @@
 {{#if class.methods}}
 ## Methods
 {{#each class.methods}}
-### {{name}}
+### {{$escapeMd name}}
 
 ```javascript
-{{#if static}}static {{/if}}{{#if return}}{{return.type}} {{/if}}{{name}}({{#each params}}{{#if @index}}, {{/if}}{{type}} {{name}}{{/each}})
+{{#if static}}static {{/if}}{{#if return}}{{{return.type}}} {{/if}}{{name}}({{#each params}}{{#if @index}}, {{/if}}{{{type}}} {{#if multiple}}...{{/if}}{{name}}{{/each}})
 ```
 
 {{{description}}}

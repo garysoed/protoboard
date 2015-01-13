@@ -35,14 +35,14 @@ export default class Preview extends PbElement {
     super.attachedCallback();
     if (this.parentElement) {
       Events.of(this.parentElement, this)
-          .register('mouseenter', handleMouseOver.bind(this))
-          .register('mouseleave', handleMouseOut.bind(this));
+          .listen('mouseenter', handleMouseOver.bind(this))
+          .listen('mouseleave', handleMouseOut.bind(this));
     }
   }
 
   detachedCallback() {
     if (this.parentElement) {
-      Events.of(this.parentElement, this).unregister();
+      Events.of(this.parentElement, this).unlisten();
     }
     super.detachedCallback();
   }

@@ -48,7 +48,7 @@ export default class Region extends PbElement {
 
   attachedCallback() {
     super.attachedCallback();
-    Events.of(this, this).register('click', this[__onClick__].bind(this));
+    Events.of(this, this).listen('click', this[__onClick__].bind(this));
 
     $(Distribute)
         .on(Distribute.EventType.BEGIN, this[__onDistributeBegin__].bind(this))
@@ -56,7 +56,7 @@ export default class Region extends PbElement {
   }
 
   detachedCallback() {
-    Events.of(this, this).unregister();
+    Events.of(this, this).unlisten();
   }
 }
 

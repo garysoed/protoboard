@@ -6,33 +6,33 @@ import Ability from 'src/ability/ability';
  * Provides decorator to show context menu on an element. To use this, pass a configuration object
  * into the constructor. The configuration object determines the structure of the menu. The key of
  * the object is the label to be shown on the menu. The value can be any of the following:
- * - ability.Ability object: This will display the label as a menu item which triggers the ability
- *   when clicked.
- * - undefined: This will display a horizontal line. The label's value is ignored.
+ * - [[ability.Ability|ability.Ability]] object: This will display the label as a menu item which 
+ *   triggers the ability when clicked.
+ * - `undefined`: This will display a horizontal line. The label's value is ignored.
  * - Configuration object: This will use the label as a menu item to open a submenu specified by the
  *   given configuration.
  *
  * TODO(gs): Maybe change the config to take an array of objects?
  *
  * @class ability.Contextable
- * @static
  * @extends ability.Ability
  */
 
 // Private symbols.
 const __abilities__ = Symbol();
+const __menuEl__ = Symbol('menuEl');
+
 const __createMenuEl__ = Symbol();
 const __currentEl__ = Symbol('currentEl');
-const __menuEl__ = Symbol('menuEl');
+const __onHide__ = Symbol();
 const __onShow__ = Symbol();
 const __trigger__ = Symbol();
 
 export default class Contextable extends Ability {
 
-
   /**
    * @constructor
-   * @param {Object} config The configuration object to describe the menu. See the class' 
+   * @param {Object} config The configuration object to describe the menu. See the class'
    *    description for this.
    */
   constructor(config) {
@@ -40,6 +40,15 @@ export default class Contextable extends Ability {
     this[__currentEl__] = null;
   }
 
+  /**
+   * Creates a menu element based on the given configuration. See the class' description for the
+   * format of the configuration.
+   *
+   * @method __createMenuEl__
+   * @param {!Object} config The configuration object used to create a menu element.
+   * @return {!Element} The menu element created based on the configuration object.
+   * @private
+   */
   [__createMenuEl__](config) {
     let menuEl = document.createElement('menu');
     $(menuEl).attr('type', 'context');
@@ -68,12 +77,36 @@ export default class Contextable extends Ability {
     return menuEl;
   }
 
+  /**
+   * Triggers the given ability on the current element.
+   * 
+   * @method __trigger__
+   * @param {ability.Ability} ability The ability to trigger.
+   * @private
+   */
   [__trigger__](ability) {
     ability.trigger(this[__currentEl__]);
   }
 
+  /**
+   * Handles event called when the context menu is shown.
+   * 
+   * @method __onShow__
+   * @param {!Object} config The configuration object passed into jQuery's contextMenu.
+   * @private
+   */
   [__onShow__](config) {
     this[__currentEl__] = config['pb-el'];
+  }
+
+  /**
+   * Handles event called when the context menu is hidden.
+   *
+   * @method __onHide__
+   * @private
+   */
+  [__onHide__]() {
+    this[__currentEl__] = null;
   }
 
   /**
@@ -91,7 +124,8 @@ export default class Contextable extends Ability {
       selector: `[pb-id="${tmpId}"]`,
       items: $.contextMenu.fromMenu(this[__menuEl__]),
       events: {
-        show: this[__onShow__].bind(this)
+        show: this[__onShow__].bind(this),
+        hide: this[__onHide__].bind(this)
       },
       'pb-el': el
     });
@@ -100,10 +134,11 @@ export default class Contextable extends Ability {
   }
 
   /**
-   * The name of the ability.
+   * Name of the ability.
    * 
-   * @attribute name
+   * @property name
    * @type string
+   * @readonly
    */
   get name() {
     return 'pb-contextable';

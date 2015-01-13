@@ -9,11 +9,11 @@ more than 1 classes, group them by directories. The `from` at for every group sh
 - Symbols have to be sorted alphabetically
 - Sections: 
   - Imports
+  - Class JSDoc
   - Private Constants
   - Symbols
-  - Globals
+  - Public Globals
   - Class
-    - Private Attributes
     - Constructor
     - Private methods
     - Public Methods

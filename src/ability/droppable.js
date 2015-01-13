@@ -10,42 +10,58 @@ import DragDrop from 'src/service/dragdrop';
  * Provides decorator to make an element be a drop target for drag and drop.
  * 
  * @class ability.Droppable
- * @static
  * @extends ability.Ability
  */
 
+/**
+ * Set to true to make it possible to drop elements into this element.
+ * @attribute pb-droppable
+ */
 const ATTR_NAME = 'pb-droppable';
 const CLASS_OVER = 'pb-over';
 
 // Private symbols.
 const __defaultValue__ = Symbol();
 const __dragEnterCount__ = Symbol();
-const __observeHandler__ = Symbol();
-const __onDragOver__ = Symbol();
+
 const __onDragEnter__ = Symbol('onDragEnter');
 const __onDragLeave__ = Symbol();
-const __onLastDraggedElChange__ = Symbol();
+const __onDragOver__ = Symbol();
+const __onLastDraggedElChange__ = Symbol('onLastDraggedElChange');
 const __register__ = Symbol('register');
 const __unregister__ = Symbol('unregister');
 
 export default class Droppable extends Ability {
 
+  /**
+   * @constructor
+   * @param {boolean} defaultValue True iff the ability should be enabled.
+   */
   constructor(defaultValue) {
     this[__defaultValue__] = defaultValue;
     this[__dragEnterCount__] = 0;
   }
 
-  [__onDragOver__](el, event) {
-    event.preventDefault();
-    event.dropEffect = 'move';
-  }
-
+  /**
+   * Handler called when an element has entered the given element.
+   *
+   * @method __onDragEnter__
+   * @param {!Element} el The element that is being entered.
+   * @private
+   */
   [__onDragEnter__](el) {
     el.classList.add(CLASS_OVER);
     this[__dragEnterCount__]++;
   }
 
-  [__onDragLeave__](el, event) {
+  /**
+   * Handler called when an element has left the given element.
+   * 
+   * @method __onDragLeave__
+   * @param {!Element} el The element being left behind.
+   * @private
+   */
+  [__onDragLeave__](el) {
     this[__dragEnterCount__]--;
     if (this[__dragEnterCount__] <= 0) {
       this[__dragEnterCount__] = 0;
@@ -53,6 +69,26 @@ export default class Droppable extends Ability {
     }
   }
 
+  /**
+   * Handler called when an element is dragged over the given element.
+   *
+   * @method __onDragOver__
+   * @param {!Element} el The element where another element is dragged over it.
+   * @param {!Event} event The event object.
+   * @private
+   */
+  [__onDragOver__](el, event) {
+    event.preventDefault();
+    event.dropEffect = 'move';
+  }
+
+  /**
+   * Handler called when the last element being dragged has changed.
+   *
+   * @method __onLastDraggedElChange__
+   * @param {!Element} el The element that this ability is registered to.
+   * @private
+   */
   [__onLastDraggedElChange__](el) {
     if (!DragDrop.lastDraggedEl) {
       this[__dragEnterCount__] = 0;
@@ -60,22 +96,29 @@ export default class Droppable extends Ability {
     }
   }
 
+  /**
+   * Registers the handlers for this ability to the given element.
+   *
+   * @method __register__
+   * @param {!Element} el The element to register the ability to.
+   * @private
+   */
   [__register__](el) {
     Events.of(el, this)
-        .register('dragover', this[__onDragOver__].bind(this, el))
-        .register('dragenter', this[__onDragEnter__].bind(this, el))
-        .register('dragleave', this[__onDragLeave__].bind(this, el))
-        .register('drop', this.trigger.bind(this, el));
+        .listen('dragover', this[__onDragOver__].bind(this, el))
+        .listen('dragenter', this[__onDragEnter__].bind(this, el))
+        .listen('dragleave', this[__onDragLeave__].bind(this, el))
+        .listen('drop', this.trigger.bind(this, el));
 
-    $(DragDrop).on(
-        DragDrop.Events.LAST_DRAGGED_EL_CHANGED, 
-        this[__onLastDraggedElChange__].bind(this, el));
+    Events.of(DragDrop, this)
+        .on(
+            DragDrop.Events.LAST_DRAGGED_EL_CHANGED, 
+            this[__onLastDraggedElChange__].bind(this, el));
   }
 
   [__unregister__](el) {
-    // TODO(gs): off the last dragged el changed
-
-    Events.of(el, this).unregister();
+    Events.of(el, this).unlisten();
+    Events.of(DragDrop, this).off();
   }
 
   /**
@@ -167,10 +210,11 @@ export default class Droppable extends Ability {
   }
 
   /**
-   * The name of the ability.
+   * The name of the ability. This is used as an ID to refer to the registered abilities.
    * 
-   * @attribute name
+   * @property name
    * @type string
+   * @readonly
    */
   get name() {
     return ATTR_NAME;

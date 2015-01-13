@@ -1,11 +1,18 @@
-import Check    from 'src/check';
+import Check from 'src/check';
 import Utils from 'src/utils';
 
-import Ability     from 'src/ability/ability';
-import Triggerable from 'src/ability/triggerable';
+import Ability from 'src/ability/ability';
+
+/**
+ * Provides decorator to make an element toggleable between two states.
+ * 
+ * @class ability.Toggleable
+ * @extends ability.Ability
+ */
 
 /**
  * Set to true to make this element toggleable.
+ * 
  * @attribute pb-toggleable
  */
 const ATTR_NAME = 'pb-toggleable';
@@ -21,19 +28,9 @@ const ATTR_SHOWFRONT = 'pb-showfront';
 const __defaultEnabled__ = Symbol();
 const __defaultShowFront__ = Symbol();
 
-function isEnabled(el) {
-  return Check($(el).attr(ATTR_NAME)).isBoolean().orThrows();
-}
+const __isEnabled__ = Symbol();
+const __isShowFront__ = Symbol();
 
-function isShowFront(el) {
-  return Check($(el).attr(ATTR_SHOWFRONT)).isBoolean().orThrows();
-}
-
-/**
- * @class ability.Toggleable
- * @static
- * @extends ability.Ability
- */
 export default class Toggleable extends Ability {
 
   /**
@@ -46,6 +43,26 @@ export default class Toggleable extends Ability {
   constructor(defaultEnabled = true, defaultShowFront = false) {
     this[__defaultEnabled__] = defaultEnabled;
     this[__defaultShowFront__] = defaultShowFront;
+  }
+
+  /**
+   * @method __isEnabled__
+   * @param {!Element} el Element to check.
+   * @return {boolean} True iff the ability is enabled for the given element.
+   * @private
+   */
+  [__isEnabled__](el) {
+    return Check($(el).attr(ATTR_NAME)).isBoolean().orThrows();
+  }
+
+  /**
+   * @method __isShowFront__
+   * @param {!Element} el Element to check.
+   * @return {boolean} True iff the element is currently showing the "front" side.
+   * @private
+   */
+  [__isShowFront__](el) {
+    return Check($(el).attr(ATTR_SHOWFRONT)).isBoolean().orThrows();
   }
 
   /**
@@ -71,16 +88,17 @@ export default class Toggleable extends Ability {
    * @param  {!Element} el Element to toggle the state of.
    */
   trigger(el) {
-    if (isEnabled(el)) {
-      $(el).attr(ATTR_SHOWFRONT, !isShowFront(el));
+    if (this[__isEnabled__](el)) {
+      $(el).attr(ATTR_SHOWFRONT, !this[__isShowFront__](el));
     }
   }
 
   /**
-   * The name of the ability.
+   * The name of the ability. This is used as an ID to refer to the registered abilities.
    * 
-   * @attribute name
+   * @property name
    * @type string
+   * @readonly
    */
   get name() {
     return ATTR_NAME;

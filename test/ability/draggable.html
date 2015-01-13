@@ -70,11 +70,11 @@
         }
 
         function expectUnregistered(draggable) {
-          expect(Events.of(draggable, child1).isRegistered('dragstart')).to.be.false;
-          expect(Events.of(draggable, child1).isRegistered('dragend')).to.be.false;
+          expect(Events.of(draggable, child1).hasListener('dragstart')).to.be.false;
+          expect(Events.of(draggable, child1).hasListener('dragend')).to.be.false;
 
-          expect(Events.of(draggable, child2).isRegistered('dragstart')).to.be.false;
-          expect(Events.of(draggable, child2).isRegistered('dragend')).to.be.false;
+          expect(Events.of(draggable, child2).hasListener('dragstart')).to.be.false;
+          expect(Events.of(draggable, child2).hasListener('dragend')).to.be.false;
 
           expect($(child1).attr('draggable')).to.not.exist;
           expect($(child2).attr('draggable')).to.not.exist;

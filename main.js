@@ -207,14 +207,13 @@ var $__src_47_ability_47_triggerable__ = (function() {
   var Utils = ($__src_47_utils__).default;
   var Ability = ($__src_47_ability_47_ability__).default;
   var __defaultValue__ = Symbol();
+  var __knownAbilities__ = Symbol();
+  var __triggers__ = Symbol();
   var __getEvent__ = Symbol('getEvent');
   var __getTriggers__ = Symbol('getTriggers');
   var __isRegistered__ = Symbol('isRegistered');
-  var __knownAbilities__ = Symbol();
   var __register__ = Symbol('register');
-  var __triggers__ = Symbol();
   var __unregister__ = Symbol('unregister');
-  var __handler__ = Symbol();
   var Triggerable = function Triggerable() {
     var defaultValue = arguments[0] !== (void 0) ? arguments[0] : {};
     var knownAbilities = arguments[1] !== (void 0) ? arguments[1] : [];
@@ -367,10 +366,10 @@ var $__src_47_ability_47_abilities__ = (function() {
   "use strict";
   var $__2;
   var __moduleName = "src/ability/abilities";
-  var Utils = ($__src_47_utils__).default;
   var Triggerable = ($__src_47_ability_47_triggerable__).default;
-  var __abilities__ = Symbol();
+  var Utils = ($__src_47_utils__).default;
   var __register__ = Symbol();
+  var __abilities__ = Symbol();
   var Abilities = ($__2 = {}, Object.defineProperty($__2, __register__, {
     value: function(ctorProto, ability) {
       Utils.extendFn(ctorProto, 'createdCallback', function() {
@@ -507,67 +506,160 @@ var $__src_47_check__ = (function() {
 })();
 var $__src_47_events__ = (function() {
   "use strict";
+  var $__3,
+      $__4;
   var __moduleName = "src/events";
   var Utils = ($__src_47_utils__).default;
+  var TYPES = {
+    DOM: 'dom',
+    JQUERY: 'jquery'
+  };
+  var HANDLERS = ($__3 = {}, Object.defineProperty($__3, TYPES.DOM, {
+    value: {
+      register: function(action, eventName, handler) {
+        action[$traceurRuntime.toProperty(__element__)].addEventListener(eventName, handler);
+      },
+      unregister: function(action, eventName, handler) {
+        action[$traceurRuntime.toProperty(__element__)].removeEventListener(eventName, handler);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__3, TYPES.JQUERY, {
+    value: {
+      register: function(action, eventName, handler) {
+        $(action[$traceurRuntime.toProperty(__element__)]).on(eventName, handler);
+      },
+      unregister: function(action, eventName, handler) {
+        $(action[$traceurRuntime.toProperty(__element__)]).off(eventName, handler);
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__3);
   var __element__ = Symbol();
   var __scope__ = Symbol();
-  var __handlers__ = Symbol();
+  var __isRegistered__ = Symbol('isRegistered');
+  var __register__ = Symbol('register');
+  var __unregister__ = Symbol('unregister');
   var Action = function Action(element, scope) {
     this[$traceurRuntime.toProperty(__element__)] = element;
     if (!this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)]) {
       this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)] = {};
     }
   };
-  ($traceurRuntime.createClass)(Action, {
-    isRegistered: function(eventName, handler) {
-      var eventSet = this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(eventName)];
+  ($traceurRuntime.createClass)(Action, ($__4 = {}, Object.defineProperty($__4, __isRegistered__, {
+    value: function(type, eventName, handler) {
+      if (!this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)]) {
+        return false;
+      }
+      var eventSet = this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)][$traceurRuntime.toProperty(eventName)];
       if (handler) {
         return !!eventSet && eventSet.has(handler);
       } else {
         return !!eventSet && eventSet.size > 0;
       }
     },
-    register: function(eventName, handler) {
-      if (this.isRegistered(eventName, handler)) {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, __register__, {
+    value: function(type, eventName, handler) {
+      if (this[$traceurRuntime.toProperty(__isRegistered__)](type, eventName, handler)) {
         return this;
       }
-      this[$traceurRuntime.toProperty(__element__)].addEventListener(eventName, handler);
-      if (!this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(eventName)]) {
-        this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(eventName)] = new Set();
+      HANDLERS[$traceurRuntime.toProperty(type)].register(this, eventName, handler);
+      if (!this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)]) {
+        this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)] = {};
       }
-      this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(eventName)].add(handler);
+      if (!this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)][$traceurRuntime.toProperty(eventName)]) {
+        this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)][$traceurRuntime.toProperty(eventName)] = new Set();
+      }
+      this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)][$traceurRuntime.toProperty(eventName)].add(handler);
       return this;
     },
-    unregister: function(eventName, handler) {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, __unregister__, {
+    value: function(type, eventName, handler) {
       var $__1 = this;
-      if (!eventName) {
-        for (var event in this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)])
-          if (!$traceurRuntime.isSymbolString(event)) {
-            this.unregister(event);
+      if (!type) {
+        for (var registeredType in this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)])
+          if (!$traceurRuntime.isSymbolString(registeredType)) {
+            this[$traceurRuntime.toProperty(__unregister__)](registeredType);
           }
         return this;
       }
-      var eventSet = this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(eventName)];
+      if (!eventName) {
+        for (var event in this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)])
+          if (!$traceurRuntime.isSymbolString(event)) {
+            this[$traceurRuntime.toProperty(__unregister__)](type, event);
+          }
+        return this;
+      }
+      var eventSet = this[$traceurRuntime.toProperty(__element__)][$traceurRuntime.toProperty(__scope__)][$traceurRuntime.toProperty(type)][$traceurRuntime.toProperty(eventName)];
       if (!eventSet) {
         return this;
       }
       if (!handler) {
         eventSet.forEach((function(registeredHandler) {
-          return $__1.unregister(eventName, registeredHandler);
+          return $__1[$traceurRuntime.toProperty(__unregister__)](type, eventName, registeredHandler);
         }));
       } else {
-        this[$traceurRuntime.toProperty(__element__)].removeEventListener(eventName, handler);
+        HANDLERS[$traceurRuntime.toProperty(type)].unregister(this, eventName, handler);
         eventSet.delete(handler);
       }
       return this;
-    }
-  }, {});
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "listen", {
+    value: function(eventName, handler) {
+      return this[$traceurRuntime.toProperty(__register__)](TYPES.DOM, eventName, handler);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "unlisten", {
+    value: function(eventName, handler) {
+      return this[$traceurRuntime.toProperty(__unregister__)](TYPES.DOM, eventName, handler);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "hasListener", {
+    value: function(eventName, handler) {
+      return this[$traceurRuntime.toProperty(__isRegistered__)](TYPES.DOM, eventName, handler);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "on", {
+    value: function(eventName, handler) {
+      return this[$traceurRuntime.toProperty(__register__)](TYPES.JQUERY, eventName, handler);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "off", {
+    value: function(eventName, handler) {
+      return this[$traceurRuntime.toProperty(__unregister__)](TYPES.JQUERY, eventName, handler);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__4), {});
   var Events = {of: function(element, scope) {
       return new Action(element, scope);
     }};
   var $__default = Events = Events;
   if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
     Utils.makeGlobal('pb.Events', Events);
+    Utils.makeGlobal('pb.Events.Action', Action);
   }
   return {get default() {
       return $__default;
@@ -674,7 +766,7 @@ var $__src_47_ability_47_draggable__ = (function() {
       var $__5 = this;
       Utils.toArray(element.children).forEach((function(child) {
         $(child).attr('draggable', 'true');
-        Events.of(child, $__5).register('dragstart', $__5[$traceurRuntime.toProperty(__onDragStart__)].bind($__5, element)).register('dragend', $__5[$traceurRuntime.toProperty(__onDragEnd__)].bind($__5, element));
+        Events.of(child, $__5).listen('dragstart', $__5[$traceurRuntime.toProperty(__onDragStart__)].bind($__5, element)).listen('dragend', $__5[$traceurRuntime.toProperty(__onDragEnd__)].bind($__5, element));
       }));
     },
     configurable: true,
@@ -684,7 +776,7 @@ var $__src_47_ability_47_draggable__ = (function() {
     value: function(element) {
       var $__5 = this;
       Utils.toArray(element.children).forEach((function(child) {
-        Events.of(child, $__5).unregister();
+        Events.of(child, $__5).unlisten();
         $(child).attr('draggable', null);
       }));
     },
@@ -856,29 +948,39 @@ var $__src_47_ability_47_rotateable__ = (function() {
 })();
 var $__src_47_ability_47_toggleable__ = (function() {
   "use strict";
+  var $__4;
   var __moduleName = "src/ability/toggleable";
   var Check = ($__src_47_check__).default;
   var Utils = ($__src_47_utils__).default;
   var Ability = ($__src_47_ability_47_ability__).default;
-  var Triggerable = ($__src_47_ability_47_triggerable__).default;
   var ATTR_NAME = 'pb-toggleable';
   var ATTR_SHOWFRONT = 'pb-showfront';
   var __defaultEnabled__ = Symbol();
   var __defaultShowFront__ = Symbol();
-  function isEnabled(el) {
-    return Check($(el).attr(ATTR_NAME)).isBoolean().orThrows();
-  }
-  function isShowFront(el) {
-    return Check($(el).attr(ATTR_SHOWFRONT)).isBoolean().orThrows();
-  }
+  var __isEnabled__ = Symbol();
+  var __isShowFront__ = Symbol();
   var Toggleable = function Toggleable() {
     var defaultEnabled = arguments[0] !== (void 0) ? arguments[0] : true;
     var defaultShowFront = arguments[1] !== (void 0) ? arguments[1] : false;
     this[$traceurRuntime.toProperty(__defaultEnabled__)] = defaultEnabled;
     this[$traceurRuntime.toProperty(__defaultShowFront__)] = defaultShowFront;
   };
-  ($traceurRuntime.createClass)(Toggleable, {
-    setDefaultValue: function(el) {
+  ($traceurRuntime.createClass)(Toggleable, ($__4 = {}, Object.defineProperty($__4, __isEnabled__, {
+    value: function(el) {
+      return Check($(el).attr(ATTR_NAME)).isBoolean().orThrows();
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, __isShowFront__, {
+    value: function(el) {
+      return Check($(el).attr(ATTR_SHOWFRONT)).isBoolean().orThrows();
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "setDefaultValue", {
+    value: function(el) {
       if ($(el).attr(ATTR_NAME) === undefined) {
         $(el).attr(ATTR_NAME, this[$traceurRuntime.toProperty(__defaultEnabled__)]);
       }
@@ -886,15 +988,25 @@ var $__src_47_ability_47_toggleable__ = (function() {
         $(el).attr(ATTR_SHOWFRONT, this[$traceurRuntime.toProperty(__defaultShowFront__)]);
       }
     },
-    trigger: function(el) {
-      if (isEnabled(el)) {
-        $(el).attr(ATTR_SHOWFRONT, !isShowFront(el));
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "trigger", {
+    value: function(el) {
+      if (this[$traceurRuntime.toProperty(__isEnabled__)](el)) {
+        $(el).attr(ATTR_SHOWFRONT, !this[$traceurRuntime.toProperty(__isShowFront__)](el));
       }
     },
-    get name() {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "name", {
+    get: function() {
       return ATTR_NAME;
-    }
-  }, {}, Ability);
+    },
+    configurable: true,
+    enumerable: true
+  }), $__4), {}, Ability);
   var $__default = Toggleable;
   if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
     Utils.makeGlobal('pb.ability.Toggleable', Toggleable);
@@ -920,9 +1032,10 @@ var $__src_47_ability_47_contextable__ = (function() {
   var Utils = ($__src_47_utils__).default;
   var Ability = ($__src_47_ability_47_ability__).default;
   var __abilities__ = Symbol();
+  var __menuEl__ = Symbol('menuEl');
   var __createMenuEl__ = Symbol();
   var __currentEl__ = Symbol('currentEl');
-  var __menuEl__ = Symbol('menuEl');
+  var __onHide__ = Symbol();
   var __onShow__ = Symbol();
   var __trigger__ = Symbol();
   var Contextable = function Contextable(config) {
@@ -970,6 +1083,13 @@ var $__src_47_ability_47_contextable__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
+  }), Object.defineProperty($__3, __onHide__, {
+    value: function() {
+      this[$traceurRuntime.toProperty(__currentEl__)] = null;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
   }), Object.defineProperty($__3, "setDefaultValue", {
     value: function(el) {
       var tmpId = Math.random();
@@ -978,7 +1098,10 @@ var $__src_47_ability_47_contextable__ = (function() {
         className: 'pb-contextable',
         selector: ("[pb-id=\"" + tmpId + "\"]"),
         items: $.contextMenu.fromMenu(this[$traceurRuntime.toProperty(__menuEl__)]),
-        events: {show: this[$traceurRuntime.toProperty(__onShow__)].bind(this)},
+        events: {
+          show: this[$traceurRuntime.toProperty(__onShow__)].bind(this),
+          hide: this[$traceurRuntime.toProperty(__onHide__)].bind(this)
+        },
         'pb-el': el
       });
     },
@@ -1067,7 +1190,8 @@ var $__src_47_component_47_card__ = (function() {
       if (!doc && !template) {
         var toggleable = new Toggleable(true);
         var rotateable = new Rotateable();
-        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, {'pb-click': toggleable}, new Draggable(true), rotateable, new Contextable({
+        var draggable = new Draggable(true);
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Card, {'pb-click': toggleable}, draggable, rotateable, new Contextable({
             'Flip': toggleable,
             '-': undefined,
             'sub': {
@@ -1136,26 +1260,17 @@ var $__src_47_ability_47_droppable__ = (function() {
   var CLASS_OVER = 'pb-over';
   var __defaultValue__ = Symbol();
   var __dragEnterCount__ = Symbol();
-  var __observeHandler__ = Symbol();
-  var __onDragOver__ = Symbol();
   var __onDragEnter__ = Symbol('onDragEnter');
   var __onDragLeave__ = Symbol();
-  var __onLastDraggedElChange__ = Symbol();
+  var __onDragOver__ = Symbol();
+  var __onLastDraggedElChange__ = Symbol('onLastDraggedElChange');
   var __register__ = Symbol('register');
   var __unregister__ = Symbol('unregister');
   var Droppable = function Droppable(defaultValue) {
     this[$traceurRuntime.toProperty(__defaultValue__)] = defaultValue;
     this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
   };
-  ($traceurRuntime.createClass)(Droppable, ($__6 = {}, Object.defineProperty($__6, __onDragOver__, {
-    value: function(el, event) {
-      event.preventDefault();
-      event.dropEffect = 'move';
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, __onDragEnter__, {
+  ($traceurRuntime.createClass)(Droppable, ($__6 = {}, Object.defineProperty($__6, __onDragEnter__, {
     value: function(el) {
       el.classList.add(CLASS_OVER);
       this[$traceurRuntime.toProperty(__dragEnterCount__)]++;
@@ -1164,12 +1279,20 @@ var $__src_47_ability_47_droppable__ = (function() {
     enumerable: true,
     writable: true
   }), Object.defineProperty($__6, __onDragLeave__, {
-    value: function(el, event) {
+    value: function(el) {
       this[$traceurRuntime.toProperty(__dragEnterCount__)]--;
       if (this[$traceurRuntime.toProperty(__dragEnterCount__)] <= 0) {
         this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
         el.classList.remove(CLASS_OVER);
       }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__6, __onDragOver__, {
+    value: function(el, event) {
+      event.preventDefault();
+      event.dropEffect = 'move';
     },
     configurable: true,
     enumerable: true,
@@ -1186,15 +1309,16 @@ var $__src_47_ability_47_droppable__ = (function() {
     writable: true
   }), Object.defineProperty($__6, __register__, {
     value: function(el) {
-      Events.of(el, this).register('dragover', this[$traceurRuntime.toProperty(__onDragOver__)].bind(this, el)).register('dragenter', this[$traceurRuntime.toProperty(__onDragEnter__)].bind(this, el)).register('dragleave', this[$traceurRuntime.toProperty(__onDragLeave__)].bind(this, el)).register('drop', this.trigger.bind(this, el));
-      $(DragDrop).on(DragDrop.Events.LAST_DRAGGED_EL_CHANGED, this[$traceurRuntime.toProperty(__onLastDraggedElChange__)].bind(this, el));
+      Events.of(el, this).listen('dragover', this[$traceurRuntime.toProperty(__onDragOver__)].bind(this, el)).listen('dragenter', this[$traceurRuntime.toProperty(__onDragEnter__)].bind(this, el)).listen('dragleave', this[$traceurRuntime.toProperty(__onDragLeave__)].bind(this, el)).listen('drop', this.trigger.bind(this, el));
+      Events.of(DragDrop, this).on(DragDrop.Events.LAST_DRAGGED_EL_CHANGED, this[$traceurRuntime.toProperty(__onLastDraggedElChange__)].bind(this, el));
     },
     configurable: true,
     enumerable: true,
     writable: true
   }), Object.defineProperty($__6, __unregister__, {
     value: function(el) {
-      Events.of(el, this).unregister();
+      Events.of(el, this).unlisten();
+      Events.of(DragDrop, this).off();
     },
     configurable: true,
     enumerable: true,
@@ -1370,7 +1494,7 @@ var $__src_47_region_47_region__ = (function() {
   }), Object.defineProperty($__6, "attachedCallback", {
     value: function() {
       $traceurRuntime.superCall(this, $Region.prototype, "attachedCallback", []);
-      Events.of(this, this).register('click', this[$traceurRuntime.toProperty(__onClick__)].bind(this));
+      Events.of(this, this).listen('click', this[$traceurRuntime.toProperty(__onClick__)].bind(this));
       $(Distribute).on(Distribute.EventType.BEGIN, this[$traceurRuntime.toProperty(__onDistributeBegin__)].bind(this)).on(Distribute.EventType.END, this[$traceurRuntime.toProperty(__onDistributeEnd__)].bind(this));
     },
     configurable: true,
@@ -1378,7 +1502,7 @@ var $__src_47_region_47_region__ = (function() {
     writable: true
   }), Object.defineProperty($__6, "detachedCallback", {
     value: function() {
-      Events.of(this, this).unregister();
+      Events.of(this, this).unlisten();
     },
     configurable: true,
     enumerable: true,
@@ -1639,11 +1763,6 @@ var $__src_47_region_47_modules__ = (function() {
   $__src_47_region_47_rect__;
   return {};
 })();
-var $__src_47_service_47_modules__ = (function() {
-  "use strict";
-  var __moduleName = "src/service/modules";
-  return {};
-})();
 var $__src_47_surface_47_rectgrid__ = (function() {
   "use strict";
   var __moduleName = "src/surface/rectgrid";
@@ -1743,12 +1862,12 @@ var $__src_47_ui_47_preview__ = (function() {
     attachedCallback: function() {
       $traceurRuntime.superCall(this, $Preview.prototype, "attachedCallback", []);
       if (this.parentElement) {
-        Events.of(this.parentElement, this).register('mouseenter', handleMouseOver.bind(this)).register('mouseleave', handleMouseOut.bind(this));
+        Events.of(this.parentElement, this).listen('mouseenter', handleMouseOver.bind(this)).listen('mouseleave', handleMouseOut.bind(this));
       }
     },
     detachedCallback: function() {
       if (this.parentElement) {
-        Events.of(this.parentElement, this).unregister();
+        Events.of(this.parentElement, this).unlisten();
       }
       $traceurRuntime.superCall(this, $Preview.prototype, "detachedCallback", []);
     }
@@ -1876,7 +1995,6 @@ var $__src_47_modules__ = (function() {
   $__src_47_ability_47_modules__;
   $__src_47_component_47_modules__;
   $__src_47_region_47_modules__;
-  $__src_47_service_47_modules__;
   $__src_47_surface_47_modules__;
   $__src_47_ui_47_modules__;
   return {};

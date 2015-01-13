@@ -1,10 +1,10 @@
-import Utils from 'src/utils';
-
 import Triggerable from 'src/ability/triggerable';
+import Utils       from 'src/utils';
 
 // Private symbols.
-const __abilities__ = Symbol();
 const __register__ = Symbol();
+
+const __abilities__ = Symbol();
 
 
 /**
@@ -16,6 +16,15 @@ const __register__ = Symbol();
  */
 const Abilities = {
 
+  /**
+   * Registers the given ability to the given constructor.
+   *
+   * @method __register__
+   * @param {!Object} ctorProto The prototype of the constructor to register to.
+   * @param {!ability.Ability} ability The ability to register.
+   * @private
+   * @static
+   */
   [__register__](ctorProto, ability) {
     Utils.extendFn(
         ctorProto,
@@ -53,12 +62,13 @@ const Abilities = {
    * for custom elements.
    *
    * Look at other classes in ability module to see what are supported.
-   * 
+   *
+   * @method config
    * @param {!Function} ctor Constructor of the element to add the abilities to.
    * @param {!Map.<string, ability.Ability>} cfg Map with the trigger type as the key, and ability
    *    to be triggered as the value.
-   * @param {Array.<ability.Ability>} contextual Array of abilities to show on the context menu.
    * @param {ability.Ability} [...abilities] Other abilities to register.
+   * @static
    */
   config(ctor, cfg, ...abilities) {
     let ctorProto = ctor.prototype;

@@ -1,10 +1,10 @@
 import Utils from 'src/utils';
 
 /**
- * Base class for all abilities.
+ * Base class for all abilities. Any abilities must extend this class and implement the methods
+ * in this class.
  *
  * @class ability.Ability
- * @static
  */
 export default class Ability {
 
@@ -22,8 +22,8 @@ export default class Ability {
    * @method attributeChangedCallback
    * @param {!Element} el The element whose attribute was changed.
    * @param {string} name The name of the attribute that was changed.
-   * @param {Object=} oldValue The old value of the attribute.
-   * @param {Object=} newValue The new value of the attribute.
+   * @param {Object} oldValue The old value of the attribute.
+   * @param {Object} newValue The new value of the attribute.
    */
   attributeChangedCallback(el, name, oldValue, newValue) { }
 
@@ -52,10 +52,11 @@ export default class Ability {
   trigger(el) { }
 
   /**
-   * The name of the ability.
+   * The name of the ability. This is used as an ID to refer to the registered abilities.
    * 
-   * @attribute name
+   * @property name
    * @type string
+   * @readonly
    */
   get name() { throw 'unimplemented'; }
 }

@@ -5,28 +5,67 @@ import Ability from 'src/ability/ability';
 
 /**
  * Makes the component rotateable. This adds a transform rotateZ CSS rule to the component.
+ * 
  * @class ability.Rotateable
  * @extends ability.Ability
  */
 
+/**
+ * Set to space separated numbers indicating the orientations, in degrees, that this element can 
+ * take. You can also set this to "true" to use the default set of orientations.
+ *
+ * @attribute pb-rotateable
+ */
 const ATTR_NAME = 'pb-rotateable';
+
+/**
+ * This is the initial orientation index of the element. Set it to the index of the orientation 
+ * specified in pb-rotateable attribute.
+ *
+ * @attribute pb-rotateable
+ */
 const ATTR_INDEX = 'pb-orientation-index';
 
 // Private symbols.
 const __defaultIndex__ = Symbol();
 const __defaultOrientations__ = Symbol();
+
 const __getOrientations__ = Symbol();
 const __getOrientationIndex__ = Symbol();
 const __setOrientationIndex__ = Symbol('setOrientationIndex');
 
 export default class Rotateable extends Ability {
 
+  /**
+   * @constructor
+   * @param {Array.<number>} defaultOrientations Array of default orientations, in degrees.
+   * @param {number} defaultIndex The index of the default orientation.
+   */
+  constructor(defaultOrientations = [0], defaultIndex = 0) {
+    this[__defaultIndex__] = defaultIndex;
+    this[__defaultOrientations__] = defaultOrientations.join(' ');
+  }
+
+  /**
+   * @method __getOrientations__
+   * @param {!Element} el The Element to get the possible orientations of.
+   * @return {Array.<number>} Array of possible orientations that the given element can take, in
+   *    degrees.
+   * @private
+   */
   [__getOrientations__](el) {
     return $(el).attr(ATTR_NAME).split(' ')
         .map(str => Check(str).isInt().orUse(undefined))
         .filter(value => Number.isInteger(value));
   }
 
+  /**
+   * @method __getOrientationIndex__
+   * @param {!Element} el The Element to get the orientation index of.
+   * @return {number} The index of orientation relative to the array returned by 
+   *    __getOrientations__.
+   * @private
+   */
   [__getOrientationIndex__](el) {
     return Check($(el).attr(ATTR_INDEX)).isInt().orThrows();
   }
@@ -54,16 +93,6 @@ export default class Rotateable extends Ability {
 
       $(el).attr(ATTR_INDEX, index);
     }
-  }
-
-  /**
-   * @constructor
-   * @param {Array.<number>} defaultOrientations Array of default orientations, in degrees.
-   * @param {number} defaultIndex The index of the default orientation.
-   */
-  constructor(defaultOrientations = [0], defaultIndex = 0) {
-    this[__defaultIndex__] = defaultIndex;
-    this[__defaultOrientations__] = defaultOrientations.join(' ');
   }
 
   /**
@@ -114,10 +143,11 @@ export default class Rotateable extends Ability {
   }
 
   /**
-   * The name of the ability.
+   * The name of the ability. This is used as an ID to refer to the registered abilities.
    * 
-   * @attribute name
+   * @property name
    * @type string
+   * @readonly
    */
   get name() {
     return ATTR_NAME;

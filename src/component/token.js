@@ -17,11 +17,26 @@ const EL_NAME = 'pb-c-token';
  * To use this, create a `pb-c-token` element with one child element. This child element will be
  * displayed as the token.
  *
+ * ```html
+ * <!-- Example: A square token -->
+ * <pb-c-token>
+ *   <div style="background: red; width: 50px; height: 50px;"></div>
+ * <pb-c-token>
+ * ```
+ *
+ * Supported abilities:
+ * - [[Draggable|ability.Draggable]]: Default enabled.
+ *
  * @class component.Token
  * @extends component.Component
  */
 export default class Token extends Component {
 
+  /**
+   * Called when the element is created.
+   *
+   * @method createdCallback
+   */
   createdCallback() {
     super.createdCallback();
     this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
@@ -44,10 +59,11 @@ export default class Token extends Component {
     doc = currentDoc;
     template = tokenTemplate;
     document.registerElement(EL_NAME, {
+      let draggable = new Draggable(true);
       prototype: Abilities.config(
           Token,
           {},
-          new Draggable(true)).prototype
+          draggable).prototype
     });
   }
 }
