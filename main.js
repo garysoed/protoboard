@@ -1227,12 +1227,12 @@ var $__src_47_component_47_token__ = (function() {
       $traceurRuntime.superCall(this, $Token.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     }}, {register: function(currentDoc, tokenTemplate) {
-      if (doc || template) {
-        return;
+      if (!doc && !template) {
+        var draggable = new Draggable(true);
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Token, {}, draggable).prototype});
       }
       doc = currentDoc;
       template = tokenTemplate;
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Token, {}, new Draggable(true)).prototype});
     }}, Component);
   var $__default = Token;
   Utils.makeGlobal('pb.component.Token', Token);

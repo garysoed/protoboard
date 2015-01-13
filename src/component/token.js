@@ -51,20 +51,18 @@ export default class Token extends Component {
    * @param {!Element} tokenTemplate The template for the `pb-c-token`'s shadow DOM.
    */
   static register(currentDoc, tokenTemplate) {
-    if (doc || template) {
-      // Registration has already happened.
-      return;
+    if (!doc && !template) {
+      let draggable = new Draggable(true);
+      document.registerElement(EL_NAME, {
+        prototype: Abilities.config(
+            Token,
+            {},
+            draggable).prototype
+      });
     }
-
+    
     doc = currentDoc;
     template = tokenTemplate;
-    document.registerElement(EL_NAME, {
-      let draggable = new Draggable(true);
-      prototype: Abilities.config(
-          Token,
-          {},
-          draggable).prototype
-    });
   }
 }
 
