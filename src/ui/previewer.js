@@ -14,19 +14,34 @@ import PreviewService from 'src/service/preview';
 let template = null;
 let doc = null;
 
-const _previewElHandler = Symbol();
-
 const EL_NAME = 'pb-u-previewer';
 
-function handlePreviewEl() {
-  if (PreviewService.previewedEl) {
-    this.innerHTML = PreviewService.previewedEl.innerHTML;
-  } else {
-    this.innerHTML = '';
-  }
-}
+// Private symbols.
+const __previewElHandler__ = Symbol();
+
+const __onPreviewElChanged__ = Symbol();
 
 export default class Previewer extends PbElement {
+
+  /**
+   * Called when the preview element has changed.
+   *
+   * @method __onPreviewElChanged__
+   * @private
+   */
+  [__onPreviewElChanged__]() {
+    if (PreviewService.previewedEl) {
+      this.innerHTML = PreviewService.previewedEl.innerHTML;
+    } else {
+      this.innerHTML = '';
+    }
+  }
+
+  /**
+   * Called when the element is created
+   *
+   * @method createdCallback
+   */
   createdCallback() {
     super.createdCallback();
     this.createShadowRoot()
@@ -35,16 +50,26 @@ export default class Previewer extends PbElement {
     this.attachedCallback();
   }
 
+  /**
+   * Called when the element is attached to the document.
+   *
+   * @method attachedCallback
+   */
   attachedCallback() {
     super.attachedCallback();
-    this[_previewElHandler] = Utils.observe(
+    this[__previewElHandler__] = Utils.observe(
         PreviewService, 
         'previewedEl', 
-        handlePreviewEl.bind(this));
+        this[__onPreviewElChanged__].bind(this));
   }
 
+  /**
+   * Called when the element is detached from the document.
+   *
+   * @method detachedCallback
+   */
   detachedCallback() {
-    Object.unobserve(PreviewService, this[_previewElHandler]);
+    Object.unobserve(PreviewService, this[__previewElHandler__]);
     super.detachedCallback();
   }
 
@@ -52,9 +77,10 @@ export default class Previewer extends PbElement {
    * Registers `pb-u-previewer` to the document.
    *
    * @method register
-   * @static
    * @param {!Document} currentDoc The document object to register the element to.
-   * @param {!Element} previewerTemplate The template for the `pb-u-previewer`'s element shadow DOM.
+   * @param {!Element} previewerTemplate The template for the <code>pb-u-previewer</code>'s element 
+   *    shadow DOM.
+   * @static
    */
   static register(currentDoc, previewerTemplate) {
     if (!template && !doc) {

@@ -15,6 +15,10 @@ const EL_NAME = 'pb-r-rect';
 /**
  * An arbitrary rectangular region. You can position elements anywhere in this region.
  *
+ * Supported abilities:
+ * - [[Droppable|ability.Droppable]]: Default enabled. This class uses a custom droppable that 
+ *   positions the element to the mouse's cursor.
+ *   
  * @class region.Rect
  * @extends region.Region
  */
@@ -48,13 +52,14 @@ class SmartDroppable extends Droppable {
 
     // TODO(gs): attached callback doesn't seem to be called on appendChild.
     // https://github.com/webcomponents/webcomponentsjs/issues/18
+    // TODO(gs): Make the ability fire an event instead. This class should just listen to the drop
+    // event.
     if (DragDrop.lastDraggedEl.attachedCallback) {
       DragDrop.lastDraggedEl.attachedCallback();
     }
     DragDrop.dragEnd();
   }
 }
-
 
 class Rect extends Region {
   constructor() {
@@ -70,24 +75,24 @@ class Rect extends Region {
    * Registers `pb-r-rect` to the document.
    *
    * @method register
-   * @static
    * @param {!Document} currentDoc The document object to register the element to.
-   * @param {!Element} rectTemplate The template for the `pb-r-rect`'s element shadow DOM.
+   * @param {!Element} rectTemplate The template for the <code>pb-r-rect</code>'s element shadow 
+   *    DOM.
+   * @static
    */
   static register(currentDoc, rectTemplate) {
-    if (doc || template) {
-      // Registration has already happened.
-      return;
+    if (!doc && !template) {
+      let smartDroppable = new SmartDroppable(true);
+      document.registerElement(EL_NAME,  {
+        prototype: Abilities.config(
+            Rect,
+            {},
+            smartDroppable).prototype
+      });
     }
 
     doc = currentDoc;
     template = rectTemplate;
-    document.registerElement(EL_NAME,  {
-      prototype: Abilities.config(
-          Rect,
-          {},
-          new SmartDroppable(true)).prototype
-    });
   }
 }
 

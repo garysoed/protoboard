@@ -1,10 +1,10 @@
-import Utils     from 'src/utils';
+import Utils from 'src/utils';
 
 import Abilities from 'src/ability/abilities';
 import Draggable from 'src/ability/draggable';
 import Droppable from 'src/ability/droppable';
 
-import Region    from 'src/region/region';
+import Region from 'src/region/region';
 
 /**
  * A collection of components. You cannot see the component until you drag one out of it.
@@ -12,6 +12,16 @@ import Region    from 'src/region/region';
  * To make a bag, create a `pb-r-bag` element. You can override the content of the placeholder by
  * creating a child element with a `pb-placeholder-content` attribute. This element will be used for
  * the placeholder content.
+ *
+ * ```html
+ * <!-- Example: Create a bag with a place holder token displaying "SECRET!!" -->
+ * <pb-r-bag>
+ *   <div pb-placeholder-content>SECRET!!</div>
+ * </pb-r-bag>
+ * ```
+ *
+ * Supported abilitie:
+ * - [[Droppable|ability.Droppable]]: Default enabled.
  * 
  * @class region.Bag
  * @extends region.Region
@@ -98,9 +108,9 @@ export default class Bag extends Region {
    * Called when the element's attribute has changed
    *
    * @method attributeChangedCallback
-   * @param  {string} name The name of the changed attribute.
-   * @param  {string} oldValue The old value of the attribute.
-   * @param  {string} newValue The new value of the attribute.
+   * @param {string} name The name of the changed attribute.
+   * @param {string} oldValue The old value of the attribute.
+   * @param {string} newValue The new value of the attribute.
    */
   attributeChangedCallback(name, oldValue, newValue) {
     this[__draggable__].attributeChangedCallback(this[__placeHolderEl__], name, oldValue, newValue);
@@ -110,24 +120,24 @@ export default class Bag extends Region {
    * Registers `pb-r-bag` to the document.
    *
    * @method register
+   * @param {!Document} currentDoc The document object to register the element to.
+   * @param {!Element} bagTemplate The template for the <code>pb-r-bag</code>'s element DOM.
    * @static
-   * @param  {!Document} currentDoc The document object to register the element to.
-   * @param  {!Element} bagTemplate The template for the pb-r-bag's element DOM.
-   * @return {[type]} [description]
    */
   static register(currentDoc, bagTemplate, placeHolderTemplate) {
-    if (!doc || !template) {
-      doc = currentDoc;
-      template = bagTemplate;
-      placeHolderTmp = placeHolderTemplate;
+    if (!doc && !template) {
+      let droppable = new Droppable(true);
+      document.registerElement(EL_NAME, {
+        prototype: Abilities.config(
+            Bag,
+            {},
+            droppable).prototype
+      });
     }
 
-    document.registerElement(EL_NAME, {
-      prototype: Abilities.config(
-          Bag,
-          {},
-          new Droppable(true)).prototype
-    });
+    doc = currentDoc;
+    template = bagTemplate;
+    placeHolderTmp = placeHolderTemplate;
   } 
 }
 

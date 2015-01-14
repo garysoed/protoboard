@@ -1,15 +1,17 @@
 import Utils from 'src/utils';
 
+/**
+ * Service that keeps track of drag and drop.
+ *
+ * @class service.DragDrop
+ * @static
+ */
+
 // Private symbols
 const __lastDraggedEl__ = Symbol();
 const __offsetX__ = Symbol();
 const __offsetY__ = Symbol();
 
-/**
- * Service that keeps track of drag and drop.
- *
- * @class service.DragDrop
- */
 let DragDrop = {
 
   [__lastDraggedEl__]: null,
@@ -48,7 +50,7 @@ let DragDrop = {
    *
    * @property lastDraggedEl
    * @type Element
-   * @readOnly
+   * @readonly
    */
   get lastDraggedEl() {
     return this[__lastDraggedEl__];
@@ -59,7 +61,7 @@ let DragDrop = {
    *
    * @property offsetX
    * @type number
-   * @readOnly
+   * @readonly
    */
   get offsetX() {
     return this[__offsetX__];
@@ -70,7 +72,7 @@ let DragDrop = {
    *
    * @property offsetY
    * @type number
-   * @readOnly
+   * @readonly
    */
   get offsetY() {
     return this[__offsetY__];
@@ -78,6 +80,12 @@ let DragDrop = {
 };
 
 DragDrop.Events = {
+  /**
+   * Type of event dispatched when the last element that was dragged has changed.
+   *
+   * @property Events.LAST_DRAGGED_EL_CHANGED
+   * @type string
+   */
   LAST_DRAGGED_EL_CHANGED: 'dragdrop-last_dragged_el_changed'
 };
 

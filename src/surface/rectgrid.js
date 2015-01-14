@@ -20,6 +20,12 @@ const EL_NAME = 'pb-s-rectgrid';
  * @extends PbElement
  */
 export default class RectGrid extends PbElement {
+
+  /**
+   * Called when the element is created
+   *
+   * @method createdCallback
+   */
   createdCallback() {
     super.createdCallback();
 
@@ -50,14 +56,12 @@ export default class RectGrid extends PbElement {
         });
   }
 
-  attachedCallback() {
-    super.attachedCallback();
-  }
-
   /**
    * Returns the element at the given row and column, or null if not found.
-   * @param  {number} row The row index of the element to be returned.
-   * @param  {number} col The col index of the element to be returned.
+   *
+   * @method get
+   * @param {number} row The row index of the element to be returned.
+   * @param {number} col The col index of the element to be returned.
    * @return {HTMLElement|null} The HTML element at the given row and col, or null if not
    *     found.
    */
@@ -71,13 +75,13 @@ export default class RectGrid extends PbElement {
    * Registers `pb-s-rectgrid` to the document.
    *
    * @method register
-   * @static
    * @param {!Document} currentDoc The document object to register the element to.
    * @param {!Object} gridTemplates Object containing template for the `pb-s-rectgrid`'s element 
    *     shadow DOM.
    * @param {!Element} gridTemplates.main The main template for the element.
    * @param {!Element} gridTemplates.row The template for every row in the grid.
    * @param {!Element} gridTemplates.col The template for every column in the grid.
+   * @static
    */
   static register(currentDoc, gridTemplates) {
     if (doc || templates) {

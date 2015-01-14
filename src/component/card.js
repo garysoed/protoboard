@@ -26,8 +26,8 @@ import Toggleable  from 'src/ability/toggleable';
  *
  * Supported abilities:
  * - [[Draggable|ability.Draggable]]: Default enabled.
- * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
  * - [[Rotateable|ability.Rotateable]]: Default disabled.
+ * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
  * 
  * @class component.Card
  * @extends component.Component
@@ -56,9 +56,10 @@ export default class Card extends Component {
    * Registers `pb-c-card` to the document.
    *
    * @method register
-   * @static
    * @param {!Document} currentDoc The document object to register the element to.
-   * @param {!Element} cardTemplate The template for the pb-c-card's element shadow DOM.
+   * @param {!Element} cardTemplate The template for the <code>pb-c-card</code>'s element shadow 
+   *    DOM.
+   * @static
    */
   static register(currentDoc, cardTemplate) {
     if (!doc && !template) {

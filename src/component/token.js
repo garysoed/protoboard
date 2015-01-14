@@ -46,9 +46,9 @@ export default class Token extends Component {
    * Registers `pb-c-token` to the document.
    *
    * @method register
-   * @static
    * @param {!Document} currentDoc The document object to register the element to.
-   * @param {!Element} tokenTemplate The template for the `pb-c-token`'s shadow DOM.
+   * @param {!Element} tokenTemplate The template for the <code>pb-c-token</code>'s shadow DOM.
+   * @static
    */
   static register(currentDoc, tokenTemplate) {
     if (!doc && !template) {

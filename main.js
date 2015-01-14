@@ -1444,72 +1444,24 @@ var $__src_47_service_47_distribute__ = (function() {
 })();
 var $__src_47_region_47_region__ = (function() {
   "use strict";
-  var $__6;
   var __moduleName = "src/region/region";
   var Events = ($__src_47_events__).default;
   var PbElement = ($__src_47_pbelement__).default;
   var Utils = ($__src_47_utils__).default;
   var Distribute = ($__src_47_service_47_distribute__).default;
   var DragDrop = ($__src_47_service_47_dragdrop__).default;
-  var CLASS_DISTRIBUTE = 'pb-distribute';
-  var __onClick__ = Symbol();
-  var __onDistributeBegin__ = Symbol();
-  var __onDistributeEnd__ = Symbol();
   var Region = function Region() {};
   var $Region = Region;
-  ($traceurRuntime.createClass)(Region, ($__6 = {}, Object.defineProperty($__6, __onClick__, {
-    value: function() {
-      if (Distribute.isActive() && Distribute.next()) {
-        this.appendChild(Distribute.next());
-      }
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, __onDistributeBegin__, {
-    value: function() {
-      if (this.shadowRoot) {
-        this.shadowRoot.querySelector('#root').classList.add(CLASS_DISTRIBUTE);
-      }
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, __onDistributeEnd__, {
-    value: function() {
-      if (this.shadowRoot) {
-        this.shadowRoot.querySelector('#root').classList.remove(CLASS_DISTRIBUTE);
-      }
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, "createdCallback", {
-    value: function() {
+  ($traceurRuntime.createClass)(Region, {
+    createdCallback: function() {
       $traceurRuntime.superCall(this, $Region.prototype, "createdCallback", []);
     },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, "attachedCallback", {
-    value: function() {
+    attachedCallback: function() {
       $traceurRuntime.superCall(this, $Region.prototype, "attachedCallback", []);
-      Events.of(this, this).listen('click', this[$traceurRuntime.toProperty(__onClick__)].bind(this));
-      $(Distribute).on(Distribute.EventType.BEGIN, this[$traceurRuntime.toProperty(__onDistributeBegin__)].bind(this)).on(Distribute.EventType.END, this[$traceurRuntime.toProperty(__onDistributeEnd__)].bind(this));
     },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__6, "detachedCallback", {
-    value: function() {
-      Events.of(this, this).unlisten();
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), $__6), {}, PbElement);
+    detachedCallback: function() {}
+  }, {}, PbElement);
   var $__default = Region;
-  Region.ATTR_DROPPABLE = 'pb-droppable';
   if (window.TEST_MODE) {
     Utils.makeGlobal('pb.region.Region', Region);
   }
@@ -1577,12 +1529,13 @@ var $__src_47_region_47_bag__ = (function() {
       this[$traceurRuntime.toProperty(__draggable__)].attributeChangedCallback(this[$traceurRuntime.toProperty(__placeHolderEl__)], name, oldValue, newValue);
     }
   }, {register: function(currentDoc, bagTemplate, placeHolderTemplate) {
-      if (!doc || !template) {
-        doc = currentDoc;
-        template = bagTemplate;
-        placeHolderTmp = placeHolderTemplate;
+      if (!doc && !template) {
+        var droppable = new Droppable(true);
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Bag, {}, droppable).prototype});
       }
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Bag, {}, new Droppable(true)).prototype});
+      doc = currentDoc;
+      template = bagTemplate;
+      placeHolderTmp = placeHolderTemplate;
     }}, Region);
   var $__default = Bag;
   Bag.prototype[$traceurRuntime.toProperty(__draggable__)] = null;
@@ -1673,21 +1626,23 @@ var $__src_47_region_47_deck__ = (function() {
     value: function(currentDoc, deckTemplate) {
       var $__8,
           $__9;
-      if (!doc || !template) {
-        doc = currentDoc;
-        template = deckTemplate;
-      }
-      document.registerElement(EL_NAME, ($__9 = {}, Object.defineProperty($__9, "prototype", {
-        value: Abilities.config($Deck, ($__8 = {}, Object.defineProperty($__8, Triggerable.TYPES.DOUBLE_CLICK, {
-          value: new Shuffleable(true),
+      if (!doc && !template) {
+        var shuffleable = new Shuffleable(true);
+        var droppable = new Droppable(true);
+        document.registerElement(EL_NAME, ($__9 = {}, Object.defineProperty($__9, "prototype", {
+          value: Abilities.config($Deck, ($__8 = {}, Object.defineProperty($__8, Triggerable.TYPES.DOUBLE_CLICK, {
+            value: shuffleable,
+            configurable: true,
+            enumerable: true,
+            writable: true
+          }), $__8), droppable).prototype,
           configurable: true,
           enumerable: true,
           writable: true
-        }), $__8), new Droppable(true)).prototype,
-        configurable: true,
-        enumerable: true,
-        writable: true
-      }), $__9));
+        }), $__9));
+      }
+      doc = currentDoc;
+      template = deckTemplate;
     },
     configurable: true,
     enumerable: true,
@@ -1739,12 +1694,12 @@ var $__src_47_region_47_rect__ = (function() {
       $traceurRuntime.superCall(this, $Rect.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     }}, {register: function(currentDoc, rectTemplate) {
-      if (doc || template) {
-        return;
+      if (!doc && !template) {
+        var smartDroppable = new SmartDroppable(true);
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Rect, {}, smartDroppable).prototype});
       }
       doc = currentDoc;
       template = rectTemplate;
-      document.registerElement(EL_NAME, {prototype: Abilities.config($Rect, {}, new SmartDroppable(true)).prototype});
     }}, Region);
   var $__default = Rect = Rect;
   Utils.makeGlobal('pb.region.Rect', Rect);
@@ -1796,9 +1751,6 @@ var $__src_47_surface_47_rectgrid__ = (function() {
         }
       }));
     },
-    attachedCallback: function() {
-      $traceurRuntime.superCall(this, $RectGrid.prototype, "attachedCallback", []);
-    },
     get: function(row, col) {
       var contentEl = this.shadowRoot.querySelector(("content[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]"));
       return contentEl ? contentEl.getDistributedNodes()[0] : null;
@@ -1825,9 +1777,25 @@ var $__src_47_surface_47_modules__ = (function() {
 })();
 var $__src_47_service_47_preview__ = (function() {
   "use strict";
+  var $__1;
   var __moduleName = "src/service/preview";
   var Utils = ($__src_47_utils__).default;
-  var Preview = {previewedEl: null};
+  var __previewedEl__ = Symbol();
+  var Preview = ($__1 = {}, Object.defineProperty($__1, __previewedEl__, {
+    value: null,
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__1, "previewedEl", {
+    get: function() {
+      return this[$traceurRuntime.toProperty(__previewedEl__)];
+    },
+    configurable: true,
+    enumerable: true,
+    set: function(el) {
+      this[$traceurRuntime.toProperty(__previewedEl__)] = el;
+    }
+  }), $__1);
   var $__default = Preview = Preview;
   Utils.makeGlobal('pb.service.Preview', Preview);
   return {get default() {
@@ -1836,6 +1804,7 @@ var $__src_47_service_47_preview__ = (function() {
 })();
 var $__src_47_ui_47_preview__ = (function() {
   "use strict";
+  var $__5;
   var __moduleName = "src/ui/preview";
   var Events = ($__src_47_events__).default;
   var PbElement = ($__src_47_pbelement__).default;
@@ -1843,35 +1812,56 @@ var $__src_47_ui_47_preview__ = (function() {
   var PreviewService = ($__src_47_service_47_preview__).default;
   var registered = false;
   var EL_NAME = 'pb-u-preview';
-  function handleMouseOver() {
-    PreviewService.previewedEl = this;
-  }
-  function handleMouseOut(e) {
-    PreviewService.previewedEl = null;
-  }
+  var __onMouseOver__ = Symbol();
+  var __onMouseOut__ = Symbol();
   var Preview = function Preview() {
     $traceurRuntime.defaultSuperCall(this, $Preview.prototype, arguments);
   };
   var $Preview = Preview;
-  ($traceurRuntime.createClass)(Preview, {
-    createdCallback: function() {
+  ($traceurRuntime.createClass)(Preview, ($__5 = {}, Object.defineProperty($__5, __onMouseOut__, {
+    value: function() {
+      PreviewService.previewedEl = null;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, __onMouseOver__, {
+    value: function() {
+      PreviewService.previewedEl = this;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "createdCallback", {
+    value: function() {
       $traceurRuntime.superCall(this, $Preview.prototype, "createdCallback", []);
       this.createShadowRoot();
       this.attachedCallback();
     },
-    attachedCallback: function() {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "attachedCallback", {
+    value: function() {
       $traceurRuntime.superCall(this, $Preview.prototype, "attachedCallback", []);
       if (this.parentElement) {
-        Events.of(this.parentElement, this).listen('mouseenter', handleMouseOver.bind(this)).listen('mouseleave', handleMouseOut.bind(this));
+        Events.of(this.parentElement, this).listen('mouseenter', this[$traceurRuntime.toProperty(__onMouseOver__)].bind(this)).listen('mouseleave', this[$traceurRuntime.toProperty(__onMouseOut__)].bind(this));
       }
     },
-    detachedCallback: function() {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "detachedCallback", {
+    value: function() {
       if (this.parentElement) {
         Events.of(this.parentElement, this).unlisten();
       }
       $traceurRuntime.superCall(this, $Preview.prototype, "detachedCallback", []);
-    }
-  }, {register: function() {
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__5), {register: function() {
       if (!registered) {
         document.registerElement(EL_NAME, {prototype: $Preview.prototype});
       }
@@ -1884,40 +1874,57 @@ var $__src_47_ui_47_preview__ = (function() {
 })();
 var $__src_47_ui_47_previewer__ = (function() {
   "use strict";
+  var $__4;
   var __moduleName = "src/ui/previewer";
   var PbElement = ($__src_47_pbelement__).default;
   var Utils = ($__src_47_utils__).default;
   var PreviewService = ($__src_47_service_47_preview__).default;
   var template = null;
   var doc = null;
-  var _previewElHandler = Symbol();
   var EL_NAME = 'pb-u-previewer';
-  function handlePreviewEl() {
-    if (PreviewService.previewedEl) {
-      this.innerHTML = PreviewService.previewedEl.innerHTML;
-    } else {
-      this.innerHTML = '';
-    }
-  }
+  var __previewElHandler__ = Symbol();
+  var __onPreviewElChanged__ = Symbol();
   var Previewer = function Previewer() {
     $traceurRuntime.defaultSuperCall(this, $Previewer.prototype, arguments);
   };
   var $Previewer = Previewer;
-  ($traceurRuntime.createClass)(Previewer, {
-    createdCallback: function() {
+  ($traceurRuntime.createClass)(Previewer, ($__4 = {}, Object.defineProperty($__4, __onPreviewElChanged__, {
+    value: function() {
+      if (PreviewService.previewedEl) {
+        this.innerHTML = PreviewService.previewedEl.innerHTML;
+      } else {
+        this.innerHTML = '';
+      }
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "createdCallback", {
+    value: function() {
       $traceurRuntime.superCall(this, $Previewer.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.attachedCallback();
     },
-    attachedCallback: function() {
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "attachedCallback", {
+    value: function() {
       $traceurRuntime.superCall(this, $Previewer.prototype, "attachedCallback", []);
-      this[$traceurRuntime.toProperty(_previewElHandler)] = Utils.observe(PreviewService, 'previewedEl', handlePreviewEl.bind(this));
+      this[$traceurRuntime.toProperty(__previewElHandler__)] = Utils.observe(PreviewService, 'previewedEl', this[$traceurRuntime.toProperty(__onPreviewElChanged__)].bind(this));
     },
-    detachedCallback: function() {
-      Object.unobserve(PreviewService, this[$traceurRuntime.toProperty(_previewElHandler)]);
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__4, "detachedCallback", {
+    value: function() {
+      Object.unobserve(PreviewService, this[$traceurRuntime.toProperty(__previewElHandler__)]);
       $traceurRuntime.superCall(this, $Previewer.prototype, "detachedCallback", []);
-    }
-  }, {register: function(currentDoc, previewerTemplate) {
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__4), {register: function(currentDoc, previewerTemplate) {
       if (!template && !doc) {
         document.registerElement(EL_NAME, {prototype: $Previewer.prototype});
       }
@@ -1940,7 +1947,7 @@ var $__src_47_ui_47_template__ = (function() {
   var handlebars = null;
   var EL_NAME = 'pb-u-template';
   var Template = function Template() {
-    $traceurRuntime.superCall(this, $Template.prototype, "constructor", []);
+    $traceurRuntime.defaultSuperCall(this, $Template.prototype, arguments);
   };
   var $Template = Template;
   ($traceurRuntime.createClass)(Template, {createdCallback: function() {

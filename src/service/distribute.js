@@ -16,7 +16,7 @@ let Distribute = {
    * Starts the distribution action.
    *
    * @method begin
-   * @param {!Bag} distributeSource Source to distribute the elements from.
+   * @param {!Element} distributeSource Source to distribute the elements from.
    */
   begin(distributeSource) {
     if (!this.isActive()) {
@@ -55,20 +55,21 @@ let Distribute = {
     return source.next();
   },
 
+  // TODO(gs): Rename to Events
   EventType: {
     /**
      * Event type dispatched when the distribution is starting.
      *
-     * @type string
      * @property EventType.BEGIN
+     * @type string
      */
     BEGIN: 'distribute-begin',
 
     /**
      * Event type dispatched when the distribution is ending.
      *
-     * @type string
      * @property EventType.END
+     * @type string
      */
     END: 'distribute-end'
   }

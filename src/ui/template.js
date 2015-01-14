@@ -21,10 +21,12 @@ const EL_NAME = 'pb-u-template';
  * @extends PbElement
  */
 export default class Template extends PbElement {
-  constructor() {
-    super();
-  }
 
+  /**
+   * Called when the element is created
+   *
+   * @method createdCallback
+   */
   createdCallback() {
     super.createdCallback();
     let templateStr = this.innerHTML;
@@ -40,9 +42,9 @@ export default class Template extends PbElement {
    * Registers `pb-u-template` to the document.
    *
    * @method register
-   * @static
    * @param {!Document} currentDoc The document object to register the element to.
    * @param {!Handlebars} handlebars_ref Reference to the Handlebars library.
+   * @static
    */
   static register(currentDoc, handlebars_ref) {
     if (!doc && !handlebars) {
