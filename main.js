@@ -51,7 +51,7 @@ var $__src_47_utils__ = (function() {
           return 0;
         }
       }
-      return undefined;
+      return null;
     },
     toArray: function(obj) {
       var array = [];

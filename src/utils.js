@@ -17,6 +17,13 @@ var Utils = {
     return this.activateTemplate(doc.querySelector(templateQuery), doc);
   },
 
+  /**
+   * Activates the given teplate element.
+   *
+   * @param  {!Element} template The template element.
+   * @param  {!Document} doc The document object to activate the template in.
+   * @return {!Element} The activated template element.
+   */
   activateTemplate(template, doc) {
     return doc.importNode(template.content, true);
   },
@@ -90,6 +97,15 @@ var Utils = {
     return promise;
   },
 
+  /**
+   * A comparison function that handles every type.
+   *
+   * @param  {Object} a First object to compare.
+   * @param  {Object} b Second object to compare.
+   * @return {?number|undefined} -1 if the first object is smaller than the second, 0 if they are
+   *    equal, -1 if the second object is smaller than the first, or undefined if the two cannot be
+   *    compared.
+   */
   compare(a, b) {
     if (typeof a === 'number' && typeof b === 'number') {
       if (a < b) {
@@ -101,9 +117,15 @@ var Utils = {
       }
     }
 
-    return undefined;
+    return null;
   },
 
+  /**
+   * Converts the given "array like" object to array.
+   *
+   * @param  {!Object} obj An array like object to convert.
+   * @return {!Array} Array object converted from the given array like object.
+   */
   toArray(obj) {
     let array = [];
     for (let i = 0; i < obj.length; i++) {
