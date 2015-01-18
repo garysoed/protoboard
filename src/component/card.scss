@@ -31,6 +31,8 @@ pb-c-card > div {
 
 pb-c-card > .pb-back {
   background-color: $color-background-dark;
+  border: 1px solid $color-border;
+  box-sizing: border-box;
 }
 
 pb-c-card > .pb-front {

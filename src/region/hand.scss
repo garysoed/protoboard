@@ -1,0 +1,27 @@
+@import 'theme';
+@import 'rect';
+@import 'main';
+
+pb-r-hand::shadow #root {
+  @include region-border();
+  position: relative;
+}
+
+pb-r-hand::shadow #content {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+pb-r-hand.pb-over::shadow #root {
+  outline: 6px dashed $color-highlight;
+  outline-offset: -3px;
+}
+
+pb-r-hand > *:hover {
+  @include layer(1);
+}
+
+pb-r-hand > *:last-child {
+  flex-shrink: 0;
+}

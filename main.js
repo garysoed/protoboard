@@ -1654,6 +1654,46 @@ var $__src_47_region_47_deck__ = (function() {
       return $__default;
     }};
 })();
+var $__src_47_region_47_hand__ = (function() {
+  "use strict";
+  var __moduleName = "src/region/hand";
+  var Utils = ($__src_47_utils__).default;
+  var Abilities = ($__src_47_ability_47_abilities__).default;
+  var Droppable = ($__src_47_ability_47_droppable__).default;
+  var Region = ($__src_47_region_47_region__).default;
+  var doc = null;
+  var template = null;
+  var EL_NAME = 'pb-r-hand';
+  var Hand = function Hand() {
+    $traceurRuntime.defaultSuperCall(this, $Hand.prototype, arguments);
+  };
+  var $Hand = Hand;
+  ($traceurRuntime.createClass)(Hand, {
+    createdCallback: function() {
+      $traceurRuntime.superCall(this, $Hand.prototype, "createdCallback", []);
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this.attachedCallback();
+    },
+    attachedCallback: function() {
+      $traceurRuntime.superCall(this, $Hand.prototype, "attachedCallback", []);
+    },
+    detachedCallback: function() {
+      $traceurRuntime.superCall(this, $Hand.prototype, "detachedCallback", []);
+    }
+  }, {register: function(currentDoc, handTemplate) {
+      if (!doc && !template) {
+        var droppable = new Droppable(true);
+        document.registerElement(EL_NAME, {prototype: Abilities.config($Hand, {}, droppable).prototype});
+      }
+      doc = currentDoc;
+      template = handTemplate;
+    }}, Region);
+  var $__default = Hand;
+  Utils.makeGlobal('pb.region.Hand', Hand);
+  return {get default() {
+      return $__default;
+    }};
+})();
 var $__src_47_region_47_rect__ = (function() {
   "use strict";
   var __moduleName = "src/region/rect";
@@ -1715,6 +1755,7 @@ var $__src_47_region_47_modules__ = (function() {
   var __moduleName = "src/region/modules";
   $__src_47_region_47_bag__;
   $__src_47_region_47_deck__;
+  $__src_47_region_47_hand__;
   $__src_47_region_47_rect__;
   return {};
 })();

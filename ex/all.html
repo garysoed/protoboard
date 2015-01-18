@@ -6,6 +6,7 @@
     <link rel="import" href="src/component/token.html">
     <link rel="import" href="src/region/bag.html">
     <link rel="import" href="src/region/deck.html">
+    <link rel="import" href="src/region/hand.html">
     <link rel="import" href="src/region/rect.html">
     <link rel="import" href="src/ui/context.html">
     <link rel="import" href="src/ui/preview.html">
@@ -133,7 +134,13 @@
       pb-r-rect::shadow #root {
         height: 300px;
         width: 300px;
+      }
+    </style>
 
+    <style>
+      pb-r-hand::shadow #root {
+        height: 100px;
+        width: 300px;
       }
     </style>
   </head>
@@ -291,6 +298,103 @@
         </tr>
         <tr>
           <td>Hand</td>
+          <td>
+            <pb-r-hand class="hand">
+              <pb-c-card>
+                <div class="pb-front">
+                  <p>Default - front</p>
+                  <p>Previewer</p>
+                  <pb-u-preview>
+                    You can add more details over here. Look at the Previewer for more details.
+                  </pb-u-preview>
+                </div>
+                <div class="pb-back">
+                  Default - back
+                </div>
+              </pb-c-card>
+              <pb-c-card pb-click="pb-rotateable" 
+                         pb-dblclick="pb-toggleable"
+                         pb-orientation-index="0"
+                         pb-rotateable="0 90"
+                         pb-showfront="true">
+                <div class="pb-front">
+                  <p>Double click to flip</p>
+                  <p>Defaults to show front</p>
+                </div>
+                <div class="pb-back">
+                  Click to rotate
+                </div>
+              </pb-c-card>
+              <pb-c-card>
+                <div class="pb-front">
+                  3
+                </div>
+                <div class="pb-back"></div>
+              </pb-c-card>
+              <pb-c-card>
+                <div class="pb-front">
+                  <p>Default - front</p>
+                  <p>Previewer</p>
+                  <pb-u-preview>
+                    You can add more details over here. Look at the Previewer for more details.
+                  </pb-u-preview>
+                </div>
+                <div class="pb-back">
+                  Default - back
+                </div>
+              </pb-c-card>
+              <pb-c-card pb-click="pb-rotateable" 
+                         pb-dblclick="pb-toggleable"
+                         pb-orientation-index="0"
+                         pb-rotateable="0 90"
+                         pb-showfront="true">
+                <div class="pb-front">
+                  <p>Double click to flip</p>
+                  <p>Defaults to show front</p>
+                </div>
+                <div class="pb-back">
+                  Click to rotate
+                </div>
+              </pb-c-card>
+              <pb-c-card>
+                <div class="pb-front">
+                  3
+                </div>
+                <div class="pb-back"></div>
+              </pb-c-card>
+              <pb-c-card>
+                <div class="pb-front">
+                  <p>Default - front</p>
+                  <p>Previewer</p>
+                  <pb-u-preview>
+                    You can add more details over here. Look at the Previewer for more details.
+                  </pb-u-preview>
+                </div>
+                <div class="pb-back">
+                  Default - back
+                </div>
+              </pb-c-card>
+              <pb-c-card pb-click="pb-rotateable" 
+                         pb-dblclick="pb-toggleable"
+                         pb-orientation-index="0"
+                         pb-rotateable="0 90"
+                         pb-showfront="true">
+                <div class="pb-front">
+                  <p>Double click to flip</p>
+                  <p>Defaults to show front</p>
+                </div>
+                <div class="pb-back">
+                  Click to rotate
+                </div>
+              </pb-c-card>
+              <pb-c-card>
+                <div class="pb-front">
+                  3
+                </div>
+                <div class="pb-back"></div>
+              </pb-c-card>
+            </pb-r-hand>
+          </td>
         </tr>
       </tbody>
 
