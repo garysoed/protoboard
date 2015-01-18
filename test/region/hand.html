@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>region.Hand Unit Tests</title>
+  <link rel="import" href="test/testbase.html">
+</head>
+<body>
+  <script>
+    'use strict';
+
+    (function() {
+      var expect = chai.expect;
+      var _ = spies.Spies;
+      var Utils = pb.Utils;
+      var DragDrop = pb.service.DragDrop;
+
+      var doc = document.currentScript.ownerDocument;
+
+      describe('region.Hand.ReorderableDroppable', function() {
+        describe('#trigger', function() {
+          var el;
+          var droppable;
+
+          beforeEach(function(done) {
+            el = doc.createElement('div');
+            droppable = new pb.region.Hand.ReorderableDroppable(true);
+            done();
+          });
+
+          it('should remove the CSS class, and inserts before the correct child', function() {
+            var child1 = doc.createElement('div');
+            _.spy(child1, 'getBoundingClientRect').overrideReturn({
+              left: 10,
+              width: 20
+            });
+
+            var child2 = doc.createElement('div');
+            _.spy(child2, 'getBoundingClientRect').overrideReturn({
+              left: 35,
+              width: 20
+            });
+
+            el.appendChild(child1);
+            el.appendChild(child2);
+            el.classList.add('pb-over');
+
+            var dragged = doc.createElement('div');
+            DragDrop.dragStart(dragged, 0, 0);
+
+            droppable.trigger(el, {clientX: 40});
+
+            expect(el.classList.contains('pb-over')).to.be.false();
+            expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+          });
+          it('should insert as the last child if eventX is too far to the right', function() {
+            var child1 = doc.createElement('div');
+            _.spy(child1, 'getBoundingClientRect').overrideReturn({
+              left: 10,
+              width: 20
+            });
+
+            var child2 = doc.createElement('div');
+            _.spy(child2, 'getBoundingClientRect').overrideReturn({
+              left: 35,
+              width: 20
+            });
+
+            el.appendChild(child1);
+            el.appendChild(child2);
+
+            var dragged = doc.createElement('div');
+            DragDrop.dragStart(dragged, 0, 0);
+
+            droppable.trigger(el, {clientX: 50});
+
+            expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
+
+          });
+          it('should not crash if there are no last dragged element', function() {
+            droppable.trigger(el, {});
+          });
+        });
+        afterEach(function(done) {
+          _.reset();
+          done();
+        });
+      });
+    })();
+  </script>
+</body>

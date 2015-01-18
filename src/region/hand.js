@@ -5,6 +5,8 @@ import Droppable from 'src/ability/droppable';
 
 import Region from 'src/region/region';
 
+import DragDrop from 'src/service/dragdrop';
+
 /**
  * @class region.Hand
  * @extends region.Region
@@ -14,6 +16,34 @@ let doc = null;
 let template = null;
 
 const EL_NAME = 'pb-r-hand';
+
+class ReorderableDroppable extends Droppable {
+  constructor(defaultValue) {
+    super(defaultValue);
+  }
+
+  trigger(el, event) {
+    el.classList.remove('pb-over');
+    let lastDraggedEl = DragDrop.lastDraggedEl;
+    if (!lastDraggedEl) {
+      return;
+    }
+
+    // Go through every children and find the index that the element should be.
+    let dropped = false;
+    for (let child of Utils.toArray(el.children)) {
+      let rect = child.getBoundingClientRect();
+      if (!dropped && rect.left + rect.width / 2 > event.clientX) {
+        dropped = true;
+        el.insertBefore(lastDraggedEl, child);
+      }
+    }
+
+    if (!dropped) {
+      el.appendChild(lastDraggedEl);
+    }
+  }
+}
 
 export default class Hand extends Region {
 
@@ -58,7 +88,7 @@ export default class Hand extends Region {
    */
   static register(currentDoc, handTemplate) {
     if (!doc && !template) {
-      let droppable = new Droppable(true);
+      let droppable = new ReorderableDroppable(true);
       document.registerElement(EL_NAME, {
         prototype: Abilities.config(
             Hand,
@@ -73,3 +103,7 @@ export default class Hand extends Region {
 }
 
 Utils.makeGlobal('pb.region.Hand', Hand);
+
+if (window['TEST_MODE']) {
+  Utils.makeGlobal('pb.region.Hand.ReorderableDroppable', ReorderableDroppable);
+}

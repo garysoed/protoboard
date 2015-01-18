@@ -1661,9 +1661,36 @@ var $__src_47_region_47_hand__ = (function() {
   var Abilities = ($__src_47_ability_47_abilities__).default;
   var Droppable = ($__src_47_ability_47_droppable__).default;
   var Region = ($__src_47_region_47_region__).default;
+  var DragDrop = ($__src_47_service_47_dragdrop__).default;
   var doc = null;
   var template = null;
   var EL_NAME = 'pb-r-hand';
+  var ReorderableDroppable = function ReorderableDroppable(defaultValue) {
+    $traceurRuntime.superCall(this, $ReorderableDroppable.prototype, "constructor", [defaultValue]);
+  };
+  var $ReorderableDroppable = ReorderableDroppable;
+  ($traceurRuntime.createClass)(ReorderableDroppable, {trigger: function(el, event) {
+      el.classList.remove('pb-over');
+      var lastDraggedEl = DragDrop.lastDraggedEl;
+      if (!lastDraggedEl) {
+        return;
+      }
+      var dropped = false;
+      for (var $__6 = Utils.toArray(el.children)[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__7; !($__7 = $__6.next()).done; ) {
+        var child = $__7.value;
+        {
+          var rect = child.getBoundingClientRect();
+          if (!dropped && rect.left + rect.width / 2 > event.clientX) {
+            dropped = true;
+            el.insertBefore(lastDraggedEl, child);
+          }
+        }
+      }
+      if (!dropped) {
+        el.appendChild(lastDraggedEl);
+      }
+    }}, {}, Droppable);
   var Hand = function Hand() {
     $traceurRuntime.defaultSuperCall(this, $Hand.prototype, arguments);
   };
@@ -1682,7 +1709,7 @@ var $__src_47_region_47_hand__ = (function() {
     }
   }, {register: function(currentDoc, handTemplate) {
       if (!doc && !template) {
-        var droppable = new Droppable(true);
+        var droppable = new ReorderableDroppable(true);
         document.registerElement(EL_NAME, {prototype: Abilities.config($Hand, {}, droppable).prototype});
       }
       doc = currentDoc;
@@ -1690,6 +1717,9 @@ var $__src_47_region_47_hand__ = (function() {
     }}, Region);
   var $__default = Hand;
   Utils.makeGlobal('pb.region.Hand', Hand);
+  if (window[$traceurRuntime.toProperty('TEST_MODE')]) {
+    Utils.makeGlobal('pb.region.Hand.ReorderableDroppable', ReorderableDroppable);
+  }
   return {get default() {
       return $__default;
     }};
