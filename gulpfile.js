@@ -57,18 +57,27 @@ gulp.task('doc', function() {
       .pipe(gulp.dest('doc'));
 });
 
-gulp.task('sass', function() {
-  return gulp.src('./src/**/*.scss')
+gulp.task('sass-ex', function() {
+  return gulp.src('./ex/**/*.scss')
+      .pipe(sass({ loadPath: ['src/themes'] }))
+      .on('error', handleError)
+      .pipe(gulp.dest('ex'));
+});
+
+gulp.task('sass-src', function() {
+  return gulp.src(['./src/**/*.scss', '!./src/themes/*.scss'])
       .pipe(sass({loadPath: ['src/themes']}))
       .on('error', handleError)
       .pipe(gulp.dest('out'));
 });
 
+gulp.task('sass', ['sass-src', 'sass-ex']);
 gulp.task('push', ['test', 'doc', 'sass'], shell.task('git push'));
 
 gulp.task('watch', function() {
   gulp.watch(['src/**/*.js'], ['traceur']);
-  gulp.watch(['src/**/*.scss'], ['sass']);
+  gulp.watch(['src/**/*.scss'], ['sass-src']);
+  gulp.watch(['ex/**/*.scss', 'src/themes/*.scss'], ['sass-ex']);
 });
 
 gulp.task('watch-traceur', function() {

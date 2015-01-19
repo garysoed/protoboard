@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <base href="..">
+  <head>
+    <link rel="import" href="src/component/card.html">
+    <link rel="import" href="src/region/deck.html">
+    <link rel="import" href="src/region/hand.html">
+    <link rel="import" href="src/region/rect.html">
+    <link rel="import" href="src/ui/preview.html">
+    <link rel="import" href="src/ui/previewer.html">
+    <link rel="import" href="src/ui/template.html">
+    <script src="ex/gazer-data-base.js"></script>
+
+    <template id="cardTemplate">
+      <pb-c-card pb-showfront="true">
+        <div class="pb-back"></div>
+        <div class="pb-front">
+          {{name}}
+          <pb-u-preview>
+            <h1>{{name}}</h1>
+            <h2>{{type}}, {{element}}</h2>
+            <h2>{{life}}{{#if attack}} / {{attack}} / {{defense}}{{/if}}</h2>
+            <h2>Cost: {{cost}}</h2>
+            <main>{{description}}</main>
+          </pb-u-preview>
+        </div>
+      </pb-c-card>
+    </template>
+    <script>
+      Handlebars.registerPartial('gz-card', document.querySelector('#cardTemplate').innerHTML);
+    </script>
+  </head>
+  <body>
+    <section>
+      <pb-r-rect id="playarea"></pb-r-rect>
+      <pb-r-deck id="riftdeck">
+        <pb-u-template data-base="base">
+        </pb-u-template>
+      </pb-r-deck>
+
+      <pb-u-template data-cards="gz.base">
+        {{#each cards}}
+        <pb-r-deck>
+          {{#pb-for 0 count 1}}
+            {{#with this}}
+              {{> gz-card}}
+            {{/with}}
+          {{/pb-for}}
+        </pb-r-deck>
+        {{/each}}
+      </pb-u-template>
+    </section>
+    <section>
+      <ul>
+        <li>Player 1</li>
+        <li>Player 2</li>
+      </ul>
+      <div id="switcher">
+        <div>
+          <pb-r-hand id="player1hand"></pb-r-hand>
+        </div>
+        <div>
+          <pb-r-hand id="player2hand"></pb-r-hand>
+        </div>
+      </div>
+    </section>
+    <pb-u-previewer></pb-u-previewer>
+  </body>
+</html>
