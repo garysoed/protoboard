@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+  <base href="../..">
+  <head>
+    <link rel="import" href="src/component/card.html">
+    <link rel="import" href="src/component/token.html">
+    <link rel="import" href="src/region/bag.html">
+    <link rel="import" href="src/region/deck.html">
+    <link rel="import" href="src/region/hand.html">
+    <link rel="import" href="src/region/rect.html">
+    <link rel="import" href="src/ui/context.html">
+    <link rel="import" href="src/ui/preview.html">
+    <link rel="import" href="src/ui/previewer.html">
+
+    <link rel="stylesheet" type="text/css" href="ex/all/previewer.css">
+    <link rel="stylesheet" type="text/css" href="ex/all/regions.css">
+    <link rel="stylesheet" type="text/css" href="ex/all/table.css">
+    <link rel="stylesheet" type="text/css" href="ex/all/token.css">
+
+    <style>
+      .front {
+        line-height: 100px;
+        text-align: center;
+      }
+
+      .pb-distribute::shadow #root {
+        outline: 2px solid green;
+        outline-offset: -2px;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <colgroup>
+        <col class="name">
+        <col>
+        <col>
+        <col class="example">
+      </colgroup>
+
+      <thead>
+        <tr>
+          <td colspan="4">
+            <h2>Components</h2>
+            Components are the interactable objects in a game.
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tokens</td>
+          <td>
+            <pb-c-token>
+              <div draggable="true" class="green circle"></div>
+            </pb-c-token>
+            <pb-c-token>
+              <div draggable="true" class="red rectangle"></div>
+            </pb-c-token>
+            <pb-c-token>
+              <div draggable="true" class="blue triangle"></div>
+            </pb-c-token>
+          </td>
+          <td>
+            These are simple draggable objects with only one state. You can drag them to places and
+            drop them. That's all. You can customize their look by adding child elements.
+          </td>
+          <td>
+            <ul>
+              <li>Chess pieces</li>
+              <li>Cubes</li>
+              <li>Meeples</li>
+              <li>Gems</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Cards</td>
+          <td>
+            <pb-c-card>
+              <div class="pb-front">
+                <p>Default - front</p>
+                <p>Previewer</p>
+                <pb-u-preview>
+                  You can add more details over here. Look at the Previewer for more details.
+                </pb-u-preview>
+              </div>
+              <div class="pb-back">
+                Default - back
+              </div>
+            </pb-c-card>
+            <pb-c-card pb-click="pb-rotateable" 
+                       pb-dblclick="pb-toggleable"
+                       pb-orientation-index="0"
+                       pb-rotateable="0 90"
+                       pb-showfront="true">
+              <div class="pb-front">
+                <p>Double click to flip</p>
+                <p>Defaults to show front</p>
+              </div>
+              <div class="pb-back">
+                Click to rotate
+              </div>
+            </pb-c-card>
+            <pb-c-card>
+              <div class="pb-front">
+                3
+              </div>
+              <div class="pb-back"></div>
+            </pb-c-card>
+          </td>
+          <td>
+            These are cards, or anything with two faces. You need to provide two children, one with
+            <code>pb-front</code> for the front side of the card, and <code>pb-back</code> for the
+            back side of the card. Cards default to showing the back face.
+          </td>
+          <td>
+            <ul>
+              <li>Cards</li>
+              <li>Coins</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Dice</td>
+        </tr>
+      </tbody>
+
+      <thead>
+        <tr>
+          <td colspan="4">
+            <h2>Regions</h2>
+            Regions are areas where you can drop components into. They often hold a collection of
+            components.
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Bag</td>
+          <td>
+            <pb-r-bag></pb-r-bag>
+            <pb-r-bag>
+              <div pb-placeholder-content class="custom">Custom</div>
+            </pb-r-bag>
+          </td>
+          <td>
+            A bag is a collection of components. You cannot see the component until you drag one out
+            of it.
+          </td>
+        </tr>
+        <tr>
+          <td>Deck</td>
+          <td>
+            <pb-r-deck></pb-r-deck>
+          </td>
+          <td>
+            A deck is a region where all the components are stacked. The framework doesn't restrict
+            the type of components that go in a deck. Only the top component can be interacted with
+            at a time.
+          </td>
+          <td>
+            <ul>
+              <li>Deck of cards</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Generic rectangular region</td>
+          <td>
+            <pb-r-rect class="reg1"></pb-r-rect>
+          </td>
+          <td>
+            A rectangle where you can place elements in arbitrary position on it.
+          </td>
+          <td>
+            <ul>
+              <li>Table</li>
+              <li>"In Play" area</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Hand</td>
+          <td>
+            <pb-r-hand class="hand"></pb-r-hand>
+          </td>
+          <td>
+            A region where you can drop off components and reorder them. You have access to all the
+            components in hand always.
+          </td>
+          <td>
+            <ul>
+              <li>Hand</li>
+              <li>Discard pile</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+
+      <thead>
+        <tr>
+          <td colspan="4">
+            <h2>UI Components</h2>
+            Various UI components to make your life easier
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Menu</td>
+        </tr>
+        <tr>
+          <td id="previewer">Previewer</td>
+          <td><pb-u-previewer></pb-u-previewer></td>
+          <td>
+            This displays the content of a <code>pb-u-preview</code> element when a mouse hovers 
+            over its parent element. This is useful to display more details of a component, while
+            preserving screen real estate. See the Card for an example.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+      var headers = document.querySelectorAll('thead');
+      for (var i = 0; i < headers.length; i++) {
+        headers.item(i).addEventListener('click', function() {
+          this.classList.toggle('collapse');
+        });
+      }
+
+      var rowHeaders = document.querySelectorAll('td:first-child');
+      for (var i = 0; i < rowHeaders.length; i++) {
+        rowHeaders.item(i).addEventListener('click', function() {
+          this.classList.toggle('collapse');
+        });
+      }
+    </script>
+  </body>
+</html>
