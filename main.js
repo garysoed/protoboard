@@ -1906,8 +1906,17 @@ var $__src_47_service_47_preview__ = (function() {
     configurable: true,
     enumerable: true,
     set: function(el) {
+      var changed = this[$traceurRuntime.toProperty(__previewedEl__)] !== el;
       this[$traceurRuntime.toProperty(__previewedEl__)] = el;
+      if (changed) {
+        $(this).trigger(Preview.Events.ELEMENT_CHANGED);
+      }
     }
+  }), Object.defineProperty($__1, "Events", {
+    value: {ELEMENT_CHANGED: 'element-changed'},
+    configurable: true,
+    enumerable: true,
+    writable: true
   }), $__1);
   var $__default = Preview = Preview;
   Utils.makeGlobal('pb.service.Preview', Preview);
@@ -1987,21 +1996,22 @@ var $__src_47_ui_47_preview__ = (function() {
 })();
 var $__src_47_ui_47_previewer__ = (function() {
   "use strict";
-  var $__4;
+  var $__5;
   var __moduleName = "src/ui/previewer";
+  var Events = ($__src_47_events__).default;
   var PbElement = ($__src_47_pbelement__).default;
-  var Utils = ($__src_47_utils__).default;
   var PreviewService = ($__src_47_service_47_preview__).default;
+  var Utils = ($__src_47_utils__).default;
   var template = null;
   var doc = null;
   var EL_NAME = 'pb-u-previewer';
   var __previewElHandler__ = Symbol();
-  var __onPreviewElChanged__ = Symbol();
+  var __onPreviewElChanged__ = Symbol('onPreviewElChanged');
   var Previewer = function Previewer() {
     $traceurRuntime.defaultSuperCall(this, $Previewer.prototype, arguments);
   };
   var $Previewer = Previewer;
-  ($traceurRuntime.createClass)(Previewer, ($__4 = {}, Object.defineProperty($__4, __onPreviewElChanged__, {
+  ($traceurRuntime.createClass)(Previewer, ($__5 = {}, Object.defineProperty($__5, __onPreviewElChanged__, {
     value: function() {
       if (PreviewService.previewedEl) {
         this.innerHTML = PreviewService.previewedEl.innerHTML;
@@ -2012,7 +2022,7 @@ var $__src_47_ui_47_previewer__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__4, "createdCallback", {
+  }), Object.defineProperty($__5, "createdCallback", {
     value: function() {
       $traceurRuntime.superCall(this, $Previewer.prototype, "createdCallback", []);
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
@@ -2021,23 +2031,23 @@ var $__src_47_ui_47_previewer__ = (function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__4, "attachedCallback", {
+  }), Object.defineProperty($__5, "attachedCallback", {
     value: function() {
       $traceurRuntime.superCall(this, $Previewer.prototype, "attachedCallback", []);
-      this[$traceurRuntime.toProperty(__previewElHandler__)] = Utils.observe(PreviewService, 'previewedEl', this[$traceurRuntime.toProperty(__onPreviewElChanged__)].bind(this));
+      this[$traceurRuntime.toProperty(__previewElHandler__)] = Events.of(PreviewService, this).on(PreviewService.Events.ELEMENT_CHANGED, this[$traceurRuntime.toProperty(__onPreviewElChanged__)].bind(this));
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__4, "detachedCallback", {
+  }), Object.defineProperty($__5, "detachedCallback", {
     value: function() {
-      Object.unobserve(PreviewService, this[$traceurRuntime.toProperty(__previewElHandler__)]);
+      Events.of(PreviewService, this).off();
       $traceurRuntime.superCall(this, $Previewer.prototype, "detachedCallback", []);
     },
     configurable: true,
     enumerable: true,
     writable: true
-  }), $__4), {register: function(currentDoc, previewerTemplate) {
+  }), $__5), {register: function(currentDoc, previewerTemplate) {
       if (!template && !doc) {
         document.registerElement(EL_NAME, {prototype: $Previewer.prototype});
       }
@@ -2052,6 +2062,7 @@ var $__src_47_ui_47_previewer__ = (function() {
 })();
 var $__src_47_ui_47_template__ = (function() {
   "use strict";
+  var $__5;
   var __moduleName = "src/ui/template";
   var Check = ($__src_47_check__).default;
   var PbElement = ($__src_47_pbelement__).default;
@@ -2065,14 +2076,28 @@ var $__src_47_ui_47_template__ = (function() {
     $traceurRuntime.defaultSuperCall(this, $Template.prototype, arguments);
   };
   var $Template = Template;
-  ($traceurRuntime.createClass)(Template, {createdCallback: function() {
+  ($traceurRuntime.createClass)(Template, ($__5 = {}, Object.defineProperty($__5, __getGlobal__, {
+    value: function(path) {
+      return path.split('.').reduce((function(previousValue, currentValue) {
+        if (previousValue) {
+          return previousValue[$traceurRuntime.toProperty(currentValue)];
+        } else {
+          return previousValue;
+        }
+      }), window);
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__5, "createdCallback", {
+    value: function() {
       var $__3 = this;
       $traceurRuntime.superCall(this, $Template.prototype, "createdCallback", []);
       var dataPromises = [];
-      var $__5 = this,
-          $__6 = function(key) {
-            var valueStr = $__5.dataset[$traceurRuntime.toProperty(key)];
-            var value = window[$traceurRuntime.toProperty(valueStr)] || valueStr;
+      var $__6 = this,
+          $__7 = function(key) {
+            var valueStr = $__6.dataset[$traceurRuntime.toProperty(key)];
+            var value = $__6[$traceurRuntime.toProperty(__getGlobal__)](valueStr) || valueStr;
             if (value instanceof Promise) {
               dataPromises.push(value.then((function(result) {
                 return [key, result];
@@ -2083,13 +2108,18 @@ var $__src_47_ui_47_template__ = (function() {
           };
       for (var key in this.dataset)
         if (!$traceurRuntime.isSymbolString(key)) {
-          $__6(key);
+          $__7(key);
         }
       Promise.all(dataPromises).then((function(dataArray) {
         var data = Utils.fromArrayOfArrays(dataArray);
-        $($__3).replaceWith(handlebars.compile($__3.innerHTML)(data));
+        var templateStr = $__3.innerHTML.replace('&gt;', '>');
+        $($__3).replaceWith(handlebars.compile(templateStr)(data));
       }));
-    }}, {register: function(currentDoc, handlebars_ref) {
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), $__5), {register: function(currentDoc, handlebars_ref) {
       if (!doc && !handlebars) {
         document.registerElement(EL_NAME, {prototype: $Template.prototype});
       }

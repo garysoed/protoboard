@@ -1,6 +1,7 @@
+import Events from 'src/events';
 import PbElement from 'src/pbelement';
-import Utils from 'src/utils';
 import PreviewService from 'src/service/preview';
+import Utils from 'src/utils';
 
 /**
  * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered 
@@ -19,7 +20,7 @@ const EL_NAME = 'pb-u-previewer';
 // Private symbols.
 const __previewElHandler__ = Symbol();
 
-const __onPreviewElChanged__ = Symbol();
+const __onPreviewElChanged__ = Symbol('onPreviewElChanged');
 
 export default class Previewer extends PbElement {
 
@@ -57,10 +58,9 @@ export default class Previewer extends PbElement {
    */
   attachedCallback() {
     super.attachedCallback();
-    this[__previewElHandler__] = Utils.observe(
-        PreviewService, 
-        'previewedEl', 
-        this[__onPreviewElChanged__].bind(this));
+    this[__previewElHandler__] = Events.of(PreviewService, this)
+        .on(PreviewService.Events.ELEMENT_CHANGED,
+            this[__onPreviewElChanged__].bind(this));
   }
 
   /**
@@ -69,7 +69,7 @@ export default class Previewer extends PbElement {
    * @method detachedCallback
    */
   detachedCallback() {
-    Object.unobserve(PreviewService, this[__previewElHandler__]);
+    Events.of(PreviewService, this).off();
     super.detachedCallback();
   }
 

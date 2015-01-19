@@ -24,7 +24,15 @@ let Preview = {
     return this[__previewedEl__];
   },
   set previewedEl(el) {
+    let changed = this[__previewedEl__] !== el;
     this[__previewedEl__] = el;
+    if (changed) {
+      $(this).trigger(Preview.Events.ELEMENT_CHANGED);
+    }
+  },
+
+  Events: {
+    ELEMENT_CHANGED: 'element-changed'
   }
 };
 

@@ -28,6 +28,16 @@ const __getGlobal__ = Symbol();
 
 export default class Template extends PbElement {
 
+  [__getGlobal__](path) {
+    return path.split('.').reduce((previousValue, currentValue) => {
+      if (previousValue) {
+        return previousValue[currentValue];
+      } else {
+        return previousValue;
+      }
+    }, window);
+  }
+
   /**
    * Called when the element is created
    *
@@ -40,7 +50,7 @@ export default class Template extends PbElement {
     let dataPromises = [];
     for (let key in this.dataset) {
       let valueStr = this.dataset[key];
-      let value = window[valueStr] || valueStr;
+      let value = this[__getGlobal__](valueStr) || valueStr;
       if (value instanceof Promise) {
         dataPromises.push(value.then(result => {
           return [key, result];
@@ -53,7 +63,8 @@ export default class Template extends PbElement {
     Promise.all(dataPromises)
         .then(dataArray => {
           let data = Utils.fromArrayOfArrays(dataArray);
-          $(this).replaceWith(handlebars.compile(this.innerHTML)(data));
+          let templateStr = this.innerHTML.replace('&gt;', '>');
+          $(this).replaceWith(handlebars.compile(templateStr)(data));
         });
   }
 

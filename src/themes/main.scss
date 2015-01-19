@@ -1,4 +1,6 @@
-@import 'default-theme';
+@import 'theme';
+
+/** Style sheets appliying to the entire document */
 
 $elements: (
   "pb-c-card",
@@ -20,6 +22,7 @@ $elements: (
 
 body {
   font-family: $font;
+  font-size: small;
 }
 
 p {

@@ -1,17 +1,5 @@
+/** 
+ * All scss files depend on this file. To change the theme, change the theme below and
+ * recompile the SCSS files.
+ */
 @import 'default-theme';
-
-body {
-  font-family: $font;
-  font-size: small;
-}
-
-.pb-component::shadow #root {
-  height: $component-height;
-  width: $component-width;
-}
-
-.pb-card::shadow #root {
-  @include card-border();
-  height: $card-height;
-  width: $card-width;
-}

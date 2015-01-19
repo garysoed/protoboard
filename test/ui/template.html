@@ -45,7 +45,7 @@
             expect(templateEl.innerHTML).to.be.equal(compiledTemplateStr);
           });
           it('should take data as variable name to global', function() {
-            window['a'] = 'data';
+            window['a'] = { b: 'data' };
             var compiledTemplate = _.spiedFunction().overrideReturn('');
             var promise = { then: _.spiedFunction() };
 
@@ -54,7 +54,7 @@
 
             pb.ui.Template.register(doc, handlebar);
 
-            var templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-u-template>')[0];
+            var templateEl = $(doc.body) .html('<pb-u-template data-a="a.b"></pb-u-template>')[0];
 
             expect(Promise.all).calledWith([['a', 'data']]).at.least(1);
 
@@ -62,7 +62,7 @@
             expect(promise.then).calledWith(callbackCaptor).at.least(1);
             callbackCaptor.matchingArgs[0]([['a', 'data']]);
 
-            expect(compiledTemplate).calledWith({a: window['a']}).at.least(1);
+            expect(compiledTemplate).calledWith({ a: window['a'].b }).at.least(1);
           });
           it('should take data as string value', function() {
             var data = 'data';
