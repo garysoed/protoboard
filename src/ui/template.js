@@ -2,11 +2,6 @@ import Check     from 'src/check';
 import PbElement from 'src/pbelement';
 import Utils     from 'src/utils';
 
-let doc = null;
-let handlebars = null;
-
-const EL_NAME = 'pb-u-template';
-
 /**
  * Contains a handlebars js template. When this element is created, it will process the handlebars
  * js template within it and replace itself with the processed templates. To pass in variables into
@@ -20,6 +15,17 @@ const EL_NAME = 'pb-u-template';
  * @class ui.Template
  * @extends PbElement
  */
+
+let doc = null;
+let handlebars = null;
+
+const EL_NAME = 'pb-u-template';
+
+const ATTR_TEMPLATE = 'pb-template';
+
+// Private symbols.
+const __getGlobal__ = Symbol();
+
 export default class Template extends PbElement {
 
   /**
@@ -29,13 +35,26 @@ export default class Template extends PbElement {
    */
   createdCallback() {
     super.createdCallback();
-    let templateStr = this.innerHTML;
-    let data = {};
+
+    // Get the data
+    let dataPromises = [];
     for (let key in this.dataset) {
       let valueStr = this.dataset[key];
-      data[key] = window[valueStr] || valueStr;
+      let value = window[valueStr] || valueStr;
+      if (value instanceof Promise) {
+        dataPromises.push(value.then(result => {
+          return [key, result];
+        }));
+      } else {
+        dataPromises.push(Promise.resolve([key, value]));
+      }
     }
-    $(this).replaceWith(handlebars.compile(this.innerHTML)(data));
+
+    Promise.all(dataPromises)
+        .then(dataArray => {
+          let data = Utils.fromArrayOfArrays(dataArray);
+          $(this).replaceWith(handlebars.compile(this.innerHTML)(data));
+        });
   }
 
   /**

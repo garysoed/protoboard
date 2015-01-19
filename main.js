@@ -60,6 +60,28 @@ var $__src_47_utils__ = (function() {
       }
       return array;
     },
+    toArrayOfArrays: function(obj) {
+      var array = [];
+      for (var $__0 = Object.keys(obj)[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__1; !($__1 = $__0.next()).done; ) {
+        var key = $__1.value;
+        {
+          array.push([key, obj[$traceurRuntime.toProperty(key)]]);
+        }
+      }
+      return array;
+    },
+    fromArrayOfArrays: function(array) {
+      var obj = {};
+      for (var $__0 = array[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__1; !($__1 = $__0.next()).done; ) {
+        var entry = $__1.value;
+        {
+          obj[$traceurRuntime.toProperty(entry[0])] = entry[1];
+        }
+      }
+      return obj;
+    },
     makeGlobal: function(namespace, target) {
       var currentScope = window;
       var pathArr = namespace.split('.');
@@ -88,9 +110,9 @@ var $__src_47_utils__ = (function() {
           }
         }
         if (oldFn) {
-          var rv$__0 = oldFn.apply(this, arguments);
+          var rv$__2 = oldFn.apply(this, arguments);
           if (callBefore) {
-            return rv$__0;
+            return rv$__2;
           }
         }
         if (!callBefore) {
@@ -435,21 +457,33 @@ var $__src_47_check__ = (function() {
   var $__2;
   var __moduleName = "src/check";
   var Utils = ($__src_47_utils__).default;
-  var __addChecked__ = Symbol();
   var __checked__ = Symbol();
   var __input__ = Symbol();
   var __value__ = Symbol();
-  var Continuation = function Continuation(input) {
+  var __onFailure__ = Symbol();
+  var __onSuccess__ = Symbol();
+  var Check = function Check(input) {
     var value = arguments[1];
     var checked = arguments[2] !== (void 0) ? arguments[2] : [];
     this[$traceurRuntime.toProperty(__checked__)] = checked;
     this[$traceurRuntime.toProperty(__input__)] = input;
     this[$traceurRuntime.toProperty(__value__)] = value;
   };
-  var $Continuation = Continuation;
-  ($traceurRuntime.createClass)(Continuation, ($__2 = {}, Object.defineProperty($__2, __addChecked__, {
+  var $Check = Check;
+  ($traceurRuntime.createClass)(Check, ($__2 = {}, Object.defineProperty($__2, __onFailure__, {
     value: function(checked) {
-      return new $Continuation(this[$traceurRuntime.toProperty(__input__)], this[$traceurRuntime.toProperty(__value__)], this[$traceurRuntime.toProperty(__checked__)].concat(checked));
+      return new $Check(this[$traceurRuntime.toProperty(__input__)], this[$traceurRuntime.toProperty(__value__)], this[$traceurRuntime.toProperty(__checked__)].concat(checked));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__2, __onSuccess__, {
+    value: function(value) {
+      if (this[$traceurRuntime.toProperty(__value__)] === undefined) {
+        return new $Check(this[$traceurRuntime.toProperty(__input__)], value);
+      } else {
+        return new $Check(this[$traceurRuntime.toProperty(__input__)], this[$traceurRuntime.toProperty(__value__)]);
+      }
     },
     configurable: true,
     enumerable: true,
@@ -459,16 +493,24 @@ var $__src_47_check__ = (function() {
       var radix = arguments[0] !== (void 0) ? arguments[0] : 10;
       var output = Number.parseInt(this[$traceurRuntime.toProperty(__input__)], radix);
       if (Number.isNaN(output)) {
-        return this[$traceurRuntime.toProperty(__addChecked__)](("int(radix = " + radix + ")"));
+        return this[$traceurRuntime.toProperty(__onFailure__)](("int(radix = " + radix + ")"));
       }
-      return new $Continuation(this[$traceurRuntime.toProperty(__input__)], output);
+      return this[$traceurRuntime.toProperty(__onSuccess__)](output);
     },
     configurable: true,
     enumerable: true,
     writable: true
   }), Object.defineProperty($__2, "isBoolean", {
     value: function() {
-      return new $Continuation(this[$traceurRuntime.toProperty(__input__)], this[$traceurRuntime.toProperty(__input__)].toLowerCase() === 'true');
+      if (typeof this[$traceurRuntime.toProperty(__input__)] !== 'string') {
+        return this[$traceurRuntime.toProperty(__onFailure__)]('boolean');
+      } else if (this[$traceurRuntime.toProperty(__input__)].toLowerCase() === 'true') {
+        return this[$traceurRuntime.toProperty(__onSuccess__)](true);
+      } else if (this[$traceurRuntime.toProperty(__input__)].toLowerCase() === 'false') {
+        return this[$traceurRuntime.toProperty(__onSuccess__)](false);
+      } else {
+        return this[$traceurRuntime.toProperty(__onFailure__)]('boolean');
+      }
     },
     configurable: true,
     enumerable: true,
@@ -496,7 +538,7 @@ var $__src_47_check__ = (function() {
     writable: true
   }), $__2), {});
   function check(input) {
-    return new Continuation(input);
+    return new Check(input);
   }
   var $__default = check;
   Utils.makeGlobal('pb.Check', check);
@@ -1567,7 +1609,7 @@ var $__src_47_ability_47_shuffleable__ = (function() {
       }
     },
     trigger: function(el) {
-      if (Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
+      if (Check($(el).attr(ATTR_NAME)).isBoolean().orUse(false)) {
         var pairs = Utils.toArray(el.children).map((function(child) {
           return [child, Math.random()];
         }));
@@ -2017,20 +2059,36 @@ var $__src_47_ui_47_template__ = (function() {
   var doc = null;
   var handlebars = null;
   var EL_NAME = 'pb-u-template';
+  var ATTR_TEMPLATE = 'pb-template';
+  var __getGlobal__ = Symbol();
   var Template = function Template() {
     $traceurRuntime.defaultSuperCall(this, $Template.prototype, arguments);
   };
   var $Template = Template;
   ($traceurRuntime.createClass)(Template, {createdCallback: function() {
+      var $__3 = this;
       $traceurRuntime.superCall(this, $Template.prototype, "createdCallback", []);
-      var templateStr = this.innerHTML;
-      var data = {};
+      var dataPromises = [];
+      var $__5 = this,
+          $__6 = function(key) {
+            var valueStr = $__5.dataset[$traceurRuntime.toProperty(key)];
+            var value = window[$traceurRuntime.toProperty(valueStr)] || valueStr;
+            if (value instanceof Promise) {
+              dataPromises.push(value.then((function(result) {
+                return [key, result];
+              })));
+            } else {
+              dataPromises.push(Promise.resolve([key, value]));
+            }
+          };
       for (var key in this.dataset)
         if (!$traceurRuntime.isSymbolString(key)) {
-          var valueStr = this.dataset[$traceurRuntime.toProperty(key)];
-          data[$traceurRuntime.toProperty(key)] = window[$traceurRuntime.toProperty(valueStr)] || valueStr;
+          $__6(key);
         }
-      $(this).replaceWith(handlebars.compile(this.innerHTML)(data));
+      Promise.all(dataPromises).then((function(dataArray) {
+        var data = Utils.fromArrayOfArrays(dataArray);
+        $($__3).replaceWith(handlebars.compile($__3.innerHTML)(data));
+      }));
     }}, {register: function(currentDoc, handlebars_ref) {
       if (!doc && !handlebars) {
         document.registerElement(EL_NAME, {prototype: $Template.prototype});

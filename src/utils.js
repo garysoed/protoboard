@@ -134,6 +134,22 @@ var Utils = {
     return array;
   },
 
+  toArrayOfArrays(obj) {
+    let array = [];
+    for (let key of Object.keys(obj)) {
+      array.push([key, obj[key]]);
+    }
+    return array;
+  },
+
+  fromArrayOfArrays(array) {
+    let obj = {};
+    for (let entry of array) {
+      obj[entry[0]] = entry[1];
+    }
+    return obj;
+  },
+
   /**
    * Makes the given target to be globally available.
    *

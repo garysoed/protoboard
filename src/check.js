@@ -1,39 +1,123 @@
 import Utils from 'src/utils';
 
+/**
+ * Utility class to check string values and parse them to different types.
+ *
+ * ```javascript
+ * // Check that the string is a number, or throw an error if it isn't.
+ * pb.Check('123')
+ *     .isInt()
+ *     .orThrows('not a number'); // returns 123 as a number
+ *
+ * // Check that the string is a number, or a boolean, or use a default value.
+ * pb.Check('abc')
+ *     .isInt()
+ *     .isBoolean()
+ *     .orUse(false); // returns false
+ * ```
+ *
+ * @class Check
+ * @static
+ */
+
 // Private symbols.
-const __addChecked__ = Symbol();
 const __checked__ = Symbol();
 const __input__ = Symbol();
 const __value__ = Symbol();
 
-class Continuation {
+const __onFailure__ = Symbol();
+const __onSuccess__ = Symbol();
 
-  [__addChecked__](checked) {
-    return new Continuation(
-        this[__input__], 
-        this[__value__], 
-        this[__checked__].concat(checked));
-  }
 
+class Check {
+
+  /**
+   * @constructor
+   * @param {?string} input The value to be checked.
+   * @param {*} value The value parsed from the input value. Specifying this indicates that the
+   *    parsing has succeeded.
+   * @param {Array.<string>} checked Array of strings that describe the check that has failed on
+   *    the input string.
+   */
   constructor(input, value = undefined, checked = []) {
     this[__checked__] = checked;
     this[__input__] = input;
     this[__value__] = value;
   }
 
+  /**
+   * Handles when a check has failed.
+   *
+   * @method __onFailure__
+   * @param {string} checked The description of check that has been done.
+   * @return {Check} A new Check object with the appended checked description.
+   * @private
+   */
+  [__onFailure__](checked) {
+    return new Check(
+        this[__input__], 
+        this[__value__], 
+        this[__checked__].concat(checked));
+  }
+
+  /**
+   * Handles when a parse has succeeded.
+   *
+   * @method __onSuccess__
+   * @param {*} value The value successfully parsed from the string input.
+   * @return {Check} A new check object with the first successfully parsed value.
+   * @private
+   */
+  [__onSuccess__](value) {
+    if (this[__value__] === undefined) {
+      return new Check(this[__input__], value);
+    } else {
+      return new Check(this[__input__], this[__value__]);
+    }
+  }
+
+  /**
+   * Try to parse the input string as an int with the given radix.
+   *
+   * @method isInt
+   * @param  {number=} radix Radix to use to parse the input string. Defaults to 10.
+   * @return {Check} A new instance of the Check object used for chaining.
+   */
   isInt(radix = 10) {
     let output = Number.parseInt(this[__input__], radix);
     if (Number.isNaN(output)) {
-      return this[__addChecked__](`int(radix = ${radix})`);
+      return this[__onFailure__](`int(radix = ${radix})`);
     }
 
-    return new Continuation(this[__input__], output);
+    return this[__onSuccess__](output);
   }
 
+  /**
+   * Try to parse the input string as a boolean.
+   *
+   * @method isBoolean
+   * @return {Check} A new instance of the Check object used for chaining.
+   */
   isBoolean() {
-    return new Continuation(this[__input__], this[__input__].toLowerCase() === 'true');
+    if (typeof this[__input__] !== 'string') {
+      return this[__onFailure__]('boolean');
+    } else if (this[__input__].toLowerCase() === 'true') {
+      return this[__onSuccess__](true);
+    } else if (this[__input__].toLowerCase() === 'false') {
+      return this[__onSuccess__](false);
+    } else {
+      return this[__onFailure__]('boolean');
+    }
   }
 
+  /**
+   * Throws an exception if no parse has been successful.
+   *
+   * @method orThrows
+   * @param {string=} msg The error message to throw. If not defined, will use an auto generated 
+   *    one.
+   * @return {*} The first successful parsed value.
+   */
   orThrows(msg) {
     if (this[__value__] === undefined) {
       if (!msg) {
@@ -46,13 +130,21 @@ class Continuation {
     }
   }
 
+  /**
+   * Use the given value if no parse attempts have been successful.
+   * 
+   * @method orUse
+   * @param {*} backup Value to use as backup if no parsing has been successful.
+   * @return {*} The first successful parsed value, or the given backup value if no parse attempts
+   *    were successful.
+   */
   orUse(backup) {
     return (this[__value__] === undefined) ? backup : this[__value__];
   }
 }
 
 function check(input) {
-  return new Continuation(input);
+  return new Check(input);
 }
 
 export default check;

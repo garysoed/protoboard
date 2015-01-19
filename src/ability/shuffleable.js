@@ -50,7 +50,7 @@ export default class Shuffleable extends Ability {
    * @param {!Element} el The element whose children should be shuffled.
    */
   trigger(el) {
-    if (Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
+    if (Check($(el).attr(ATTR_NAME)).isBoolean().orUse(false)) {
       let pairs = Utils.toArray(el.children).map(child => [child, Math.random()]);
       pairs.sort((a, b) => Utils.compare(a[1], b[1]));
 

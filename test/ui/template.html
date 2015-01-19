@@ -25,12 +25,21 @@
             var templateStr = 'Template String';
             var compiledTemplateStr = 'Compiled template string';
             var compiledTemplate = _.spiedFunction().overrideReturn(compiledTemplateStr);
+            var promise = { then: _.spiedFunction() };
 
             _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
+            _.spy(Promise, 'all').overrideReturn(promise);
 
             pb.ui.Template.register(doc, handlebar);
 
-            var templateEl = $(doc.body).html('<pb-u-template>' + templateStr + '</pb-template>')[0];
+            var templateEl = $(doc.body)
+                .html('<pb-u-template>' + templateStr + '</pb-u-template>')[0];
+
+            expect(Promise.all).calledWith([]).at.least(1);
+
+            var callbackCaptor = _M.isA(Function);
+            expect(promise.then).calledWith(callbackCaptor).at.least(1);
+            callbackCaptor.matchingArgs[0]([]);
 
             expect(handlebar.compile).calledWith(templateStr).at.least(1);
             expect(templateEl.innerHTML).to.be.equal(compiledTemplateStr);
@@ -38,27 +47,65 @@
           it('should take data as variable name to global', function() {
             window['a'] = 'data';
             var compiledTemplate = _.spiedFunction().overrideReturn('');
+            var promise = { then: _.spiedFunction() };
 
             _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
+            _.spy(Promise, 'all').overrideReturn(promise);
 
             pb.ui.Template.register(doc, handlebar);
 
-            var templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-template>')[0];
+            var templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-u-template>')[0];
+
+            expect(Promise.all).calledWith([['a', 'data']]).at.least(1);
+
+            var callbackCaptor = _M.isA(Function);
+            expect(promise.then).calledWith(callbackCaptor).at.least(1);
+            callbackCaptor.matchingArgs[0]([['a', 'data']]);
 
             expect(compiledTemplate).calledWith({a: window['a']}).at.least(1);
           });
           it('should take data as string value', function() {
             var data = 'data';
             var compiledTemplate = _.spiedFunction().overrideReturn('');
+            var promise = { then: _.spiedFunction() };
 
             _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
+            _.spy(Promise, 'all').overrideReturn(promise);
 
             pb.ui.Template.register(doc, handlebar);
 
-            var templateEl = $(doc.body) .html('<pb-u-template data-a="data"></pb-template>')[0];
+            var templateEl = $(doc.body) .html('<pb-u-template data-a="data"></pb-u-template>')[0];
+
+            expect(Promise.all).calledWith([['a', data]]).at.least(1);
+
+            var callbackCaptor = _M.isA(Function);
+            expect(promise.then).calledWith(callbackCaptor).at.least(1);
+            callbackCaptor.matchingArgs[0]([['a', data]]);
 
             expect(compiledTemplate).calledWith({a: data}).at.least(1);
           });
+          it('should take promise as a value', function() {
+            var data = 'data';
+            window['a'] = Promise.resolve(data);
+            var compiledTemplate = _.spiedFunction().overrideReturn('');
+            var promise = { then: _.spiedFunction() };
+
+            _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
+            _.spy(Promise, 'all').overrideReturn(promise);
+
+            pb.ui.Template.register(doc, handlebar);
+
+            var templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-u-template>')[0];
+
+            expect(Promise.all).calledWith([['a', window['a']]]).at.least(1);
+
+            var callbackCaptor = _M.isA(Function);
+            expect(promise.then).calledWith(callbackCaptor).at.least(1);
+            callbackCaptor.matchingArgs[0]([['a', data]]);
+
+            expect(compiledTemplate).calledWith({a: data}).at.least(1);
+
+          });          
         });
 
         describe('#pb-for', function() {
