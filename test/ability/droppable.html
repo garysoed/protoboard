@@ -164,24 +164,25 @@
           });
           it('should remove pb-over on dragleave', function() {
             droppable[__register__](el);
+            droppable[__onDragEnter__](el);
 
             var handlerCaptor = _M.isA(Function);
             expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
 
-            droppable[__onDragEnter__](el);
-            handlerCaptor.matchingArgs[0]();
+            handlerCaptor.matchingArgs[0]({ target: el });
             expect(el.classList.contains('pb-over')).to.be.false();
           });
-          it('should be noop on dragleave if there are more dragenters than dragleaves', function() {
+          it('should be noop on dragleave dragging out of a descendant', function() {
+            var target = doc.createElement('div');
+            el.appendChild(target);
+
             droppable[__register__](el);
+            droppable[__onDragEnter__](el);
 
             var handlerCaptor = _M.isA(Function);
             expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
 
-            droppable[__onDragEnter__](el);
-            droppable[__onDragEnter__](el);
-
-            handlerCaptor.matchingArgs[0]();
+            handlerCaptor.matchingArgs[0]({ target: target });
             expect(el.classList.contains('pb-over')).to.be.true();
           });
           it('should call trigger on drop', function() {

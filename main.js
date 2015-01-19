@@ -1301,7 +1301,6 @@ var $__src_47_ability_47_droppable__ = (function() {
   var ATTR_NAME = 'pb-droppable';
   var CLASS_OVER = 'pb-over';
   var __defaultValue__ = Symbol();
-  var __dragEnterCount__ = Symbol();
   var __onDragEnter__ = Symbol('onDragEnter');
   var __onDragLeave__ = Symbol();
   var __onDragOver__ = Symbol();
@@ -1310,21 +1309,17 @@ var $__src_47_ability_47_droppable__ = (function() {
   var __unregister__ = Symbol('unregister');
   var Droppable = function Droppable(defaultValue) {
     this[$traceurRuntime.toProperty(__defaultValue__)] = defaultValue;
-    this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
   };
   ($traceurRuntime.createClass)(Droppable, ($__6 = {}, Object.defineProperty($__6, __onDragEnter__, {
     value: function(el) {
       el.classList.add(CLASS_OVER);
-      this[$traceurRuntime.toProperty(__dragEnterCount__)]++;
     },
     configurable: true,
     enumerable: true,
     writable: true
   }), Object.defineProperty($__6, __onDragLeave__, {
-    value: function(el) {
-      this[$traceurRuntime.toProperty(__dragEnterCount__)]--;
-      if (this[$traceurRuntime.toProperty(__dragEnterCount__)] <= 0) {
-        this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
+    value: function(el, event) {
+      if (el === event.target || !el.contains(event.target)) {
         el.classList.remove(CLASS_OVER);
       }
     },
@@ -1342,7 +1337,6 @@ var $__src_47_ability_47_droppable__ = (function() {
   }), Object.defineProperty($__6, __onLastDraggedElChange__, {
     value: function(el) {
       if (!DragDrop.lastDraggedEl) {
-        this[$traceurRuntime.toProperty(__dragEnterCount__)] = 0;
         el.classList.remove(CLASS_OVER);
       }
     },

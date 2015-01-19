@@ -22,7 +22,6 @@ const CLASS_OVER = 'pb-over';
 
 // Private symbols.
 const __defaultValue__ = Symbol();
-const __dragEnterCount__ = Symbol();
 
 const __onDragEnter__ = Symbol('onDragEnter');
 const __onDragLeave__ = Symbol();
@@ -39,7 +38,6 @@ export default class Droppable extends Ability {
    */
   constructor(defaultValue) {
     this[__defaultValue__] = defaultValue;
-    this[__dragEnterCount__] = 0;
   }
 
   /**
@@ -51,7 +49,6 @@ export default class Droppable extends Ability {
    */
   [__onDragEnter__](el) {
     el.classList.add(CLASS_OVER);
-    this[__dragEnterCount__]++;
   }
 
   /**
@@ -61,10 +58,8 @@ export default class Droppable extends Ability {
    * @param {!Element} el The element being left behind.
    * @private
    */
-  [__onDragLeave__](el) {
-    this[__dragEnterCount__]--;
-    if (this[__dragEnterCount__] <= 0) {
-      this[__dragEnterCount__] = 0;
+  [__onDragLeave__](el, event) {
+    if (el === event.target || !el.contains(event.target)) {
       el.classList.remove(CLASS_OVER);
     }
   }
@@ -91,7 +86,6 @@ export default class Droppable extends Ability {
    */
   [__onLastDraggedElChange__](el) {
     if (!DragDrop.lastDraggedEl) {
-      this[__dragEnterCount__] = 0;
       el.classList.remove(CLASS_OVER);
     }
   }
