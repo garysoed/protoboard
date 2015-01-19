@@ -2,4 +2,6 @@
  * All scss files depend on this file. To change the theme, change the theme below and
  * recompile the SCSS files.
  */
-@import 'default-theme';
+@import 'grey';
+
+@import 'base';
