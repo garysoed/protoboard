@@ -59,3 +59,15 @@ $card-height: 100px;
 $card-width: 75px;
 
 $transition-duration: .3s;
+
+
+.pb-component::shadow #root {
+  height: $component-height;
+  width: $component-width;
+}
+
+.pb-card::shadow #root {
+  @include card-border();
+  height: $card-height;
+  width: $card-width;
+}
