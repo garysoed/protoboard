@@ -1,5 +1,13 @@
 <base href="../..">
-<link rel="import" href="main.html">
+
+<link rel="import" href="out/ability/abilities.html">
+<link rel="import" href="out/ability/contextable.html">
+<link rel="import" href="out/ability/draggable.html">
+<link rel="import" href="out/ability/rotateable.html">
+<link rel="import" href="out/ability/toggleable.html">
+<link rel="import" href="out/component/component.html">
+<link rel="import" href="out/utils.html">
+
 <link rel="stylesheet" type="text/css" href="out/component/card.css">
 
 <template>
@@ -12,8 +20,81 @@
 </template>
 
 <script>
-  (function() {
-    var doc = document.currentScript.ownerDocument;
-    pb.component.Card.register(doc, doc.querySelector('template'));
-  })();
+((Abilities, Contextable, Draggable, Rotateable, Toggleable, Component, Utils) => {
+
+/**
+ * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
+ * - One must have a `pb-front` class. This is the front face of the card.
+ * - One must have a `pb-back` class. This is the back face of the card.
+ *
+ * By default, the card starts by showing its back. If you want to make it start by showing the 
+ * front face, add `pb-showfront="true"` to the `pb-c-card`.
+ *
+ * ```html
+ * <!-- Example: Create a card that starts by displaying its front side -->
+ * <pb-c-card pb-showfront="true">
+ *   <div class="pb-front">Front side</div>
+ *   <div class="pb-back">Back side</div>
+ * </pb-c-card>
+ * ```
+ *
+ * Supported abilities:
+ * - [[Draggable|ability.Draggable]]: Default enabled.
+ * - [[Rotateable|ability.Rotateable]]: Default disabled.
+ * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
+ * 
+ * @class component.Card
+ * @extends component.Component
+ */
+
+let doc = document.currentScript.ownerDocument;
+let template = doc.querySelector('template');
+
+const EL_NAME = 'pb-c-card';
+
+export default class Card extends Component {
+
+  /**
+   * Called when the element is created
+   *
+   * @method createdCallback
+   */
+  createdCallback() {
+    super.createdCallback();
+    this.createShadowRoot()
+        .appendChild(Utils.activateTemplate(template, doc));
+    this.attachedCallback();
+  }
+}
+
+let toggleable = new Toggleable(true);
+let rotateable = new Rotateable();
+let draggable = new Draggable(true);
+document.registerElement(EL_NAME,  {
+  prototype: Abilities.config(
+      Card,
+      {
+        'pb-click': toggleable
+      },
+      draggable,
+      rotateable,
+      new Contextable({
+        'Flip': toggleable,
+        '-': undefined,
+        'sub': {
+          'Flip': toggleable,
+          'Tap / Untap': rotateable
+        }
+      })).prototype
+});
+
+Utils.makeGlobal('pb.component.Card', Card);
+
+})(pb.ability.Abilities,
+    pb.ability.Contextable,
+    pb.ability.Draggable,
+    pb.ability.Rotateable,
+    pb.ability.Toggleable,
+    pb.component.Component,
+    pb.Utils);
 </script>

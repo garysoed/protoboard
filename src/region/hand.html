@@ -1,6 +1,10 @@
 <base href="../..">
 
-<link rel="import" href="main.html">
+<link rel="import" href="out/ability/abilities.html">
+<link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/region/region.html">
+<link rel="import" href="out/service/dragdrop.html">
+<link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/region/hand.css">
 
@@ -15,8 +19,93 @@
 </template>
 
 <script>
-  (function() {
-    var doc = document.currentScript.ownerDocument;
-    pb.region.Hand.register(doc, doc.querySelector('template'));
-  })();
+((Abilities, DragDrop, Droppable, Region, Utils) => {
+
+/**
+ * @class region.Hand
+ * @extends region.Region
+ */
+
+let doc = document.currentScript.ownerDocument;
+let template = doc.querySelector('template');
+
+const EL_NAME = 'pb-r-hand';
+
+class ReorderableDroppable extends Droppable {
+  constructor(defaultValue) {
+    super(defaultValue);
+  }
+
+  trigger(el, event) {
+    el.classList.remove('pb-over');
+    let lastDraggedEl = DragDrop.lastDraggedEl;
+    if (!lastDraggedEl) {
+      return;
+    }
+
+    // Go through every children and find the index that the element should be.
+    let dropped = false;
+    for (let child of Utils.toArray(el.children)) {
+      let rect = child.getBoundingClientRect();
+      if (!dropped && rect.left + rect.width / 2 > event.clientX) {
+        dropped = true;
+        el.insertBefore(lastDraggedEl, child);
+      }
+    }
+
+    if (!dropped) {
+      el.appendChild(lastDraggedEl);
+    }
+  }
+}
+
+export default class Hand extends Region {
+
+  /**
+   * Called when the element is created.
+   *
+   * @method createdCallback
+   */
+  createdCallback() {
+    super.createdCallback();
+    this.createShadowRoot()
+        .appendChild(Utils.activateTemplate(template, doc));
+
+    this.attachedCallback();
+  }
+
+  /**
+   * Called when the element is attached to the document.
+   *
+   * @method attachedCallback
+   */
+  attachedCallback() {
+    super.attachedCallback();
+  }
+
+  /**
+   * Called when the element is detached from the document.
+   *
+   * @method detachedCallback
+   */
+  detachedCallback() {
+    super.detachedCallback();
+  }
+}
+
+
+let droppable = new ReorderableDroppable(true);
+document.registerElement(EL_NAME, {
+  prototype: Abilities.config(
+      Hand,
+      {},
+      droppable).prototype
+});
+
+Utils.makeGlobal('pb.region.Hand', Hand);
+if (window['TEST_MODE']) {
+  Utils.makeGlobal('pb.region.Hand.ReorderableDroppable', ReorderableDroppable);
+}
+
+})(pb.ability.Abilities, pb.service.DragDrop, pb.ability.Droppable, pb.region.Region, pb.Utils);
 </script>

@@ -1,5 +1,4 @@
 import Utils from 'src/utils';
-import DragDropService from 'src/service/dragdrop';
 import PbElement from 'src/pbelement';
 
 /**

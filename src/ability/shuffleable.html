@@ -1,7 +1,11 @@
-import Check from 'src/check';
-import Utils from 'src/utils';
+<base href="../..">
 
-import Ability from 'src/ability/ability';
+<link rel="import" href="out/ability/ability.html">
+<link rel="import" href="out/check.html">
+<link rel="import" href="out/utils.html">
+
+<script>
+((Ability, Check, Utils) => {
 
 /**
  * Provides decorator to make the component be able to shuffle the child elements.
@@ -72,3 +76,5 @@ export default class Shuffleable extends Ability {
 }
 
 Utils.makeGlobal('pb.ability.Shuffleable', Shuffleable);
+
+})(pb.ability.Ability, pb.Check, pb.Utils);

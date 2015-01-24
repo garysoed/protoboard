@@ -1,4 +1,9 @@
-import Utils from 'src/utils';
+<base href="../..">
+
+<link rel="import" href="out/utils.html">
+
+<script>
+((Utils) => {
 
 /**
  * Base class for all abilities. Any abilities must extend this class and implement the methods
@@ -61,6 +66,7 @@ export default class Ability {
   get name() { throw 'unimplemented'; }
 }
 
-if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.ability.Ability', Ability);
-}
+Utils.makeGlobal('pb.ability.Ability', Ability);
+
+})(pb.Utils);
+</script>

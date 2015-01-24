@@ -1,3 +1,10 @@
+<base href="../..">
+
+<link rel="import" href="out/utils.html">
+
+<script>
+
+((Utils) => {
 import Utils from 'src/utils';
 
 /**
@@ -39,3 +46,6 @@ let Preview = {
 export default Preview = Preview;
 
 Utils.makeGlobal('pb.service.Preview', Preview);
+
+})(pb.Utils);
+</script>

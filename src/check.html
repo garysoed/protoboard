@@ -1,4 +1,9 @@
-import Utils from 'src/utils';
+<base href="..">
+
+<link rel="import" href="out/utils.html">
+
+<script>
+((Utils) => {
 
 /**
  * Utility class to check string values and parse them to different types.
@@ -150,3 +155,6 @@ function check(input) {
 export default check;
 
 Utils.makeGlobal('pb.Check', check);
+
+})(pb.Utils);
+</script>

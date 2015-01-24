@@ -1,10 +1,13 @@
-import Check  from 'src/check';
-import Events from 'src/events';
-import Utils  from 'src/utils';
+<base href="../..">
 
-import Ability from 'src/ability/ability';
+<link rel="import" href="out/ability/ability.html">
+<link rel="import" href="out/check.html">
+<link rel="import" href="out/events.html">
+<link rel="import" href="out/service/dragdrop.html">
+<link rel="import" href="out/utils.html">
 
-import DragDropService from 'src/service/dragdrop';
+<script>
+((Ability, Check, Events, DragDropService, Utils) => {
 
 /**
  * Provides decorator to make an element draggable. Use [[Abilities|ability.Abilities]] to decorate
@@ -181,6 +184,6 @@ export default class Draggable extends Ability {
   }
 }
 
-if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.ability.Draggable', Draggable);
-}
+Utils.makeGlobal('pb.ability.Draggable', Draggable);
+
+})(pb.ability.Ability, pb.Check, pb.Events, pb.service.DragDrop, pb.Utils);

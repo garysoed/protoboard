@@ -1,6 +1,12 @@
 <base href="../..">
 
-<link rel="import" href="main.html">
+<link rel="import" href="out/ability/abilities.html">
+<link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/ability/shuffleable.html">
+<link rel="import" href="out/ability/triggerable.html">
+<link rel="import" href="out/region/region.html">
+<link rel="import" href="out/utils.html">
+
 <link rel="stylesheet" type="text/css" href="out/region/deck.css">
 
 <template>
@@ -10,8 +16,88 @@
 </template>
 
 <script>
-  (function() {
-    var doc = document.currentScript.ownerDocument;
-    pb.region.Deck.register(doc, doc.querySelector('template'));
-  })();
+((Abilities, Droppable, Region, Shuffleable, Triggerable, Utils) => {
+
+/**
+ * Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.
+ * Any child elements of this class are considered to be in the deck.
+ *
+ * ```html
+ * <!-- Example: Deck containing two cards -->
+ * <pb-r-deck>
+ *   <pb-c-card id="card1">
+ *     <div class="pb-front">Front</div>
+ *     <div class="pb-back">Back</div>
+ *   </pb-c-card>
+ *   <pb-c-card id="card2">
+ *     <div class="pb-front">Front</div>
+ *     <div class="pb-back">Back</div>
+ *   </pb-c-card>
+ * </pb-r-deck>
+ * ```
+ *
+ * Supported abilities:
+ * - [[Droppable|ability.Droppable]]: Default enabled.
+ * - [[Shuffleable|ability.Shuffleable]]: Default enabled on double click.
+ *
+ * @class region.Deck
+ * @extends region.Region
+ */
+
+let doc = document.currentScript.ownerDocument;
+let template = doc.querySelector('template');
+
+const EL_NAME = 'pb-r-deck';
+
+export default class Deck extends Region {
+
+  /**
+   * Called when the element is created.
+   *
+   * @method createdCallback
+   */
+  createdCallback() {
+    super.createdCallback();
+    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    this.attachedCallback();
+  }
+
+  /**
+   * Called when the element is attached to the document.
+   *
+   * @method attachedCallback
+   */
+  attachedCallback() {
+    super.attachedCallback();
+  }
+
+  /**
+   * Called when the element is detached from the document.
+   *
+   * @method detachedCallback
+   */
+  detachedCallback() {
+    super.detachedCallback();
+  }
+}
+
+let shuffleable = new Shuffleable(true);
+let droppable = new Droppable(true);
+document.registerElement(EL_NAME, {
+  prototype: Abilities.config(
+      Deck,
+      {
+        [Triggerable.TYPES.DOUBLE_CLICK]: shuffleable
+      },
+      droppable).prototype
+});
+
+Utils.makeGlobal('pb.region.Deck', Deck);
+
+})(pb.ability.Abilities, 
+    pb.ability.Droppable, 
+    pb.region.Region, 
+    pb.ability.Shuffleable, 
+    pb.ability.Triggerable, 
+    pb.Utils);
 </script>

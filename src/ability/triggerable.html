@@ -1,7 +1,11 @@
-import HammerWrapper from 'src/hammerwrapper';
-import Utils         from 'src/utils';
+<base href="../..">
 
-import Ability from 'src/ability/ability';
+<link rel="import" href="out/ability/ability.html">
+<link rel="import" href="out/hammerwrapper.html">
+<link rel="import" href="out/utils.html">
+
+<script>
+((Ability, HammerWrapper, Utils) => {
 
 /**
  * Provides triggers to abilities supported by the app. Normally you don't need to register this to
@@ -234,6 +238,7 @@ Triggerable.TYPES = {
 
 export default Triggerable = Triggerable;
 
-if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.ability.Triggerable', Triggerable);
-}
+Utils.makeGlobal('pb.ability.Triggerable', Triggerable);
+
+
+})(pb.ability.Ability, pb.HammerWrapper, pb.Utils);

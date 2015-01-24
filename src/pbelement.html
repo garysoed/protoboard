@@ -1,2 +1,36 @@
 <base href="..">
-<link rel="import" href="main.html">
+
+<link rel="import" href="out/utils.html">
+
+<script>
+((Utils) => {
+
+/**
+ * Base class of all ProtoBoard elements.
+ * 
+ * @class PbElement
+ * @extends HTMLElement
+ */
+export default class PbElement extends HTMLElement {
+
+  createdCallback() {
+    /**
+     * True iff the element has been created and attached.
+     *
+     * @type boolean
+     * @property isCreated
+     */
+    this.isCreated = false;
+  }
+
+  attachedCallback() {
+    this.isCreated = true;
+  }
+
+  detachedCallback() { }
+}
+
+Utils.makeGlobal('pb.PbElement', PbElement);
+
+})(pb.Utils);
+</script>

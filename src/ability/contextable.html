@@ -1,6 +1,14 @@
-import Utils  from 'src/utils';
+<base href="../..">
 
-import Ability from 'src/ability/ability';
+<link rel="import" href="out/third_party/jquery.html">
+<link rel="import" href="out/third_party/jquery_context.html">
+
+<link rel="import" href="out/ability/ability.html">
+<link rel="import" href="out/ui/context.html">
+<link rel="import" href="out/utils.html">
+
+<script>
+((Utils, Ability) => {
 
 /**
  * Provides decorator to show context menu on an element. To use this, pass a configuration object
@@ -145,6 +153,7 @@ export default class Contextable extends Ability {
   }
 }
 
-if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.ability.Contextable', Contextable);
-}
+Utils.makeGlobal('pb.ability.Contextable', Contextable);
+
+})(pb.Utils, pb.ability.Ability);
+</script>

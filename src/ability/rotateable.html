@@ -1,7 +1,11 @@
-import Check from 'src/check';
-import Utils from 'src/utils';
+<base href="../..">
 
-import Ability from 'src/ability/ability';
+<link rel="import" href="out/ability/ability.html">
+<link rel="import" href="out/check.html">
+<link rel="import" href="out/utils.html">
+
+<script>
+((Ability, Check, Utils) => {
 
 /**
  * Makes the component rotateable. This adds a transform rotateZ CSS rule to the component.
@@ -154,6 +158,6 @@ export default class Rotateable extends Ability {
   }
 }
 
-if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.ability.Rotateable', Rotateable);
-}
+Utils.makeGlobal('pb.ability.Rotateable', Rotateable);
+
+})(pb.ability.Ability, pb.Check, pb.Utils);

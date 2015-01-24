@@ -4,7 +4,8 @@
   <base href="../..">
   <title>RectGrid Unit Tests</title>
   <link rel="import" href="test/testbase.html">
-  <link rel="import" href="src/surface/rectgrid.html">
+
+  <link rel="import" href="out/surface/rectgrid.html">
 </head>
 <body>
   <pb-s-rectgrid id="grid" pb-row="2" pb-col="3">
@@ -69,14 +70,6 @@
           it('should return null if the cell is invalid', function() {
             var grid = doc.querySelector('pb-s-rectgrid#grid');
             expect(grid.get(2, 3)).to.not.exist;
-          });
-        });
-
-        describe('#register', function() {
-          it('should does nothing on second call', function() {
-            _.spy(document, 'registerElement', false);
-            RectGrid.register(doc, {} /* templates */);
-            expect(document.registerElement).called().to.be.equal(0);
           });
         });
       });

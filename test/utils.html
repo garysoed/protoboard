@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <base href="..">
   <title>Utils Unit Tests</title>
-  <link rel="import" href="testbase.html">
+  <link rel="import" href="test/testbase.html">
+  <link rel="import" href="out/utils.html">
 </head>
 <body>
   <template id="correctTemplate">Correct</template>
@@ -15,6 +17,7 @@
       var Utils = pb.Utils;
       var expect = chai.expect;
       var _ = spies.Spies;
+      var _M = spies.Matchers;
       
       var doc = document.currentScript.ownerDocument;
 
@@ -48,7 +51,7 @@
             _.spy(Object, 'observe');
 
             Utils.observe(o, 'a', handler);
-            var isAFunction = Matchers.isA(Function);
+            var isAFunction = _M.isA(Function);
             expect(Object.observe).calledWith(o, isAFunction).at.least(1);
 
             // Emulate a change event on the listened property.
@@ -65,14 +68,14 @@
             };
             isAFunction.matchingArgs[0]([changeA, changeB]);
             expect(handler).calledWith(changeA.name, changeA.type, changeA.oldValue).at.least(1);
-            expect(handler).calledWith(changeB.name, Matchers.any(), Matchers.any()).equal(0);
+            expect(handler).calledWith(changeB.name, _M.any(), _M.any()).equal(0);
           });
           it('should listen to all properties when not given any names', function() {
             var handler = _.spiedFunction()
             _.spy(Object, 'observe');
 
             Utils.observe(o, null /* property */, handler);
-            var isAFunction = Matchers.isA(Function);
+            var isAFunction = _M.isA(Function);
             expect(Object.observe).calledWith(o, isAFunction).at.least(1);
 
             // Emulate a change event on the listened property.

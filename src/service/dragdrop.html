@@ -1,4 +1,10 @@
-import Utils from 'src/utils';
+<base href="../..">
+
+<link rel="import" href="out/utils.html">
+
+<script>
+// TODO(gs): Delete the exports.
+((Utils) => {
 
 /**
  * Service that keeps track of drag and drop.
@@ -89,6 +95,7 @@ DragDrop.Events = {
   LAST_DRAGGED_EL_CHANGED: 'dragdrop-last_dragged_el_changed'
 };
 
-export default DragDrop = DragDrop;
-
 Utils.makeGlobal('pb.service.DragDrop', DragDrop);
+
+})(pb.Utils);
+</script>

@@ -2,15 +2,15 @@
 <html>
   <base href="../..">
   <head>
-    <link rel="import" href="src/component/card.html">
-    <link rel="import" href="src/component/token.html">
-    <link rel="import" href="src/region/bag.html">
-    <link rel="import" href="src/region/deck.html">
-    <link rel="import" href="src/region/hand.html">
-    <link rel="import" href="src/region/rect.html">
-    <link rel="import" href="src/ui/context.html">
-    <link rel="import" href="src/ui/preview.html">
-    <link rel="import" href="src/ui/previewer.html">
+    <link rel="import" href="out/component/card.html">
+    <link rel="import" href="out/component/token.html">
+    <link rel="import" href="out/region/bag.html">
+    <link rel="import" href="out/region/deck.html">
+    <link rel="import" href="out/region/hand.html">
+    <link rel="import" href="out/region/rect.html">
+    <link rel="import" href="out/ui/context.html">
+    <link rel="import" href="out/ui/preview.html">
+    <link rel="import" href="out/ui/previewer.html">
 
     <link rel="stylesheet" type="text/css" href="ex/all/previewer.css">
     <link rel="stylesheet" type="text/css" href="ex/all/regions.css">
@@ -47,32 +47,6 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Tokens</td>
-          <td>
-            <pb-c-token>
-              <div draggable="true" class="green circle"></div>
-            </pb-c-token>
-            <pb-c-token>
-              <div draggable="true" class="red rectangle"></div>
-            </pb-c-token>
-            <pb-c-token>
-              <div draggable="true" class="blue triangle"></div>
-            </pb-c-token>
-          </td>
-          <td>
-            These are simple draggable objects with only one state. You can drag them to places and
-            drop them. That's all. You can customize their look by adding child elements.
-          </td>
-          <td>
-            <ul>
-              <li>Chess pieces</li>
-              <li>Cubes</li>
-              <li>Meeples</li>
-              <li>Gems</li>
-            </ul>
-          </td>
-        </tr>
 
         <tr>
           <td>Cards</td>
@@ -123,6 +97,33 @@
         </tr>
 
         <tr>
+          <td>Tokens</td>
+          <td>
+            <pb-c-token>
+              <div draggable="true" class="green circle"></div>
+            </pb-c-token>
+            <pb-c-token>
+              <div draggable="true" class="red rectangle"></div>
+            </pb-c-token>
+            <pb-c-token>
+              <div draggable="true" class="blue triangle"></div>
+            </pb-c-token>
+          </td>
+          <td>
+            These are simple draggable objects with only one state. You can drag them to places and
+            drop them. That's all. You can customize their look by adding child elements.
+          </td>
+          <td>
+            <ul>
+              <li>Chess pieces</li>
+              <li>Cubes</li>
+              <li>Meeples</li>
+              <li>Gems</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
           <td>Dice</td>
         </tr>
       </tbody>
@@ -150,6 +151,7 @@
             of it.
           </td>
         </tr>
+
         <tr>
           <td>Deck</td>
           <td>
@@ -166,21 +168,7 @@
             </ul>
           </td>
         </tr>
-        <tr>
-          <td>Generic rectangular region</td>
-          <td>
-            <pb-r-rect class="reg1"></pb-r-rect>
-          </td>
-          <td>
-            A rectangle where you can place elements in arbitrary position on it.
-          </td>
-          <td>
-            <ul>
-              <li>Table</li>
-              <li>"In Play" area</li>
-            </ul>
-          </td>
-        </tr>
+
         <tr>
           <td>Hand</td>
           <td>
@@ -194,6 +182,22 @@
             <ul>
               <li>Hand</li>
               <li>Discard pile</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Generic rectangular region</td>
+          <td>
+            <pb-r-rect class="reg1"></pb-r-rect>
+          </td>
+          <td>
+            A rectangle where you can place elements in arbitrary position on it.
+          </td>
+          <td>
+            <ul>
+              <li>Table</li>
+              <li>"In Play" area</li>
             </ul>
           </td>
         </tr>

@@ -1,5 +1,10 @@
-import Triggerable from 'src/ability/triggerable';
-import Utils       from 'src/utils';
+<base href="../..">
+
+<link rel="import" href="out/ability/triggerable.html">
+<link rel="import" href="out/utils.html">
+
+<script>
+((Triggerable, Utils) => {
 
 // Private symbols.
 const __register__ = Symbol();
@@ -96,8 +101,8 @@ const Abilities = {
   }
 };
 
-export default Abilities;
+Utils.makeGlobal('pb.ability.Abilities', Abilities);
 
-if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.ability.Abilities', Abilities);
-}
+})(pb.ability.Triggerable, pb.Utils);
+
+</script>

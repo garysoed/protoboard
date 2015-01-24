@@ -1,5 +1,9 @@
 <base href="../..">
-<link rel="import" href="main.html">
+
+<link rel="import" href="out/ability/abilities.html">
+<link rel="import" href="out/ability/draggable.html">
+<link rel="import" href="out/component/component.html">
+<link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/component/token.css">
 
@@ -10,8 +14,57 @@
 </template>
 
 <script>
-  (function() {
-    var doc = document.currentScript.ownerDocument;
-    pb.component.Token.register(doc, doc.querySelector('template'));
-  })();
+((Abilities, Component, Draggable, Utils) => {
+
+let doc = document.currentScript.ownerDocument;
+let template = doc.querySelector('template');
+
+const EL_NAME = 'pb-c-token';
+
+/**
+ * A simple movable component with only one state. Examples of token:
+ * - Chess piece
+ * - Cubes
+ * - Damage marker
+ *
+ * To use this, create a `pb-c-token` element with one child element. This child element will be
+ * displayed as the token.
+ *
+ * ```html
+ * <!-- Example: A square token -->
+ * <pb-c-token>
+ *   <div style="background: red; width: 50px; height: 50px;"></div>
+ * <pb-c-token>
+ * ```
+ *
+ * Supported abilities:
+ * - [[Draggable|ability.Draggable]]: Default enabled.
+ *
+ * @class component.Token
+ * @extends component.Component
+ */
+export default class Token extends Component {
+
+  /**
+   * Called when the element is created.
+   *
+   * @method createdCallback
+   */
+  createdCallback() {
+    super.createdCallback();
+    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  }
+}
+
+let draggable = new Draggable(true);
+document.registerElement(EL_NAME, {
+  prototype: Abilities.config(
+      Token,
+      {},
+      draggable).prototype
+});
+
+Utils.makeGlobal('pb.component.Token', Token);
+
+})(pb.ability.Abilities, pb.component.Component, pb.ability.Draggable, pb.Utils);
 </script>

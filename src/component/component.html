@@ -1,0 +1,32 @@
+<base href="../..">
+
+<link rel="import" href="out/pbelement.html">
+<link rel="import" href="out/utils.html">
+
+<script>
+// TODO(gs): Inject the imports.
+((PbElement, Utils) => {
+
+/**
+ * Base class for all components.
+ *
+ * @class component.Component
+ * @extends PbElement  
+ */
+export default class Component extends PbElement {
+
+  /**
+   * For testing only.
+   */
+  constructor() { }
+
+  createdCallback() {
+    super.createdCallback();
+  }
+}
+
+Utils.makeGlobal('pb.component.Component', Component);
+
+})(pb.PbElement, pb.Utils);
+
+</script>

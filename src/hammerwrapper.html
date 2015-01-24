@@ -1,4 +1,10 @@
-import Utils from 'src/utils';
+<base href="..">
+
+<link rel="import" href="out/hammerwrapper.html">
+<link rel="import" href="out/third_party/hammer.html">
+
+<script>
+((Utils) => {
 
 /**
  * Wrapper around Hammer JS.
@@ -67,6 +73,7 @@ let HammerWrapper = {
 
 export default HammerWrapper = HammerWrapper;
 
-if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.HammerWrapper', HammerWrapper);
-}
+Utils.makeGlobal('pb.HammerWrapper', HammerWrapper);
+
+})(pb.Utils);
+</script>

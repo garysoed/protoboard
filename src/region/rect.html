@@ -1,6 +1,10 @@
 <base href="../..">
 
-<link rel="import" href="main.html">
+<link rel="import" href="out/ability/abilities.html">
+<link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/region/region.html">
+<link rel="import" href="out/service/dragdrop.html">
+<link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/region/rect.css">
 
@@ -11,8 +15,87 @@
 </template>
 
 <script>
-  (function() {
-    var doc = document.currentScript.ownerDocument;
-    pb.region.Rect.register(doc, doc.querySelector('template'));
-  })();
+((Abilities, DragDrop, Droppable, Region, Utils) => {
+
+let doc = document.currentScript.ownerDocument;
+let template = doc.querySelector('template');
+
+const EL_NAME = 'pb-r-rect';
+
+/**
+ * An arbitrary rectangular region. You can position elements anywhere in this region.
+ *
+ * Supported abilities:
+ * - [[Droppable|ability.Droppable]]: Default enabled. This class uses a custom droppable that 
+ *   positions the element to the mouse's cursor.
+ *   
+ * @class region.Rect
+ * @extends region.Region
+ */
+
+class SmartDroppable extends Droppable {
+
+  constructor(defaultValue) {
+    super(defaultValue);
+  }
+
+  /**
+   * Drop the last dragged element on the given element
+   *
+   * @method trigger
+   * @param {!Element} el The element to drop the dragged element into.
+   * @param {!Event} event Event object that triggered the call.
+   */
+  trigger(el, event) {
+    el.classList.remove('pb-over');
+    let lastDraggedEl = DragDrop.lastDraggedEl;
+    if (!lastDraggedEl) {
+      return;
+    }
+    el.appendChild(lastDraggedEl);
+
+    let screenCoord = lastDraggedEl.getBoundingClientRect();
+    let dLeft = event.clientX - screenCoord.left - DragDrop.offsetX;
+    let dTop = event.clientY - screenCoord.top - DragDrop.offsetY;
+    lastDraggedEl.style.left = `${lastDraggedEl.offsetLeft + dLeft}px`;
+    lastDraggedEl.style.top = `${lastDraggedEl.offsetTop + dTop}px`;
+
+    // TODO(gs): attached callback doesn't seem to be called on appendChild.
+    // https://github.com/webcomponents/webcomponentsjs/issues/18
+    // TODO(gs): Make the ability fire an event instead. This class should just listen to the drop
+    // event.
+    if (DragDrop.lastDraggedEl.attachedCallback) {
+      DragDrop.lastDraggedEl.attachedCallback();
+    }
+    DragDrop.dragEnd();
+  }
+}
+
+class Rect extends Region {
+  constructor() {
+    super();
+  }
+
+  createdCallback() {
+    super.createdCallback();
+    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  }
+}
+
+export default Rect = Rect;
+
+let smartDroppable = new SmartDroppable(true);
+document.registerElement(EL_NAME,  {
+  prototype: Abilities.config(
+      Rect,
+      {},
+      smartDroppable).prototype
+});
+
+Utils.makeGlobal('pb.region.Rect', Rect);
+if (window['TEST_MODE']) {
+  Utils.makeGlobal('pb.region.Rect.SmartDroppable', SmartDroppable);
+}
+
+})(pb.ability.Abilities, pb.service.DragDrop, pb.ability.Droppable, pb.region.Region, pb.Utils);
 </script>
