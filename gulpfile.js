@@ -1,4 +1,7 @@
-var gulp   = require('gulp');
+var gulp    = require('gulp');
+var watch   = require('gulp-watch');
+var plumber = require('gulp-plumber');
+var batch   = require('gulp-batch');
 
 var jshint = require('gulp-jshint');
 var shell  = require('gulp-shell');
@@ -103,54 +106,40 @@ function replaceScript() {
   }
 }
 
-gulp.task('6to5', function() {
-  var replace = replaceScript();
-  return gulp.src('./src/**/*.html', {base: './src'})
-      .pipe(replace.from)
-      .pipe(to5({modules: 'ignore'}))
-      .pipe(replace.to)
-      .pipe(gulp.dest('out'));
-});
-
-var handleError = function(error) {
-  console.log(error.toString());
-  this.emit('end');
-};
-
+// TODO(gs): Fix this.
 gulp.task('jshint', function() {
-  return gulp.src('./src/**/*.js')
+  return gulp.src('./src/**/*.html')
       .pipe(jshint({
         esnext: true,
         sub: true
       }))
       .pipe(jshint.reporter('jshint-stylish'))
-      .pipe(jshint.reporter('fail'))
-      .on('error', handleError);
+      .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('traceur', ['jshint'], function() {
-  return gulp.src('./src/modules.js')
-      .pipe(shell([
-        'traceur --out <%= out %> <%= file.path %> --source-maps=file --symbols=true --modules=inline'
-      ],
-      {
-        templateData: {
-          out: 'main.js'
-        }
-      }));
-});
-
-gulp.task('test', ['traceur'], function() {
+gulp.task('test', ['6to5'], function() {
   return gulp.src('karma.conf.js')
-      .pipe(shell(['karma start <%= file.path %> --single-run --color']))
-      .on('error', handleError);
+      .pipe(shell(['karma start <%= file.path %> --single-run --color']));
 });
 
-gulp.task('test-dev', ['traceur'], function() {
+gulp.task('test-dev', ['6to5'], function() {
   return gulp.src('karma.conf.js')
-      .pipe(shell(['karma start <%= file.path %> --color']))
-      .on('error', handleError);
+      .pipe(shell(['karma start <%= file.path %> --color']));
 });
+
+function run6to5() {
+  return to5({modules: 'ignore'});
+}
+
+gulp.task('6to5', function() {
+  var replace = replaceScript();
+  return gulp.src('./src/**/*.html', {base: './src'})
+      .pipe(replace.from)
+        .pipe(run6to5())
+      .pipe(replace.to)
+      .pipe(gulp.dest('out'));
+});
+
 
 gulp.task('doc', function() {
   return gulp.src('gulpfile.js')
@@ -164,30 +153,48 @@ gulp.task('doc', function() {
       .pipe(gulp.dest('doc'));
 });
 
-gulp.task('sass-ex', function() {
-  return gulp.src('./ex/**/*.scss')
-      .pipe(sass({ loadPath: ['src/themes'] }))
-      .on('error', handleError)
-      .pipe(gulp.dest('ex'));
-});
 
-gulp.task('sass-src', function() {
+function runSass() {
+  return sass({loadPath: ['src/themes']});
+}
+
+gulp.task('sass', function() {
   return gulp.src(['./src/**/*.scss', '!./src/themes/*.scss'])
-      .pipe(sass({loadPath: ['src/themes']}))
-      .on('error', handleError)
+      .pipe(runSass())
       .pipe(gulp.dest('out'));
 });
 
-gulp.task('sass', ['sass-src', 'sass-ex']);
-gulp.task('push', ['test', 'doc', 'sass'], shell.task('git push'));
+gulp.task('sass-ex', function() {
+  return gulp.src('./ex/**/*.scss')
+      .pipe(runSass())
+      .pipe(gulp.dest('ex'));
+});
 
 gulp.task('watch', function() {
-  gulp.watch(['src/**/*.js'], ['traceur']);
-  gulp.watch(['src/**/*.scss'], ['sass-src']);
-  gulp.watch(['src/**/*.html'], ['6to5']);
-  gulp.watch(['ex/**/*.scss', 'src/themes/*.scss'], ['sass-ex']);
+  // SASS
+  watch(['src/**/*.scss'], batch(function(events) {
+    return events
+        .pipe(plumber())
+        .pipe(runSass())
+        .pipe(gulp.dest('out'));
+  }));
+
+  watch(['ex/**/*.scss', 'src/themes/*.scss'], batch(function(events) {
+    return events
+        .pipe(plumber())
+        .pipe(runSass())
+        .pipe(gulp.dest('ex'));
+  }));
+
+  watch(['src/**/*.html'], batch(function(events) {
+    var replace = replaceScript();
+    return events
+        .pipe(plumber())
+        .pipe(replace.from)
+          .pipe(run6to5())
+        .pipe(replace.to)
+        .pipe(gulp.dest('out'));
+  }));
 });
 
-gulp.task('watch-traceur', function() {
-  gulp.watch(['src/**/*.js'], ['traceur']);
-});
+gulp.task('push', ['test', 'doc', 'sass'], shell.task('git push'));
