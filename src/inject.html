@@ -131,10 +131,18 @@ let Inject = {
    * @method with
    * @param {!Object} localValues Object whose key is the binding key and value is the value to be
    *    bound to that key.
-   * @return {!Object} Object with a provide function. See provide.
+   * @return {!Object} Object with the provide function and with function. See documentations on
+   *    those methods.
    */
-  with(localValues) {
+  with(key, value) {
+    let localValues = {};
+    localValues[key] = value;
     return {
+      with(key, value) {
+        localValues[key] = value;
+        return this;
+      },
+
       provide(key, providerFn) {
         (new Provider(key, providerFn, localValues)).inject();
       }

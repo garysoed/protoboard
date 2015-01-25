@@ -8,7 +8,7 @@
 
 <script>
 Inject
-    .with({ 'doc': document.currentScript.ownerDocument })
+    .with('doc', document.currentScript.ownerDocument)
     .provide('pb_ui_Template', (Check, PbElement, Utils, Handlebars, doc) => {
 
 /**
