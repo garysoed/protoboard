@@ -158,7 +158,8 @@ gulp.task('doc', function() {
         'projectName': 'Protoboard',
         '$home': 'doc-theme/Home.theme',
         '$class': 'doc-theme/class.theme',
-        'src': './src/'
+        'src': ['./src'],
+        'extension': '.html'
       }))
       .pipe(gulp.dest('doc'));
 });

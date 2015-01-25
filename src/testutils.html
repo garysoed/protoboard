@@ -1,10 +1,11 @@
 <base href="..">
 
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((Utils) => {
-  Utils.makeGlobal('pb.t', {
+Inject.provide('pb_t', (Utils) => {
+  let TestUtil = {
     createFakeAbility: function(name) {
       var _ = spies.Spies;
       return { 
@@ -16,6 +17,10 @@
         detachedCallback: _.spiedFunction()
       };
     }
-  });
-})(pb.Utils);
+  };
+
+  Utils.makeGlobal('pb.t', TestUtil);
+
+  return TestUtil;
+});
 </script>

@@ -7,7 +7,9 @@
 <link rel="import" href="out/utils.html">
 
 <script>
-((Check, PbElement, Utils) => {
+Inject
+    .with({ 'doc': document.currentScript.ownerDocument })
+    .provide('pb_ui_Template', (Check, PbElement, Utils, Handlebars, doc) => {
 
 /**
  * Contains a handlebars js template. When this element is created, it will process the handlebars
@@ -22,9 +24,6 @@
  * @class ui.Template
  * @extends PbElement
  */
-
-let doc = document.currentScript.ownerDocument;
-let handlebars = Handlebars;
 
 const EL_NAME = 'pb-u-template';
 
@@ -71,7 +70,7 @@ export default class Template extends PbElement {
         .then(dataArray => {
           let data = Utils.fromArrayOfArrays(dataArray);
           let templateStr = this.innerHTML.replace('&gt;', '>');
-          $(this).replaceWith(handlebars.compile(templateStr)(data));
+          $(this).replaceWith(Handlebars.compile(templateStr)(data));
         });
   }
 }
@@ -93,9 +92,14 @@ Handlebars.registerHelper('pb-for', function(from, to, step, options) {
   return rv;
 });
 
-document.registerElement(EL_NAME, {prototype: Template.prototype});
+try {
+  document.registerElement(EL_NAME, {prototype: Template.prototype});
+  Utils.makeGlobal('pb.ui.Template', Template);
+} catch (e) {
+  console.warn(e);
+}
 
-Utils.makeGlobal('pb.ui.Template', Template);
+return Template;
 
-})(pb.Check, pb.PbElement, pb.Utils);
+});
 </script>

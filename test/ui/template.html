@@ -5,6 +5,7 @@
   <title>Template Unit Tests</title>
   <link rel="import" href="test/testbase.html">
 
+  <link rel="import" href="out/inject.html">
   <link rel="import" href="out/ui/template.html">
 </head>
 <body>
@@ -15,153 +16,150 @@
       var expect = chai.expect;
       var _ = spies.Spies;
       var _M = spies.Matchers;
+      var Inject = window['Inject'];
 
       var doc = document.currentScript.ownerDocument;
 
       describe('Template', function() {
-        var handlebar = Handlebars.create();
+        var origTemplate;
+        var handlebar;
+        var forHelper;
+
+        before(function(done) {
+          handlebar = Handlebars.create();
+          _.spy(handlebar, 'registerHelper');
+          origTemplate = Inject.get('pb_ui_Template');
+          Inject.getProvider('pb_ui_Template')
+              .with('Handlebars', handlebar)
+              .with('doc', doc)
+              .inject();
+          var isAFunction = _M.isA(Function);
+          expect(handlebar.registerHelper).calledWith('pb-for', isAFunction).at.least(1);
+          forHelper = isAFunction.matchingArgs[0];
+          done();
+        });
           
-        // TODO(gs): Figure out how to test this.
-        // describe('#createdCallback', function() {
-        //   it('should replace the innerHTML', function() {
-        //     var templateStr = 'Template String';
-        //     var compiledTemplateStr = 'Compiled template string';
-        //     var compiledTemplate = _.spiedFunction().overrideReturn(compiledTemplateStr);
-        //     var promise = { then: _.spiedFunction() };
+        describe('#createdCallback', function() {
+          // TODO(gs): How to test this???
+          // it('should replace the innerHTML', function() {
+          //   var templateStr = 'Template String';
+          //   var compiledTemplateStr = 'Compiled template string';
+          //   var compiledTemplate = _.spiedFunction().overrideReturn(compiledTemplateStr);
+          //   var promise = { then: _.spiedFunction() };
 
-        //     _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
-        //     _.spy(Promise, 'all').overrideReturn(promise);
+          //   _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
+          //   _.spy(Promise, 'all').overrideReturn(promise);
 
-        //     pb.ui.Template.register(doc, handlebar);
+          //   var templateEl = $(doc.body)
+          //       .html('<pb-u-template>' + templateStr + '</pb-u-template>')[0];
 
-        //     var templateEl = $(doc.body)
-        //         .html('<pb-u-template>' + templateStr + '</pb-u-template>')[0];
+          //   expect(Promise.all).calledWith([]).at.least(1);
 
-        //     expect(Promise.all).calledWith([]).at.least(1);
+          //   var callbackCaptor = _M.isA(Function);
+          //   expect(promise.then).calledWith(callbackCaptor).at.least(1);
+          //   callbackCaptor.matchingArgs[0]([]);
 
-        //     var callbackCaptor = _M.isA(Function);
-        //     expect(promise.then).calledWith(callbackCaptor).at.least(1);
-        //     callbackCaptor.matchingArgs[0]([]);
+          //   expect(handlebar.compile).calledWith(templateStr).at.least(1);
+          //   expect(templateEl.innerHTML).to.be.equal(compiledTemplateStr);
+          // });
+          // it('should take data as variable name to global', function() {
+          //   window['a'] = { b: 'data' };
+          //   var compiledTemplate = _.spiedFunction().overrideReturn('');
+          //   var promise = { then: _.spiedFunction() };
 
-        //     expect(handlebar.compile).calledWith(templateStr).at.least(1);
-        //     expect(templateEl.innerHTML).to.be.equal(compiledTemplateStr);
-        //   });
-        //   it('should take data as variable name to global', function() {
-        //     window['a'] = { b: 'data' };
-        //     var compiledTemplate = _.spiedFunction().overrideReturn('');
-        //     var promise = { then: _.spiedFunction() };
+          //   _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
+          //   _.spy(Promise, 'all').overrideReturn(promise);
 
-        //     _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
-        //     _.spy(Promise, 'all').overrideReturn(promise);
+          //   var templateEl = $(doc.body) .html('<pb-u-template data-a="a.b"></pb-u-template>')[0];
 
-        //     pb.ui.Template.register(doc, handlebar);
+          //   expect(Promise.all).calledWith([['a', 'data']]).at.least(1);
 
-        //     var templateEl = $(doc.body) .html('<pb-u-template data-a="a.b"></pb-u-template>')[0];
+          //   var callbackCaptor = _M.isA(Function);
+          //   expect(promise.then).calledWith(callbackCaptor).at.least(1);
+          //   callbackCaptor.matchingArgs[0]([['a', 'data']]);
 
-        //     expect(Promise.all).calledWith([['a', 'data']]).at.least(1);
+          //   expect(compiledTemplate).calledWith({ a: window['a'].b }).at.least(1);
+          // });
+          // it('should take data as string value', function() {
+          //   var data = 'data';
+          //   var compiledTemplate = _.spiedFunction().overrideReturn('');
+          //   var promise = { then: _.spiedFunction() };
 
-        //     var callbackCaptor = _M.isA(Function);
-        //     expect(promise.then).calledWith(callbackCaptor).at.least(1);
-        //     callbackCaptor.matchingArgs[0]([['a', 'data']]);
+          //   _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
+          //   _.spy(Promise, 'all').overrideReturn(promise);
 
-        //     expect(compiledTemplate).calledWith({ a: window['a'].b }).at.least(1);
-        //   });
-        //   it('should take data as string value', function() {
-        //     var data = 'data';
-        //     var compiledTemplate = _.spiedFunction().overrideReturn('');
-        //     var promise = { then: _.spiedFunction() };
+          //   var templateEl = $(doc.body).html('<pb-u-template data-a="data"></pb-u-template>')[0];
 
-        //     _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
-        //     _.spy(Promise, 'all').overrideReturn(promise);
+          //   expect(Promise.all).calledWith([['a', data]]).at.least(1);
 
-        //     pb.ui.Template.register(doc, handlebar);
+          //   var callbackCaptor = _M.isA(Function);
+          //   expect(promise.then).calledWith(callbackCaptor).at.least(1);
+          //   callbackCaptor.matchingArgs[0]([['a', data]]);
 
-        //     var templateEl = $(doc.body) .html('<pb-u-template data-a="data"></pb-u-template>')[0];
+          //   expect(compiledTemplate).calledWith({a: data}).at.least(1);
+          // });
+          // it('should take promise as a value', function() {
+          //   var data = 'data';
+          //   window['a'] = Promise.resolve(data);
+          //   var compiledTemplate = _.spiedFunction().overrideReturn('');
+          //   var promise = { then: _.spiedFunction() };
 
-        //     expect(Promise.all).calledWith([['a', data]]).at.least(1);
+          //   _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
+          //   _.spy(Promise, 'all').overrideReturn(promise);
 
-        //     var callbackCaptor = _M.isA(Function);
-        //     expect(promise.then).calledWith(callbackCaptor).at.least(1);
-        //     callbackCaptor.matchingArgs[0]([['a', data]]);
+          //   var templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-u-template>')[0];
 
-        //     expect(compiledTemplate).calledWith({a: data}).at.least(1);
-        //   });
-        //   it('should take promise as a value', function() {
-        //     var data = 'data';
-        //     window['a'] = Promise.resolve(data);
-        //     var compiledTemplate = _.spiedFunction().overrideReturn('');
-        //     var promise = { then: _.spiedFunction() };
+          //   expect(Promise.all).calledWith([['a', window['a']]]).at.least(1);
 
-        //     _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
-        //     _.spy(Promise, 'all').overrideReturn(promise);
+          //   var callbackCaptor = _M.isA(Function);
+          //   expect(promise.then).calledWith(callbackCaptor).at.least(1);
+          //   callbackCaptor.matchingArgs[0]([['a', data]]);
 
-        //     pb.ui.Template.register(doc, handlebar);
+          //   expect(compiledTemplate).calledWith({a: data}).at.least(1);
 
-        //     var templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-u-template>')[0];
+          // });
+        });
 
-        //     expect(Promise.all).calledWith([['a', window['a']]]).at.least(1);
+        describe('#pb-for', function() {
+          it('should repeat the inner block a number of times', function() {
+            var content = 'content';
+            var options = {
+              fn: _.spiedFunction().overrideReturn(content)
+            };
 
-        //     var callbackCaptor = _M.isA(Function);
-        //     expect(promise.then).calledWith(callbackCaptor).at.least(1);
-        //     callbackCaptor.matchingArgs[0]([['a', data]]);
+            var result = forHelper.call(handlebar, '0', '5', '2', options);
+            expect(result).to.be.equal(content + content + content);
 
-        //     expect(compiledTemplate).calledWith({a: data}).at.least(1);
+            var isAObject = _M.isA(Object);
+            expect(options.fn).calledWith(handlebar, isAObject).to.be.equal(3);
 
-        //   });          
-        // });
+            var indexes = isAObject.matchingArgs.map(function(arg) {
+              return arg.data.index;
+            });
+            expect(indexes).to.be.eql([0, 2, 4]);
+          });
+          it('should default step to 1', function() {
+            var content = 'content';
+            var options = {
+              fn: _.spiedFunction().overrideReturn(content)
+            };
 
-        // describe('#pb-for', function() {
-        //   var helperFn = null;
+            var result = forHelper.call(handlebar, '0', '2', options);
+            expect(result).to.be.equal(content + content);
 
-        //   beforeEach(function(done) {
-        //     _.spy(handlebar, 'registerHelper');
+            var isAObject = _M.isA(Object);
+            expect(options.fn).calledWith(handlebar, isAObject).to.be.equal(2);
 
-        //     pb.ui.Template.register(doc, handlebar);
-
-        //     var isAFunction = _M.isA(Function);
-        //     expect(handlebar.registerHelper).calledWith('pb-for', isAFunction).at.least(1);
-        //     helperFn = isAFunction.matchingArgs[0];
-        //     done();
-        //   });
-
-        //   it('should repeat the inner block a number of times', function() {
-        //     var content = "content";
-        //     var options = {
-        //       fn: _.spiedFunction().overrideReturn(content)
-        //     };
-
-        //     var result = helperFn.call(handlebar, "0", "5", "2", options);
-        //     expect(result).to.be.equal(content + content + content);
-
-        //     var isAObject = _M.isA(Object);
-        //     expect(options.fn).calledWith(handlebar, isAObject).to.be.equal(3);
-
-        //     var indexes = isAObject.matchingArgs.map(function(arg) {
-        //       return arg.data.index;
-        //     });
-        //     expect(indexes).to.be.eql([0, 2, 4]);
-        //   });
-        //   it('should default step to 1', function() {
-        //     var content = "content";
-        //     var options = {
-        //       fn: _.spiedFunction().overrideReturn(content)
-        //     };
-
-        //     var result = helperFn.call(handlebar, "0", "2", options);
-        //     expect(result).to.be.equal(content + content);
-
-        //     var isAObject = _M.isA(Object);
-        //     expect(options.fn).calledWith(handlebar, isAObject).to.be.equal(2);
-
-        //     var indexes = isAObject.matchingArgs.map(function(arg) {
-        //       return arg.data.index;
-        //     });
-        //     expect(indexes).to.be.eql([0, 1]);
-        //   });
-        // });
+            var indexes = isAObject.matchingArgs.map(function(arg) {
+              return arg.data.index;
+            });
+            expect(indexes).to.be.eql([0, 1]);
+          });
+        });
 
         afterEach(function(done) {
           _.reset();
+          Inject.provide('pb_ui_Template', function() { return origTemplate; });
           done();
         });
       });
