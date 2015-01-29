@@ -2,10 +2,11 @@
 
 <link rel="import" href="out/ability/ability.html">
 <link rel="import" href="out/hammerwrapper.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((Ability, HammerWrapper, Utils) => {
+Inject.provide('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
 
 /**
  * Provides triggers to abilities supported by the app. Normally you don't need to register this to
@@ -240,5 +241,5 @@ export default Triggerable = Triggerable;
 
 Utils.makeGlobal('pb.ability.Triggerable', Triggerable);
 
-
-})(pb.ability.Ability, pb.HammerWrapper, pb.Utils);
+return Triggerable;
+});

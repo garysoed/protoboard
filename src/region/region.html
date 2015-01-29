@@ -1,10 +1,11 @@
 <base href="../..">
 
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/pbelement.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((PbElement, Utils) => {
+Inject.provide('pb_region_Region', (PbElement, Utils) => {
 
 // import Distribute from 'src/service/distribute';
 
@@ -67,5 +68,7 @@ export default class Region extends PbElement {
 
 Utils.makeGlobal('pb.region.Region', Region);
 
-})(pb.PbElement, pb.Utils);
+return Region;
+
+});
 </script>

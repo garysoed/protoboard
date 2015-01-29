@@ -1,9 +1,10 @@
 <base href="../..">
 
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((Utils) => {
+Inject.provide('pb_ability_Ability', Utils => {
 
 /**
  * Base class for all abilities. Any abilities must extend this class and implement the methods
@@ -68,5 +69,7 @@ export default class Ability {
 
 Utils.makeGlobal('pb.ability.Ability', Ability);
 
-})(pb.Utils);
+return Ability;
+
+});
 </script>

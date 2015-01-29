@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Bag Unit Tests</title>
+
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/inject.html">
+  <link rel="import" href="out/region/bag.html">
+  <link rel="import" href="out/utils.html">
+</head>
+<body>
+  <pb-r-bag id="emptyChildren"></pb-r-bag>
+  <pb-r-bag id="hasContent">
+    <div pb-placeholder-content>content</div>
+  </pb-r-bag>
+  <pb-r-bag id="hasPlaceholder">
+    <div pb-placeholder>Placeholder</div>
+  </pb-r-bag>
+  <script>
+  Inject
+      .with('doc', document.currentScript.ownerDocument)
+      .inject((expect, _, doc, Bag, Utils) => {
+
+  let BagDraggable = Bag.BagDraggable;
+
+  // Private symbols
+  let __draggable__ = Utils.getSymbol(Bag.prototype, 'draggable');
+  let __placeHolderEl__ = Utils.getSymbol(Bag.prototype, 'placeHolderEl');
+
+  describe('Bag', () => {
+    describe('#createdCallback', () => {
+      it('should create placeholder and its content if none is specified', () => {
+        let el = doc.querySelector('#emptyChildren');
+        let placeholder = el.querySelector('[pb-placeholder]');
+        expect(placeholder).to.exist;
+        expect(placeholder.childElementCount).to.be.at.least(1);
+      });
+      it('should not create placeholder content if it is specified', () => {
+        let el = doc.querySelector('#hasContent');
+        let placeholders = el.querySelectorAll('[pb-placeholder]');
+
+        expect(placeholders.length).to.equal(1);
+
+        let placeholder = placeholders.item(0);
+        expect(placeholder.querySelector('[pb-placeholder-content]').innerHTML)
+            .to.equal('content');
+      });
+      it('should not create placeholder or its content if placeholder is specified', () => {
+        let el = doc.querySelector('#hasPlaceholder');
+        let placeholders = el.querySelectorAll('[pb-placeholder]');
+
+        expect(placeholders.length).to.equal(1);
+
+        let placeholder = placeholders.item(0);
+        expect(placeholder.innerHTML).to.equal('Placeholder');
+      });
+    });
+
+    describe('#attachedCallback', () => {
+      it('should call attachedCallback on draggable', () => {
+        let el = doc.createElement('pb-r-bag');
+        _.spy(el[__draggable__], 'attachedCallback');
+        el.attachedCallback();
+        expect(el[__draggable__].attachedCallback)
+            .calledWith(el[__placeHolderEl__]).at.least(1);
+      });
+    });
+
+    describe('#detachedCallback', () => {
+      it('should call detachedCallback on draggable', () => {
+        let el = doc.createElement('pb-r-bag');
+        _.spy(el[__draggable__], 'detachedCallback');
+        el.detachedCallback();
+        expect(el[__draggable__].detachedCallback)
+            .calledWith(el[__placeHolderEl__]).at.least(1);
+      });
+    });
+
+    describe('#attributeChangedCallback', () => {
+      it('should call attributeChangedCallback on draggable', () => {
+        let el = doc.createElement('pb-r-bag');
+        _.spy(el[__draggable__], 'attributeChangedCallback');
+        el.attributeChangedCallback('name', 'oldValue', 'newValue');
+        expect(el[__draggable__].attributeChangedCallback)
+            .calledWith(el[__placeHolderEl__], 'name', 'oldValue', 'newValue').at.least(1);
+      });
+    });
+
+    describe('BagDraggable', () => {
+      describe('#getMovedElement', () => {
+        it('should randomly pick a child element with no pb-placeholder attribute', () => {
+          let placeHolderEl = doc.createElement('div');
+          $(placeHolderEl).attr('pb-placeholder', '');
+
+          let selectedChild = doc.createElement('div');
+          let draggable = new BagDraggable({
+            children: [
+              placeHolderEl,
+              doc.createElement('div'), 
+              selectedChild,
+              doc.createElement('div')
+            ]
+          });
+
+          _.spy(Math, 'random').overrideReturn(0.5);
+
+          expect(draggable.getMovedElement()).to.be.equal(selectedChild);
+        });
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    });
+  });
+  });
+  </script>
+</body>

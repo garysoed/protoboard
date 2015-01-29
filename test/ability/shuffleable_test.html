@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>ability.Shuffleable Unit Tests</title>
+
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/ability/shuffleable.html">
+  <link rel="import" href="out/inject.html">
+</head>
+<body>
+  <script>
+  Inject
+      .with('doc', document.currentScript.ownerDocument)
+      .inject((expect, _, doc, Shuffleable, Utils) => {
+
+  describe('ability.Shuffleable', () => {
+    let el;
+    let shuffleable;
+
+    beforeEach(done => {
+      el = doc.createElement('div');
+      shuffleable = new Shuffleable(true);
+      done();
+    });
+
+    describe('#setDefaultValue', () => {
+      it('should set the default value if attribute is not set', () => {
+        shuffleable.setDefaultValue(el);
+        expect($(el).attr('pb-shuffleable')).to.be.equal('true');
+      });
+      it('should be noop if the attribute is set', () => {
+        $(el).attr('pb-shuffleable', 'false');
+        shuffleable.setDefaultValue(el);
+        expect($(el).attr('pb-shuffleable')).to.be.equal('false');
+      });
+    });
+
+    describe('#trigger', () => {
+      let children = [];
+      let origRandom;
+
+      beforeEach(done => {
+        children.push(doc.createElement('div'));
+        children.push(doc.createElement('a'));
+        children.push(doc.createElement('p'));
+
+        children.forEach(function(child) {
+          el.appendChild(child);
+        });
+
+        // TODO(gs): Use override, once implemented.
+        origRandom = Math.random;
+        let ordering = [1, 3, 2];
+        Math.random = () => { return ordering.pop(); };
+        done();
+      });
+
+      it('should shuffle if enabled', () => {
+        $(el).attr('pb-shuffleable', 'true');
+        shuffleable.trigger(el);
+        expect(Utils.toArray(el.children)).to.be.eql([children[2], children[0], children[1]]);
+      });
+      it('should be noop if disabled', () => {
+        $(el).attr('pb-shuffleable', 'false');
+
+        _.spy(Math, 'random');
+        shuffleable.trigger(el);
+        expect(Math.random).called().to.be.equal(0);
+      });
+      it('should be noop if attribute value is bad', () => {
+        $(el).attr('pb-shuffleable', 'invalid');
+        
+        _.spy(Math, 'random');
+        shuffleable.trigger(el);
+        expect(Math.random).called().to.be.equal(0);
+      });
+
+      afterEach(done => {
+        Math.random = origRandom;
+        done();
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    });
+  });
+  });
+  </script>
+</body>

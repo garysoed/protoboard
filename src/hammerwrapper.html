@@ -1,10 +1,11 @@
 <base href="..">
 
-<link rel="import" href="out/hammerwrapper.html">
 <link rel="import" href="out/third_party/hammer.html">
 
+<link rel="import" href="out/inject.html">
+
 <script>
-((Utils) => {
+Inject.provide('pb_HammerWrapper', Utils => {
 
 /**
  * Wrapper around Hammer JS.
@@ -75,5 +76,7 @@ export default HammerWrapper = HammerWrapper;
 
 Utils.makeGlobal('pb.HammerWrapper', HammerWrapper);
 
-})(pb.Utils);
+return HammerWrapper;
+
+});
 </script>

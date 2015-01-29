@@ -23,6 +23,7 @@
     "gulp-6to5": "^2.0.2",
     "gulp-batch": "^1.0.4",
     "gulp-file": "^0.2.0",
+    "gulp-html-subs": "git://github.com/garysoed/gulp-html-subs",
     "gulp-jshint": "^1.9.0",
     "gulp-plumber": "^0.6.6",
     "gulp-ruby-sass": "^0.7.1",

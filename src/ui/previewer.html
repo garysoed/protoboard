@@ -12,7 +12,7 @@
 </template>
 
 <script>
-((Events, PbElement, PreviewService, Utils) => {
+Inject.provide('pb_ui_Previewer', (Events, PbElement, service_Preview, Utils) => {
 
 /**
  * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered 
@@ -42,8 +42,8 @@ export default class Previewer extends PbElement {
    * @private
    */
   [__onPreviewElChanged__]() {
-    if (PreviewService.previewedEl) {
-      this.innerHTML = PreviewService.previewedEl.innerHTML;
+    if (service_Preview.previewedEl) {
+      this.innerHTML = service_Preview.previewedEl.innerHTML;
     } else {
       this.innerHTML = '';
     }
@@ -69,8 +69,8 @@ export default class Previewer extends PbElement {
    */
   attachedCallback() {
     super.attachedCallback();
-    this[__previewElHandler__] = Events.of(PreviewService, this)
-        .on(PreviewService.Events.ELEMENT_CHANGED,
+    this[__previewElHandler__] = Events.of(service_Preview, this)
+        .on(service_Preview.Events.ELEMENT_CHANGED,
             this[__onPreviewElChanged__].bind(this));
   }
 
@@ -80,7 +80,7 @@ export default class Previewer extends PbElement {
    * @method detachedCallback
    */
   detachedCallback() {
-    Events.of(PreviewService, this).off();
+    Events.of(service_Preview, this).off();
     super.detachedCallback();
   }
 }
@@ -89,5 +89,6 @@ document.registerElement(EL_NAME, {prototype: Previewer.prototype});
 
 Utils.makeGlobal('pb.ui.Previewer', Previewer);
 
-})(pb.Events, pb.PbElement, pb.service.Preview, pb.Utils);
+return Previewer;
+});
 </script>

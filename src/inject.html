@@ -22,13 +22,15 @@ const providers = {};
  */
 class Provider {
 
-  constructor(key, providerFn, localValues) {
+  constructor(providerFn, key, localValues) {
     this[__value__] = null;
-    this[__key__] = key;
+    this[__key__] = key || null;
     this[__providerFn__] = providerFn;
     this[__localValues__] = localValues || {};
 
-    providers[key] = this;
+    if (key) {
+      providers[key] = this;
+    }
   }
 
   inject() {
@@ -51,7 +53,7 @@ class Provider {
 
     this[__value__] = this[__providerFn__].apply(null, resolvedArgs);
 
-    if (this[__value__] === undefined) {
+    if (this[__value__] === undefined && this[__key__]) {
       console.warn(`Value of ${this[__key__]} is undefined`);
     }
   }
@@ -70,7 +72,7 @@ class Provider {
       localValues[localKey] = this[__localValues__][localKey];
     }
     localValues[key] = value;
-    return new Provider(this[__key__], this[__providerFn__], localValues);
+    return new Provider(this[__providerFn__], this[__key__], localValues);
   }
 }
 
@@ -121,7 +123,17 @@ let Inject = {
    * @param {!Function} providerFn The function that returns the value to be bound.
    */
   provide(key, providerFn) {
-    (new Provider(key, providerFn)).inject();
+    (new Provider(providerFn, key)).inject();
+  },
+
+  /**
+   * Runs the given function with injected values.
+   *
+   * @method inject
+   * @param {!Function} providerFn The function to run.
+   */
+  inject(providerFn) {
+    (new Provider(providerFn)).inject();
   },
 
   /**
@@ -144,7 +156,11 @@ let Inject = {
       },
 
       provide(key, providerFn) {
-        (new Provider(key, providerFn, localValues)).inject();
+        (new Provider(providerFn, key, localValues)).inject();
+      },
+
+      inject(providerFn) {
+        (new Provider(providerFn, null, localValues)).inject();
       }
     };
   },

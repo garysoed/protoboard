@@ -2,6 +2,7 @@
 
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/region/region.html">
 <link rel="import" href="out/service/dragdrop.html">
 <link rel="import" href="out/utils.html">
@@ -15,7 +16,7 @@
 </template>
 
 <script>
-((Abilities, DragDrop, Droppable, Region, Utils) => {
+Inject.provide('pb_region_Rect', (Abilities, DragDrop, Droppable, Region, Utils) => {
 
 let doc = document.currentScript.ownerDocument;
 let template = doc.querySelector('template');
@@ -97,5 +98,7 @@ if (window['TEST_MODE']) {
   Utils.makeGlobal('pb.region.Rect.SmartDroppable', SmartDroppable);
 }
 
-})(pb.ability.Abilities, pb.service.DragDrop, pb.ability.Droppable, pb.region.Region, pb.Utils);
+return Rect;
+
+});
 </script>

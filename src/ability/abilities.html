@@ -1,10 +1,11 @@
 <base href="../..">
 
 <link rel="import" href="out/ability/triggerable.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((Triggerable, Utils) => {
+Inject.provide('pb_ability_Abilities', (Triggerable, Utils) => {
 
 // Private symbols.
 const __register__ = Symbol();
@@ -103,6 +104,8 @@ const Abilities = {
 
 Utils.makeGlobal('pb.ability.Abilities', Abilities);
 
-})(pb.ability.Triggerable, pb.Utils);
+return Abilities;
+
+});
 
 </script>

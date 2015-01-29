@@ -5,11 +5,12 @@
 <link rel="import" href="out/ability/ability.html">
 <link rel="import" href="out/check.html">
 <link rel="import" href="out/events.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/service/dragdrop.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((Ability, Check, Events, DragDropService, Utils) => {
+Inject.provide('pb_ability_Draggable', (Ability, Check, Events, DragDrop, Utils) => {
 
 /**
  * Provides decorator to make an element draggable. Use [[Abilities|ability.Abilities]] to decorate
@@ -72,7 +73,7 @@ export default class Draggable extends Ability {
     el.classList.add(CLASS_DRAGGED);
 
     let boundingRect = el.getBoundingClientRect();
-    DragDropService.dragStart(
+    DragDrop.dragStart(
         this.getMovedElement(el),
         event.clientX - boundingRect.left,
         event.clientY - boundingRect.top);
@@ -188,4 +189,6 @@ export default class Draggable extends Ability {
 
 Utils.makeGlobal('pb.ability.Draggable', Draggable);
 
-})(pb.ability.Ability, pb.Check, pb.Events, pb.service.DragDrop, pb.Utils);
+return Draggable;
+
+});

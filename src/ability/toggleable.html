@@ -2,10 +2,11 @@
 
 <link rel="import" href="out/ability/ability.html">
 <link rel="import" href="out/check.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((Ability, Check, Utils) => {
+Inject.provide('pb_ability_Toggleable', (Ability, Check, Utils) => {
 
 /**
  * Provides decorator to make an element toggleable between two states.
@@ -111,4 +112,6 @@ export default class Toggleable extends Ability {
 
 Utils.makeGlobal('pb.ability.Toggleable', Toggleable);
 
-})(pb.ability.Ability, pb.Check, pb.Utils);
+return Toggleable;
+
+});

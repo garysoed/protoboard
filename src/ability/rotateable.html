@@ -2,10 +2,11 @@
 
 <link rel="import" href="out/ability/ability.html">
 <link rel="import" href="out/check.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((Ability, Check, Utils) => {
+Inject.provide('pb_ability_Rotateable', (Ability, Check, Utils) => {
 
 /**
  * Makes the component rotateable. This adds a transform rotateZ CSS rule to the component.
@@ -160,4 +161,5 @@ export default class Rotateable extends Ability {
 
 Utils.makeGlobal('pb.ability.Rotateable', Rotateable);
 
-})(pb.ability.Ability, pb.Check, pb.Utils);
+return Rotateable;
+});

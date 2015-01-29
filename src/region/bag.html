@@ -3,6 +3,7 @@
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/draggable.html">
 <link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/region/region.html">
 <link rel="import" href="out/utils.html">
 
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-((Utils, Abilities, Draggable, Droppable, Region) => {
+Inject.provide('pb_region_Bag', (Utils, Abilities, Draggable, Droppable, Region) => {
 
 /**
  * A collection of components. You cannot see the component until you drag one out of it.
@@ -148,5 +149,7 @@ if (window['TEST_MODE']) {
   Utils.makeGlobal('pb.region.Bag.BagDraggable', BagDraggable);
 }
 
-})(pb.Utils, pb.ability.Abilities, pb.ability.Draggable, pb.ability.Droppable, pb.region.Region);
+return Bag;
+
+});
 </script>

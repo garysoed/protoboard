@@ -1,10 +1,11 @@
 <base href="../..">
 
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <script>
 // TODO(gs): Delete the exports.
-((Utils) => {
+Inject.provide('pb_service_DragDrop', (Utils) => {
 
 /**
  * Service that keeps track of drag and drop.
@@ -97,5 +98,7 @@ DragDrop.Events = {
 
 Utils.makeGlobal('pb.service.DragDrop', DragDrop);
 
-})(pb.Utils);
+return DragDrop;
+
+});
 </script>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Triggerable Unit Tests</title>
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/inject.html">
+</head>
+<body>
+  <script>
+  Inject
+      .with('doc', document.currentScript.ownerDocument)
+      .inject((expect, _, _M, doc, HammerWrapper, Triggerable, Utils) => {
+
+  describe('Triggerable', () => {
+    let el;
+
+    // Private symbols.
+    let __register__;
+    let __unregister__;
+
+    beforeEach(done => {
+      el = doc.createElement('div');
+
+      __register__ = Utils.getSymbol(Triggerable.prototype, 'register');
+      __unregister__ = Utils.getSymbol(Triggerable.prototype, 'unregister');
+
+      done();
+    });
+
+    describe('#setDefaultValue', () => {
+      it('should set the default values for all supported types', () => {
+        let ability1 = pb.t.createFakeAbility('ability1');
+        let ability2 = pb.t.createFakeAbility('ability2');
+        let triggerable = new Triggerable(
+            {
+              'pb-click': ability1.name,
+              'pb-dblclick': ability2.name
+            },
+            [ ability1, ability2 ]);
+        triggerable.setDefaultValue(el);
+
+        expect($(el).attr('pb-click')).to.be.equal(ability1.name);
+        expect($(el).attr('pb-dblclick')).to.be.equal(ability2.name);
+      });
+      it('should ignore unsupported type in default value', () => {
+        let ability = pb.t.createFakeAbility('ability');
+        let triggerable = new Triggerable(
+            { 'pb-unknown': ability.name },
+            [ ability ]);
+        triggerable.setDefaultValue(el);
+
+        expect($(el).attr('pb-unknown')).to.be.equal(undefined);
+      });
+      it('should not override attribute that is already set', () => {
+        let ability = pb.t.createFakeAbility('ability');
+        $(el).attr('pb-click', ability.name);
+
+        let triggerable = new Triggerable(
+            { 'pb-click': ability.name },
+            [ ability ]);
+        triggerable.setDefaultValue(el);
+
+        expect($(el).attr('pb-click')).to.be.equal(ability.name);
+      });
+      it('should ignore unknown ability', () => {
+        let triggerable = new Triggerable(
+            { 'pb-click': 'unknownAbility' },
+            []);
+        triggerable.setDefaultValue(el);
+
+        expect($(el).attr('pb-click')).to.be.equal(undefined);
+      });
+    });
+
+    describe('#attributeChangedCallback', () => {
+      it('should registers new ability', () => {
+        let ability = pb.t.createFakeAbility('ability');
+        let triggerable = new Triggerable({}, [ability]);
+
+        _.spy(triggerable, __register__);
+
+        triggerable.attributeChangedCallback(el, 'pb-click', null, ability.name);
+
+        expect(triggerable[__register__]).calledWith(el, 'pb-click', ability).at.least(1);
+      });
+      it('should unregisters old ability', () => {
+        let ability = pb.t.createFakeAbility('ability');
+        let triggerable = new Triggerable({}, [ability]);
+        triggerable.attributeChangedCallback(el, 'pb-click', null, ability.name);
+
+        _.spy(triggerable, __unregister__);
+        triggerable.attributeChangedCallback(el, 'pb-click', ability.name, null);
+
+        expect(triggerable[__unregister__]).calledWith(el, 'pb-click', ability).at.least(1);
+      });
+      it('should handle changing triggers', () => {
+        let triggerType = 'pb-click';
+        let oldAbility = { name: 'oldAbility', trigger: () => {} };
+        let newAbility = { name: 'newAbility', trigger: () => {} };
+        let triggerable = new Triggerable({}, [oldAbility, newAbility]);
+
+        triggerable.attributeChangedCallback(el, triggerType, null, oldAbility.name);
+
+        _.spy(triggerable, __register__);
+        _.spy(triggerable, __unregister__);
+        triggerable.attributeChangedCallback(el, triggerType, oldAbility.name, newAbility.name);
+
+        expect(triggerable[__unregister__]).calledWith(el, triggerType, oldAbility).at.least(1);
+        expect(triggerable[__register__]).calledWith(el, triggerType, newAbility).at.least(1);
+        expect(triggerable[__unregister__]).calledWith(el, triggerType, oldAbility)
+            .before(triggerable[__register__]).calledWith(el, triggerType, newAbility);
+      });
+      it('should ignore unsupported trigger', () => {
+        let ability = pb.t.createFakeAbility('ability');
+        let triggerable = new Triggerable({}, [ability]);
+
+        _.spy(triggerable, __register__);
+
+        triggerable.attributeChangedCallback(el, 'pb-unknown', null, ability.name);
+
+        expect(triggerable[__register__]).called().to.be.equal(0);
+
+      });
+      it('should ignore unknown ability', () => {
+        let triggerable = new Triggerable({}, []);
+
+        _.spy(triggerable, __register__);
+
+        triggerable.attributeChangedCallback(el, 'pb-click', null, 'unknownAbility');
+
+        expect(triggerable[__register__]).called().to.be.equal(0);
+      });
+    });
+
+    describe('#attachedCallback', () => {
+      let ability = pb.t.createFakeAbility('ability');
+
+      it('should register all known trigger types', () => {
+        $(el)
+            .attr('pb-click', ability.name)
+            .attr('pb-dblclick', ability.name);
+
+        let triggerable = new Triggerable({}, [ ability ]);
+
+        _.spy(triggerable, __register__);
+
+        triggerable.attachedCallback(el);
+
+        expect(triggerable[__register__]).calledWith(el, 'pb-click', ability).at.least(1);
+        expect(triggerable[__register__]).calledWith(el, 'pb-dblclick', ability).at.least(1);
+      });
+      it('should not crash when a trigger is not specified', () => {
+        let triggerable = new Triggerable({}, [ ability ]);
+        triggerable.attachedCallback(el);
+      });
+      it('should not crash if an ability is unknown', () => {
+        $(el).attr('pb-click', 'unknownAbility');
+
+        let triggerable = new Triggerable({}, []);
+        triggerable.attachedCallback(el);
+      });
+    });
+
+    describe('#detachedCallback', () => {
+      it('should unregister all known trigger types', () => {
+        let triggerable = new Triggerable();
+
+        _.spy(triggerable, __unregister__);
+        triggerable.detachedCallback(el);
+
+        expect(triggerable[__unregister__]).calledWith(el, 'pb-click').at.least(1);
+        expect(triggerable[__unregister__]).calledWith(el, 'pb-dblclick').at.least(1);
+      });
+    });
+
+    describe('#__register__', () => {
+      it('should register if not registered', () => {
+        let ability = pb.t.createFakeAbility('ability');
+        let triggerable = new Triggerable();
+
+        _.spy(HammerWrapper, 'on');
+
+        triggerable[__register__](el, 'pb-click', ability);
+
+        expect(HammerWrapper.on).calledWith(el, 'singletap', _M.isA(Function)).at.least(1);
+      });
+      it('should be noop if registered', () => {
+        let ability = pb.t.createFakeAbility('ability');
+        let triggerable = new Triggerable();
+        triggerable[__register__](el, 'pb-click', ability);
+
+        _.spy(HammerWrapper, 'on');
+
+        // register the ability again
+        triggerable[__register__](el, 'pb-click', ability);
+
+        expect(HammerWrapper.on).called().to.be.equal(0);
+      });
+    });
+
+    describe('#__unregister__', () => {
+      it('should unregister previously registered handler', () => {
+        let ability = pb.t.createFakeAbility('ability');
+        let triggerable = new Triggerable();
+
+        _.spy(HammerWrapper, 'on');
+        triggerable[__register__](el, 'pb-click', ability);
+        let handlerCaptor = _M.isA(Function);
+        expect(HammerWrapper.on).calledWith(el, 'singletap', handlerCaptor).at.least(1);
+
+        _.spy(HammerWrapper, 'off');
+        triggerable[__unregister__](el, 'pb-click');
+        expect(HammerWrapper.off)
+            .calledWith(el, 'singletap', handlerCaptor.matchingArgs[0]).at.least(1);
+      });
+      it('should not crash if nothing is registered', () => {
+        let triggerable = new Triggerable();
+        triggerable[__unregister__](el, 'pb-click');
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    });
+  });
+  });
+  </script>
+</body>

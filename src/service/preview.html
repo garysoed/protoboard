@@ -4,8 +4,7 @@
 
 <script>
 
-((Utils) => {
-import Utils from 'src/utils';
+Inject.provide('pb_service_Preview', (Utils) => {
 
 /**
  * Service that lets the user preview an element on mouse hover.
@@ -47,5 +46,6 @@ export default Preview = Preview;
 
 Utils.makeGlobal('pb.service.Preview', Preview);
 
-})(pb.Utils);
+return Preview;
+});
 </script>

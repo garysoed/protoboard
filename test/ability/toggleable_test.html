@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>Toggleable Unit Tests</title>
+
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/ability/toggleable.html">
+  <link rel="import" href="out/inject.html">
+</head>
+<body>
+  <script>
+  Inject
+      .with('doc', document.currentScript.ownerDocument)
+      .inject((expect, _, _M, doc, Toggleable) => {
+
+  describe('Toggleable', () => {
+    let el;
+
+    beforeEach(done => {
+      el = doc.createElement('div');
+      done();
+    });
+
+    describe('#setDefaultValue', () => {
+      let toggleable;
+
+      beforeEach(done => {
+        toggleable = new Toggleable(
+            false /* defaultEnabled */, 
+            true /* defaultShowFront */);
+        done();
+      });
+
+      it('should set the default values', () => {
+        toggleable.setDefaultValue(el);
+        expect($(el).attr('pb-toggleable')).to.be.equal('false');
+        expect($(el).attr('pb-showfront')).to.be.equal('true');
+      });
+      it('should do nothing if enabled is set', () => {
+        $(el).attr('pb-toggleable', 'true');
+        toggleable.setDefaultValue(el);
+        expect($(el).attr('pb-toggleable')).to.be.equal('true');
+      });
+      it('should do nothing if state is set', () => {
+        $(el).attr('pb-showfront', 'false');
+        toggleable.setDefaultValue(el);
+        expect($(el).attr('pb-showfront')).to.be.equal('false');
+      });
+    });
+
+    describe('#trigger', () => {
+      let toggleable;
+
+      beforeEach(done => {
+        toggleable = new Toggleable();
+        done();
+      });
+
+      it('should toggle the state', () => {
+        $(el)
+            .attr('pb-toggleable', 'true')
+            .attr('pb-showfront', 'false');
+        toggleable.trigger(el);
+        expect($(el).attr('pb-showfront')).to.be.equal('true');
+      });
+      it('should do nothing if disabled', () => {
+        $(el)
+            .attr('pb-toggleable', 'false')
+            .attr('pb-showfront', 'false');
+        toggleable.trigger(el);
+        expect($(el).attr('pb-showfront')).to.be.equal('false');
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    });
+  });
+  });
+  </script>
+</body>

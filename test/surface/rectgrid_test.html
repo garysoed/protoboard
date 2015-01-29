@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>RectGrid Unit Tests</title>
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/inject.html">
+  <link rel="import" href="out/surface/rectgrid.html">
+</head>
+<body>
+  <pb-s-rectgrid id="grid" pb-row="2" pb-col="3">
+    <div id="region" pb-row="1" pb-col="2"></div>
+  </pb-s-rectgrid>
+  <script>
+  Inject
+      .with('doc', document.currentScript.ownerDocument)
+      .inject((expect, _, _M, doc) => {
+
+  describe('RectGrid', () => {
+    describe('#created', () => {
+      it('should create the rows and cols', () => {
+        let grid = doc.querySelector('pb-s-rectgrid#grid');
+        let contentEls = grid.shadowRoot.querySelectorAll('content');
+        expect(contentEls.length).to.be.equal(6);
+
+        let correctCellEl = grid.shadowRoot.querySelector('content[pb-row="1"][pb-col="2"]');
+        let regionEl = doc.querySelector('div#region');
+        expect(correctCellEl.getDistributedNodes()[0]).to.contain(regionEl);
+      });
+
+      it('should throw exception if row is not a number', done => {
+        let div = doc.createElement('div');
+        let origOnError = window.onerror;
+
+        window.onerror = err => {
+          expect(err).to.contain('a');
+          window.onerror = origOnError;
+          done();
+        };
+
+        div.innerHTML = '<pb-s-rectgrid row="a" col="1"></pb-s-rectgrid>';
+      });
+
+      it('should throw exception if col is not a number', done => {
+        let div = doc.createElement('div');
+        let origOnError = window.onerror;
+
+        window.onerror = err => {
+          expect(err).to.contain('b');
+          window.onerror = origOnError;
+          done();
+        };
+
+        div.innerHTML = '<pb-s-rectgrid pb-row="3" pb-col="b"></pb-s-rectgrid>';
+      });
+    });
+
+    describe('#get', () => {
+      it('should return the correct cell', () => {
+        let grid = doc.querySelector('pb-s-rectgrid#grid');
+        expect(grid.get(1, 2)).to.be.equal(doc.querySelector('div#region'));
+      });
+
+      it('should return null if the cell is invalid', () => {
+        let grid = doc.querySelector('pb-s-rectgrid#grid');
+        expect(grid.get(2, 3)).to.not.exist;
+      });
+    });
+  });
+  });
+  </script>
+</body>

@@ -16,13 +16,9 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // Generated files
-      { pattern: 'out/**', included: false },
-
-      // For source maps
-      { pattern: 'src/**/*.js', included: false },
+      { pattern: 'out/**/!(*_test).html', included: false },
 
       // Deps
-      { pattern: 'src/**/*.html', included: false },
       { pattern: 'bower_components/jquery/dist/jquery.js', included: false },
       { pattern: 'bower_components/jQuery-contextMenu/src/jquery.contextMenu.js', included: false },
       { pattern: 'bower_components/handlebars/handlebars.js', included: false },
@@ -32,8 +28,8 @@ module.exports = function(config) {
       { pattern: 'node_modules/traceur/bin/traceur-runtime.js', included: false },
       { pattern: 'node_modules/spies/**', included: false },
 
-      { pattern: 'test/testbase.html', included: false},
-      'test/**/*.html'
+      { pattern: 'out/testbase.html', included: false},
+      { pattern: 'out/**/*_test.html', included: true}
     ],
 
 

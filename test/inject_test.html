@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>Inject Unit Tests</title>
 
+  <link rel="import" href="out/testbase.html">
+  
   <link rel="import" href="out/inject.html">
-
-  <link rel="import" href="test/testbase.html">
 </head>
 <body>
   <script>
     'use strict';
 
-    (function() {
-      var expect = chai.expect;
-      var _ = spies.Spies;
+    (() => {
+      let expect = chai.expect;
+      let _ = spies.Spies;
 
-      var doc = document.currentScript.ownerDocument;
+      let doc = document.currentScript.ownerDocument;
 
-      describe('Inject', function() {
-        var a_aa = 'a_aa';
-        var a_ab = 'a_ab';
+      describe('Inject', () => {
+        let a_aa = 'a_aa';
+        let a_ab = 'a_ab';
 
-        before(function(done) {
-          Inject.provide('test_a_aa', function() { return a_aa; });
-          Inject.provide('test_a_ab', function() { return a_ab; });
+        before(done => {
+          Inject.provide('test_a_aa', () => a_aa);
+          Inject.provide('test_a_ab', () => a_ab);
           done();
         });
 
-        describe('#provide', function() {
-          it('should inject the correct values', function() {
-            var value = 'value';
-            var fn = _.spiedFunction();
-            Inject.provide('test_value', function(a_aa, ab) {
+        describe('#provide', () => {
+          it('should inject the correct values', () => {
+            let value = 'value';
+            let fn = _.spiedFunction();
+            Inject.provide('test_value', (a_aa, ab) => {
               fn(a_aa, ab);
               return value;
             });
@@ -40,21 +40,19 @@
             expect(fn).calledWith(a_aa, a_ab).at.least(1);
             expect(Inject.get('test_value')).to.be.equal(value);
           });
-          it('should throw error when an injected key cannot be found', function() {
-            expect(function() {
-              Inject.provide('test_fail', function(a) {});
-            }).to.throw(/Cannot find/);
+          it('should throw error when an injected key cannot be found', () => {
+            expect(() => Inject.provide('test_fail', a => undefined)).to.throw(/Cannot find/);
           });
         });
 
-        describe('#with', function() {
-          it('should inject using the provided local object', function() {
-            var value = 'value';
-            var fn = _.spiedFunction();
-            var abcValue = 123;
+        describe('#with', () => {
+          it('should inject using the provided local object', () => {
+            let value = 'value';
+            let fn = _.spiedFunction();
+            let abcValue = 123;
             Inject
                 .with('abc', abcValue)
-                .provide('test_value', function(abc) {
+                .provide('test_value', abc => {
                   fn(abc);
                   return value;
                 });
@@ -62,49 +60,49 @@
             expect(fn).calledWith(abcValue).at.least(1);
             expect(Inject.get('test_value')).to.be.equal(value);
           });
-          it('should not persist the bound value', function() {
+          it('should not persist the bound value', () => {
             Inject
                 .with('abc', 'abc')
-                .provide('test_value', function() { return 1; });
+                .provide('test_value', () => 1);
             expect(Inject.get('abc')).to.be.undefined();
           });
         });
 
-        describe('#get', function() {
-          var value = 2;
+        describe('#get', () => {
+          let value = 2;
 
-          beforeEach(function(done) {
-            Inject.provide('test_suffix', function() { return value; });
+          beforeEach(done => {
+            Inject.provide('test_suffix', () => value);
             done();
           });
-          it('should return exact match', function() {
+          it('should return exact match', () => {
             expect(Inject.get('test_suffix')).to.be.equal(value);
           });
-          it('should return suffix match', function() {
+          it('should return suffix match', () => {
             expect(Inject.get('suffix')).to.be.equal(value);
           });
         });
 
-        describe('#getProvider', function() {
-          beforeEach(function(done) {
-            Inject.provide('test_suffix', function() { return 2; });
+        describe('#getProvider', () => {
+          beforeEach(done => {
+            Inject.provide('test_suffix', () => 2);
             done();
           });
 
-          it('should return exact match', function() {
+          it('should return exact match', () => {
             expect(Inject.get('test_suffix')).to.be.not.undefined();
           });
-          it('should return suffix match', function() {
+          it('should return suffix match', () => {
             expect(Inject.get('suffix')).to.be.not.undefined();
           });
         })
 
-        describe('$Provider', function() {
-          describe('#inject', function() {
-            it('should inject the correct values', function() {
-              var value = 'value';
-              var fn = _.spiedFunction();
-              Inject.provide('test_provider', function(aa, ab) {
+        describe('$Provider', () => {
+          describe('#inject', () => {
+            it('should inject the correct values', () => {
+              let value = 'value';
+              let fn = _.spiedFunction();
+              Inject.provide('test_provider', (aa, ab) => {
                 fn(aa, ab);
                 return value;
               });
@@ -114,11 +112,11 @@
             });
           });
 
-          describe('#with', function() {
-            it('should bind the provided value', function() {
-              var newValue = 'newValue';
-              var fn = _.spiedFunction();
-              Inject.provide('test_provider', function(aa, ab) {
+          describe('#with', () => {
+            it('should bind the provided value', () => {
+              let newValue = 'newValue';
+              let fn = _.spiedFunction();
+              Inject.provide('test_provider', (aa, ab) => {
                 fn(aa, ab);
                 return 'value';
               });
@@ -129,7 +127,7 @@
                   .inject();
               expect(fn).calledWith(newValue, a_ab).at.least(1);
             });
-            it('should not persist the provided value', function() {
+            it('should not persist the provided value', () => {
               Inject.getProvider('test_a_aa')
                   .with('abc', 'abc')
                   .inject();
@@ -139,7 +137,7 @@
           });
         });
 
-        afterEach(function(done) {
+        afterEach(done => {
           _.reset();
           done();
         });
