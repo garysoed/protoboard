@@ -4,6 +4,7 @@
 <link rel="import" href="out/ability/droppable.html">
 <link rel="import" href="out/ability/shuffleable.html">
 <link rel="import" href="out/ability/triggerable.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/region/region.html">
 <link rel="import" href="out/utils.html">
 
@@ -16,7 +17,13 @@
 </template>
 
 <script>
-((Abilities, Droppable, Region, Shuffleable, Triggerable, Utils) => {
+Inject.provide('pb_region_Deck', (
+    Abilities, 
+    Droppable, 
+    Region, 
+    Shuffleable, 
+    Triggerable, 
+    Utils) => {
 
 /**
  * Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.
@@ -92,12 +99,7 @@ document.registerElement(EL_NAME, {
       droppable).prototype
 });
 
-Utils.makeGlobal('pb.region.Deck', Deck);
+return Deck;
 
-})(pb.ability.Abilities, 
-    pb.ability.Droppable, 
-    pb.region.Region, 
-    pb.ability.Shuffleable, 
-    pb.ability.Triggerable, 
-    pb.Utils);
+});
 </script>

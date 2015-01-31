@@ -94,7 +94,6 @@ Handlebars.registerHelper('pb-for', function(from, to, step, options) {
 
 try {
   document.registerElement(EL_NAME, {prototype: Template.prototype});
-  Utils.makeGlobal('pb.ui.Template', Template);
 } catch (e) {
   console.warn(e);
 }

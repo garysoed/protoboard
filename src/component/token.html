@@ -3,6 +3,7 @@
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/draggable.html">
 <link rel="import" href="out/component/component.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/component/token.css">
@@ -14,7 +15,7 @@
 </template>
 
 <script>
-((Abilities, Component, Draggable, Utils) => {
+Inject.provide('pb_component_Token', (Abilities, Component, Draggable, Utils) => {
 
 let doc = document.currentScript.ownerDocument;
 let template = doc.querySelector('template');
@@ -64,7 +65,7 @@ document.registerElement(EL_NAME, {
       draggable).prototype
 });
 
-Utils.makeGlobal('pb.component.Token', Token);
+return Token;
 
-})(pb.ability.Abilities, pb.component.Component, pb.ability.Draggable, pb.Utils);
+});
 </script>

@@ -29,8 +29,8 @@ const CLASS_OVER = 'pb-over';
 // Private symbols.
 const __defaultValue__ = Symbol();
 
-const __onMouseEnter__ = Symbol('onMouseEnter');
-const __onMouseLeave__ = Symbol();
+const __onDragEnter__ = Symbol('onDragEnter');
+const __onDragLeave__ = Symbol();
 const __onDragOver__ = Symbol();
 const __onLastDraggedElChange__ = Symbol('onLastDraggedElChange');
 const __register__ = Symbol('register');
@@ -49,11 +49,11 @@ export default class Droppable extends Ability {
   /**
    * Handler called when an element has entered the given element.
    *
-   * @method __onMouseEnter__
+   * @method __onDragEnter__
    * @param {!Element} el The element that is being entered.
    * @private
    */
-  [__onMouseEnter__](el) {
+  [__onDragEnter__](el) {
     if (DragDrop.lastDraggedEl) {
       el.classList.add(CLASS_OVER);
     }
@@ -62,12 +62,25 @@ export default class Droppable extends Ability {
   /**
    * Handler called when an element has left the given element.
    * 
-   * @method __onMouseLeave__
+   * @method __onDragLeave__
    * @param {!Element} el The element being left behind.
    * @private
    */
-  [__onMouseLeave__](el, event) {
+  [__onDragLeave__](el, event) {
     el.classList.remove(CLASS_OVER);
+  }
+   
+  /**    
+   * Handler called when an element is dragged over the given element.   
+   *   
+   * @method __onDragOver__    
+   * @param {!Element} el The element where another element is dragged over it.    
+   * @param {!Event} event The event object.   
+   * @private    
+   */    
+  [__onDragOver__](el, event) {    
+    event.preventDefault();    
+    event.dropEffect = 'move';
   }
 
   /**
@@ -92,9 +105,10 @@ export default class Droppable extends Ability {
    */
   [__register__](el) {
     Events.of(el, this)
-        .listen('mouseenter', this[__onMouseEnter__].bind(this, el))
-        .listen('mouseleave', this[__onMouseLeave__].bind(this, el))
-        .listen('mouseup', this.trigger.bind(this, el));
+        .listen('dragover', this[__onDragOver__].bind(this, el))
+        .listen('dragenter', this[__onDragEnter__].bind(this, el))
+        .listen('dragleave', this[__onDragLeave__].bind(this, el))
+        .listen('drop', this.trigger.bind(this, el));
 
     Events.of(DragDrop, this)
         .on(
