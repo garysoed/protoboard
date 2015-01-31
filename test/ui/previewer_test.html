@@ -12,9 +12,9 @@
   <script>
   Inject
       .with('doc', document.currentScript.ownerDocument)
-      .inject((expect, _, _M, doc, service_Preview, Utils, Events) => {
+      .inject((expect, _, _M, doc, service_Preview, Utils, Events, Previewer) => {
 
-  let __onPreviewElChanged__ = Utils.getSymbol(pb.ui.Previewer.prototype, 'onPreviewElChanged');
+  let __onPreviewElChanged__ = Utils.getSymbol(Previewer.prototype, 'onPreviewElChanged');
 
   describe('ui.Previewer', () => {
     describe('#createdCallback', () => {

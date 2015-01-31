@@ -111,20 +111,6 @@
       });
     });
 
-    describe('#makeGlobal', () => {
-      it('should correctly assign the target', () => {
-        let target = 'target';
-        Utils.makeGlobal('path.to.the.Target', target);
-        expect(path.to.the.Target).to.be.equal(target);
-
-        window.a = undefined;
-      });
-      it('should throw exception when target is duplicated', () => {
-        Utils.makeGlobal('a.b.c.Target', {});
-        expect(Utils.makeGlobal.bind(Utils, 'a.b.c.Target', {})).to.throw('Target');
-      });
-    });
-
     describe('#extendFn', () => {
       it('should call the original function before the new function by default', () => {
         let oldFn = _.spiedFunction().overrideReturn(1);

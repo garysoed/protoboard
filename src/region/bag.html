@@ -144,9 +144,8 @@ document.registerElement(EL_NAME, {
       droppable).prototype
 });
 
-Utils.makeGlobal('pb.region.Bag', Bag);
 if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.region.Bag.BagDraggable', BagDraggable);
+  Bag.BagDraggable = BagDraggable;
 }
 
 return Bag;

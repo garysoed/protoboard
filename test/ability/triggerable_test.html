@@ -11,7 +11,7 @@
   <script>
   Inject
       .with('doc', document.currentScript.ownerDocument)
-      .inject((expect, _, _M, doc, HammerWrapper, Triggerable, Utils) => {
+      .inject((expect, _, _M, doc, pb_t, HammerWrapper, Triggerable, Utils) => {
 
   describe('Triggerable', () => {
     let el;
@@ -31,8 +31,8 @@
 
     describe('#setDefaultValue', () => {
       it('should set the default values for all supported types', () => {
-        let ability1 = pb.t.createFakeAbility('ability1');
-        let ability2 = pb.t.createFakeAbility('ability2');
+        let ability1 = pb_t.createFakeAbility('ability1');
+        let ability2 = pb_t.createFakeAbility('ability2');
         let triggerable = new Triggerable(
             {
               'pb-click': ability1.name,
@@ -45,7 +45,7 @@
         expect($(el).attr('pb-dblclick')).to.be.equal(ability2.name);
       });
       it('should ignore unsupported type in default value', () => {
-        let ability = pb.t.createFakeAbility('ability');
+        let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable(
             { 'pb-unknown': ability.name },
             [ ability ]);
@@ -54,7 +54,7 @@
         expect($(el).attr('pb-unknown')).to.be.equal(undefined);
       });
       it('should not override attribute that is already set', () => {
-        let ability = pb.t.createFakeAbility('ability');
+        let ability = pb_t.createFakeAbility('ability');
         $(el).attr('pb-click', ability.name);
 
         let triggerable = new Triggerable(
@@ -76,7 +76,7 @@
 
     describe('#attributeChangedCallback', () => {
       it('should registers new ability', () => {
-        let ability = pb.t.createFakeAbility('ability');
+        let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable({}, [ability]);
 
         _.spy(triggerable, __register__);
@@ -86,7 +86,7 @@
         expect(triggerable[__register__]).calledWith(el, 'pb-click', ability).at.least(1);
       });
       it('should unregisters old ability', () => {
-        let ability = pb.t.createFakeAbility('ability');
+        let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable({}, [ability]);
         triggerable.attributeChangedCallback(el, 'pb-click', null, ability.name);
 
@@ -113,7 +113,7 @@
             .before(triggerable[__register__]).calledWith(el, triggerType, newAbility);
       });
       it('should ignore unsupported trigger', () => {
-        let ability = pb.t.createFakeAbility('ability');
+        let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable({}, [ability]);
 
         _.spy(triggerable, __register__);
@@ -135,7 +135,7 @@
     });
 
     describe('#attachedCallback', () => {
-      let ability = pb.t.createFakeAbility('ability');
+      let ability = pb_t.createFakeAbility('ability');
 
       it('should register all known trigger types', () => {
         $(el)
@@ -177,7 +177,7 @@
 
     describe('#__register__', () => {
       it('should register if not registered', () => {
-        let ability = pb.t.createFakeAbility('ability');
+        let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable();
 
         _.spy(HammerWrapper, 'on');
@@ -187,7 +187,7 @@
         expect(HammerWrapper.on).calledWith(el, 'singletap', _M.isA(Function)).at.least(1);
       });
       it('should be noop if registered', () => {
-        let ability = pb.t.createFakeAbility('ability');
+        let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable();
         triggerable[__register__](el, 'pb-click', ability);
 
@@ -202,7 +202,7 @@
 
     describe('#__unregister__', () => {
       it('should unregister previously registered handler', () => {
-        let ability = pb.t.createFakeAbility('ability');
+        let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable();
 
         _.spy(HammerWrapper, 'on');

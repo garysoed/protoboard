@@ -164,24 +164,24 @@ Inject.provide('pb_Utils', () => {
      * @param {string} namespace The namespace of the target. This should be separated by '.'.
      * @param {Object=} target The target object to be made globally available.
      */
-    makeGlobal(namespace, target) {
-      let currentScope = window;
-      let pathArr = namespace.split('.');
-      pathArr.forEach((path, i) => {
-        if (i === (pathArr.length - 1)) {
-          if (!currentScope[path]) {
-            currentScope[path] = target;
-          } else {
-            throw `${namespace} already exists`; 
-          }
-        } else {
-          if (!currentScope[path]) {
-            currentScope[path] = {};
-          }
-        }
-        currentScope = currentScope[path];
-      });
-    },
+    // makeGlobal(namespace, target) {}
+    //   let currentScope = window;
+    //   let pathArr = namespace.split('.');
+    //   pathArr.forEach((path, i) => {
+    //     if (i === (pathArr.length - 1)) {
+    //       if (!currentScope[path]) {
+    //         currentScope[path] = target;
+    //       } else {
+    //         throw `${namespace} already exists`; 
+    //       }
+    //     } else {
+    //       if (!currentScope[path]) {
+    //         currentScope[path] = {};
+    //       }
+    //     }
+    //     currentScope = currentScope[path];
+    //   });
+    // },
 
     /**
      * Replaces the specified function to call the given function before or after the original 
@@ -245,8 +245,6 @@ Inject.provide('pb_Utils', () => {
   };
 
   export default Utils = Utils;
-
-  Utils.makeGlobal('pb.Utils', Utils);
 
   return Utils;
 });

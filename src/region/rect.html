@@ -93,9 +93,8 @@ document.registerElement(EL_NAME,  {
       smartDroppable).prototype
 });
 
-Utils.makeGlobal('pb.region.Rect', Rect);
 if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.region.Rect.SmartDroppable', SmartDroppable);
+  Rect.SmartDroppable = SmartDroppable;
 }
 
 return Rect;

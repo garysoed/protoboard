@@ -257,10 +257,8 @@ let Events = {
 
 export default Events = Events;
 
-Utils.makeGlobal('pb.Events', Events);
-
 if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.Events.Action', Action);
+  Events.Action = Action;
 }
 
 return Events;

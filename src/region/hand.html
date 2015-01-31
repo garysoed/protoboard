@@ -101,9 +101,8 @@ document.registerElement(EL_NAME, {
       droppable).prototype
 });
 
-Utils.makeGlobal('pb.region.Hand', Hand);
 if (window['TEST_MODE']) {
-  Utils.makeGlobal('pb.region.Hand.ReorderableDroppable', ReorderableDroppable);
+  Hand.ReorderableDroppable = ReorderableDroppable;
 }
 
 return Hand;

@@ -39,7 +39,7 @@
 </template>
 
 <script>
-((Check, PbElement, Utils) => {
+Inject.provide('pb_surface_RectGrid', (Check, PbElement, Utils) => {
 
 let doc = document.currentScript.ownerDocument;
 let templates = {
@@ -117,7 +117,7 @@ export default class RectGrid extends PbElement {
 
 document.registerElement(EL_NAME, {prototype: RectGrid.prototype});
 
-Utils.makeGlobal('pb.surface.RectGrid', RectGrid);
+return RectGrid;
 
-})(pb.Check, pb.PbElement, pb.Utils);
+});
 </script>

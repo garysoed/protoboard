@@ -13,7 +13,7 @@
   <script>
   Inject
       .with('doc', document.currentScript.ownerDocument)
-      .inject((expect, _, _M, doc, Abilities, HammerWrapper) => {
+      .inject((expect, _, _M, doc, pb_t, Abilities, HammerWrapper) => {
 
   describe('Abilities', () => {
     describe('#config', () => {
@@ -24,8 +24,8 @@
         Ctor.prototype.ownerDocument = doc;
         Ctor.prototype.style = {};
 
-        var ability1 = pb.t.createFakeAbility('ability1');
-        var ability2 = pb.t.createFakeAbility('ability2');
+        var ability1 = pb_t.createFakeAbility('ability1');
+        var ability2 = pb_t.createFakeAbility('ability2');
 
         Abilities.config(Ctor, {'pb-click': ability1}, ability2);
 

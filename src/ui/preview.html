@@ -1,12 +1,13 @@
 <base href="../..">
 
 <link rel="import" href="out/events.html">
+<link rel="import" href="out/inject.html">
 <link rel="import" href="out/pbelement.html">
 <link rel="import" href="out/service/preview.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-((Events, PbElement, PreviewService, Utils) => {
+Inject.provide('pb_ui_Preview', (Events, PbElement, service_Preview, Utils) => {
 
 /**
  * Class that contains a preview if the mouse enters the parent element. This will display
@@ -42,7 +43,7 @@ export default class Preview extends PbElement {
    * @private
    */
   [__onMouseOut__]() {
-    PreviewService.previewedEl = null;
+    service_Preview.previewedEl = null;
   }
 
   /**
@@ -52,7 +53,7 @@ export default class Preview extends PbElement {
    * @private
    */
   [__onMouseOver__]() {
-    PreviewService.previewedEl = this;
+    service_Preview.previewedEl = this;
   }
 
   /**
@@ -93,9 +94,8 @@ export default class Preview extends PbElement {
   }
 }
 
-Utils.makeGlobal('pb.ui.Preview', Preview);
-
 document.registerElement(EL_NAME, {prototype: Preview.prototype});
 
-})(pb.Events, pb.PbElement, pb.service.Preview, pb.Utils);
+return Preview;
+});
 </script>

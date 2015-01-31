@@ -75,9 +75,9 @@ function sub6to5() {
 function subSass() {
   return chain(function(stream) {
     return stream
-        .pipe(sass({loadPath: ['src/themes']}))
-        .pipe(debug({title: chalk.green('sass')}))
-  });
+        .pipe(sass({loadPath: ['src/themes']}));
+  })
+  .pipe(debug({title: chalk.green('sass')}));
 }
 
 gulp.task('6to5-src', function() {
@@ -108,7 +108,7 @@ gulp.task('karma-dev', function(done) {
 
 gulp.task('sass-src', function() {
   return gulp.src(['./src/**/*.scss', '!./src/themes/*.scss'])
-      .pipe(subSass().run())
+      .pipe(subSass())
       .pipe(gulp.dest('out'));
 });
 
@@ -118,7 +118,8 @@ gulp.task('watch', function() {
     var base = event.path.substring(__dirname.length).split('/')[1];
     gulp.src(event.path, {base: base})
         .pipe(plumber())
-        .pipe(subSass().run())
+        .pipe(subSass())
+        .pipe(debug({title: chalk.green('sass')}))
         .pipe(gulp.dest('out'));
   });
 
@@ -127,7 +128,8 @@ gulp.task('watch', function() {
     var base = event.path.substring(__dirname.length).split('/')[1];
     gulp.src(event.path, {base: base})
         .pipe(plumber())
-        .pipe(subSass().run())
+        .pipe(subSass())
+        .pipe(debug({title: chalk.green('sass')}))
         .pipe(gulp.dest('ex'));
   });
 
@@ -136,13 +138,9 @@ gulp.task('watch', function() {
     var base = event.path.substring(__dirname.length).split('/')[1];
     gulp.src(event.path, {base: base})
         .pipe(plumber())
-        .pipe(sub6to5().run())
+        .pipe(sub6to5())
+        .pipe(debug({title: chalk.green('6to5')}))
         .pipe(gulp.dest('out'));
-  });
-
-  // Test
-  gulp.watch(['out/**/*.html'], function() {
-    gulp.start('karma');
   });
 });
 
