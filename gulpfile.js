@@ -25,30 +25,6 @@ gulp.task('jshint', function() {
       .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('test', ['6to5'], function() {
-  return gulp.src('karma.conf.js')
-      .pipe(shell(['karma start <%= file.path %> --single-run --color']));
-});
-
-gulp.task('test-dev', ['6to5'], function() {
-  return gulp.src('karma.conf.js')
-      .pipe(shell(['karma start <%= file.path %> --color']));
-});
-
-function run6to5() {
-  return to5({modules: 'ignore'});
-}
-
-gulp.task('6to5', function() {
-  var replace = subs();
-  return gulp.src(['./src/**/*.html', './test/**/*_test.html', './test/testbase.html'])
-      .pipe(replace.extract)
-        .pipe(run6to5())
-      .pipe(replace.inject)
-      .pipe(gulp.dest('out'));
-});
-
-
 gulp.task('doc', function() {
   return gulp.src('gulpfile.js')
       .pipe(yuimd({
@@ -61,51 +37,69 @@ gulp.task('doc', function() {
       .pipe(gulp.dest('doc'));
 });
 
+gulp.task('test', ['6to5'], function() {
+  return gulp.src('karma.conf.js')
+      .pipe(shell(['karma start <%= file.path %> --single-run --color']));
+});
 
-function runSass() {
-  return sass({loadPath: ['src/themes']});
+gulp.task('test-dev', ['6to5'], function() {
+  return gulp.src('karma.conf.js')
+      .pipe(shell(['karma start <%= file.path %> --color']));
+});
+
+function run6to5(vinyl) {
+  gutil.log('Running', gutil.colors.cyan('6to5'));
+  var replace = subs();
+  return vinyl
+      .pipe(replace.extract)
+        .pipe(to5({modules: 'ignore'}))
+      .pipe(replace.inject)
+      .on('end', function() { gutil.log('Done'); });
+}
+
+gulp.task('6to5', function() {
+  return run6to5(
+      gulp.src(['./src/**/*.html', './test/**/*_test.html', './test/testbase.html']))
+      .pipe(gulp.dest('out'));
+});
+
+
+function runSass(vinyl) {
+  gutil.log('Running', gutil.colors.cyan('sass'));
+  return vinyl
+      .pipe(sass({loadPath: ['src/themes']}))
+      .on('end', function() { gutil.log('Done'); });
 }
 
 gulp.task('sass', function() {
-  return gulp.src(['./src/**/*.scss', '!./src/themes/*.scss'])
-      .pipe(runSass())
+  return runSass(gulp.src(['./src/**/*.scss', '!./src/themes/*.scss']))
       .pipe(gulp.dest('out'));
 });
 
 gulp.task('sass-ex', function() {
-  return gulp.src('./ex/**/*.scss')
-      .pipe(runSass())
+  return runSass(gulp.src('./ex/**/*.scss'))
       .pipe(gulp.dest('ex'));
 });
 
 gulp.task('watch', function() {
   // SASS
-  watch(['src/**/*.scss'], batch(function(events) {
-    gutil.log('Running sass');
-    return events
-        .pipe(plumber())
-        .pipe(runSass())
+  gulp.watch(['src/**/*.scss'], batch(function(event) {
+    gutil.log(gutil.colors.magenta(event.path), event.type);
+    runSass(gulp.src(event.path).pipe(plumber()))
         .pipe(gulp.dest('out'));
   }));
 
-  watch(['ex/**/*.scss', 'src/themes/*.scss'], batch(function(events) {
-    gutil.log('Running sass-ex');
-    return events
-        .pipe(plumber())
-        .pipe(runSass())
+  gulp.watch(['ex/**/*.scss', 'src/themes/*.scss'], batch(function(event) {
+    gutil.log(gutil.colors.magenta(event.path), event.type);
+    runSass(gulp.src(event.path).pipe(plumber()))
         .pipe(gulp.dest('ex'));
   }));
 
-  var replace = subs();
-  watch(['src/**/*.html', 'test/**/*.html'], batch(function(events) {
-    gutil.log('Running 6to5');
-    return events
-        .pipe(plumber())
-        .pipe(replace.extract)
-          .pipe(run6to5())
-        .pipe(replace.inject)
+  gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
+    gutil.log(gutil.colors.magenta(event.path), event.type);
+    run6to5(gulp.src(event.path).pipe(plumber()))
         .pipe(gulp.dest('out'));
-  }));
+  });
 });
 
 gulp.task('push', ['test', 'doc', 'sass'], shell.task('git push'));
