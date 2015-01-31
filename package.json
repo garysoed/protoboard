@@ -19,15 +19,18 @@
   "devDependencies": {
     "bower": "^1.3.12",
     "chai": "^1.9.2",
+    "chalk": "^0.5.1",
     "gulp": "^3.8.10",
     "gulp-6to5": "^2.0.2",
     "gulp-batch": "^1.0.4",
     "gulp-file": "^0.2.0",
     "gulp-html-subs": "git://github.com/garysoed/gulp-html-subs",
     "gulp-jshint": "^1.9.0",
+    "gulp-logger": "0.0.2",
     "gulp-plumber": "^0.6.6",
     "gulp-ruby-sass": "^0.7.1",
     "gulp-shell": "^0.2.11",
+    "gulp-subtask": "^0.2.3",
     "gulp-watch": "^4.1.0",
     "http-server": "^0.7.2",
     "jsdom": "^3.0.2",
@@ -43,6 +46,7 @@
     "yuimd": "git://github.com/garysoed/yuimd"
   },
   "dependencies": {
+    "gulp-debug": "^2.0.0",
     "gulp-util": "^3.0.2",
     "hammerjs": "^2.0.4",
     "jquery": "^2.1.1",
