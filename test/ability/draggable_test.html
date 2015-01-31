@@ -45,26 +45,25 @@
 
     function expectRegistered() {
       // Check that dragstart listener is registered to both children.
-      let dragStartCaptor = _M.isA(Function);
-      expect(child1.addEventListener).calledWith('dragstart', dragStartCaptor).at.least(1);
-      expect(child2.addEventListener).calledWith('dragstart', dragStartCaptor).at.least(1);
+      let mouseDownCaptor = _M.isA(Function);
+      expect(child1.addEventListener).calledWith('mousedown', mouseDownCaptor).at.least(1);
+      expect(child2.addEventListener).calledWith('mousedown', mouseDownCaptor).at.least(1);
 
-      let dragStartHandler = dragStartCaptor.matchingArgs[0];
+      let dragStartHandler = mouseDownCaptor.matchingArgs[0];
       let event = {
         dataTransfer: {}
       };
 
       dragStartHandler(event);
 
-      expect(event.dataTransfer.effectAllowed).to.be.equal('move');
       expect(el.classList.contains('pb-dragged')).to.be.true;
 
       // Check that dragend listener is registered to both children.
-      let dragEndCaptor = _M.isA(Function);
-      expect(child1.addEventListener).calledWith('dragend', dragEndCaptor).at.least(1);
-      expect(child2.addEventListener).calledWith('dragend', dragEndCaptor).at.least(1);
+      let mouseUpCaptor = _M.isA(Function);
+      expect(child1.addEventListener).calledWith('mouseup', mouseUpCaptor).at.least(1);
+      expect(child2.addEventListener).calledWith('mouseup', mouseUpCaptor).at.least(1);
 
-      dragEndCaptor.matchingArgs[0](el);
+      mouseUpCaptor.matchingArgs[0](el);
 
       expect(el.classList.contains('pb-dragged')).to.be.false;
     }
@@ -81,9 +80,6 @@
 
       expect(Events.of(draggable, child2).hasListener('dragstart')).to.be.false;
       expect(Events.of(draggable, child2).hasListener('dragend')).to.be.false;
-
-      expect($(child1).attr('draggable')).to.not.exist;
-      expect($(child2).attr('draggable')).to.not.exist;
     }
 
     describe('#setDefaultValue', () => {
@@ -110,9 +106,6 @@
         _.spy(child2, 'addEventListener');
 
         draggable.attributeChangedCallback(el, 'pb-draggable', 'false', 'true');
-
-        expect($(child1).attr('draggable')).to.be.equal('true');
-        expect($(child2).attr('draggable')).to.be.equal('true');
 
         expectRegistered();
       });
@@ -226,7 +219,6 @@
 
         draggable[__onDragStart__](el, event);
 
-        expect(dataTransfer.effectAllowed).to.be.equal('move');
         expect(el.classList.contains('pb-dragged')).to.be.true();
         expect(DragDrop.dragStart).calledWith(el, -3, -6);
       });

@@ -27,7 +27,7 @@
             Utils) => {
 
       // Private symbols
-      let __onDragEnter__ = Utils.getSymbol(Droppable.prototype, 'onDragEnter');
+      let __onMouseEnter__ = Utils.getSymbol(Droppable.prototype, 'onMouseEnter');
       let __onLastDraggedElChange__ = Utils.getSymbol(Droppable.prototype, 'onLastDraggedElChange');
       let __register__ = Utils.getSymbol(Droppable.prototype, 'register');
       let __unregister__ = Utils.getSymbol(Droppable.prototype, 'unregister');
@@ -146,58 +146,43 @@
             done();
           });
 
-          it('should set dropEffect on dragover', () => {
+          it('should add pb-over on mouseenter', () => {
             droppable[__register__](el);
 
-            let handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.listen).calledWith('dragover', handlerCaptor).at.least(1);
-
-            let event = {
-              preventDefault: _.spiedFunction()
-            };
-            handlerCaptor.matchingArgs[0](event);
-            expect(event.preventDefault).calledWith().at.least(1);
-            expect(event.dropEffect).to.be.equal('move');
-          });
-          it('should add pb-over on dragenter', () => {
-            droppable[__register__](el);
+            DragDrop.dragStart(document.createElement('div'));
 
             let handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.listen).calledWith('dragenter', handlerCaptor).at.least(1);
+            expect(fakeEvents.listen).calledWith('mouseenter', handlerCaptor).at.least(1);
 
             handlerCaptor.matchingArgs[0]();
             expect(el.classList.contains('pb-over')).to.be.true();
           });
-          it('should remove pb-over on dragleave', () => {
+          it('should do nothing on mouseenter if no element is being dragged', () => {
             droppable[__register__](el);
-            droppable[__onDragEnter__](el);
 
             let handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
+            expect(fakeEvents.listen).calledWith('mouseenter', handlerCaptor).at.least(1);
+
+            handlerCaptor.matchingArgs[0]();
+            expect(el.classList.contains('pb-over')).to.be.false();
+          });
+          it('should remove pb-over on mouseleave', () => {
+            droppable[__register__](el);
+            droppable[__onMouseEnter__](el);
+
+            let handlerCaptor = _M.isA(Function);
+            expect(fakeEvents.listen).calledWith('mouseleave', handlerCaptor).at.least(1);
 
             handlerCaptor.matchingArgs[0]({ target: el });
             expect(el.classList.contains('pb-over')).to.be.false();
           });
-          it('should be noop on dragleave dragging out of a descendant', () => {
-            let target = doc.createElement('div');
-            el.appendChild(target);
-
-            droppable[__register__](el);
-            droppable[__onDragEnter__](el);
-
-            let handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
-
-            handlerCaptor.matchingArgs[0]({ target: target });
-            expect(el.classList.contains('pb-over')).to.be.true();
-          });
-          it('should call trigger on drop', () => {
+          it('should call trigger on mouseup', () => {
             _.spy(droppable, 'trigger');
 
             droppable[__register__](el);
 
             let handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.listen).calledWith('drop', handlerCaptor).at.least(1);
+            expect(fakeEvents.listen).calledWith('mouseup', handlerCaptor).at.least(1);
 
             handlerCaptor.matchingArgs[0]();
             expect(droppable.trigger).calledWith(el).at.least(1);
@@ -207,7 +192,7 @@
 
             droppable[__register__](el);
 
-            droppable[__onDragEnter__](el);
+            droppable[__onMouseEnter__](el);
             droppable[__onLastDraggedElChange__](el);
 
             expect(el.classList.contains('pb-over')).to.be.false();
@@ -217,7 +202,7 @@
 
             droppable[__register__](el);
 
-            droppable[__onDragEnter__](el);
+            droppable[__onMouseEnter__](el);
             droppable[__onLastDraggedElChange__](el);
 
             expect(el.classList.contains('pb-over')).to.be.true();
@@ -242,6 +227,7 @@
 
         afterEach(done => {
           _.reset();
+          DragDrop.dragEnd();
           done();
         });
       });

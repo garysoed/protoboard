@@ -68,8 +68,8 @@ export default class Draggable extends Ability {
    * @private
    */
   [__onDragStart__](el, event) {
-    let dataTransfer = event.dataTransfer;
-    dataTransfer.effectAllowed = 'move';
+    // let dataTransfer = event.dataTransfer;
+    // dataTransfer.effectAllowed = 'move';
     el.classList.add(CLASS_DRAGGED);
 
     let boundingRect = el.getBoundingClientRect();
@@ -89,10 +89,9 @@ export default class Draggable extends Ability {
   [__register__](element) {
     // Propagate the draggable attribute to the root element.
     Utils.toArray(element.children).forEach(child => {
-      $(child).attr('draggable', 'true');
       Events.of(child, this)
-          .listen('dragstart', this[__onDragStart__].bind(this, element))
-          .listen('dragend', this[__onDragEnd__].bind(this, element));
+          .listen('mousedown', this[__onDragStart__].bind(this, element))
+          .listen('mouseup', this[__onDragEnd__].bind(this, element));
     });
   }
 
@@ -106,7 +105,6 @@ export default class Draggable extends Ability {
   [__unregister__](element) {
     Utils.toArray(element.children).forEach(child => {
       Events.of(child, this).unlisten();
-      $(child).attr('draggable', null);
     });
   }
 

@@ -1,7 +1,5 @@
 var gulp    = require('gulp');
-var watch   = require('gulp-watch');
 var plumber = require('gulp-plumber');
-var batch   = require('gulp-batch');
 
 var jshint = require('gulp-jshint');
 var shell  = require('gulp-shell');
@@ -11,7 +9,6 @@ var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
 
 var gutil   = require('gulp-util');
-var path    = require('path');
 
 
 // TODO(gs): Fix this.
@@ -83,21 +80,24 @@ gulp.task('sass-ex', function() {
 
 gulp.task('watch', function() {
   // SASS
-  gulp.watch(['src/**/*.scss'], batch(function(event) {
+  gulp.watch(['src/**/*.scss'], function(event) {
     gutil.log(gutil.colors.magenta(event.path), event.type);
     runSass(gulp.src(event.path).pipe(plumber()))
         .pipe(gulp.dest('out'));
-  }));
+  });
 
-  gulp.watch(['ex/**/*.scss', 'src/themes/*.scss'], batch(function(event) {
+  gulp.watch(['ex/**/*.scss', 'src/themes/*.scss'], function(event) {
     gutil.log(gutil.colors.magenta(event.path), event.type);
     runSass(gulp.src(event.path).pipe(plumber()))
         .pipe(gulp.dest('ex'));
-  }));
+  });
 
   gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
-    gutil.log(gutil.colors.magenta(event.path), event.type);
-    run6to5(gulp.src(event.path).pipe(plumber()))
+    var base = event.path.substring(__dirname.length).split('/')[1];
+    gutil.log(gutil.colors.magenta(event.path), event.type, gutil.colors.magenta(base));
+    run6to5(
+        gulp.src(event.path, {base: base})
+            .pipe(plumber()))
         .pipe(gulp.dest('out'));
   });
 });
