@@ -9,7 +9,7 @@ var jshint = require('gulp-jshint');
 var karma  = require('karma').server;
 var shell  = require('gulp-shell');
 var sass   = require('gulp-ruby-sass');
-// var yuimd  = require('yuimd');
+var yuimd  = require('yuimd');
 var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
 
@@ -148,4 +148,4 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('push', ['test', 'doc', 'sass-src'], shell.task('git push'));
+gulp.task('push', ['karma', 'doc', 'sass-src'], shell.task('git push'));
