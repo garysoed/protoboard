@@ -75,37 +75,39 @@
     });
 
     describe('#attributeChangedCallback', () => {
-      it('should registers new ability', () => {
-        let ability = pb_t.createFakeAbility('ability');
+      it('should register new ability', () => {
+        let name = 'ability';
+        let ability = pb_t.createFakeAbility(name);
         let triggerable = new Triggerable({}, [ability]);
 
         _.spy(triggerable, __register__);
 
-        triggerable.attributeChangedCallback(el, 'pb-click', null, ability.name);
+        triggerable.attributeChangedCallback(el, 'pb-click', null, name);
 
         expect(triggerable[__register__]).calledWith(el, 'pb-click', ability).at.least(1);
       });
-      it('should unregisters old ability', () => {
-        let ability = pb_t.createFakeAbility('ability');
+      it('should unregister old ability', () => {
+        let name = 'ability';
+        let ability = pb_t.createFakeAbility(name);
         let triggerable = new Triggerable({}, [ability]);
-        triggerable.attributeChangedCallback(el, 'pb-click', null, ability.name);
+        triggerable.attributeChangedCallback(el, 'pb-click', null, name);
 
         _.spy(triggerable, __unregister__);
-        triggerable.attributeChangedCallback(el, 'pb-click', ability.name, null);
+        triggerable.attributeChangedCallback(el, 'pb-click', name, null);
 
         expect(triggerable[__unregister__]).calledWith(el, 'pb-click', ability).at.least(1);
       });
       it('should handle changing triggers', () => {
         let triggerType = 'pb-click';
-        let oldAbility = { name: 'oldAbility', trigger: () => {} };
-        let newAbility = { name: 'newAbility', trigger: () => {} };
+        let oldAbility = pb_t.createFakeAbility('oldAbility');
+        let newAbility = pb_t.createFakeAbility('newAbility');
         let triggerable = new Triggerable({}, [oldAbility, newAbility]);
 
-        triggerable.attributeChangedCallback(el, triggerType, null, oldAbility.name);
+        triggerable.attributeChangedCallback(el, triggerType, null, 'oldAbility');
 
         _.spy(triggerable, __register__);
         _.spy(triggerable, __unregister__);
-        triggerable.attributeChangedCallback(el, triggerType, oldAbility.name, newAbility.name);
+        triggerable.attributeChangedCallback(el, triggerType, 'oldAbility', 'newAbility');
 
         expect(triggerable[__unregister__]).calledWith(el, triggerType, oldAbility).at.least(1);
         expect(triggerable[__register__]).calledWith(el, triggerType, newAbility).at.least(1);
@@ -135,12 +137,13 @@
     });
 
     describe('#attachedCallback', () => {
-      let ability = pb_t.createFakeAbility('ability');
+      let abilityName = 'ability';
+      let ability = pb_t.createFakeAbility(abilityName);
 
       it('should register all known trigger types', () => {
         $(el)
-            .attr('pb-click', ability.name)
-            .attr('pb-dblclick', ability.name);
+            .attr('pb-click', abilityName)
+            .attr('pb-dblclick', abilityName);
 
         let triggerable = new Triggerable({}, [ ability ]);
 

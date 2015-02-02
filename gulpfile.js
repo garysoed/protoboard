@@ -9,7 +9,7 @@ var jshint = require('gulp-jshint');
 var karma  = require('karma').server;
 var shell  = require('gulp-shell');
 var sass   = require('gulp-ruby-sass');
-var yuimd  = require('yuimd');
+// var yuimd  = require('yuimd');
 var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
 
@@ -18,6 +18,11 @@ var gutil   = require('gulp-util');
 function chain(fn) {
   return through.obj(function(file, enc, callback) {
     var stream = gulp.src('')
+        .pipe(plumber({
+          errorHandler: function(err) {
+            this.emit('error', err);
+          }.bind(this)
+        }))
         .pipe(through.obj(function(f, enc, cb) {
           cb(null, file);
         }));
@@ -76,8 +81,7 @@ function subSass() {
   return chain(function(stream) {
     return stream
         .pipe(sass({loadPath: ['src/themes']}));
-  })
-  .pipe(debug({title: chalk.green('sass')}));
+  });
 }
 
 gulp.task('6to5-src', function() {

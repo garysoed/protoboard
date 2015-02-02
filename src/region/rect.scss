@@ -1,16 +1,19 @@
 @import 'theme';
 
+pb-r-rect {
+  @include region-border();
+}
 
 pb-r-rect > * {
   position: absolute;
 }
 
 pb-r-rect::shadow #root {
-  @include region-border();
+  @include trbl-fit();
   position: relative;
 }
 
-pb-r-rect.pb-over::shadow #root {
+pb-r-rect.pb-over {
   outline: 6px dashed $color-highlight;
   outline-offset: -3px;
 }

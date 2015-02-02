@@ -17,6 +17,7 @@ more than 1 classes, group them by directories. The `from` at for every group sh
     - Constructor
     - Private methods
     - Public Methods
+    - Protected Methods
     - Getters and Setters
   - Public Constants
   - Public Static Methods

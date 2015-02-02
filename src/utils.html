@@ -104,6 +104,17 @@ Inject.provide('pb_Utils', () => {
       return promise;
     },
 
+    watch(fn) {
+      let promise = new Promise((resolve, reject) => {
+        let id = setInterval(() => {
+          if (fn()) {
+            clearInterval(id);
+            resolve();
+          }
+        }, 500);
+      });
+    },
+
     /**
      * A comparison function that handles every type.
      *

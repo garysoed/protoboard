@@ -2,9 +2,16 @@
 @import 'rect';
 @import 'main';
 
+
 pb-r-deck {
-  @extend pb-r-rect;
+  @include region-border();
   @extend .pb-card;
+}
+
+pb-r-deck.pb-over {
+  /* TODO(gs): Make this a mixin */
+  outline: 6px dashed $color-highlight;
+  outline-offset: -3px;
 }
 
 pb-r-deck > * {
@@ -12,6 +19,7 @@ pb-r-deck > * {
   right: 0;
   margin-left: auto;
   margin-right: auto;
+  position: absolute;
 }
 
 pb-r-deck::shadow #root {

@@ -20,14 +20,19 @@
 
   let SmartDroppable = Rect.SmartDroppable;
 
+  let __onDomMutation__ = Utils.getSymbol(SmartDroppable.prototype, 'onDomMutation');
+
   describe('Rect', () => {
     describe('$SmartDroppable', () => {
       let el;
       let smartDroppable;
 
+      let __mutationObserver__;
+
       beforeEach(done => {
         el = doc.createElement('div');
         smartDroppable = new SmartDroppable(true);
+        __mutationObserver__ = Utils.getSymbol(smartDroppable, 'mutationObserver');
         done();
       });
 
@@ -66,6 +71,45 @@
           });
 
           expect(el.classList.contains('pb-over')).to.be.false();
+        });
+      });
+
+      describe('#register', () => {
+        it('should start observing mutations to children', () => {
+          _.spy(smartDroppable[__mutationObserver__], 'observe');
+
+          smartDroppable.register(el);
+
+          expect(smartDroppable[__mutationObserver__].observe)
+              .calledWith(el, { childList: true })
+              .at.least(1);
+        });
+      });
+
+      describe('#unregister', () => {
+        it('should disconnect the mutation observer', () => {
+          _.spy(smartDroppable[__mutationObserver__], 'disconnect');
+
+          smartDroppable.unregister(el);
+
+          expect(smartDroppable[__mutationObserver__].disconnect).calledWith().at.least(1);
+        });
+      });
+
+      describe('__onDomMutation__', () => {
+        it('should set the left and top of removed elements to 0, 0', () => {
+          let el1 = { style: {} };
+          let el2 = { style: {} };
+          let el3 = { style: {} };
+
+          smartDroppable[__onDomMutation__]([
+            { removedNodes: [ el1, el2 ] },
+            { removedNodes: [ el3 ] }
+          ]);
+
+          expect(el1.style).to.be.eql({ left: 0, top: 0 });
+          expect(el2.style).to.be.eql({ left: 0, top: 0 });
+          expect(el3.style).to.be.eql({ left: 0, top: 0 });
         });
       });
     });

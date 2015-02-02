@@ -23,6 +23,10 @@ let template = doc.querySelector('template');
 
 const EL_NAME = 'pb-r-rect';
 
+// Private symbols
+const __mutationObserver__ = Symbol('mutationObserver');
+const __onDomMutation__ = Symbol('onDomMutation');
+
 /**
  * An arbitrary rectangular region. You can position elements anywhere in this region.
  *
@@ -36,8 +40,53 @@ const EL_NAME = 'pb-r-rect';
 
 class SmartDroppable extends Droppable {
 
+  /**
+   * Handles event when the MutationObserver observes changes to the child list.
+   *
+   * @method __onDomMutation__
+   * @param {!Array.<MutationRecord>} mutations Array of MutationRecords.
+   * @private
+   */
+  [__onDomMutation__](mutations) {
+    mutations.forEach(mutation => {
+      Utils.toArray(mutation.removedNodes).forEach(removedNode => {
+        removedNode.style.left = 0;
+        removedNode.style.top = 0;
+      });
+    });
+  }
+
+  /**
+   * @constructor
+   * @param {boolean} defaultValue True iff the ability should be enabled.
+   */
   constructor(defaultValue) {
     super(defaultValue);
+    this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
+  }
+
+  /**
+   * Registers the handlers for this ability to the given element.
+   *
+   * @method register
+   * @param {!Element} el The element to register the ability to.
+   * @protected
+   */
+  register(el) {
+    super.register(el);
+    this[__mutationObserver__].observe(el, { childList: true });
+  }
+
+  /**
+   * Unregisters the handlers for this ability from the given element.
+   *
+   * @method __unregister__
+   * @param {!Element} el The element to unregister the ability from.
+   * @protected
+   */
+  unregister(el) {
+    this[__mutationObserver__].disconnect();
+    super.unregister(el);
   }
 
   /**

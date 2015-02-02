@@ -16,22 +16,28 @@
       .inject((expect, _, _M, doc, pb_t, Abilities, HammerWrapper) => {
 
   describe('Abilities', () => {
+    let Ctor;
+
+    beforeEach(done => {
+      Ctor = function() {};
+      Ctor.prototype.createdCallback = () => undefined;
+      Ctor.prototype.addEventListener = _.spiedFunction();
+      Ctor.prototype.removeEventListener = _.spiedFunction();
+      Ctor.prototype.ownerDocument = doc;
+      Ctor.prototype.style = {};
+      done();
+    });
+
     describe('#config', () => {
       it('should registers all the abilities and register the correct triggerable', () => {
-        var Ctor = function() {};
-        Ctor.prototype.addEventListener = _.spiedFunction();
-        Ctor.prototype.removeEventListener = _.spiedFunction();
-        Ctor.prototype.ownerDocument = doc;
-        Ctor.prototype.style = {};
-
-        var ability1 = pb_t.createFakeAbility('ability1');
-        var ability2 = pb_t.createFakeAbility('ability2');
+        let ability1 = pb_t.createFakeAbility('ability1');
+        let ability2 = pb_t.createFakeAbility('ability2');
 
         Abilities.config(Ctor, {'pb-click': ability1}, ability2);
 
         _.spy(HammerWrapper, 'on');
 
-        var el = new Ctor();
+        let el = new Ctor();
 
         el.createdCallback();
         expect(ability1.setDefaultValue).calledWith(el).at.least(1);
@@ -47,7 +53,7 @@
         expect(ability1.attachedCallback).calledWith(el).at.least(1);
         expect(ability2.attachedCallback).calledWith(el).at.least(1);
 
-        var clickHandlerCaptor = _M.isA(Function);
+        let clickHandlerCaptor = _M.isA(Function);
         expect(HammerWrapper.on).calledWith(el, 'singletap', clickHandlerCaptor).at.least(1);
 
         // Trigger the click and check that the correct ability is triggered.
@@ -57,6 +63,25 @@
         el.detachedCallback();
         expect(ability1.detachedCallback).calledWith(el).at.least(1);
         expect(ability2.detachedCallback).calledWith(el).at.least(1);
+      });
+    });
+
+    describe('#trigger', () => {
+      it('should trigger the registered ability', () => {
+        let ability = pb_t.createFakeAbility('ability');
+        ability.trigger = _.spiedFunction();
+        
+        Abilities.config(Ctor, {'pb-click': ability});
+
+        let el = new Ctor();
+        el.createdCallback();
+        Abilities.trigger(el, ability.constructor);
+        expect(ability.trigger).calledWith(el).at.least(1);
+      });
+      it('shoud throw exception if the ability cannot be found', () => {
+        let el = new Ctor();
+        el.createdCallback();
+        expect(() => Abilities.trigger(el, {name: 'unknown'})).to.throw('unknown');
       });
     });
 

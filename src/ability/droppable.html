@@ -67,7 +67,9 @@ export default class Droppable extends Ability {
    * @private
    */
   [__onDragLeave__](el, event) {
-    el.classList.remove(CLASS_OVER);
+    if (el === event.target || !el.contains(event.target)) {
+      el.classList.remove(CLASS_OVER);
+    }
   }
    
   /**    
@@ -97,38 +99,6 @@ export default class Droppable extends Ability {
   }
 
   /**
-   * Registers the handlers for this ability to the given element.
-   *
-   * @method __register__
-   * @param {!Element} el The element to register the ability to.
-   * @private
-   */
-  [__register__](el) {
-    Events.of(el, this)
-        .listen('dragover', this[__onDragOver__].bind(this, el))
-        .listen('dragenter', this[__onDragEnter__].bind(this, el))
-        .listen('dragleave', this[__onDragLeave__].bind(this, el))
-        .listen('drop', this.trigger.bind(this, el));
-
-    Events.of(DragDrop, this)
-        .on(
-            DragDrop.Events.LAST_DRAGGED_EL_CHANGED, 
-            this[__onLastDraggedElChange__].bind(this, el));
-  }
-
-  /**
-   * Unregisters the handlers for this ability from the given element.
-   *
-   * @method __unregister__
-   * @param {!Element} el The element to unregister the ability from.
-   * @private
-   */
-  [__unregister__](el) {
-    Events.of(el, this).unlisten();
-    Events.of(DragDrop, this).off();
-  }
-
-  /**
    * Sets the default value of the given element.
    *
    * @method setDefaultValue
@@ -153,9 +123,9 @@ export default class Droppable extends Ability {
     if (name === ATTR_NAME) {
       newValue = Check(newValue).isBoolean(newValue).orThrows();
       if (newValue) {
-        this[__register__](el);
+        this.register(el);
       } else {
-        this[__unregister__](el);
+        this.unregister(el);
       }
     }
   }
@@ -168,7 +138,7 @@ export default class Droppable extends Ability {
    */
   attachedCallback(el) {
     if ($(el).attr(ATTR_NAME) && Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
-      this[__register__](el);
+      this.register(el);
     }
   }
 
@@ -179,7 +149,8 @@ export default class Droppable extends Ability {
    * @param {!Element} el The element that was detached.
    */
   detachedCallback(el) {
-    this[__unregister__](el);
+    // TODO(gs): Change the __register__ and __unregister__ to be protected for all abilities.
+    this.unregister(el);
   }
 
   /**
@@ -217,14 +188,35 @@ export default class Droppable extends Ability {
   }
 
   /**
-   * The name of the ability. This is used as an ID to refer to the registered abilities.
-   * 
-   * @property name
-   * @type string
-   * @readonly
+   * Registers the handlers for this ability to the given element.
+   *
+   * @method register
+   * @param {!Element} el The element to register the ability to.
+   * @protected
    */
-  get name() {
-    return ATTR_NAME;
+  register(el) {
+    Events.of(el, this)
+        .listen('dragover', this[__onDragOver__].bind(this, el))
+        .listen('dragenter', this[__onDragEnter__].bind(this, el))
+        .listen('dragleave', this[__onDragLeave__].bind(this, el))
+        .listen('drop', this.trigger.bind(this, el));
+
+    Events.of(DragDrop, this)
+        .on(
+            DragDrop.Events.LAST_DRAGGED_EL_CHANGED, 
+            this[__onLastDraggedElChange__].bind(this, el));
+  }
+
+  /**
+   * Unregisters the handlers for this ability from the given element.
+   *
+   * @method __unregister__
+   * @param {!Element} el The element to unregister the ability from.
+   * @protected
+   */
+  unregister(el) {
+    Events.of(el, this).unlisten();
+    Events.of(DragDrop, this).off();
   }
 }
 

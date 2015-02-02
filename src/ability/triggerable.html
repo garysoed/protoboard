@@ -48,7 +48,7 @@ class Triggerable extends Ability {
     this[__defaultValue__] = defaultValue;
     this[__knownAbilities__] = {};
     for (let ability of knownAbilities) {
-      this[__knownAbilities__][ability.name] = ability;
+      this[__knownAbilities__][ability.constructor.name] = ability;
     }
   }
   
@@ -104,7 +104,7 @@ class Triggerable extends Ability {
       return false;
     }
     let ability = this[__getTriggers__](el)[triggerType].ability;
-    return ability && abilityName === ability.name;
+    return ability && abilityName === ability.constructor.name;
   }
 
   /**
@@ -117,7 +117,7 @@ class Triggerable extends Ability {
    * @private
    */
   [__register__](el, triggerType, ability) {
-    if (!this[__isRegistered__](el, triggerType, ability.name)) {
+    if (!this[__isRegistered__](el, triggerType, ability.constructor.name)) {
       // Only registers if there aren't any triggers registered.
       let handlers = this[__getTriggers__](el);
       handlers[triggerType] = {ability: ability, handler: ability.trigger.bind(ability, el)};

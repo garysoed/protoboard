@@ -39,7 +39,7 @@ const Abilities = {
           if (!this[__abilities__]) {
             this[__abilities__] = {};
           }
-          this[__abilities__][ability.name] = ability;
+          this[__abilities__][ability.constructor.name] = ability;
           ability.setDefaultValue.call(ability, this);
         });
     Utils.extendFn(
@@ -87,7 +87,7 @@ const Abilities = {
       let ability = cfg[key];
       knownAbilities.add(ability);
       this[__register__](ctorProto, ability);
-      triggerConfig[key] = ability.name;
+      triggerConfig[key] = ability.constructor.name;
     }
 
     // Get from the rest of abilities
@@ -99,6 +99,22 @@ const Abilities = {
     this[__register__](ctorProto, new Triggerable(triggerConfig, knownAbilities));
 
     return ctor;
+  },
+
+  /**
+   * Triggers the given ability that was registered on the given element.
+   *
+   * @method trigger
+   * @param {!Element} el The element to trigger the ability on.
+   * @param {!Function} abilityCtor The constructor of the Ability to trigger.
+   * @static
+   */
+  trigger(el, abilityCtor) {
+    let name = abilityCtor.name;
+    if (!el[__abilities__] || !el[__abilities__][name]) {
+      throw `Cannot find ability ${name} in element ${el}`;
+    }
+    el[__abilities__][name].trigger(el);
   }
 };
 

@@ -1,15 +1,17 @@
 <base href="..">
 
+<link rel="import" href="out/third_party/">
 <link rel="import" href="out/inject.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-Inject.provide('pb_t', (Utils) => {
+Inject.provide('pb_t', (_, Utils) => {
   let TestUtil = {
-    createFakeAbility: function(name) {
-      var _ = spies.Spies;
+    createFakeAbility(name) {
       return { 
-        name: name, 
+        constructor: {
+          name: name
+        }, 
         trigger: _.spiedFunction(),
         setDefaultValue: _.spiedFunction(),
         attributeChangedCallback: _.spiedFunction(),
