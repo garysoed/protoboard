@@ -47,7 +47,6 @@ pb-c-card > .pb-front {
 pb-c-card[pb-showfront="true"].pb-dragged {
   .pb-front {
     @include layer(1);
-    display: block;
   }
 
   .pb-back {
@@ -55,10 +54,9 @@ pb-c-card[pb-showfront="true"].pb-dragged {
   }
 }
 
-pb-c-card.pb-dragged {
+pb-c-card:not([pb-showfront="true"]).pb-dragged {
   .pb-back {
     @include layer(1);
-    display: block;
   }
 
   .pb-front {

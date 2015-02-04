@@ -62,6 +62,7 @@ class Provider {
    * Bind the given value to the given binding key.
    * TODO(gs): Make this look like Inject.with
    *
+   * @method with
    * @param {string} key The binding key to use.
    * @param {*} value The value to be bound.
    * @return {Inject.Provider} The provider to be chained.
@@ -121,6 +122,7 @@ let Inject = {
    * @method provide
    * @param {string} key The binding key.
    * @param {!Function} providerFn The function that returns the value to be bound.
+   * @static
    */
   provide(key, providerFn) {
     (new Provider(providerFn, key)).inject();
@@ -131,6 +133,7 @@ let Inject = {
    *
    * @method inject
    * @param {!Function} providerFn The function to run.
+   * @static
    */
   inject(providerFn) {
     (new Provider(providerFn)).inject();
@@ -145,6 +148,7 @@ let Inject = {
    *    bound to that key.
    * @return {!Object} Object with the provide function and with function. See documentations on
    *    those methods.
+   * @static
    */
   with(key, value) {
     let localValues = {};
@@ -166,8 +170,10 @@ let Inject = {
   },
 
   /**
+   * @method get
    * @param {string} key The binding key of the value to return.
    * @return {*} The bound value, or undefined if no values were bound.
+   * @static
    */
   get(key) {
     let registered = this[__resolveKey__](key, providers);
@@ -175,8 +181,10 @@ let Inject = {
   },
 
   /**
+   * @method getProvider
    * @param {string} key The binding key of the provider to return.
    * @return {Inject.Provider} The bound provider object, or undefined if no providers were bound.
+   * @static
    */
   getProvider(key) {
     return this[__resolveKey__](key, providers);

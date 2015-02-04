@@ -13,9 +13,13 @@ pb-r-hand::shadow #content {
   overflow: hidden;
 }
 
-pb-r-hand.pb-over::shadow #root {
+pb-r-hand.pb-over #root {
   outline: 6px dashed $color-highlight;
   outline-offset: -3px;
+
+  * {
+    pointer-events: none;
+  }
 }
 
 pb-r-hand > *:hover {

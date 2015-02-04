@@ -9,6 +9,7 @@ var jshint = require('gulp-jshint');
 var karma  = require('karma').server;
 var shell  = require('gulp-shell');
 var sass   = require('gulp-ruby-sass');
+var yuidoc = require('gulp-yuidoc');
 var yuimd  = require('yuimd');
 var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
@@ -50,13 +51,14 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('doc', function() {
-  return gulp.src('gulpfile.js')
+  return gulp.src('./src/**/*.html')
+      .pipe(yuidoc.parser({
+        extension: '.html'
+      }))
       .pipe(yuimd({
         'projectName': 'Protoboard',
         '$home': 'doc-theme/Home.theme',
-        '$class': 'doc-theme/class.theme',
-        'src': ['./src'],
-        'extension': '.html'
+        '$class': 'doc-theme/class.theme'
       }))
       .pipe(gulp.dest('doc'));
 });
@@ -148,4 +150,4 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('push', ['karma', 'doc', 'sass-src'], shell.task('git push'));
+gulp.task('push', ['karma', 'doc'], shell.task('git push'));

@@ -27,6 +27,7 @@ Inject.provide('pb_Utils', () => {
     /**
      * Activates the given teplate element.
      *
+     * @method activateTemplate
      * @param  {!Element} template The template element.
      * @param  {!Document} doc The document object to activate the template in.
      * @return {!Element} The activated template element.
@@ -38,7 +39,7 @@ Inject.provide('pb_Utils', () => {
     /**
      * Returns the referenced function, or noop function if the referenced function does not exist.
      * 
-     * @method  nonNullFn
+     * @method nonNullFn
      * @param  {!Object} scope Object containing the referenced function.
      * @param  {string} name Name of the function to return.
      * @return {!Function} The referenced function, or noop function if the referenced function does
@@ -51,7 +52,7 @@ Inject.provide('pb_Utils', () => {
     /**
      * Observes the given property on the given object.
      * 
-     * @method  observe
+     * @method observe
      * @param {!Object} object Object to observe changes to.
      * @param {string|null} property The property name to listen to, or null to listen to all 
      *     properties.
@@ -118,8 +119,9 @@ Inject.provide('pb_Utils', () => {
     /**
      * A comparison function that handles every type.
      *
-     * @param  {Object} a First object to compare.
-     * @param  {Object} b Second object to compare.
+     * @method compare
+     * @param {Object} a First object to compare.
+     * @param {Object} b Second object to compare.
      * @return {?number|undefined} -1 if the first object is smaller than the second, 0 if they are
      *    equal, -1 if the second object is smaller than the first, or undefined if the two cannot 
      *    be compared.
@@ -141,6 +143,7 @@ Inject.provide('pb_Utils', () => {
     /**
      * Converts the given "array like" object to array.
      *
+     * @method toArray
      * @param  {!Object} obj An array like object to convert.
      * @return {!Array} Array object converted from the given array like object.
      */
@@ -167,32 +170,6 @@ Inject.provide('pb_Utils', () => {
       }
       return obj;
     },
-
-    /**
-     * Makes the given target to be globally available.
-     * TODO(gs): Remove
-     * @method makeGlobal
-     * @param {string} namespace The namespace of the target. This should be separated by '.'.
-     * @param {Object=} target The target object to be made globally available.
-     */
-    // makeGlobal(namespace, target) {}
-    //   let currentScope = window;
-    //   let pathArr = namespace.split('.');
-    //   pathArr.forEach((path, i) => {
-    //     if (i === (pathArr.length - 1)) {
-    //       if (!currentScope[path]) {
-    //         currentScope[path] = target;
-    //       } else {
-    //         throw `${namespace} already exists`; 
-    //       }
-    //     } else {
-    //       if (!currentScope[path]) {
-    //         currentScope[path] = {};
-    //       }
-    //     }
-    //     currentScope = currentScope[path];
-    //   });
-    // },
 
     /**
      * Replaces the specified function to call the given function before or after the original 

@@ -5,13 +5,6 @@
 <script>
 Inject.provide('pb_Events', (Utils) => {
 
-/**
- * Utility class to register / unregister events easily.
- *
- * @class Events
- * @static
- */
-
 const TYPES = {
   DOM: 'dom',
   JQUERY: 'jquery'
@@ -48,6 +41,7 @@ const __unregister__ = Symbol('unregister');
 class Action {
 
   /**
+   * @class Events.Action
    * @constructor
    * @param {!Element} element Element to operate on.
    * @param {!Object} scope Scope of the registered events.
@@ -239,6 +233,13 @@ class Action {
     return this[__unregister__](TYPES.JQUERY, eventName, handler);
   }
 }
+
+/**
+ * Utility class to register / unregister events easily.
+ *
+ * @class Events
+ * @static
+ */
 
 let Events = {
   /**

@@ -12,6 +12,10 @@ pb-r-deck.pb-over {
   /* TODO(gs): Make this a mixin */
   outline: 6px dashed $color-highlight;
   outline-offset: -3px;
+
+  * {
+    pointer-events: none;
+  }
 }
 
 pb-r-deck > * {

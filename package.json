@@ -32,6 +32,7 @@
     "gulp-shell": "^0.2.11",
     "gulp-subtask": "^0.2.3",
     "gulp-watch": "^4.1.0",
+    "gulp-yuidoc": "^0.1.2",
     "http-server": "^0.7.2",
     "jsdom": "^3.0.2",
     "jshint-stylish": "^1.0.0",
@@ -43,7 +44,7 @@
     "mocha": "^2.0.0",
     "spies": "git://github.com/garysoed/spies.git",
     "stringbuilder": "0.0.10",
-    "yuimd": "git://github.com/garysoed/yuimd"
+    "yuimd": "file:../yuimd"
   },
   "dependencies": {
     "gulp-debug": "^2.0.0",

@@ -39,6 +39,7 @@ const __unregister__ = Symbol('unregister');
 export default class Droppable extends Ability {
 
   /**
+   * @class ability.Droppable
    * @constructor
    * @param {boolean} defaultValue True iff the ability should be enabled.
    */
@@ -53,7 +54,8 @@ export default class Droppable extends Ability {
    * @param {!Element} el The element that is being entered.
    * @private
    */
-  [__onDragEnter__](el) {
+  [__onDragEnter__](el, event) {
+    event.preventDefault();
     if (DragDrop.lastDraggedEl) {
       el.classList.add(CLASS_OVER);
     }
@@ -67,7 +69,7 @@ export default class Droppable extends Ability {
    * @private
    */
   [__onDragLeave__](el, event) {
-    if (el === event.target || !el.contains(event.target)) {
+    if (el === event.target) {
       el.classList.remove(CLASS_OVER);
     }
   }
@@ -185,6 +187,8 @@ export default class Droppable extends Ability {
       }
     }
     DragDrop.dragEnd();
+
+    event.preventDefault();
   }
 
   /**
