@@ -103,6 +103,9 @@
 
         describe('#trigger', () => {
           it('should remove pb-over, append the last dragged element as last child, and ends the dragdrop', () => {
+            let event = {
+              preventDefault: _.spiedFunction()
+            };
             let lastDraggedEl = doc.createElement('div');
             DragDrop.dragStart(lastDraggedEl, 0, 0);
             el.classList.add('pb-over');
@@ -110,26 +113,32 @@
             _.spy(lastDraggedEl, 'attachedCallback');
             _.spy(DragDrop, 'dragEnd');
 
-            droppable.trigger(el);
+            droppable.trigger(el, event);
             expect(el.classList.contains('pb-over')).to.be.false();
             expect(el.children[0]).to.be.equal(lastDraggedEl);
             expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
             expect(DragDrop.dragEnd).calledWith().at.least(1);
+            expect(event.preventDefault).calledWith().at.least(1);
           });
           it('should only remove pb-over and ends drag if the last dragged element is null', () => {
+            let event = {
+              preventDefault: _.spiedFunction()
+            };
             DragDrop.dragStart(null, 0, 0);
             el.classList.add('pb-over');
 
             _.spy(DragDrop, 'dragEnd');
 
-            droppable.trigger(el);
+            droppable.trigger(el, event);
             expect(el.classList.contains('pb-over')).to.be.false();
             expect(DragDrop.dragEnd).calledWith().at.least(1);
+            expect(event.preventDefault).calledWith().at.least(1);
           });
         });
 
         describe('#register', () => {
           let fakeEvents;
+          let fakeEvent;
 
           beforeEach(done => {
             fakeEvents = {
@@ -140,6 +149,11 @@
                 return fakeEvents;
               }
             };
+
+            fakeEvent = {
+              preventDefault: _.spiedFunction()
+            };
+
             _.spy(fakeEvents, 'listen');
             _.spy(Events, 'of').overrideReturn(fakeEvents);
             done();
@@ -162,12 +176,13 @@
             DragDrop.dragStart(document.createElement('div'));
 
             expect(fakeEvents.listen).calledWith('dragenter', handlerCaptor).at.least(1);
-            handlerCaptor.matchingArgs[0]();
+            handlerCaptor.matchingArgs[0](fakeEvent);
             expect(el.classList.contains('pb-over')).to.be.true();
+            expect(fakeEvent.preventDefault).calledWith().at.least(1);
           });
           it('should remove pb-over on dragleave', () => {
             droppable.register(el);
-            droppable[__onDragEnter__](el);
+            droppable[__onDragEnter__](el, fakeEvent);
             let handlerCaptor = _M.isA(Function);
 
             expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
@@ -182,7 +197,7 @@
             droppable.register(el);
 
             DragDrop.dragStart(document.createElement('div'));
-            droppable[__onDragEnter__](el);
+            droppable[__onDragEnter__](el, fakeEvent);
             
             let handlerCaptor = _M.isA(Function);
             expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
@@ -195,20 +210,20 @@
             droppable.register(el);
             let handlerCaptor = _M.isA(Function);
             expect(fakeEvents.listen).calledWith('drop', handlerCaptor).at.least(1);
-            handlerCaptor.matchingArgs[0]();
-            expect(droppable.trigger).calledWith(el).at.least(1);
+            handlerCaptor.matchingArgs[0](fakeEvent);
+            expect(droppable.trigger).calledWith(el, fakeEvent).at.least(1);
           });
           it('should remove pb-over on if lastDraggedEl is set to null', () => {
             DragDrop.dragStart(null, 0, 0);
             droppable.register(el);
-            droppable[__onDragEnter__](el);
+            droppable[__onDragEnter__](el, fakeEvent);
             droppable[__onLastDraggedElChange__](el);
             expect(el.classList.contains('pb-over')).to.be.false();
           });
           it('should be noop if lastDraggedEl is set to an element', () => {
             DragDrop.dragStart(doc.createElement('div'), 0, 0);
             droppable.register(el);
-            droppable[__onDragEnter__](el);
+            droppable[__onDragEnter__](el, fakeEvent);
             droppable[__onLastDraggedElChange__](el);
             expect(el.classList.contains('pb-over')).to.be.true();
           });

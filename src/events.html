@@ -58,24 +58,15 @@ class Action {
    * @method __isRegistered__
    * @param {string} type The type of event to be checked.
    * @param {string} eventName Name of the event to be checked.
-   * @param {Function=} handler The function to be checked.
-   * @return {Boolean} If handler is given, true iff the handler is registered to the given event
-   *     name and type. Otherwise, true iff there is a handler registered to the event name and 
-   *     type.
    * @private
    */
-  [__isRegistered__](type, eventName, handler) {
+  [__isRegistered__](type, eventName) {
     if (!this[__element__][__scope__][type]) {
       return false;
     }
 
     // TODO(gs): This check is too strict.
-    let eventSet = this[__element__][__scope__][type][eventName];
-    if (handler) {
-      return !!eventSet && eventSet.has(handler);
-    } else {
-      return !!eventSet && eventSet.size > 0;
-    }
+    return !!this[__element__][__scope__][type][eventName];
   }
 
   /**
@@ -89,7 +80,7 @@ class Action {
    * @private
    */
   [__register__](type, eventName, handler) {
-    if (this[__isRegistered__](type, eventName, handler)) {
+    if (this[__isRegistered__](type, eventName)) {
       return this;
     }
 
@@ -99,10 +90,7 @@ class Action {
       this[__element__][__scope__][type] = {};
     }
 
-    if (!this[__element__][__scope__][type][eventName]) {
-      this[__element__][__scope__][type][eventName] = new Set();
-    }
-    this[__element__][__scope__][type][eventName].add(handler);
+    this[__element__][__scope__][type][eventName] = handler;
     return this;
   }
 
@@ -147,15 +135,12 @@ class Action {
       return this;
     }
 
-    if (!handler) {
-      // Unregisters all handlers for the given event name
-      eventSet.forEach(
-          registeredHandler => this[__unregister__](type, eventName, registeredHandler));
-    } else {
-      // Unregister the given event name.
-      HANDLERS[type].unregister(this, eventName, handler);
-      eventSet.delete(handler);
-    }
+    // Unregister the given event name.
+    HANDLERS[type].unregister(
+        this, 
+        eventName, 
+        this[__element__][__scope__][type][eventName]);
+    this[__element__][__scope__][type][eventName] = null;
 
     return this;
   }
@@ -195,11 +180,9 @@ class Action {
    * @method hasListener
    * @param {string} eventName Name of the event to be checked.
    * @param {Function=} handler The function to be checked.
-   * @return {Boolean} If handler is given, true iff the handler is listening to the given event
-   *     name. Otherwise, true iff there is a handler registered to the event name.
    */
-  hasListener(eventName, handler) {
-    return this[__isRegistered__](TYPES.DOM, eventName, handler);
+  hasListener(eventName) {
+    return this[__isRegistered__](TYPES.DOM, eventName);
   }
 
   /**
