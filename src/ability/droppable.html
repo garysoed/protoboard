@@ -182,8 +182,8 @@ export default class Droppable extends Ability {
 
       // TODO(gs): attached callback doesn't seem to be called on appendChild.
       // https://github.com/webcomponents/webcomponentsjs/issues/18
-      if (DragDrop.lastDraggedEl.attachedCallback) {
-        DragDrop.lastDraggedEl.attachedCallback();
+      if (lastDraggedEl.attachedCallback) {
+        lastDraggedEl.attachedCallback();
       }
     }
     DragDrop.dragEnd();

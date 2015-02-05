@@ -24,10 +24,12 @@
   describe('Events', () => {
     let el;
     let scope;
+    let scope2;
 
     beforeEach(function(done) {
       el = doc.createElement('div');
       scope = Symbol();
+      scope2 = Symbol();
       done();
     });
 
@@ -47,13 +49,12 @@
       });
       it('should return true if a handler is registered to the given event name', () => {
         let eventName = 'event';
-        let handler = () => {};
-        Events.of(el, scope).listen(eventName, handler);
-        expect(Events.of(el, scope)[__isRegistered__]('dom', eventName, handler)).to.be.true();
+        Events.of(el, scope).listen(eventName, () => {});
+        expect(Events.of(el, scope)[__isRegistered__]('dom', eventName)).to.be.true();
       });
-      it('should return false if the given handler is not registered to the given event name', () => {
+      it('should return false if the scope is different', () => {
         Events.of(el, scope).listen('event', () => {});
-        expect(Events.of(el, scope)[__isRegistered__]('dom', 'event', () => {})).to.be.false();
+        expect(Events.of(el, scope2)[__isRegistered__]('dom', 'event')).to.be.false();
       });
     });
 
@@ -83,17 +84,15 @@
       let event0 = 'event0';
       let event1 = 'event1';
       let event2 = 'event2';
-      let handler000 = () => {};
-      let handler001 = () => {};
+      let handler00 = () => {};
       let handler01 = () => {};
-      let handler1 = () => {};
+      let handler12 = () => {};
 
       beforeEach(function(done) {
         Events.of(el, scope)
-            [__register__](type0, event0, handler000)
-            [__register__](type0, event0, handler001)
+            [__register__](type0, event0, handler00)
             [__register__](type0, event1, handler01)
-            [__register__](type1, event2, handler1);
+            [__register__](type1, event2, handler12);
         done();
       });
 
@@ -102,18 +101,16 @@
         _.spy($.prototype, 'off');
 
         Events.of(el, scope)[__unregister__]();
-        expect(el.removeEventListener).calledWith(event0, handler000).at.least(1);
-        expect(el.removeEventListener).calledWith(event0, handler001).at.least(1);
+        expect(el.removeEventListener).calledWith(event0, handler00).at.least(1);
         expect(el.removeEventListener).calledWith(event1, handler01).at.least(1);
-        expect($(el).off).calledWith(event2, handler1).at.least(1);
+        expect($(el).off).calledWith(event2, handler12).at.least(1);
       });
       it('should unregister all handlers listening to the given type', () => {
         _.spy(el, 'removeEventListener');
         _.spy($.prototype, 'off');
 
         Events.of(el, scope)[__unregister__](type0);
-        expect(el.removeEventListener).calledWith(event0, handler000).at.least(1);
-        expect(el.removeEventListener).calledWith(event0, handler001).at.least(1);
+        expect(el.removeEventListener).calledWith(event0, handler00).at.least(1);
         expect(el.removeEventListener).calledWith(event1, handler01).at.least(1);
         expect($(el).off).called().to.be.equal(0);
       });
@@ -122,8 +119,7 @@
         _.spy($.prototype, 'off');
 
         Events.of(el, scope)[__unregister__](type0, event0);
-        expect(el.removeEventListener).calledWith(event0, handler000).at.least(1);
-        expect(el.removeEventListener).calledWith(event0, handler001).at.least(1);
+        expect(el.removeEventListener).calledWith(event0, handler00).at.least(1);
         expect(el.removeEventListener).calledWith(event1, _M.any()).to.be.equal(0);
         expect($(el).off).called().to.be.equal(0);
       });
@@ -131,9 +127,8 @@
         _.spy(el, 'removeEventListener');
         _.spy($.prototype, 'off');
 
-        Events.of(el, scope)[__unregister__](type0, event0, handler000);
-        expect(el.removeEventListener).calledWith(event0, handler000).at.least(1);
-        expect(el.removeEventListener).calledWith(event0, handler001).to.be.equal(0);
+        Events.of(el, scope)[__unregister__](type0, event0, handler00);
+        expect(el.removeEventListener).calledWith(event0, handler00).at.least(1);
         expect(el.removeEventListener).calledWith(event1, _M.any()).to.be.equal(0);
         expect($(el).off).called().to.be.equal(0);
       });

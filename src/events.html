@@ -44,13 +44,14 @@ class Action {
    * @class Events.Action
    * @constructor
    * @param {!Element} element Element to operate on.
-   * @param {!Object} scope Scope of the registered events.
+   * @param {!Object} scope Scope of the registered events. TODO(gs): USE THE SCOPE!!!!!!!
    */
   constructor(element, scope) {
     this[__element__] = element;
+    this[__scope__] = scope;
     
-    if (!this[__element__][__scope__]) {
-      this[__element__][__scope__] = {};
+    if (!this[__element__][scope]) {
+      this[__element__][scope] = {};
     }
   }
 
@@ -61,12 +62,12 @@ class Action {
    * @private
    */
   [__isRegistered__](type, eventName) {
-    if (!this[__element__][__scope__][type]) {
+    if (!this[__element__][this[__scope__]][type]) {
       return false;
     }
 
     // TODO(gs): This check is too strict.
-    return !!this[__element__][__scope__][type][eventName];
+    return !!this[__element__][this[__scope__]][type][eventName];
   }
 
   /**
@@ -86,11 +87,11 @@ class Action {
 
     HANDLERS[type].register(this, eventName, handler);
 
-    if (!this[__element__][__scope__][type]) {
-      this[__element__][__scope__][type] = {};
+    if (!this[__element__][this[__scope__]][type]) {
+      this[__element__][this[__scope__]][type] = {};
     }
 
-    this[__element__][__scope__][type][eventName] = handler;
+    this[__element__][this[__scope__]][type][eventName] = handler;
     return this;
   }
 
@@ -115,7 +116,7 @@ class Action {
   [__unregister__](type, eventName, handler) {
     if (!type) {
       // Unregisters all events.
-      for (let registeredType in this[__element__][__scope__]) {
+      for (let registeredType in this[__element__][this[__scope__]]) {
         this[__unregister__](registeredType);
       }
       return this;
@@ -123,13 +124,13 @@ class Action {
 
     if (!eventName) {
       // Unregisters all events of the given type.
-      for (let event in this[__element__][__scope__][type]) {
+      for (let event in this[__element__][this[__scope__]][type]) {
         this[__unregister__](type, event);
       }
       return this;
     }
 
-    let eventSet = this[__element__][__scope__][type][eventName];
+    let eventSet = this[__element__][this[__scope__]][type][eventName];
     if (!eventSet) {
       // Nothing is registered for this event name. Quit immediately.
       return this;
@@ -139,8 +140,8 @@ class Action {
     HANDLERS[type].unregister(
         this, 
         eventName, 
-        this[__element__][__scope__][type][eventName]);
-    this[__element__][__scope__][type][eventName] = null;
+        this[__element__][this[__scope__]][type][eventName]);
+    this[__element__][this[__scope__]][type][eventName] = null;
 
     return this;
   }
