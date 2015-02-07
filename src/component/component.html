@@ -1,12 +1,12 @@
 <base href="../..">
 
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/pbelement.html">
 <link rel="import" href="out/utils.html">
 
 <script>
 // TODO(gs): Inject the imports.
-Inject.provide('pb_component_Component', (PbElement, Utils) => {
+DI.bind('pb_component_Component', (PbElement, Utils) => {
 
 /**
  * Base class for all components.

@@ -2,7 +2,7 @@
 
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
 <link rel="import" href="out/service/dragdrop.html">
 <link rel="import" href="out/utils.html">
@@ -16,10 +16,17 @@
 </template>
 
 <script>
-Inject.provide('pb_region_Rect', (Abilities, DragDrop, Droppable, Region, Utils) => {
-
-let doc = document.currentScript.ownerDocument;
-let template = doc.querySelector('template');
+DI
+    .constant('pb$doc', document.currentScript.ownerDocument)
+    .with('pb$template', pb$doc => pb$doc.querySelector('template'))
+    .bind('pb_region_Rect', (
+        Abilities, 
+        DragDrop, 
+        Droppable, 
+        Region, 
+        Utils, 
+        pb$doc, 
+        pb$template) => {
 
 const EL_NAME = 'pb-r-rect';
 
@@ -129,7 +136,7 @@ class Rect extends Region {
 
   createdCallback() {
     super.createdCallback();
-    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    this.createShadowRoot().appendChild(Utils.activateTemplate(pb$template, pb$doc));
   }
 }
 

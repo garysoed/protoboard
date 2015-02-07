@@ -2,8 +2,8 @@
 
 <script src="bower_components/handlebars/handlebars.js"></script>
 
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 
 <script>
-Inject.provide('Handlebars', () => Handlebars);
+DI.bind('Handlebars', () => Handlebars);
 </script>

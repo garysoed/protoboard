@@ -1,11 +1,10 @@
 <base href="..">
 
-<link rel="import" href="out/third_party/">
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-Inject.provide('pb_t', (_, Utils) => {
+DI.bind('pb_t', (_, Utils) => {
   let TestUtil = {
     createFakeAbility(name) {
       return { 

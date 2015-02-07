@@ -2,11 +2,11 @@
 
 <link rel="import" href="out/ability/ability.html">
 <link rel="import" href="out/check.html">
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-Inject.provide('pb_ability_Toggleable', (Ability, Check, Utils) => {
+DI.bind('pb_ability_Toggleable', (Ability, Check, Utils) => {
 
 /**
  * Provides decorator to make an element toggleable between two states.

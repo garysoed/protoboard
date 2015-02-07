@@ -1,11 +1,11 @@
 <base href="../..">
 
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/utils.html">
 
 <script>
 // TODO(gs): Delete the exports.
-Inject.provide('pb_service_DragDrop', (Utils) => {
+DI.bind('pb_service_DragDrop', (Utils) => {
 
 /**
  * Service that keeps track of drag and drop.

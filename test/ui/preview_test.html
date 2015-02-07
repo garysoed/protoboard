@@ -5,14 +5,14 @@
   <title>ui.Preview Unit Tests</title>
   <link rel="import" href="out/testbase.html">
 
-  <link rel="import" href="out/inject.html">
+  <link rel="import" href="out/di.html">
   <link rel="import" href="out/ui/preview.html">
 </head>
 <body>
   <script>
-  Inject
-      .with('doc', document.currentScript.ownerDocument)
-      .inject((expect, _, _M, doc) => {
+  DI
+      .constant('doc', document.currentScript.ownerDocument)
+      .run((expect, _, _M, ui_Preview, doc) => {
 
   describe('ui.Preview', () => {
     describe('#attachedCallback', () => {

@@ -5,10 +5,13 @@
 // Private symbols.
 const __function__ = Symbol();
 const __localBindings__ = Symbol('localBindings');
+const __localScope__ = Symbol('localScope');
 const __name__ = Symbol();
 const __parentScope__ = Symbol('parentScope');
 const __resolvedValues__ = Symbol();
 const __values__ = Symbol('values');
+
+const __get__ = Symbol('get');
 
 const FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
 const SEPARATOR = '_';
@@ -23,8 +26,9 @@ class Provider {
    * @param {string} [name=null] Reference name of the provider. This is used for detecting cyclic
    *    dependencies.
    */
-  constructor(fn, name = null) {
+  constructor(fn, localScope, name = null) {
     this[__function__] = fn;
+    this[__localScope__] = localScope;
     this[__name__] = name;
     this[__resolvedValues__] = new Map();
   }
@@ -44,7 +48,20 @@ class Provider {
         let arg = arg.trim();
 
         // TODO(gs): Handle cyclic dependency.
-        let value = scope.get(arg);
+        let value = undefined;
+
+        // Check the given scope first
+        value = scope[__get__](arg, scope);
+
+        if (value === undefined) {
+          // If value cannot be resolved in the given scope, check the local dependency.
+          value = this[__localScope__][__get__](arg, scope);
+        }
+
+        if (value === undefined) {
+          // If value cannot be resolved in the local scope, check the global bindings.
+          value = getGlobal(arg, scope);
+        }
 
         if (value === undefined) {
           if (this[__name__]) {
@@ -157,6 +174,19 @@ class Scope {
     this[__parentScope__] = parentScope;
   }
 
+  [__get__](key, scope) {
+    let provider = this[__localBindings__].get(key);
+    if (provider === undefined) {
+      if (this[__parentScope__]) {
+        return this[__parentScope__][__get__](key, scope);
+      } else {
+        return undefined;
+      }
+    } else {
+      return provider.resolve(scope);
+    }
+  }
+
   /**
    * Creates a new child scope with the given value bound to the given key in its local binding.
    *
@@ -168,8 +198,12 @@ class Scope {
    */
   with(key, value) {
     let childScope = new Scope(this);
-    childScope[__localBindings__].add(key, new Provider(value, key));
+    childScope[__localBindings__].add(key, new Provider(value, this, key));
     return childScope;
+  }
+
+  constant(key, value) {
+    return this.with(key, () => value);
   }
 
   /**
@@ -179,10 +213,9 @@ class Scope {
    * @param {string} key The key to bound the value to.
    * @param {!Function} fn The function to run. The function's arguments will be bound based on
    *    their names.
-   * @return {[type]} [description]
    */
   bind(key, value) {
-    bindings.add(key, new Provider(value, key));
+    bindings.add(key, new Provider(value, this, key));
   }
 
   /**
@@ -195,29 +228,36 @@ class Scope {
    * @return {*} The value bound to the given key, or undefined if no values can be found.
    */
   get(key) {
-    let provider = this[__localBindings__].get(key);
-    if (provider === undefined) {
-      if (this[__parentScope__]) {
-        return this[__parentScope__].get(key);
-      } else {
-        let globalProvider = bindings.get(key);
-        if (globalProvider === undefined) {
-          return undefined;
-        } else {
-          return globalProvider.resolve(this);
-        }
-      }
+    let value = this[__get__](key);
+    if (value === undefined) {
+      return getGlobal(key, this);
     } else {
-      return provider.resolve(this);
+      return value;
     }
   }
 
+  /**
+   * Runs the given function after injecting any dependencies.
+   *
+   * @method run
+   * @param {!Function} fn The function to run. The function's arguments will be bound based on
+   *    their names.
+   */
   run(fn) {
-    new Provider(fn).resolve(this);
+    new Provider(fn, this).resolve(this);
   }
 }
 
 const bindings = new BindingTree();
+
+function getGlobal(key, scope) {
+  let globalProvider = bindings.get(key);
+  if (globalProvider === undefined) {
+    return undefined;
+  } else {
+    return globalProvider.resolve(scope);
+  }
+}
 
 const DI = new Scope();
 window['DI'] = DI;

@@ -1,10 +1,10 @@
 <base href="..">
 
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-Inject.provide('pb_PbElement', (Utils) => {
+DI.bind('pb_PbElement', (Utils) => {
   /**
    * Base class of all ProtoBoard elements.
    * 

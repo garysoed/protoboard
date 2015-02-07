@@ -9,7 +9,7 @@
 </head>
 <body>
   <script>
-  Inject.inject((Utils) => {
+  DI.run(Utils => {
     let expect = chai.expect;
     let _ = spies.Spies;
 
@@ -18,6 +18,37 @@
     describe('DI', () => {
       describe('DI$Provider', () => {
         describe('#resolve', () => {
+          it('should prefer the value from the given scope', () => {
+            let localScope = new DI.Scope().with('a', () => 1);
+            let givenScope = new DI.Scope().with('a', () => 2);
+            let innerFn = _.spiedFunction().overrideReturn(4);
+            let fn = a => innerFn(a);
+
+            let provider = new DI.Provider(fn, localScope);
+            expect(provider.resolve(givenScope)).to.be.equal(4);
+            expect(innerFn).calledWith(2).at.least(1);
+          });
+          it('should prefer the value from the local scope if value from given scope cannot be resolved', () => {
+            let localScope = new DI.Scope().with('a', () => 1);
+            let givenScope = new DI.Scope();
+            let innerFn = _.spiedFunction().overrideReturn(4);
+            let fn = a => innerFn(a);
+
+            let provider = new DI.Provider(fn, localScope);
+            expect(provider.resolve(givenScope)).to.be.equal(4);
+            expect(innerFn).calledWith(1).at.least(1);
+
+          });
+          it('should use the global value if given or local scopes cannot resolve the value', () => {
+            DI.bind('a', () => 2);
+            let givenScope = new DI.Scope();
+            let innerFn = _.spiedFunction().overrideReturn(4);
+            let fn = a => innerFn(a);
+
+            let provider = new DI.Provider(fn, new DI.Scope());
+            expect(provider.resolve(givenScope)).to.be.equal(4);
+            expect(innerFn).calledWith(2).at.least(1);
+          });
           it('should call the function using its arguments for bound values', () => {
             let rv = 3;
             let innerFn = _.spiedFunction().overrideReturn(rv);
@@ -33,14 +64,14 @@
                 .with('a', () => 1)
                 .with('b', () => 2);
 
-            let provider = new DI.Provider(fn);
+            let provider = new DI.Provider(fn, scope);
 
             expect(provider.resolve(scope)).to.be.equal(rv);
           });
           it('should cache the result for the same scope', () => {
             let scope = {};
             let fn = _.spiedFunction().overrideReturn(3);
-            let provider = new DI.Provider(fn);
+            let provider = new DI.Provider(fn, scope);
             provider.resolve(scope);
             provider.resolve(scope);
             
@@ -51,7 +82,7 @@
             let scope2 = {};
             let fn = _.spiedFunction().overrideReturn(3);
 
-            let provider = new DI.Provider(fn);
+            let provider = new DI.Provider(fn, scope1);
 
             provider.resolve(scope1);
             provider.resolve(scope2);
@@ -61,21 +92,21 @@
           it('should throw exception if an argument cannot be found', () => {
             let name = 'name';
 
-            let provider = new DI.Provider(a => 3, name);
+            let provider = new DI.Provider(a => 3, DI, name);
 
-            expect(() => provider.resolve({ get: () => undefined })).to.throw(`${name}`);
+            expect(() => provider.resolve(DI)).to.throw(`${name}`);
           });
           it('should throw exception if an argument cannot be found for nameless provider', () => {
-            let provider = new DI.Provider(a => 3);
-            expect(() => provider.resolve({ get: () => undefined })).to.throw('run expression');
+            let provider = new DI.Provider(a => 3, DI);
+            expect(() => provider.resolve(DI)).to.throw('run expression');
           });
           it('should print warning if the function returns undefined', () => {
             let name = 'name';
 
             _.spy(console, 'warn').overrideReturn();
 
-            let provider = new DI.Provider(() => undefined, name);
-            provider.resolve({});
+            let provider = new DI.Provider(() => undefined, DI, name);
+            provider.resolve(DI);
             expect(console.warn).calledWith(`Value of ${name} is undefined`).at.least(1);
           });
         });

@@ -4,7 +4,7 @@
 <link rel="import" href="out/ability/droppable.html">
 <link rel="import" href="out/ability/shuffleable.html">
 <link rel="import" href="out/ability/triggerable.html">
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
 <link rel="import" href="out/utils.html">
 
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-Inject.provide('pb_region_Deck', (
+DI.bind('pb_region_Deck', (
     Abilities, 
     Droppable, 
     Region, 

@@ -5,12 +5,12 @@
   <title>DragDrop Unit Tests</title>
   <link rel="import" href="out/testbase.html">
 
-  <link rel="import" href="out/inject.html">
+  <link rel="import" href="out/di.html">
   <link rel="import" href="out/service/dragdrop.html">
 </head>
 <body>
   <script>
-  Inject.inject((expect, _, DragDrop) => {
+  DI.run((expect, _, DragDrop) => {
 
   describe('DragDrop', () => {
     describe('#dragStart', () => {

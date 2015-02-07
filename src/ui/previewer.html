@@ -12,7 +12,10 @@
 </template>
 
 <script>
-Inject.provide('pb_ui_Previewer', (Events, PbElement, service_Preview, Utils) => {
+DI
+    .constant('pb$doc', document.currentScript.ownerDocument)
+    .with('pb$template', pb$doc => pb$doc.querySelector('template'))
+    .bind('pb_ui_Previewer', (Events, PbElement, service_Preview, Utils, pb$doc, pb$template) => {
 
 /**
  * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered 
@@ -22,9 +25,6 @@ Inject.provide('pb_ui_Previewer', (Events, PbElement, service_Preview, Utils) =>
  * @class ui.Previewer
  * @extends PbElement
  */
-
-let doc = document.currentScript.ownerDocument;
-let template = doc.querySelector('template');
 
 const EL_NAME = 'pb-u-previewer';
 
@@ -57,7 +57,7 @@ export default class Previewer extends PbElement {
   createdCallback() {
     super.createdCallback();
     this.createShadowRoot()
-        .appendChild(Utils.activateTemplate(template, doc));
+        .appendChild(Utils.activateTemplate(pb$template, pb$doc));
 
     this.attachedCallback();
   }

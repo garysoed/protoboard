@@ -6,7 +6,7 @@
 <link rel="import" href="out/ability/rotateable.html">
 <link rel="import" href="out/ability/toggleable.html">
 <link rel="import" href="out/component/component.html">
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/component/card.css">
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-Inject.provide('pb_component_Card', (
+DI.bind('pb_component_Card', (
     Abilities, 
     Contextable, 
     Draggable, 

@@ -2,7 +2,7 @@
 
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
 <link rel="import" href="out/service/dragdrop.html">
 <link rel="import" href="out/utils.html">
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-Inject.provide('pb_region_Hand', (Abilities, DragDrop, Droppable, Region, Utils) => {
+DI.bind('pb_region_Hand', (Abilities, DragDrop, Droppable, Region, Utils) => {
 
 /**
  * @class region.Hand

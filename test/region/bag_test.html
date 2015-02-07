@@ -6,7 +6,7 @@
 
   <link rel="import" href="out/testbase.html">
 
-  <link rel="import" href="out/inject.html">
+  <link rel="import" href="out/di.html">
   <link rel="import" href="out/region/bag.html">
   <link rel="import" href="out/utils.html">
 </head>
@@ -19,9 +19,9 @@
     <div pb-placeholder>Placeholder</div>
   </pb-r-bag>
   <script>
-  Inject
-      .with('doc', document.currentScript.ownerDocument)
-      .inject((expect, _, doc, Bag, Utils) => {
+  DI
+      .with('doc', () => document.currentScript.ownerDocument)
+      .run((expect, _, doc, Bag, Utils) => {
 
   let BagDraggable = Bag.BagDraggable;
 

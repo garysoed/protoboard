@@ -1,13 +1,13 @@
 <base href="../..">
 
 <link rel="import" href="out/events.html">
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/pbelement.html">
 <link rel="import" href="out/service/preview.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-Inject.provide('pb_ui_Preview', (Events, PbElement, service_Preview, Utils) => {
+DI.bind('pb_ui_Preview', (Events, PbElement, service_Preview, Utils) => {
 
 /**
  * Class that contains a preview if the mouse enters the parent element. This will display

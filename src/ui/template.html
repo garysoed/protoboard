@@ -7,9 +7,8 @@
 <link rel="import" href="out/utils.html">
 
 <script>
-Inject
-    .with('doc', document.currentScript.ownerDocument)
-    .provide('pb_ui_Template', (Check, PbElement, Utils, Handlebars, doc) => {
+DI
+    .bind('pb_ui_Template', (Check, PbElement, Utils, Handlebars) => {
 
 /**
  * Contains a handlebars js template. When this element is created, it will process the handlebars

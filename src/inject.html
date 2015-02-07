@@ -81,7 +81,7 @@ class Provider {
  * Provides dependency injection. The main way to use this is to call the #provide method.
  *
  * ```javascript
- * Inject.provide('test_Object', function(a, b) {
+ * DI.bind('test_Object', function(a, b) {
  *   return {};
  * });
  * ```
@@ -99,96 +99,96 @@ class Provider {
 
 let Inject = {
 
-  [__resolveKey__](key, providers) {
-    // Full path.
-    if (providers[key]) {
-      return providers[key];
-    }
+  // [__resolveKey__](key, providers) {
+  //   // Full path.
+  //   if (providers[key]) {
+  //     return providers[key];
+  //   }
 
-    // Otherwise, check for the postfix.
-    for (let existingKey in providers) {
-      let index = existingKey.indexOf(key, existingKey.length - key.length);
-      if (index >= 0 && (index === 0 || existingKey[index - 1] === '_')) {
-        return providers[existingKey];
-      }
-    }
+  //   // Otherwise, check for the postfix.
+  //   for (let existingKey in providers) {
+  //     let index = existingKey.indexOf(key, existingKey.length - key.length);
+  //     if (index >= 0 && (index === 0 || existingKey[index - 1] === '_')) {
+  //       return providers[existingKey];
+  //     }
+  //   }
 
-    return undefined;
-  },
+  //   return undefined;
+  // },
 
-  /**
-   * Binds the result of the given function to the given key.
-   *
-   * @method provide
-   * @param {string} key The binding key.
-   * @param {!Function} providerFn The function that returns the value to be bound.
-   * @static
-   */
-  provide(key, providerFn) {
-    (new Provider(providerFn, key)).inject();
-  },
+  // /**
+  //  * Binds the result of the given function to the given key.
+  //  *
+  //  * @method provide
+  //  * @param {string} key The binding key.
+  //  * @param {!Function} providerFn The function that returns the value to be bound.
+  //  * @static
+  //  */
+  // provide(key, providerFn) {
+  //   (new Provider(providerFn, key)).inject();
+  // },
 
-  /**
-   * Runs the given function with injected values.
-   *
-   * @method inject
-   * @param {!Function} providerFn The function to run.
-   * @static
-   */
-  inject(providerFn) {
-    (new Provider(providerFn)).inject();
-  },
+  // /**
+  //  * Runs the given function with injected values.
+  //  *
+  //  * @method inject
+  //  * @param {!Function} providerFn The function to run.
+  //  * @static
+  //  */
+  // inject(providerFn) {
+  //   (new Provider(providerFn)).inject();
+  // },
 
-  /**
-   * Binds additional values for providing a value. These values will only be bound for this 
-   * instance of provider.
-   *
-   * @method with
-   * @param {!Object} localValues Object whose key is the binding key and value is the value to be
-   *    bound to that key.
-   * @return {!Object} Object with the provide function and with function. See documentations on
-   *    those methods.
-   * @static
-   */
-  with(key, value) {
-    let localValues = {};
-    localValues[key] = value;
-    return {
-      with(key, value) {
-        localValues[key] = value;
-        return this;
-      },
+  // *
+  //  * Binds additional values for providing a value. These values will only be bound for this 
+  //  * instance of provider.
+  //  *
+  //  * @method with
+  //  * @param {!Object} localValues Object whose key is the binding key and value is the value to be
+  //  *    bound to that key.
+  //  * @return {!Object} Object with the provide function and with function. See documentations on
+  //  *    those methods.
+  //  * @static
+   
+  // with(key, value) {
+  //   let localValues = {};
+  //   localValues[key] = value;
+  //   return {
+  //     with(key, value) {
+  //       localValues[key] = value;
+  //       return this;
+  //     },
 
-      provide(key, providerFn) {
-        (new Provider(providerFn, key, localValues)).inject();
-      },
+  //     provide(key, providerFn) {
+  //       (new Provider(providerFn, key, localValues)).inject();
+  //     },
 
-      inject(providerFn) {
-        (new Provider(providerFn, null, localValues)).inject();
-      }
-    };
-  },
+  //     inject(providerFn) {
+  //       (new Provider(providerFn, null, localValues)).inject();
+  //     }
+  //   };
+  // },
 
-  /**
-   * @method get
-   * @param {string} key The binding key of the value to return.
-   * @return {*} The bound value, or undefined if no values were bound.
-   * @static
-   */
-  get(key) {
-    let registered = this[__resolveKey__](key, providers);
-    return registered !== undefined ? registered[__value__] : undefined;
-  },
+  // /**
+  //  * @method get
+  //  * @param {string} key The binding key of the value to return.
+  //  * @return {*} The bound value, or undefined if no values were bound.
+  //  * @static
+  //  */
+  // get(key) {
+  //   let registered = this[__resolveKey__](key, providers);
+  //   return registered !== undefined ? registered[__value__] : undefined;
+  // },
 
-  /**
-   * @method getProvider
-   * @param {string} key The binding key of the provider to return.
-   * @return {Inject.Provider} The bound provider object, or undefined if no providers were bound.
-   * @static
-   */
-  getProvider(key) {
-    return this[__resolveKey__](key, providers);
-  }
+  // /**
+  //  * @method getProvider
+  //  * @param {string} key The binding key of the provider to return.
+  //  * @return {Inject.Provider} The bound provider object, or undefined if no providers were bound.
+  //  * @static
+  //  */
+  // getProvider(key) {
+  //   return this[__resolveKey__](key, providers);
+  // }
 };
 
 window['Inject'] = Inject;

@@ -8,14 +8,14 @@
 
   <link rel="import" href="out/ability/ability.html">
   <link rel="import" href="out/ability/contextable.html">
-  <link rel="import" href="out/inject.html">
+  <link rel="import" href="out/di.html">
   <link rel="import" href="out/utils.html">
 </head>
 <body>
   <script>
-  Inject
-      .with('doc', document.currentScript.ownerDocument)
-      .inject((
+  DI
+      .with('doc', () => document.currentScript.ownerDocument)
+      .run((
           expect,
           _,
           _F,

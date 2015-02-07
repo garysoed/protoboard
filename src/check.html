@@ -1,11 +1,11 @@
 <base href="..">
 
-<link rel="import" href="out/inject.html">
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/utils.html">
 
 <script>
 
-Inject.provide('pb_Check', (Utils) => {
+DI.bind('pb_Check', (Utils) => {
 
   /**
    * Utility class to check string values and parse them to different types.

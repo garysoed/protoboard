@@ -13,9 +13,9 @@
   <template id="badTemplate">Wrong</template>
 
   <script>
-  Inject
-      .with('doc', document.currentScript.ownerDocument)
-      .inject((expect, _, _M, doc, Utils) => {
+  DI
+      .constant('doc', document.currentScript.ownerDocument)
+      .run((expect, _, _M, doc, Utils) => {
 
   describe('Utils', () => {
     describe('#extractTemplate', () => {
