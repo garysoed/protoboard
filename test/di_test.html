@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>DI Unit Tests</title>
+
+  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="out/di.html">
+</head>
+<body>
+  <script>
+  Inject.inject((Utils) => {
+    let expect = chai.expect;
+    let _ = spies.Spies;
+
+    let doc = document.currentScript.ownerDocument;
+
+    describe('DI', () => {
+      describe('DI$Provider', () => {
+        describe('#resolve', () => {
+          it('should call the function using its arguments for bound values', () => {
+            let rv = 3;
+            let innerFn = _.spiedFunction().overrideReturn(rv);
+            let fn = (a, b) => {
+              return innerFn(a, b);
+            };
+
+            let boundedValues = {
+              'a': 1,
+              'b': 2
+            };
+            let scope = new DI.Scope()
+                .with('a', () => 1)
+                .with('b', () => 2);
+
+            let provider = new DI.Provider(fn);
+
+            expect(provider.resolve(scope)).to.be.equal(rv);
+          });
+          it('should cache the result for the same scope', () => {
+            let scope = {};
+            let fn = _.spiedFunction().overrideReturn(3);
+            let provider = new DI.Provider(fn);
+            provider.resolve(scope);
+            provider.resolve(scope);
+            
+            expect(fn).called().to.be.equal(1);
+          });
+          it('should call the function again for a different scope', () => {
+            let scope1 = {};
+            let scope2 = {};
+            let fn = _.spiedFunction().overrideReturn(3);
+
+            let provider = new DI.Provider(fn);
+
+            provider.resolve(scope1);
+            provider.resolve(scope2);
+            
+            expect(fn).called().to.be.equal(2);
+          });
+          it('should throw exception if an argument cannot be found', () => {
+            let name = 'name';
+
+            let provider = new DI.Provider(a => 3, name);
+
+            expect(() => provider.resolve({ get: () => undefined })).to.throw(`${name}`);
+          });
+          it('should throw exception if an argument cannot be found for nameless provider', () => {
+            let provider = new DI.Provider(a => 3);
+            expect(() => provider.resolve({ get: () => undefined })).to.throw('run expression');
+          });
+          it('should print warning if the function returns undefined', () => {
+            let name = 'name';
+
+            _.spy(console, 'warn').overrideReturn();
+
+            let provider = new DI.Provider(() => undefined, name);
+            provider.resolve({});
+            expect(console.warn).calledWith(`Value of ${name} is undefined`).at.least(1);
+          });
+        });
+      });
+
+      describe('DI$BindingTree', () => {
+        describe('#add', () => {
+          it('should create the expected tree', () => {
+            let tree = new DI.BindingTree();
+            let __values__ = Utils.getSymbol(tree, 'values');
+            tree.add('a_b', 'aB');
+            tree.add('b_b', 'bB');
+            tree.add('a_c', 'aC');
+
+            expect(tree[__values__].get('c')).to.be.eql({ key: 'a_c', value: 'aC' });
+            
+            let subTree = tree[__values__].get('b');
+            expect(subTree[__values__].get('a')).to.be.eql({ key: 'a_b', value: 'aB' });
+            expect(subTree[__values__].get('b')).to.be.eql({ key: 'b_b', value: 'bB' });
+          });
+          it('should throw exception if a key is already bound', () => {
+            let tree = new DI.BindingTree();
+            tree.add('a', 'a');
+            expect(() => tree.add('a', 'b')).to.throw('Key a');
+          });
+        });
+
+        describe('#get', () => {
+          let tree;
+          beforeEach(done => {
+            tree = new DI.BindingTree();
+            tree.add('a_b', 'aB');
+            tree.add('b_b', 'bB');
+            tree.add('c', 'c');
+            done();
+          })
+
+          it('should return the value if the key has no collisions', () => {
+            expect(tree.get('c')).to.be.equal('c');
+          });
+          it('should return the value if the key has collision', () => {
+            expect(tree.get('b_b')).to.be.equal('bB');
+          });
+          it('should return undefined if value cannot be found', () => {
+            expect(tree.get('d')).to.be.undefined();
+          });
+          it('should return undefined if duplicate values cannot be resolved.', () => {
+            expect(tree.get('b')).to.be.undefined();
+          });
+        });
+      });
+
+      describe('DI$Scope', () => {
+        describe('#with', () => {
+          it('should return a child scope with the local binding added and parent reference', () => {
+            let scope = new DI.Scope();
+            const __parentScope__ = Utils.getSymbol(scope, 'parentScope');
+            const __localBindings__ = Utils.getSymbol(scope, 'localBindings');
+
+            let value = 'value';
+            let child = scope.with('a', () => value);
+            expect(child[__parentScope__]).to.be.equal(scope);
+            expect(child[__localBindings__].get('a').resolve(child)).to.be.equal(value);
+          });
+        });
+
+        describe('#bind', () => {
+          it('should bind the given value and key globally', () => {
+            let scope = new DI.Scope();
+            let value = 'value';
+            scope.bind('v', () => value);
+            expect(DI.bindings.get('v').resolve(scope)).to.be.equal(value);
+          });
+        });
+
+        describe('#get', () => {
+          it('should resolve the value bound in the local scope first', () => {
+            DI.bind('a', () => 3);
+            let scope = DI
+                .with('a', () => 1)
+                .with('a', () => 2);
+            expect(scope.get('a')).to.be.equal(2);
+          });
+          it('should resolve the value bound in the parent scope', () => {
+            DI.bind('a', () => 3);
+            let scope = DI
+                .with('a', () => 1)
+                .with('b', () => 2);
+            expect(scope.get('a')).to.be.equal(1);
+          });
+          it('should resolve to the globally bound value', () => {
+            DI.bind('a', () => 3);
+            expect(DI.get('a')).to.be.equal(3);
+          });
+          it('should return undefined if no values is bound', () => {
+            expect(DI.get('a')).to.be.undefined();
+          });
+        });
+      });
+
+      afterEach(done => {
+        const __values__ = Utils.getSymbol(DI.bindings, 'values');
+        DI.bindings[__values__] = new Map();
+        _.reset();
+        done();
+      })
+    });
+  });
+  </script>
+</body>
