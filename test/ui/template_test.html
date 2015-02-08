@@ -6,151 +6,150 @@
   <link rel="import" href="out/testbase.html">
 
   <link rel="import" href="out/di.html">
+  <link rel="import" href="out/third_party/handlebars.html">
   <link rel="import" href="out/ui/template.html">
 </head>
 <body>
   <script>
   DI
+      .with('$registry', Registry => new Registry())
+      .with('Handlebars', _ => {
+        let handlebars = Handlebars.create();
+        handlebars.registerHelper = (name, fn) => {
+          handlebars.helperName = name;
+          handlebars.helperFn = fn;
+        };
+        return handlebars;
+      })
       .constant('doc', document.currentScript.ownerDocument)
       .constant('DI', window['DI'])
-      .run((expect, _, _M, Template, doc, DI) => {
+      .run((expect, _, _M, $registry, Handlebars, Template, doc) => {
 
   describe('Template', () => {
     let origTemplate;
-    let handlebar;
     let forHelper;
 
     before(done => {
-      // handlebar = Handlebars.create();
-      // _.spy(handlebar, 'registerHelper');
-      // origTemplate = DI.get('pb_ui_Template');
-      // // DI.getProvider('pb_ui_Template')
-      // //     .with('Handlebars', handlebar)
-      // //     .with('doc', doc)
-      // //     .inject();
-      // let isAFunction = _M.isA(Function);
-      // expect(handlebar.registerHelper).calledWith('pb-for', isAFunction).at.least(1);
-      // forHelper = isAFunction.matchingArgs[0];
+      $registry.register(doc);
+      expect(Handlebars.helperName).to.equal('pb-for');
+      forHelper = Handlebars.helperFn;
       done();
     });
       
     describe('#createdCallback', () => {
-      // TODO(gs): How to test this???
-      // it('should replace the innerHTML', () => {
-      //   let templateStr = 'Template String';
-      //   let compiledTemplateStr = 'Compiled template string';
-      //   let compiledTemplate = _.spiedFunction().overrideReturn(compiledTemplateStr);
-      //   let promise = { then: _.spiedFunction() };
+      it('should replace the innerHTML', () => {
+        let templateStr = 'Template String';
+        let compiledTemplateStr = 'Compiled template string';
+        let compiledTemplate = _.spiedFunction().overrideReturn(compiledTemplateStr);
+        let promise = { then: _.spiedFunction() };
 
-      //   _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
-      //   _.spy(Promise, 'all').overrideReturn(promise);
+        _.spy(Handlebars, 'compile').overrideReturn(compiledTemplate);
+        _.spy(Promise, 'all').overrideReturn(promise);
 
-      //   let templateEl = $(doc.body)
-      //       .html('<pb-u-template>' + templateStr + '</pb-u-template>')[0];
+        let templateEl = $(doc.body)
+            .html('<pb-u-template>' + templateStr + '</pb-u-template>')[0];
 
-      //   expect(Promise.all).calledWith([]).at.least(1);
+        expect(Promise.all).calledWith([]).at.least(1);
 
-      //   let callbackCaptor = _M.isA(Function);
-      //   expect(promise.then).calledWith(callbackCaptor).at.least(1);
-      //   callbackCaptor.matchingArgs[0]([]);
+        let callbackCaptor = _M.isA(Function);
+        expect(promise.then).calledWith(callbackCaptor).at.least(1);
+        callbackCaptor.matchingArgs[0]([]);
 
-      //   expect(handlebar.compile).calledWith(templateStr).at.least(1);
-      //   expect(templateEl.innerHTML).to.be.equal(compiledTemplateStr);
-      // });
-      // it('should take data as variable name to global', () => {
-      //   window['a'] = { b: 'data' };
-      //   let compiledTemplate = _.spiedFunction().overrideReturn('');
-      //   let promise = { then: _.spiedFunction() };
+        expect(Handlebars.compile).calledWith(templateStr).at.least(1);
+        expect(templateEl.innerHTML).to.be.equal(compiledTemplateStr);
+      });
+      it('should take data as variable name to global', () => {
+        window['a'] = { b: 'data' };
+        let compiledTemplate = _.spiedFunction().overrideReturn('');
+        let promise = { then: _.spiedFunction() };
 
-      //   _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
-      //   _.spy(Promise, 'all').overrideReturn(promise);
+        _.spy(Handlebars, 'compile').overrideReturn(compiledTemplate);
+        _.spy(Promise, 'all').overrideReturn(promise);
 
-      //   let templateEl = $(doc.body) .html('<pb-u-template data-a="a.b"></pb-u-template>')[0];
+        let templateEl = $(doc.body) .html('<pb-u-template data-a="a.b"></pb-u-template>')[0];
 
-      //   expect(Promise.all).calledWith([['a', 'data']]).at.least(1);
+        expect(Promise.all).calledWith([['a', 'data']]).at.least(1);
 
-      //   let callbackCaptor = _M.isA(Function);
-      //   expect(promise.then).calledWith(callbackCaptor).at.least(1);
-      //   callbackCaptor.matchingArgs[0]([['a', 'data']]);
+        let callbackCaptor = _M.isA(Function);
+        expect(promise.then).calledWith(callbackCaptor).at.least(1);
+        callbackCaptor.matchingArgs[0]([['a', 'data']]);
 
-      //   expect(compiledTemplate).calledWith({ a: window['a'].b }).at.least(1);
-      // });
-      // it('should take data as string value', () => {
-      //   let data = 'data';
-      //   let compiledTemplate = _.spiedFunction().overrideReturn('');
-      //   let promise = { then: _.spiedFunction() };
+        expect(compiledTemplate).calledWith({ a: window['a'].b }).at.least(1);
+      });
+      it('should take data as string value', () => {
+        let data = 'data';
+        let compiledTemplate = _.spiedFunction().overrideReturn('');
+        let promise = { then: _.spiedFunction() };
 
-      //   _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
-      //   _.spy(Promise, 'all').overrideReturn(promise);
+        _.spy(Handlebars, 'compile').overrideReturn(compiledTemplate);
+        _.spy(Promise, 'all').overrideReturn(promise);
 
-      //   let templateEl = $(doc.body).html('<pb-u-template data-a="data"></pb-u-template>')[0];
+        let templateEl = $(doc.body).html('<pb-u-template data-a="data"></pb-u-template>')[0];
 
-      //   expect(Promise.all).calledWith([['a', data]]).at.least(1);
+        expect(Promise.all).calledWith([['a', data]]).at.least(1);
 
-      //   let callbackCaptor = _M.isA(Function);
-      //   expect(promise.then).calledWith(callbackCaptor).at.least(1);
-      //   callbackCaptor.matchingArgs[0]([['a', data]]);
+        let callbackCaptor = _M.isA(Function);
+        expect(promise.then).calledWith(callbackCaptor).at.least(1);
+        callbackCaptor.matchingArgs[0]([['a', data]]);
 
-      //   expect(compiledTemplate).calledWith({a: data}).at.least(1);
-      // });
-      // it('should take promise as a value', () => {
-      //   let data = 'data';
-      //   window['a'] = Promise.resolve(data);
-      //   let compiledTemplate = _.spiedFunction().overrideReturn('');
-      //   let promise = { then: _.spiedFunction() };
+        expect(compiledTemplate).calledWith({a: data}).at.least(1);
+      });
+      it('should take promise as a value', () => {
+        let data = 'data';
+        window['a'] = Promise.resolve(data);
+        let compiledTemplate = _.spiedFunction().overrideReturn('');
+        let promise = { then: _.spiedFunction() };
 
-      //   _.spy(handlebar, 'compile').overrideReturn(compiledTemplate);
-      //   _.spy(Promise, 'all').overrideReturn(promise);
+        _.spy(Handlebars, 'compile').overrideReturn(compiledTemplate);
+        _.spy(Promise, 'all').overrideReturn(promise);
 
-      //   let templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-u-template>')[0];
+        let templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-u-template>')[0];
 
-      //   expect(Promise.all).calledWith([['a', window['a']]]).at.least(1);
+        expect(Promise.all).calledWith([['a', window['a']]]).at.least(1);
 
-      //   let callbackCaptor = _M.isA(Function);
-      //   expect(promise.then).calledWith(callbackCaptor).at.least(1);
-      //   callbackCaptor.matchingArgs[0]([['a', data]]);
+        let callbackCaptor = _M.isA(Function);
+        expect(promise.then).calledWith(callbackCaptor).at.least(1);
+        callbackCaptor.matchingArgs[0]([['a', data]]);
 
-      //   expect(compiledTemplate).calledWith({a: data}).at.least(1);
-
-      // });
+        expect(compiledTemplate).calledWith({a: data}).at.least(1);
+      });
     });
 
-    // describe('#pb-for', () => {
-    //   it('should repeat the inner block a number of times', () => {
-    //     let content = 'content';
-    //     let options = {
-    //       fn: _.spiedFunction().overrideReturn(content)
-    //     };
+    describe('#pb-for', () => {
+      it('should repeat the inner block a number of times', () => {
+        let content = 'content';
+        let options = {
+          fn: _.spiedFunction().overrideReturn(content)
+        };
 
-    //     let result = forHelper.call(handlebar, '0', '5', '2', options);
-    //     expect(result).to.be.equal(content + content + content);
+        let result = forHelper.call(Handlebars, '0', '5', '2', options);
+        expect(result).to.be.equal(content + content + content);
 
-    //     let isAObject = _M.isA(Object);
-    //     expect(options.fn).calledWith(handlebar, isAObject).to.be.equal(3);
+        let isAObject = _M.isA(Object);
+        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(3);
 
-    //     let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
-    //     expect(indexes).to.be.eql([0, 2, 4]);
-    //   });
-    //   it('should default step to 1', () => {
-    //     let content = 'content';
-    //     let options = {
-    //       fn: _.spiedFunction().overrideReturn(content)
-    //     };
+        let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
+        expect(indexes).to.be.eql([0, 2, 4]);
+      });
+      it('should default step to 1', () => {
+        let content = 'content';
+        let options = {
+          fn: _.spiedFunction().overrideReturn(content)
+        };
 
-    //     let result = forHelper.call(handlebar, '0', '2', options);
-    //     expect(result).to.be.equal(content + content);
+        let result = forHelper.call(Handlebars, '0', '2', options);
+        expect(result).to.be.equal(content + content);
 
-    //     let isAObject = _M.isA(Object);
-    //     expect(options.fn).calledWith(handlebar, isAObject).to.be.equal(2);
+        let isAObject = _M.isA(Object);
+        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(2);
 
-    //     let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
-    //     expect(indexes).to.be.eql([0, 1]);
-    //   });
-    // });
+        let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
+        expect(indexes).to.be.eql([0, 1]);
+      });
+    });
 
     afterEach(function(done) {
       _.reset();
-      DI.bind('pb_ui_Template', () => origTemplate);
       done();
     });
   });
