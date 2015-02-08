@@ -32,7 +32,8 @@ const HANDLERS = {
 
 // Private symbols.
 const __element__ = Symbol();
-const __scope__ = Symbol();
+const __elementScopeMap__ = Symbol();
+const __scopeMap__ = Symbol();
 
 const __isRegistered__ = Symbol('isRegistered');
 const __register__ = Symbol('register');
@@ -44,15 +45,20 @@ class Action {
    * @class Events.Action
    * @constructor
    * @param {!Element} element Element to operate on.
-   * @param {!Object} scope Scope of the registered events. TODO(gs): USE THE SCOPE!!!!!!!
+   * @param {!Object} scope Scope of the registered events.
    */
   constructor(element, scope) {
     this[__element__] = element;
-    this[__scope__] = scope;
     
-    if (!this[__element__][scope]) {
-      this[__element__][scope] = {};
+    if (!this[__element__][__scopeMap__]) {
+      this[__element__][__scopeMap__] = new Map();
     }
+
+    if (!this[__element__][__scopeMap__].has(scope)) {
+      this[__element__][__scopeMap__].set(scope, new Map());
+    }
+
+    this[__elementScopeMap__] = this[__element__][__scopeMap__].get(scope);
   }
 
   /**
@@ -62,12 +68,12 @@ class Action {
    * @private
    */
   [__isRegistered__](type, eventName) {
-    if (!this[__element__][this[__scope__]][type]) {
+    if (!this[__elementScopeMap__].get(type)) {
       return false;
     }
 
     // TODO(gs): This check is too strict.
-    return !!this[__element__][this[__scope__]][type][eventName];
+    return this[__elementScopeMap__].get(type).has(eventName);
   }
 
   /**
@@ -87,11 +93,11 @@ class Action {
 
     HANDLERS[type].register(this, eventName, handler);
 
-    if (!this[__element__][this[__scope__]][type]) {
-      this[__element__][this[__scope__]][type] = {};
+    if (!this[__elementScopeMap__].has(type)) {
+      this[__elementScopeMap__].set(type, new Map());
     }
 
-    this[__element__][this[__scope__]][type][eventName] = handler;
+    this[__elementScopeMap__].get(type).set(eventName, handler);
     return this;
   }
 
@@ -116,7 +122,7 @@ class Action {
   [__unregister__](type, eventName, handler) {
     if (!type) {
       // Unregisters all events.
-      for (let registeredType in this[__element__][this[__scope__]]) {
+      for (let registeredType of this[__elementScopeMap__].keys()) {
         this[__unregister__](registeredType);
       }
       return this;
@@ -124,24 +130,24 @@ class Action {
 
     if (!eventName) {
       // Unregisters all events of the given type.
-      for (let event in this[__element__][this[__scope__]][type]) {
-        this[__unregister__](type, event);
+      let typeMap = this[__elementScopeMap__].get(type);
+      if (typeMap) {
+        for (let event of typeMap.keys()) {
+          this[__unregister__](type, event);
+        }
       }
       return this;
     }
 
-    let eventSet = this[__element__][this[__scope__]][type][eventName];
-    if (!eventSet) {
-      // Nothing is registered for this event name. Quit immediately.
-      return this;
+    let registeredEvent = this[__elementScopeMap__].get(type).get(eventName);
+    if (registeredEvent) {
+      // Unregister the given event name.
+      HANDLERS[type].unregister(
+          this, 
+          eventName, 
+          registeredEvent);
+      this[__elementScopeMap__].get(type).delete(eventName);
     }
-
-    // Unregister the given event name.
-    HANDLERS[type].unregister(
-        this, 
-        eventName, 
-        this[__element__][this[__scope__]][type][eventName]);
-    this[__element__][this[__scope__]][type][eventName] = null;
 
     return this;
   }
