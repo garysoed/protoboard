@@ -171,4 +171,5 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('push', ['karma', 'doc'], shell.task('git push'));
+gulp.task('commit', ['karma'], shell.task('git commit -a'));
+gulp.task('push', ['commit', 'doc'], shell.task('git push'));
