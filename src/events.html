@@ -5,253 +5,251 @@
 <script>
 DI.bind('pb_Events', (Utils) => {
 
-const TYPES = {
-  DOM: 'dom',
-  JQUERY: 'jquery'
-};
+  const TYPES = {
+    DOM: 'dom',
+    JQUERY: 'jquery'
+  };
 
-const HANDLERS = {
-  [TYPES.DOM]: {
-    register: function(action, eventName, handler) {
-      action[__element__].addEventListener(eventName, handler);
-    },
-    unregister: function(action, eventName, handler) {
-      action[__element__].removeEventListener(eventName, handler);
-    }
-  },
-
-  [TYPES.JQUERY]: {
-    register: function(action, eventName, handler) {
-      $(action[__element__]).on(eventName, handler);
-    },
-    unregister: function(action, eventName, handler) {
-      $(action[__element__]).off(eventName, handler);
-    }
-  }
-};
-
-// Private symbols.
-const __element__ = Symbol();
-const __elementScopeMap__ = Symbol();
-const __scopeMap__ = Symbol();
-
-const __isRegistered__ = Symbol('isRegistered');
-const __register__ = Symbol('register');
-const __unregister__ = Symbol('unregister');
-
-class Action {
-
-  /**
-   * @class Events.Action
-   * @constructor
-   * @param {!Element} element Element to operate on.
-   * @param {!Object} scope Scope of the registered events.
-   */
-  constructor(element, scope) {
-    this[__element__] = element;
-    
-    if (!this[__element__][__scopeMap__]) {
-      this[__element__][__scopeMap__] = new Map();
-    }
-
-    if (!this[__element__][__scopeMap__].has(scope)) {
-      this[__element__][__scopeMap__].set(scope, new Map());
-    }
-
-    this[__elementScopeMap__] = this[__element__][__scopeMap__].get(scope);
-  }
-
-  /**
-   * @method __isRegistered__
-   * @param {string} type The type of event to be checked.
-   * @param {string} eventName Name of the event to be checked.
-   * @private
-   */
-  [__isRegistered__](type, eventName) {
-    if (!this[__elementScopeMap__].get(type)) {
-      return false;
-    }
-
-    // TODO(gs): This check is too strict.
-    return this[__elementScopeMap__].get(type).has(eventName);
-  }
-
-  /**
-   * Registers the given handler to the given event name for the given type.
-   *
-   * @method __register__
-   * @param {string} type The type of event to register the handler to.
-   * @param {string} eventName Name of the event to register the handler to.
-   * @param {!Function} handler Handler to be called for the given event.
-   * @return {Events} The Events object for chaining.
-   * @private
-   */
-  [__register__](type, eventName, handler) {
-    if (this[__isRegistered__](type, eventName)) {
-      return this;
-    }
-
-    HANDLERS[type].register(this, eventName, handler);
-
-    if (!this[__elementScopeMap__].has(type)) {
-      this[__elementScopeMap__].set(type, new Map());
-    }
-
-    this[__elementScopeMap__].get(type).set(eventName, handler);
-    return this;
-  }
-
-  /**
-   * Unregisters the handlers in the scope for the element.
-   *
-   * - If type, eventName and handler are given, only the handler listening to that event of that
-   *   type will be unregistered.
-   * - If only type and eventName are given, all handlers listening to that event name of that type
-   *   will be unregistered.
-   * - If only type is given, all handlers listening for that type will be unregistered.
-   * - If nothing is given, all handlers in the scope will be unregistered.
-   *
-   * @method __unregister__
-   * @param {string=} type Type of event to unregister.
-   * @param {string=} eventName If given, all handlers listening to this event will be 
-   *     unregistered.
-   * @param {Function=} handler Handler to unlisten.
-   * @return {!Events} The Events object for chaining.
-   * @private
-   */
-  [__unregister__](type, eventName, handler) {
-    if (!type) {
-      // Unregisters all events.
-      for (let registeredType of this[__elementScopeMap__].keys()) {
-        this[__unregister__](registeredType);
+  const HANDLERS = {
+    [TYPES.DOM]: {
+      register: function(action, eventName, handler) {
+        action[__element__].addEventListener(eventName, handler);
+      },
+      unregister: function(action, eventName, handler) {
+        action[__element__].removeEventListener(eventName, handler);
       }
+    },
+
+    [TYPES.JQUERY]: {
+      register: function(action, eventName, handler) {
+        $(action[__element__]).on(eventName, handler);
+      },
+      unregister: function(action, eventName, handler) {
+        $(action[__element__]).off(eventName, handler);
+      }
+    }
+  };
+
+  // Private symbols.
+  const __element__ = Symbol();
+  const __elementScopeMap__ = Symbol();
+  const __scopeMap__ = Symbol();
+
+  const __isRegistered__ = Symbol('isRegistered');
+  const __register__ = Symbol('register');
+  const __unregister__ = Symbol('unregister');
+
+  class Action {
+
+    /**
+     * @class Events.Action
+     * @constructor
+     * @param {!Element} element Element to operate on.
+     * @param {!Object} scope Scope of the registered events.
+     */
+    constructor(element, scope) {
+      this[__element__] = element;
+      
+      if (!this[__element__][__scopeMap__]) {
+        this[__element__][__scopeMap__] = new Map();
+      }
+
+      if (!this[__element__][__scopeMap__].has(scope)) {
+        this[__element__][__scopeMap__].set(scope, new Map());
+      }
+
+      this[__elementScopeMap__] = this[__element__][__scopeMap__].get(scope);
+    }
+
+    /**
+     * @method __isRegistered__
+     * @param {string} type The type of event to be checked.
+     * @param {string} eventName Name of the event to be checked.
+     * @private
+     */
+    [__isRegistered__](type, eventName) {
+      if (!this[__elementScopeMap__].get(type)) {
+        return false;
+      }
+
+      // TODO(gs): This check is too strict.
+      return this[__elementScopeMap__].get(type).has(eventName);
+    }
+
+    /**
+     * Registers the given handler to the given event name for the given type.
+     *
+     * @method __register__
+     * @param {string} type The type of event to register the handler to.
+     * @param {string} eventName Name of the event to register the handler to.
+     * @param {!Function} handler Handler to be called for the given event.
+     * @return {Events} The Events object for chaining.
+     * @private
+     */
+    [__register__](type, eventName, handler) {
+      if (this[__isRegistered__](type, eventName)) {
+        return this;
+      }
+
+      HANDLERS[type].register(this, eventName, handler);
+
+      if (!this[__elementScopeMap__].has(type)) {
+        this[__elementScopeMap__].set(type, new Map());
+      }
+
+      this[__elementScopeMap__].get(type).set(eventName, handler);
       return this;
     }
 
-    if (!eventName) {
-      // Unregisters all events of the given type.
-      let typeMap = this[__elementScopeMap__].get(type);
-      if (typeMap) {
-        for (let event of typeMap.keys()) {
-          this[__unregister__](type, event);
+    /**
+     * Unregisters the handlers in the scope for the element.
+     *
+     * - If type, eventName and handler are given, only the handler listening to that event of that
+     *   type will be unregistered.
+     * - If only type and eventName are given, all handlers listening to that event name of that type
+     *   will be unregistered.
+     * - If only type is given, all handlers listening for that type will be unregistered.
+     * - If nothing is given, all handlers in the scope will be unregistered.
+     *
+     * @method __unregister__
+     * @param {string=} type Type of event to unregister.
+     * @param {string=} eventName If given, all handlers listening to this event will be 
+     *     unregistered.
+     * @param {Function=} handler Handler to unlisten.
+     * @return {!Events} The Events object for chaining.
+     * @private
+     */
+    [__unregister__](type, eventName, handler) {
+      if (!type) {
+        // Unregisters all events.
+        for (let registeredType of this[__elementScopeMap__].keys()) {
+          this[__unregister__](registeredType);
         }
+        return this;
       }
+
+      if (!eventName) {
+        // Unregisters all events of the given type.
+        let typeMap = this[__elementScopeMap__].get(type);
+        if (typeMap) {
+          for (let event of typeMap.keys()) {
+            this[__unregister__](type, event);
+          }
+        }
+        return this;
+      }
+
+      let registeredEvent = this[__elementScopeMap__].get(type).get(eventName);
+      if (registeredEvent) {
+        // Unregister the given event name.
+        HANDLERS[type].unregister(
+            this, 
+            eventName, 
+            registeredEvent);
+        this[__elementScopeMap__].get(type).delete(eventName);
+      }
+
       return this;
     }
 
-    let registeredEvent = this[__elementScopeMap__].get(type).get(eventName);
-    if (registeredEvent) {
-      // Unregister the given event name.
-      HANDLERS[type].unregister(
-          this, 
-          eventName, 
-          registeredEvent);
-      this[__elementScopeMap__].get(type).delete(eventName);
+    /**
+     * Calls addEventListener to the element, registering the given event name and handler.
+     *
+     * @method listen
+     * @param {string} eventName Name of the event to register the handler to.
+     * @param {!Function} handler Handler to be called for the given event.
+     * @return {Events} The Events object for chaining.
+     */
+    listen(eventName, handler) {
+      return this[__register__](TYPES.DOM, eventName, handler);
     }
 
-    return this;
+    /**
+     * Calls removeEventListener to the element, unregistering the handlers in the scope for the 
+     * element.
+     *
+     * - If eventName and handler are given, only the handler listening to that event will be 
+     *   unlistened.
+     * - If only eventName is given, all handlers listening to that event name will be unlistened.
+     * - If nothing is given, all handlers in the scope will be unlistened.
+     *
+     * @method unlisten
+     * @param {string=} eventName If given, all handlers listening to this event will be 
+     *     unlistened.
+     * @param {Function=} handler Handler to unlisten.
+     * @return {!Events} The Events object for chaining.
+     */
+    unlisten(eventName, handler) {
+      return this[__unregister__](TYPES.DOM, eventName, handler);
+    }
+
+    /**
+     * @method hasListener
+     * @param {string} eventName Name of the event to be checked.
+     * @param {Function=} handler The function to be checked.
+     */
+    hasListener(eventName) {
+      return this[__isRegistered__](TYPES.DOM, eventName);
+    }
+
+    /**
+     * Calls jQuery's on method on the element, registering the given event name and handler.
+     *
+     * @method on
+     * @param {string} eventName Name of the event to register the handler to.
+     * @param {!Function} handler Handler to be called for the given event.
+     * @return {Events} The Events object for chaining.
+     */
+    on(eventName, handler) {
+      return this[__register__](TYPES.JQUERY, eventName, handler);
+    }
+
+    /**
+     * Calls jQuery's off method on the element, unregistering the handlers in the scope for the 
+     * element.
+     *
+     * - If eventName and handler are given, only the handler listening to that event will be 
+     *   unlistened.
+     * - If only eventName is given, all handlers listening to that event name will be unlistened.
+     * - If nothing is given, all handlers in the scope will be unlistened.
+     *
+     * @method off
+     * @param {string=} eventName If given, all handlers listening to this event will be 
+     *     unlistened.
+     * @param {Function=} handler Handler to stop listening to.
+     * @return {!Events} The Events object for chaining.
+     */
+    off(eventName, handler) {
+      return this[__unregister__](TYPES.JQUERY, eventName, handler);
+    }
   }
 
   /**
-   * Calls addEventListener to the element, registering the given event name and handler.
+   * Utility class to register / unregister events easily.
    *
-   * @method listen
-   * @param {string} eventName Name of the event to register the handler to.
-   * @param {!Function} handler Handler to be called for the given event.
-   * @return {Events} The Events object for chaining.
-   */
-  listen(eventName, handler) {
-    return this[__register__](TYPES.DOM, eventName, handler);
-  }
-
-  /**
-   * Calls removeEventListener to the element, unregistering the handlers in the scope for the 
-   * element.
-   *
-   * - If eventName and handler are given, only the handler listening to that event will be 
-   *   unlistened.
-   * - If only eventName is given, all handlers listening to that event name will be unlistened.
-   * - If nothing is given, all handlers in the scope will be unlistened.
-   *
-   * @method unlisten
-   * @param {string=} eventName If given, all handlers listening to this event will be 
-   *     unlistened.
-   * @param {Function=} handler Handler to unlisten.
-   * @return {!Events} The Events object for chaining.
-   */
-  unlisten(eventName, handler) {
-    return this[__unregister__](TYPES.DOM, eventName, handler);
-  }
-
-  /**
-   * @method hasListener
-   * @param {string} eventName Name of the event to be checked.
-   * @param {Function=} handler The function to be checked.
-   */
-  hasListener(eventName) {
-    return this[__isRegistered__](TYPES.DOM, eventName);
-  }
-
-  /**
-   * Calls jQuery's on method on the element, registering the given event name and handler.
-   *
-   * @method on
-   * @param {string} eventName Name of the event to register the handler to.
-   * @param {!Function} handler Handler to be called for the given event.
-   * @return {Events} The Events object for chaining.
-   */
-  on(eventName, handler) {
-    return this[__register__](TYPES.JQUERY, eventName, handler);
-  }
-
-  /**
-   * Calls jQuery's off method on the element, unregistering the handlers in the scope for the 
-   * element.
-   *
-   * - If eventName and handler are given, only the handler listening to that event will be 
-   *   unlistened.
-   * - If only eventName is given, all handlers listening to that event name will be unlistened.
-   * - If nothing is given, all handlers in the scope will be unlistened.
-   *
-   * @method off
-   * @param {string=} eventName If given, all handlers listening to this event will be 
-   *     unlistened.
-   * @param {Function=} handler Handler to stop listening to.
-   * @return {!Events} The Events object for chaining.
-   */
-  off(eventName, handler) {
-    return this[__unregister__](TYPES.JQUERY, eventName, handler);
-  }
-}
-
-/**
- * Utility class to register / unregister events easily.
- *
- * @class Events
- * @static
- */
-
-let Events = {
-  /**
-   * Creates an Events object that operates on the given element with the given scope.
-   *
-   * @method of
-   * @param  {!Element} element The element to operate on.
-   * @param  {!Object} scope Scope of the registered events.
-   * @return {!Events} Chainable Events object.
+   * @class Events
    * @static
    */
-  of(element, scope) {
-    return new Action(element, scope);
+
+  let Events = {
+    /**
+     * Creates an Events object that operates on the given element with the given scope.
+     *
+     * @method of
+     * @param  {!Element} element The element to operate on.
+     * @param  {!Object} scope Scope of the registered events.
+     * @return {!Events} Chainable Events object.
+     * @static
+     */
+    of(element, scope) {
+      return new Action(element, scope);
+    }
+  };
+
+  if (window['TEST_MODE']) {
+    Events.Action = Action;
   }
-};
 
-export default Events = Events;
-
-if (window['TEST_MODE']) {
-  Events.Action = Action;
-}
-
-return Events;
+  return Events;
 });
 </script>

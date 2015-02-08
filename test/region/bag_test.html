@@ -35,13 +35,13 @@
     before(done => {
       $registry.register(doc);
       done();
-    })
+    });
 
     describe('#createdCallback', () => {
       it('should create placeholder and its content if none is specified', () => {
         let el = doc.querySelector('#emptyChildren');
         let placeholder = el.querySelector('[pb-placeholder]');
-        expect(placeholder).to.exist;
+        expect(placeholder).to.exist();
         expect(placeholder.childElementCount).to.be.at.least(1);
       });
       it('should not create placeholder content if it is specified', () => {

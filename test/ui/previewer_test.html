@@ -28,7 +28,7 @@
       it('should create a shadow root', () => {
         let previewer = doc.createElement('pb-u-previewer');
         previewer.createdCallback();
-        expect(previewer.shadowRoot).to.exist;
+        expect(previewer.shadowRoot).to.exist();
       });
     });
 

@@ -5,31 +5,29 @@
 <link rel="import" href="out/utils.html">
 
 <script>
-// TODO(gs): Inject the imports.
 DI.bind('pb_component_Component', (PbElement, Utils) => {
 
-/**
- * Base class for all components.
- *
- * @class component.Component
- * @extends PbElement  
- */
-export default class Component extends PbElement {
-
   /**
-   * For testing only.
+   * Base class for all components.
+   *
    * @class component.Component
-   * @constructor
+   * @extends PbElement  
    */
-  constructor() { }
+  class Component extends PbElement {
 
-  createdCallback() {
-    super.createdCallback();
+    /**
+     * For testing only.
+     * @class component.Component
+     * @constructor
+     */
+    constructor() { }
+
+    createdCallback() {
+      super.createdCallback();
+    }
   }
-}
 
-return Component;
-
+  return Component;
 });
 
 </script>

@@ -6,59 +6,58 @@
 <script>
 DI.bind('pb_ability_Ability', Utils => {
 
-/**
- * Base class for all abilities. Any abilities must extend this class and implement the methods
- * in this class.
- *
- * @class ability.Ability
- */
-export default class Ability {
-
   /**
-   * Sets the default value of the given element.
+   * Base class for all abilities. Any abilities must extend this class and implement the methods
+   * in this class.
    *
-   * @method setDefaultValue
-   * @param {!Element} el The element whose default value should be set.
+   * @class ability.Ability
    */
-  setDefaultValue(el) { }
+  class Ability {
 
-  /**
-   * Called when an attribute was changed.
-   *
-   * @method attributeChangedCallback
-   * @param {!Element} el The element whose attribute was changed.
-   * @param {string} name The name of the attribute that was changed.
-   * @param {Object} oldValue The old value of the attribute.
-   * @param {Object} newValue The new value of the attribute.
-   */
-  attributeChangedCallback(el, name, oldValue, newValue) { }
+    /**
+     * Sets the default value of the given element.
+     *
+     * @method setDefaultValue
+     * @param {!Element} el The element whose default value should be set.
+     */
+    setDefaultValue(el) { }
 
-  /**
-   * Called when the element is attached to the document.
-   *
-   * @method attachedCallback
-   * @param {!Element} el The element that was attached.
-   */
-  attachedCallback(el) { }
+    /**
+     * Called when an attribute was changed.
+     *
+     * @method attributeChangedCallback
+     * @param {!Element} el The element whose attribute was changed.
+     * @param {string} name The name of the attribute that was changed.
+     * @param {Object} oldValue The old value of the attribute.
+     * @param {Object} newValue The new value of the attribute.
+     */
+    attributeChangedCallback(el, name, oldValue, newValue) { }
 
-  /**
-   * Called when the element is detached from the document.
-   *
-   * @method detachedCallback
-   * @param {!Element} el The element that was detached.
-   */
-  detachedCallback(el) { }
+    /**
+     * Called when the element is attached to the document.
+     *
+     * @method attachedCallback
+     * @param {!Element} el The element that was attached.
+     */
+    attachedCallback(el) { }
 
-  /**
-   * Triggers the effect of the ability on the given element.
-   *
-   * @method trigger
-   * @param {!Element} el The element to trigger the ability on.
-   */
-  trigger(el) { }
-}
+    /**
+     * Called when the element is detached from the document.
+     *
+     * @method detachedCallback
+     * @param {!Element} el The element that was detached.
+     */
+    detachedCallback(el) { }
 
-return Ability;
+    /**
+     * Triggers the effect of the ability on the given element.
+     *
+     * @method trigger
+     * @param {!Element} el The element to trigger the ability on.
+     */
+    trigger(el) { }
+  }
 
+  return Ability;
 });
 </script>

@@ -31,7 +31,7 @@ DI
   // Private symbols.
   const __getGlobal__ = Symbol();
 
-  export default class Template extends PbElement {
+  class Template extends PbElement {
 
     [__getGlobal__](path) {
       return path.split('.').reduce((previousValue, currentValue) => {

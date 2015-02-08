@@ -18,6 +18,7 @@ var gutil   = require('gulp-util');
 
 function chain(fn) {
   return through.obj(function(file, enc, callback) {
+    // TODO(gs): How to open a stream?
     var stream = gulp.src('')
         .pipe(plumber({
           errorHandler: function(err) {
@@ -40,15 +41,6 @@ function chain(fn) {
 
 
 // TODO(gs): Fix this.
-gulp.task('jshint', function() {
-  return gulp.src('./src/**/*.html')
-      .pipe(jshint({
-        esnext: true,
-        sub: true
-      }))
-      .pipe(jshint.reporter('jshint-stylish'))
-      .pipe(jshint.reporter('fail'));
-});
 
 gulp.task('doc', function() {
   return gulp.src('./src/**/*.html')
@@ -62,6 +54,21 @@ gulp.task('doc', function() {
       }))
       .pipe(gulp.dest('doc'));
 });
+
+function subJsHint() {
+  return chain(function(stream) {
+    var replace = subs();
+    return stream
+        .pipe(replace.extract)
+            .pipe(jshint({
+              esnext: true,
+              sub: true
+            }))
+            .pipe(jshint.reporter('jshint-stylish'))
+            .pipe(jshint.reporter('fail'))
+        .pipe(replace.inject)
+  })
+}
 
 function sub6to5() {
   return chain(function(stream) {
@@ -86,13 +93,18 @@ function subSass() {
   });
 }
 
-gulp.task('6to5-src', function() {
+gulp.task('jshint', function() {
+  return gulp.src(['./src/**/*.html', './test/**/*.html'])
+      .pipe(subJsHint());
+})
+
+gulp.task('6to5-src', ['jshint'], function() {
   return gulp.src(['./src/**/*.html'])
       .pipe(sub6to5())
       .pipe(gulp.dest('out'));
 });
 
-gulp.task('6to5-test', function() {
+gulp.task('6to5-test', ['jshint'], function() {
   return gulp.src(['./test/**/*_test.html', './test/testbase.html'])
       .pipe(sub6to5())
       .pipe(gulp.dest('out'));
@@ -147,6 +159,15 @@ gulp.task('watch', function() {
         .pipe(sub6to5())
         .pipe(debug({title: chalk.green('6to5')}))
         .pipe(gulp.dest('out'));
+  });
+
+  // JSHint
+  gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
+    var base = event.path.substring(__dirname.length).split('/')[1];
+    gulp.src(event.path, {base: base})
+        .pipe(plumber())
+        .pipe(subJsHint())
+        .pipe(debug({title: chalk.green('jshint')}));
   });
 });
 

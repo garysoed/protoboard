@@ -56,7 +56,7 @@
 
       dragStartHandler(event);
 
-      expect(el.classList.contains('pb-dragged')).to.be.true;
+      expect(el.classList.contains('pb-dragged')).to.be.true();
 
       // Check that dragend listener is registered to both children.
       let dragEndCaptor = _M.isA(Function);
@@ -65,7 +65,7 @@
 
       dragEndCaptor.matchingArgs[0](el);
 
-      expect(el.classList.contains('pb-dragged')).to.be.false;
+      expect(el.classList.contains('pb-dragged')).to.be.false();
     }
 
     function getRegisteredHandler(el, eventName) {
@@ -75,11 +75,11 @@
     }
 
     function expectUnregistered(draggable) {
-      expect(Events.of(draggable, child1).hasListener('dragstart')).to.be.false;
-      expect(Events.of(draggable, child1).hasListener('dragend')).to.be.false;
+      expect(Events.of(draggable, child1).hasListener('dragstart')).to.be.false();
+      expect(Events.of(draggable, child1).hasListener('dragend')).to.be.false();
 
-      expect(Events.of(draggable, child2).hasListener('dragstart')).to.be.false;
-      expect(Events.of(draggable, child2).hasListener('dragend')).to.be.false;
+      expect(Events.of(draggable, child2).hasListener('dragstart')).to.be.false();
+      expect(Events.of(draggable, child2).hasListener('dragend')).to.be.false();
     }
 
     describe('#setDefaultValue', () => {
@@ -89,7 +89,7 @@
       });
       it('should not do anything if value is already set', () => {
         $(el).attr('pb-draggable', false);
-        new Draggable(true).setDefaultValue(el)
+        new Draggable(true).setDefaultValue(el);
       });
     });
 

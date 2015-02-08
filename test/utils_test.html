@@ -22,7 +22,7 @@
       it('should extract the correct template', () => {
         let template = Utils.extractTemplate('#correctTemplate', doc);
         expect(template.textContent).to.be.equal('Correct');
-      })
+      });
     });
 
     describe('#nonNullFn', () => {
@@ -35,7 +35,7 @@
       });
 
       it('should return noop function if it does not exist', () => {
-        expect(Utils.nonNullFn({}, 'fn')()).to.be.undefined;
+        expect(Utils.nonNullFn({}, 'fn')()).to.be.undefined();
       });
     });
 
@@ -67,7 +67,7 @@
         expect(handler).calledWith(changeB.name, _M.any(), _M.any()).equal(0);
       });
       it('should listen to all properties when not given any names', () => {
-        let handler = _.spiedFunction()
+        let handler = _.spiedFunction();
         _.spy(Object, 'observe');
 
         Utils.observe(o, null /* property */, handler);

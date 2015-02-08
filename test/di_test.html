@@ -151,7 +151,7 @@
             tree.add('b_b', 'bB');
             tree.add('c', 'c');
             done();
-          })
+          });
 
           it('should return the value if the key has no collisions', () => {
             expect(tree.get('c')).to.be.equal('c');
@@ -221,7 +221,7 @@
         DI.bindings[__values__] = new Map();
         _.reset();
         done();
-      })
+      });
     });
   });
   </script>
