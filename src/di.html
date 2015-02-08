@@ -44,18 +44,25 @@ class Provider {
     if (!this[__resolvedValues__].has(scope)) {
       let argsString = this[__function__].toString().match(FN_ARGS)[1];
       let args = argsString ? argsString.split(',') : [];
+
       let resolvedArgs = args.map(arg => {
         let arg = arg.trim();
+        let optional = false;
+
+        if (arg.substring(0, 4) === 'opt_') {
+          arg = arg.substring(4);
+          optional = true;
+        }
 
         // TODO(gs): Handle cyclic dependency.
         let value = undefined;
 
-        // Check the given scope first
-        value = scope[__get__](arg, scope);
+        // Check the local scope first.
+        value = this[__localScope__][__get__](arg, scope);
 
         if (value === undefined) {
-          // If value cannot be resolved in the given scope, check the local dependency.
-          value = this[__localScope__][__get__](arg, scope);
+          // If value cannot be resolved in the local scope, check the given scope.
+          value = scope[__get__](arg, scope);
         }
 
         if (value === undefined) {
@@ -64,7 +71,9 @@ class Provider {
         }
 
         if (value === undefined) {
-          if (this[__name__]) {
+          if (optional) {
+            return undefined;
+          } else if (this[__name__]) {
             throw `Cannot find ${arg} while providing ${this[__name__]}`;
           } else {
             throw `Cannot find ${arg} while trying to run expression`;
@@ -216,6 +225,7 @@ class Scope {
    */
   bind(key, value) {
     bindings.add(key, new Provider(value, this, key));
+    return this;
   }
 
   /**

@@ -40,18 +40,18 @@
 
 <script>
 DI
-    .constant('pb$doc', document.currentScript.ownerDocument)
-    .with('pb$templateMain', pb$doc => pb$doc.querySelector('template#main'))
-    .with('pb$templateRow', pb$doc => pb$doc.querySelector('template#row'))
-    .with('pb$templateCol', pb$doc => pb$doc.querySelector('template#col'))
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('templateMain', doc => doc.querySelector('template#main'))
+    .with('templateRow', doc => doc.querySelector('template#row'))
+    .with('templateCol', doc => doc.querySelector('template#col'))
     .bind('pb_surface_RectGrid', (
         Check, 
         PbElement, 
         Utils, 
-        pb$doc,
-        pb$templateMain, 
-        pb$templateRow,
-        pb$templateCol) => {
+        doc,
+        templateMain, 
+        templateRow,
+        templateCol) => {
 
 const ATTR_ROW = 'pb-row';
 const ATTR_COL = 'pb-col';
@@ -79,7 +79,7 @@ export default class RectGrid extends PbElement {
 
     // Create the shadow DOM.
     this.createShadowRoot()
-        .appendChild(Utils.activateTemplate(pb$templateMain, pb$doc));
+        .appendChild(Utils.activateTemplate(templateMain, doc));
 
     // Initializes the data.
     let rowCount = Check($(this).attr(ATTR_ROW)).isInt().orThrows();
@@ -88,13 +88,13 @@ export default class RectGrid extends PbElement {
 
     // Add the rows.
     for (let row = 0; row < rowCount; row++) {
-      rootEl.appendChild(Utils.activateTemplate(pb$templateRow, pb$doc));
+      rootEl.appendChild(Utils.activateTemplate(templateRow, doc));
     }
 
     $(this.shadowRoot.querySelectorAll('#content > div'))
         .each((row, rowEl) => {
           for (let col = 0; col < colCount; col++) {
-            let colEl = Utils.activateTemplate(pb$templateCol, pb$doc);
+            let colEl = Utils.activateTemplate(templateCol, doc);
             $(colEl.querySelector('content'))
                 .attr('select', `[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`)
                 .attr(ATTR_ROW, row)

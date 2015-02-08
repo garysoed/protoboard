@@ -1,5 +1,6 @@
 <base href="../..">
 
+<link rel="import" href="out/di.html">
 <link rel="import" href="out/events.html">
 <link rel="import" href="out/pbelement.html">
 <link rel="import" href="out/service/preview.html">
@@ -13,80 +14,87 @@
 
 <script>
 DI
-    .constant('pb$doc', document.currentScript.ownerDocument)
-    .with('pb$template', pb$doc => pb$doc.querySelector('template'))
-    .bind('pb_ui_Previewer', (Events, PbElement, service_Preview, Utils, pb$doc, pb$template) => {
-
-/**
- * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered 
- * over. This works in tandem with [[ui.Preview|ui.Preview]] and 
- * [[service.Preview|service.Preview]].
- *
- * @class ui.Previewer
- * @extends PbElement
- */
-
-const EL_NAME = 'pb-u-previewer';
-
-// Private symbols.
-const __previewElHandler__ = Symbol();
-
-const __onPreviewElChanged__ = Symbol('onPreviewElChanged');
-
-export default class Previewer extends PbElement {
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', doc => doc.querySelector('template'))
+    .bind('pb_ui_Previewer', (
+        $registry,
+        Events, 
+        PbElement, 
+        service_Preview, 
+        Utils, 
+        doc, 
+        template) => {
 
   /**
-   * Called when the preview element has changed.
+   * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered 
+   * over. This works in tandem with [[ui.Preview|ui.Preview]] and 
+   * [[service.Preview|service.Preview]].
    *
-   * @method __onPreviewElChanged__
-   * @private
+   * @class ui.Previewer
+   * @extends PbElement
    */
-  [__onPreviewElChanged__]() {
-    if (service_Preview.previewedEl) {
-      this.innerHTML = service_Preview.previewedEl.innerHTML;
-    } else {
-      this.innerHTML = '';
+
+  const EL_NAME = 'pb-u-previewer';
+
+  // Private symbols.
+  const __previewElHandler__ = Symbol();
+
+  const __onPreviewElChanged__ = Symbol('onPreviewElChanged');
+
+  export default class Previewer extends PbElement {
+
+    /**
+     * Called when the preview element has changed.
+     *
+     * @method __onPreviewElChanged__
+     * @private
+     */
+    [__onPreviewElChanged__]() {
+      if (service_Preview.previewedEl) {
+        this.innerHTML = service_Preview.previewedEl.innerHTML;
+      } else {
+        this.innerHTML = '';
+      }
+    }
+
+    /**
+     * Called when the element is created
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+      this.createShadowRoot()
+          .appendChild(Utils.activateTemplate(template, doc));
+
+      this.attachedCallback();
+    }
+
+    /**
+     * Called when the element is attached to the document.
+     *
+     * @method attachedCallback
+     */
+    attachedCallback() {
+      super.attachedCallback();
+      this[__previewElHandler__] = Events.of(service_Preview, this)
+          .on(service_Preview.Events.ELEMENT_CHANGED,
+              this[__onPreviewElChanged__].bind(this));
+    }
+
+    /**
+     * Called when the element is detached from the document.
+     *
+     * @method detachedCallback
+     */
+    detachedCallback() {
+      Events.of(service_Preview, this).off();
+      super.detachedCallback();
     }
   }
 
-  /**
-   * Called when the element is created
-   *
-   * @method createdCallback
-   */
-  createdCallback() {
-    super.createdCallback();
-    this.createShadowRoot()
-        .appendChild(Utils.activateTemplate(pb$template, pb$doc));
+  $registry.add(EL_NAME, Previewer.prototype);
 
-    this.attachedCallback();
-  }
-
-  /**
-   * Called when the element is attached to the document.
-   *
-   * @method attachedCallback
-   */
-  attachedCallback() {
-    super.attachedCallback();
-    this[__previewElHandler__] = Events.of(service_Preview, this)
-        .on(service_Preview.Events.ELEMENT_CHANGED,
-            this[__onPreviewElChanged__].bind(this));
-  }
-
-  /**
-   * Called when the element is detached from the document.
-   *
-   * @method detachedCallback
-   */
-  detachedCallback() {
-    Events.of(service_Preview, this).off();
-    super.detachedCallback();
-  }
-}
-
-document.registerElement(EL_NAME, {prototype: Previewer.prototype});
-
-return Previewer;
+  return Previewer;
 });
 </script>

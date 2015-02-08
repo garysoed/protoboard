@@ -18,7 +18,7 @@
     describe('DI', () => {
       describe('DI$Provider', () => {
         describe('#resolve', () => {
-          it('should prefer the value from the given scope', () => {
+          it('should prefer the value from the local scope', () => {
             let localScope = new DI.Scope().with('a', () => 1);
             let givenScope = new DI.Scope().with('a', () => 2);
             let innerFn = _.spiedFunction().overrideReturn(4);
@@ -26,11 +26,11 @@
 
             let provider = new DI.Provider(fn, localScope);
             expect(provider.resolve(givenScope)).to.be.equal(4);
-            expect(innerFn).calledWith(2).at.least(1);
+            expect(innerFn).calledWith(1).at.least(1);
           });
-          it('should prefer the value from the local scope if value from given scope cannot be resolved', () => {
-            let localScope = new DI.Scope().with('a', () => 1);
-            let givenScope = new DI.Scope();
+          it('should prefer the value from the given scope if value from local scope cannot be resolved', () => {
+            let localScope = new DI.Scope();
+            let givenScope = new DI.Scope().with('a', () => 1);
             let innerFn = _.spiedFunction().overrideReturn(4);
             let fn = a => innerFn(a);
 
@@ -108,6 +108,15 @@
             let provider = new DI.Provider(() => undefined, DI, name);
             provider.resolve(DI);
             expect(console.warn).calledWith(`Value of ${name} is undefined`).at.least(1);
+          });
+          it('should try to resolve optional argument', () => {
+            let scope = new DI.Scope().constant('a', 3);
+            let provider = new DI.Provider(opt_a => opt_a, scope);
+            expect(provider.resolve(scope)).to.equal(3);
+          });
+          it('should return pass undefined for optional unresolvable argument', () => {
+            let provider = new DI.Provider(opt_a => opt_a, DI);
+            expect(provider.resolve(DI)).to.be.undefined();
           });
         });
       });

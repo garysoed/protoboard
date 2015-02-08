@@ -6,15 +6,22 @@
   <link rel="import" href="out/testbase.html">
 
   <link rel="import" href="out/di.html">
+  <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/ui/preview.html">
 </head>
 <body>
   <script>
   DI
+      .with('$registry', Registry => new Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, _M, ui_Preview, doc) => {
+      .run((expect, _, _M, $registry, ui_Preview, doc) => {
 
   describe('ui.Preview', () => {
+    before(done => {
+      $registry.register(doc);
+      done();
+    });
+
     describe('#attachedCallback', () => {
       it('should listen to mouse enter and leave on parent element', () => {
         let parent = document.createElement('div');

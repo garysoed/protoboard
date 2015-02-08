@@ -1,0 +1,31 @@
+<base href="../..">
+
+<link rel="import" href="out/di.html">
+
+<script>
+DI.bind('pb_service_Registry', () => {
+
+  const __elements__ = Symbol();
+
+  class Registry {
+    constructor() {
+      this[__elements__] = new Map();
+    }
+
+    add(name, prototype) {
+      if (this[__elements__].has(name)) {
+        throw `${name} is already registered`;
+      }
+      this[__elements__].set(name, prototype);
+    }
+
+    register(doc) {
+      for (let [name, prototype] of this[__elements__]) {
+        doc.registerElement(name, { prototype: prototype });
+      }
+    }
+  }
+
+  return Registry;
+});
+</script>

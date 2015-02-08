@@ -8,6 +8,7 @@
 
   <link rel="import" href="out/di.html">
   <link rel="import" href="out/region/bag.html">
+  <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/utils.html">
 </head>
 <body>
@@ -20,8 +21,9 @@
   </pb-r-bag>
   <script>
   DI
+      .with('$registry', Registry => new Registry())
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, doc, Bag, Utils) => {
+      .run((expect, _, doc, Bag, Utils, $registry) => {
 
   let BagDraggable = Bag.BagDraggable;
 
@@ -30,6 +32,11 @@
   let __placeHolderEl__ = Utils.getSymbol(Bag.prototype, 'placeHolderEl');
 
   describe('Bag', () => {
+    before(done => {
+      $registry.register(doc);
+      done();
+    })
+
     describe('#createdCallback', () => {
       it('should create placeholder and its content if none is specified', () => {
         let el = doc.querySelector('#emptyChildren');

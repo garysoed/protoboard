@@ -15,57 +15,63 @@
 </template>
 
 <script>
-DI.bind('pb_component_Token', (Abilities, Component, Draggable, Utils) => {
+DI
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', doc => doc.querySelector('template'))
+    .bind('pb_component_Token', (
+        $registry, 
+        Abilities, 
+        Component, 
+        Draggable, 
+        Utils,
+        doc,
+        template) => {
 
-let doc = document.currentScript.ownerDocument;
-let template = doc.querySelector('template');
-
-const EL_NAME = 'pb-c-token';
-
-/**
- * A simple movable component with only one state. Examples of token:
- * - Chess piece
- * - Cubes
- * - Damage marker
- *
- * To use this, create a `pb-c-token` element with one child element. This child element will be
- * displayed as the token.
- *
- * ```html
- * <!-- Example: A square token -->
- * <pb-c-token>
- *   <div style="background: red; width: 50px; height: 50px;"></div>
- * <pb-c-token>
- * ```
- *
- * Supported abilities:
- * - [[Draggable|ability.Draggable]]: Default enabled.
- *
- * @class component.Token
- * @extends component.Component
- */
-export default class Token extends Component {
+  const EL_NAME = 'pb-c-token';
 
   /**
-   * Called when the element is created.
+   * A simple movable component with only one state. Examples of token:
+   * - Chess piece
+   * - Cubes
+   * - Damage marker
    *
-   * @method createdCallback
+   * To use this, create a `pb-c-token` element with one child element. This child element will be
+   * displayed as the token.
+   *
+   * ```html
+   * <!-- Example: A square token -->
+   * <pb-c-token>
+   *   <div style="background: red; width: 50px; height: 50px;"></div>
+   * <pb-c-token>
+   * ```
+   *
+   * Supported abilities:
+   * - [[Draggable|ability.Draggable]]: Default enabled.
+   *
+   * @class component.Token
+   * @extends component.Component
    */
-  createdCallback() {
-    super.createdCallback();
-    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  export default class Token extends Component {
+
+    /**
+     * Called when the element is created.
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    }
   }
-}
 
-let draggable = new Draggable(true);
-document.registerElement(EL_NAME, {
-  prototype: Abilities.config(
-      Token,
-      {},
-      draggable).prototype
-});
+  let draggable = new Draggable(true);
+  $registry.add(
+      EL_NAME, 
+      Abilities.config(
+          Token,
+          {},
+          draggable).prototype);
 
-return Token;
-
+  return Token;
 });
 </script>

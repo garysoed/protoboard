@@ -1,0 +1,34 @@
+<base href="..">
+
+<link rel="import" href="out/di.html">
+<link rel="import" href="out/service/registry.html">
+<link rel="import" href="out/utils.html">
+
+<script>
+DI
+    .with('$registry', Registry => new Registry())
+    .run((
+      $registry,
+      opt_Bag,
+      opt_Card,
+      opt_Deck,
+      opt_Hand,
+      opt_ui_Preview,
+      opt_ui_Previewer,
+      opt_Rect,
+      opt_Token,
+      Utils) => {
+  $registry.register(document);
+
+  // Call this later.
+  setTimeout(() => {
+    let tags = Utils.
+        toArray(document.querySelectorAll(':unresolved')).
+        map(el => el.tagName.toLowerCase());
+    let tagSet = new Set(tags);
+    for (let tag of tagSet) {
+      console.warn(`Element ${tag} is unresolved`);
+    }
+  }, 0);
+});
+</script>

@@ -18,94 +18,98 @@
 </template>
 
 <script>
-DI.bind('pb_region_Hand', (Abilities, DragDrop, Droppable, Region, Utils) => {
+DI
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', doc => doc.querySelector('template'))
+    .bind('pb_region_Hand', (
+        $registry,
+        Abilities, 
+        DragDrop, 
+        Droppable, 
+        Region, 
+        Utils, 
+        doc, 
+        template) => {
 
-/**
- * @class region.Hand
- * @extends region.Region
- */
+  /**
+   * @class region.Hand
+   * @extends region.Region
+   */
 
-let doc = document.currentScript.ownerDocument;
-let template = doc.querySelector('template');
+  const EL_NAME = 'pb-r-hand';
 
-const EL_NAME = 'pb-r-hand';
-
-class ReorderableDroppable extends Droppable {
-  constructor(defaultValue) {
-    super(defaultValue);
-  }
-
-  trigger(el, event) {
-    el.classList.remove('pb-over');
-    let lastDraggedEl = DragDrop.lastDraggedEl;
-    if (!lastDraggedEl) {
-      return;
+  class ReorderableDroppable extends Droppable {
+    constructor(defaultValue) {
+      super(defaultValue);
     }
 
-    // Go through every children and find the index that the element should be.
-    let dropped = false;
-    for (let child of Utils.toArray(el.children)) {
-      let rect = child.getBoundingClientRect();
-      if (!dropped && rect.left + rect.width / 2 > event.clientX) {
-        dropped = true;
-        el.insertBefore(lastDraggedEl, child);
+    trigger(el, event) {
+      el.classList.remove('pb-over');
+      let lastDraggedEl = DragDrop.lastDraggedEl;
+      if (!lastDraggedEl) {
+        return;
+      }
+
+      // Go through every children and find the index that the element should be.
+      let dropped = false;
+      for (let child of Utils.toArray(el.children)) {
+        let rect = child.getBoundingClientRect();
+        if (!dropped && rect.left + rect.width / 2 > event.clientX) {
+          dropped = true;
+          el.insertBefore(lastDraggedEl, child);
+        }
+      }
+
+      if (!dropped) {
+        el.appendChild(lastDraggedEl);
       }
     }
+  }
 
-    if (!dropped) {
-      el.appendChild(lastDraggedEl);
+  export default class Hand extends Region {
+
+    /**
+     * Called when the element is created.
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+      this.createShadowRoot()
+          .appendChild(Utils.activateTemplate(template, doc));
+
+      this.attachedCallback();
+    }
+
+    /**
+     * Called when the element is attached to the document.
+     *
+     * @method attachedCallback
+     */
+    attachedCallback() {
+      super.attachedCallback();
+    }
+
+    /**
+     * Called when the element is detached from the document.
+     *
+     * @method detachedCallback
+     */
+    detachedCallback() {
+      super.detachedCallback();
     }
   }
-}
 
-export default class Hand extends Region {
 
-  /**
-   * Called when the element is created.
-   *
-   * @method createdCallback
-   */
-  createdCallback() {
-    super.createdCallback();
-    this.createShadowRoot()
-        .appendChild(Utils.activateTemplate(template, doc));
+  let droppable = new ReorderableDroppable(true);
+  $registry.add(
+      EL_NAME, 
+      Abilities.config(Hand, {}, droppable).prototype);
 
-    this.attachedCallback();
+  if (window['TEST_MODE']) {
+    Hand.ReorderableDroppable = ReorderableDroppable;
   }
 
-  /**
-   * Called when the element is attached to the document.
-   *
-   * @method attachedCallback
-   */
-  attachedCallback() {
-    super.attachedCallback();
-  }
-
-  /**
-   * Called when the element is detached from the document.
-   *
-   * @method detachedCallback
-   */
-  detachedCallback() {
-    super.detachedCallback();
-  }
-}
-
-
-let droppable = new ReorderableDroppable(true);
-document.registerElement(EL_NAME, {
-  prototype: Abilities.config(
-      Hand,
-      {},
-      droppable).prototype
-});
-
-if (window['TEST_MODE']) {
-  Hand.ReorderableDroppable = ReorderableDroppable;
-}
-
-return Hand;
-
+  return Hand;
 });
 </script>

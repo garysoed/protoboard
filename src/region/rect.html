@@ -17,144 +17,139 @@
 
 <script>
 DI
-    .constant('pb$doc', document.currentScript.ownerDocument)
-    .with('pb$template', pb$doc => pb$doc.querySelector('template'))
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', doc => doc.querySelector('template'))
     .bind('pb_region_Rect', (
+        $registry,
         Abilities, 
         DragDrop, 
         Droppable, 
         Region, 
         Utils, 
-        pb$doc, 
-        pb$template) => {
+        doc, 
+        template) => {
+  const EL_NAME = 'pb-r-rect';
 
-const EL_NAME = 'pb-r-rect';
-
-// Private symbols
-const __mutationObserver__ = Symbol('mutationObserver');
-const __onDomMutation__ = Symbol('onDomMutation');
-
-/**
- * An arbitrary rectangular region. You can position elements anywhere in this region.
- *
- * Supported abilities:
- * - [[Droppable|ability.Droppable]]: Default enabled. This class uses a custom droppable that 
- *   positions the element to the mouse's cursor.
- *   
- * @class region.Rect
- * @extends region.Region
- */
-
-class SmartDroppable extends Droppable {
+  // Private symbols
+  const __mutationObserver__ = Symbol('mutationObserver');
+  const __onDomMutation__ = Symbol('onDomMutation');
 
   /**
-   * Handles event when the MutationObserver observes changes to the child list.
+   * An arbitrary rectangular region. You can position elements anywhere in this region.
    *
-   * @method __onDomMutation__
-   * @param {!Array.<MutationRecord>} mutations Array of MutationRecords.
-   * @private
-   */
-  [__onDomMutation__](mutations) {
-    mutations.forEach(mutation => {
-      Utils.toArray(mutation.removedNodes).forEach(removedNode => {
-        removedNode.style.left = 0;
-        removedNode.style.top = 0;
-      });
-    });
-  }
-
-  /**
+   * Supported abilities:
+   * - [[Droppable|ability.Droppable]]: Default enabled. This class uses a custom droppable that 
+   *   positions the element to the mouse's cursor.
+   *   
    * @class region.Rect
-   * @constructor
-   * @param {boolean} defaultValue True iff the ability should be enabled.
+   * @extends region.Region
    */
-  constructor(defaultValue) {
-    super(defaultValue);
-    this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
-  }
 
-  /**
-   * Registers the handlers for this ability to the given element.
-   *
-   * @method register
-   * @param {!Element} el The element to register the ability to.
-   * @protected
-   */
-  register(el) {
-    super.register(el);
-    this[__mutationObserver__].observe(el, { childList: true });
-  }
+  class SmartDroppable extends Droppable {
 
-  /**
-   * Unregisters the handlers for this ability from the given element.
-   *
-   * @method __unregister__
-   * @param {!Element} el The element to unregister the ability from.
-   * @protected
-   */
-  unregister(el) {
-    this[__mutationObserver__].disconnect();
-    super.unregister(el);
-  }
-
-  /**
-   * Drop the last dragged element on the given element
-   *
-   * @method trigger
-   * @param {!Element} el The element to drop the dragged element into.
-   * @param {!Event} event Event object that triggered the call.
-   */
-  trigger(el, event) {
-    el.classList.remove('pb-over');
-    let lastDraggedEl = DragDrop.lastDraggedEl;
-    if (!lastDraggedEl) {
-      return;
+    /**
+     * Handles event when the MutationObserver observes changes to the child list.
+     *
+     * @method __onDomMutation__
+     * @param {!Array.<MutationRecord>} mutations Array of MutationRecords.
+     * @private
+     */
+    [__onDomMutation__](mutations) {
+      mutations.forEach(mutation => {
+        Utils.toArray(mutation.removedNodes).forEach(removedNode => {
+          removedNode.style.left = 0;
+          removedNode.style.top = 0;
+        });
+      });
     }
-    el.appendChild(lastDraggedEl);
 
-    let screenCoord = lastDraggedEl.getBoundingClientRect();
-    let dLeft = event.clientX - screenCoord.left - DragDrop.offsetX;
-    let dTop = event.clientY - screenCoord.top - DragDrop.offsetY;
-    lastDraggedEl.style.left = `${lastDraggedEl.offsetLeft + dLeft}px`;
-    lastDraggedEl.style.top = `${lastDraggedEl.offsetTop + dTop}px`;
-
-    // TODO(gs): attached callback doesn't seem to be called on appendChild.
-    // https://github.com/webcomponents/webcomponentsjs/issues/18
-    // TODO(gs): Make the ability fire an event instead. This class should just listen to the drop
-    // event.
-    if (DragDrop.lastDraggedEl.attachedCallback) {
-      DragDrop.lastDraggedEl.attachedCallback();
+    /**
+     * @class region.Rect
+     * @constructor
+     * @param {boolean} defaultValue True iff the ability should be enabled.
+     */
+    constructor(defaultValue) {
+      super(defaultValue);
+      this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
     }
-    DragDrop.dragEnd();
+
+    /**
+     * Registers the handlers for this ability to the given element.
+     *
+     * @method register
+     * @param {!Element} el The element to register the ability to.
+     * @protected
+     */
+    register(el) {
+      super.register(el);
+      this[__mutationObserver__].observe(el, { childList: true });
+    }
+
+    /**
+     * Unregisters the handlers for this ability from the given element.
+     *
+     * @method __unregister__
+     * @param {!Element} el The element to unregister the ability from.
+     * @protected
+     */
+    unregister(el) {
+      this[__mutationObserver__].disconnect();
+      super.unregister(el);
+    }
+
+    /**
+     * Drop the last dragged element on the given element
+     *
+     * @method trigger
+     * @param {!Element} el The element to drop the dragged element into.
+     * @param {!Event} event Event object that triggered the call.
+     */
+    trigger(el, event) {
+      el.classList.remove('pb-over');
+      let lastDraggedEl = DragDrop.lastDraggedEl;
+      if (!lastDraggedEl) {
+        return;
+      }
+      el.appendChild(lastDraggedEl);
+
+      let screenCoord = lastDraggedEl.getBoundingClientRect();
+      let dLeft = event.clientX - screenCoord.left - DragDrop.offsetX;
+      let dTop = event.clientY - screenCoord.top - DragDrop.offsetY;
+      lastDraggedEl.style.left = `${lastDraggedEl.offsetLeft + dLeft}px`;
+      lastDraggedEl.style.top = `${lastDraggedEl.offsetTop + dTop}px`;
+
+      // TODO(gs): attached callback doesn't seem to be called on appendChild.
+      // https://github.com/webcomponents/webcomponentsjs/issues/18
+      // TODO(gs): Make the ability fire an event instead. This class should just listen to the drop
+      // event.
+      if (DragDrop.lastDraggedEl.attachedCallback) {
+        DragDrop.lastDraggedEl.attachedCallback();
+      }
+      DragDrop.dragEnd();
+    }
   }
-}
 
-class Rect extends Region {
-  constructor() {
-    super();
+  class Rect extends Region {
+    constructor() {
+      super();
+    }
+
+    createdCallback() {
+      super.createdCallback();
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    }
   }
 
-  createdCallback() {
-    super.createdCallback();
-    this.createShadowRoot().appendChild(Utils.activateTemplate(pb$template, pb$doc));
+  export default Rect = Rect;
+
+  let smartDroppable = new SmartDroppable(true);
+  $registry.add(EL_NAME, Abilities.config(Rect, {}, smartDroppable).prototype);
+
+  if (window['TEST_MODE']) {
+    Rect.SmartDroppable = SmartDroppable;
   }
-}
 
-export default Rect = Rect;
-
-let smartDroppable = new SmartDroppable(true);
-document.registerElement(EL_NAME,  {
-  prototype: Abilities.config(
-      Rect,
-      {},
-      smartDroppable).prototype
-});
-
-if (window['TEST_MODE']) {
-  Rect.SmartDroppable = SmartDroppable;
-}
-
-return Rect;
+  return Rect;
 
 });
 </script>

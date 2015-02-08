@@ -21,78 +21,82 @@
 </template>
 
 <script>
-DI.bind('pb_component_Card', (
-    Abilities, 
-    Contextable, 
-    Draggable, 
-    Rotateable, 
-    Toggleable, 
-    Component, 
-    Utils) => {
-
-/**
- * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
- * - One must have a `pb-front` class. This is the front face of the card.
- * - One must have a `pb-back` class. This is the back face of the card.
- *
- * By default, the card starts by showing its back. If you want to make it start by showing the 
- * front face, add `pb-showfront="true"` to the `pb-c-card`.
- *
- * ```html
- * <!-- Example: Create a card that starts by displaying its front side -->
- * <pb-c-card pb-showfront="true">
- *   <div class="pb-front">Front side</div>
- *   <div class="pb-back">Back side</div>
- * </pb-c-card>
- * ```
- *
- * Supported abilities:
- * - [[Draggable|ability.Draggable]]: Default enabled.
- * - [[Rotateable|ability.Rotateable]]: Default disabled.
- * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
- * 
- * @class component.Card
- * @extends component.Component
- */
-
-let doc = document.currentScript.ownerDocument;
-let template = doc.querySelector('template');
-
-const EL_NAME = 'pb-c-card';
-
-export default class Card extends Component {
+DI
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', doc => doc.querySelector('template'))
+    .bind('pb_component_Card', (
+        Abilities, 
+        Contextable, 
+        Draggable, 
+        Rotateable, 
+        Toggleable, 
+        Component, 
+        Utils,
+        doc,
+        template,
+        $registry) => {
 
   /**
-   * Called when the element is created
+   * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
+   * - One must have a `pb-front` class. This is the front face of the card.
+   * - One must have a `pb-back` class. This is the back face of the card.
    *
-   * @method createdCallback
+   * By default, the card starts by showing its back. If you want to make it start by showing the 
+   * front face, add `pb-showfront="true"` to the `pb-c-card`.
+   *
+   * ```html
+   * <!-- Example: Create a card that starts by displaying its front side -->
+   * <pb-c-card pb-showfront="true">
+   *   <div class="pb-front">Front side</div>
+   *   <div class="pb-back">Back side</div>
+   * </pb-c-card>
+   * ```
+   *
+   * Supported abilities:
+   * - [[Draggable|ability.Draggable]]: Default enabled.
+   * - [[Rotateable|ability.Rotateable]]: Default disabled.
+   * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
+   * 
+   * @class component.Card
+   * @extends component.Component
    */
-  createdCallback() {
-    super.createdCallback();
-    this.createShadowRoot()
-        .appendChild(Utils.activateTemplate(template, doc));
-    this.attachedCallback();
+
+  const EL_NAME = 'pb-c-card';
+
+  export default class Card extends Component {
+
+    /**
+     * Called when the element is created
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+      this.createShadowRoot()
+          .appendChild(Utils.activateTemplate(template, doc));
+      this.attachedCallback();
+    }
   }
-}
 
-let toggleable = new Toggleable(true);
-let rotateable = new Rotateable();
-let draggable = new Draggable(true);
-document.registerElement(EL_NAME,  {
-  prototype: Abilities.config(
-      Card,
-      {
-        'pb-click': toggleable
-      },
-      draggable,
-      rotateable,
-      new Contextable({
-        'Flip': toggleable,
-        'Tap / Untap': rotateable
-      })).prototype
-});
+  let toggleable = new Toggleable(true);
+  let rotateable = new Rotateable();
+  let draggable = new Draggable(true);
+  let contextable = new Contextable({
+    'Flip': toggleable,
+    'Tap / Untap': rotateable
+  });
+  $registry.add(
+      EL_NAME, 
+      Abilities.config(
+          Card,
+          {
+            'pb-click': toggleable
+          },
+          draggable,
+          rotateable,
+          contextable).prototype);
 
-return Card;
+  return Card;
 
 });
 </script>

@@ -8,6 +8,7 @@
   <link rel="import" href="out/di.html">
   <link rel="import" href="out/region/rect.html">
   <link rel="import" href="out/service/dragdrop.html">
+  <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/utils.html">
 </head>
 <body>
@@ -15,6 +16,7 @@
 
   <script>
   DI
+      .with('$registry', Registry => new Registry())
       .constant('doc', document.currentScript.ownerDocument)
       .run((expect, _, doc, DragDrop, Rect, Utils) => {
 
