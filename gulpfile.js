@@ -39,34 +39,17 @@ function chain(fn) {
   });
 }
 
-
-// TODO(gs): Fix this.
-
-gulp.task('doc', function() {
-  return gulp.src('./src/**/*.html')
-      .pipe(yuidoc.parser({
-        extension: '.html'
-      }))
-      .pipe(yuimd({
-        'projectName': 'Protoboard',
-        '$home': 'doc-theme/Home.theme',
-        '$class': 'doc-theme/class.theme'
-      }))
-      .pipe(gulp.dest('doc'));
-});
-
 function subJsHint() {
   return chain(function(stream) {
-    var replace = subs();
     return stream
-        .pipe(replace.extract)
-            .pipe(jshint({
-              esnext: true,
-              sub: true
-            }))
-            .pipe(jshint.reporter('jshint-stylish'))
-            .pipe(jshint.reporter('fail'))
-        .pipe(replace.inject)
+        .pipe(jshint.extract())
+        .pipe(jshint({
+          esnext: true,
+          laxbreak: true,
+          sub: true
+        }))
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(jshint.reporter('fail'));
   })
 }
 
@@ -93,8 +76,30 @@ function subSass() {
   });
 }
 
+function subYuiMd() {
+  return chain(function(stream) {
+      return stream.pipe(yuidoc.parser({
+        extension: '.html'
+      }))
+      .pipe(yuimd({
+        'projectName': 'Protoboard',
+        '$home': 'doc-theme/Home.theme',
+        '$class': 'doc-theme/class.theme'
+      }));
+  });
+}
+
+gulp.task('clean', shell.task('rm -r out'));
+
+gulp.task('doc', function() {
+  return gulp.src('./src/**/*.html')
+      .pipe(subYuiMd())
+      .pipe(gulp.dest('doc'));
+});
+
 gulp.task('jshint', function() {
   return gulp.src(['./src/**/*.html', './test/**/*.html'])
+      .pipe(plumber())
       .pipe(subJsHint());
 })
 
@@ -126,6 +131,12 @@ gulp.task('karma-dev', function(done) {
 
 gulp.task('sass-src', function() {
   return gulp.src(['./src/**/*.scss', '!./src/themes/*.scss'])
+      .pipe(subSass())
+      .pipe(gulp.dest('out'));
+});
+
+gulp.task('sass-ex', function() {
+  return gulp.src(['ex/**/*.scss', 'src/themes/*.scss'])
       .pipe(subSass())
       .pipe(gulp.dest('out'));
 });
@@ -171,5 +182,6 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('commit', ['karma'], shell.task('git commit -a'));
+gulp.task('compile', ['6to5-src', '6to5-test', 'sass-src', 'sass-ex']);
+gulp.task('commit', ['karma']);
 gulp.task('push', ['commit', 'doc'], shell.task('git push'));

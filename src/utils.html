@@ -155,6 +155,19 @@ DI.bind('pb_Utils', () => {
       return array;
     },
 
+    toMap(obj) {
+      if (obj instanceof NamedNodeMap) {
+        let data = [];
+        for (let i = 0; i < obj.length; i++) {
+          let item = obj.item(i);
+          data.push([item.name, item]);
+        }
+        return new Map(data);
+      } else {
+        throw `Unsupported type of ${obj}`;
+      }
+    },
+
     toArrayOfArrays(obj) {
       let array = [];
       for (let key of Object.keys(obj)) {

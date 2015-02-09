@@ -3,10 +3,13 @@
 <link rel="import" href="out/ability/ability.html">
 <link rel="import" href="out/hammerwrapper.html">
 <link rel="import" href="out/di.html">
+<link rel="import" href="out/trigger/click.html">
+<link rel="import" href="out/trigger/doubleclick.html">
+<link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
+DI.bind('pb_ability_Triggerable', (Ability, Click, DoubleClick, HammerWrapper, Key, Utils) => {
 
   /**
    * Provides triggers to abilities supported by the app. Normally you don't need to register this 
@@ -25,14 +28,43 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
 
   // Private symbols.
   const __defaultValue__ = Symbol();
+  const __keys__ = Symbol();
   const __knownAbilities__ = Symbol();
-  const __triggers__ = Symbol();
 
-  const __getEvent__ = Symbol('getEvent');
-  const __getTriggers__ = Symbol('getTriggers');
-  const __isRegistered__ = Symbol('isRegistered');
+  const __getTrigger__ = Symbol('getTrigger');
   const __register__ = Symbol('register');
   const __unregister__ = Symbol('unregister');
+
+  const TYPES = {
+    /**
+     * Triggers when the element is clicked.
+     *
+     * @attribute pb-click
+     */
+    CLICK: 'pb-click',
+
+    /**
+     * Triggers when the element is double clicked.
+     *
+     * @attribute pb-dblclick
+     */
+    DOUBLE_CLICK: 'pb-dblclick',
+
+    /**
+     * Triggers when a key is pressed. Postfix this with `-` followed by the character to detect.
+     *
+     * @attribute pb-key
+     */
+    KEY: 'pb-key'
+  };
+
+  const TRIGGERS = {
+    [TYPES.CLICK]: new Click(),
+    [TYPES.DOUBLE_CLICK]: new DoubleClick(),
+    [TYPES.KEY]: new Key()
+  };
+
+  const KEYS = new Map();
 
   class Triggerable extends Ability {
 
@@ -52,60 +84,30 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
         this[__knownAbilities__][ability.constructor.name] = ability;
       }
     }
-    
-    /**
-     * Returns the event associated with the trigger type.
-     * 
-     * @method __getEvent__
-     * @param {ability.Triggerable.TYPES} triggerType The type of trigger whose event should be 
-     *     returned.
-     * @return {string} The event related to the trigger type.
-     * @private
-     */
-    [__getEvent__](triggerType) {
-      switch (triggerType) {
-        case Triggerable.TYPES.CLICK:
-          return 'singletap';
-        case Triggerable.TYPES.DOUBLE_CLICK:
-          return 'doubletap';
-        default:
-          throw 'Unrecognized trigger: ' + triggerType;
-      }
-    }
 
     /**
-     * Returns the triggers registered to the given element.
-     * 
-     * @method  __getTriggers__
-     * @param {!Element} el The element to return the registered triggers from.
-     * @return {Object} Object with key being the trigger type, and the value being the ability that
-     *     is triggered by the key.
-     * @private
-     */
-    [__getTriggers__](el) {
-      if (!el[__triggers__]) {
-        el[__triggers__] = {};
-      }
-      return el[__triggers__];
-    }
-
-    /**
-     * Returns if the element is registered with the given ability.
+     * Returns the trigger object that corresponds to the given name.
      *
-     * @method  __isRegistered__
-     * @param {!Element} el The element to check.
-     * @param {!ability.Triggerable.TYPES} triggerType The type of trigger to check.
-     * @param {string} abilityName The name of ability to check.
-     * @return {boolean} True iff the element is registered to trigger the given ability name on the
-     *     given trigger type.
-     * @private
+     * @method __getTrigger__
+     * @param {string} name The name of the trigger to return.
+     * @return {trigger.Trigger} The corresponding trigger object to return, or null if there is no 
+     *    corresponding trigger.
      */
-    [__isRegistered__](el, triggerType, abilityName) {
-      if (!this[__getTriggers__](el)[triggerType]) {
-        return false;
+    [__getTrigger__](name) {
+      if (name !== TYPES.KEY && TRIGGERS[name]) {
+        return TRIGGERS[name];
+      } else if (name.substring(0, TYPES.KEY.length + 1) === (TYPES.KEY + '-')) {
+        let key = name.substring(TYPES.KEY.length + 1);
+        if (!key) {
+          return null;
+        }
+        if (!KEYS.has(key)) {
+          KEYS.set(key, TRIGGERS[TYPES.KEY](key));
+        }
+        return KEYS.get(key);
+      } else {
+        return null;
       }
-      let ability = this[__getTriggers__](el)[triggerType].ability;
-      return ability && abilityName === ability.constructor.name;
     }
 
     /**
@@ -113,17 +115,12 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
      *
      * @method  __register__
      * @param {!Element} el The element to register.
-     * @param {!ability.Triggerable.TYPES} triggerType The type of trigger to register.
+     * @param {!trigger.Trigger} trigger The trigger to register.
      * @param {ability.Ability} ability The ability to register.
      * @private
      */
-    [__register__](el, triggerType, ability) {
-      if (!this[__isRegistered__](el, triggerType, ability.constructor.name)) {
-        // Only registers if there aren't any triggers registered.
-        let handlers = this[__getTriggers__](el);
-        handlers[triggerType] = {ability: ability, handler: ability.trigger.bind(ability, el)};
-        HammerWrapper.on(el, this[__getEvent__](triggerType), handlers[triggerType].handler);
-      }
+    [__register__](el, trigger, ability) {
+      trigger.on(el, ability);
     }
 
     /**
@@ -131,15 +128,11 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
      *
      * @method __unregister__
      * @param {!Element} el The element to unregister from.
-     * @param {!ability.Triggerable.TYPES} triggerType The type of trigger to unregister.
+     * @param {!trigger.Trigger} trigger The trigger to unregister.
      * @private
      */
-    [__unregister__](el, triggerType) {
-      let handlers = this[__getTriggers__](el);
-      if (handlers[triggerType]) {
-        HammerWrapper.off(el, this[__getEvent__](triggerType), handlers[triggerType].handler);
-        delete handlers[triggerType];
-      }
+    [__unregister__](el, trigger) {
+      trigger.off(el);
     }
 
     /**
@@ -149,10 +142,14 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
      * @param {!Element} el The element whose default value should be set.
      */
     setDefaultValue(el) {
-      for (let key in Triggerable.TYPES) {
-        let type = Triggerable.TYPES[key]; 
+      for (let key in TYPES) {
+        let type = TYPES[key]; 
         let abilityName = this[__defaultValue__][type];
-        if ($(el).attr(type) === undefined && abilityName && this[__knownAbilities__][abilityName]) {
+        let trigger = this[__getTrigger__](type);
+        if (trigger
+            && $(el).attr(type) === undefined 
+            && abilityName 
+            && this[__knownAbilities__][abilityName]) {
           $(el).attr(type, abilityName);
         }
       }
@@ -168,16 +165,15 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
      * @param {string} newValue New value of the changed attribute.
      */
     attributeChangedCallback(el, name, oldValue, newValue) {
-      for (let key in Triggerable.TYPES) {
-        if (name === Triggerable.TYPES[key]) {
-          // Unregister the old ability.
-          if (oldValue && this[__knownAbilities__][oldValue]) {
-            this[__unregister__](el, name, this[__knownAbilities__][oldValue]);
-          }
+      let trigger = this[__getTrigger__](name);
+      if (trigger) {
+        // Unregister the old ability.
+        if (oldValue && this[__knownAbilities__][oldValue]) {
+          this[__unregister__](el, trigger);
+        }
 
-          if (newValue && this[__knownAbilities__][newValue]) {
-            this[__register__](el, name, this[__knownAbilities__][newValue]);
-          }
+        if (newValue && this[__knownAbilities__][newValue]) {
+          this[__register__](el, trigger, this[__knownAbilities__][newValue]);
         }
       }
     }
@@ -189,11 +185,11 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
      * @param {!Element} el The element that was attached.
      */
     attachedCallback(el) {
-      for (let key in Triggerable.TYPES) {
-        let triggerType = Triggerable.TYPES[key];
-        let abilityName = $(el).attr(triggerType);
-        if (abilityName && this[__knownAbilities__][abilityName]) {
-          this[__register__](el, triggerType, this[__knownAbilities__][abilityName]);
+      for (let [name, attr] of Utils.toMap(el.attributes)) {
+        let abilityName = attr.value;
+        let trigger = this[__getTrigger__](name);
+        if (trigger && abilityName && this[__knownAbilities__][abilityName]) {
+          this[__register__](el, trigger, this[__knownAbilities__][abilityName]);
         }
       }
     }
@@ -205,8 +201,15 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
      * @param {!Element} el The element that was detached.
      */
     detachedCallback(el) {
-      for (let key in Triggerable.TYPES) {
-        this[__unregister__](el, Triggerable.TYPES[key]);
+      for (let key in TYPES) {
+        let trigger = this[__getTrigger__](TYPES[key]);
+        if (trigger) {
+          this[__unregister__](el, trigger);
+        }
+      }
+
+      for (let trigger of KEYS.values()) {
+        this[__unregister__](el, trigger);
       }
     }
 
@@ -222,21 +225,7 @@ DI.bind('pb_ability_Triggerable', (Ability, HammerWrapper, Utils) => {
     }
   }
 
-  Triggerable.TYPES = {
-    /**
-     * Triggers when the element is clicked.
-     *
-     * @attribute pb-click
-     */
-    CLICK: 'pb-click',
-
-    /**
-     * Triggers when the element is double clicked.
-     *
-     * @attribute pb-dblclick
-     */
-    DOUBLE_CLICK: 'pb-dblclick'
-  };
+  Triggerable.TYPES = TYPES;
 
   return Triggerable;
 });

@@ -17,6 +17,14 @@ DI.bind('pb_t', (_, Utils) => {
         attachedCallback: _.spiedFunction(),
         detachedCallback: _.spiedFunction()
       };
+    },
+
+    createFakeEvents() {
+      let fake = {};
+      fake.of = _.spiedFunction().overrideReturn(fake);
+      fake.on = _.spiedFunction().overrideReturn(fake);
+      fake.off = _.spiedFunction().overrideReturn(fake);
+      return fake;
     }
   };
 

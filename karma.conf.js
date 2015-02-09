@@ -25,6 +25,7 @@ module.exports = function(config) {
       { pattern: 'node_modules/chai/chai.js', included: false },
       { pattern: 'node_modules/hammerjs/hammer.js', included: false },
       { pattern: 'node_modules/jquery/dist/jquery.js', included: false },
+      { pattern: 'node_modules/keyboardjs/keyboard.js', included: false },
       { pattern: 'node_modules/traceur/bin/traceur-runtime.js', included: false },
       { pattern: 'node_modules/spies/**', included: false },
 

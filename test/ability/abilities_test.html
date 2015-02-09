@@ -12,14 +12,23 @@
 <body>
   <script>
   DI
+      .with('fakeTriggerable', t => t.createFakeAbility('fakeTriggerable'))
+      .with('pb_ability_Triggerable', fakeTriggerable => {
+        return (config, knownAbilities) => {
+          fakeTriggerable.config = config;
+          fakeTriggerable.knownAbilities = knownAbilities;
+          return fakeTriggerable;
+        };
+      })
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, pb_t, Abilities, HammerWrapper) => {
+      .run((expect, _, _M, doc, pb_t, Abilities, HammerWrapper, fakeTriggerable) => {
 
   describe('Abilities', () => {
     let Ctor;
 
     beforeEach(done => {
       Ctor = function() {};
+      Ctor.prototype = HTMLElement.prototype;
       Ctor.prototype.createdCallback = () => undefined;
       Ctor.prototype.addEventListener = _.spiedFunction();
       Ctor.prototype.removeEventListener = _.spiedFunction();
@@ -53,12 +62,9 @@
         expect(ability1.attachedCallback).calledWith(el).at.least(1);
         expect(ability2.attachedCallback).calledWith(el).at.least(1);
 
-        let clickHandlerCaptor = _M.isA(Function);
-        expect(HammerWrapper.on).calledWith(el, 'singletap', clickHandlerCaptor).at.least(1);
-
-        // Trigger the click and check that the correct ability is triggered.
-        clickHandlerCaptor.matchingArgs[0]();
-        expect(ability1.trigger).calledWith(el).at.least(1);
+        // Check the configurations passed to the fake Triggerable
+        expect(fakeTriggerable.config).to.be.eql({ 'pb-click': 'ability1' });
+        expect(fakeTriggerable.knownAbilities).to.be.eql(new Set([ ability1, ability2 ]));
 
         el.detachedCallback();
         expect(ability1.detachedCallback).calledWith(el).at.least(1);

@@ -11,21 +11,18 @@
   <script>
   DI
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, pb_t, HammerWrapper, Triggerable, Utils) => {
+      .run((expect, _, _M, doc, pb_t, Click, DoubleClick, Key, Triggerable, Utils) => {
 
   describe('Triggerable', () => {
     let el;
 
     // Private symbols.
-    let __register__;
-    let __unregister__;
+    let __getTrigger__ = Utils.getSymbol(Triggerable.prototype, 'getTrigger');
+    let __register__ = Utils.getSymbol(Triggerable.prototype, 'register');
+    let __unregister__ = Utils.getSymbol(Triggerable.prototype, 'unregister');
 
     beforeEach(done => {
       el = doc.createElement('div');
-
-      __register__ = Utils.getSymbol(Triggerable.prototype, 'register');
-      __unregister__ = Utils.getSymbol(Triggerable.prototype, 'unregister');
-
       done();
     });
 
@@ -84,7 +81,7 @@
 
         triggerable.attributeChangedCallback(el, 'pb-click', null, name);
 
-        expect(triggerable[__register__]).calledWith(el, 'pb-click', ability).at.least(1);
+        expect(triggerable[__register__]).calledWith(el, _M.isA(Click), ability).at.least(1);
       });
       it('should unregister old ability', () => {
         let name = 'ability';
@@ -92,10 +89,10 @@
         let triggerable = new Triggerable({}, [ability]);
         triggerable.attributeChangedCallback(el, 'pb-click', null, name);
 
-        _.spy(triggerable, __unregister__);
+        _.spy(triggerable, __unregister__).overrideReturn();
         triggerable.attributeChangedCallback(el, 'pb-click', name, null);
 
-        expect(triggerable[__unregister__]).calledWith(el, 'pb-click', ability).at.least(1);
+        expect(triggerable[__unregister__]).calledWith(el, _M.isA(Click)).at.least(1);
       });
       it('should handle changing triggers', () => {
         let triggerType = 'pb-click';
@@ -105,14 +102,14 @@
 
         triggerable.attributeChangedCallback(el, triggerType, null, 'oldAbility');
 
-        _.spy(triggerable, __register__);
-        _.spy(triggerable, __unregister__);
+        _.spy(triggerable, __register__).overrideReturn();
+        _.spy(triggerable, __unregister__).overrideReturn();
         triggerable.attributeChangedCallback(el, triggerType, 'oldAbility', 'newAbility');
 
-        expect(triggerable[__unregister__]).calledWith(el, triggerType, oldAbility).at.least(1);
-        expect(triggerable[__register__]).calledWith(el, triggerType, newAbility).at.least(1);
-        expect(triggerable[__unregister__]).calledWith(el, triggerType, oldAbility)
-            .before(triggerable[__register__]).calledWith(el, triggerType, newAbility);
+        expect(triggerable[__unregister__]).calledWith(el, _M.isA(Click)).at.least(1);
+        expect(triggerable[__register__]).calledWith(el, _M.isA(Click), newAbility).at.least(1);
+        expect(triggerable[__unregister__]).calledWith(el, _M.isA(Click))
+            .before(triggerable[__register__]).calledWith(el, _M.isA(Click), newAbility);
       });
       it('should ignore unsupported trigger', () => {
         let ability = pb_t.createFakeAbility('ability');
@@ -151,8 +148,8 @@
 
         triggerable.attachedCallback(el);
 
-        expect(triggerable[__register__]).calledWith(el, 'pb-click', ability).at.least(1);
-        expect(triggerable[__register__]).calledWith(el, 'pb-dblclick', ability).at.least(1);
+        expect(triggerable[__register__]).calledWith(el, _M.isA(Click), ability).at.least(1);
+        expect(triggerable[__register__]).calledWith(el, _M.isA(DoubleClick), ability).at.least(1);
       });
       it('should not crash when a trigger is not specified', () => {
         let triggerable = new Triggerable({}, [ ability ]);
@@ -169,58 +166,72 @@
     describe('#detachedCallback', () => {
       it('should unregister all known trigger types', () => {
         let triggerable = new Triggerable();
+        let triggerKeyA = triggerable[__getTrigger__]('pb-key-a');
+        let triggerKeyB = triggerable[__getTrigger__]('pb-key-b');
 
-        _.spy(triggerable, __unregister__);
+        _.spy(triggerable, __unregister__).overrideReturn();
         triggerable.detachedCallback(el);
 
-        expect(triggerable[__unregister__]).calledWith(el, 'pb-click').at.least(1);
-        expect(triggerable[__unregister__]).calledWith(el, 'pb-dblclick').at.least(1);
+        expect(triggerable[__unregister__]).calledWith(el, _M.isA(Click)).at.least(1);
+        expect(triggerable[__unregister__]).calledWith(el, _M.isA(DoubleClick)).at.least(1);
+        expect(triggerable[__unregister__]).calledWith(el, triggerKeyA).at.least(1);
+        expect(triggerable[__unregister__]).calledWith(el, triggerKeyB).at.least(1);
       });
     });
 
     describe('#__register__', () => {
-      it('should register if not registered', () => {
+      it('should register', () => {
         let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable();
+        let trigger = new Click();
 
-        _.spy(HammerWrapper, 'on');
+        _.spy(trigger, 'on');
 
-        triggerable[__register__](el, 'pb-click', ability);
+        triggerable[__register__](el, trigger, ability);
 
-        expect(HammerWrapper.on).calledWith(el, 'singletap', _M.isA(Function)).at.least(1);
-      });
-      it('should be noop if registered', () => {
-        let ability = pb_t.createFakeAbility('ability');
-        let triggerable = new Triggerable();
-        triggerable[__register__](el, 'pb-click', ability);
-
-        _.spy(HammerWrapper, 'on');
-
-        // register the ability again
-        triggerable[__register__](el, 'pb-click', ability);
-
-        expect(HammerWrapper.on).called().to.be.equal(0);
+        expect(trigger.on).calledWith(el, ability).at.least(1);
       });
     });
 
     describe('#__unregister__', () => {
-      it('should unregister previously registered handler', () => {
+      it('should unregister', () => {
         let ability = pb_t.createFakeAbility('ability');
         let triggerable = new Triggerable();
+        let trigger = new Click();
 
-        _.spy(HammerWrapper, 'on');
-        triggerable[__register__](el, 'pb-click', ability);
-        let handlerCaptor = _M.isA(Function);
-        expect(HammerWrapper.on).calledWith(el, 'singletap', handlerCaptor).at.least(1);
+        _.spy(trigger, 'off').overrideReturn();
 
-        _.spy(HammerWrapper, 'off');
-        triggerable[__unregister__](el, 'pb-click');
-        expect(HammerWrapper.off)
-            .calledWith(el, 'singletap', handlerCaptor.matchingArgs[0]).at.least(1);
+        triggerable[__unregister__](el, trigger);
+
+        expect(trigger.off).calledWith(el).at.least(1);
       });
-      it('should not crash if nothing is registered', () => {
-        let triggerable = new Triggerable();
-        triggerable[__unregister__](el, 'pb-click');
+    });
+
+    describe('#__getTrigger__', () => {
+      let triggerable;
+      beforeEach(done => {
+        triggerable = new Triggerable();
+        done();
+      });
+
+      it('should return a known non key trigger', () => {
+        expect(triggerable[__getTrigger__]('pb-click')).instanceOf(Click);
+      });
+      it('should return a key trigger', () => {
+        let trigger = triggerable[__getTrigger__]('pb-key-b');
+        let __key__ = Utils.getSymbol(trigger, 'key');
+        expect(trigger[__key__]).to.be.equal('b');
+      });
+      it('should cache the previously created key', () => {
+        let trigger = triggerable[__getTrigger__]('pb-key-b');
+        expect(triggerable[__getTrigger__]('pb-key-b')).to.be.equal(trigger);
+        expect(triggerable[__getTrigger__]('pb-key-a')).to.not.be.equal(trigger);
+      });
+      it('should return null for unrecognizable trigger name', () => {
+        expect(triggerable[__getTrigger__]('pb-unknown')).to.be.null();
+      });
+      it('should return null for invalid key', () => {
+        expect(triggerable[__getTrigger__]('pb-key')).to.be.null();
       });
     });
 

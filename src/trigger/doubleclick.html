@@ -1,0 +1,41 @@
+<base href="../..">
+
+<link rel="import" href="out/di.html">
+<link rel="import" href="out/hammerwrapper.html">
+
+<script>
+DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper) => {
+
+  /**
+   * Triggers an ability when the element is double clicked.
+   * 
+   * @class trigger.DoubleClick
+   */
+  class DoubleClick {
+
+    /**
+     * Registers the given element to trigger the given ability when double clicked.
+     *
+     * @method on
+     * @param {!Element} element Element to register.
+     * @param {!ability.Ability} ability The ability to trigger.
+     */
+    on(element, ability) {
+      Events.of(element, this)
+          .on('hammer', 'doubletap', ability.trigger.bind(ability, element));
+    }
+
+    /**
+     * Unregisters the given element from triggering the registered ability when double clicked.
+     *
+     * @method off
+     * @param {!Element} element Element to unregister.
+     */
+    off(element) {
+      Events.of(element, this).off('hammer', 'doubletap');
+    }
+  }
+
+  return DoubleClick;
+});
+</script>

@@ -1,0 +1,91 @@
+<base href="../..">
+
+<link rel="import" href="out/di.html">
+
+<script>
+DI.bind('pb_trigger_Key', Events => {
+  // Private symbols.
+  const __active__ = Symbol();
+  const __key__ = Symbol('key');
+
+  const __onKeyPress__ = Symbol();
+  const __onMouseEnter__ = Symbol();
+  const __onMouseLeave__ = Symbol();
+
+  class Key {
+
+    /**
+     * Triggers an ability when the given key is pressed while the mouse is over the registered
+     * element.
+     *
+     * @constructor
+     * @class trigger.Key
+     * @param {string} key The key that needs to be pressed to trigger the registered ability.
+     */
+    constructor(key) {
+      this[__key__] = key;
+    }
+
+    /**
+     * Handles event called when the key press is detected.
+     * 
+     * @method __onKeyPress__
+     * @param {!ability.Ability} ability The ability to trigger.
+     * @param {!Element} element The element to trigger the ability on.
+     * @private
+     */
+    [__onKeyPress__](ability, element) {
+      if (this[__active__]) {
+        ability.trigger.call(ability, element);
+      }
+    }
+
+    /**
+     * Handles event called when mouse has entered the element.
+     *
+     * @method __onMouseEnter__
+     * @private
+     */
+    [__onMouseEnter__]() {
+      this[__active__] = true;
+    }
+
+    /**
+     * Handles event called when mouse has left the element.
+     *
+     * @method __onMouseLeave__
+     * @private
+     */
+    [__onMouseLeave__]() {
+      this[__active__] = false;
+    }
+
+    /**
+     * Registers the given element to trigger the given ability when a key is pressed while the 
+     * mouse is hovering over the element.
+     *
+     * @method on
+     * @param {!Element} element Element that needs to be hovered over to trigger the ability.
+     * @param {!ability.Ability} ability The ability to trigger.
+     */
+    on(element, ability) {
+      Events.of(element, this)
+          .on('keyboard', this[__key__], this[__onKeyPress__].bind(this, ability, element))
+          .on('dom', 'mouseenter', this[__onMouseEnter__].bind(this))
+          .on('dom', 'mouseleave', this[__onMouseLeave__].bind(this));
+    }
+
+    /**
+     * Unregisters the given element from any listeners registered in the on method.
+     *
+     * @method off
+     * @param {!Element} element Element to unregister the listener from.
+     */
+    off(element) {
+      Events.of(element, this).off();
+    }
+  }
+
+  return () => { return key => new Key(key); };
+});
+</script>
