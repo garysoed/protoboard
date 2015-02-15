@@ -4,64 +4,114 @@
 <link rel="import" href="out/service/registry.html">
 
 <script>
-DI.bind('pb_service_Move', ($registry, Events) => {
+DI.bind('pb_service_Move', ($registry, Events, Utils) => {
 
   // Private symbols.
+  const __container__ = Symbol('container');
   const __document__ = Symbol();
-  const __movedElements__ = Symbol();
-  const __previousPosition__ = Symbol();
   const __mouseX__ = Symbol();
   const __mouseY__ = Symbol();
 
-  const __moveElement__ = Symbol();
-  const __onMouseMove__ = Symbol();
+  const __moveContainer__ = Symbol('moveContainer');
+  const __onMouseMove__ = Symbol('onMouseMove');
 
+  /**
+   * Service that handles moving elements around. Used by ability.Droppable and ability.Pickable.
+   *
+   * @class service.Move
+   * @static
+   */
   let Move = {
+    /**
+     * Reference to the document that the service operates in.
+     * 
+     * @property __document__
+     * @type Document
+     * @private
+     */
     [__document__]: undefined,
-    [__movedElements__]: new Set(),
 
-    [__moveElement__](el, event) {
-      let rect = el.getBoundingClientRect();
-      el.style.left = `${event.clientX - rect.width / 2}px`;
-      el.style.top = `${event.clientY - rect.height / 2}px`;
+    /**
+     * The container of all the moved elements.
+     *
+     * @property __container__
+     * @type Element
+     * @private
+     */
+    [__container__]: null,
 
-      // TODO(gs): Handle multiple elements
+    /**
+     * Moves the container element to the last known location of the mouse.
+     *
+     * @method __moveContainer__
+     * @private
+     */
+    [__moveContainer__]() {
+      let width = 0;
+      let height = 0;
+      Utils.toArray(this[__container__].children).forEach(child => {
+        let rect = child.getBoundingClientRect();
+        width = Math.max(rect.width, width);
+        height = Math.max(rect.height, height);
+      });
+
+      this[__container__].style.left = `${this[__mouseX__] - width / 2}px`;
+      this[__container__].style.top = `${this[__mouseY__] - height / 2}px`;
     },
 
+    /**
+     * Handles event when the mouse is moved.
+     *
+     * @method __onMouseMove__
+     * @param {!MouseEvent} event The corresponding mouse event.
+     * @private
+     */
     [__onMouseMove__](event) {
-      for (let el of this[__movedElements__]) {
-        this[__moveElement__](el, event);
-      }
+      this[__moveContainer__]();
       this[__mouseX__] = event.clientX;
       this[__mouseY__] = event.clientY;
     },
 
-    add(el, event) {
-      this[__document__].body.appendChild(el);
-
-      el[__previousPosition__] = el.style.position;
-      el.style.position = 'fixed';
-      el.style.pointerEvents = 'none'; // TODO(gs): Use CSS.
-      this[__moveElement__](el, event);
-      this[__movedElements__].add(el);
+    /**
+     * Sets the given element as being moved.
+     *
+     * @method add
+     * @param {!Element} el Element to move.
+     */
+    add(el) {
+      this[__container__].appendChild(el);
+      this[__moveContainer__]();
     },
 
-    remove(el) {
-      el.style.left = '';
-      el.style.top = '';
-      el.style.position = el[__previousPosition__];
-      el.style.pointerEvents = '';
-      this[__movedElements__].delete(el);
-    },
-
+    /**
+     * The elements that are being moved.
+     *
+     * @property movedElements
+     * @type !Set.<!Element>
+     * @readonly
+     */
     get movedElements() {
-      return this[__movedElements__];
+      return new Set(Utils.toArray(this[__container__].children));
     },
 
+    /**
+     * Last known X coordinate of the mouse in px.
+     *
+     * @property mouseX
+     * @type number
+     * @readonly
+     */
     get mouseX() {
       return this[__mouseX__];
     },
 
+    /**
+     * Last known Y coordinate of the mouse in px.
+     *
+     * @property mouseY
+     * @type number
+     * @readonly
+     */
     get mouseY() {
       return this[__mouseY__];
     }
@@ -71,6 +121,9 @@ DI.bind('pb_service_Move', ($registry, Events) => {
     Events.of(doc.body, Move)
         .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
     Move[__document__] = doc;
+    Move[__container__] = doc.createElement('div');
+    Move[__container__].classList.add('pb-move');
+    doc.body.appendChild(Move[__container__]);
   });
 
   return Move;

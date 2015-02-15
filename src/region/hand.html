@@ -2,9 +2,11 @@
 
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/check.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
-<link rel="import" href="out/service/dragdrop.html">
+<link rel="import" href="out/service/move.html">
+<link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/region/hand.css">
@@ -23,9 +25,11 @@ DI
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_region_Hand', (
         $registry,
-        Abilities, 
-        DragDrop, 
-        Droppable, 
+        Abilities,
+        Check,
+        Droppable,
+        Key,
+        Move,
         Region, 
         Utils, 
         doc, 
@@ -39,29 +43,30 @@ DI
   const EL_NAME = 'pb-r-hand';
 
   class ReorderableDroppable extends Droppable {
-    constructor(defaultValue) {
-      super(defaultValue);
+    constructor(name = 'pb-droppable', defaultTrigger = new Key('d'), defaultEnabled = true) {
+      super(name, defaultTrigger, defaultEnabled);
     }
 
-    trigger(el, event) {
-      el.classList.remove('pb-over');
-      let lastDraggedEl = DragDrop.lastDraggedEl;
-      if (!lastDraggedEl) {
-        return;
-      }
+    trigger(el) {
+      if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
+        let movedElement = Move.movedElements.values().next().value;
+        if (movedElement) {
+          // Go through every children and find the index that the element should be.
+          let dropped = false;
+          for (let child of Utils.toArray(el.children)) {
+            let rect = child.getBoundingClientRect();
+            if (!dropped && rect.left + rect.width / 2 > Move.mouseX) {
+              dropped = true;
+              el.insertBefore(movedElement, child);
+            }
+          }
 
-      // Go through every children and find the index that the element should be.
-      let dropped = false;
-      for (let child of Utils.toArray(el.children)) {
-        let rect = child.getBoundingClientRect();
-        if (!dropped && rect.left + rect.width / 2 > event.clientX) {
-          dropped = true;
-          el.insertBefore(lastDraggedEl, child);
+          if (!dropped) {
+            el.appendChild(movedElement);
+          }
+
+          Move.remove(movedElement);
         }
-      }
-
-      if (!dropped) {
-        el.appendChild(lastDraggedEl);
       }
     }
   }
@@ -101,11 +106,9 @@ DI
   }
 
 
-  let droppable = new ReorderableDroppable(true);
-  // TODO(gs)
-  // $registry.add(
-  //     EL_NAME, 
-  //     Abilities.config(Hand, {}, droppable).prototype);
+  Abilities.of(Hand.prototype)
+      .add(new ReorderableDroppable('droppable', new Key('d'), true));
+  $registry.add(EL_NAME, Hand.prototype);
 
   if (window['TEST_MODE']) {
     Hand.ReorderableDroppable = ReorderableDroppable;

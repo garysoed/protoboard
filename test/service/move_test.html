@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="../..">
+  <title>service.Move Unit Tests</title>
+
+  <link rel="import" href="out/di.html">
+  <link rel="import" href="out/service/main.html">
+  <link rel="import" href="out/service/registry.html">
+  <link rel="import" href="out/testbase.html">
+</head>
+<body>
+  <script>
+  DI
+      .with('$registry', Registry => new Registry())
+      .constant('doc', document.currentScript.ownerDocument)
+      .run((expect, _, $registry, Move, doc, pb_t) => {
+
+  // Private symbols.
+  const __container__ = pb_t.getSymbol(Move, 'container');
+  const __moveContainer__ = pb_t.getSymbol(Move, 'moveContainer');
+  const __onMouseMove__ = pb_t.getSymbol(Move, 'onMouseMove');
+
+  describe('service.Move', () => {
+    before(done => {
+      $registry.register(doc);
+      done();
+    });
+
+    describe('__moveContainer__', () => {
+      it('should set the left and top coordinates of the container correctly', () => {
+        let child1 = doc.createElement('div');
+        _.spy(child1, 'getBoundingClientRect').overrideReturn({ width: 20, height: 30 });
+        let child2 = doc.createElement('div');
+        _.spy(child2, 'getBoundingClientRect').overrideReturn({ width: 10, height: 40 });
+
+        let container = Move[__container__];
+        container.appendChild(child1);
+        container.appendChild(child2);
+
+        let x = 55;
+        let y = 77;
+        Move[__onMouseMove__]({ clientX: x, clientY: y });
+
+        Move[__moveContainer__]();
+
+        expect(container.style.left).to.equal('45px');
+        expect(container.style.top).to.equal('57px');
+      });
+    });
+    
+    describe('__onMouseMove__', () => {
+      it('should set the mouse coordinates correctly and move the container', () => {
+        let event = { clientX: 12, clientY: 24};
+
+        _.spy(Move, __moveContainer__);
+
+        Move[__onMouseMove__](event);
+
+        expect(Move.mouseX).to.equal(event.clientX);
+        expect(Move.mouseY).to.equal(event.clientY);
+        expect(Move[__moveContainer__]).calledWith().at.least(1);
+      });
+    });
+
+    describe('add', () => {
+      it('should add the element to the container and move the container', () => {
+        let el = doc.createElement('div');
+
+        _.spy(Move, __moveContainer__);
+
+        Move.add(el);
+
+        expect(Move[__moveContainer__]).calledWith().at.least(1);
+        expect(Move[__container__].contains(el)).to.be.true();
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    })
+  });
+  });
+  </script>
+</body>

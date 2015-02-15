@@ -79,7 +79,9 @@ DI
       let candidates = Utils.toArray(el.children)
           .filter(child => $(child).attr(ATTR_PLACEHOLDER) === undefined);
       let moved = candidates[Math.round(Math.random() * (candidates.length - 1))];
-      Move.add(moved, event);
+      if (moved) {
+        Move.add(moved, event);
+      }
     }
   }
 

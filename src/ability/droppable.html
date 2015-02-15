@@ -36,15 +36,6 @@ DI.bind('pb_ability_Droppable', (Ability, Check, Click, Move) => {
     }
 
     /**
-     * @method __isEnabled__
-     * @return {boolean} True iff the ability is enabled.
-     * @private
-     */
-    [__isEnabled__](el) {
-      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-    }
-
-    /**
      * @override
      */
     init(el) {
@@ -59,14 +50,11 @@ DI.bind('pb_ability_Droppable', (Ability, Check, Click, Move) => {
      * @override
      */
     trigger(el) {
-      if (this[__isEnabled__](el)) {
-        let toRemove = [];
-        Move.movedElements.forEach(movedElement => {
+      if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
+        let movedElement = Move.movedElements.values().next().value;
+        if (movedElement) {
           el.appendChild(movedElement);
-          toRemove.push(movedElement);
-        });
-        for (let removedEl of toRemove) {
-          Move.remove(removedEl);
+          Move.remove(movedElement);
         }
       }
     }

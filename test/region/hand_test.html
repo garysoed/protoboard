@@ -8,16 +8,21 @@
 
   <link rel="import" href="out/di.html">
   <link rel="import" href="out/region/hand.html">
-  <link rel="import" href="out/service/dragdrop.html">
+  <link rel="import" href="out/service/move.html">
   <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/utils.html">
 </head>
 <body>
   <script>
   DI
+      .constant('Move', {
+        movedElements: [],
+        mouseX: 0,
+        remove: () => {}
+      })
       .with('$registry', Registry => new Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, doc, DragDrop, Hand, Utils) => {
+      .run((expect, _, $, doc, Hand, Move, Utils) => {
 
   describe('region.Hand.ReorderableDroppable', () => {
     describe('#trigger', () => {
@@ -26,11 +31,12 @@
 
       beforeEach(done => {
         el = doc.createElement('div');
-        droppable = new Hand.ReorderableDroppable(true);
+        droppable = new Hand.ReorderableDroppable();
+        $(el).attr(droppable.attrName, 'true');
         done();
       });
 
-      it('should remove the CSS class, and inserts before the correct child', () => {
+      it('should insert before the correct child', () => {
         let child1 = doc.createElement('div');
         _.spy(child1, 'getBoundingClientRect').overrideReturn({
           left: 10,
@@ -48,12 +54,15 @@
         el.classList.add('pb-over');
 
         let dragged = doc.createElement('div');
-        DragDrop.dragStart(dragged, 0, 0);
 
-        droppable.trigger(el, {clientX: 40});
+        Move.movedElements = [dragged];
+        Move.mouseX = 40;
+        _.spy(Move, 'remove');
 
-        expect(el.classList.contains('pb-over')).to.be.false();
+        droppable.trigger(el);
+
         expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+        expect(Move.remove).calledWith(dragged).at.least(1);
       });
       it('should insert as the last child if eventX is too far to the right', () => {
         let child1 = doc.createElement('div');
@@ -72,15 +81,18 @@
         el.appendChild(child2);
 
         let dragged = doc.createElement('div');
-        DragDrop.dragStart(dragged, 0, 0);
+        Move.movedElements = [dragged];
+        Move.mouseX = 50;
+        _.spy(Move, 'remove');
 
-        droppable.trigger(el, {clientX: 50});
+        droppable.trigger(el);
 
         expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
-
+        expect(Move.remove).calledWith(dragged).at.least(1);
       });
       it('should not crash if there are no last dragged element', () => {
-        droppable.trigger(el, {});
+        Move.movedElements = [];
+        droppable.trigger(el);
       });
     });
     afterEach(done => {

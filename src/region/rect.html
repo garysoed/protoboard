@@ -2,9 +2,9 @@
 
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/check.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
-<link rel="import" href="out/service/dragdrop.html">
 <link rel="import" href="out/trigger/click.html">
 <link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
@@ -24,10 +24,11 @@ DI
     .bind('pb_region_Rect', (
         $registry,
         Abilities,
+        Check,
         Click,
-        DragDrop, 
         Droppable, 
         Key,
+        Move, 
         Region, 
         Utils, 
         doc, 
@@ -73,10 +74,16 @@ DI
     [__onDomMutation__](mutations) {
       mutations.forEach(mutation => {
         Utils.toArray(mutation.removedNodes).forEach(removedNode => {
-          removedNode.style.left = 0;
-          removedNode.style.top = 0;
+          removedNode.style.left = '';
+          removedNode.style.top = '';
         });
       });
+    }
+
+    init(el) {
+      super.init(el);
+
+      this[__mutationObserver__].observe(el, { childList: true });
     }
 
     /**
@@ -87,26 +94,29 @@ DI
      * @param {!Event} event Event object that triggered the call.
      */
     trigger(el, event) {
-      let lastDraggedEl = DragDrop.lastDraggedEl;
-      if (!lastDraggedEl) {
-        return;
-      }
-      el.appendChild(lastDraggedEl);
+      if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
+        let movedElement = Move.movedElements.values().next().value;
 
-      let screenCoord = lastDraggedEl.getBoundingClientRect();
-      let dLeft = event.clientX - screenCoord.left - DragDrop.offsetX;
-      let dTop = event.clientY - screenCoord.top - DragDrop.offsetY;
-      lastDraggedEl.style.left = `${lastDraggedEl.offsetLeft + dLeft}px`;
-      lastDraggedEl.style.top = `${lastDraggedEl.offsetTop + dTop}px`;
+        if (movedElement) {
+          el.appendChild(movedElement);
 
-      // TODO(gs): attached callback doesn't seem to be called on appendChild.
-      // https://github.com/webcomponents/webcomponentsjs/issues/18
-      // TODO(gs): Make the ability fire an event instead. This class should just listen to the drop
-      // event.
-      if (DragDrop.lastDraggedEl.attachedCallback) {
-        DragDrop.lastDraggedEl.attachedCallback();
+          let rect = movedElement.getBoundingClientRect();
+          let dLeft = Move.mouseX - rect.left - rect.width / 2;
+          let dTop = Move.mouseY - rect.top - rect.height / 2;
+          movedElement.style.left = `${movedElement.offsetLeft + dLeft}px`;
+          movedElement.style.top = `${movedElement.offsetTop + dTop}px`;
+
+          // TODO(gs): attached callback doesn't seem to be called on appendChild.
+          // https://github.com/webcomponents/webcomponentsjs/issues/18
+          // TODO(gs): Make the ability fire an event instead. This class should just listen to the drop
+          // event.
+          if (movedElement.attachedCallback) {
+            movedElement.attachedCallback();
+          }
+
+          Move.remove(movedElement);
+        }
       }
-      DragDrop.dragEnd();
     }
   }
 
@@ -123,8 +133,7 @@ DI
 
   Abilities.of(Rect.prototype)
       .add(new FlexDroppable('droppable', new Key('d'), true));
-  // TODO(gs)
-  // $registry.add(EL_NAME, Abilities.config(Rect, {}, FlexDroppable).prototype);
+  $registry.add(EL_NAME, Rect.prototype);
 
   if (window['TEST_MODE']) {
     Rect.FlexDroppable = FlexDroppable;

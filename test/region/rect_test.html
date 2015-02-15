@@ -7,7 +7,7 @@
 
   <link rel="import" href="out/di.html">
   <link rel="import" href="out/region/rect.html">
-  <link rel="import" href="out/service/dragdrop.html">
+  <link rel="import" href="out/service/move.html">
   <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/utils.html">
   <link rel="import" href="out/testutils.html">
@@ -19,8 +19,14 @@
   DI
       .with('$registry', Registry => new Registry())
       .with('FlexDroppable', Rect => Rect.FlexDroppable)
+      .constant('pb_service_Move', {
+        movedElements: [],
+        remove: () => {},
+        mouseX: 0,
+        mouseY: 0
+      })
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, doc, DragDrop, FlexDroppable, Rect, Utils, pb_t) => {
+      .run((expect, _, doc, FlexDroppable, Move, Rect, Utils, pb_t) => {
 
   let __onDomMutation__ = pb_t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
 
@@ -32,8 +38,10 @@
       let __mutationObserver__;
 
       beforeEach(done => {
+        flexDroppable = new FlexDroppable();
         el = doc.createElement('div');
-        flexDroppable = new FlexDroppable(true);
+        flexDroppable.init(el);
+
         __mutationObserver__ = pb_t.getSymbol(flexDroppable, 'mutationObserver');
         done();
       });
@@ -44,22 +52,23 @@
           lastDraggedEl.attachedCallback = _.spiedFunction();
           _.spy(lastDraggedEl, 'getBoundingClientRect').overrideReturn({
             left: 56,
-            top: 78
+            top: 78,
+            width: 24,
+            height: 68
           });
 
-          DragDrop.dragStart(lastDraggedEl, 12 /** offsetX */, 34 /** offsetY */);
-          _.spy(DragDrop, 'dragEnd');
+          Move.movedElements = [lastDraggedEl];
+          Move.mouseX = 90;
+          Move.mouseY = 12;
+          _.spy(Move, 'remove');
 
-          flexDroppable.trigger(el, {
-            clientX: 90,
-            clientY: 12
-          });
+          flexDroppable.trigger(el);
 
           expect(Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
           expect(lastDraggedEl.style.left).to.be.equal('22px');
           expect(lastDraggedEl.style.top).to.be.equal('-100px');
           expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
-          expect(DragDrop.dragEnd).calledWith().at.least(1);
+          expect(Move.remove).calledWith(lastDraggedEl).at.least(1);
         });
       });
 
@@ -74,9 +83,9 @@
             { removedNodes: [ el3 ] }
           ]);
 
-          expect(el1.style).to.be.eql({ left: 0, top: 0 });
-          expect(el2.style).to.be.eql({ left: 0, top: 0 });
-          expect(el3.style).to.be.eql({ left: 0, top: 0 });
+          expect(el1.style).to.be.eql({ left: '', top: '' });
+          expect(el2.style).to.be.eql({ left: '', top: '' });
+          expect(el3.style).to.be.eql({ left: '', top: '' });
         });
       });
     });

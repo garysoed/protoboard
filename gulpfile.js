@@ -144,8 +144,7 @@ gulp.task('sass-ex', function() {
 gulp.task('watch', function() {
   // SASS
   gulp.watch(['src/**/*.scss'], function(event) {
-    var base = event.path.substring(__dirname.length).split('/')[1];
-    gulp.src(event.path, {base: base})
+    gulp.src(['src/**/*.html'])
         .pipe(plumber())
         .pipe(subSass())
         .pipe(debug({title: chalk.green('sass')}))

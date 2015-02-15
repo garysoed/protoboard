@@ -39,9 +39,8 @@ DI.bind('pb_trigger_Key', (Events, Move) => {
      * @private
      */
     [__onKeyPress__](ability, element, event) {
-      if (this[__element__]) {
+      if (this[__element__] === element) {
         ability.trigger.call(ability, this[__element__], event);
-        this[__element__] = null;
       }
     }
 
@@ -80,6 +79,7 @@ DI.bind('pb_trigger_Key', (Events, Move) => {
           .on('keyboard', this[__key__], this[__onKeyPress__].bind(this, ability, element))
           .on('dom', 'mouseenter', this[__onMouseEnter__].bind(this, element))
           .on('dom', 'mouseleave', this[__onMouseLeave__].bind(this, element));
+      element.classList.add('pb-key');
     }
 
     /**
@@ -90,6 +90,7 @@ DI.bind('pb_trigger_Key', (Events, Move) => {
      */
     off(element) {
       Events.of(element, this).off();
+      element.classList.remove('pb-key');
     }
 
     toString() {
