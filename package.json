@@ -52,6 +52,7 @@
     "hammerjs": "^2.0.4",
     "jquery": "^2.1.1",
     "keyboardjs": "^0.4.2",
+    "keypress": "git://github.com/dmauro/Keypress",
     "spies": "git://github.com/garysoed/spies.git",
     "through2": "^0.6.3",
     "yargs": "^1.3.3"

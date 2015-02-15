@@ -1,11 +1,14 @@
 <base href="../..">
 
 <link rel="import" href="out/di.html">
+<link rel="import" href="out/events.html">
+<link rel="import" href="out/service/move.html">
 
 <script>
-DI.bind('pb_trigger_Key', Events => {
+DI.bind('pb_trigger_Key', (Events, Move) => {
   // Private symbols.
   const __active__ = Symbol();
+  const __element__ = Symbol();
   const __key__ = Symbol('key');
 
   const __onKeyPress__ = Symbol();
@@ -24,6 +27,7 @@ DI.bind('pb_trigger_Key', Events => {
      */
     constructor(key) {
       this[__key__] = key;
+      this[__element__] = null;
     }
 
     /**
@@ -34,9 +38,10 @@ DI.bind('pb_trigger_Key', Events => {
      * @param {!Element} element The element to trigger the ability on.
      * @private
      */
-    [__onKeyPress__](ability, element) {
-      if (this[__active__]) {
-        ability.trigger.call(ability, element);
+    [__onKeyPress__](ability, element, event) {
+      if (this[__element__]) {
+        ability.trigger.call(ability, this[__element__], event);
+        this[__element__] = null;
       }
     }
 
@@ -46,8 +51,8 @@ DI.bind('pb_trigger_Key', Events => {
      * @method __onMouseEnter__
      * @private
      */
-    [__onMouseEnter__]() {
-      this[__active__] = true;
+    [__onMouseEnter__](element) {
+      this[__element__] = element;
     }
 
     /**
@@ -56,8 +61,10 @@ DI.bind('pb_trigger_Key', Events => {
      * @method __onMouseLeave__
      * @private
      */
-    [__onMouseLeave__]() {
-      this[__active__] = false;
+    [__onMouseLeave__](element) {
+      if (this[__element__] === element) {
+        this[__element__] = null;
+      }
     }
 
     /**
@@ -71,8 +78,8 @@ DI.bind('pb_trigger_Key', Events => {
     on(element, ability) {
       Events.of(element, this)
           .on('keyboard', this[__key__], this[__onKeyPress__].bind(this, ability, element))
-          .on('dom', 'mouseenter', this[__onMouseEnter__].bind(this))
-          .on('dom', 'mouseleave', this[__onMouseLeave__].bind(this));
+          .on('dom', 'mouseenter', this[__onMouseEnter__].bind(this, element))
+          .on('dom', 'mouseleave', this[__onMouseLeave__].bind(this, element));
     }
 
     /**
@@ -84,8 +91,19 @@ DI.bind('pb_trigger_Key', Events => {
     off(element) {
       Events.of(element, this).off();
     }
+
+    toString() {
+      return `pb-key-${this[__key__]}`;
+    }
   }
 
-  return () => { return key => new Key(key); };
+  Key.parse = function(str) {
+    if (str.substring(0, 'pb-key-'.length) === 'pb-key-') {
+      return new Key(str.substring('pb-key-'.length));
+    }
+    return undefined;
+  };
+
+  return Key;
 });
 </script>

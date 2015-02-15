@@ -98,7 +98,7 @@
           });
           it('should throw exception if an argument cannot be found for nameless provider', () => {
             let provider = new DI.Provider(a => 3, DI);
-            expect(() => provider.resolve(DI)).to.throw('run expression');
+            expect(() => provider.resolve(DI)).to.throw('running expression');
           });
           it('should print warning if the function returns undefined', () => {
             let name = 'name';

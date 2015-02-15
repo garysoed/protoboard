@@ -7,15 +7,12 @@
 DI.bind('pb_t', (_, Utils) => {
   let TestUtil = {
     createFakeAbility(name) {
-      return { 
-        constructor: {
-          name: name
-        }, 
-        trigger: _.spiedFunction(),
-        setDefaultValue: _.spiedFunction(),
-        attributeChangedCallback: _.spiedFunction(),
-        attachedCallback: _.spiedFunction(),
-        detachedCallback: _.spiedFunction()
+      return {
+        attrName: `attr${name}`,
+        attrTrigger: `attr${name}Trigger`,
+        init: _.spiedFunction(),
+        updateConfig: _.spiedFunction(),
+        trigger: _.spiedFunction()
       };
     },
 
@@ -25,6 +22,20 @@ DI.bind('pb_t', (_, Utils) => {
       fake.on = _.spiedFunction().overrideReturn(fake);
       fake.off = _.spiedFunction().overrideReturn(fake);
       return fake;
+    },
+
+    createFakeTrigger(name) {
+      return {
+        toString() { return name; },
+        on: _.spiedFunction(),
+        off: _.spiedFunction()
+      };
+    },
+
+    getSymbol(obj, name) {
+      return Object.getOwnPropertySymbols(obj).find(symbol => {
+        return `Symbol(${name})` === symbol.toString();
+      });
     }
   };
 

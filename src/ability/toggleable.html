@@ -3,114 +3,108 @@
 <link rel="import" href="out/ability/ability.html">
 <link rel="import" href="out/check.html">
 <link rel="import" href="out/di.html">
+<link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-DI.bind('pb_ability_Toggleable', (Ability, Check, Utils) => {
-
-/**
- * Provides decorator to make an element toggleable between two states.
- * 
- * @class ability.Toggleable
- * @extends ability.Ability
- */
-
-/**
- * Set to true to make this element toggleable.
- * 
- * @attribute pb-toggleable
- */
-const ATTR_NAME = 'pb-toggleable';
-
-/**
- * Set to true to show the front side of the element, however front is defined.
- *
- * @attribute pb-showfront
- */
-const ATTR_SHOWFRONT = 'pb-showfront';
-
-// Private symbols.
-const __defaultEnabled__ = Symbol();
-const __defaultShowFront__ = Symbol();
-
-const __isEnabled__ = Symbol();
-const __isShowFront__ = Symbol();
-
-class Toggleable extends Ability {
+DI.bind('pb_ability_Toggleable', (Ability, Check, Key, Utils) => {
 
   /**
-   * @class ability.Toggleable
-   * @constructor
-   * @param {boolean} defaultEnabled True iff the element registered to this ability will have
-   *     this ability enabled by default.
-   * @param {boolean} defaultShowFront True iff the element registered to this ability will
-   *     show the front side by default.
-   */
-  constructor(defaultEnabled = true, defaultShowFront = false) {
-    this[__defaultEnabled__] = defaultEnabled;
-    this[__defaultShowFront__] = defaultShowFront;
-  }
-
-  /**
-   * @method __isEnabled__
-   * @param {!Element} el Element to check.
-   * @return {boolean} True iff the ability is enabled for the given element.
-   * @private
-   */
-  [__isEnabled__](el) {
-    return Check($(el).attr(ATTR_NAME)).isBoolean().orThrows();
-  }
-
-  /**
-   * @method __isShowFront__
-   * @param {!Element} el Element to check.
-   * @return {boolean} True iff the element is currently showing the "front" side.
-   * @private
-   */
-  [__isShowFront__](el) {
-    return Check($(el).attr(ATTR_SHOWFRONT)).isBoolean().orThrows();
-  }
-
-  /**
-   * Sets the default value of the given element.
-   *
-   * @method setDefaultValue
-   * @param {!Element} el The element whose default value should be set.
-   */
-  setDefaultValue(el) {
-    if ($(el).attr(ATTR_NAME) === undefined) {
-      $(el).attr(ATTR_NAME, this[__defaultEnabled__]);
-    }
-
-    if ($(el).attr(ATTR_SHOWFRONT) === undefined) {
-      $(el).attr(ATTR_SHOWFRONT, this[__defaultShowFront__]);
-    }
-  }
-
-  /**
-   * Toggles the state of the element.
-   *
-   * @method trigger
-   * @param  {!Element} el Element to toggle the state of.
-   */
-  trigger(el) {
-    if (this[__isEnabled__](el)) {
-      $(el).attr(ATTR_SHOWFRONT, !this[__isShowFront__](el));
-    }
-  }
-
-  /**
-   * The name of the ability. This is used as an ID to refer to the registered abilities.
+   * Provides decorator to make an element toggleable between two states.
    * 
-   * @property name
-   * @type string
-   * @readonly
+   * @class ability.Toggleable
+   * @extends ability.Ability
    */
-  get name() {
-    return ATTR_NAME;
+
+  /**
+   * Set to true to show the front side of the element, however front is defined.
+   *
+   * @attribute pb-showfront
+   */
+  
+  // TODO(gs): Update the CSS pb-showfront => pb-toggleable-active
+  const ATTR_SHOWFRONT = 'pb-showfront';
+
+  // Private symbols.
+  const __defaultEnabled__ = Symbol();
+  const __defaultActive__ = Symbol();
+
+  const __isEnabled__ = Symbol();
+  const __isActive__ = Symbol();
+
+  class Toggleable extends Ability {
+
+    constructor(
+        name = 'pb-toggleable', 
+        defaultTrigger = new Key('t'), 
+        defaultConfig = { enabled: true, active: false }) {
+      super(name, defaultTrigger);
+
+      if (typeof defaultConfig === 'boolean') {
+        this[__defaultEnabled__] = defaultConfig;
+        this[__defaultActive__] = false;
+      } else {
+        // TODO(gs): Add run time type check
+        this[__defaultEnabled__] = defaultConfig.enabled;
+        this[__defaultActive__] = defaultConfig.active;
+      }
+    }
+
+    /**
+     * @method __isEnabled__
+     * @param {!Element} el Element to check.
+     * @return {boolean} True iff the ability is enabled for the given element.
+     * @private
+     */
+    [__isEnabled__](el) {
+      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+    }
+
+    /**
+     * @method __isActive__
+     * @param {!Element} el Element to check.
+     * @return {boolean} True iff the element is currently active.
+     * @private
+     */
+    [__isActive__](el) {
+      return Check($(el).attr(this.attrActive)).isBoolean().orThrows();
+    }
+
+    /**
+     * @override
+     */
+    init(el) {
+      super.init(el);
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
+      }
+
+      if ($(el).attr(this.attrActive) === undefined) {
+        $(el).attr(this.attrActive, this[__defaultActive__]);
+      }
+    }
+
+    /**
+     * @override
+     */
+    trigger(el) {
+      if (this[__isEnabled__](el)) {
+        $(el).attr(this.attrActive, !this[__isActive__](el));
+      }
+    }
+
+    /**
+     * The name of the attribute on the element corresponding to this ability that indicates that 
+     * the element is in active state.
+     * 
+     * @property attrActive
+     * @type string
+     * @readonly
+     */
+    get attrActive() {
+      return `${this.attrName}-active`;
+    }
   }
-}
 
-return Toggleable;
-
+  return Toggleable;
 });

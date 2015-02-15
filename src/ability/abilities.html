@@ -1,125 +1,132 @@
 <base href="../..">
 
-<link rel="import" href="out/ability/triggerable.html">
 <link rel="import" href="out/di.html">
+<link rel="import" href="out/polyfill.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-DI.bind('pb_ability_Abilities', (Triggerable, Utils) => {
+DI.bind('pb_ability_Abilities', Utils => {
 
-// Private symbols.
-const __register__ = Symbol();
+  // Private symbols.
+  const __abilities__ = Symbol('abilities');
+  const __element__ = Symbol();
+  const __observer__ = Symbol('observer');
 
-const __abilities__ = Symbol();
+  const __onMutation__ = Symbol('onMutation');
 
+  class Builder {
 
-/**
- * Entry point to add any abilities to custom elements. Note that this only works on custom
- * elements.
- *
- * @class ability.Abilities
- * @static
- */
-const Abilities = {
-
-  /**
-   * Registers the given ability to the given constructor.
-   *
-   * @method __register__
-   * @param {!Object} ctorProto The prototype of the constructor to register to.
-   * @param {!ability.Ability} ability The ability to register.
-   * @private
-   * @static
-   */
-  [__register__](ctorProto, ability) {
-    Utils.extendFn(
-        ctorProto,
-        'createdCallback',
-        function() {
-          if (!this[__abilities__]) {
-            this[__abilities__] = {};
-          }
-          this[__abilities__][ability.constructor.name] = ability;
-          ability.setDefaultValue.call(ability, this);
-        });
-    Utils.extendFn(
-        ctorProto, 
-        'attributeChangedCallback', 
-        function(name, oldValue, newValue) {
-          ability.attributeChangedCallback.call(ability, this, name, oldValue, newValue);
-        });
-    Utils.extendFn(
-        ctorProto, 
-        'attachedCallback', 
-        function() {
-          ability.attachedCallback.call(ability, this);
-        });
-    Utils.extendFn(
-        ctorProto, 
-        'detachedCallback', 
-        function() {
-          ability.detachedCallback.call(ability, this);
-        }, 
-        true /* callBefore */);
-  },
-
-  /**
-   * Configures the given constructor to add abilities. This only works if the constructor is used
-   * for custom elements.
-   *
-   * Look at other classes in ability module to see what are supported.
-   *
-   * @method config
-   * @param {!Function} ctor Constructor of the element to add the abilities to.
-   * @param {!Map.<string, ability.Ability>} cfg Map with the trigger type as the key, and ability
-   *    to be triggered as the value.
-   * @param {ability.Ability} [...abilities] Other abilities to register.
-   * @static
-   */
-  config(ctor, cfg, ...abilities) {
-    let ctorProto = ctor.prototype;
-    let triggerConfig = {};
-    // collect the known abilities.
-    let knownAbilities = new Set();
-
-    // Get from config
-    for (let key in cfg) {
-      let ability = cfg[key];
-      knownAbilities.add(ability);
-      this[__register__](ctorProto, ability);
-      triggerConfig[key] = ability.constructor.name;
+    /**
+     * @constructor
+     * @class ability.Abilities.Builder
+     * @param {!Element} el Element to add abilities to.
+     */
+    constructor(el) {
+      this[__element__] = el;
     }
 
-    // Get from the rest of abilities
-    for (let ability of abilities) {
-      knownAbilities.add(ability);
-      this[__register__](ctorProto, ability);
+    /**
+     * Adds the given ability to the element specified in the builder.
+     *
+     * @method add
+     * @param {!ability.Ability} ability The ability to add.
+     * @return {!ability.Abilities.Builder} This builder object for chaining.
+     */
+    add(ability) {
+      let key = ability.attrName;
+      if (!this[__element__][__abilities__]) {
+        this[__element__][__abilities__] = new Map();
+      }
+
+      if (this[__element__][__abilities__].has(ability.attrName)) {
+        throw `Ability with key ${ability.attrName} is already registered`;
+      }
+      this[__element__][__abilities__].set(ability.attrName, ability);
+
+      if (this[__element__][__abilities__].has(ability.attrTrigger)) {
+        throw `Ability with key ${ability.attrTrigger} is already registered`;
+      }
+      this[__element__][__abilities__].set(ability.attrTrigger, ability);
+
+      return this;
     }
-
-    this[__register__](ctorProto, new Triggerable(triggerConfig, knownAbilities));
-
-    return ctor;
-  },
-
-  /**
-   * Triggers the given ability that was registered on the given element.
-   *
-   * @method trigger
-   * @param {!Element} el The element to trigger the ability on.
-   * @param {!Function} abilityCtor The constructor of the Ability to trigger.
-   * @static
-   */
-  trigger(el, abilityCtor) {
-    let name = abilityCtor.name;
-    if (!el[__abilities__] || !el[__abilities__][name]) {
-      throw `Cannot find ability ${name} in element ${el}`;
-    }
-    el[__abilities__][name].trigger(el);
   }
-};
 
-return Abilities;
+  /**
+   * TODO(gs): Doc
+   *
+   * @class ability.Abilities
+   * @static
+   */
+  const Abilities = {
 
+    /**
+     * Handler called when the MutationObserver detected a change.
+     *
+     * @method __onMutation__
+     * @param {!Array.<!MutationRecord>} records Mutation records.
+     */
+    [__onMutation__](records) {
+      for (let record of records) {
+        let el = record.target;
+        let attrName = record.attributeName;
+        if (el[__abilities__] && el[__abilities__].has(attrName)) {
+          el[__abilities__].get(attrName).updateConfig(el);
+        }
+      }
+    },
+
+    /**
+     * Creates a new Abilities Builder to operate on the given element.
+     *
+     * @method of
+     * @param {!Element} el Element that the Builder should operate on.
+     * @return {!ability.Abilities.Builder} The builder object.
+     */
+    of(el) {
+      return new Builder(el);
+    },
+
+    /**
+     * Initializes the added abilities on the given element.
+     *
+     * @method init
+     * @param {!Element} el The element to initialize.
+     */
+    init(el) {
+      if (el[__observer__]) {
+        throw `Element ${el} is already initialized`;
+      }
+      el[__observer__] = new MutationObserver(this[__onMutation__]);
+
+      if (!el[__abilities__]) {
+        return;
+      }
+
+      let observerConfig = {
+        attributes: true,
+        attributeFilter: Array.from(el[__abilities__].keys())
+      };
+
+      Utils.extendFn(
+          el,
+          'attachedCallback',
+          () => el[__observer__].observe(el, observerConfig));
+      Utils.extendFn(
+          el,
+          'detachedCallback',
+          () => el[__observer__].disconnect());
+
+      let abilities = new Set(el[__abilities__].values());
+      abilities.forEach(ability => {
+        ability.init(el);
+      });
+    },
+
+    Builder: Builder
+  };
+
+  return Abilities;
 });
 
 </script>

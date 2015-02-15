@@ -12,6 +12,7 @@
 <body>
   <script>
   DI
+      .with('$registry', Registry => new Registry())
       .with('doc', () => document.currentScript.ownerDocument)
       .run((expect, _, _M, doc, Toggleable) => {
 
@@ -23,30 +24,32 @@
       done();
     });
 
-    describe('#setDefaultValue', () => {
-      let toggleable;
-
-      beforeEach(done => {
-        toggleable = new Toggleable(
-            false /* defaultEnabled */, 
-            true /* defaultShowFront */);
-        done();
-      });
-
+    describe('#init', () => {
       it('should set the default values', () => {
-        toggleable.setDefaultValue(el);
-        expect($(el).attr('pb-toggleable')).to.be.equal('false');
-        expect($(el).attr('pb-showfront')).to.be.equal('true');
+        let toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+        toggleable.init(el);
+        expect($(el).attr(toggleable.attrName)).to.equal('true');
+        expect($(el).attr(toggleable.attrActive)).to.be.equal('true');
       });
       it('should do nothing if enabled is set', () => {
-        $(el).attr('pb-toggleable', 'true');
-        toggleable.setDefaultValue(el);
-        expect($(el).attr('pb-toggleable')).to.be.equal('true');
+        let value = 'value';
+        let toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+
+        $(el).attr(toggleable.attrName, value);
+        toggleable.init(el);
+
+        expect($(el).attr(toggleable.attrName)).to.equal(value);
+        expect($(el).attr(toggleable.attrActive)).to.be.equal('true');
       });
       it('should do nothing if state is set', () => {
-        $(el).attr('pb-showfront', 'false');
-        toggleable.setDefaultValue(el);
-        expect($(el).attr('pb-showfront')).to.be.equal('false');
+        let value = 'value';
+        let toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+
+        $(el).attr(toggleable.attrActive, value);
+        toggleable.init(el);
+
+        expect($(el).attr(toggleable.attrName)).to.equal('true');
+        expect($(el).attr(toggleable.attrActive)).to.be.equal(value);
       });
     });
 
@@ -54,23 +57,23 @@
       let toggleable;
 
       beforeEach(done => {
-        toggleable = new Toggleable();
+        toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
         done();
       });
 
       it('should toggle the state', () => {
-        $(el)
-            .attr('pb-toggleable', 'true')
-            .attr('pb-showfront', 'false');
+        $(el).attr(toggleable.attrName, 'true');
+        $(el).attr(toggleable.attrActive, 'true');
         toggleable.trigger(el);
-        expect($(el).attr('pb-showfront')).to.be.equal('true');
+
+        expect($(el).attr(toggleable.attrActive)).to.equal('false');
       });
       it('should do nothing if disabled', () => {
-        $(el)
-            .attr('pb-toggleable', 'false')
-            .attr('pb-showfront', 'false');
+        $(el).attr(toggleable.attrName, 'false');
+        $(el).attr(toggleable.attrActive, 'true');
         toggleable.trigger(el);
-        expect($(el).attr('pb-showfront')).to.be.equal('false');
+
+        expect($(el).attr(toggleable.attrActive)).to.equal('true');
       });
     });
 

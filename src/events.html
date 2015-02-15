@@ -1,11 +1,11 @@
 <base href="..">
 
 <link rel="import" href="out/hammerwrapper.html">
-<link rel="import" href="out/third_party/keyboardjs.html">
+<link rel="import" href="out/third_party/keypress.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-DI.bind('pb_Events', (HammerWrapper, KeyboardJS, Utils) => {
+DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
 
   // Private symbols.
   const __element__ = Symbol();
@@ -55,11 +55,12 @@ DI.bind('pb_Events', (HammerWrapper, KeyboardJS, Utils) => {
     [TYPES.KEYBOARD]: {
       __registryRef__: Symbol(),
       register: (action, eventName, handler) => {
-        let ref = KeyboardJS.on(eventName, undefined, handler);
-        action[__element__][this.__registryRef__] = ref;
+        let ref = new Keypress();
+        ref.simple_combo(eventName, handler);
+        action[__element__][this[__registryRef__]] = ref;
       },
       unregister: (action, eventName, handler) => {
-        action[__element__][this.__registryRef__].clear();
+        action[__element__][this[__registryRef__]].stop_listening();
       }
     }
   };

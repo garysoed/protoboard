@@ -6,10 +6,12 @@
 DI.bind('pb_service_Registry', () => {
 
   const __elements__ = Symbol();
+  const __toRun__ = Symbol();
 
   class Registry {
     constructor() {
       this[__elements__] = new Map();
+      this[__toRun__] = [];
     }
 
     add(name, prototype) {
@@ -17,11 +19,16 @@ DI.bind('pb_service_Registry', () => {
         throw `${name} is already registered`;
       }
       this[__elements__].set(name, prototype);
+      this.runAtRegister(doc => doc.registerElement(name, { prototype: prototype }));
+    }
+
+    runAtRegister(fn) {
+      this[__toRun__].push(fn);
     }
 
     register(doc) {
-      for (let [name, prototype] of this[__elements__]) {
-        doc.registerElement(name, { prototype: prototype });
+      for (let fn of this[__toRun__]) {
+        fn(doc);
       }
     }
   }

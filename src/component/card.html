@@ -1,12 +1,11 @@
 <base href="../..">
 
 <link rel="import" href="out/ability/abilities.html">
-<link rel="import" href="out/ability/contextable.html">
-<link rel="import" href="out/ability/draggable.html">
-<link rel="import" href="out/ability/rotateable.html">
+<link rel="import" href="out/ability/pickable.html">
 <link rel="import" href="out/ability/toggleable.html">
 <link rel="import" href="out/component/component.html">
 <link rel="import" href="out/di.html">
+<link rel="import" href="out/trigger/click.html">
 <link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/component/card.css">
@@ -25,12 +24,12 @@ DI
     .constant('doc', document.currentScript.ownerDocument)
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_component_Card', (
-        Abilities, 
-        Contextable, 
-        Draggable, 
-        Rotateable, 
-        Toggleable, 
+        Abilities,
+        Click,
         Component, 
+        Key,
+        Pickable,
+        Toggleable,
         Utils,
         doc,
         template,
@@ -53,7 +52,6 @@ DI
    * ```
    *
    * Supported abilities:
-   * - [[Draggable|ability.Draggable]]: Default enabled.
    * - [[Rotateable|ability.Rotateable]]: Default disabled.
    * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
    * 
@@ -78,23 +76,13 @@ DI
     }
   }
 
-  let toggleable = new Toggleable(true);
-  let rotateable = new Rotateable();
-  let draggable = new Draggable(true);
-  let contextable = new Contextable({
-    'Flip': toggleable,
-    'Tap / Untap': rotateable
-  });
-  $registry.add(
-      EL_NAME, 
-      Abilities.config(
-          Card,
-          {
-            'pb-click': toggleable
-          },
-          draggable,
-          rotateable,
-          contextable).prototype);
+  // TODO(gs): Add key config.
+  Abilities.of(Card.prototype)
+      .add(new Pickable('pickable', new Key('q'), true))
+      .add(new Toggleable('flippable', new Click(), true))
+      .add(new Toggleable('tappable', new Key('t'), true));
+
+  $registry.add(EL_NAME, Card.prototype);
 
   return Card;
 

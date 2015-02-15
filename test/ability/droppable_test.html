@@ -10,244 +10,90 @@
   <link rel="import" href="out/events.html">
   <link rel="import" href="out/di.html">
   <link rel="import" href="out/service/dragdrop.html">
+  <link rel="import" href="out/service/registry.html">
+  <link rel="import" href="out/third_party/jquery.html">
   <link rel="import" href="out/utils.html">
 </head>
 <body>
   <script>
     DI
+        .constant('Move', {
+          movedElements: [],
+          remove() {}
+        })
+        .with('$registry', Registry => new Registry())
         .with('doc', () => document.currentScript.ownerDocument)
         .run((
             expect,
             _,
             _M,
             doc,
-            DragDrop,
+            $,
             Droppable,
-            Events,
+            Move,
             Utils) => {
-
-      // Private symbols
-      let __onDragEnter__ = Utils.getSymbol(Droppable.prototype, 'onDragEnter');
-      let __onDragOver__ = Utils.getSymbol(Droppable.prototype, 'onDragOver');
-      let __onLastDraggedElChange__ = Utils.getSymbol(Droppable.prototype, 'onLastDraggedElChange');
 
       describe('Droppable', () => {
         let el;
-        let droppable;
 
         beforeEach(done => {
           el = doc.createElement('div');
-          droppable = new Droppable(true);
           done();
         });
 
-        describe('#setDefaultValue', () => {
-          it('should set the default value if not set', () => {
-            (new Droppable(true)).setDefaultValue(el);
-            expect($(el).attr('pb-droppable')).to.be.equal('true');
+        describe('#init', () => {
+          it('should set the default value if the attribute is not set', () => {
+            let droppable = new Droppable(undefined, undefined, false);
+            droppable.init(el);
+            expect($(el).attr(droppable.attrName)).to.equal('false');
           });
-          it('should be noop if the value is set', () => {
-            $(el).attr('pb-droppable', 'false');
-            (new Droppable(true)).setDefaultValue(el);
-            expect($(el).attr('pb-droppable')).to.be.equal('false');
-          });
-        });
-
-        describe('#attributeChangedCallback', () => {
-          it('should register if set to enabled', () => {
-            _.spy(droppable, 'register');
-            droppable.attributeChangedCallback(el, 'pb-droppable', 'false', 'true');
-            expect(droppable.register).calledWith(el).at.least(1);
-          });
-          it('should unregister if set to disabled', () => {
-            _.spy(droppable, 'unregister');
-            droppable.attributeChangedCallback(el, 'pb-droppable', 'true', 'false');
-            expect(droppable.unregister).calledWith(el).at.least(1);
-          });
-          it('should ignore unsupported attribute', () => {
-            _.spy(droppable, 'register');
-            _.spy(droppable, 'unregister');
-            droppable.attributeChangedCallback(el, 'unsupported', 'true', 'false');
-            expect(droppable.register).called().to.be.equal(0);
-            expect(droppable.unregister).called().to.be.equal(0);
-          });
-        });
-
-        describe('#attachedCallback', () => {
-          it('should register if enabled', () => {
-            $(el).attr('pb-droppable', 'true');
-            _.spy(droppable, 'register');
-            droppable.attachedCallback(el);
-            expect(droppable.register).calledWith(el).at.least(1);
-          });
-          it('should do nothing if not enabled', () => {
-            $(el).attr('pb-droppable', 'false');
-            _.spy(droppable, 'register');
-            droppable.attachedCallback(el);
-            expect(droppable.register).called().to.be.equal(0);
-          });
-          it('should do nothing if attribute is not set', () => {
-            _.spy(droppable, 'register');
-            droppable.attachedCallback(el);
-            expect(droppable.register).called().to.be.equal(0);
-          });
-        });
-
-        describe('#detachedCallback', () => {
-          it('should call unregister', () => {
-            _.spy(droppable, 'unregister');
-            droppable.detachedCallback(el);
-            expect(droppable.unregister).calledWith(el).at.least(1);
+          it('should not set the default value if the attribute is set', () => {
+            let value = 'value';
+            let droppable = new Droppable();
+            $(el).attr(droppable.attrName, value);
+            droppable.init(el);
+            expect($(el).attr(droppable.attrName)).to.equal(value);
           });
         });
 
         describe('#trigger', () => {
-          it('should remove pb-over, append the last dragged element as last child, and ends the dragdrop', () => {
-            let event = {
-              preventDefault: _.spiedFunction()
-            };
-            let lastDraggedEl = doc.createElement('div');
-            DragDrop.dragStart(lastDraggedEl, 0, 0);
-            el.classList.add('pb-over');
+          let droppable;
 
-            _.spy(lastDraggedEl, 'attachedCallback');
-            _.spy(DragDrop, 'dragEnd');
+          it('should add the moved elements if enabled', () => {
+            let child1 = doc.createElement('div');
+            let child2 = doc.createElement('h1');
 
-            droppable.trigger(el, event);
-            expect(el.classList.contains('pb-over')).to.be.false();
-            expect(el.children[0]).to.be.equal(lastDraggedEl);
-            expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
-            expect(DragDrop.dragEnd).calledWith().at.least(1);
-            expect(event.preventDefault).calledWith().at.least(1);
+            droppable = new Droppable(undefined, undefined, true);
+            droppable.init(el);
+
+            Move.movedElements = [child1, child2];
+            _.spy(Move, 'remove');
+
+            droppable.trigger(el);
+
+            expect(Utils.toArray(el.children)).to.eql([child1, child2]);
+            expect(Move.remove).calledWith(child1).at.least(1);
+            expect(Move.remove).calledWith(child2).at.least(1);
           });
-          it('should only remove pb-over and ends drag if the last dragged element is null', () => {
-            let event = {
-              preventDefault: _.spiedFunction()
-            };
-            DragDrop.dragStart(null, 0, 0);
-            el.classList.add('pb-over');
+          it('should do nothing if not enabled', () => {
+            let child1 = doc.createElement('div');
+            let child2 = doc.createElement('h1');
 
-            _.spy(DragDrop, 'dragEnd');
+            droppable = new Droppable(undefined, undefined, false);
+            droppable.init(el);
 
-            droppable.trigger(el, event);
-            expect(el.classList.contains('pb-over')).to.be.false();
-            expect(DragDrop.dragEnd).calledWith().at.least(1);
-            expect(event.preventDefault).calledWith().at.least(1);
-          });
-        });
+            Move.movedElements = [child1, child2];
+            _.spy(Move, 'remove');
 
-        describe('#register', () => {
-          let fakeEvents;
-          let fakeEvent;
+            droppable.trigger(el);
 
-          beforeEach(done => {
-            fakeEvents = {
-              listen: () => {
-                return fakeEvents;
-              },
-              on: () => {
-                return fakeEvents;
-              }
-            };
-
-            fakeEvent = {
-              preventDefault: _.spiedFunction()
-            };
-
-            _.spy(fakeEvents, 'listen');
-            _.spy(Events, 'of').overrideReturn(fakeEvents);
-            done();
-          });
-          it('should set dropEffect on dragover', () => {
-            droppable.register(el);
-            let handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.listen).calledWith('dragover', handlerCaptor).at.least(1);
-            let event = {
-              preventDefault: _.spiedFunction()
-            };
-            handlerCaptor.matchingArgs[0](event);
-            expect(event.preventDefault).calledWith().at.least(1);
-            expect(event.dropEffect).to.be.equal('move');
-          });
-          it('should add pb-over on dragenter', () => {
-            droppable.register(el);
-            let handlerCaptor = _M.isA(Function);
-
-            DragDrop.dragStart(document.createElement('div'));
-
-            expect(fakeEvents.listen).calledWith('dragenter', handlerCaptor).at.least(1);
-            handlerCaptor.matchingArgs[0](fakeEvent);
-            expect(el.classList.contains('pb-over')).to.be.true();
-            expect(fakeEvent.preventDefault).calledWith().at.least(1);
-          });
-          it('should remove pb-over on dragleave', () => {
-            droppable.register(el);
-            droppable[__onDragEnter__](el, fakeEvent);
-            let handlerCaptor = _M.isA(Function);
-
-            expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
-
-            handlerCaptor.matchingArgs[0]({ target: el });
-            expect(el.classList.contains('pb-over')).to.be.false();
-          });
-          it('should be noop on dragleave dragging out of a descendant', () => {
-            let target = doc.createElement('div');
-            el.appendChild(target);
-
-            droppable.register(el);
-
-            DragDrop.dragStart(document.createElement('div'));
-            droppable[__onDragEnter__](el, fakeEvent);
-            
-            let handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.listen).calledWith('dragleave', handlerCaptor).at.least(1);
-            handlerCaptor.matchingArgs[0]({ target: target });
-
-            expect(el.classList.contains('pb-over')).to.be.true();
-          });
-          it('should call trigger on drop', () => {
-            _.spy(droppable, 'trigger');
-            droppable.register(el);
-            let handlerCaptor = _M.isA(Function);
-            expect(fakeEvents.listen).calledWith('drop', handlerCaptor).at.least(1);
-            handlerCaptor.matchingArgs[0](fakeEvent);
-            expect(droppable.trigger).calledWith(el, fakeEvent).at.least(1);
-          });
-          it('should remove pb-over on if lastDraggedEl is set to null', () => {
-            DragDrop.dragStart(null, 0, 0);
-            droppable.register(el);
-            droppable[__onDragEnter__](el, fakeEvent);
-            droppable[__onLastDraggedElChange__](el);
-            expect(el.classList.contains('pb-over')).to.be.false();
-          });
-          it('should be noop if lastDraggedEl is set to an element', () => {
-            DragDrop.dragStart(doc.createElement('div'), 0, 0);
-            droppable.register(el);
-            droppable[__onDragEnter__](el, fakeEvent);
-            droppable[__onLastDraggedElChange__](el);
-            expect(el.classList.contains('pb-over')).to.be.true();
-          });
-        });
-
-        describe('#unregister', () => {
-          it('should unregister all events', () => {
-            let unlistenFn = _.spiedFunction();
-            let offFn = _.spiedFunction();
-            _.spy(Events, 'of').overrideReturn({
-              unlisten: unlistenFn,
-              off: offFn
-            });
-
-            droppable.unregister(el);
-            expect(Events.of).calledWith(el, droppable).at.least(1);
-            expect(unlistenFn).calledWith().at.least(1);
-            expect(offFn).calledWith().at.least(1);
+            expect(el.children.length).to.equal(0);
+            expect(Move.remove).called().to.be.equal(0);
           });
         });
 
         afterEach(done => {
           _.reset();
-          DragDrop.dragEnd();
           done();
         });
       });

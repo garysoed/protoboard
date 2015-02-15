@@ -10,6 +10,7 @@
   <link rel="import" href="out/service/dragdrop.html">
   <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/utils.html">
+  <link rel="import" href="out/testutils.html">
 </head>
 <body>
   <pb-r-rect></pb-r-rect>
@@ -17,29 +18,28 @@
   <script>
   DI
       .with('$registry', Registry => new Registry())
+      .with('FlexDroppable', Rect => Rect.FlexDroppable)
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, doc, DragDrop, Rect, Utils) => {
+      .run((expect, _, doc, DragDrop, FlexDroppable, Rect, Utils, pb_t) => {
 
-  let SmartDroppable = Rect.SmartDroppable;
-
-  let __onDomMutation__ = Utils.getSymbol(SmartDroppable.prototype, 'onDomMutation');
+  let __onDomMutation__ = pb_t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
 
   describe('Rect', () => {
-    describe('$SmartDroppable', () => {
+    describe('$FlexDroppable', () => {
       let el;
-      let smartDroppable;
+      let flexDroppable;
 
       let __mutationObserver__;
 
       beforeEach(done => {
         el = doc.createElement('div');
-        smartDroppable = new SmartDroppable(true);
-        __mutationObserver__ = Utils.getSymbol(smartDroppable, 'mutationObserver');
+        flexDroppable = new FlexDroppable(true);
+        __mutationObserver__ = pb_t.getSymbol(flexDroppable, 'mutationObserver');
         done();
       });
 
       describe('#trigger', () => {
-        it('should remove the pb-over class, append the last dragged element, and position it correctly', () => {
+        it('should append the last dragged element and position it correctly', () => {
           let lastDraggedEl = doc.createElement('div');
           lastDraggedEl.attachedCallback = _.spiedFunction();
           _.spy(lastDraggedEl, 'getBoundingClientRect').overrideReturn({
@@ -50,51 +50,16 @@
           DragDrop.dragStart(lastDraggedEl, 12 /** offsetX */, 34 /** offsetY */);
           _.spy(DragDrop, 'dragEnd');
 
-          el.classList.add('pb-over');
-
-          smartDroppable.trigger(el, {
+          flexDroppable.trigger(el, {
             clientX: 90,
             clientY: 12
           });
 
-          expect(el.classList.contains('pb-over')).to.be.false();
           expect(Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
           expect(lastDraggedEl.style.left).to.be.equal('22px');
           expect(lastDraggedEl.style.top).to.be.equal('-100px');
           expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
           expect(DragDrop.dragEnd).calledWith().at.least(1);
-        });
-        it('should only remove the pb-over class if there are no last dragged elements', () => {
-          el.classList.add('pb-over');
-
-          smartDroppable.trigger(el, {
-            clientX: 90,
-            clientY: 12
-          });
-
-          expect(el.classList.contains('pb-over')).to.be.false();
-        });
-      });
-
-      describe('#register', () => {
-        it('should start observing mutations to children', () => {
-          _.spy(smartDroppable[__mutationObserver__], 'observe');
-
-          smartDroppable.register(el);
-
-          expect(smartDroppable[__mutationObserver__].observe)
-              .calledWith(el, { childList: true })
-              .at.least(1);
-        });
-      });
-
-      describe('#unregister', () => {
-        it('should disconnect the mutation observer', () => {
-          _.spy(smartDroppable[__mutationObserver__], 'disconnect');
-
-          smartDroppable.unregister(el);
-
-          expect(smartDroppable[__mutationObserver__].disconnect).calledWith().at.least(1);
         });
       });
 
@@ -104,7 +69,7 @@
           let el2 = { style: {} };
           let el3 = { style: {} };
 
-          smartDroppable[__onDomMutation__]([
+          flexDroppable[__onDomMutation__]([
             { removedNodes: [ el1, el2 ] },
             { removedNodes: [ el3 ] }
           ]);

@@ -1,9 +1,10 @@
 <base href="../..">
 
 <link rel="import" href="out/ability/abilities.html">
-<link rel="import" href="out/ability/draggable.html">
+<link rel="import" href="out/ability/pickable.html">
 <link rel="import" href="out/component/component.html">
 <link rel="import" href="out/di.html">
+<link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/component/token.css">
@@ -19,10 +20,11 @@ DI
     .constant('doc', document.currentScript.ownerDocument)
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_component_Token', (
-        $registry, 
+        $registry,
         Abilities, 
         Component, 
-        Draggable, 
+        Key,
+        Pickable,
         Utils,
         doc,
         template) => {
@@ -64,13 +66,10 @@ DI
     }
   }
 
-  let draggable = new Draggable(true);
-  $registry.add(
-      EL_NAME, 
-      Abilities.config(
-          Token,
-          {},
-          draggable).prototype);
+  Abilities.of(Token.prototype)
+      .add(new Pickable('pickable', new Key('q'), true));
+
+  $registry.add(EL_NAME, Token.prototype);
 
   return Token;
 });

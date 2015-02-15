@@ -1,10 +1,11 @@
 <base href="..">
 
 <link rel="import" href="out/di.html">
+<link rel="import" href="out/trigger/triggers.html">
 <link rel="import" href="out/utils.html">
 
 <script>
-DI.bind('pb_PbElement', (Utils) => {
+DI.bind('pb_PbElement', (Abilities, Utils) => {
   /**
    * Base class of all ProtoBoard elements.
    * 
@@ -14,6 +15,7 @@ DI.bind('pb_PbElement', (Utils) => {
   class PbElement extends HTMLElement {
 
     createdCallback() {
+      Abilities.init(this);
       /**
        * True iff the element has been created and attached.
        *

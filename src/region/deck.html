@@ -3,9 +3,9 @@
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
 <link rel="import" href="out/ability/shuffleable.html">
-<link rel="import" href="out/ability/triggerable.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
+<link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/region/deck.css">
@@ -23,10 +23,10 @@ DI
     .bind('pb_region_Deck', (
         $registry,
         Abilities, 
-        Droppable, 
+        Droppable,
+        Key,
         Region, 
         Shuffleable, 
-        Triggerable, 
         Utils,
         doc,
         template) => {
@@ -91,18 +91,12 @@ DI
     }
   }
 
-  let shuffleable = new Shuffleable(true);
-  let droppable = new Droppable(true);
-  $registry.add(
-      EL_NAME, 
-      Abilities.config(
-          Deck,
-          {
-            [Triggerable.TYPES.DOUBLE_CLICK]: shuffleable
-          },
-          droppable).prototype);
+  Abilities.of(Deck.prototype)
+      .add(new Shuffleable('shuffle', new Key('s'), true))
+      .add(new Droppable('droppable', new Key('d'), true));
+
+  $registry.add(EL_NAME, Deck.prototype);
 
   return Deck;
-
 });
 </script>

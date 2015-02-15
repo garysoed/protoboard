@@ -102,9 +102,10 @@ DI
 
 
   let droppable = new ReorderableDroppable(true);
-  $registry.add(
-      EL_NAME, 
-      Abilities.config(Hand, {}, droppable).prototype);
+  // TODO(gs)
+  // $registry.add(
+  //     EL_NAME, 
+  //     Abilities.config(Hand, {}, droppable).prototype);
 
   if (window['TEST_MODE']) {
     Hand.ReorderableDroppable = ReorderableDroppable;

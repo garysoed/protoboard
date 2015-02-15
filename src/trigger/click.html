@@ -35,7 +35,15 @@ DI.bind('pb_trigger_Click', (Events, HammerWrapper) => {
     off(element) {
       Events.of(element, this).off('hammer', 'singletap');
     }
+
+    toString() {
+      return 'pb-click';
+    }
   }
+
+  Click.parse = function(str) {
+    return (str === 'pb-click') ? new Click() : undefined;
+  };
 
   return Click;
 });

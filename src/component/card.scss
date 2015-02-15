@@ -18,7 +18,7 @@ pb-c-card::shadow {
   }
 }
 
-pb-c-card[pb-showfront="true"]::shadow #container {
+pb-c-card[flippable-active="true"]::shadow #container {
   transform: rotateY(180deg);
 }
 
@@ -44,7 +44,8 @@ pb-c-card > .pb-front {
 }
 
 
-pb-c-card[pb-showfront="true"].pb-dragged {
+// TODO(gs): Fix these
+pb-c-card[flippable-active="true"].pb-dragged {
   .pb-front {
     @include layer(1);
   }
@@ -54,7 +55,7 @@ pb-c-card[pb-showfront="true"].pb-dragged {
   }
 }
 
-pb-c-card:not([pb-showfront="true"]).pb-dragged {
+pb-c-card:not([flippable-active="true"]).pb-dragged {
   .pb-back {
     @include layer(1);
   }
@@ -64,7 +65,10 @@ pb-c-card:not([pb-showfront="true"]).pb-dragged {
   }
 }
 
-pb-c-card[pb-rotateable] {
-  /** TODO(gs): Use library to keep track of the prefixes */
+pb-c-card[tappable-active="true"] {
+  transform: rotateZ(90deg);
+}
+
+pb-c-card[tappable="true"] {
   transition: transform $transition-duration;
 }

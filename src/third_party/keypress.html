@@ -1,0 +1,9 @@
+<base href="../..">
+
+<script src="node_modules/keypress/keypress.js"></script>
+
+<link rel="import" href="out/di.html">
+
+<script>
+DI.bind('Keypress', () => window['keypress'].Listener);
+</script>

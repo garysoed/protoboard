@@ -1,229 +1,77 @@
 <base href="../..">
 
-<link rel="import" href="out/third_party/jquery.html">
-
-<link rel="import" href="out/ability/ability.html">
 <link rel="import" href="out/check.html">
-<link rel="import" href="out/events.html">
 <link rel="import" href="out/di.html">
-<link rel="import" href="out/service/dragdrop.html">
-<link rel="import" href="out/utils.html">
+<link rel="import" href="out/service/move.html">
+<link rel="import" href="out/trigger/click.html">
 
 <script>
-DI.bind('pb_ability_Droppable', (Ability, Check, Events, DragDrop, Utils) => {
+DI.bind('pb_ability_Droppable', (Ability, Check, Click, Move) => {
 
-/**
- * Provides decorator to make an element be a drop target for drag and drop.
- * 
- * @class ability.Droppable
- * @extends ability.Ability
- */
+  // Private symbols.
+  const __defaultEnabled__ = Symbol();
 
-/**
- * Set to true to make it possible to drop elements into this element.
- * @attribute pb-droppable
- */
-const ATTR_NAME = 'pb-droppable';
-const CLASS_OVER = 'pb-over';
-
-// Private symbols.
-const __defaultValue__ = Symbol();
-
-const __onDragEnter__ = Symbol('onDragEnter');
-const __onDragLeave__ = Symbol();
-const __onDragOver__ = Symbol();
-const __onLastDraggedElChange__ = Symbol('onLastDraggedElChange');
-const __register__ = Symbol('register');
-const __unregister__ = Symbol('unregister');
-
-class Droppable extends Ability {
+  const __isEnabled__ = Symbol();
 
   /**
+   * Element with this ability can have elements added to pb.service.Move added as a child element
+   * when this ability is triggered.
+   *
    * @class ability.Droppable
-   * @constructor
-   * @param {boolean} defaultValue True iff the ability should be enabled.
+   * @extends ability.Ability
    */
-  constructor(defaultValue) {
-    this[__defaultValue__] = defaultValue;
-  }
+  class Droppable extends Ability {
 
-  /**
-   * Handler called when an element has entered the given element.
-   *
-   * @method __onDragEnter__
-   * @param {!Element} el The element that is being entered.
-   * @private
-   */
-  [__onDragEnter__](el, event) {
-    event.preventDefault();
-    if (DragDrop.lastDraggedEl) {
-      el.classList.add(CLASS_OVER);
+    /**
+     * @constructor
+     * @class ability.Droppable
+     * @param {string} [name='pb-droppable'] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
+     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     */
+    constructor(name = 'pb-droppable', defaultTrigger = new Click(), defaultEnabled = true) {
+      super(name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
     }
-  }
 
-  /**
-   * Handler called when an element has left the given element.
-   * 
-   * @method __onDragLeave__
-   * @param {!Element} el The element being left behind.
-   * @private
-   */
-  [__onDragLeave__](el, event) {
-    if (el === event.target) {
-      el.classList.remove(CLASS_OVER);
+    /**
+     * @method __isEnabled__
+     * @return {boolean} True iff the ability is enabled.
+     * @private
+     */
+    [__isEnabled__](el) {
+      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
     }
-  }
-   
-  /**    
-   * Handler called when an element is dragged over the given element.   
-   *   
-   * @method __onDragOver__    
-   * @param {!Element} el The element where another element is dragged over it.    
-   * @param {!Event} event The event object.   
-   * @private    
-   */    
-  [__onDragOver__](el, event) {    
-    event.preventDefault();    
-    event.dropEffect = 'move';
-  }
 
-  /**
-   * Handler called when the last element being dragged has changed.
-   *
-   * @method __onLastDraggedElChange__
-   * @param {!Element} el The element that this ability is registered to.
-   * @private
-   */
-  [__onLastDraggedElChange__](el) {
-    if (!DragDrop.lastDraggedEl) {
-      el.classList.remove(CLASS_OVER);
+    /**
+     * @override
+     */
+    init(el) {
+      super.init(el);
+
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
+      }
     }
-  }
 
-  /**
-   * Sets the default value of the given element.
-   *
-   * @method setDefaultValue
-   * @param {!Element} el The element whose default value should be set.
-   */
-  setDefaultValue(el) {
-    if ($(el).attr(ATTR_NAME) === undefined) {
-      $(el).attr(ATTR_NAME, this[__defaultValue__]);
-    }
-  }
-
-  /**
-   * Handles attribute change.
-   *
-   * @method attributeChangedCallback
-   * @param {!Element} el The element whose attribute was changed.
-   * @param {string} name Name of the attribute that was changed.
-   * @param {string} oldValue Old value of the changed attribute.
-   * @param {string} newValue New value of the changed attribute.
-   */
-  attributeChangedCallback(el, name, oldValue, newValue) {
-    if (name === ATTR_NAME) {
-      newValue = Check(newValue).isBoolean(newValue).orThrows();
-      if (newValue) {
-        this.register(el);
-      } else {
-        this.unregister(el);
+    /**
+     * @override
+     */
+    trigger(el) {
+      if (this[__isEnabled__](el)) {
+        let toRemove = [];
+        Move.movedElements.forEach(movedElement => {
+          el.appendChild(movedElement);
+          toRemove.push(movedElement);
+        });
+        for (let el of toRemove) {
+          Move.remove(el);
+        }
       }
     }
   }
 
-  /**
-   * Handles registration when the element is attached to the document.
-   *
-   * @method attachedCallback
-   * @param {!Element} el The element that was attached.
-   */
-  attachedCallback(el) {
-    if ($(el).attr(ATTR_NAME) && Check($(el).attr(ATTR_NAME)).isBoolean().orThrows()) {
-      this.register(el);
-    }
-  }
-
-  /**
-   * Handles unregistration when the element is detached from the document.
-   *
-   * @method detachedCallback
-   * @param {!Element} el The element that was detached.
-   */
-  detachedCallback(el) {
-    // TODO(gs): Change the __register__ and __unregister__ to be protected for all abilities.
-    this.unregister(el);
-  }
-
-  /**
-   * Returns the element that will be moved, if the given element were to be dragged and dropped.
-   *
-   * @method  getMovedElement 
-   * @param  {!Element} el The element that is dragged.
-   * @return {!Element} The element that will be moved if the given element was dragged and dropped.
-   */
-  getMovedElement(el) {
-    return el;
-  }
-
-  /**
-   * Drop the last dragged element on the given element
-   *
-   * @method trigger
-   * @param {!Element} el The element to drop the dragged element into.
-   * @param {!Event} event Event object that triggered the call.
-   */
-  trigger(el, event) {
-    el.classList.remove(CLASS_OVER);
-
-    let lastDraggedEl = DragDrop.lastDraggedEl;
-    if (lastDraggedEl) {
-      el.appendChild(lastDraggedEl);
-
-      // TODO(gs): attached callback doesn't seem to be called on appendChild.
-      // https://github.com/webcomponents/webcomponentsjs/issues/18
-      if (lastDraggedEl.attachedCallback) {
-        lastDraggedEl.attachedCallback();
-      }
-    }
-    DragDrop.dragEnd();
-
-    event.preventDefault();
-  }
-
-  /**
-   * Registers the handlers for this ability to the given element.
-   *
-   * @method register
-   * @param {!Element} el The element to register the ability to.
-   * @protected
-   */
-  register(el) {
-    Events.of(el, this)
-        .listen('dragover', this[__onDragOver__].bind(this, el))
-        .listen('dragenter', this[__onDragEnter__].bind(this, el))
-        .listen('dragleave', this[__onDragLeave__].bind(this, el))
-        .listen('drop', this.trigger.bind(this, el));
-
-    Events.of(DragDrop, this)
-        .on(
-            DragDrop.Events.LAST_DRAGGED_EL_CHANGED, 
-            this[__onLastDraggedElChange__].bind(this, el));
-  }
-
-  /**
-   * Unregisters the handlers for this ability from the given element.
-   *
-   * @method __unregister__
-   * @param {!Element} el The element to unregister the ability from.
-   * @protected
-   */
-  unregister(el) {
-    Events.of(el, this).unlisten();
-    Events.of(DragDrop, this).off();
-  }
-}
-
-return Droppable;
-
+  return Droppable;
 });
+</script>

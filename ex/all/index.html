@@ -17,6 +17,8 @@
     <link rel="stylesheet" type="text/css" href="ex/all/table.css">
     <link rel="stylesheet" type="text/css" href="ex/all/token.css">
 
+    <link rel="import" href="out/third_party/keypress.html">
+
     <link rel="import" href="out/main.html">
 
     <style>
@@ -102,13 +104,13 @@
           <td>Tokens</td>
           <td>
             <pb-c-token>
-              <div draggable="true" class="green circle"></div>
+              <div class="green circle"></div>
             </pb-c-token>
             <pb-c-token>
-              <div draggable="true" class="red rectangle"></div>
+              <div class="red rectangle"></div>
             </pb-c-token>
             <pb-c-token>
-              <div draggable="true" class="blue triangle"></div>
+              <div class="blue triangle"></div>
             </pb-c-token>
           </td>
           <td>
@@ -244,6 +246,10 @@
     </table>
 
     <script>
+      var l = new keypress.Listener();
+      l.simple_combo('a', function() { console.log('keypress a'); });
+      l.simple_combo('a', function() { console.log('keypress a2'); });
+
       var headers = document.querySelectorAll('thead');
       for (var i = 0; i < headers.length; i++) {
         headers.item(i).addEventListener('click', function() {

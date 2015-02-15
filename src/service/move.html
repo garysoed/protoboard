@@ -1,0 +1,78 @@
+<base href="../..">
+
+<link rel="import" href="out/di.html">
+<link rel="import" href="out/service/registry.html">
+
+<script>
+DI.bind('pb_service_Move', ($registry, Events) => {
+
+  // Private symbols.
+  const __document__ = Symbol();
+  const __movedElements__ = Symbol();
+  const __previousPosition__ = Symbol();
+  const __mouseX__ = Symbol();
+  const __mouseY__ = Symbol();
+
+  const __moveElement__ = Symbol();
+  const __onMouseMove__ = Symbol();
+
+  let Move = {
+    [__document__]: undefined,
+    [__movedElements__]: new Set(),
+
+    [__moveElement__](el, event) {
+      let rect = el.getBoundingClientRect();
+      el.style.left = `${event.clientX - rect.width / 2}px`;
+      el.style.top = `${event.clientY - rect.height / 2}px`;
+
+      // TODO(gs): Handle multiple elements
+    },
+
+    [__onMouseMove__](event) {
+      for (let el of this[__movedElements__]) {
+        this[__moveElement__](el, event);
+      }
+      this[__mouseX__] = event.clientX;
+      this[__mouseY__] = event.clientY;
+    },
+
+    add(el, event) {
+      this[__document__].body.appendChild(el);
+
+      el[__previousPosition__] = el.style.position;
+      el.style.position = 'fixed';
+      el.style.pointerEvents = 'none'; // TODO(gs): Use CSS.
+      this[__moveElement__](el, event);
+      this[__movedElements__].add(el);
+    },
+
+    remove(el) {
+      el.style.left = '';
+      el.style.top = '';
+      el.style.position = el[__previousPosition__];
+      el.style.pointerEvents = '';
+      this[__movedElements__].delete(el);
+    },
+
+    get movedElements() {
+      return this[__movedElements__];
+    },
+
+    get mouseX() {
+      return this[__mouseX__];
+    },
+
+    get mouseY() {
+      return this[__mouseY__];
+    }
+  };
+
+  $registry.runAtRegister(doc => {
+    Events.of(doc.body, Move)
+        .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
+    Move[__document__] = doc;
+  });
+
+  return Move;
+});
+</script>

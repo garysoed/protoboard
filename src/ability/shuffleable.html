@@ -6,66 +6,57 @@
 <link rel="import" href="out/utils.html">
 
 <script>
-DI.bind('pb_ability_Shuffleable', (Ability, Check, Utils) => {
-
-/**
- * Provides decorator to make the component be able to shuffle the child elements.
- * 
- * @class ability.Shuffleable
- * @extends ability.Ability
- */
-
-/**
- * Set to true to enable this element to be shuffleable.
- *
- * @attribute pb-shuffleable
- */
-const ATTR_NAME = 'pb-shuffleable';
-
-// Private symbols.
-const __defaultEnabled__ = Symbol();
-
-class Shuffleable extends Ability {
+DI.bind('pb_ability_Shuffleable', (Ability, Check, Click, Utils) => {
 
   /**
+   * Elements with this ability can shuffle its children.
+   * 
    * @class ability.Shuffleable
-   * @constructor
-   * @param {boolean=} defaultEnabled True iff this ability should be enabled by default. Defaults
-   *     to true.
+   * @extends ability.Ability
    */
-  constructor(defaultEnabled = true) {
-    this[__defaultEnabled__] = defaultEnabled;
-  }
 
-  /**
-   * Sets the default value of the given element.
-   *
-   * @method setDefaultValue
-   * @param {!Element} el The element whose default value should be set.
-   */
-  setDefaultValue(el) {
-    if ($(el).attr(ATTR_NAME) === undefined) {
-      $(el).attr(ATTR_NAME, this[__defaultEnabled__]);
+  // Private symbols.
+  const __defaultEnabled__ = Symbol();
+
+  class Shuffleable extends Ability {
+
+    /**
+     * @constructor
+     * @class ability.Shuffleable
+     * @param {string} [name='pb-shuffleable'] Name of the ability.
+     * @param {ability.Trigger} [defaultTrigger=ability.Click] Default trigger for the ability.
+     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     */
+    constructor(name = 'pb-shuffleable', defaultTrigger = new Click(), defaultEnabled = true) {
+      super(name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
+    }
+
+    /**
+     * @override
+     */
+    init(el) {
+      super.init(el);
+
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
+      }
+    }
+
+    /**
+     * @override
+     */
+    trigger(el) {
+      if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
+        let pairs = Utils.toArray(el.children).map(child => [child, Math.random()]);
+        pairs.sort((a, b) => Utils.compare(a[1], b[1]));
+
+        let shuffled = pairs.map(pair => pair[0]);
+        shuffled.forEach(shuffledEl => el.appendChild(shuffledEl));
+      }
     }
   }
 
-  /**
-   * Shuffles the children of the given element.
-   *
-   * @method trigger
-   * @param {!Element} el The element whose children should be shuffled.
-   */
-  trigger(el) {
-    if (Check($(el).attr(ATTR_NAME)).isBoolean().orUse(false)) {
-      let pairs = Utils.toArray(el.children).map(child => [child, Math.random()]);
-      pairs.sort((a, b) => Utils.compare(a[1], b[1]));
-
-      let shuffled = pairs.map(pair => pair[0]);
-      shuffled.forEach(shuffledEl => el.appendChild(shuffledEl));
-    }
-  }
-}
-
-return Shuffleable;
-
+  return Shuffleable;
 });

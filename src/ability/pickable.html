@@ -1,0 +1,58 @@
+<base href="../..">
+
+<link rel="import" href="out/check.html">
+<link rel="import" href="out/di.html">
+<link rel="import" href="out/service/move.html">
+
+<script>
+DI.bind('pb_ability_Pickable', (Ability, Check, Click, Move, Triggers) => {
+
+  // Private symbols.
+  const __defaultEnabled__ = Symbol();
+
+  /**
+   * Element with this ability can be picked and dragged around. The element will be added to
+   * pb.service.Move and will be accessible by ability.Droppable.
+   *
+   * @class ability.Pickable
+   * @extends ability.Ability
+   */
+  class Pickable extends Ability {
+
+    /**
+     * @constructor
+     * @class ability.Pickable
+     * @param {string} [name='pb-pickable'] Name of the ability.
+     * @param {ability.Trigger} [defaultTrigger=ability.Click] Default trigger for the ability.
+     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     */
+    constructor(name = 'pb-pickable', defaultTrigger = new Click(), defaultEnabled = true) {
+      super(name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
+    }
+
+    /**
+     * @override
+     */
+    init(el) {
+      super.init(el);
+
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
+      }
+    }
+
+    /**
+     * @override
+     */
+    trigger(el, event) {
+      if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
+        Move.add(el, event);
+      }
+    }
+  }
+
+  return Pickable;
+});
+</script>

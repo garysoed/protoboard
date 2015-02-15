@@ -12,6 +12,7 @@
   <script>
   DI
       .constant('doc', document.currentScript.ownerDocument)
+      .with('$registry', Registry => new Registry())
       .with('Events', pb_t => pb_t.createFakeEvents())
       .run((_, _M, expect, Key, Events, doc, pb_t) => {
 
@@ -19,7 +20,7 @@
       let key;
 
       beforeEach(done => {
-        key = (new Key())('a');
+        key = new Key('a');
         done();
       });
 
@@ -27,6 +28,7 @@
         it('should register mouseenter, mouseleave, and using keyboardjs', () => {
           let element = doc.createElement('div');
           let ability = pb_t.createFakeAbility('test');
+          let event = {};
 
           key.on(element, ability);
 
@@ -41,17 +43,17 @@
           expect(Events.on).calledWith('dom', 'mouseleave', mouseLeaveCaptor).at.least(1);
 
           // Should not call trigger since mouse isn't hovering over the element.
-          keyboardHandlerCaptor.matchingArgs[0]();
+          keyboardHandlerCaptor.matchingArgs[0](event);
           expect(ability.trigger).called().to.be.equal(0);
 
           // Should trigger the ability since the mouse is hovering over the element.
-          mouseEnterCaptor.matchingArgs[0]();
-          keyboardHandlerCaptor.matchingArgs[0]();
-          expect(ability.trigger).calledWith(element).at.least(1);
+          mouseEnterCaptor.matchingArgs[0](event);
+          keyboardHandlerCaptor.matchingArgs[0](event);
+          expect(ability.trigger).calledWith(element, event).at.least(1);
 
           // Mouse hovers out, and ability should not be triggered.
-          mouseLeaveCaptor.matchingArgs[0]();
-          keyboardHandlerCaptor.matchingArgs[0]();
+          mouseLeaveCaptor.matchingArgs[0](event);
+          keyboardHandlerCaptor.matchingArgs[0](event);
           expect(ability.trigger).called().to.be.equal(1);
         });
       });

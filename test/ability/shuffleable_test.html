@@ -21,19 +21,19 @@
 
     beforeEach(done => {
       el = doc.createElement('div');
-      shuffleable = new Shuffleable(true);
+      shuffleable = new Shuffleable(undefined, undefined, true);
       done();
     });
 
-    describe('#setDefaultValue', () => {
+    describe('#init', () => {
       it('should set the default value if attribute is not set', () => {
-        shuffleable.setDefaultValue(el);
-        expect($(el).attr('pb-shuffleable')).to.be.equal('true');
+        shuffleable.init(el);
+        expect($(el).attr(shuffleable.attrName)).to.be.equal('true');
       });
       it('should be noop if the attribute is set', () => {
-        $(el).attr('pb-shuffleable', 'false');
-        shuffleable.setDefaultValue(el);
-        expect($(el).attr('pb-shuffleable')).to.be.equal('false');
+        $(el).attr(shuffleable.attrName, 'false');
+        shuffleable.init(el);
+        expect($(el).attr(shuffleable.attrName)).to.be.equal('false');
       });
     });
 
