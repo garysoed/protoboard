@@ -43,8 +43,6 @@ pb-c-card > .pb-front {
   box-sizing: border-box;
 }
 
-
-// TODO(gs): Fix these
 pb-c-card[flippable-active="true"].pb-dragged {
   .pb-front {
     @include layer(1);

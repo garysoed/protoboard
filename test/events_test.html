@@ -6,20 +6,21 @@
 
   <link rel="import" href="out/testbase.html">
 
-  <link rel="import" href="out/events.html">
   <link rel="import" href="out/di.html">
+  <link rel="import" href="out/events.html">
+  <link rel="import" href="out/testutils.html">
 </head>
 <body>
   <script>
   DI
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, Events, Utils) => {
+      .run((expect, _, _M, doc, Events, pb_t) => {
 
   let Action = Events.Action;
 
-  let __isRegistered__ = Utils.getSymbol(Action.prototype, 'isRegistered');
-  let __register__ = Utils.getSymbol(Action.prototype, 'register');
-  let __unregister__ = Utils.getSymbol(Action.prototype, 'unregister');
+  let __isRegistered__ = pb_t.getSymbol(Action.prototype, 'isRegistered');
+  let __register__ = pb_t.getSymbol(Action.prototype, 'register');
+  let __unregister__ = pb_t.getSymbol(Action.prototype, 'unregister');
 
   describe('Events', () => {
     let el;

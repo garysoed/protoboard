@@ -236,14 +236,6 @@ DI.bind('pb_Utils', () => {
         }
       };
     },
-
-    // TODO(gs): Move to test utils.
-    getSymbol(obj, name) {
-      console.warn('Deprecated getSymbol');
-      return Object.getOwnPropertySymbols(obj).find(symbol => {
-        return `Symbol(${name})` === symbol.toString();
-      });
-    }
   };
 
   return Utils;

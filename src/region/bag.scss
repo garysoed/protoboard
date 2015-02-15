@@ -12,15 +12,6 @@ pb-r-bag::shadow #root {
   @include region-border();
 }
 
-pb-r-bag.pb-over #root {
-  outline: 6px dashed $color-highlight;
-  outline-offset: -3px;
-
-  * {
-    pointer-events: none;
-  }
-}
-
 /* The placeholder */
 .pb-placeholder {
   background-color: $color-lighter;

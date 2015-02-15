@@ -12,12 +12,3 @@ pb-r-rect::shadow #root {
   @include trbl-fit();
   position: relative;
 }
-
-pb-r-rect.pb-over {
-  outline: 6px dashed $color-highlight;
-  outline-offset: -3px;
-
-  * {
-    pointer-events: none;
-  }
-}

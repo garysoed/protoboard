@@ -7,65 +7,15 @@
 <script>
 DI.bind('pb_region_Region', (PbElement, Utils) => {
 
-  // import Distribute from 'src/service/distribute';
-
-  // const CLASS_DISTRIBUTE = 'pb-distribute';
-
   /**
    * Base class of all regions.
    * 
    * @class region.Region
    * @extends PbElement
    */
-
-  // TODO(gs): Make Distributable
-
-  // Private symbols
-  // const __onClick__ = Symbol();
-  // const __onDistributeBegin__ = Symbol();
-  // const __onDistributeEnd__ = Symbol();
-
   class Region extends PbElement {
-
-    constructor() { }
-
-    // [__onClick__]() {
-    //   if (Distribute.isActive() && Distribute.next()) {
-    //     this.appendChild(Distribute.next());
-    //   }
-    // }
-
-    // [__onDistributeBegin__]() {
-    //   if (this.shadowRoot) {
-    //     this.shadowRoot.querySelector('#root').classList.add(CLASS_DISTRIBUTE);
-    //   }
-    // }
-
-    // [__onDistributeEnd__]() {
-    //   if (this.shadowRoot) {
-    //     this.shadowRoot.querySelector('#root').classList.remove(CLASS_DISTRIBUTE);
-    //   }
-    // }
-
-    createdCallback() {
-      super.createdCallback();
-    }
-
-    attachedCallback() {
-      super.attachedCallback();
-      // Events.of(this, this).listen('click', this[__onClick__].bind(this));
-
-      // $(Distribute)
-      //     .on(Distribute.EventType.BEGIN, this[__onDistributeBegin__].bind(this))
-      //     .on(Distribute.EventType.END, this[__onDistributeEnd__].bind(this));
-    }
-
-    detachedCallback() {
-      // Events.of(this, this).unlisten();
-    }
   }
 
-return Region;
-
+  return Region;
 });
 </script>

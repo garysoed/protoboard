@@ -4,12 +4,13 @@
   <base href="..">
   <title>DI Unit Tests</title>
 
-  <link rel="import" href="out/testbase.html">
   <link rel="import" href="out/di.html">
+  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="out/testutils.html">
 </head>
 <body>
   <script>
-  DI.run(Utils => {
+  DI.run(pb_t => {
     let expect = chai.expect;
     let _ = spies.Spies;
 
@@ -125,7 +126,7 @@
         describe('#add', () => {
           it('should create the expected tree', () => {
             let tree = new DI.BindingTree();
-            let __values__ = Utils.getSymbol(tree, 'values');
+            let __values__ = pb_t.getSymbol(tree, 'values');
             tree.add('a_b', 'aB');
             tree.add('b_b', 'bB');
             tree.add('a_c', 'aC');
@@ -172,8 +173,8 @@
         describe('#with', () => {
           it('should return a child scope with the local binding added and parent reference', () => {
             let scope = new DI.Scope();
-            const __parentScope__ = Utils.getSymbol(scope, 'parentScope');
-            const __localBindings__ = Utils.getSymbol(scope, 'localBindings');
+            const __parentScope__ = pb_t.getSymbol(scope, 'parentScope');
+            const __localBindings__ = pb_t.getSymbol(scope, 'localBindings');
 
             let value = 'value';
             let child = scope.with('a', () => value);
@@ -217,7 +218,7 @@
       });
 
       afterEach(done => {
-        const __values__ = Utils.getSymbol(DI.bindings, 'values');
+        const __values__ = pb_t.getSymbol(DI.bindings, 'values');
         DI.bindings[__values__] = new Map();
         _.reset();
         done();
