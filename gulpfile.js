@@ -183,4 +183,4 @@ gulp.task('watch', function() {
 
 gulp.task('compile', ['6to5-src', '6to5-test', 'sass-src', 'sass-ex']);
 gulp.task('check', ['karma']);
-gulp.task('push', ['commit', 'doc'], shell.task('git push'));
+gulp.task('push', ['check', 'doc'], shell.task('git push'));
