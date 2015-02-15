@@ -74,7 +74,8 @@ DI
     }
   }
 
-  Handlebars.registerHelper('pb-for', (from, to, step, options) => {
+  // Use function since Handlebars changes the context of this.
+  Handlebars.registerHelper('pb-for', function(from, to, step, options) {
     if (options === undefined) {
       // Shift the args if step is not defined.
       options = step;
@@ -86,7 +87,7 @@ DI
         i += Check(step).isInt().orThrows()) {
       let data = Handlebars.createFrame(options.data || {});
       data.index = i;
-      rv += options.fn(Handlebars, { data: data });
+      rv += options.fn(this, { data: data });
     } 
     return rv;
   });

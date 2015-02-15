@@ -17,8 +17,7 @@
   DI
       .constant('Move', {
         movedElements: [],
-        mouseX: 0,
-        remove: () => {}
+        mouseX: 0
       })
       .with('$registry', Registry => new Registry())
       .constant('doc', document.currentScript.ownerDocument)
@@ -57,12 +56,10 @@
 
         Move.movedElements = [dragged];
         Move.mouseX = 40;
-        _.spy(Move, 'remove');
 
         droppable.trigger(el);
 
         expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
-        expect(Move.remove).calledWith(dragged).at.least(1);
       });
       it('should insert as the last child if eventX is too far to the right', () => {
         let child1 = doc.createElement('div');
@@ -83,12 +80,10 @@
         let dragged = doc.createElement('div');
         Move.movedElements = [dragged];
         Move.mouseX = 50;
-        _.spy(Move, 'remove');
 
         droppable.trigger(el);
 
         expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
-        expect(Move.remove).calledWith(dragged).at.least(1);
       });
       it('should not crash if there are no last dragged element', () => {
         Move.movedElements = [];

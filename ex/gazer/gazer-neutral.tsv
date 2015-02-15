@@ -1,0 +1,5 @@
+Name	Type	#	L	A	D	Description	Cost	Cost (Actual)
+Energy Orb	Device	10	5			Tap: +1 Energy	3	3
+Bot	Minion	10	3	2	0		3	3
+Mind Link	Enchantment	10				At the beginning of the turn, draw a card	3	3
+Meditate	Spell	10				Discard an Element card. Reveal cards from the top of the draft deck until you reveal a card of the same Element. Draft it to your hand.	1	1

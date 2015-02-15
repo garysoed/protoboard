@@ -92,7 +92,7 @@ DI
   }
 
   Abilities.of(Deck.prototype)
-      .add(new Shuffleable('shuffle', new Key('s'), true))
+      .add(new Shuffleable('shuffleable', new Key('s'), true))
       .add(new Droppable('droppable', new Key('d'), true));
 
   $registry.add(EL_NAME, Deck.prototype);

@@ -5,8 +5,8 @@
 <link rel="import" href="out/utils.html">
 
 <script>
-DI
-    .with('$registry', Registry => new Registry())
+window.Scope = DI.with('$registry', Registry => new Registry());
+window.Scope
     .run((
       $registry,
       opt_Bag,
@@ -16,12 +16,13 @@ DI
       opt_ui_Preview,
       opt_ui_Previewer,
       opt_Rect,
+      opt_ui_Template,
       opt_Token,
       Utils) => {
-  $registry.register(document);
 
-  // Call this later.
-  setTimeout(() => {
+  document.addEventListener('DOMContentLoaded', () => {
+    $registry.register(document);
+
     let tags = Utils.
         toArray(document.querySelectorAll(':unresolved')).
         map(el => el.tagName.toLowerCase());
@@ -29,6 +30,6 @@ DI
     for (let tag of tagSet) {
       console.warn(`Element ${tag} is unresolved`);
     }
-  }, 0);
+  });
 });
 </script>

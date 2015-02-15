@@ -1,0 +1,170 @@
+@import 'theme';
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 8px;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+input {
+  width: 40px;
+}
+
+#top-section {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  flex: 1;
+}
+
+#active-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#draft {
+  display: flex;
+  justify-content: space-between;
+}
+
+pb-u-previewer {
+  width: 25%;
+  margin: 20px;
+}
+
+#rift {
+  display: flex;
+}
+
+#riftdeck {
+  margin-right: 20px;
+}
+
+#riftdiscard {
+  margin-left: 20px;
+}
+
+#riftchoice {
+  display: flex;
+}
+
+#riftchoice > *,
+#staples > * {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#environment {
+  display: flex;
+}
+
+#staples {
+  display: flex;
+}
+
+#playarea {
+  flex: 1;
+  position: relative;
+
+  pb-r-rect {
+    @include trbl-fit();
+  }
+}
+
+pb-c-card.neutral .pb-front {
+  background-color: #ffaaff;
+}
+
+pb-c-card.air .pb-front {
+  background-color: #aaaaaa;
+}
+
+pb-c-card.earth .pb-front {
+  background-color: #aaffaa;
+}
+
+pb-c-card.fire .pb-front {
+  background-color: #ffaaaa;
+}
+
+pb-c-card.water .pb-front {
+  background-color: #aaaaff;
+}
+
+.pb-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#bottom-section {
+  ul {
+    display: flex;
+    list-style-type: none;
+    -webkit-padding-start: 0;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+
+    li {
+      padding: 10px;
+      cursor: pointer;
+
+      input {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  pb-r-hand::shadow #root {
+    height: 100px;
+  }
+}
+
+#bottom-section.player1 {
+  li.player1 {
+    background-color: $color-background;
+  }
+
+  #player1area {
+    display: block;
+  }
+}
+
+#switcher {
+  height: 135px;
+}
+
+#bottom-section.player2 {
+  li.player2 {
+    background-color: $color-background;
+  }
+
+  #player2area {
+    display: block;
+  }
+}
+
+.playerarea {
+  display: none;
+
+  .hand {
+    display: flex;
+    pb-r-deck {
+      margin-right: 20px;
+    }
+
+    pb-r-hand {
+      flex: 1;
+    }
+  }
+
+  .buttons {
+    margin-top: 15px;
+  }
+}

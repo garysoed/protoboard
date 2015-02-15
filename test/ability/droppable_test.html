@@ -18,8 +18,7 @@
   <script>
     DI
         .constant('Move', {
-          movedElements: [],
-          remove() {}
+          movedElements: []
         })
         .with('$registry', Registry => new Registry())
         .with('doc', () => document.currentScript.ownerDocument)
@@ -67,12 +66,10 @@
             droppable.init(el);
 
             Move.movedElements = [child1, child2];
-            _.spy(Move, 'remove');
 
             droppable.trigger(el);
 
             expect(Utils.toArray(el.children)).to.eql([child1]);
-            expect(Move.remove).calledWith(child1).at.least(1);
           });
           it('should do nothing if not enabled', () => {
             let child1 = doc.createElement('div');
@@ -82,12 +79,10 @@
             droppable.init(el);
 
             Move.movedElements = [child1, child2];
-            _.spy(Move, 'remove');
 
             droppable.trigger(el);
 
             expect(el.children.length).to.equal(0);
-            expect(Move.remove).called().to.be.equal(0);
           });
         });
 

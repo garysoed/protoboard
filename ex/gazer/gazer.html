@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <base href="../..">
+  <head>
+    <link rel="import" href="out/component/card.html">
+    <link rel="import" href="out/di.html">
+    <link rel="import" href="out/region/deck.html">
+    <link rel="import" href="out/region/hand.html">
+    <link rel="import" href="out/region/rect.html">
+    <link rel="import" href="out/ui/preview.html">
+    <link rel="import" href="out/ui/previewer.html">
+    <link rel="import" href="out/ui/template.html">
+    <link rel="stylesheet" href="ex/gazer/gazer.css">
+
+    <script>
+      var gz = {};
+    </script>
+    <script src="ex/gazer/gz-data-neutral.js"></script>
+    <script src="ex/gazer/gz-data-air.js"></script>
+    <script src="ex/gazer/gz-data-fire.js"></script>
+    <script src="ex/gazer/gz-data-earth.js"></script>
+    <script src="ex/gazer/gz-data-water.js"></script>
+    <script>
+      gz.plain = {
+        'Energy Orb': 3,
+        'Mind Link': 3,
+        'Bot': 3,
+        'Meditate': 1
+      };
+
+      gz.player1 = [];
+      gz.player2 = [];
+      for (var name in gz.plain) {
+        var card = null;
+        gz.neutral.forEach(function(candidate) {
+          if (candidate.name === name) {
+            card = candidate;
+          }
+        });
+        if (!card) {
+          throw name + ' cannot be found';
+        }
+
+        var clone = JSON.parse(JSON.stringify(card));
+        clone.count = gz.plain[name];
+        gz.player1.push(clone);
+        gz.player2.push(clone);
+      }
+    </script>
+
+    <template id="cardTemplate">
+      {{#pb-for 0 count 1}}
+      <pb-c-card class="{{element}}"
+                 flippable-active="{{@root.showfront}}">
+        <div class="pb-back"></div>
+        <div class="pb-front">
+          <div>{{name}}</div>
+          {{#if life}}
+          <input type="number">
+          {{#if attack}}{{attack}} / {{armor}}{{/if}}
+          {{/if}}
+          <pb-u-preview>
+            <h1>{{name}}</h1>
+            <h2>{{type}}, {{element}}</h2>
+            <h2>{{#if life}}L: {{life}}{{/if}}{{#if attack}} A: {{attack}} D: {{armor}}{{/if}}</h2>
+            <h2>Cost: {{cost}}</h2>
+            <main>{{description}}</main>
+          </pb-u-preview>
+        </div>
+      </pb-c-card>
+      {{/pb-for}}
+    </template>
+
+    <script>
+      Handlebars.registerPartial('gz-card', document.querySelector('#cardTemplate').innerHTML);
+    </script>
+
+    <link rel="import" href="out/main.html">
+  </head>
+  <body>
+    <section id="top-section">
+      <section id="active-area">
+
+        <section id="draft">
+          <section id="rift">
+            <pb-r-deck id="riftdeck">
+              <pb-u-template id="rift-air" data-cards="gz.air" data-showfront="false">
+                {{#each cards}}
+                  {{> gz-card}}
+                {{/each}}
+              </pb-u-template>
+              <pb-u-template id="rift-earth" data-cards="gz.earth" data-showfront="false">
+                {{#each cards}}
+                  {{> gz-card}}
+                {{/each}}
+              </pb-u-template>
+              <pb-u-template id="rift-fire" data-cards="gz.fire" data-showfront="false">
+                {{#each cards}}
+                  {{> gz-card}}
+                {{/each}}
+              </pb-u-template>
+              <pb-u-template id="rift-water" data-cards="gz.water" data-showfront="false">
+                {{#each cards}}
+                  {{> gz-card}}
+                {{/each}}
+              </pb-u-template>
+            </pb-r-deck>
+
+            <section id="riftchoice">
+              <pb-r-deck></pb-r-deck>
+              <pb-r-deck></pb-r-deck>
+              <pb-r-deck></pb-r-deck>
+              <pb-r-deck></pb-r-deck>
+            </section>
+          </section>
+
+          <section id="environment">
+            <section id="staples">
+              <pb-u-template data-cards="gz.neutral" data-showfront="true">
+                {{#each cards}}
+                <pb-r-deck>
+                  {{#with this}}
+                    {{> gz-card}}
+                  {{/with}}
+                </pb-r-deck>
+                {{/each}}
+              </pb-u-template>
+            </section>
+            <pb-r-deck id="riftdiscard"></pb-r-deck>
+          </section>
+        </section>
+
+        <section id="playarea">
+          <pb-r-rect></pb-r-rect>
+        </section>
+      </section>
+
+      <pb-u-previewer></pb-u-previewer>
+    </section>
+
+    <section id="bottom-section" class="player1">
+      <ul>
+        <li class="player1">Player 1 <input type="number"></li>
+        <li class="player2">Player 2 <input type="number"></li>
+      </ul>
+      <section id="switcher">
+        <section class="playerarea" id="player1area">
+          <section class="hand">
+            <pb-r-deck class="discard"></pb-r-deck>
+            <pb-r-deck class="deck">
+              <pb-u-template id="player1-template" data-cards="gz.player1" data-showfront="false">
+                {{#each cards}}
+                  {{> gz-card}}
+                {{/each}}
+              </pb-u-template>
+            </pb-r-deck>
+            <pb-r-hand></pb-r-hand>
+          </section>
+          <section class="buttons">
+            <button class="shuffle">Shuffle</button>
+            <button class="draw">Draw 4</button>
+          </section>
+        </section>
+        <section class="playerarea" id="player2area">
+          <section class="hand">
+            <pb-r-deck class="discard"></pb-r-deck>
+            <pb-r-deck class="deck">
+              <pb-u-template id="player2-template" data-cards="gz.player2" data-showfront="false">
+                {{#each cards}}
+                  {{> gz-card}}
+                {{/each}}
+              </pb-u-template>
+            </pb-r-deck>
+            <pb-r-hand></pb-r-hand>
+          </section>
+          <section class="buttons">
+            <button class="shuffle">Shuffle</button>
+            <button class="draw">Draw 4</button>
+          </section>
+        </section>
+      </section>
+    </section>
+
+    <script>
+      window.Scope.run(function(Abilities, Shuffleable, Utils) {
+         var deckPromise = Promise.all([
+          Utils.watch(function() {
+            return document.querySelector('#rift-air') === null;
+          }),
+          Utils.watch(function() {
+            return document.querySelector('#rift-fire') === null;
+          }),
+          Utils.watch(function() {
+            return document.querySelector('#rift-water') === null;
+          }),
+          Utils.watch(function() {
+            return document.querySelector('#rift-earth') === null;
+          })
+        ]).then(function() {
+          Abilities.trigger(document.querySelector('#riftdeck'), 'shuffleable');
+        });
+
+        var player1Promise = Utils.watch(function() {
+          return document.querySelector('#player1-template') === null;
+        }).then(function() {
+          Abilities.trigger(document.querySelector('#player1area .deck'), 'shuffleable');
+        });
+
+        var player2Promise = Utils.watch(function() {
+          return document.querySelector('#player2-template') === null;
+        }).then(function() {
+          Abilities.trigger(document.querySelector('#player2area .deck'), 'shuffleable');
+        });
+
+        Promise.all([ deckPromise, player1Promise, player2Promise ])
+            .then(function() {
+              Utils.toArray(document.querySelectorAll('input')).forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                  e.stopPropagation();
+                });
+                el.addEventListener('mousedown', function(e) {
+                  e.stopPropagation();
+                });
+              });
+            });
+
+        var bottom = document.querySelector('#bottom-section');
+        document.querySelector('#bottom-section li.player1').addEventListener('click', function() {
+          bottom.classList.toggle('player1');
+          bottom.classList.remove('player2');
+        });
+        document.querySelector('#bottom-section li.player2').addEventListener('click', function() {
+          bottom.classList.toggle('player2');
+          bottom.classList.remove('player1');
+        });
+
+        Utils.toArray(document.querySelectorAll('.playerarea')).forEach(function(area) {
+          var deck = area.querySelector('.deck');
+          var discard = area.querySelector('.discard');
+          var hand = area.querySelector('pb-r-hand');
+
+          area.querySelector('button.shuffle').addEventListener('click', function() {
+            Abilities.trigger(discard, 'shuffleable');
+
+            // Flip all the children and move them to the bottom of the deck.
+            Utils.toArray(discard.children).forEach(function(child) {
+              $(child).attr('flippable-active', false);
+              deck.insertBefore(child, deck.firstElementChild);
+            });
+
+            // TODO(gs): Add "add to bottom" to card
+          });
+
+          area.querySelector('button.draw').addEventListener('click', function() {
+            for (var i = 0; i < 4 && deck.childElementCount > 0; i++) {
+              var child = deck.lastElementChild;
+              hand.appendChild(child);
+              $(child).attr('flippable-active', true);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+Name	Type	#	L	A	D	Description	Cost	Cost (Actual)	0	0	0	0
+Purify	Spell	2				Reveal the top 3 cards of the deck. Put any Minions in hand.	2	2				
+Pottery	Spell	2				Draft a bot into hand	1	1				
+Evolution	Spell	2				Put a Minion in play back in your hand. Put a Minion in your discard pile with summoning cost at most one more of the summoning cost of that minion into play.	2	2				
+Alpha Minion	Enchantment	2				At the beginning of the turn, you may draft a Bot	3	3				
+Earth Reinforcement	Enchantment	3				At the beginning of the turn, take a Minion from your discard pile and put it on top of the deck	3	3				
+Natural Selection	Enchantment	2				At the beginning of the turn, pick a player’s deck. Reveal the top 3 cards of the deck. Discard any of them and put the rest back in any order.	3	3				
+Symbiosis	Enchantment	1				When another target receives a damage, you may redirect it to this Minion.	3	3				
+Sun Squirrel	Minion	3	3	1	0	When this comes into play put all Bots in your discard pile into hand.	3.5	4				
+Leader of the Pack	Minion	2	4	2	0	When this comes into play, put one Bot in discard pile into play for free.	6	5				
+Bot Leader	Minion	2	3	2	0	When this comes into play, draft a Bot into your hand	4	4				
+Jungle Beater	Minion	2	2	0	1	+1 Attack to all Minions you control	4.5	5				
+Regrowing Vines	Minion	3	1	2	0	You may put this Minion into play from your discard pile	2.5	3				
+Beast Staff	Device	2	3			T: Trigger the entrance ability of one of your Minions	4	4				
+Revival Pendant	Device	2	5			T: Play a Minion in your discard pile, paying its energy cost	3	3				

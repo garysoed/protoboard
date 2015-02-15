@@ -1,0 +1,15 @@
+Name	Type	#	L	A	D	Description	Cost	Cost (Actual)	0	0	0	0
+Healing Stream	Spell	2				Heals one Minion by 3	1.25	1				
+Rejuvenating Stream	Spell	2				Fully heals one Minion	2.75	3				
+Ice Armor	Enchantment	2				Armor + 1	3	3				
+Everlasting Water	Enchantment	3				Life + X, where X is the number of Enchantments on this Minion.	2.25	2				
+Piercing Icicle	Enchantment	2				When this Minion attacks, the damage not absorbed by a defending Minion will go towards the intended target.	3	3				
+Icy Spear	Enchantment	3				Attack + X, where X is the number of Enchantments on this Minion.	2.25	2				
+Healing Water	Enchantment	2				At the beginning of the turn, this Minion heals one life	2.25	2				
+Ice Golem	Minion	2	3	1	1		6	5				
+Rain Sprite	Minion	2	2	-2	0	When this Minion’s attack is negative, it heals instead of damages when attacking.	4	4				
+Water Blob	Minion	2	5	1	1	T: Put a Minion in play back into hand. Water Blob heals by the remaining life of that Minion.	5	5				
+Mist Folk	Minion	2	1	0	3	T: Move an Enchantment from one Minion you control to another.	5	5				
+Aqua Morph	Device	1	3			T: Put one Enchantment into play from hand for free.	4	4				
+Water Bearer	Device	3	3			T: Put one Enchantment from discard pile into hand.	2	2				
+Steam Engine	Device	2	3			T: Tap a Minion. Draw X cards, where X is the number of Enchantments on that Minion.	4	4				
