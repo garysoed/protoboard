@@ -65,8 +65,8 @@ DI.bind('pb_ability_Droppable', (Ability, Check, Click, Move) => {
           el.appendChild(movedElement);
           toRemove.push(movedElement);
         });
-        for (let el of toRemove) {
-          Move.remove(el);
+        for (let removedEl of toRemove) {
+          Move.remove(removedEl);
         }
       }
     }
