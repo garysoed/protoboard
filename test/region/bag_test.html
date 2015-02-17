@@ -8,6 +8,7 @@
 
   <link rel="import" href="out/di.html">
   <link rel="import" href="out/region/bag.html">
+  <link rel="import" href="out/service/config.html">
   <link rel="import" href="out/service/move.html">
   <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/testutils.html">
@@ -24,7 +25,7 @@
   DI
       .with('$registry', Registry => new Registry())
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, doc, Bag, Move, pb_t, $registry) => {
+      .run((expect, _, doc, Bag, Config, Move, pb_t, $registry) => {
 
   let RandomPickable = Bag.RandomPickable;
 
@@ -34,7 +35,7 @@
 
   describe('Bag', () => {
     before(done => {
-      $registry.register(doc);
+      $registry.register(doc, Config);
       done();
     });
 

@@ -6,6 +6,7 @@
   <link rel="import" href="out/testbase.html">
 
   <link rel="import" href="out/di.html">
+  <link rel="import" href="out/service/config.html">
   <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/testutils.html">
   <link rel="import" href="out/ui/previewer.html">
@@ -15,13 +16,13 @@
   DI
       .with('$registry', Registry => new Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, service_Preview, Utils, Events, Previewer, pb_t, $registry) => {
+      .run((expect, _, _M, doc, service_Preview, Utils, Config, Events, Previewer, pb_t, $registry) => {
 
   let __onPreviewElChanged__ = pb_t.getSymbol(Previewer.prototype, 'onPreviewElChanged');
 
   describe('ui.Previewer', () => {
     before(done => {
-      $registry.register(doc);
+      $registry.register(doc, Config);
       done();
     });
 

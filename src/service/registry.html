@@ -3,6 +3,8 @@
 <link rel="import" href="out/di.html">
 
 <script>
+
+// TODO(gs): Combine with Bootstrap.
 DI.bind('pb_service_Registry', () => {
 
   const __elements__ = Symbol();
@@ -19,16 +21,19 @@ DI.bind('pb_service_Registry', () => {
         throw `${name} is already registered`;
       }
       this[__elements__].set(name, prototype);
-      this.runAtRegister(doc => doc.registerElement(name, { prototype: prototype }));
+      this.runAtRegister((doc, Config) => {
+        Config.init(name, prototype);
+        doc.registerElement(name, { prototype: prototype });
+      });
     }
 
     runAtRegister(fn) {
       this[__toRun__].push(fn);
     }
 
-    register(doc) {
+    register(doc, Config) {
       for (let fn of this[__toRun__]) {
-        fn(doc);
+        fn(doc, Config);
       }
     }
   }

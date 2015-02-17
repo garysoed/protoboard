@@ -4,11 +4,12 @@
 
 <link rel="import" href="out/check.html">
 <link rel="import" href="out/pbelement.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/utils.html">
 
 <script>
 DI
-    .bind('pb_ui_Template', ($registry, Check, PbElement, Utils, Handlebars) => {
+    .bind('pb_ui_Template', ($registry, Check, Config, PbElement, Utils, Handlebars) => {
 
   /**
    * Contains a handlebars js template. When this element is created, it will process the 
@@ -92,6 +93,7 @@ DI
     return rv;
   });
 
+  Config.add(EL_NAME);
   $registry.add(EL_NAME, Template.prototype);
 
   return Template;

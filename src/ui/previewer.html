@@ -3,6 +3,7 @@
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/events.html">
 <link rel="import" href="out/pbelement.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/service/preview.html">
 <link rel="import" href="out/utils.html">
 
@@ -18,6 +19,7 @@ DI
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_ui_Previewer', (
         $registry,
+        Config,
         Events, 
         PbElement, 
         service_Preview, 
@@ -93,6 +95,7 @@ DI
     }
   }
 
+  Config.add(EL_NAME);
   $registry.add(EL_NAME, Previewer.prototype);
 
   return Previewer;

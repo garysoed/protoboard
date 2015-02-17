@@ -5,6 +5,7 @@
 <link rel="import" href="out/ability/pickable.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/service/move.html">
 <link rel="import" href="out/trigger/click.html">
 <link rel="import" href="out/trigger/key.html">
@@ -31,6 +32,7 @@ DI
         $registry,
         Abilities,
         Click,
+        Config,
         Droppable,
         Key,
         Move,
@@ -115,9 +117,10 @@ DI
 
   Bag.prototype[__placeHolderEl__] = null;
 
-  Abilities.of(Bag.prototype)
-      .add(new Droppable('droppable', new Key('d')))
-      .add(new RandomPickable('pickable', new Key('q')));
+  Config.add(
+      EL_NAME,
+      new Droppable('droppable', new Key('d')),
+      new RandomPickable('pickable', new Key('q')));
 
   $registry.add(EL_NAME, Bag.prototype);
 

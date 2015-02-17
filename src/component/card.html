@@ -1,11 +1,12 @@
 <base href="../..">
 
-<link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/pickable.html">
 <link rel="import" href="out/ability/toggleable.html">
 <link rel="import" href="out/component/component.html">
 <link rel="import" href="out/di.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/trigger/click.html">
+<link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
 
 <link rel="stylesheet" type="text/css" href="out/component/card.css">
@@ -24,9 +25,9 @@ DI
     .constant('doc', document.currentScript.ownerDocument)
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_component_Card', (
-        Abilities,
         Click,
         Component, 
+        Config,
         Key,
         Pickable,
         Toggleable,
@@ -76,11 +77,11 @@ DI
     }
   }
 
-  // TODO(gs): Add key config.
-  Abilities.of(Card.prototype)
-      .add(new Pickable('pickable', new Key('q'), true))
-      .add(new Toggleable('flippable', new Key('f'), true))
-      .add(new Toggleable('tappable', new Key('t'), true));
+  Config.add(
+      'pb-c-card',
+      new Pickable('pickable', new Key('q'), true),
+      new Toggleable('flippable', new Click(), true),
+      new Toggleable('tappable', new Key('t'), true));
 
   $registry.add(EL_NAME, Card.prototype);
 

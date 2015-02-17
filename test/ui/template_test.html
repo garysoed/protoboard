@@ -6,6 +6,7 @@
   <link rel="import" href="out/testbase.html">
 
   <link rel="import" href="out/di.html">
+  <link rel="import" href="out/service/config.html">
   <link rel="import" href="out/third_party/handlebars.html">
   <link rel="import" href="out/ui/template.html">
 </head>
@@ -23,14 +24,14 @@
       })
       .constant('doc', document.currentScript.ownerDocument)
       .constant('DI', window['DI'])
-      .run((expect, _, _M, $registry, Handlebars, Template, doc) => {
+      .run((expect, _, _M, $registry, Config, Handlebars, Template, doc) => {
 
   describe('Template', () => {
     let origTemplate;
     let forHelper;
 
     before(done => {
-      $registry.register(doc);
+      $registry.register(doc, Config);
       expect(Handlebars.helperName).to.equal('pb-for');
       forHelper = Handlebars.helperFn;
       done();

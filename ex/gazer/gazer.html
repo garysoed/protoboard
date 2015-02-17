@@ -2,6 +2,7 @@
 <html>
   <base href="../..">
   <head>
+    <link rel="import" href="out/bootstrap.html">
     <link rel="import" href="out/component/card.html">
     <link rel="import" href="out/di.html">
     <link rel="import" href="out/region/deck.html">
@@ -81,8 +82,6 @@
     <script>
       Handlebars.registerPartial('gz-card', document.querySelector('#cardTemplate').innerHTML);
     </script>
-
-    <link rel="import" href="out/main.html">
   </head>
   <body>
     <section id="top-section">
@@ -138,7 +137,6 @@
                     {{/with}}
                 </pb-u-template>
               </pb-r-deck>
-
 
               <pb-r-deck>
                 <pb-u-template data-cards="gz.base.mind_link" data-showfront="true">
@@ -215,8 +213,13 @@
     </section>
 
     <script>
-      window.Scope.run(function(Abilities, Shuffleable, Utils) {
-         var deckPromise = Promise.all([
+      DI
+          .run(function(Abilities, Bootstrap, Config, Key, Shuffleable, Toggleable, Utils) {
+            
+        Config.add('pb-c-card', new Toggleable('flippable', new Key('f'), true));
+        Bootstrap.run(document);
+
+        var deckPromise = Promise.all([
           Utils.watch(function() {
             return document.querySelector('#rift-air') === null;
           }),

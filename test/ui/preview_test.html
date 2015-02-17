@@ -6,6 +6,7 @@
   <link rel="import" href="out/testbase.html">
 
   <link rel="import" href="out/di.html">
+  <link rel="import" href="out/service/config.html">
   <link rel="import" href="out/service/registry.html">
   <link rel="import" href="out/ui/preview.html">
 </head>
@@ -14,11 +15,11 @@
   DI
       .with('$registry', Registry => new Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, _M, $registry, ui_Preview, doc) => {
+      .run((expect, _, _M, $registry, Config, ui_Preview, doc) => {
 
   describe('ui.Preview', () => {
     before(done => {
-      $registry.register(doc);
+      $registry.register(doc, Config);
       done();
     });
 

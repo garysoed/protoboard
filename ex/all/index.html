@@ -2,6 +2,7 @@
 <html>
   <base href="../..">
   <head>
+    <link rel="import" href="out/bootstrap.html">
     <link rel="import" href="out/component/card.html">
     <link rel="import" href="out/component/token.html">
     <link rel="import" href="out/region/bag.html">
@@ -18,8 +19,6 @@
     <link rel="stylesheet" type="text/css" href="ex/all/token.css">
 
     <link rel="import" href="out/third_party/keypress.html">
-
-    <link rel="import" href="out/main.html">
 
     <style>
       .front {
@@ -246,6 +245,8 @@
     </table>
 
     <script>
+    DI.run(function(Bootstrap) { Bootstrap.run(document); });
+
       var l = new keypress.Listener();
       l.simple_combo('a', function() { console.log('keypress a'); });
       l.simple_combo('a', function() { console.log('keypress a2'); });

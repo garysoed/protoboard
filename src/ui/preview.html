@@ -3,13 +3,14 @@
 <link rel="import" href="out/events.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/pbelement.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/service/preview.html">
 <link rel="import" href="out/service/registry.html">
 <link rel="import" href="out/utils.html">
 
 <script>
 DI
-.bind('pb_ui_Preview', (Events, PbElement, service_Preview, $registry, Utils) => {
+.bind('pb_ui_Preview', (Config, Events, PbElement, service_Preview, $registry, Utils) => {
 
   /**
    * Class that contains a preview if the mouse enters the parent element. This will display
@@ -96,6 +97,7 @@ DI
     }
   }
 
+  Config.add(EL_NAME);
   $registry.add(EL_NAME, Preview.prototype);
 
   return Preview;

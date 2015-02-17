@@ -4,6 +4,7 @@
 
 <link rel="import" href="out/check.html">
 <link rel="import" href="out/pbelement.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/utils.html">
 
 <template id="main">
@@ -46,7 +47,8 @@ DI
     .with('templateCol', doc => doc.querySelector('template#col'))
     .bind('pb_surface_RectGrid', (
         $registry,
-        Check, 
+        Check,
+        Config,
         PbElement, 
         Utils, 
         doc,
@@ -121,6 +123,7 @@ DI
     }
   }
 
+  Config.add(EL_NAME);
   $registry.add(EL_NAME, RectGrid.prototype);
 
   return RectGrid;

@@ -5,6 +5,7 @@
 <link rel="import" href="out/check.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/trigger/click.html">
 <link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
@@ -26,6 +27,7 @@ DI
         Abilities,
         Check,
         Click,
+        Config,
         Droppable, 
         Key,
         Move, 
@@ -129,8 +131,9 @@ DI
     }
   }
 
-  Abilities.of(Rect.prototype)
-      .add(new FlexDroppable('droppable', new Key('d'), true));
+  Config.add(
+      EL_NAME,
+      new FlexDroppable('droppable', new Key('d'), true));
   $registry.add(EL_NAME, Rect.prototype);
 
   if (window['TEST_MODE']) {

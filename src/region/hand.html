@@ -5,6 +5,7 @@
 <link rel="import" href="out/check.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/service/move.html">
 <link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
@@ -27,6 +28,7 @@ DI
         $registry,
         Abilities,
         Check,
+        Config,
         Droppable,
         Key,
         Move,
@@ -104,8 +106,9 @@ DI
   }
 
 
-  Abilities.of(Hand.prototype)
-      .add(new ReorderableDroppable('droppable', new Key('d'), true));
+  Config.add(
+      EL_NAME,
+      new ReorderableDroppable('droppable', new Key('d'), true));
   $registry.add(EL_NAME, Hand.prototype);
 
   if (window['TEST_MODE']) {

@@ -5,6 +5,7 @@
 <link rel="import" href="out/ability/shuffleable.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
+<link rel="import" href="out/service/config.html">
 <link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
 
@@ -22,7 +23,8 @@ DI
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_region_Deck', (
         $registry,
-        Abilities, 
+        Abilities,
+        Config,
         Droppable,
         Key,
         Region, 
@@ -73,9 +75,10 @@ DI
     }
   }
 
-  Abilities.of(Deck.prototype)
-      .add(new Shuffleable('shuffleable', new Key('s'), true))
-      .add(new Droppable('droppable', new Key('d'), true));
+  Config.add(
+      EL_NAME, 
+      new Shuffleable('shuffleable', new Key('s'), true),
+      new Droppable('droppable', new Key('d'), true));
 
   $registry.add(EL_NAME, Deck.prototype);
 
