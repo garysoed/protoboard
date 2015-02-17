@@ -8,10 +8,12 @@
 
   <link rel="import" href="out/ability/shuffleable.html">
   <link rel="import" href="out/di.html">
+  <link rel="import" href="out/service/registry.html">
 </head>
 <body>
   <script>
   DI
+      .with('$registry', Registry => new Registry())
       .with('doc', () => document.currentScript.ownerDocument)
       .run((expect, _, doc, Shuffleable, Utils) => {
 

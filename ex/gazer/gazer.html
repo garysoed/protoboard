@@ -15,24 +15,31 @@
     <script>
       var gz = {};
     </script>
-    <script src="ex/gazer/gz-data-neutral.js"></script>
-    <script src="ex/gazer/gz-data-air.js"></script>
-    <script src="ex/gazer/gz-data-fire.js"></script>
-    <script src="ex/gazer/gz-data-earth.js"></script>
-    <script src="ex/gazer/gz-data-water.js"></script>
+    <script src="ex/gazer/gz-data.js"></script>
     <script>
       gz.plain = {
-        'Energy Orb': 3,
-        'Mind Link': 3,
+        'Energy Orb': 2,
+        'Mind Link': 2,
         'Bot': 3,
         'Meditate': 1
       };
+      gz.air = gz.cards.Air;
+      gz.fire = gz.cards.Fire;
+      gz.water = gz.cards.Water;
+      gz.earth = gz.cards.Earth;
+
+      gz.base = gz.cards.Base;
+      gz.base.mind_link = gz.base[2];
+      gz.base.bot = gz.base[1];
+      gz.base.energy_orb = gz.base[0];
+      gz.base.meditate = gz.base[3];
+
 
       gz.player1 = [];
       gz.player2 = [];
       for (var name in gz.plain) {
         var card = null;
-        gz.neutral.forEach(function(candidate) {
+        gz.base.forEach(function(candidate) {
           if (candidate.name === name) {
             card = candidate;
           }
@@ -116,15 +123,39 @@
 
           <section id="environment">
             <section id="staples">
-              <pb-u-template data-cards="gz.neutral" data-showfront="true">
-                {{#each cards}}
-                <pb-r-deck>
-                  {{#with this}}
-                    {{> gz-card}}
-                  {{/with}}
-                </pb-r-deck>
-                {{/each}}
-              </pb-u-template>
+              <pb-r-deck>
+                <pb-u-template data-cards="gz.base.energy_orb" data-showfront="true">
+                    {{#with cards}}
+                      {{> gz-card}}
+                    {{/with}}
+                </pb-u-template>
+              </pb-r-deck>
+
+              <pb-r-deck>
+                <pb-u-template data-cards="gz.base.bot" data-showfront="true">
+                    {{#with cards}}
+                      {{> gz-card}}
+                    {{/with}}
+                </pb-u-template>
+              </pb-r-deck>
+
+
+              <pb-r-deck>
+                <pb-u-template data-cards="gz.base.mind_link" data-showfront="true">
+                    {{#with cards}}
+                      {{> gz-card}}
+                    {{/with}}
+                </pb-u-template>
+              </pb-r-deck>
+
+
+              <pb-r-deck>
+                <pb-u-template data-cards="gz.base.meditate" data-showfront="true">
+                    {{#with cards}}
+                      {{> gz-card}}
+                    {{/with}}
+                </pb-u-template>
+              </pb-r-deck>
             </section>
             <pb-r-deck id="riftdiscard"></pb-r-deck>
           </section>
@@ -147,18 +178,19 @@
         <section class="playerarea" id="player1area">
           <section class="hand">
             <pb-r-deck class="discard"></pb-r-deck>
-            <pb-r-deck class="deck">
+            <pb-r-deck class="deck" show-count="true" data-count="5">
               <pb-u-template id="player1-template" data-cards="gz.player1" data-showfront="false">
                 {{#each cards}}
                   {{> gz-card}}
                 {{/each}}
               </pb-u-template>
             </pb-r-deck>
+            <div class="decksize"></div>
             <pb-r-hand></pb-r-hand>
           </section>
           <section class="buttons">
             <button class="shuffle">Shuffle</button>
-            <button class="draw">Draw 4</button>
+            <button class="draw">Draw 3</button>
           </section>
         </section>
         <section class="playerarea" id="player2area">
@@ -171,11 +203,12 @@
                 {{/each}}
               </pb-u-template>
             </pb-r-deck>
+            <div class="decksize"></div>
             <pb-r-hand></pb-r-hand>
           </section>
           <section class="buttons">
             <button class="shuffle">Shuffle</button>
-            <button class="draw">Draw 4</button>
+            <button class="draw">Draw 3</button>
           </section>
         </section>
       </section>
@@ -203,13 +236,27 @@
         var player1Promise = Utils.watch(function() {
           return document.querySelector('#player1-template') === null;
         }).then(function() {
+          var deck = document.querySelector('#player1area .deck');
           Abilities.trigger(document.querySelector('#player1area .deck'), 'shuffleable');
+
+          var observer = new MutationObserver(function() {
+            document.querySelector('#player1area .decksize').innerText = deck.children.length;
+          });
+          document.querySelector('#player1area .decksize').innerText = deck.children.length
+          observer.observe(deck, { childList: true });
         });
 
         var player2Promise = Utils.watch(function() {
           return document.querySelector('#player2-template') === null;
         }).then(function() {
+          var deck = document.querySelector('#player2area .deck');
           Abilities.trigger(document.querySelector('#player2area .deck'), 'shuffleable');
+
+          var observer = new MutationObserver(function() {
+            document.querySelector('#player2area .decksize').innerText = deck.children.length;
+          });
+          document.querySelector('#player2area .decksize').innerText = deck.children.length
+          observer.observe(deck, { childList: true });
         });
 
         Promise.all([ deckPromise, player1Promise, player2Promise ])
@@ -252,7 +299,7 @@
           });
 
           area.querySelector('button.draw').addEventListener('click', function() {
-            for (var i = 0; i < 4 && deck.childElementCount > 0; i++) {
+            for (var i = 0; i < 3 && deck.childElementCount > 0; i++) {
               var child = deck.lastElementChild;
               hand.appendChild(child);
               $(child).attr('flippable-active', true);

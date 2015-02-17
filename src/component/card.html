@@ -79,7 +79,7 @@ DI
   // TODO(gs): Add key config.
   Abilities.of(Card.prototype)
       .add(new Pickable('pickable', new Key('q'), true))
-      .add(new Toggleable('flippable', new Click(), true))
+      .add(new Toggleable('flippable', new Key('f'), true))
       .add(new Toggleable('tappable', new Key('t'), true));
 
   $registry.add(EL_NAME, Card.prototype);

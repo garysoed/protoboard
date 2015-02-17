@@ -11,40 +11,43 @@ function handleError(error) {
   this.emit('end');
 };
 
-function toJson(element) {
+function toJson() {
   return through.obj(function(file, enc, cb) {
-    var group = [];
+    var elements = {};
     if (file.isBuffer()) {
       var lines = String(file.contents).split('\n');
       for (var i = 1; i < lines.length; i++) {
         var segments = lines[i].split('\t');
         var card = {
           'name': segments[0],
-          'type': segments[1],
-          'element': element,
-          'count': segments[2],
-          'description': segments[6],
-          'cost': segments[8]
+          'type': segments[2],
+          'element': segments[1],
+          'count': segments[3],
+          'description': segments[7],
+          'cost': segments[12]
         };
 
-        if (segments[3]) {
-          card['life'] = segments[3];
-        }
-
         if (segments[4]) {
-          card['attack'] = segments[4];
+          card['life'] = segments[4];
         }
 
         if (segments[5]) {
-          card['armor'] = segments[5];
+          card['attack'] = segments[5];
         }
 
-        group.push(card);
+        if (segments[6]) {
+          card['armor'] = segments[6];
+        }
+
+        if (!elements[card.element]) {
+          elements[card.element] = [];
+        }
+        elements[card.element].push(card);
       }
 
       this.push(new gutil.File({
-        path: 'gz-data-' + element + '.js',
-        contents: new Buffer('gz.' + element + ' = ' + JSON.stringify(group, null, 2) + ';')
+        path: 'gz-data.js',
+        contents: new Buffer('gz.cards = ' + JSON.stringify(elements, null, 2) + ';')
       }));
     } else {
       throw 'Only supports buffer';
@@ -54,16 +57,6 @@ function toJson(element) {
   });
 }
 
-var elements = ['air', 'earth', 'fire', 'neutral', 'water'];
-
-elements.forEach(function(element) {
-  gulp.task('json.' + element, function() {
-    return gulp.src(['gazer-' + element + '.tsv'])
-        .pipe(toJson(element))
-        .pipe(gulp.dest('.'));
-  });
-});
-
 gulp.task('sass', function() {
   return gulp.src('*.scss')
       .pipe(sass({ loadPath: ['../../src/themes'] }))
@@ -71,7 +64,11 @@ gulp.task('sass', function() {
       .pipe(gulp.dest('.'));
 });
 
-gulp.task('json', elements.map(function(element) { return 'json.' + element; }));
+gulp.task('json', function() {
+  return gulp.src('gazer.tsv')
+      .pipe(toJson())
+      .pipe(gulp.dest('.'));
+});
 gulp.task('watch', function() {
   gulp.watch(['*.scss'], ['sass']);
 });

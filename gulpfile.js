@@ -136,7 +136,7 @@ gulp.task('sass-src', function() {
 });
 
 gulp.task('sass-ex', function() {
-  return gulp.src(['ex/**/*.scss', 'src/themes/*.scss'])
+  return gulp.src(['ex/**/*.scss', '!./src/themes/*.scss'])
       .pipe(subSass())
       .pipe(gulp.dest('out'));
 });
@@ -144,7 +144,7 @@ gulp.task('sass-ex', function() {
 gulp.task('watch', function() {
   // SASS
   gulp.watch(['src/**/*.scss'], function(event) {
-    gulp.src(['src/**/*.html'])
+    gulp.src(['src/**/*.scss'])
         .pipe(plumber())
         .pipe(subSass())
         .pipe(debug({title: chalk.green('sass')}))
@@ -153,8 +153,7 @@ gulp.task('watch', function() {
 
   // SASS for examples
   gulp.watch(['ex/**/*.scss', 'src/themes/*.scss'], function(event) {
-    var base = event.path.substring(__dirname.length).split('/')[1];
-    gulp.src(event.path, {base: base})
+    gulp.src(['ex/**/*.scss', '!./src/themes/*.scss'])
         .pipe(plumber())
         .pipe(subSass())
         .pipe(debug({title: chalk.green('sass')}))

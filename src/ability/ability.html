@@ -54,6 +54,7 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
      * @param {!Element} el Element whose attributes have changed.
      */
     updateConfig(el) {
+      // TODO(gs): Disallow this. Trigger cannot be changed.
       let newValue = $(el).attr(this.attrTrigger);
       if (newValue !== this[__trigger__].toString()) {
         this[__trigger__].off(el);

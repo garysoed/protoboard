@@ -60,7 +60,6 @@
           Move.movedElements = [lastDraggedEl];
           Move.mouseX = 90;
           Move.mouseY = 12;
-          _.spy(Move, 'remove');
 
           flexDroppable.trigger(el);
 
@@ -68,7 +67,6 @@
           expect(lastDraggedEl.style.left).to.be.equal('22px');
           expect(lastDraggedEl.style.top).to.be.equal('-100px');
           expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
-          expect(Move.remove).calledWith(lastDraggedEl).at.least(1);
         });
       });
 

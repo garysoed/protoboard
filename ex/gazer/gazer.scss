@@ -75,23 +75,23 @@ pb-u-previewer {
   }
 }
 
-pb-c-card.neutral .pb-front {
+pb-c-card.Base .pb-front {
   background-color: #ffaaff;
 }
 
-pb-c-card.air .pb-front {
+pb-c-card.Air .pb-front {
   background-color: #aaaaaa;
 }
 
-pb-c-card.earth .pb-front {
+pb-c-card.Earth .pb-front {
   background-color: #aaffaa;
 }
 
-pb-c-card.fire .pb-front {
+pb-c-card.Fire .pb-front {
   background-color: #ffaaaa;
 }
 
-pb-c-card.water .pb-front {
+pb-c-card.Water .pb-front {
   background-color: #aaaaff;
 }
 
@@ -156,6 +156,10 @@ pb-c-card.water .pb-front {
   .hand {
     display: flex;
     pb-r-deck {
+      margin-right: 20px;
+    }
+
+    .decksize {
       margin-right: 20px;
     }
 

@@ -71,24 +71,6 @@ DI
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
       this.attachedCallback();
     }
-
-    /**
-     * Called when the element is attached to the document.
-     *
-     * @method attachedCallback
-     */
-    attachedCallback() {
-      super.attachedCallback();
-    }
-
-    /**
-     * Called when the element is detached from the document.
-     *
-     * @method detachedCallback
-     */
-    detachedCallback() {
-      super.detachedCallback();
-    }
   }
 
   Abilities.of(Deck.prototype)
