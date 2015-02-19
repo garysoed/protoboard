@@ -21,8 +21,8 @@
       gz.plain = {
         'Energy Orb': 2,
         'Mind Link': 2,
-        'Bot': 3,
-        'Meditate': 1
+        'Bot': 2,
+        'Meditate': 2
       };
       gz.air = gz.cards.Air;
       gz.fire = gz.cards.Fire;
@@ -79,6 +79,12 @@
       {{/pb-for}}
     </template>
 
+    <template cards>
+      {{#each cards}}
+        {{> gz-card}}
+      {{/each}}
+    </template>
+
     <script>
       Handlebars.registerPartial('gz-card', document.querySelector('#cardTemplate').innerHTML);
     </script>
@@ -90,26 +96,22 @@
         <section id="draft">
           <section id="rift">
             <pb-r-deck id="riftdeck">
-              <pb-u-template id="rift-air" data-cards="gz.air" data-showfront="false">
-                {{#each cards}}
-                  {{> gz-card}}
-                {{/each}}
-              </pb-u-template>
-              <pb-u-template id="rift-earth" data-cards="gz.earth" data-showfront="false">
-                {{#each cards}}
-                  {{> gz-card}}
-                {{/each}}
-              </pb-u-template>
-              <pb-u-template id="rift-fire" data-cards="gz.fire" data-showfront="false">
-                {{#each cards}}
-                  {{> gz-card}}
-                {{/each}}
-              </pb-u-template>
-              <pb-u-template id="rift-water" data-cards="gz.water" data-showfront="false">
-                {{#each cards}}
-                  {{> gz-card}}
-                {{/each}}
-              </pb-u-template>
+              <pb-u-template id="rift-air" 
+                  template="template[cards]" 
+                  data-cards="gz.air" 
+                  data-showfront="false"></pb-u-template>
+              <pb-u-template id="rift-earth" 
+                  template="template[cards]" 
+                  data-cards="gz.earth" 
+                  data-showfront="false"></pb-u-template>
+              <pb-u-template id="rift-fire" 
+                  template="template[cards]" 
+                  data-cards="gz.fire" 
+                  data-showfront="false"></pb-u-template>
+              <pb-u-template id="rift-water" 
+                  template="template[cards]" 
+                  data-cards="gz.water" 
+                  data-showfront="false"></pb-u-template>
             </pb-r-deck>
 
             <section id="riftchoice">
@@ -122,38 +124,15 @@
 
           <section id="environment">
             <section id="staples">
+              <template>
+              {{#each cards}}
               <pb-r-deck>
-                <pb-u-template data-cards="gz.base.energy_orb" data-showfront="true">
-                    {{#with cards}}
-                      {{> gz-card}}
-                    {{/with}}
-                </pb-u-template>
+                {{> gz-card}}
               </pb-r-deck>
+              {{/each}}
+              </template>
 
-              <pb-r-deck>
-                <pb-u-template data-cards="gz.base.bot" data-showfront="true">
-                    {{#with cards}}
-                      {{> gz-card}}
-                    {{/with}}
-                </pb-u-template>
-              </pb-r-deck>
-
-              <pb-r-deck>
-                <pb-u-template data-cards="gz.base.mind_link" data-showfront="true">
-                    {{#with cards}}
-                      {{> gz-card}}
-                    {{/with}}
-                </pb-u-template>
-              </pb-r-deck>
-
-
-              <pb-r-deck>
-                <pb-u-template data-cards="gz.base.meditate" data-showfront="true">
-                    {{#with cards}}
-                      {{> gz-card}}
-                    {{/with}}
-                </pb-u-template>
-              </pb-r-deck>
+              <pb-u-template template="#staples template" data-cards="gz.base" data-showfront="true"></pb-u-template>
             </section>
             <pb-r-deck id="riftdiscard"></pb-r-deck>
           </section>
@@ -177,11 +156,10 @@
           <section class="hand">
             <pb-r-deck class="discard"></pb-r-deck>
             <pb-r-deck class="deck" show-count="true" data-count="5">
-              <pb-u-template id="player1-template" data-cards="gz.player1" data-showfront="false">
-                {{#each cards}}
-                  {{> gz-card}}
-                {{/each}}
-              </pb-u-template>
+              <pb-u-template id="player1-template"
+                  template="template[cards]"
+                  data-cards="gz.player1"
+                  data-showfront="false"></pb-u-template>
             </pb-r-deck>
             <div class="decksize"></div>
             <pb-r-hand></pb-r-hand>
@@ -195,11 +173,10 @@
           <section class="hand">
             <pb-r-deck class="discard"></pb-r-deck>
             <pb-r-deck class="deck">
-              <pb-u-template id="player2-template" data-cards="gz.player2" data-showfront="false">
-                {{#each cards}}
-                  {{> gz-card}}
-                {{/each}}
-              </pb-u-template>
+              <pb-u-template id="player2-template"
+                  template="template[cards]" 
+                  data-cards="gz.player2"
+                  data-showfront="false"></pb-u-template>
             </pb-r-deck>
             <div class="decksize"></div>
             <pb-r-hand></pb-r-hand>

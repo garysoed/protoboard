@@ -11,6 +11,11 @@
   <link rel="import" href="out/ui/template.html">
 </head>
 <body>
+  <template>
+  </template>
+
+  <div id="testholder"></div>
+
   <script>
   DI
       .with('$registry', Registry => new Registry())
@@ -40,6 +45,7 @@
     describe('#createdCallback', () => {
       it('should replace the innerHTML', () => {
         let templateStr = 'Template String';
+        doc.querySelector('template').innerHTML = templateStr;
         let compiledTemplateStr = 'Compiled template string';
         let compiledTemplate = _.spiedFunction().overrideReturn(compiledTemplateStr);
         let promise = { then: _.spiedFunction() };
@@ -47,8 +53,8 @@
         _.spy(Handlebars, 'compile').overrideReturn(compiledTemplate);
         _.spy(Promise, 'all').overrideReturn(promise);
 
-        let templateEl = $(doc.body)
-            .html('<pb-u-template>' + templateStr + '</pb-u-template>')[0];
+        let templateEl = $(doc.body.querySelector('#testholder'))
+            .html('<pb-u-template template="template"></pb-u-template>')[0];
 
         expect(Promise.all).calledWith([]).at.least(1);
 
@@ -67,7 +73,8 @@
         _.spy(Handlebars, 'compile').overrideReturn(compiledTemplate);
         _.spy(Promise, 'all').overrideReturn(promise);
 
-        let templateEl = $(doc.body) .html('<pb-u-template data-a="a.b"></pb-u-template>')[0];
+        let templateEl = $(doc.body.querySelector('#testholder'))
+            .html('<pb-u-template template="template" data-a="a.b"></pb-u-template>')[0];
 
         expect(Promise.all).calledWith([['a', 'data']]).at.least(1);
 
@@ -85,7 +92,8 @@
         _.spy(Handlebars, 'compile').overrideReturn(compiledTemplate);
         _.spy(Promise, 'all').overrideReturn(promise);
 
-        let templateEl = $(doc.body).html('<pb-u-template data-a="data"></pb-u-template>')[0];
+        let templateEl = $(doc.body.querySelector('#testholder'))
+            .html('<pb-u-template template="template" data-a="data"></pb-u-template>')[0];
 
         expect(Promise.all).calledWith([['a', data]]).at.least(1);
 
@@ -104,7 +112,8 @@
         _.spy(Handlebars, 'compile').overrideReturn(compiledTemplate);
         _.spy(Promise, 'all').overrideReturn(promise);
 
-        let templateEl = $(doc.body) .html('<pb-u-template data-a="a"></pb-u-template>')[0];
+        let templateEl = $(doc.body.querySelector('#testholder'))
+            .html('<pb-u-template template="template" data-a="a"></pb-u-template>')[0];
 
         expect(Promise.all).calledWith([['a', window['a']]]).at.least(1);
 

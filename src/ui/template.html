@@ -69,7 +69,10 @@ DI
       Promise.all(dataPromises)
           .then(dataArray => {
             let data = Utils.fromArrayOfArrays(dataArray);
-            let templateStr = this.innerHTML.replace('&gt;', '>');
+            let templateStr = this.ownerDocument
+                .querySelector($(this).attr('template'))
+                .innerHTML
+                .replace('&gt;', '>');
             $(this).replaceWith(Handlebars.compile(templateStr)(data));
           });
     }
