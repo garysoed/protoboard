@@ -36,32 +36,32 @@ DI
         template,
         $registry) => {
 
+  const EL_NAME = 'pb-c-card';
+
   /**
    * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
    * - One must have a `pb-front` class. This is the front face of the card.
    * - One must have a `pb-back` class. This is the back face of the card.
    *
    * By default, the card starts by showing its back. If you want to make it start by showing the 
-   * front face, add `pb-showfront="true"` to the `pb-c-card`.
+   * front face, add `flippable-active="true"` to the `pb-c-card`.
    *
    * ```html
    * <!-- Example: Create a card that starts by displaying its front side -->
-   * <pb-c-card pb-showfront="true">
+   * <pb-c-card flippable-active="true">
    *   <div class="pb-front">Front side</div>
    *   <div class="pb-back">Back side</div>
    * </pb-c-card>
    * ```
    *
-   * Supported abilities:
-   * - [[Rotateable|ability.Rotateable]]: Default disabled.
+   * Default supported abilities:
+   * - [[Pickable|ability.Pickable]] pickable
+   * - pickable - [[Rotateable|ability.Rotateable]] - 
    * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
    * 
    * @class component.Card
    * @extends component.Component
    */
-
-  const EL_NAME = 'pb-c-card';
-
   class Card extends Component {
 
     /**

@@ -17,9 +17,12 @@ DI.bind('pb_ability_Abilities', Utils => {
   class Builder {
 
     /**
+     * Builder helper for using {{#crossLink "ability.Abilities"}}Abilities{{/crossLink}}.
+     *
      * @constructor
      * @class ability.Abilities.Builder
-     * @param {!Element} el Element to add abilities to.
+     * @param {Element} el Element to add abilities to.
+     * @private
      */
     constructor(el) {
       this[__element__] = el;
@@ -29,8 +32,8 @@ DI.bind('pb_ability_Abilities', Utils => {
      * Adds the given ability to the element specified in the builder.
      *
      * @method add
-     * @param {!ability.Ability} ability The ability to add.
-     * @return {!ability.Abilities.Builder} This builder object for chaining.
+     * @param {ability.Ability} ability The ability to add.
+     * @return {ability.Abilities.Builder} This builder object for chaining.
      */
     add(ability) {
       let key = ability.attrName;
@@ -49,11 +52,43 @@ DI.bind('pb_ability_Abilities', Utils => {
       this[__element__][__abilities__].set(ability.attrTrigger, ability);
 
       return this;
+    },
+
+    /**
+     * Triggers the ability corresponding to the given name.
+     *
+     * @method trigger
+     * @param {string} name Name of the ability to trigger. Refer to the element's API for the
+     *    names.
+     * @return {ability.Abilities.Builder} This builder object for chaining.
+     */
+    trigger(name) {
+      let el = this[__element__];
+      let ability = null;
+      if (el[__abilities__]) {
+        ability = el[__abilities__].get(name);
+      }
+
+      if (!ability) {
+        // TODO(gs): All errors should use the error object.
+        throw new Error(`Ability ${name} is not registered with element ${el}`);
+      }
+
+      ability.trigger(el);
+
+      return this;
     }
   }
 
   /**
-   * TODO(gs): Doc
+   * Helper class to register abilities to custom elements. You can use this class to customize
+   * abilities, add abilities, and trigger registered abilities. Any interactions should start with
+   * the {{#crossLink "ability.Abilities/of:method"}}{{/crossLink}} method.
+   *
+   * @example
+   *     // Registering ability.
+   *     Abilities.of(el)
+   *         .add(new Ability());
    *
    * @class ability.Abilities
    * @static
@@ -64,7 +99,8 @@ DI.bind('pb_ability_Abilities', Utils => {
      * Handler called when the MutationObserver detected a change.
      *
      * @method __onMutation__
-     * @param {!Array.<!MutationRecord>} records Mutation records.
+     * @param {Array} records Array of {{#crossLink "MutationRecord"}}{{/crossLink}}s.
+     * @private
      */
     [__onMutation__](records) {
       for (let record of records) {
@@ -77,11 +113,12 @@ DI.bind('pb_ability_Abilities', Utils => {
     },
 
     /**
-     * Creates a new Abilities Builder to operate on the given element.
+     * Creates a new {{#crossLink "ability.Abilities.Builder"}}Builder{{/crossLink}} to operate on
+     * the given element.
      *
      * @method of
-     * @param {!Element} el Element that the Builder should operate on.
-     * @return {!ability.Abilities.Builder} The builder object.
+     * @param {Element} el Element that the Builder should operate on.
+     * @return {ability.Abilities.Builder} The builder object.
      */
     of(el) {
       return new Builder(el);
@@ -91,7 +128,7 @@ DI.bind('pb_ability_Abilities', Utils => {
      * Initializes the added abilities on the given element.
      *
      * @method init
-     * @param {!Element} el The element to initialize.
+     * @param {Element} el The element to initialize.
      */
     init(el) {
       if (el[__observer__]) {
@@ -121,24 +158,12 @@ DI.bind('pb_ability_Abilities', Utils => {
       abilities.forEach(ability => {
         ability.init(el);
       });
-    },
-
-    trigger(el, name) {
-      let ability = null;
-      if (el[__abilities__]) {
-        ability = el[__abilities__].get(name);
-      }
-
-      if (!ability) {
-        // TODO(gs): All errors should use the error object.
-        throw new Error(`Ability ${name} is not registered with element ${el}`);
-      }
-
-      ability.trigger(el);
-    },
-
-    Builder: Builder
+    }
   };
+
+  if (window['TEST_MODE']) {
+    Abilities.Builder = Builder;
+  }
 
   return Abilities;
 });

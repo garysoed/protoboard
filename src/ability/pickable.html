@@ -10,20 +10,16 @@ DI.bind('pb_ability_Pickable', (Ability, Check, Click, Move, Triggers) => {
   // Private symbols.
   const __defaultEnabled__ = Symbol();
 
-  /**
-   * Element with this ability can be picked and dragged around. The element will be added to
-   * pb.service.Move and will be accessible by ability.Droppable.
-   *
-   * @class ability.Pickable
-   * @extends ability.Ability
-   */
   class Pickable extends Ability {
 
     /**
+     * Element with this ability can be picked and dragged around. The element can be dropped on
+     * elements with {{#crossLink "ability.Droppable"}}{{/crossLink}} ability.
+     *
      * @constructor
      * @class ability.Pickable
-     * @param {string} [name='pb-pickable'] Name of the ability.
-     * @param {ability.Trigger} [defaultTrigger=ability.Click] Default trigger for the ability.
+     * @param {string} [name=pb-pickable] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      */
     constructor(name = 'pb-pickable', defaultTrigger = new Click(), defaultEnabled = true) {
@@ -33,7 +29,10 @@ DI.bind('pb_ability_Pickable', (Ability, Check, Click, Move, Triggers) => {
     }
 
     /**
-     * @override
+     * Sets the default configuration for this ability on the given element.
+     *
+     * @method init
+     * @param {Element} el The element to set the default configuration to.
      */
     init(el) {
       super.init(el);
@@ -44,7 +43,11 @@ DI.bind('pb_ability_Pickable', (Ability, Check, Click, Move, Triggers) => {
     }
 
     /**
-     * @override
+     * Picks up the element and makes it follow the mouse cursor.
+     *
+     * @method trigger
+     * @param {Element} el Element to be picked up.
+     * @param {Event} event The event triggering the pick.
      */
     trigger(el, event) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {

@@ -25,7 +25,7 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
      * @class ability.Ability
      * @param {string} name Name of the ability. This is used to identify an ability that has been
      *    added to an element. It therefore must be unique for the element.
-     * @param {!trigger.Trigger} defaultTrigger The default trigger to trigger this ability.
+     * @param {trigger.Trigger} defaultTrigger The default trigger to trigger this ability.
      */
     constructor(name, defaultTrigger) {
       this[__name__] = name;
@@ -36,7 +36,7 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
      * Initializes the ability on the given element.
      *
      * @method init
-     * @param {!Element} el The element to set the default values to.
+     * @param {Element} el The element to set the default values to.
      */
     init(el) {
       if ($(el).attr(this.attrTrigger) === undefined) {
@@ -51,7 +51,7 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
      * Updates the inner state of the ability based on changes to the element.
      *
      * @method updateConfig
-     * @param {!Element} el Element whose attributes have changed.
+     * @param {Element} el Element whose attributes have changed.
      */
     updateConfig(el) {
       // TODO(gs): Disallow this. Trigger cannot be changed.
@@ -68,7 +68,7 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
      * Triggers the effect of the ability on the given element.
      *
      * @method trigger
-     * @param {!Element} el The element to trigger the ability on.
+     * @param {Element} el The element to trigger the ability on.
      * @param {Event} event The event that triggers the ability.
      */
     trigger(el, event) { }
@@ -76,10 +76,10 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
     /**
      * Name of the ability. This is also the name of the attribute on the element corresponding to
      * this ability.
-     * 
+     *
      * @property attrName
      * @type string
-     * @readonly
+     * @final
      */
     get attrName() {
       return this[__name__];
@@ -87,11 +87,11 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
 
     /**
      * The name of the attribute on the element corresponding to this ability that sets the trigger
-     * for this ability.
-     * 
+     * for this ability. This is the name of the ability with a <code>-on</code> postfix.
+     *
      * @property attrTrigger
      * @type string
-     * @readonly
+     * @final
      */
     get attrTrigger() {
       return `${this[__name__]}-on`;

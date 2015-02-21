@@ -96,21 +96,21 @@
         <section id="draft">
           <section id="rift">
             <pb-r-deck id="riftdeck">
-              <pb-u-template id="rift-air" 
-                  template="template[cards]" 
-                  data-cards="gz.air" 
+              <pb-u-template id="rift-air"
+                  template="template[cards]"
+                  data-cards="gz.air"
                   data-showfront="false"></pb-u-template>
-              <pb-u-template id="rift-earth" 
-                  template="template[cards]" 
-                  data-cards="gz.earth" 
+              <pb-u-template id="rift-earth"
+                  template="template[cards]"
+                  data-cards="gz.earth"
                   data-showfront="false"></pb-u-template>
-              <pb-u-template id="rift-fire" 
-                  template="template[cards]" 
-                  data-cards="gz.fire" 
+              <pb-u-template id="rift-fire"
+                  template="template[cards]"
+                  data-cards="gz.fire"
                   data-showfront="false"></pb-u-template>
-              <pb-u-template id="rift-water" 
-                  template="template[cards]" 
-                  data-cards="gz.water" 
+              <pb-u-template id="rift-water"
+                  template="template[cards]"
+                  data-cards="gz.water"
                   data-showfront="false"></pb-u-template>
             </pb-r-deck>
 
@@ -174,7 +174,7 @@
             <pb-r-deck class="discard"></pb-r-deck>
             <pb-r-deck class="deck">
               <pb-u-template id="player2-template"
-                  template="template[cards]" 
+                  template="template[cards]"
                   data-cards="gz.player2"
                   data-showfront="false"></pb-u-template>
             </pb-r-deck>
@@ -192,7 +192,7 @@
     <script>
       DI
           .run(function(Abilities, Bootstrap, Config, Key, Shuffleable, Toggleable, Utils) {
-            
+
         Config.add('pb-c-card', new Toggleable('flippable', new Key('f'), true));
         Bootstrap.run(document);
 
@@ -210,14 +210,14 @@
             return document.querySelector('#rift-earth') === null;
           })
         ]).then(function() {
-          Abilities.trigger(document.querySelector('#riftdeck'), 'shuffleable');
+          Abilities.of(document.querySelector('#riftdeck')).trigger('shuffleable');
         });
 
         var player1Promise = Utils.watch(function() {
           return document.querySelector('#player1-template') === null;
         }).then(function() {
           var deck = document.querySelector('#player1area .deck');
-          Abilities.trigger(document.querySelector('#player1area .deck'), 'shuffleable');
+          Abilities.of(document.querySelector('#player1area .deck')).trigger('shuffleable');
 
           var observer = new MutationObserver(function() {
             document.querySelector('#player1area .decksize').innerText = deck.children.length;
@@ -230,7 +230,7 @@
           return document.querySelector('#player2-template') === null;
         }).then(function() {
           var deck = document.querySelector('#player2area .deck');
-          Abilities.trigger(document.querySelector('#player2area .deck'), 'shuffleable');
+          Abilities.of(document.querySelector('#player2area .deck')).trigger('shuffleable');
 
           var observer = new MutationObserver(function() {
             document.querySelector('#player2area .decksize').innerText = deck.children.length;
@@ -267,7 +267,7 @@
           var hand = area.querySelector('pb-r-hand');
 
           area.querySelector('button.shuffle').addEventListener('click', function() {
-            Abilities.trigger(discard, 'shuffleable');
+            Abilities.of(discard).trigger('shuffleable');
 
             // Flip all the children and move them to the bottom of the deck.
             Utils.toArray(discard.children).forEach(function(child) {
