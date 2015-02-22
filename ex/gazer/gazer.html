@@ -190,7 +190,7 @@
           </section>
           <section class="buttons">
             <button class="shuffle">Shuffle</button>
-            <button class="draw">Draw 3</button>
+            <button class="draw">Draw 4</button>
           </section>
         </section>
         <section class="playerarea" id="player2area">
@@ -208,7 +208,7 @@
           </section>
           <section class="buttons">
             <button class="shuffle">Shuffle</button>
-            <button class="draw">Draw 3</button>
+            <button class="draw">Draw 4</button>
           </section>
         </section>
       </section>
@@ -299,7 +299,7 @@
           });
 
           area.querySelector('button.draw').addEventListener('click', function() {
-            for (var i = 0; i < 3 && deck.childElementCount > 0; i++) {
+            for (var i = 0; i < 4 && deck.childElementCount > 0; i++) {
               var child = deck.lastElementChild;
               hand.appendChild(child);
               $(child).attr('flippable-active', true);
