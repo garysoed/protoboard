@@ -14,6 +14,12 @@
     "themedir": "./node_modules/doctheme",
     "paths": [
       "./src"
-    ]
+    ],
+    "external": {
+      "data": {
+        "base": "../assets/redirect.html#",
+        "json": "./node_modules/doctheme/externals/dom.json"
+      }
+    }
   }
 }
