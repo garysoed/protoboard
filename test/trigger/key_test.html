@@ -14,7 +14,8 @@
       .constant('doc', document.currentScript.ownerDocument)
       .constant('pb_service_Move', {
         mouseX: 0,
-        mouseY: 0
+        mouseY: 0,
+        movedElements: new Set()
       })
       .with('$registry', Registry => new Registry())
       .with('Events', pb_t => pb_t.createFakeEvents())
@@ -120,8 +121,7 @@
           });
           it('should not unlisten the element if the mouse is still in the element', () => {
             let el = doc.createElement('div');
-            let ability = pb_t.createFakeAbility('ability');
-            Service.add(el, 'a', ability);
+            Service.add(el, 'a', pb_t.createFakeAbility('ability'));
 
             _.spy(el, 'getBoundingClientRect').overrideReturn({
               left: 12,
@@ -137,6 +137,26 @@
             // Check that the ability is still there.
             const map = Service[pb_t.getSymbol(Service, 'hoveredEls')];
             expect(map.has(el)).to.be.true();
+          });
+          it('should unlisten to the element if it is being moved', () => {
+            let el = doc.createElement('div');
+            Service.add(el, 'a', pb_t.createFakeAbility('ability'));
+
+            _.spy(el, 'getBoundingClientRect').overrideReturn({
+              left: 10,
+              right: 20,
+              top: 10,
+              bottom: 20
+            });
+            Move.mouseX = 15;
+            Move.mouseY = 15;
+            Move.movedElements.add(el);
+
+            handler({ keyCode: 97 });
+
+            // Check that the ability is still there.
+            const map = Service[pb_t.getSymbol(Service, 'hoveredEls')];
+            expect(map.has(el)).to.be.false();
           });
         });
 
@@ -210,6 +230,7 @@
       afterEach(done => {
         _.reset();
         Key.Service.clear();
+        Move.movedElements.clear();
         done();
       });
     });

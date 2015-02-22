@@ -148,7 +148,8 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
       if (triggeredEl) {
         // Check if the mouse is still inside the triggered el.
         const rect = triggeredEl.getBoundingClientRect();
-        if (rect.left > Move.mouseX
+        if (Move.movedElements.has(triggeredEl)
+            || rect.left > Move.mouseX
             || rect.right < Move.mouseX
             || rect.top > Move.mouseY
             || rect.bottom < Move.mouseY) {
@@ -171,6 +172,7 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
     /**
      * Registers the given element to trigger the given ability when the given key is pressed.
      *
+     * @method add
      * @param {Element} element The element to trigger when the given key is pressed.
      * @param {string} key The key to press
      * @param {ability.Ability} ability The ability to trigger.
@@ -188,10 +190,21 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
       keyMap.get(key).add(ability);
     },
 
+    /**
+     * Unregisters the given element.
+     *
+     * @method remove
+     * @param {Element} element The element to unregister.
+     */
     remove(element) {
       this[__hoveredEls__].delete(element);
     },
 
+    /**
+     * Clears all registered elements.
+     *
+     * @method clear
+     */
     clear() {
       this[__hoveredEls__].clear();
     },

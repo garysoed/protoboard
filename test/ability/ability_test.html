@@ -43,7 +43,6 @@
 
         ability.init(el);
         expect($(el).attr(ability.attrTrigger)).to.be.equal(triggerStr);
-        expect(trigger.on).calledWith(el, ability).at.least(1);
         expect(ability.updateConfig).calledWith(el).at.least(1);
       });
       it('should not override the trigger value if it is already set', () => {
@@ -64,8 +63,11 @@
       it('should update the trigger if the trigger changes', () => {
         let trigger = pb_t.createFakeTrigger('triggerName');
         let newTrigger = pb_t.createFakeTrigger('new trigger');
-        
+
         let ability = new Ability('name', trigger);
+        Triggers.trigger = trigger;
+        ability.init(el);
+
         $(el).attr(ability.attrTrigger, newTrigger.toString());
 
         Triggers.trigger = newTrigger;
@@ -75,7 +77,7 @@
         expect(trigger.off).calledWith(el).at.least(1);
         expect(Triggers.triggerStr).to.be.equal(newTrigger.toString());
         expect(newTrigger.on).calledWith(el, ability).at.least(1);
-        expect(ability[pb_t.getSymbol(ability, 'trigger')]).to.be.equal(newTrigger);
+        expect(el[pb_t.getSymbol(el, 'triggerMap')].get(ability)).to.be.equal(newTrigger);
       });
       it('should be noop if the trigger does not change', () => {
         let trigger = pb_t.createFakeTrigger('triggerName');

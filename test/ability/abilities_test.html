@@ -3,9 +3,9 @@
 <head>
   <base href="../..">
   <title>ability.Abilities Unit Tests</title>
-  
+
   <link rel="import" href="out/testbase.html">
-  
+
   <link rel="import" href="out/ability/abilities.html">
   <link rel="import" href="out/di.html">
 </head>
@@ -109,9 +109,9 @@
         expect(ability2.updateConfig).calledWith(records[1].target).at.least(1);
       });
       it('should not throw exception if the element has no abilities', () => {
-        Abilities[__onMutation__]([{ 
-          target: doc.createElement('div'), 
-          attributeName: 'attributeName' 
+        Abilities[__onMutation__]([{
+          target: doc.createElement('div'),
+          attributeName: 'attributeName'
         }]);
       });
       it('should not throw exception if the element has no attribute that has been mutated', () => {
@@ -167,12 +167,6 @@
 
         let config = configCaptor.matchingArgs[0];
         expect(config.attributes).to.be.true();
-        expect(config.attributeFilter).to.be.eql([ 
-          ability1.attrName, 
-          ability1.attrTrigger,
-          ability2.attrName,
-          ability2.attrTrigger
-        ]);
 
         // Check the detached callback.
         let detachedCallbackCaptor = _M.isA(Function);
