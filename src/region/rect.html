@@ -28,12 +28,12 @@ DI
         Check,
         Click,
         Config,
-        Droppable, 
+        Droppable,
         Key,
-        Move, 
-        Region, 
-        Utils, 
-        doc, 
+        Move,
+        Region,
+        Utils,
+        doc,
         template) => {
   const EL_NAME = 'pb-r-rect';
 
@@ -41,25 +41,19 @@ DI
   const __mutationObserver__ = Symbol('mutationObserver');
   const __onDomMutation__ = Symbol('onDomMutation');
 
-  /**
-   * An arbitrary rectangular region. You can position elements anywhere in this region.
-   *
-   * Supported abilities:
-   * - [[Droppable|ability.Droppable]]: Default enabled. This class uses a custom droppable that 
-   *   positions the element to the mouse's cursor.
-   *   
-   * @class region.Rect
-   * @extends region.Region
-   */
-
   class FlexDroppable extends Droppable {
 
     /**
+     * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
+     * Elements with this ability adds the picked element as its child element when triggered. The
+     * dropped element is positioned to be directly below the mouse cursor when the drop happened.
+     *
      * @constructor
-     * @class region.Rect
-     * @param {string} [name='pb-droppable'] Name of the ability.
+     * @class region.Rect.FlexDroppable
+     * @param {string} [name=pb-droppable] Name of the ability.
      * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     * @extends ability.Droppable
      */
     constructor(name = 'pb-droppable', defaultTrigger = new Click(), defaultEnabled = true) {
       super(name, defaultTrigger, defaultEnabled);
@@ -70,7 +64,7 @@ DI
      * Handles event when the MutationObserver observes changes to the child list.
      *
      * @method __onDomMutation__
-     * @param {!Array.<MutationRecord>} mutations Array of MutationRecords.
+     * @param {Array} mutations Array of MutationRecords.
      * @private
      */
     [__onDomMutation__](mutations) {
@@ -82,6 +76,12 @@ DI
       });
     }
 
+    /**
+     * Sets the default configuration for this ability on the given element.
+     *
+     * @method init
+     * @param {Element} el The element to set the default configuration to.
+     */
     init(el) {
       super.init(el);
 
@@ -92,8 +92,8 @@ DI
      * Drop the last dragged element on the given element
      *
      * @method trigger
-     * @param {!Element} el The element to drop the dragged element into.
-     * @param {!Event} event Event object that triggered the call.
+     * @param {Element} el The element to drop the dragged element into.
+     * @param {Event} event Event object that triggered the call.
      */
     trigger(el, event) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
@@ -120,11 +120,22 @@ DI
     }
   }
 
+  /**
+   * An arbitrary rectangular region. You can position elements anywhere in this region.
+   *
+   * Supported abilities:
+   * - {{#crossLink "region.Rect.FlexDroppable"}}droppable{{/crossLink}}
+   *
+   * @class region.Rect
+   * @extends region.Region
+   */
   class Rect extends Region {
-    constructor() {
-      super();
-    }
 
+    /**
+     * Called when the element is created.
+     *
+     * @method createdCallback
+     */
     createdCallback() {
       super.createdCallback();
       this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));

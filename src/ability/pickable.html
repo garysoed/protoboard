@@ -21,6 +21,7 @@ DI.bind('pb_ability_Pickable', (Ability, Check, Click, Move, Triggers) => {
      * @param {string} [name=pb-pickable] Name of the ability.
      * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     * @extends ability.Ability
      */
     constructor(name = 'pb-pickable', defaultTrigger = new Click(), defaultEnabled = true) {
       super(name, defaultTrigger);

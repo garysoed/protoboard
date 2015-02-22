@@ -27,8 +27,8 @@ DI
         Config,
         Droppable,
         Key,
-        Region, 
-        Shuffleable, 
+        Region,
+        Shuffleable,
         Utils,
         doc,
         template) => {
@@ -52,8 +52,8 @@ DI
    * ```
    *
    * Supported abilities:
-   * - [[Droppable|ability.Droppable]]: Default enabled.
-   * - [[Shuffleable|ability.Shuffleable]]: Default enabled on double click.
+   * - {{#crossLink "ability.Droppable"}}droppable{{/crossLink}}
+   * - {{#crossLink "ability.Shuffleable"}}shuffleable{{/crossLink}}
    *
    * @class region.Deck
    * @extends region.Region
@@ -76,7 +76,7 @@ DI
   }
 
   Config.add(
-      EL_NAME, 
+      EL_NAME,
       new Shuffleable('shuffleable', new Key('s'), true),
       new Droppable('droppable', new Key('d'), true));
 

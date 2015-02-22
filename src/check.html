@@ -21,7 +21,7 @@ DI.bind('pb_Check', (Utils) => {
     /**
      * Utility class to check string values and parse them to different types.
      *
-     * @example
+     * ```javascript
      * // Check that the string is a number, or throw an error if it isn't.
      * Check('123')
      *     .isInt()
@@ -32,6 +32,7 @@ DI.bind('pb_Check', (Utils) => {
      *     .isInt()
      *     .isBoolean()
      *     .orUse(false); // returns false
+     * ```
      *
      * @class Check
      * @constructor

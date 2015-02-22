@@ -26,7 +26,7 @@ DI
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_component_Card', (
         Click,
-        Component, 
+        Component,
         Config,
         Key,
         Pickable,
@@ -43,8 +43,13 @@ DI
    * - One must have a `pb-front` class. This is the front face of the card.
    * - One must have a `pb-back` class. This is the back face of the card.
    *
-   * By default, the card starts by showing its back. If you want to make it start by showing the 
+   * By default, the card starts by showing its back. If you want to make it start by showing the
    * front face, add `flippable-active="true"` to the `pb-c-card`.
+   *
+   * Default supported abilities:
+   * - {{#crossLink "ability.Pickable"}}pickable{{/crossLink}}
+   * - {{#crossLink "ability.Toggleable"}}flippable{{/crossLink}}
+   * - {{#crossLink "ability.Toggleable"}}tappable{{/crossLink}}
    *
    * ```html
    * <!-- Example: Create a card that starts by displaying its front side -->
@@ -53,12 +58,7 @@ DI
    *   <div class="pb-back">Back side</div>
    * </pb-c-card>
    * ```
-   *
-   * Default supported abilities:
-   * - [[Pickable|ability.Pickable]] pickable
-   * - pickable - [[Rotateable|ability.Rotateable]] - 
-   * - [[Toggleable|ability.Toggleable]]: Default enabled on click.
-   * 
+
    * @class component.Card
    * @extends component.Component
    */
