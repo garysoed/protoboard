@@ -21,7 +21,7 @@ class Provider {
   /**
    * @class DI.Provider
    * @constructor
-   * @param {!Function} fn The function to run. The function's arguments will be bound based on
+   * @param {Function} fn The function to run. The function's arguments will be bound based on
    *    their names.
    * @param {string} [name=null] Reference name of the provider. This is used for detecting cyclic
    *    dependencies.
@@ -37,7 +37,7 @@ class Provider {
    * Resolves the provider. Resolved values are cached per scope.
    *
    * @method resolve
-   * @param {!DI.Scope} scope The scope to resolve the value in.
+   * @param {DI.Scope} scope The scope to resolve the value in.
    * @return {Object} The resolved value for the given scope.
    */
   resolve(scope) {
@@ -87,7 +87,7 @@ class Provider {
           } else {
             throw `Cannot find ${arg} while running expression`;
           }
-        } 
+        }
 
         return value;
       });
@@ -133,7 +133,7 @@ class BindingTree {
    * @method add
    * @param {string} key The key to bind the value to.
    * @param {Object} value The value to be bound.
-   * @param {number} [depth = 0] The depth of the key to use as binding key. This should not be
+   * @param {number} [depth=0] The depth of the key to use as binding key. This should not be
    *    called from outside the class.
    */
   add(key, value, depth = 0) {
@@ -165,7 +165,7 @@ class BindingTree {
    * @param {string} key Key of the value to return.
    * @param {number} [depth=0] The depth of the key to use as binding key. This should not be
    *    called from outside the class.
-   * @return {*} The bound value, or undefined if the value cannot be found, or if the key has
+   * @return {any} The bound value, or undefined if the value cannot be found, or if the key has
    *    collision but collision cannot be resolved.
    */
   get(key, depth = 0) {
@@ -192,7 +192,7 @@ class BindingTree {
 class Scope {
   /**
    * Scope containing local bindings.
-   * 
+   *
    * @class DI.Scope
    * @constructor
    * @param {DI.Scope} [parentScope=null] The parent scope.
@@ -220,9 +220,9 @@ class Scope {
    *
    * @method with
    * @param {string} key The key to bound the value to.
-   * @param {!Function} fn The function to run. The function's arguments will be bound based on
+   * @param {Function} fn The function to run. The function's arguments will be bound based on
    *    their names.
-   * @return {!DI.Scope} The newly created child scope.
+   * @return {DI.Scope} The newly created child scope.
    */
   with(key, value) {
     let childScope = new Scope(this);
@@ -239,7 +239,7 @@ class Scope {
    *
    * @method bind
    * @param {string} key The key to bound the value to.
-   * @param {!Function} fn The function to run. The function's arguments will be bound based on
+   * @param {Function} fn The function to run. The function's arguments will be bound based on
    *    their names.
    */
   bind(key, value) {
@@ -254,7 +254,7 @@ class Scope {
    *
    * @method get
    * @param {string} key Key whose bound value should be returned.
-   * @return {*} The value bound to the given key, or undefined if no values can be found.
+   * @return {any} The value bound to the given key, or undefined if no values can be found.
    */
   get(key) {
     let value = this[__get__](key);
@@ -269,7 +269,7 @@ class Scope {
    * Runs the given function after injecting any dependencies.
    *
    * @method run
-   * @param {!Function} fn The function to run. The function's arguments will be bound based on
+   * @param {Function} fn The function to run. The function's arguments will be bound based on
    *    their names.
    */
   run(fn) {

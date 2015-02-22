@@ -3,9 +3,10 @@
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/events.html">
 <link rel="import" href="out/service/move.html">
+<link rel="import" href="out/trigger/trigger.html">
 
 <script>
-DI.bind('pb_trigger_Key', (Events, Move) => {
+DI.bind('pb_trigger_Key', (Events, Move, Trigger) => {
   // Private symbols.
   const __active__ = Symbol();
   const __element__ = Symbol();
@@ -15,7 +16,7 @@ DI.bind('pb_trigger_Key', (Events, Move) => {
   const __onMouseEnter__ = Symbol();
   const __onMouseLeave__ = Symbol();
 
-  class Key {
+  class Key extends Trigger {
 
     /**
      * Triggers an ability when the given key is pressed while the mouse is over the registered
@@ -24,6 +25,7 @@ DI.bind('pb_trigger_Key', (Events, Move) => {
      * @constructor
      * @class trigger.Key
      * @param {string} key The key that needs to be pressed to trigger the registered ability.
+     * @extends trigger.Trigger
      */
     constructor(key) {
       this[__key__] = key;
@@ -32,10 +34,10 @@ DI.bind('pb_trigger_Key', (Events, Move) => {
 
     /**
      * Handles event called when the key press is detected.
-     * 
+     *
      * @method __onKeyPress__
-     * @param {!ability.Ability} ability The ability to trigger.
-     * @param {!Element} element The element to trigger the ability on.
+     * @param {ability.Ability} ability The ability to trigger.
+     * @param {Element} element The element to trigger the ability on.
      * @private
      */
     [__onKeyPress__](ability, element, event) {
@@ -67,12 +69,12 @@ DI.bind('pb_trigger_Key', (Events, Move) => {
     }
 
     /**
-     * Registers the given element to trigger the given ability when a key is pressed while the 
+     * Registers the given element to trigger the given ability when a key is pressed while the
      * mouse is hovering over the element.
      *
      * @method on
-     * @param {!Element} element Element that needs to be hovered over to trigger the ability.
-     * @param {!ability.Ability} ability The ability to trigger.
+     * @param {Element} element Element that needs to be hovered over to trigger the ability.
+     * @param {ability.Ability} ability The ability to trigger.
      */
     on(element, ability) {
       Events.of(element, this)
@@ -86,18 +88,32 @@ DI.bind('pb_trigger_Key', (Events, Move) => {
      * Unregisters the given element from any listeners registered in the on method.
      *
      * @method off
-     * @param {!Element} element Element to unregister the listener from.
+     * @param {Element} element Element to unregister the listener from.
      */
     off(element) {
       Events.of(element, this).off();
       element.classList.remove('pb-key');
     }
 
+    /**
+     * @method toString
+     * @return {string} String `pb-key-<key>`, where `key` is the key that needs to be pressed to
+     *    trigger this.
+     */
     toString() {
       return `pb-key-${this[__key__]}`;
     }
   }
 
+  /**
+   * Parses the input string
+   *
+   * @method parse
+   * @param {string} str The string to parse
+   * @return {trigger.Key|undefined} The Key trigger if parse is successful, or `undefined`
+   *    otherwise.
+   * @static
+   */
   Key.parse = function(str) {
     if (str.substring(0, 'pb-key-'.length) === 'pb-key-') {
       return new Key(str.substring('pb-key-'.length));

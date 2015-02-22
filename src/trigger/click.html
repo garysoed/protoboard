@@ -3,23 +3,25 @@
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/events.html">
 <link rel="import" href="out/hammerwrapper.html">
+<link rel="import" href="out/trigger/trigger.html">
 
 <script>
-DI.bind('pb_trigger_Click', (Events, HammerWrapper) => {
+DI.bind('pb_trigger_Click', (Events, HammerWrapper, Trigger) => {
 
   /**
    * Triggers an ability when the element is clicked.
-   * 
+   *
    * @class trigger.Click
+   * @extends trigger.Trigger
    */
-  class Click {
+  class Click extends Trigger {
 
     /**
      * Registers the given element to trigger the given ability when clicked.
      *
      * @method on
-     * @param {!Element} element Element to register.
-     * @param {!ability.Ability} ability The ability to trigger.
+     * @param {Element} element Element to register.
+     * @param {ability.Ability} ability The ability to trigger.
      */
     on(element, ability) {
       Events.of(element, this)
@@ -30,17 +32,30 @@ DI.bind('pb_trigger_Click', (Events, HammerWrapper) => {
      * Unregisters the given element from triggering the registered ability when clicked.
      *
      * @method off
-     * @param {!Element} element Element to unregister.
+     * @param {Element} element Element to unregister.
      */
     off(element) {
       Events.of(element, this).off('hammer', 'singletap');
     }
 
+    /**
+     * @method toString
+     * @return {string} String pb-click
+     */
     toString() {
       return 'pb-click';
     }
   }
 
+  /**
+   * Parses the input string
+   *
+   * @method parse
+   * @param {string} str The string to parse
+   * @return {trigger.Click|undefined} The Click trigger if parse is successful, or `undefined`
+   *    otherwise.
+   * @static
+   */
   Click.parse = function(str) {
     return (str === 'pb-click') ? new Click() : undefined;
   };

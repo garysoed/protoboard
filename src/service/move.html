@@ -18,7 +18,16 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
   const __onMouseMove__ = Symbol('onMouseMove');
 
   /**
-   * Service that handles moving elements around. Used by ability.Droppable and ability.Pickable.
+   * Service that handles moving elements around. Used by
+   * {{#crossLink "ability.Droppable"}}{{/crossLink}} and
+   * {{#crossLink "ability.Pickable"}}{{/crossLink}}.
+   *
+   * ```javascript
+   * Move.add(element);  // Sets the element as moved.
+   *
+   * // The element will be moved to a special container. To remove the element, just append it
+   * // somewhere else.
+   * ```
    *
    * @class service.Move
    * @static
@@ -26,7 +35,7 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
   let Move = {
     /**
      * Reference to the document that the service operates in.
-     * 
+     *
      * @property __document__
      * @type Document
      * @private
@@ -65,7 +74,7 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
      * Handles event when the mouse is moved.
      *
      * @method __onMouseMove__
-     * @param {!MouseEvent} event The corresponding mouse event.
+     * @param {MouseEvent} event The corresponding mouse event.
      * @private
      */
     [__onMouseMove__](event) {
@@ -78,7 +87,7 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
      * Sets the given element as being moved.
      *
      * @method add
-     * @param {!Element} el Element to move.
+     * @param {Element} el Element to move.
      */
     add(el) {
       this[__container__].appendChild(el);
@@ -89,8 +98,8 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
      * The elements that are being moved.
      *
      * @property movedElements
-     * @type !Set.<!Element>
-     * @readonly
+     * @type !Set
+     * @final
      */
     get movedElements() {
       return new Set(Utils.toArray(this[__container__].children));
@@ -101,7 +110,7 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
      *
      * @property mouseX
      * @type number
-     * @readonly
+     * @final
      */
     get mouseX() {
       return this[__mouseX__];
@@ -112,7 +121,7 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
      *
      * @property mouseY
      * @type number
-     * @readonly
+     * @final
      */
     get mouseY() {
       return this[__mouseY__];

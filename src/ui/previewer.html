@@ -20,17 +20,17 @@ DI
     .bind('pb_ui_Previewer', (
         $registry,
         Config,
-        Events, 
-        PbElement, 
-        service_Preview, 
-        Utils, 
-        doc, 
+        Events,
+        PbElement,
+        service_Preview,
+        Utils,
+        doc,
         template) => {
 
   /**
-   * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered 
-   * over. This works in tandem with [[ui.Preview|ui.Preview]] and 
-   * [[service.Preview|service.Preview]].
+   * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered
+   * over. This works in tandem with {{#crossLink ui.Preview}}{{/crossLink}} and
+   * {{#crossLink service.Preview}}{{/crossLink}}.
    *
    * @class ui.Previewer
    * @extends PbElement

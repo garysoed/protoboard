@@ -18,17 +18,30 @@ DI.bind('pb_PbElement', (Abilities, Utils) => {
    */
   class PbElement extends HTMLElement {
 
+    /**
+     * Called when the element is created
+     *
+     * @method createdCallback
+     */
     createdCallback() {
       Abilities.init(this);
       this.[__isCreated__] = false;
     }
 
+    /**
+     * Called when the element is attached to the document.
+     *
+     * @method attachedCallback
+     */
     attachedCallback() {
       this.[__isCreated__] = true;
     }
 
-    createdCallback() { }
-
+    /**
+     * Called when the element is detached from the document.
+     *
+     * @method detachedCallback
+     */
     detachedCallback() { }
 
     /**

@@ -2,23 +2,25 @@
 
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/hammerwrapper.html">
+<link rel="import" href="out/trigger/trigger.html">
 
 <script>
-DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper) => {
+DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper, Trigger) => {
 
   /**
    * Triggers an ability when the element is double clicked.
-   * 
+   *
    * @class trigger.DoubleClick
+   * @extends trigger.Trigger
    */
-  class DoubleClick {
+  class DoubleClick extends Trigger {
 
     /**
      * Registers the given element to trigger the given ability when double clicked.
      *
      * @method on
-     * @param {!Element} element Element to register.
-     * @param {!ability.Ability} ability The ability to trigger.
+     * @param {Element} element Element to register.
+     * @param {ability.Ability} ability The ability to trigger.
      */
     on(element, ability) {
       Events.of(element, this)
@@ -29,17 +31,30 @@ DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper) => {
      * Unregisters the given element from triggering the registered ability when double clicked.
      *
      * @method off
-     * @param {!Element} element Element to unregister.
+     * @param {Element} element Element to unregister.
      */
     off(element) {
       Events.of(element, this).off('hammer', 'doubletap');
     }
 
+    /**
+     * @method toString
+     * @return {string} String pb-dblclick
+     */
     toString() {
       return 'pb-dblclick';
     }
   }
 
+  /**
+   * Parses the input string
+   *
+   * @method parse
+   * @param {string} str The string to parse
+   * @return {trigger.DoubleClick|undefined} The DoubleClick trigger if parse is successful, or
+   *    `undefined` otherwise.
+   * @static
+   */
   DoubleClick.parse = function(str) {
     return (str === 'pb-dblclick') ? new DoubleClick() : undefined;
   };

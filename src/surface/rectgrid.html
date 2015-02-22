@@ -49,10 +49,10 @@ DI
         $registry,
         Check,
         Config,
-        PbElement, 
-        Utils, 
+        PbElement,
+        Utils,
         doc,
-        templateMain, 
+        templateMain,
         templateRow,
         templateCol) => {
 
@@ -64,8 +64,16 @@ DI
    * A surface that lays out its components in a grid. To use this, add attributes `pb-row` and
    * `pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns in the grid.
    *
-   * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes on
-   * them to indicate their positions in the grid.
+   * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes
+   * on them to indicate their positions in the grid.
+   *
+   * ```javascript
+   * <pb-s-rectgrid pb-row="2" pb-col="3">
+   *   <div pb-row="0" pb-col="0">Top Left</div>
+   *   <div pb-row="0" pb-col="1">Top Right</div>
+   *   <div pb-row="1" pb-col="0">Bottom Left</div>
+   *   <div pb-row="1" pb-col="1">Bottom Right</div>
+   * </pb-s-rectgrid>
    *
    * @class surface.RectGrid
    * @extends PbElement
@@ -113,8 +121,7 @@ DI
      * @method get
      * @param {number} row The row index of the element to be returned.
      * @param {number} col The col index of the element to be returned.
-     * @return {HTMLElement|null} The HTML element at the given row and col, or null if not
-     *     found.
+     * @return {HTMLElement|null} The HTML element at the given row and col, or null if not found.
      */
     get(row, col) {
       let contentEl = this.shadowRoot

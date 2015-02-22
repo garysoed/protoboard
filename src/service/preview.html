@@ -20,10 +20,10 @@ DI.bind('pb_service_Preview', (Utils) => {
     [__previewedEl__]: null,
 
     /**
-     * Element that is being previewed, if any.
+     * Element that is being previewed, if any. If null, no element is being previewed.
      *
      * @property previewedEl
-     * @type Element
+     * @type Element|null
      */
     get previewedEl() {
       return this[__previewedEl__];
@@ -37,6 +37,11 @@ DI.bind('pb_service_Preview', (Utils) => {
     },
 
     Events: {
+      /**
+       * Fired when the previewed element has been changed.
+       *
+       * @event element-changed
+       */
       ELEMENT_CHANGED: 'element-changed'
     }
   };
