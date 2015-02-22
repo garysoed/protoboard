@@ -6,15 +6,13 @@
 <link rel="import" href="out/trigger/trigger.html">
 
 <script>
-DI.bind('pb_trigger_Key', (Events, Move, Trigger) => {
+DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
   // Private symbols.
   const __active__ = Symbol();
-  const __element__ = Symbol();
   const __key__ = Symbol('key');
 
-  const __onKeyPress__ = Symbol();
   const __onMouseEnter__ = Symbol();
-  const __onMouseLeave__ = Symbol();
+  const __onMouseLeave__ = Symbol('onMouseLeave');
 
   class Key extends Trigger {
 
@@ -29,43 +27,29 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger) => {
      */
     constructor(key) {
       this[__key__] = key;
-      this[__element__] = null;
-    }
-
-    /**
-     * Handles event called when the key press is detected.
-     *
-     * @method __onKeyPress__
-     * @param {ability.Ability} ability The ability to trigger.
-     * @param {Element} element The element to trigger the ability on.
-     * @private
-     */
-    [__onKeyPress__](ability, element, event) {
-      if (this[__element__] === element) {
-        ability.trigger.call(ability, this[__element__], event);
-      }
     }
 
     /**
      * Handles event called when mouse has entered the element.
      *
      * @method __onMouseEnter__
+     * @param {ability.Ability} ability The ability to trigger.
+     * @param {Element} element The element that the mouse has entered.
      * @private
      */
-    [__onMouseEnter__](element) {
-      this[__element__] = element;
+    [__onMouseEnter__](ability, element) {
+      Service.add(element, this[__key__], ability);
     }
 
     /**
      * Handles event called when mouse has left the element.
      *
      * @method __onMouseLeave__
+     * @param {Element} element The element that the mouse has left.
      * @private
      */
     [__onMouseLeave__](element) {
-      if (this[__element__] === element) {
-        this[__element__] = null;
-      }
+      Service.remove(element);
     }
 
     /**
@@ -78,8 +62,7 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger) => {
      */
     on(element, ability) {
       Events.of(element, this)
-          .on('keyboard', this[__key__], this[__onKeyPress__].bind(this, ability, element))
-          .on('dom', 'mouseenter', this[__onMouseEnter__].bind(this, element))
+          .on('dom', 'mouseenter', this[__onMouseEnter__].bind(this, ability, element))
           .on('dom', 'mouseleave', this[__onMouseLeave__].bind(this, element));
       element.classList.add('pb-key');
     }
@@ -120,6 +103,119 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger) => {
     }
     return undefined;
   };
+
+  // Element > key > [ability]
+  const __hoveredEls__ = Symbol('hoveredEls');
+
+  const __onKeyPress__ = Symbol('onKeyPress');
+
+  /**
+   * Helper service for detecting key press.
+   *
+   * @class trigger.Key.Service
+   * @static
+   * @private
+   */
+  const Service = {
+    [__hoveredEls__]: new Map(),
+
+    /**
+     * Handles event when a key press is detected.
+     *
+     * @method __onKeyPress__
+     * @param {Event} event The KeyboardEvent that triggered this handler.
+     * @private
+     */
+    [__onKeyPress__](event) {
+      const char = String.fromCharCode(event.keyCode);
+      let triggeredEl = null;
+      for (let [el, keyMap] of this[__hoveredEls__]) {
+        if (keyMap.has(char)) {
+          let abilitySet = keyMap.get(char);
+          for (let ability of abilitySet) {
+            triggeredEl = el;
+            ability.trigger(el, event);
+            break;
+          }
+        }
+
+        if (triggeredEl) {
+          break;
+        }
+      }
+
+      // Stop listening for the triggered element.
+      if (triggeredEl) {
+        // Check if the mouse is still inside the triggered el.
+        const rect = triggeredEl.getBoundingClientRect();
+        if (rect.left > Move.mouseX
+            || rect.right < Move.mouseX
+            || rect.top > Move.mouseY
+            || rect.bottom < Move.mouseY) {
+          this[__hoveredEls__].delete(triggeredEl);
+        }
+      }
+    },
+
+    /**
+     * Initializes the service.
+     *
+     * @method init
+     * @param {Document} doc The document to listen to key presses.
+     */
+    init(doc) {
+      Events.of(doc.body, Service)
+          .on('dom', 'keypress', this[__onKeyPress__].bind(Service));
+    },
+
+    /**
+     * Registers the given element to trigger the given ability when the given key is pressed.
+     *
+     * @param {Element} element The element to trigger when the given key is pressed.
+     * @param {string} key The key to press
+     * @param {ability.Ability} ability The ability to trigger.
+     */
+    add(element, key, ability) {
+      if (!this[__hoveredEls__].has(element)) {
+        this[__hoveredEls__].set(element, new Map());
+      }
+
+      let keyMap = this[__hoveredEls__].get(element);
+      if (!keyMap.get(key)) {
+        keyMap.set(key, new Set());
+      }
+
+      keyMap.get(key).add(ability);
+    },
+
+    remove(element) {
+      this[__hoveredEls__].delete(element);
+    },
+
+    clear() {
+      this[__hoveredEls__].clear();
+    },
+
+    /**
+     * Map of elements to trigger the ability on. The key is the element, the value is a map of key
+     * to a set of abilities.
+     *
+     * @property hoveredEls
+     * @type Map
+     * @final
+     */
+    get hoveredEls() {
+      return this[__hoveredEls__];
+    }
+  };
+
+  $registry.runAtRegister(doc => {
+    Service.init(doc);
+  });
+
+  if (opt_TEST_MODE) {
+    Key.Service = Service;
+  }
 
   return Key;
 });

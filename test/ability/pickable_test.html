@@ -11,6 +11,7 @@
 <body>
   <script>
   DI
+      .with('$registry', Registry => new Registry())
       .constant('Move', { add() {} })
       .constant('doc', document.currentScript.ownerDocument)
       .run((expect, _, $, doc, Move, Pickable) => {
