@@ -68,14 +68,15 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
   class Action {
 
     /**
+     * Helper class for using {{#crossLink "Events"}}{{/crossLink}}.
      * @class Events.Action
      * @constructor
-     * @param {!Element} element Element to operate on.
-     * @param {!Object} scope Scope of the registered events.
+     * @param {Element} element Element to operate on.
+     * @param {Object} scope Scope of the registered events.
      */
     constructor(element, scope) {
       this[__element__] = element;
-      
+
       if (!this[__element__][__scopeMap__]) {
         this[__element__][__scopeMap__] = new Map();
       }
@@ -108,7 +109,7 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
      * @method __register__
      * @param {string} type The type of event to register the handler to.
      * @param {string} eventName Name of the event to register the handler to.
-     * @param {!Function} handler Handler to be called for the given event.
+     * @param {Function} handler Handler to be called for the given event.
      * @return {Events} The Events object for chaining.
      * @private
      */
@@ -137,7 +138,7 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
      *
      * @method __unregister__
      * @param {string=} type Type of event to unregister.
-     * @param {string=} eventName If given, all handlers listening to this event will be 
+     * @param {string=} eventName If given, all handlers listening to this event will be
      *     unregistered.
      * @return {!Events} The Events object for chaining.
      * @private
@@ -170,8 +171,8 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
       if (registeredEvent) {
         // Unregister the given event name.
         HANDLERS[type].unregister(
-            this, 
-            eventName, 
+            this,
+            eventName,
             registeredEvent);
         this[__elementScopeMap__].get(type).delete(eventName);
       }
@@ -179,54 +180,23 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
       return this;
     }
 
-    /**
-     * Calls addEventListener to the element, registering the given event name and handler.
-     *
-     * @method listen
-     * @param {string} eventName Name of the event to register the handler to.
-     * @param {!Function} handler Handler to be called for the given event.
-     * @return {Events} The Events object for chaining.
-     */
     listen(eventName, handler) {
       return this[__register__](TYPES.DOM, eventName, handler);
     }
 
-    /**
-     * Calls removeEventListener to the element, unregistering the handlers in the scope for the 
-     * element.
-     *
-     * - If eventName and handler are given, only the handler listening to that event will be 
-     *   unlistened.
-     * - If only eventName is given, all handlers listening to that event name will be unlistened.
-     * - If nothing is given, all handlers in the scope will be unlistened.
-     *
-     * @method unlisten
-     * @param {string=} eventName If given, all handlers listening to this event will be 
-     *     unlistened.
-     * @return {!Events} The Events object for chaining.
-     */
     unlisten(eventName) {
       return this[__unregister__](TYPES.DOM, eventName);
     }
 
     /**
-     * @method hasListener
-     * @param {string} eventName Name of the event to be checked.
-     * @param {Function=} handler The function to be checked.
-     */
-    hasListener(eventName) {
-      return this[__isRegistered__](TYPES.DOM, eventName);
-    }
-
-    /**
-     * Calls on method of the corresponding type on the element, registering the given event name 
-     * and handler. 
+     * Calls on method of the corresponding type on the element, registering the given event name
+     * and handler.
      * TODO(gs): Make this customizable
      * @method on
      * @param {string} type The registration type.
      * @param {string} eventName Name of the event to register the handler to.
-     * @param {!Function} handler Handler to be called for the given event.
-     * @return {!Events} The Events object for chaining.
+     * @param {Function} handler Handler to be called for the given event.
+     * @return {Events.Action} The Action object for chaining.
      */
     on(type, eventName, handler) {
       if (arguments.length === 3) {
@@ -241,32 +211,52 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
     }
 
     /**
-     * Calls off method of the corresponding type on the element, unregistering the handlers in the 
+     * Calls off method of the corresponding type on the element, unregistering the handlers in the
      * scope for the element.
      *
-     * - If eventName is given, all handlers listening to that event name will be unlistened.
-     * - If nothing is given, all handlers in the scope will be unlistened.
+     * <ul>
+     *   <li>If eventName is given, all handlers listening to that event name will be unlistened.
+     *   <li>If nothing is given, all handlers in the scope will be unlistened.
+     * </ul>
      *
      * @method off
      * @param {string} type The registration type.
-     * @param {string=} eventName If given, all handlers listening to this event will be 
+     * @param {string} [eventName] If given, all handlers listening to this event will be
      *     unlistened.
-     * @return {!Events} The Events object for chaining.
+     * @return {Events.Action} The Action object for chaining.
      */
     off(type, eventName) {
-      if (arguments.length === 3) {
-        return this[__unregister__](type, eventName);
-      } else {
-        eventName = type;
-
-        // TODO: Remove this use
-        return this[__unregister__](TYPES.JQUERY, eventName);
-      }
+      return this[__unregister__](type, eventName);
     }
   }
 
   /**
-   * Utility class to register / unregister events easily.
+   * Utility class to register / unregister events easily. This library handles 4 methods of
+   * registrations:
+   * <ul>
+   *   <li>DOM</li>
+   *   <li><a href="http://hammerjs.github.io/">HammerJS</a></li>
+   *   <li><a href="http://jquery.com/">JQuery</a></li>
+   *   <li><a href="http://dmauro.github.io/Keypress/">Keypress</a></li>
+   * </ul>
+   *
+   * For a given scope object, only one handler can be bound to an event type.
+   *
+   * @example
+   * var scope = {};
+   *
+   * // Register for events.
+   * Events.of(element, scope)
+   *     .on('dom', 'click', handleClick)        // Handles DOM click event.
+   *     .on('hammer', 'tap', handleTap)         // Handles HammerJS tap event.
+   *     .on('jquery', 'mouseup', handleMouseUp) // Handles mouseup event through JQuery.
+   *     .on('keyboard', 'a', handleKeyA);       // Handles keypress a
+   *
+   * // Unregister events in the given scope.
+   * Events.of(element, scope)
+   *     .off('hammer')         // Unregisters all hammer events.
+   *     .off('dom', 'click')   // Unregisters all DOM click events.
+   *     .off();                // Unregisters all events in this scope.
    *
    * @class Events
    * @static
@@ -277,9 +267,9 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
      * Creates an Events object that operates on the given element with the given scope.
      *
      * @method of
-     * @param  {!Element} element The element to operate on.
-     * @param  {!Object} scope Scope of the registered events.
-     * @return {!Events} Chainable Events object.
+     * @param {Element} element The element to operate on.
+     * @param {Object} scope Scope of the registered events.
+     * @return {Events.Action} Chainable action object.
      * @static
      */
     of(element, scope) {

@@ -6,9 +6,13 @@
 
 <script>
 DI.bind('pb_PbElement', (Abilities, Utils) => {
+
+  // Private symbols.
+  const __isCreated__ = Symbol();
+
   /**
    * Base class of all ProtoBoard elements.
-   * 
+   *
    * @class PbElement
    * @extends HTMLElement
    */
@@ -16,20 +20,25 @@ DI.bind('pb_PbElement', (Abilities, Utils) => {
 
     createdCallback() {
       Abilities.init(this);
-      /**
-       * True iff the element has been created and attached.
-       *
-       * @type boolean
-       * @property isCreated
-       */
-      this.isCreated = false;
+      this.[__isCreated__] = false;
     }
 
     attachedCallback() {
-      this.isCreated = true;
+      this.[__isCreated__] = true;
     }
 
     detachedCallback() { }
+
+    /**
+     * True iff the element has been created.
+     *
+     * @type boolean
+     * @property isCreated
+     * @final
+     */
+    get isCreated() {
+      return this[__isCreated__];
+    }
   }
 
   return PbElement;

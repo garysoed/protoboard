@@ -6,7 +6,8 @@
 DI.bind('pb_Utils', () => {
 
   /**
-   * Various miscellaneous utilities.
+   * Various miscellaneous utilities. They are not meant for general usage, but feel free to use
+   * them.
    * @class Utils
    * @static
    */
@@ -14,11 +15,11 @@ DI.bind('pb_Utils', () => {
   var Utils = {
     /**
      * Extracts the given template from the given document.
-     * 
+     *
      * @method  extractTemplate
-     * @param  {string} templateQuery The query used to obtain the template.
-     * @param  {!Document} doc The document object to obtain the template from.
-     * @return {!Node} The node in the template.
+     * @param {string} templateQuery The query used to obtain the template.
+     * @param {Document} doc The document object to obtain the template from.
+     * @return {Node} The node in the template.
      */
     extractTemplate(templateQuery, doc) {
       return this.activateTemplate(doc.querySelector(templateQuery), doc);
@@ -28,9 +29,9 @@ DI.bind('pb_Utils', () => {
      * Activates the given teplate element.
      *
      * @method activateTemplate
-     * @param  {!Element} template The template element.
-     * @param  {!Document} doc The document object to activate the template in.
-     * @return {!Element} The activated template element.
+     * @param  {Element} template The template element.
+     * @param  {Document} doc The document object to activate the template in.
+     * @return {Element} The activated template element.
      */
     activateTemplate(template, doc) {
       return doc.importNode(template.content, true);
@@ -38,12 +39,12 @@ DI.bind('pb_Utils', () => {
 
     /**
      * Returns the referenced function, or noop function if the referenced function does not exist.
-     * 
+     *
      * @method nonNullFn
-     * @param  {!Object} scope Object containing the referenced function.
-     * @param  {string} name Name of the function to return.
-     * @return {!Function} The referenced function, or noop function if the referenced function does
-     *     not exist.
+     * @param {Object} scope Object containing the referenced function.
+     * @param {string} name Name of the function to return.
+     * @return {Function} The referenced function, or noop function if the referenced function does
+     *    not exist.
      */
     nonNullFn(scope, name) {
       return scope[name] || (() => {});
@@ -51,14 +52,13 @@ DI.bind('pb_Utils', () => {
 
     /**
      * Observes the given property on the given object.
-     * 
-     * @method observe
-     * @param {!Object} object Object to observe changes to.
-     * @param {string|null} property The property name to listen to, or null to listen to all 
-     *     properties.
-     * @param {Function} handler Handler called when a property has changed. The handler accepts 3
-     *     arguments: property name, change type, and the old value of the property.
      *
+     * @method observe
+     * @param {Object} object Object to observe changes to.
+     * @param {string|null} property The property name to listen to, or null to listen to all
+     *    properties.
+     * @param {Function} handler Handler called when a property has changed. The handler accepts 3
+     *    arguments: property name, change type, and the old value of the property.
      * @return {Function} The handler used to unobserve the object.
      */
     observe(object, property, handler) {
@@ -74,19 +74,19 @@ DI.bind('pb_Utils', () => {
     },
 
     /**
-     * Returns a Promise that waits for the given property of the given object to fulfill the given 
+     * Returns a Promise that waits for the given property of the given object to fulfill the given
      * condition.
      *
      * @method waitFor
-     * @param {!Object} object Object containing the property to wait for.
+     * @param {Object} object Object containing the property to wait for.
      * @param {string} property The name of the property to wait for.
-     * @param {*} condition If Function, this method will call the function with the property value
-     *     and will wait for the function to return true. Otherwise, this will wait for the property
-     *     to match this.
+     * @param {any} condition If Function, this method will call the function with the property
+     *    value and will wait for the function to return true. Otherwise, this will wait for the
+     *    property to match this.
      */
     waitFor(object, property, condition) {
       let promise = new Promise((resolve, reject) => {
-        let truthFn = (typeof condition === 'function') ? 
+        let truthFn = (typeof condition === 'function') ?
             condition : v => v === condition;
         if (truthFn(object[property])) {
           resolve(object, property);
@@ -122,8 +122,8 @@ DI.bind('pb_Utils', () => {
      * @method compare
      * @param {Object} a First object to compare.
      * @param {Object} b Second object to compare.
-     * @return {?number|undefined} -1 if the first object is smaller than the second, 0 if they are
-     *    equal, -1 if the second object is smaller than the first, or undefined if the two cannot 
+     * @return {number|undefined} -1 if the first object is smaller than the second, 0 if they are
+     *    equal, -1 if the second object is smaller than the first, or undefined if the two cannot
      *    be compared.
      */
     compare(a, b) {
@@ -144,8 +144,8 @@ DI.bind('pb_Utils', () => {
      * Converts the given "array like" object to array.
      *
      * @method toArray
-     * @param  {!Object} obj An array like object to convert.
-     * @return {!Array} Array object converted from the given array like object.
+     * @param  {Object} obj An array like object to convert.
+     * @return {Array} Array object converted from the given array like object.
      */
     toArray(obj) {
       let array = [];
@@ -185,15 +185,15 @@ DI.bind('pb_Utils', () => {
     },
 
     /**
-     * Replaces the specified function to call the given function before or after the original 
+     * Replaces the specified function to call the given function before or after the original
      * function. The given function will be called with the same arguments and scope as the original
      * function.
      *
      * @method extendFn
      * @param {Object} scope The object containing the function to replace.
      * @param {string} name The name of the function to replace.
-     * @param {!Function} fn Function to be called.
-     * @param {boolean} callBefore True iff the function should be called before the original 
+     * @param {Function} fn Function to be called.
+     * @param {boolean} callBefore True iff the function should be called before the original
      *     function. Defaults to false.
      */
     extendFn(scope, name, fn, callBefore) {
@@ -223,8 +223,8 @@ DI.bind('pb_Utils', () => {
      * Makes the given function curried.
      *
      * @method curry
-     * @param {!Function} fn The function to be curried.
-     * @return {!Function} The curried function.
+     * @param {Function} fn The function to be curried.
+     * @return {Function} The curried function.
      */
     curry(fn) {
       return function() {

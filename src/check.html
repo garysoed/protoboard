@@ -7,26 +7,6 @@
 
 DI.bind('pb_Check', (Utils) => {
 
-  /**
-   * Utility class to check string values and parse them to different types.
-   *
-   * ```javascript
-   * // Check that the string is a number, or throw an error if it isn't.
-   * pb.Check('123')
-   *     .isInt()
-   *     .orThrows('not a number'); // returns 123 as a number
-   *
-   * // Check that the string is a number, or a boolean, or use a default value.
-   * pb.Check('abc')
-   *     .isInt()
-   *     .isBoolean()
-   *     .orUse(false); // returns false
-   * ```
-   *
-   * @class Check
-   * @static
-   */
-
   // Private symbols.
   const __checked__ = Symbol();
   const __input__ = Symbol();
@@ -39,13 +19,27 @@ DI.bind('pb_Check', (Utils) => {
   class Check {
 
     /**
+     * Utility class to check string values and parse them to different types.
+     *
+     * @example
+     * // Check that the string is a number, or throw an error if it isn't.
+     * Check('123')
+     *     .isInt()
+     *     .orThrows('not a number'); // returns 123 as a number
+     *
+     * // Check that the string is a number, or a boolean, or use a default value.
+     * Check('abc')
+     *     .isInt()
+     *     .isBoolean()
+     *     .orUse(false); // returns false
+     *
      * @class Check
      * @constructor
-     * @param {?string} input The value to be checked.
-     * @param {*} value The value parsed from the input value. Specifying this indicates that the
+     * @param {string} input The value to be checked.
+     * @param {any} value The value parsed from the input value. Specifying this indicates that the
      *    parsing has succeeded.
-     * @param {Array.<string>} checked Array of strings that describe the check that has failed on
-     *    the input string.
+     * @param {Array} checked Array of strings that describe the check that has failed on the input
+     *    string.
      */
     constructor(input, value = undefined, checked = []) {
       this[__checked__] = checked;
@@ -63,8 +57,8 @@ DI.bind('pb_Check', (Utils) => {
      */
     [__onFailure__](checked) {
       return new Check(
-          this[__input__], 
-          this[__value__], 
+          this[__input__],
+          this[__value__],
           this[__checked__].concat(checked));
     }
 
@@ -72,7 +66,7 @@ DI.bind('pb_Check', (Utils) => {
      * Handles when a parse has succeeded.
      *
      * @method __onSuccess__
-     * @param {*} value The value successfully parsed from the string input.
+     * @param {any} value The value successfully parsed from the string input.
      * @return {Check} A new check object with the first successfully parsed value.
      * @private
      */
@@ -88,7 +82,7 @@ DI.bind('pb_Check', (Utils) => {
      * Try to parse the input string as an int with the given radix.
      *
      * @method isInt
-     * @param  {number=} radix Radix to use to parse the input string. Defaults to 10.
+     * @param {number} radix Radix to use to parse the input string. Defaults to 10.
      * @return {Check} A new instance of the Check object used for chaining.
      */
     isInt(radix = 10) {
@@ -122,9 +116,9 @@ DI.bind('pb_Check', (Utils) => {
      * Throws an exception if no parse has been successful.
      *
      * @method orThrows
-     * @param {string=} msg The error message to throw. If not defined, will use an auto generated 
+     * @param {string} msg The error message to throw. If not defined, will use an auto generated
      *    one.
-     * @return {*} The first successful parsed value.
+     * @return {any} The first successful parsed value.
      */
     orThrows(msg) {
       if (this[__value__] === undefined) {
@@ -132,7 +126,7 @@ DI.bind('pb_Check', (Utils) => {
           msg = `Illegal Exception. Checked: ${this[__checked__].join(', ')} ` +
               `but was ${this[__input__]}`;
         }
-        throw msg;
+        throw new Error(msg);
       } else {
         return this[__value__];
       }
@@ -140,11 +134,11 @@ DI.bind('pb_Check', (Utils) => {
 
     /**
      * Use the given value if no parse attempts have been successful.
-     * 
+     *
      * @method orUse
-     * @param {*} backup Value to use as backup if no parsing has been successful.
-     * @return {*} The first successful parsed value, or the given backup value if no parse attempts
-     *    were successful.
+     * @param {any} backup Value to use as backup if no parsing has been successful.
+     * @return {any} The first successful parsed value, or the given backup value if no parse
+     *    attempts were successful.
      */
     orUse(backup) {
       return (this[__value__] === undefined) ? backup : this[__value__];
