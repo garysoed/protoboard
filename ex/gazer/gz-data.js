@@ -33,7 +33,7 @@ gz.cards = {
       "type": "Spell",
       "element": "Base",
       "count": "10",
-      "description": "Discard an Element card. Reveal cards from the top of the draft deck until you reveal a card of the same Element. Draft it to your hand.",
+      "description": "Draft a card to your hand",
       "cost": "1"
     }
   ],
@@ -220,7 +220,7 @@ gz.cards = {
       "type": "Enchantment",
       "element": "Earth",
       "count": "2",
-      "description": "At the beginning of the turn, pick a player’s deck. Reveal the top 3 cards of the deck. Discard any of them and put the rest back in any order.",
+      "description": "At the beginning of the turn, reveal the top 3 cards of your deck. Discard any of them and put the rest back in any order.",
       "cost": "1"
     },
     {
@@ -248,8 +248,8 @@ gz.cards = {
       "element": "Earth",
       "count": "2",
       "description": "When this comes into play, put one Bot in discard pile into play for free.",
-      "cost": "6",
-      "life": "4",
+      "cost": "5",
+      "life": "3",
       "attack": "1",
       "armor": "0"
     },
@@ -343,8 +343,8 @@ gz.cards = {
       "type": "Spell",
       "element": "Air",
       "count": "2",
-      "description": "Move a Minion back to the controller’s hand. The controller gains the same amount of energy used to summon the Minion.",
-      "cost": "1"
+      "description": "Move a Minion you control back to the owner's hand. The owner gains the same amount of energy used to summon the Minion. The owner may begin their React phase now",
+      "cost": "2"
     },
     {
       "name": "Intelligence",
@@ -368,7 +368,7 @@ gz.cards = {
       "element": "Air",
       "count": "2",
       "description": "Whenever this Minion damages a target, tap one of that player's targets",
-      "cost": "2"
+      "cost": "1"
     },
     {
       "name": "Mind Devourer",
