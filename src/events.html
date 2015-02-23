@@ -221,7 +221,7 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
    *
    * For a given scope object, only one handler can be bound to an event type.
    *
-   * @example
+   * ```javascript
    * var scope = {};
    *
    * // Register for events.
@@ -236,6 +236,7 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
    *     .off('hammer')         // Unregisters all hammer events.
    *     .off('dom', 'click')   // Unregisters all DOM click events.
    *     .off();                // Unregisters all events in this scope.
+   * ```
    *
    * @class Events
    * @static
