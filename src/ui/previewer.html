@@ -80,7 +80,8 @@ DI
     attachedCallback() {
       super.attachedCallback();
       this[__previewElHandler__] = Events.of(service_Preview, this)
-          .on(service_Preview.Events.ELEMENT_CHANGED,
+          .on('jquery',
+              service_Preview.Events.ELEMENT_CHANGED,
               this[__onPreviewElChanged__].bind(this));
     }
 

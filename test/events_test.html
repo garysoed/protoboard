@@ -37,12 +37,12 @@
     describe('#__isRegistered__', () => {
       it('should return true if handler is not defined but some handler is registered', () => {
         let eventName = 'event';
-        Events.of(el, scope).listen(eventName, () => {});
+        Events.of(el, scope).on('dom', eventName, () => {});
         expect(Events.of(el, scope)[__isRegistered__]('dom', eventName)).to.be.true();
       });
       it('should return false if no handler of the given type is registered', () => {
         let eventName = 'eventName';
-        Events.of(el, scope).listen(eventName, () => {});
+        Events.of(el, scope).on('dom', eventName, () => {});
         expect(Events.of(el, scope)[__isRegistered__]('jquery', eventName)).to.be.false();
       });
       it('should return false if handler is not defined and no handler is registered', () => {
@@ -50,11 +50,11 @@
       });
       it('should return true if a handler is registered to the given event name', () => {
         let eventName = 'event';
-        Events.of(el, scope).listen(eventName, () => {});
+        Events.of(el, scope).on('dom', eventName, () => {});
         expect(Events.of(el, scope)[__isRegistered__]('dom', eventName)).to.be.true();
       });
       it('should return false if the scope is different', () => {
-        Events.of(el, scope).listen('event', () => {});
+        Events.of(el, scope).on('dom', 'event', () => {});
         expect(Events.of(el, scope2)[__isRegistered__]('dom', 'event')).to.be.false();
       });
     });

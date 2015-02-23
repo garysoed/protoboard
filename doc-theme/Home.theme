@@ -1,6 +1,0 @@
-Welcome to {{projectName}}!!!
-
-Classes:
-{{#each classes}}
-- {{$type name @root.classes}}
-{{/each}}

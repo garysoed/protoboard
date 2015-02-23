@@ -48,11 +48,10 @@ DI.bind('pb_ability_Pickable', (Ability, Check, Click, Move, Triggers) => {
      *
      * @method trigger
      * @param {Element} el Element to be picked up.
-     * @param {Event} event The event triggering the pick.
      */
-    trigger(el, event) {
+    trigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
-        Move.add(el, event);
+        Move.add(el);
       }
     }
   }

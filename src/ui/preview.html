@@ -79,8 +79,8 @@ DI
       super.attachedCallback();
       if (this.parentElement) {
         Events.of(this.parentElement, this)
-            .listen('mouseenter', this[__onMouseOver__].bind(this))
-            .listen('mouseleave', this[__onMouseOut__].bind(this));
+            .on('dom', 'mouseenter', this[__onMouseOver__].bind(this))
+            .on('dom', 'mouseleave', this[__onMouseOut__].bind(this));
       }
     }
 
@@ -91,7 +91,7 @@ DI
      */
     detachedCallback() {
       if (this.parentElement) {
-        Events.of(this.parentElement, this).unlisten();
+        Events.of(this.parentElement, this).off();
       }
       super.detachedCallback();
     }

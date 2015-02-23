@@ -70,7 +70,6 @@
     describe('$RandomPickable', () => {
       describe('#trigger', () => {
         it('should randomly pick a child element with no pb-placeholder attribute', () => {
-          let event = {};
           let el = doc.createElement('div');
           let selectedChild = doc.createElement('div');
           let placeHolderEl = doc.createElement('div');
@@ -86,12 +85,11 @@
           _.spy(Math, 'random').overrideReturn(0.5);
           _.spy(Move, 'add');
 
-          pickable.trigger(el, event);
+          pickable.trigger(el);
 
-          expect(Move.add).calledWith(selectedChild, event).at.least(1);
+          expect(Move.add).calledWith(selectedChild).at.least(1);
         });
         it('should not crash if there are no children', () => {
-          let event = {};
           let el = doc.createElement('div');
           let placeHolderEl = doc.createElement('div');
           $(placeHolderEl).attr('pb-placeholder', '');
@@ -101,7 +99,7 @@
           el.appendChild(placeHolderEl);
 
           let pickable = new RandomPickable();
-          pickable.trigger(el, event);
+          pickable.trigger(el);
           expect(Move.add).called().to.equal(0);
         });
       });

@@ -93,9 +93,8 @@ DI
      *
      * @method trigger
      * @param {Element} el The element to drop the dragged element into.
-     * @param {Event} event Event object that triggered the call.
      */
-    trigger(el, event) {
+    trigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
         let movedElement = Move.movedElements.values().next().value;
 
@@ -108,10 +107,6 @@ DI
           movedElement.style.left = `${movedElement.offsetLeft + dLeft}px`;
           movedElement.style.top = `${movedElement.offsetTop + dTop}px`;
 
-          // TODO(gs): attached callback doesn't seem to be called on appendChild.
-          // https://github.com/webcomponents/webcomponentsjs/issues/18
-          // TODO(gs): Make the ability fire an event instead. This class should just listen to the drop
-          // event.
           if (movedElement.attachedCallback) {
             movedElement.attachedCallback();
           }

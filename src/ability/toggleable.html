@@ -41,7 +41,6 @@ DI.bind('pb_ability_Toggleable', (Ability, Check, Key, Utils) => {
         this[__defaultEnabled__] = defaultConfig;
         this[__defaultActive__] = false;
       } else {
-        // TODO(gs): Add run time type check
         this[__defaultEnabled__] = defaultConfig.enabled;
         this[__defaultActive__] = defaultConfig.active;
       }

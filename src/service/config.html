@@ -11,9 +11,9 @@
 
 <script>
 DI.bind('pb_service_Config', (
-    Abilities, 
-    Click, 
-    Droppable, 
+    Abilities,
+    Click,
+    Droppable,
     Key,
     Pickable,
     Shuffleable,
@@ -21,8 +21,7 @@ DI.bind('pb_service_Config', (
 
   const configuration = {};
 
-  // TODO(gs): Make replacing the trigger easier.
-  let Config = {
+  const Config = {
     add(elementName, ...abilities) {
       if (!configuration[elementName]) {
         configuration[elementName] = new Map();

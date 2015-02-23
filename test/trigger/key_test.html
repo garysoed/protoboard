@@ -110,7 +110,7 @@
             handler(event);
 
             // Check that the first ability is called.
-            expect(ability1.trigger).calledWith(el1, event).at.least(1);
+            expect(ability1.trigger).calledWith(el1).at.least(1);
             expect(ability2.trigger).called().to.be.equal(0);
 
             // Check that the ability is deleted.

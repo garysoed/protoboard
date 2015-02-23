@@ -73,14 +73,13 @@ DI
      *
      * @method trigger
      * @param {Element} el The element whose child element should be randomly picked.
-     * @param {Event} event The event that triggered the pick.
      */
-    trigger(el, event) {
+    trigger(el) {
       let candidates = Utils.toArray(el.children)
           .filter(child => $(child).attr(ATTR_PLACEHOLDER) === undefined);
       let moved = candidates[Math.round(Math.random() * (candidates.length - 1))];
       if (moved) {
-        Move.add(moved, event);
+        Move.add(moved);
       }
     }
   }

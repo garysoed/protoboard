@@ -99,7 +99,6 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
         return false;
       }
 
-      // TODO(gs): This check is too strict.
       return this[__elementScopeMap__].get(type).has(eventName);
     }
 
@@ -180,18 +179,10 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
       return this;
     }
 
-    listen(eventName, handler) {
-      return this[__register__](TYPES.DOM, eventName, handler);
-    }
-
-    unlisten(eventName) {
-      return this[__unregister__](TYPES.DOM, eventName);
-    }
-
     /**
      * Calls on method of the corresponding type on the element, registering the given event name
      * and handler.
-     * TODO(gs): Make this customizable
+     *
      * @method on
      * @param {string} type The registration type.
      * @param {string} eventName Name of the event to register the handler to.
@@ -199,25 +190,15 @@ DI.bind('pb_Events', (HammerWrapper, Keypress, Utils) => {
      * @return {Events.Action} The Action object for chaining.
      */
     on(type, eventName, handler) {
-      if (arguments.length === 3) {
-        return this[__register__](type, eventName, handler);
-      } else {
-        handler = eventName;
-        eventName = type;
-
-        // TODO: Remove this use
-        return this[__register__](TYPES.JQUERY, eventName, handler);
-      }
+      return this[__register__](type, eventName, handler);
     }
 
     /**
      * Calls off method of the corresponding type on the element, unregistering the handlers in the
      * scope for the element.
      *
-     * <ul>
-     *   <li>If eventName is given, all handlers listening to that event name will be unlistened.
-     *   <li>If nothing is given, all handlers in the scope will be unlistened.
-     * </ul>
+     * - If eventName is given, all handlers listening to that event name will be unlistened.
+     * - If nothing is given, all handlers in the scope will be unlistened.
      *
      * @method off
      * @param {string} type The registration type.

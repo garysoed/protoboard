@@ -115,10 +115,10 @@
             </pb-r-deck>
 
             <section id="riftchoice">
-              <pb-r-deck></pb-r-deck>
-              <pb-r-deck></pb-r-deck>
-              <pb-r-deck></pb-r-deck>
-              <pb-r-deck></pb-r-deck>
+              <pb-r-deck shuffleable="false"></pb-r-deck>
+              <pb-r-deck shuffleable="false"></pb-r-deck>
+              <pb-r-deck shuffleable="false"></pb-r-deck>
+              <pb-r-deck shuffleable="false"></pb-r-deck>
             </section>
           </section>
 
@@ -126,7 +126,7 @@
             <section id="staples">
               <template>
               {{#each cards}}
-              <pb-r-deck>
+              <pb-r-deck shuffleable="false">
                 {{> gz-card}}
               </pb-r-deck>
               {{/each}}

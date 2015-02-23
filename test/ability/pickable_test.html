@@ -41,15 +41,14 @@
 
     describe('#trigger', () => {
       it('should add the element to Move if enabled', () => {
-        let event = {};
         let pickable = new Pickable(undefined, undefined, true);
         pickable.init(el);
 
         _.spy(Move, 'add');
 
-        pickable.trigger(el, event);
+        pickable.trigger(el);
 
-        expect(Move.add).calledWith(el, event).at.least(1);
+        expect(Move.add).calledWith(el).at.least(1);
       });
       it('should do nothing if not enabled', () => {
         let pickable = new Pickable(undefined, undefined, false);

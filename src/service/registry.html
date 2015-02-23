@@ -4,18 +4,30 @@
 
 <script>
 
-// TODO(gs): Combine with Bootstrap.
 DI.bind('pb_service_Registry', () => {
 
   const __elements__ = Symbol();
   const __toRun__ = Symbol();
 
   class Registry {
+    /**
+     * A service that collects functions to be ran at bootstrap.
+     *
+     * @constructor
+     * @class service.Registry
+     */
     constructor() {
       this[__elements__] = new Map();
       this[__toRun__] = [];
     }
 
+    /**
+     * Sets the given element name and prototype to be registered as custom element at bootstrap.
+     *
+     * @method add
+     * @param {name} name Element name to register
+     * @param {Object} prototype Prototype object of the custom element.
+     */
     add(name, prototype) {
       if (this[__elements__].has(name)) {
         throw `${name} is already registered`;
@@ -27,10 +39,25 @@ DI.bind('pb_service_Registry', () => {
       });
     }
 
+    /**
+     * Runs the given function at bootstrap.
+     *
+     * @method runAtRegister
+     * @param {Function} fn The function to run. This function takes in a
+     *    {{#crossLink "Document"}}{{/crossLink}} and a
+     *    {{#crossLink "service.Config"}}{{/crossLink}}.
+     */
     runAtRegister(fn) {
       this[__toRun__].push(fn);
     }
 
+    /**
+     * Runs all the collected functions.
+     *
+     * @method register
+     * @param {Document} doc Document object to run the functions in.
+     * @param {service.Config} Config The configuration service to use.
+     */
     register(doc, Config) {
       for (let fn of this[__toRun__]) {
         fn(doc, Config);

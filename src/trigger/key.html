@@ -134,7 +134,7 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
           let abilitySet = keyMap.get(char);
           for (let ability of abilitySet) {
             triggeredEl = el;
-            ability.trigger(el, event);
+            ability.trigger(el);
             break;
           }
         }
