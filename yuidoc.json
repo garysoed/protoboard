@@ -7,19 +7,23 @@
   "colorMainLight": "#008000",
   "colorKeyword": "#808080",
   "colorLink": "gold",
-  "colorLinkVisited": "darkorange",
+  "colorLinkExternal": "darkorange",
   "options": {
     "linkNatives": "true",
     "outdir": "./doc",
     "themedir": "./node_modules/doctheme",
     "paths": [
-      "./src"
+      "./src",
+      "./tutorial"
     ],
     "external": {
       "data": {
         "base": "../assets/redirect.html#",
         "json": "./node_modules/doctheme/externals/dom.json"
       }
-    }
+    },
+    "extension": ".html,.js",
+    "helpers": ["./node_modules/doctheme/helpers.js"],
+    "nocode": true
   }
 }

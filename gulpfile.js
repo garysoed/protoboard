@@ -91,7 +91,7 @@ function subYuiMd() {
 
 gulp.task('clean', shell.task('rm -r out'));
 
-gulp.task('doc', shell.task('yuidoc --config yuidoc.json --extension .html --no-code --helpers ./node_modules/doctheme/helpers.js'));
+gulp.task('doc', shell.task('yuidoc --config yuidoc.json'));
 
 gulp.task('jshint', function() {
   return gulp.src(['./src/**/*.html', './test/**/*.html'])
