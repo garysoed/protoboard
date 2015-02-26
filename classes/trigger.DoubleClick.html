@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>trigger.DoubleClick - Protoboard</title>
+
+  <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+
+  <link rel="stylesheet" href="../assets/css/class.css">
+  <link rel="stylesheet" href="../assets/css/events.css">
+  <link rel="stylesheet" href="../assets/css/index.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/method.css">
+  <link rel="stylesheet" href="../assets/css/prettyprint.css">
+  <link rel="stylesheet" href="../assets/css/props.css">
+  <link rel="stylesheet" href="../assets/css/sidebar.css">
+  <style>
+    @import url(http://fonts.googleapis.com/css?family=Roboto);
+    @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono);
+
+    body {
+      background-color: #222;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Roboto', Helvetica, Arial, sans-serif;
+      font-size: smaller;
+      line-height: 3ex;
+      margin: 0;
+      height: 100vh;
+    }
+
+    .description code {
+      color: #F6F080;
+      background-color: #444;
+      border-radius: 4px;
+      padding: 2px 4px;
+    }
+
+    h1, h2 {
+      margin: 5px 0;
+    }
+
+    a, a:visited {
+      color: gold;
+      text-decoration: none;
+    }
+
+    a.external {
+      color: darkorange;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    pre,
+    code,
+    a.crosslink {
+      font-family: 'Ubuntu Mono', monospace;
+    }
+
+    .prettyprint code {
+      background-color: transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    code .keyword {
+      color: #808080;
+    }
+
+    div.content {
+      max-width: 50em;
+    }
+
+    section.collapsible > header {
+      background-color: #004000;
+      padding: 5px 20px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      transition: padding .2s;
+      position: relative;
+    }
+
+    section.collapsible > header h2 {
+      font-size: 1.2em;
+    }
+
+    section.collapsible > header::after {
+      background-image: -webkit-linear-gradient(270deg, #004000, transparent);
+      content: '';
+      display: block;
+      height: 10px;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      bottom: -10px;
+    }
+
+    section.collapsible.collapsed > header {
+      padding-bottom: 5px;
+    }
+
+    section.collapsible > div {
+      overflow: hidden;
+      transition: height .2s;
+    }
+
+    footer {
+      border: 2px solid #004000;
+      padding: 15px;
+      -webkit-margin-before: 20px;
+    }
+
+    header.tutorial {
+      color: #008000;
+    }
+  </style>
+  <style>
+    header.main-header h1 a {
+      color: #008000;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div>
+      <h1><a href="../index.html">Protoboard</a></h1>
+      <span class="main-subtitle">v 0.1.0</span>
+    </div>
+    <a href="https://github.com/garysoed/protoboard">GitHub</a>
+  </header>
+  <section class="main-content">
+    <section class="main-sidebar"><div class="sidebar">
+    <section class="collapsible ">
+      <header>
+        <h2>tutorial</h2>
+      </header>
+      <div>
+        <ul>
+          <li class="">
+            <a href="../classes/1 Overview.html">1 Overview</a>
+          </li>
+          <li class="">
+            <a href="../classes/2 Prerequisites.html">2 Prerequisites</a>
+          </li>
+          <li class="">
+            <a href="../classes/3 Components.html">3 Components</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="collapsible selected">
+      <header>
+        <h2>api</h2>
+      </header>
+      <div>
+        <ul>
+          <li class="">
+            <a href="../classes/ability.Abilities.html">ability.Abilities</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Abilities.Builder.html">ability.Abilities.Builder</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Ability.html">ability.Ability</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Droppable.html">ability.Droppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Pickable.html">ability.Pickable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Shuffleable.html">ability.Shuffleable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Toggleable.html">ability.Toggleable</a>
+          </li>
+          <li class="">
+            <a href="../classes/Check.html">Check</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Card.html">component.Card</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Component.html">component.Component</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Token.html">component.Token</a>
+          </li>
+          <li class="">
+            <a href="../classes/DI.BindingTree.html">DI.BindingTree</a>
+          </li>
+          <li class="">
+            <a href="../classes/DI.Provider.html">DI.Provider</a>
+          </li>
+          <li class="">
+            <a href="../classes/DI.Scope.html">DI.Scope</a>
+          </li>
+          <li class="">
+            <a href="../classes/Events.html">Events</a>
+          </li>
+          <li class="">
+            <a href="../classes/Events.Action.html">Events.Action</a>
+          </li>
+          <li class="">
+            <a href="../classes/HammerWrapper.html">HammerWrapper</a>
+          </li>
+          <li class="">
+            <a href="../classes/PbElement.html">PbElement</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Bag.html">region.Bag</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Bag.RandomPickable.html">region.Bag.RandomPickable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Deck.html">region.Deck</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Hand.html">region.Hand</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Hand.ReorderableDroppable.html">region.Hand.ReorderableDroppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Rect.html">region.Rect</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Rect.FlexDroppable.html">region.Rect.FlexDroppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Region.html">region.Region</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Move.html">service.Move</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Preview.html">service.Preview</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Registry.html">service.Registry</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.RectGrid.html">surface.RectGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Click.html">trigger.Click</a>
+          </li>
+          <li class="sidebar-selected">
+            <a href="../classes/trigger.DoubleClick.html">trigger.DoubleClick</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Key.html">trigger.Key</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Trigger.html">trigger.Trigger</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Preview.html">ui.Preview</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Previewer.html">ui.Previewer</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Template.html">ui.Template</a>
+          </li>
+          <li class="">
+            <a href="../classes/Utils.html">Utils</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+</div>
+
+
+</section>
+    <section class="main-main"><div class="class">
+  <section class="class-summary">
+      <header>
+        <code>trigger.DoubleClick <span class="keyword">extends</span> <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code>
+      </header>
+
+    <div class="content description">
+      <p>Triggers an ability when the element is double clicked.</p>
+
+    </div>
+
+  </section>
+
+
+
+    <section class="collapsible class-subsection">
+      <header>
+        <h2>Methods</h2>
+      </header>
+      <div>
+          <section class="method">
+            <header>
+              <code class="method-signature">off(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element)</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Unregisters the given element from triggering the registered ability when double clicked.</p>
+          </span>
+              <table>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>element</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Element to unregister.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+                <footer>
+                  Overrides <code><a href="trigger.Trigger.html#method_off">trigger.Trigger</a></code>
+                </footer>
+              
+            </div>
+          </section>
+          
+          <section class="method">
+            <header>
+              <code class="method-signature">on(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element, <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> ability)</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Registers the given element to trigger the given ability when double clicked.</p>
+          </span>
+              <table>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>element</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Element to register.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>ability</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The ability to trigger.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+                <footer>
+                  Overrides <code><a href="trigger.Trigger.html#method_on">trigger.Trigger</a></code>
+                </footer>
+              
+            </div>
+          </section>
+          
+          <section class="method">
+            <header>
+              <code class="method-signature"><span class="keyword">static</span> parse(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> str) => <a href="../classes/trigger.DoubleClick.html" class="crosslink">trigger.DoubleClick</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined.html" class="crosslink external" target="_blank">Undefined</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Parses the input string</p>
+          </span>
+              <table>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>str</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The string to parse</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/trigger.DoubleClick.html" class="crosslink">trigger.DoubleClick</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined.html" class="crosslink external" target="_blank">Undefined</a></code><span class="description"><p>The DoubleClick trigger if parse is successful, or
+             <code>undefined</code> otherwise.</p>
+          </span>
+                </div>
+          
+            </div>
+          </section>
+          
+          <section class="method">
+            <header>
+              <code class="method-signature">toString() => <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code>
+            </header>
+            <div class="content">
+              <span class="description"></span>
+              <table>
+              </table>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code><span class="description"><p>String pb-dblclick</p>
+          </span>
+                </div>
+                <footer>
+                  Overrides <code><a href="trigger.Trigger.html#method_toString">trigger.Trigger</a></code>
+                </footer>
+              
+            </div>
+          </section>
+          
+      </div>
+    </section>
+
+</div>
+
+
+
+</section>
+  </section>
+</body>
+  <script src="../assets/vendor/prettify/prettify-min.js"></script>
+  <script>prettyPrint();</script>
+  <script>
+    var els = document.querySelectorAll('section.collapsible');
+    for (var i = 0; i < els.length; i++) {
+      var section = els.item(i);
+      var content = section.querySelector('div');
+      var header = section.querySelector('header');
+      var height = content.clientHeight + 'px';
+      header.addEventListener('click', function(section, content, contentHeight) {
+        section.classList.toggle('collapsed');
+        content.style.height = section.classList.contains('collapsed') ? '0' : contentHeight;
+      }.bind(header, section, content, height));
+      content.style.height = height;
+    }
+  </script>
+</html>

@@ -1,0 +1,8 @@
+<html>
+<body>
+  <script>
+    var target = window.location.hash.substring(9);
+    target = target.substring(0, target.length - 5);
+    window.open('http://' + target, '_self');
+  </script>
+</body>
