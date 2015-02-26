@@ -1,0 +1,23 @@
+.sidebar {
+  min-width: 200px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  -webkit-padding-start: 0;
+}
+
+.sidebar li {
+  padding: 0 20px;
+  line-height: 2em;
+}
+
+.sidebar h2 {
+  text-transform: uppercase;
+}
+
+li.sidebar-selected {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #222;
+}

@@ -1,0 +1,51 @@
+.method {
+  padding: 20px;
+}
+
+.method:nth-child(2n) {
+  background-color: black;
+}
+
+.method > header {
+  margin: 0 0 20px;
+  font-size: 1rem;
+}
+
+.method table {
+  border-collapse: collapse;
+  margin: 0 20px;
+  width: 100%;
+}
+
+.method tbody:nth-child(2n) {
+  background-color: black;
+}
+
+.method tbody:nth-child(2n+1) {
+  background-color: #222;
+}
+
+.method td {
+  padding: 0 10px;
+  vertical-align: top;
+}
+
+.method td.method-type {
+  white-space: nowrap;
+}
+
+.method-returns {
+  -webkit-margin-before: 1em;
+  -webkit-margin-after: 1em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+}
+
+.method-returns strong {
+  -webkit-margin-end: 1em;
+}
+
+.method-returns p {
+  display: inline-block;
+  -webkit-margin-start: 1em;
+}

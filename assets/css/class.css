@@ -1,0 +1,8 @@
+.class-summary > header {
+  margin: 10px 0 0;
+  font-size: 1rem;
+}
+
+.class .class-summary {
+  padding: 20px 0 10px 20px
+}

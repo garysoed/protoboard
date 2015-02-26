@@ -1,0 +1,32 @@
+header.main-header {
+  align-items: flex-end;
+  background-color: black;
+  display: flex;
+  padding: 20px;
+  -webkit-filter: drop-shadow(0px 2px 5px rgba(0,0,0,1));
+}
+
+header.main-header > div {
+  flex: 1;
+}
+
+.main-subtitle {
+  font-size: 0.75rem;
+}
+
+section.main-sidebar {
+  background-color: black;
+  overflow: scroll;
+  -webkit-filter: drop-shadow(0px 2px 5px rgba(0,0,0,1));
+}
+
+section.main-content {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+section.main-main {
+  overflow: scroll;
+  flex: 1;
+}
