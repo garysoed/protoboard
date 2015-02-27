@@ -1,7 +1,7 @@
 <base href="../..">
 
-<link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/ability/helpable.html">
 <link rel="import" href="out/ability/pickable.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
@@ -30,10 +30,10 @@ DI
     .with('placeHolderTmp', doc => doc.querySelector('template#placeholder'))
     .bind('pb_region_Bag', (
         $registry,
-        Abilities,
         Click,
         Config,
         Droppable,
+        Helpable,
         Key,
         Move,
         Pickable,
@@ -138,8 +138,9 @@ DI
 
   Config.add(
       EL_NAME,
-      new Droppable('droppable', new Key('d')),
-      new RandomPickable('pickable', new Key('q')));
+      new Helpable('help'),
+      new Droppable('drop', new Key('d')),
+      new RandomPickable('pick', new Key('q')));
 
   $registry.add(EL_NAME, Bag.prototype);
 

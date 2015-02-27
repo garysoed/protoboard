@@ -81,6 +81,39 @@
               .throw(`${ability1.attrTrigger} is already registered`);
         });
       });
+
+      describe('#getAll', () => {
+        it('should return the abilities correctly', () => {
+          let ability = pb_t.createFakeAbility('Ability');
+          builder.add(ability);
+
+          var map = builder.getAll();
+          expect(map.size).to.be.equal(1);
+          expect(map.get(ability.attrName)).to.be.equal(ability);
+        });
+        it('should return empty map if the element has no abilities', () => {
+          expect(builder.getAll().size).to.be.equal(0);
+        });
+      });
+
+      describe('#trigger', () => {
+        it('should trigger the ability', () => {
+          let ability = pb_t.createFakeAbility('ability');
+          builder.add(ability);
+
+          _.spy(ability, 'trigger');
+          builder.trigger(ability.attrName);
+          expect(ability.trigger).calledWith(el).at.least(1);
+        });
+        it('should throw error if the element has no abilities', () => {
+          expect(() => builder.trigger('ability')).to.throw(Error);
+        });
+        it('should throw error if the element does not have the specified ability', () => {
+          let ability = pb_t.createFakeAbility('ability');
+          builder.add(ability);
+          expect(() => builder.trigger('other ability')).to.throw(Error);
+        });
+      })
     });
 
     describe('#__onMutation__', () => {

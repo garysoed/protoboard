@@ -1,8 +1,9 @@
 <base href="../..">
 
-<link rel="import" href="out/ability/abilities.html">
+<link rel="import" href="out/ability/helpable.html">
 <link rel="import" href="out/ability/pickable.html">
 <link rel="import" href="out/component/component.html">
+<link rel="import" href="out/config.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/trigger/key.html">
 <link rel="import" href="out/utils.html">
@@ -21,8 +22,8 @@ DI
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_component_Token', (
         $registry,
-        Abilities,
         Component,
+        Config,
         Key,
         Pickable,
         Utils,
@@ -66,8 +67,10 @@ DI
     }
   }
 
-  Abilities.of(Token.prototype)
-      .add(new Pickable('pickable', new Key('q'), true));
+  Config.add(
+      'pb-c-token',
+      new Helpable('help'),
+      new Pickable('pick', new Key('q'), true));
 
   $registry.add(EL_NAME, Token.prototype);
 

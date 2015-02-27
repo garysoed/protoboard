@@ -79,6 +79,18 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
     trigger(el) { }
 
     /**
+     * Returns the trigger for this ability on this element.
+     *
+     * @method getTrigger
+     * @param {Element} el The element to return the trigger for this ability for.
+     * @return {trigger.Trigger|null} The trigger for this ability on this element, or null if there
+     *    is none.
+     */
+    getTrigger(el) {
+      return el[__triggerMap__] ? el[__triggerMap__].get(this) : null;
+    }
+
+    /**
      * Name of the ability. This is also the name of the attribute on the element corresponding to
      * this ability.
      *

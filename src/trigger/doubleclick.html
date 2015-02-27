@@ -44,6 +44,13 @@ DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper, Trigger) => {
     toString() {
       return 'pb-dblclick';
     }
+
+    /**
+     * @method helpText
+     */
+    get helpText() {
+      return 'Double Click';
+    }
   }
 
   /**

@@ -55,6 +55,24 @@ DI.bind('pb_ability_Abilities', Utils => {
     }
 
     /**
+     * @method getAll
+     * @return {Map} Map of ability name to ability of the element in context. This excludes the
+     *    trigger attribute of the abilities.
+     */
+    getAll() {
+      if (!this[__element__][__abilities__]) {
+        return new Map();
+      }
+
+      let abilities = new Set(this[__element__][__abilities__].values());
+      let map = new Map();
+      for (let ability of abilities) {
+        map.set(ability.attrName, ability);
+      }
+      return map;
+    }
+
+    /**
      * Triggers the ability corresponding to the given name.
      *
      * @method trigger

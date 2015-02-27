@@ -59,7 +59,7 @@
     <template id="cardTemplate">
       {{#pb-for 0 count 1}}
       <pb-c-card class="{{element}}"
-                 flippable-active="{{@root.showfront}}">
+                 flip-active="{{@root.showfront}}">
         <div class="pb-back"></div>
         <div class="pb-front">
           <div>{{name}}</div>
@@ -193,7 +193,7 @@
       DI
           .run(function(Abilities, Bootstrap, Config, Key, Shuffleable, Toggleable, Utils) {
 
-        Config.add('pb-c-card', new Toggleable('flippable', new Key('f'), true));
+        Config.add('pb-c-card', new Toggleable('flip', new Key('f'), true));
         Bootstrap.run(document);
 
         var deckPromise = Promise.all([
@@ -271,7 +271,7 @@
 
             // Flip all the children and move them to the bottom of the deck.
             Utils.toArray(discard.children).forEach(function(child) {
-              $(child).attr('flippable-active', false);
+              $(child).attr('flip-active', false);
               deck.insertBefore(child, deck.firstElementChild);
             });
 
@@ -282,7 +282,7 @@
             for (var i = 0; i < 4 && deck.childElementCount > 0; i++) {
               var child = deck.lastElementChild;
               hand.appendChild(child);
-              $(child).attr('flippable-active', true);
+              $(child).attr('flip-active', true);
             }
           });
         });

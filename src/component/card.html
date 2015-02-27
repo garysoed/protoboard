@@ -1,5 +1,6 @@
 <base href="../..">
 
+<link rel="import" href="out/ability/helpable.html">
 <link rel="import" href="out/ability/pickable.html">
 <link rel="import" href="out/ability/toggleable.html">
 <link rel="import" href="out/component/component.html">
@@ -28,6 +29,7 @@ DI
         Click,
         Component,
         Config,
+        Helpable,
         Key,
         Pickable,
         Toggleable,
@@ -47,9 +49,9 @@ DI
    * front face, add `flippable-active="true"` to the `pb-c-card`.
    *
    * Default supported abilities:
-   * - {{#crossLink "ability.Pickable"}}pickable{{/crossLink}}
-   * - {{#crossLink "ability.Toggleable"}}flippable{{/crossLink}}
-   * - {{#crossLink "ability.Toggleable"}}tappable{{/crossLink}}
+   * - {{#crossLink "ability.Pickable"}}pick{{/crossLink}}
+   * - {{#crossLink "ability.Toggleable"}}flip{{/crossLink}}
+   * - {{#crossLink "ability.Toggleable"}}tap{{/crossLink}}
    *
    * ```html
    * <!-- Example: Create a card that starts by displaying its front side -->
@@ -79,9 +81,10 @@ DI
 
   Config.add(
       'pb-c-card',
-      new Pickable('pickable', new Key('q'), true),
-      new Toggleable('flippable', new Click(), true),
-      new Toggleable('tappable', new Key('t'), true));
+      new Helpable('help'),
+      new Pickable('pick', new Key('q'), true),
+      new Toggleable('flip', new Click(), true),
+      new Toggleable('tap', new Key('t'), true));
 
   $registry.add(EL_NAME, Card.prototype);
 

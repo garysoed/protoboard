@@ -2,6 +2,7 @@
 
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/ability/helpable.html">
 <link rel="import" href="out/check.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
@@ -30,6 +31,7 @@ DI
         Check,
         Config,
         Droppable,
+        Helpable,
         Key,
         Move,
         Region,
@@ -106,7 +108,7 @@ DI
    * ```
    *
    * Supported abilities:
-   * - {{#crossLink "region.Hand.ReorderableDroppable"}}droppable{{/crossLink}}
+   * - {{#crossLink "region.Hand.ReorderableDroppable"}}drop{{/crossLink}}
    *
    * @class region.Hand
    * @extends region.Region
@@ -148,7 +150,8 @@ DI
 
   Config.add(
       EL_NAME,
-      new ReorderableDroppable('droppable', new Key('d'), true));
+      new Helpable('help'),
+      new ReorderableDroppable('drop', new Key('d'), true));
   $registry.add(EL_NAME, Hand.prototype);
 
   if (window['TEST_MODE']) {

@@ -86,6 +86,13 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
     toString() {
       return `pb-key-${this[__key__]}`;
     }
+
+    /**
+     * @method helpText
+     */
+    get helpText() {
+      return this[__key__];
+    }
   }
 
   /**

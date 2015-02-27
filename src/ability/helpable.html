@@ -1,0 +1,110 @@
+<base href="../..">
+
+<link rel="import" href="out/ability/abilities.html">
+<link rel="import" href="out/ability/ability.html">
+<link rel="import" href="out/di.html">
+<link rel="import" href="out/events.html">
+<link rel="import" href="out/trigger/key.html">
+<link rel="import" href="out/utils.html">
+
+<template>
+  <style>
+    #root {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    content::content div {
+      color: white;
+      font-size: 1rem;
+      line-height: 2em;
+      text-transform: capitalize;
+    }
+
+    content::content div.trigger {
+      display: inline-block;
+      font-weight: bold;
+      width: 60px;
+      text-align: right;
+      -webkit-margin-after: 6px;
+    }
+  </style>
+
+  <div id="root">
+    <div>
+      <content></content>
+    </div>
+  </div>
+</template>
+
+<script>
+DI
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', doc => doc.querySelector('template'))
+    .bind('pb_ability_Helpable', (
+        Abilities,
+        Ability,
+        Events,
+        Key,
+        Utils,
+        doc,
+        template,
+        $registry) => {
+
+  let displayEl = null;
+
+  class Helpable extends Ability {
+    /**
+     * Displays the triggers for all registered abilities.
+     *
+     * @constructor
+     * @class ability.Helpable
+     * @param {string} [name=pb-helpable] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=ability.Key] Default trigger. Defaults to the '?'
+     *    key.
+     * @extends ability.Ability
+     */
+    constructor(name = 'pb-helpable', defaultTrigger = new Key('?')) {
+      super(name, defaultTrigger);
+    }
+
+    /**
+     * Displays the triggers for all abilities registered to this element.
+     *
+     * @method trigger
+     * @param {Element} el The element whose abilities should be displayed.
+     */
+    trigger(el) {
+      let abilities = Abilities.of(el).getAll();
+      displayEl.innerHTML = '';
+      let doc = displayEl.ownerDocument;
+      for (let [name, ability] of abilities) {
+        let entry = doc.createElement('div');
+        entry.innerHTML = `<div class="trigger">${ability.getTrigger(el).helpText}</div>: ${name}`;
+        displayEl.appendChild(entry);
+      }
+
+      displayEl.style.display = '';
+    }
+  }
+
+  $registry.runAtRegister((document, config) => {
+    displayEl = document.createElement('div');
+    displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    displayEl.style.display = 'none';
+    Events.of(displayEl).on('dom', 'click', () => {
+      displayEl.style.display = 'none';
+    });
+    document.body.appendChild(displayEl);
+  });
+
+  return Helpable;
+});
+</script>

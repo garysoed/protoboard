@@ -2,6 +2,7 @@
 
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/ability/helpable.html">
 <link rel="import" href="out/ability/shuffleable.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
@@ -52,8 +53,8 @@ DI
    * ```
    *
    * Supported abilities:
-   * - {{#crossLink "ability.Droppable"}}droppable{{/crossLink}}
-   * - {{#crossLink "ability.Shuffleable"}}shuffleable{{/crossLink}}
+   * - {{#crossLink "ability.Droppable"}}drop{{/crossLink}}
+   * - {{#crossLink "ability.Shuffleable"}}shuffle{{/crossLink}}
    *
    * @class region.Deck
    * @extends region.Region
@@ -77,8 +78,9 @@ DI
 
   Config.add(
       EL_NAME,
-      new Shuffleable('shuffleable', new Key('s'), true),
-      new Droppable('droppable', new Key('d'), true));
+      new Helpable('help'),
+      new Shuffleable('shuffle', new Key('s'), true),
+      new Droppable('drop', new Key('d'), true));
 
   $registry.add(EL_NAME, Deck.prototype);
 

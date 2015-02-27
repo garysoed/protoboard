@@ -2,6 +2,7 @@
 
 <link rel="import" href="out/ability/abilities.html">
 <link rel="import" href="out/ability/droppable.html">
+<link rel="import" href="out/ability/helpable.html">
 <link rel="import" href="out/check.html">
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/region/region.html">
@@ -24,11 +25,11 @@ DI
     .with('template', doc => doc.querySelector('template'))
     .bind('pb_region_Rect', (
         $registry,
-        Abilities,
         Check,
         Click,
         Config,
         Droppable,
+        Helpable,
         Key,
         Move,
         Region,
@@ -119,7 +120,7 @@ DI
    * An arbitrary rectangular region. You can position elements anywhere in this region.
    *
    * Supported abilities:
-   * - {{#crossLink "region.Rect.FlexDroppable"}}droppable{{/crossLink}}
+   * - {{#crossLink "region.Rect.FlexDroppable"}}drop{{/crossLink}}
    *
    * @class region.Rect
    * @extends region.Region
@@ -139,7 +140,8 @@ DI
 
   Config.add(
       EL_NAME,
-      new FlexDroppable('droppable', new Key('d'), true));
+      new Helpable('help'),
+      new FlexDroppable('drop', new Key('d'), true));
   $registry.add(EL_NAME, Rect.prototype);
 
   if (window['TEST_MODE']) {
