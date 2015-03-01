@@ -1,4 +1,4 @@
-<base href="..">
+<base href=".">
 
 <script>
   // Production steps of ECMA-262, Edition 6, 22.1.2.1
@@ -38,7 +38,7 @@
         var mapFn = arguments.length > 1 ? arguments[1] : void undefined;
         var T;
         if (typeof mapFn !== 'undefined') {
-          // 5. else      
+          // 5. else
           // 5. a If IsCallable(mapfn) is false, throw a TypeError exception.
           if (!isCallable(mapFn)) {
             throw new TypeError('Array.from: when provided, the second argument must be a function');
