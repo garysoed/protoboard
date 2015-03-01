@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>ui.Previewer - Protoboard</title>
+  <title>ability.Helpable - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -172,7 +172,7 @@
           <li class="">
             <a href="../classes/ability.Droppable.html">ability.Droppable</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/ability.Helpable.html">ability.Helpable</a>
           </li>
           <li class="">
@@ -271,7 +271,7 @@
           <li class="">
             <a href="../classes/ui.Preview.html">ui.Preview</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/ui.Previewer.html">ui.Previewer</a>
           </li>
           <li class="">
@@ -290,18 +290,66 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code>ui.Previewer <span class="keyword">extends</span> <a href="../classes/PbElement.html" class="crosslink">PbElement</a></code>
+        <code>ability.Helpable <span class="keyword">extends</span> <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code>
       </header>
 
     <div class="content description">
-      <p>Element that displays the innerHTML of the <code>pb-u-preview</code> of element currently being hovered
-over. This works in tandem with  and
-.</p>
+      <p>Displays the triggers for all registered abilities.</p>
 
     </div>
 
   </section>
 
+    <section class="collapsible class-subsection">
+      <header>
+        <h2>Constructor</h2>
+      </header>
+      <div>
+          <section class="method">
+            <header>
+              <code class="method-signature">ability.Helpable(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger)</code>
+            </header>
+            <div class="content">
+              <span class="description"></span>
+              <table>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>[name=pb-helpable]</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Name of the ability.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>[defaultTrigger=ability.Key]</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Default trigger. Defaults to the &#39;?&#39;
+             key.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+            </div>
+          </section>
+          
+      </div>
+    </section>
 
     <section class="collapsible class-subsection">
       <header>
@@ -310,14 +358,31 @@ over. This works in tandem with  and
       <div>
           <section class="props">
             <header>
-              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> isCreated</code>
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> attrName</code>
             </header>
             <div class="content">
-              <span class="description"><p>True iff the element has been created.</p>
+              <span class="description"><p>Name of the ability. This is also the name of the attribute on the element corresponding to
+          this ability.</p>
           </span>
           
                 <footer>
-                  Defined in <code><a href="PbElement.html#method_isCreated">PbElement</a></code>
+                  Defined in <code><a href="ability.Ability.html#method_attrName">ability.Ability</a></code>
+                </footer>
+              
+            </div>
+          </section>
+          
+          <section class="props">
+            <header>
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> attrTrigger</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>The name of the attribute on the element corresponding to this ability that sets the trigger
+          for this ability. This is the name of the ability with a <code>-on</code> postfix.</p>
+          </span>
+          
+                <footer>
+                  Defined in <code><a href="ability.Ability.html#method_attrTrigger">ability.Ability</a></code>
                 </footer>
               
             </div>
@@ -333,15 +398,36 @@ over. This works in tandem with  and
       <div>
           <section class="method">
             <header>
-              <code class="method-signature">attachedCallback()</code>
+              <code class="method-signature">getTrigger(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el) => <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null.html" class="crosslink external" target="_blank">Null</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Called when the element is attached to the document.</p>
+              <span class="description"><p>Returns the trigger for this ability on this element.</p>
           </span>
               <table>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>el</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The element to return the trigger for this ability for.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
               </table>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null.html" class="crosslink external" target="_blank">Null</a></code><span class="description"><p>The trigger for this ability on this element, or null if there
+             is none.</p>
+          </span>
+                </div>
+          
                 <footer>
-                  Overrides <code><a href="PbElement.html#method_attachedCallback">PbElement</a></code>
+                  Defined in <code><a href="ability.Ability.html#method_getTrigger">ability.Ability</a></code>
                 </footer>
               
             </div>
@@ -349,15 +435,31 @@ over. This works in tandem with  and
           
           <section class="method">
             <header>
-              <code class="method-signature">createdCallback()</code>
+              <code class="method-signature">init(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Called when the element is created</p>
+              <span class="description"><p>Initializes the ability on the given element.</p>
           </span>
               <table>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>el</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The element to set the default values to.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
               </table>
+          
                 <footer>
-                  Overrides <code><a href="PbElement.html#method_createdCallback">PbElement</a></code>
+                  Defined in <code><a href="ability.Ability.html#method_init">ability.Ability</a></code>
                 </footer>
               
             </div>
@@ -365,15 +467,62 @@ over. This works in tandem with  and
           
           <section class="method">
             <header>
-              <code class="method-signature">detachedCallback()</code>
+              <code class="method-signature">trigger(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Called when the element is detached from the document.</p>
+              <span class="description"><p>Displays the triggers for all abilities registered to this element.</p>
           </span>
               <table>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>el</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The element whose abilities should be displayed.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
               </table>
                 <footer>
-                  Overrides <code><a href="PbElement.html#method_detachedCallback">PbElement</a></code>
+                  Overrides <code><a href="ability.Ability.html#method_trigger">ability.Ability</a></code>
+                </footer>
+              
+            </div>
+          </section>
+          
+          <section class="method">
+            <header>
+              <code class="method-signature">updateConfig(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Updates the inner state of the ability based on changes to the element.</p>
+          </span>
+              <table>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>el</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Element whose attributes have changed.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+                <footer>
+                  Defined in <code><a href="ability.Ability.html#method_updateConfig">ability.Ability</a></code>
                 </footer>
               
             </div>

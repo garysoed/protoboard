@@ -20,4 +20,6 @@ li.sidebar-selected {
   padding-top: 10px;
   padding-bottom: 10px;
   background-color: #222;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

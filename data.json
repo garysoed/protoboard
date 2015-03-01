@@ -39,6 +39,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/ability/helpable.html": {
+            "name": "src/ability/helpable.html",
+            "modules": {},
+            "classes": {
+                "ability.Helpable": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/ability/pickable.html": {
             "name": "src/ability/pickable.html",
             "modules": {},
@@ -327,11 +336,20 @@
             "fors": {},
             "namespaces": {}
         },
-        "tutorial/03_components.js": {
-            "name": "tutorial/03_components.js",
+        "tutorial/03_basic.js": {
+            "name": "tutorial/03_basic.js",
             "modules": {},
             "classes": {
-                "3 Components": 1
+                "3 Basic Usage": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "tutorial/04_customize.js": {
+            "name": "tutorial/04_customize.js",
+            "modules": {},
+            "classes": {
+                "4 Customizing Components": 1
             },
             "fors": {},
             "namespaces": {}
@@ -353,6 +371,7 @@
                 "ability.Abilities": 1,
                 "ability.Ability": 1,
                 "ability.Droppable": 1,
+                "ability.Helpable": 1,
                 "ability.Pickable": 1,
                 "ability.Shuffleable": 1,
                 "ability.Toggleable": 1,
@@ -401,14 +420,15 @@
             "classes": {
                 "1 Overview": 1,
                 "2 Prerequisites": 1,
-                "3 Components": 1
+                "3 Basic Usage": 1,
+                "4 Customizing Components": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "tutorial/03_components.js",
+            "file": "tutorial/04_customize.js",
             "line": 1,
-            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. Themes: This library comes with some existing themes. You can customize the color themes, and\n   if you use CSS, you can customize in greater details (coming next).\n\nSome glossary of terminologies for the API:\n<dl>\n  <dt>{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}</dt>\n  <dd>These are where the main logic happens. A Component can have several abilities, each\n  triggered with a Trigger.</dd>\n\n  <dt>{{#crossLink \"component.Component\"}}Component{{/crossLink}}</dt>\n  <dd>These are board game components that can be interacted with. Examples include dice, cards,\n  and tokens. All components can be moved around.</dd>\n\n  <dt>{{#crossLink \"region.Region\"}}Region{{/crossLink}}</dt>\n  <dd>Regions can contain other components. They cannot be moved and can contain one or more\n  components. Examples include: deck, bag, and hand.</dd>\n\n  <dt>{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}</dt>\n  <dd>Triggers listen to events in the document and triggers the ability it is associated with.\n  The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.</dd>\n\n  <dt>UI</dt>\n  <dd>This library also comes with several basic UI elements for convenience. These elements do\n  not have a real life counterpart.</dd>\n</dl>\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n  - `pb-c-` indicates a component\n  - `pb-r-` indicates a region\n  - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
+            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. Themes: This library comes with some existing themes. You can customize the color themes, and\n   if you use CSS, you can customize in greater details (coming next).\n\nSome glossary of terminologies for the API:\n<dl>\n  <dt>{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}</dt>\n  <dd>These are where the main logic happens. A Component can have several abilities, each\n  triggered with a Trigger.</dd>\n\n  <dt>{{#crossLink \"component.Component\"}}Component{{/crossLink}}</dt>\n  <dd>Components are the basic entity of a board. They provide main interaction with the players.\n  Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.</dd>\n\n  <dt>{{#crossLink \"region.Region\"}}Region{{/crossLink}}</dt>\n  <dd>Regions can contain other components. They cannot be moved and can contain one or more\n  components. Examples include: deck, bag, and hand.</dd>\n\n  <dt>{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}</dt>\n  <dd>Triggers listen to events in the document and triggers the ability it is associated with.\n  The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.</dd>\n\n  <dt>UI</dt>\n  <dd>This library also comes with several basic UI elements for convenience. These elements do\n  not have a real life counterpart.</dd>\n</dl>\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n  - `pb-c-` indicates a component\n  - `pb-r-` indicates a region\n  - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
         }
     },
     "classes": {
@@ -445,7 +465,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/abilities.html",
-            "line": 82,
+            "line": 100,
             "description": "Helper class to register abilities to custom elements. You can use this class to customize\nabilities, add abilities, and trigger registered abilities. Any interactions should start with\nthe {{#crossLink \"ability.Abilities/of:method\"}}{{/crossLink}} method.\n\n```javascript\n// Registering ability.\nAbilities.of(el)\n    .add(new Ability());\n```",
             "static": 1
         },
@@ -509,6 +529,37 @@
                     "type": "Boolean",
                     "optional": true,
                     "optdefault": "true"
+                }
+            ],
+            "extends": "ability.Ability"
+        },
+        "ability.Helpable": {
+            "name": "ability.Helpable",
+            "shortname": "ability.Helpable",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ability/helpable.html",
+            "line": 64,
+            "description": "Displays the triggers for all registered abilities.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the ability.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "pb-helpable"
+                },
+                {
+                    "name": "defaultTrigger",
+                    "description": "Default trigger. Defaults to the '?'\n   key.",
+                    "type": "trigger.Trigger",
+                    "optional": true,
+                    "optdefault": "ability.Key"
                 }
             ],
             "extends": "ability.Ability"
@@ -647,8 +698,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/card.html",
-            "line": 41,
-            "description": "A representation of a card. To use this, create a `pb-c-card` element with two child elements:\n- One must have a `pb-front` class. This is the front face of the card.\n- One must have a `pb-back` class. This is the back face of the card.\n\nBy default, the card starts by showing its back. If you want to make it start by showing the\nfront face, add `flippable-active=\"true\"` to the `pb-c-card`.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pickable{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}flippable{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}tappable{{/crossLink}}\n\n```html\n<!-- Example: Create a card that starts by displaying its front side -->\n<pb-c-card flippable-active=\"true\">\n  <div class=\"pb-front\">Front side</div>\n  <div class=\"pb-back\">Back side</div>\n</pb-c-card>\n```",
+            "line": 43,
+            "description": "A representation of a card. To use this, create a `pb-c-card` element with two child elements:\n- One must have a `pb-front` class. This is the front face of the card.\n- One must have a `pb-back` class. This is the back face of the card.\n\nBy default, the card starts by showing its back. If you want to make it start by showing the\nfront face, add `flippable-active=\"true\"` to the `pb-c-card`.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pick{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}flip{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}tap{{/crossLink}}\n\n```html\n<!-- Example: Create a card that starts by displaying its front side -->\n<pb-c-card flippable-active=\"true\">\n  <div class=\"pb-front\">Front side</div>\n  <div class=\"pb-back\">Back side</div>\n</pb-c-card>\n```",
             "extends": "component.Component"
         },
         "component.Component": {
@@ -675,7 +726,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/token.html",
-            "line": 34,
+            "line": 36,
             "description": "A simple movable component with only one state. Examples of token:\n- Chess piece\n- Cubes\n- Damage marker\n\nTo use this, create a `pb-c-token` element with one child element. This child element will be\ndisplayed as the token.\n\n```html\n<!-- Example: A square token -->\n<pb-c-token>\n  <div style=\"background: red; width: 50px; height: 50px;\"></div>\n<pb-c-token>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Pickable\"}}pickable{{/crossLink}}",
             "extends": "component.Component"
         },
@@ -741,8 +792,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/deck.html",
-            "line": 36,
-            "description": "Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.\nAny child elements of this class are considered to be in the deck.\n\n```html\n<!-- Example: Deck containing two cards -->\n<pb-r-deck>\n  <pb-c-card id=\"card1\">\n    <div class=\"pb-front\">Front</div>\n    <div class=\"pb-back\">Back</div>\n  </pb-c-card>\n  <pb-c-card id=\"card2\">\n    <div class=\"pb-front\">Front</div>\n    <div class=\"pb-back\">Back</div>\n  </pb-c-card>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Droppable\"}}droppable{{/crossLink}}\n- {{#crossLink \"ability.Shuffleable\"}}shuffleable{{/crossLink}}",
+            "line": 38,
+            "description": "Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.\nAny child elements of this class are considered to be in the deck.\n\n```html\n<!-- Example: Deck containing two cards -->\n<pb-r-deck>\n  <pb-c-card id=\"card1\">\n    <div class=\"pb-front\">Front</div>\n    <div class=\"pb-back\">Back</div>\n  </pb-c-card>\n  <pb-c-card id=\"card2\">\n    <div class=\"pb-front\">Front</div>\n    <div class=\"pb-back\">Back</div>\n  </pb-c-card>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Droppable\"}}drop{{/crossLink}}\n- {{#crossLink \"ability.Shuffleable\"}}shuffle{{/crossLink}}",
             "extends": "region.Region"
         },
         "region.Hand.ReorderableDroppable": {
@@ -755,7 +806,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/hand.html",
-            "line": 44,
+            "line": 46,
             "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered.\nThe position of the dropped element depends on the mouse position when the trigger\noccured.",
             "is_constructor": 1,
             "params": [
@@ -793,8 +844,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/hand.html",
-            "line": 91,
-            "description": "Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children\nare considered to be in the hand. A hand allows the user to reorder the child elements,\ndepending on where a child element is dropped.\n\n```html\n<!-- Hand with two tokens -->\n<pb-r-deck>\n  <pb-c-token id=\"token1\">\n    <div>Token 1</div>\n  </pb-c-token>\n  <pb-c-token id=\"token2\">\n    <div>Token 2</div>\n  </pb-c-token>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"region.Hand.ReorderableDroppable\"}}droppable{{/crossLink}}",
+            "line": 93,
+            "description": "Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children\nare considered to be in the hand. A hand allows the user to reorder the child elements,\ndepending on where a child element is dropped.\n\n```html\n<!-- Hand with two tokens -->\n<pb-r-deck>\n  <pb-c-token id=\"token1\">\n    <div>Token 1</div>\n  </pb-c-token>\n  <pb-c-token id=\"token2\">\n    <div>Token 2</div>\n  </pb-c-token>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"region.Hand.ReorderableDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
         },
         "region.Rect.FlexDroppable": {
@@ -807,7 +858,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/rect.html",
-            "line": 46,
+            "line": 47,
             "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered. The\ndropped element is positioned to be directly below the mouse cursor when the drop happened.",
             "is_constructor": 1,
             "params": [
@@ -845,8 +896,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/rect.html",
-            "line": 118,
-            "description": "An arbitrary rectangular region. You can position elements anywhere in this region.\n\nSupported abilities:\n- {{#crossLink \"region.Rect.FlexDroppable\"}}droppable{{/crossLink}}",
+            "line": 119,
+            "description": "An arbitrary rectangular region. You can position elements anywhere in this region.\n\nSupported abilities:\n- {{#crossLink \"region.Rect.FlexDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
         },
         "region.Region": {
@@ -979,7 +1030,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/key.html",
-            "line": 112,
+            "line": 119,
             "description": "Helper service for detecting key press.",
             "static": 1,
             "access": "private",
@@ -1231,7 +1282,7 @@
             "namespace": "",
             "file": "tutorial/01_overview.js",
             "line": 1,
-            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. Themes: This library comes with some existing themes. You can customize the color themes, and\n   if you use CSS, you can customize in greater details (coming next).\n\nSome glossary of terminologies for the API:\n<dl>\n  <dt>{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}</dt>\n  <dd>These are where the main logic happens. A Component can have several abilities, each\n  triggered with a Trigger.</dd>\n\n  <dt>{{#crossLink \"component.Component\"}}Component{{/crossLink}}</dt>\n  <dd>These are board game components that can be interacted with. Examples include dice, cards,\n  and tokens. All components can be moved around.</dd>\n\n  <dt>{{#crossLink \"region.Region\"}}Region{{/crossLink}}</dt>\n  <dd>Regions can contain other components. They cannot be moved and can contain one or more\n  components. Examples include: deck, bag, and hand.</dd>\n\n  <dt>{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}</dt>\n  <dd>Triggers listen to events in the document and triggers the ability it is associated with.\n  The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.</dd>\n\n  <dt>UI</dt>\n  <dd>This library also comes with several basic UI elements for convenience. These elements do\n  not have a real life counterpart.</dd>\n</dl>\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n  - `pb-c-` indicates a component\n  - `pb-r-` indicates a region\n  - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
+            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. Themes: This library comes with some existing themes. You can customize the color themes, and\n   if you use CSS, you can customize in greater details (coming next).\n\nSome glossary of terminologies for the API:\n<dl>\n  <dt>{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}</dt>\n  <dd>These are where the main logic happens. A Component can have several abilities, each\n  triggered with a Trigger.</dd>\n\n  <dt>{{#crossLink \"component.Component\"}}Component{{/crossLink}}</dt>\n  <dd>Components are the basic entity of a board. They provide main interaction with the players.\n  Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.</dd>\n\n  <dt>{{#crossLink \"region.Region\"}}Region{{/crossLink}}</dt>\n  <dd>Regions can contain other components. They cannot be moved and can contain one or more\n  components. Examples include: deck, bag, and hand.</dd>\n\n  <dt>{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}</dt>\n  <dd>Triggers listen to events in the document and triggers the ability it is associated with.\n  The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.</dd>\n\n  <dt>UI</dt>\n  <dd>This library also comes with several basic UI elements for convenience. These elements do\n  not have a real life counterpart.</dd>\n</dl>\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n  - `pb-c-` indicates a component\n  - `pb-r-` indicates a region\n  - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
         },
         "2 Prerequisites": {
             "name": "2 Prerequisites",
@@ -1247,9 +1298,9 @@
             "line": 1,
             "description": "1. Install <a href=\"https://www.npmjs.com/\">NPM</a>.\n2. Run `npm install protoboard`.\n3. Install <a href=\"http://gulpjs.com/\">Gulp</a>: `npm install gulp`.\n4. Protoboard relies on <a href=\"http://www.html5rocks.com/en/tutorials/webcomponents/imports/\">\n   HTML Import</a>. So you will need an HTTP server serving static files. A simple one you can\n   use is <a href=\"https://www.npmjs.com/package/http-server\">http-server</a>:\n   `npm install http-server`.\n5. Navigate to the root directory of the project (where the `gulpfile.js`) file is, and run\n   `gulp compile`. This will compile all the source files.\n6. Run `http-server` from the root directory of the project, and navigate to the file you want to\n   open. A good one to start is `ex/all/index.html`."
         },
-        "3 Components": {
-            "name": "3 Components",
-            "shortname": "3 Components",
+        "3 Basic Usage": {
+            "name": "3 Basic Usage",
+            "shortname": "3 Basic Usage",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1257,9 +1308,23 @@
             "extension_for": [],
             "module": "tutorial",
             "namespace": "",
-            "file": "tutorial/03_components.js",
+            "file": "tutorial/03_basic.js",
             "line": 1,
-            "description": "Components are the basic entity of a board. They provide main interaction with the players. Every\ncomponent has one or more abilities registered to it. Check the\n{{#classPrefix \"component.Component\"}}API reference{{/classPrefix}} to see the ability names\nregistered to a component."
+            "description": "To use this library, you will need to write an HTML file. You will need to do the following:\n1. Add the following code to the `<head>` block of the document:\n   ```html\n   <link rel=\"import\" href=\"path/to/out/di.html\">\n   <link rel=\"import\" href=\"path/to/out/bootstrap.html\">\n   ```\n2. Below the `<link>` tags added in the previous steps, add the code below. Copy the code\n   verbatim.\n   ```html\n   <script>\n     DI.run(function(Bootstrap) { Bootstrap.run(document); });\n   </script>\n   ```\n   This code sets up all the custom elements used in the page.\n3. Add custom elements in the body. Be sure to import the appropriate files in the `<head>`\n   block. For example, to add a token:\n   ```html\n   <head>\n     <!-- Required -->\n     <link rel=\"import\" href=\"path/to/out/di.html\">\n     <link rel=\"import\" href=\"path/to/out/bootstrap.html\">\n\n     <!-- Import token -->\n     <link rel=\"import\" href=\"path/to/out/component/token.html\">\n   </head>\n\n   <body>\n     <pb-c-token>\n       <div>Token Content</div>\n     </pb-c-token>\n\n     <script>\n       // Required\n       DI.run(function(Bootstrap) { Bootstrap.run(document); });\n     </script>\n   </body>\n   ```\n\nTo help with debugging for missing imports, you can open the developer tools (Alt + &#8984; for\nChrome on Mac) and check the Console tab. It should tell you elements which are missing imports.\nFor instance `Element pb-r-bag is resolved` indicates that the import for `bag.html` is missing.\n\nMore information on using the element is in the API pages. You can also see\n<a href=\"https://github.com/garysoed/protoboard/blob/master/ex/all/index.html\">all/index.html\n</a> for examples on how to use every element. You can also play around with every element on\nthat page."
+        },
+        "4 Customizing Components": {
+            "name": "4 Customizing Components",
+            "shortname": "4 Customizing Components",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "tutorial",
+            "namespace": "",
+            "file": "tutorial/04_customize.js",
+            "line": 1,
+            "description": "Every component and region has a set of abilities registered to them. You can view them from\ntheir respective API page. You can customize these abilities to suit your game needs.\n\nEvery ability support the following customization:\n- You can enable / disable the ability by setting the attribute of the component / region. For\n  example:\n  ```html\n  <pb-c-token pickable=\"false\">\n  ```\n  That makes the token non pickable.\n- You can change the trigger for each ability by setting the attribute of the component / region\n  with a `-on` prefix. For example:\n  ```html\n  <pb-c-token pickable=\"pb-key-p\">\n  ```\n  That sets the token to be picked when the user hovers over the token and presses `p`. Look at\n  classes extending {{#crossLink \"trigger.Trigger\"}}{{/crossLink}} for more triggers.\n\nMore additional customizations, check out the ability's API page."
         }
     },
     "classitems": [
@@ -1285,6 +1350,17 @@
         {
             "file": "src/ability/abilities.html",
             "line": 57,
+            "itemtype": "method",
+            "name": "getAll",
+            "return": {
+                "description": "Map of ability name to ability of the element in context. This excludes the\n   trigger attribute of the abilities.",
+                "type": "Map"
+            },
+            "class": "ability.Abilities.Builder"
+        },
+        {
+            "file": "src/ability/abilities.html",
+            "line": 75,
             "description": "Triggers the ability corresponding to the given name.",
             "itemtype": "method",
             "name": "trigger",
@@ -1303,7 +1379,7 @@
         },
         {
             "file": "src/ability/abilities.html",
-            "line": 98,
+            "line": 116,
             "description": "Handler called when the MutationObserver detected a change.",
             "itemtype": "method",
             "name": "__onMutation__",
@@ -1320,7 +1396,7 @@
         },
         {
             "file": "src/ability/abilities.html",
-            "line": 115,
+            "line": 133,
             "description": "Creates a new {{#crossLink \"ability.Abilities.Builder\"}}Builder{{/crossLink}} to operate on\nthe given element.",
             "itemtype": "method",
             "name": "of",
@@ -1339,7 +1415,7 @@
         },
         {
             "file": "src/ability/abilities.html",
-            "line": 127,
+            "line": 145,
             "description": "Initializes the added abilities on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1400,6 +1476,25 @@
         {
             "file": "src/ability/ability.html",
             "line": 81,
+            "description": "Returns the trigger for this ability on this element.",
+            "itemtype": "method",
+            "name": "getTrigger",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to return the trigger for this ability for.",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "The trigger for this ability on this element, or null if there\n   is none.",
+                "type": "trigger.Trigger|null"
+            },
+            "class": "ability.Ability"
+        },
+        {
+            "file": "src/ability/ability.html",
+            "line": 93,
             "description": "Name of the ability. This is also the name of the attribute on the element corresponding to\nthis ability.",
             "itemtype": "property",
             "name": "attrName",
@@ -1409,7 +1504,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 93,
+            "line": 105,
             "description": "The name of the attribute on the element corresponding to this ability that sets the trigger\nfor this ability. This is the name of the ability with a <code>-on</code> postfix.",
             "itemtype": "property",
             "name": "attrTrigger",
@@ -1446,6 +1541,21 @@
                 }
             ],
             "class": "ability.Droppable"
+        },
+        {
+            "file": "src/ability/helpable.html",
+            "line": 78,
+            "description": "Displays the triggers for all abilities registered to this element.",
+            "itemtype": "method",
+            "name": "trigger",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element whose abilities should be displayed.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ability.Helpable"
         },
         {
             "file": "src/ability/pickable.html",
@@ -1589,7 +1699,7 @@
         },
         {
             "file": "src/component/card.html",
-            "line": 67,
+            "line": 69,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -1597,7 +1707,7 @@
         },
         {
             "file": "src/component/token.html",
-            "line": 58,
+            "line": 60,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -1628,7 +1738,7 @@
         },
         {
             "file": "src/region/deck.html",
-            "line": 66,
+            "line": 68,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -1636,7 +1746,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 61,
+            "line": 63,
             "description": "Drops the element added to {{#crossLink \"service.Move\"}}{{/crossLink}} as a child of the\ngiven element. The position of the dropped child depends on the position of the mouse at the\ntrigger time relative to the other children.",
             "itemtype": "method",
             "name": "trigger",
@@ -1651,7 +1761,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 116,
+            "line": 118,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -1659,7 +1769,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 129,
+            "line": 131,
             "description": "Called when the element is attached to the document.",
             "itemtype": "method",
             "name": "attachedCallback",
@@ -1667,7 +1777,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 138,
+            "line": 140,
             "description": "Called when the element is detached from the document.",
             "itemtype": "method",
             "name": "detachedCallback",
@@ -1675,7 +1785,7 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 63,
+            "line": 64,
             "description": "Handles event when the MutationObserver observes changes to the child list.",
             "itemtype": "method",
             "name": "__onDomMutation__",
@@ -1692,7 +1802,7 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 79,
+            "line": 80,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1707,7 +1817,7 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 91,
+            "line": 92,
             "description": "Drop the last dragged element on the given element",
             "itemtype": "method",
             "name": "trigger",
@@ -1722,7 +1832,7 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 129,
+            "line": 130,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -1974,7 +2084,14 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 50,
+            "line": 49,
+            "itemtype": "method",
+            "name": "helpText",
+            "class": "trigger.Click"
+        },
+        {
+            "file": "src/trigger/click.html",
+            "line": 57,
             "description": "Parses the input string",
             "itemtype": "method",
             "name": "parse",
@@ -2040,7 +2157,14 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 49,
+            "line": 48,
+            "itemtype": "method",
+            "name": "helpText",
+            "class": "trigger.DoubleClick"
+        },
+        {
+            "file": "src/trigger/doubleclick.html",
+            "line": 56,
             "description": "Parses the input string",
             "itemtype": "method",
             "name": "parse",
@@ -2145,7 +2269,14 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 91,
+            "line": 90,
+            "itemtype": "method",
+            "name": "helpText",
+            "class": "trigger.Key"
+        },
+        {
+            "file": "src/trigger/key.html",
+            "line": 98,
             "description": "Parses the input string",
             "itemtype": "method",
             "name": "parse",
@@ -2165,7 +2296,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 122,
+            "line": 129,
             "description": "Handles event when a key press is detected.",
             "itemtype": "method",
             "name": "__onKeyPress__",
@@ -2182,7 +2313,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 161,
+            "line": 168,
             "description": "Initializes the service.",
             "itemtype": "method",
             "name": "init",
@@ -2197,7 +2328,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 172,
+            "line": 179,
             "description": "Registers the given element to trigger the given ability when the given key is pressed.",
             "itemtype": "method",
             "name": "add",
@@ -2222,7 +2353,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 193,
+            "line": 200,
             "description": "Unregisters the given element.",
             "itemtype": "method",
             "name": "remove",
@@ -2237,7 +2368,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 203,
+            "line": 210,
             "description": "Clears all registered elements.",
             "itemtype": "method",
             "name": "clear",
@@ -2245,7 +2376,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 212,
+            "line": 219,
             "description": "Map of elements to trigger the ability on. The key is the element, the value is a map of key\nto a set of abilities.",
             "itemtype": "property",
             "name": "hoveredEls",
@@ -3139,7 +3270,7 @@
         },
         {
             "file": "tutorial/01_overview.js",
-            "line": 50,
+            "line": 52,
             "description": "Some examples of abilities include:\n  <ul>\n    <li>{{#crossLink \"ability.Shuffleable\"}}Shuffleable{{/crossLink}}: Shuffles the component's\n    children when triggered.\n    <li> {{#crossLink \"ability.Pickable\"}}Pickable{{/crossLink}}: Makes the component's move\n    following the mouse, until dropped.\n    <li>{{#crossLink \"ability.Droppable\"}}Droppable{{/crossLink}}: Adds the picked component as\n    the current component's child.\n  </ul>\n\n  Each Ability attached to a Component has its own name. This means that you can have two\n  abilities of the same type, but different names. For example, {{#crossLink \"component.Card\"}}\n  pb-c-card{{/crossLink}} has two abilities: `flippable` and `tappable`, both of which are of\n  type {{#crossLink \"ability.Toggleable\"}}Toggleable{{/crossLink}}.",
             "class": "1 Overview",
             "module": "tutorial"
@@ -3152,7 +3283,7 @@
         },
         {
             "message": "Missing item type\nSome examples of abilities include:\n  <ul>\n    <li>{{#crossLink \"ability.Shuffleable\"}}Shuffleable{{/crossLink}}: Shuffles the component's\n    children when triggered.\n    <li> {{#crossLink \"ability.Pickable\"}}Pickable{{/crossLink}}: Makes the component's move\n    following the mouse, until dropped.\n    <li>{{#crossLink \"ability.Droppable\"}}Droppable{{/crossLink}}: Adds the picked component as\n    the current component's child.\n  </ul>\n\n  Each Ability attached to a Component has its own name. This means that you can have two\n  abilities of the same type, but different names. For example, {{#crossLink \"component.Card\"}}\n  pb-c-card{{/crossLink}} has two abilities: `flippable` and `tappable`, both of which are of\n  type {{#crossLink \"ability.Toggleable\"}}Toggleable{{/crossLink}}.",
-            "line": " tutorial/01_overview.js:50"
+            "line": " tutorial/01_overview.js:52"
         }
     ]
 }

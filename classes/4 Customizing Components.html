@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>src/trigger/click.html - Protoboard</title>
+  <title>4 Customizing Components - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -133,7 +133,7 @@
   </header>
   <section class="main-content">
     <section class="main-sidebar"><div class="sidebar">
-    <section class="collapsible ">
+    <section class="collapsible selected">
       <header>
         <h2>tutorial</h2>
       </header>
@@ -148,7 +148,7 @@
           <li class="">
             <a href="../classes/3 Basic Usage.html">3 Basic Usage</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/4 Customizing Components.html">4 Customizing Components</a>
           </li>
         </ul>
@@ -287,82 +287,39 @@
 
 
 </section>
-    <section class="main-main"><h4>src/trigger/click.html</h4>
+    <section class="main-main"><div class="class">
+  <section class="class-summary">
+      <header class="tutorial">
+        <h2>4 Customizing Components</h2>
+      </header>
 
-<pre class="code prettyprint linenums">
-&lt;base href=&quot;..&quot;&gt;
+    <div class="content description">
+      <p>Every component and region has a set of abilities registered to them. You can view them from
+their respective API page. You can customize these abilities to suit your game needs.</p>
+<p>Every ability support the following customization:</p>
+<ul>
+<li>You can enable / disable the ability by setting the attribute of the component / region. For
+example:<pre class="code prettyprint"><code class="lang-html">&lt;pb-c-token pickable="false"&gt;
+</code></pre>
+That makes the token non pickable.</li>
+<li>You can change the trigger for each ability by setting the attribute of the component / region
+with a <code>-on</code> prefix. For example:<pre class="code prettyprint"><code class="lang-html">&lt;pb-c-token pickable="pb-key-p"&gt;
+</code></pre>
+That sets the token to be picked when the user hovers over the token and presses <code>p</code>. Look at
+classes extending <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> for more triggers.</li>
+</ul>
+<p>More additional customizations, check out the ability&#39;s API page.</p>
 
-&lt;link rel=&quot;import&quot; href=&quot;di.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;events.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;hammerwrapper.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;trigger/trigger.html&quot;&gt;
+    </div>
 
-&lt;script&gt;
-DI.bind(&#x27;pb_trigger_Click&#x27;, (pb_Events, HammerWrapper, Trigger) =&gt; {
+  </section>
 
-  /**
-   * Triggers an ability when the element is clicked.
-   *
-   * @class trigger.Click
-   * @extends trigger.Trigger
-   */
-  class Click extends Trigger {
 
-    /**
-     * Registers the given element to trigger the given ability when clicked.
-     *
-     * @method on
-     * @param {Element} element Element to register.
-     * @param {ability.Ability} ability The ability to trigger.
-     */
-    on(element, ability) {
-      pb_Events.of(element, this)
-          .on(&#x27;hammer&#x27;, &#x27;singletap&#x27;, ability.trigger.bind(ability, element));
-    }
 
-    /**
-     * Unregisters the given element from triggering the registered ability when clicked.
-     *
-     * @method off
-     * @param {Element} element Element to unregister.
-     */
-    off(element) {
-      pb_Events.of(element, this).off(&#x27;hammer&#x27;, &#x27;singletap&#x27;);
-    }
 
-    /**
-     * @method toString
-     * @return {string} String pb-click
-     */
-    toString() {
-      return &#x27;pb-click&#x27;;
-    }
+</div>
 
-    /**
-     * @method helpText
-     */
-    get helpText() {
-      return &#x27;Click&#x27;;
-    }
-  }
 
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Click|undefined} The Click trigger if parse is successful, or &#x60;undefined&#x60;
-   *    otherwise.
-   * @static
-   */
-  Click.parse = function(str) {
-    return (str === &#x27;pb-click&#x27;) ? new Click() : undefined;
-  };
-
-  return Click;
-});
-&lt;/script&gt;
-</pre>
 
 </section>
   </section>

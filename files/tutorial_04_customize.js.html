@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>src/trigger/click.html - Protoboard</title>
+  <title>tutorial/04_customize.js - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -287,81 +287,33 @@
 
 
 </section>
-    <section class="main-main"><h4>src/trigger/click.html</h4>
+    <section class="main-main"><h4>tutorial/04_customize.js</h4>
 
 <pre class="code prettyprint linenums">
-&lt;base href=&quot;..&quot;&gt;
-
-&lt;link rel=&quot;import&quot; href=&quot;di.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;events.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;hammerwrapper.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;trigger/trigger.html&quot;&gt;
-
-&lt;script&gt;
-DI.bind(&#x27;pb_trigger_Click&#x27;, (pb_Events, HammerWrapper, Trigger) =&gt; {
-
-  /**
-   * Triggers an ability when the element is clicked.
-   *
-   * @class trigger.Click
-   * @extends trigger.Trigger
-   */
-  class Click extends Trigger {
-
-    /**
-     * Registers the given element to trigger the given ability when clicked.
-     *
-     * @method on
-     * @param {Element} element Element to register.
-     * @param {ability.Ability} ability The ability to trigger.
-     */
-    on(element, ability) {
-      pb_Events.of(element, this)
-          .on(&#x27;hammer&#x27;, &#x27;singletap&#x27;, ability.trigger.bind(ability, element));
-    }
-
-    /**
-     * Unregisters the given element from triggering the registered ability when clicked.
-     *
-     * @method off
-     * @param {Element} element Element to unregister.
-     */
-    off(element) {
-      pb_Events.of(element, this).off(&#x27;hammer&#x27;, &#x27;singletap&#x27;);
-    }
-
-    /**
-     * @method toString
-     * @return {string} String pb-click
-     */
-    toString() {
-      return &#x27;pb-click&#x27;;
-    }
-
-    /**
-     * @method helpText
-     */
-    get helpText() {
-      return &#x27;Click&#x27;;
-    }
-  }
-
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Click|undefined} The Click trigger if parse is successful, or &#x60;undefined&#x60;
-   *    otherwise.
-   * @static
-   */
-  Click.parse = function(str) {
-    return (str === &#x27;pb-click&#x27;) ? new Click() : undefined;
-  };
-
-  return Click;
-});
-&lt;/script&gt;
+/**
+ * Every component and region has a set of abilities registered to them. You can view them from
+ * their respective API page. You can customize these abilities to suit your game needs.
+ *
+ * Every ability support the following customization:
+ * - You can enable / disable the ability by setting the attribute of the component / region. For
+ *   example:
+ *   &#x60;&#x60;&#x60;html
+ *   &lt;pb-c-token pickable=&quot;false&quot;&gt;
+ *   &#x60;&#x60;&#x60;
+ *   That makes the token non pickable.
+ * - You can change the trigger for each ability by setting the attribute of the component / region
+ *   with a &#x60;-on&#x60; prefix. For example:
+ *   &#x60;&#x60;&#x60;html
+ *   &lt;pb-c-token pickable=&quot;pb-key-p&quot;&gt;
+ *   &#x60;&#x60;&#x60;
+ *   That sets the token to be picked when the user hovers over the token and presses &#x60;p&#x60;. Look at
+ *   classes extending {{#crossLink &quot;trigger.Trigger&quot;}}{{/crossLink}} for more triggers.
+ *
+ * More additional customizations, check out the ability&#x27;s API page.
+ *
+ * @class 4 Customizing Components
+ * @module tutorial
+ */
 </pre>
 
 </section>

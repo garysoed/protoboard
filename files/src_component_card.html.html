@@ -146,7 +146,10 @@
             <a href="../classes/2 Prerequisites.html">2 Prerequisites</a>
           </li>
           <li class="">
-            <a href="../classes/3 Components.html">3 Components</a>
+            <a href="../classes/3 Basic Usage.html">3 Basic Usage</a>
+          </li>
+          <li class="">
+            <a href="../classes/4 Customizing Components.html">4 Customizing Components</a>
           </li>
         </ul>
       </div>
@@ -168,6 +171,9 @@
           </li>
           <li class="">
             <a href="../classes/ability.Droppable.html">ability.Droppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Helpable.html">ability.Helpable</a>
           </li>
           <li class="">
             <a href="../classes/ability.Pickable.html">ability.Pickable</a>
@@ -284,18 +290,19 @@
     <section class="main-main"><h4>src/component/card.html</h4>
 
 <pre class="code prettyprint linenums">
-&lt;base href=&quot;../..&quot;&gt;
+&lt;base href=&quot;..&quot;&gt;
 
-&lt;link rel=&quot;import&quot; href=&quot;out/ability/pickable.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;out/ability/toggleable.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;out/component/component.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;out/di.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;out/service/config.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;out/trigger/click.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;out/trigger/key.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;out/utils.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;ability/helpable.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;ability/pickable.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;ability/toggleable.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;component/component.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;di.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;service/config.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;trigger/click.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;trigger/key.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;utils.html&quot;&gt;
 
-&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;out/component/card.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;component/card.css&quot;&gt;
 
 &lt;template&gt;
   &lt;div id=&quot;root&quot;&gt;
@@ -314,6 +321,7 @@ DI
         Click,
         Component,
         Config,
+        Helpable,
         Key,
         Pickable,
         Toggleable,
@@ -333,9 +341,9 @@ DI
    * front face, add &#x60;flippable-active=&quot;true&quot;&#x60; to the &#x60;pb-c-card&#x60;.
    *
    * Default supported abilities:
-   * - {{#crossLink &quot;ability.Pickable&quot;}}pickable{{/crossLink}}
-   * - {{#crossLink &quot;ability.Toggleable&quot;}}flippable{{/crossLink}}
-   * - {{#crossLink &quot;ability.Toggleable&quot;}}tappable{{/crossLink}}
+   * - {{#crossLink &quot;ability.Pickable&quot;}}pick{{/crossLink}}
+   * - {{#crossLink &quot;ability.Toggleable&quot;}}flip{{/crossLink}}
+   * - {{#crossLink &quot;ability.Toggleable&quot;}}tap{{/crossLink}}
    *
    * &#x60;&#x60;&#x60;html
    * &lt;!-- Example: Create a card that starts by displaying its front side --&gt;
@@ -365,9 +373,10 @@ DI
 
   Config.add(
       &#x27;pb-c-card&#x27;,
-      new Pickable(&#x27;pickable&#x27;, new Key(&#x27;q&#x27;), true),
-      new Toggleable(&#x27;flippable&#x27;, new Click(), true),
-      new Toggleable(&#x27;tappable&#x27;, new Key(&#x27;t&#x27;), true));
+      new Helpable(&#x27;help&#x27;),
+      new Pickable(&#x27;pick&#x27;, new Key(&#x27;q&#x27;), true),
+      new Toggleable(&#x27;flip&#x27;, new Click(), true),
+      new Toggleable(&#x27;tap&#x27;, new Key(&#x27;t&#x27;), true));
 
   $registry.add(EL_NAME, Card.prototype);
 

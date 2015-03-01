@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>src/trigger/click.html - Protoboard</title>
+  <title>tutorial/03_basic.js - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -287,81 +287,60 @@
 
 
 </section>
-    <section class="main-main"><h4>src/trigger/click.html</h4>
+    <section class="main-main"><h4>tutorial/03_basic.js</h4>
 
 <pre class="code prettyprint linenums">
-&lt;base href=&quot;..&quot;&gt;
-
-&lt;link rel=&quot;import&quot; href=&quot;di.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;events.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;hammerwrapper.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;trigger/trigger.html&quot;&gt;
-
-&lt;script&gt;
-DI.bind(&#x27;pb_trigger_Click&#x27;, (pb_Events, HammerWrapper, Trigger) =&gt; {
-
-  /**
-   * Triggers an ability when the element is clicked.
-   *
-   * @class trigger.Click
-   * @extends trigger.Trigger
-   */
-  class Click extends Trigger {
-
-    /**
-     * Registers the given element to trigger the given ability when clicked.
-     *
-     * @method on
-     * @param {Element} element Element to register.
-     * @param {ability.Ability} ability The ability to trigger.
-     */
-    on(element, ability) {
-      pb_Events.of(element, this)
-          .on(&#x27;hammer&#x27;, &#x27;singletap&#x27;, ability.trigger.bind(ability, element));
-    }
-
-    /**
-     * Unregisters the given element from triggering the registered ability when clicked.
-     *
-     * @method off
-     * @param {Element} element Element to unregister.
-     */
-    off(element) {
-      pb_Events.of(element, this).off(&#x27;hammer&#x27;, &#x27;singletap&#x27;);
-    }
-
-    /**
-     * @method toString
-     * @return {string} String pb-click
-     */
-    toString() {
-      return &#x27;pb-click&#x27;;
-    }
-
-    /**
-     * @method helpText
-     */
-    get helpText() {
-      return &#x27;Click&#x27;;
-    }
-  }
-
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Click|undefined} The Click trigger if parse is successful, or &#x60;undefined&#x60;
-   *    otherwise.
-   * @static
-   */
-  Click.parse = function(str) {
-    return (str === &#x27;pb-click&#x27;) ? new Click() : undefined;
-  };
-
-  return Click;
-});
-&lt;/script&gt;
+/**
+ * To use this library, you will need to write an HTML file. You will need to do the following:
+ * 1. Add the following code to the &#x60;&lt;head&gt;&#x60; block of the document:
+ *    &#x60;&#x60;&#x60;html
+ *    &lt;link rel=&quot;import&quot; href=&quot;path/to/out/di.html&quot;&gt;
+ *    &lt;link rel=&quot;import&quot; href=&quot;path/to/out/bootstrap.html&quot;&gt;
+ *    &#x60;&#x60;&#x60;
+ * 2. Below the &#x60;&lt;link&gt;&#x60; tags added in the previous steps, add the code below. Copy the code
+ *    verbatim.
+ *    &#x60;&#x60;&#x60;html
+ *    &lt;script&gt;
+ *      DI.run(function(Bootstrap) { Bootstrap.run(document); });
+ *    &lt;/script&gt;
+ *    &#x60;&#x60;&#x60;
+ *    This code sets up all the custom elements used in the page.
+ * 3. Add custom elements in the body. Be sure to import the appropriate files in the &#x60;&lt;head&gt;&#x60;
+ *    block. For example, to add a token:
+ *    &#x60;&#x60;&#x60;html
+ *    &lt;head&gt;
+ *      &lt;!-- Required --&gt;
+ *      &lt;link rel=&quot;import&quot; href=&quot;path/to/out/di.html&quot;&gt;
+ *      &lt;link rel=&quot;import&quot; href=&quot;path/to/out/bootstrap.html&quot;&gt;
+ *
+ *      &lt;!-- Import token --&gt;
+ *      &lt;link rel=&quot;import&quot; href=&quot;path/to/out/component/token.html&quot;&gt;
+ *    &lt;/head&gt;
+ *
+ *    &lt;body&gt;
+ *      &lt;pb-c-token&gt;
+ *        &lt;div&gt;Token Content&lt;/div&gt;
+ *      &lt;/pb-c-token&gt;
+ *
+ *      &lt;script&gt;
+ *        // Required
+ *        DI.run(function(Bootstrap) { Bootstrap.run(document); });
+ *      &lt;/script&gt;
+ *    &lt;/body&gt;
+ *    &#x60;&#x60;&#x60;
+ *
+ * To help with debugging for missing imports, you can open the developer tools (Alt + &amp;#8984; for
+ * Chrome on Mac) and check the Console tab. It should tell you elements which are missing imports.
+ * For instance &#x60;Element pb-r-bag is resolved&#x60; indicates that the import for &#x60;bag.html&#x60; is missing.
+ *
+ * More information on using the element is in the API pages. You can also see
+ * &lt;a href=&quot;https://github.com/garysoed/protoboard/blob/master/ex/all/index.html&quot;&gt;all/index.html
+ * &lt;/a&gt; for examples on how to use every element. You can also play around with every element on
+ * that page.
+ *
+ * @class 3 Basic Usage
+ * @module tutorial
+ */
 </pre>
 
 </section>

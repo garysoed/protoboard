@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>src/trigger/click.html - Protoboard</title>
+  <title>src/ability/helpable.html - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -287,79 +287,117 @@
 
 
 </section>
-    <section class="main-main"><h4>src/trigger/click.html</h4>
+    <section class="main-main"><h4>src/ability/helpable.html</h4>
 
 <pre class="code prettyprint linenums">
 &lt;base href=&quot;..&quot;&gt;
 
+&lt;link rel=&quot;import&quot; href=&quot;ability/abilities.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;ability/ability.html&quot;&gt;
 &lt;link rel=&quot;import&quot; href=&quot;di.html&quot;&gt;
 &lt;link rel=&quot;import&quot; href=&quot;events.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;hammerwrapper.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;trigger/trigger.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;trigger/key.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;utils.html&quot;&gt;
+
+&lt;template&gt;
+  &lt;style&gt;
+    #root {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    content::content div {
+      color: white;
+      font-size: 1rem;
+      line-height: 2em;
+      text-transform: capitalize;
+    }
+
+    content::content div.trigger {
+      display: inline-block;
+      font-weight: bold;
+      width: 60px;
+      text-align: right;
+      -webkit-margin-after: 6px;
+    }
+  &lt;/style&gt;
+
+  &lt;div id=&quot;root&quot;&gt;
+    &lt;div&gt;
+      &lt;content&gt;&lt;/content&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
 
 &lt;script&gt;
-DI.bind(&#x27;pb_trigger_Click&#x27;, (pb_Events, HammerWrapper, Trigger) =&gt; {
+DI
+    .constant(&#x27;doc&#x27;, document.currentScript.ownerDocument)
+    .with(&#x27;template&#x27;, doc =&gt; doc.querySelector(&#x27;template&#x27;))
+    .bind(&#x27;pb_ability_Helpable&#x27;, (
+        Abilities,
+        Ability,
+        Events,
+        Key,
+        Utils,
+        doc,
+        template,
+        $registry) =&gt; {
 
-  /**
-   * Triggers an ability when the element is clicked.
-   *
-   * @class trigger.Click
-   * @extends trigger.Trigger
-   */
-  class Click extends Trigger {
+  let displayEl = null;
 
+  class Helpable extends Ability {
     /**
-     * Registers the given element to trigger the given ability when clicked.
+     * Displays the triggers for all registered abilities.
      *
-     * @method on
-     * @param {Element} element Element to register.
-     * @param {ability.Ability} ability The ability to trigger.
+     * @constructor
+     * @class ability.Helpable
+     * @param {string} [name=pb-helpable] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=ability.Key] Default trigger. Defaults to the &#x27;?&#x27;
+     *    key.
+     * @extends ability.Ability
      */
-    on(element, ability) {
-      pb_Events.of(element, this)
-          .on(&#x27;hammer&#x27;, &#x27;singletap&#x27;, ability.trigger.bind(ability, element));
+    constructor(name = &#x27;pb-helpable&#x27;, defaultTrigger = new Key(&#x27;?&#x27;)) {
+      super(name, defaultTrigger);
     }
 
     /**
-     * Unregisters the given element from triggering the registered ability when clicked.
+     * Displays the triggers for all abilities registered to this element.
      *
-     * @method off
-     * @param {Element} element Element to unregister.
+     * @method trigger
+     * @param {Element} el The element whose abilities should be displayed.
      */
-    off(element) {
-      pb_Events.of(element, this).off(&#x27;hammer&#x27;, &#x27;singletap&#x27;);
-    }
+    trigger(el) {
+      let abilities = Abilities.of(el).getAll();
+      displayEl.innerHTML = &#x27;&#x27;;
+      let doc = displayEl.ownerDocument;
+      for (let [name, ability] of abilities) {
+        let entry = doc.createElement(&#x27;div&#x27;);
+        entry.innerHTML = &#x60;&lt;div class=&quot;trigger&quot;&gt;${ability.getTrigger(el).helpText}&lt;/div&gt;: ${name}&#x60;;
+        displayEl.appendChild(entry);
+      }
 
-    /**
-     * @method toString
-     * @return {string} String pb-click
-     */
-    toString() {
-      return &#x27;pb-click&#x27;;
-    }
-
-    /**
-     * @method helpText
-     */
-    get helpText() {
-      return &#x27;Click&#x27;;
+      displayEl.style.display = &#x27;&#x27;;
     }
   }
 
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Click|undefined} The Click trigger if parse is successful, or &#x60;undefined&#x60;
-   *    otherwise.
-   * @static
-   */
-  Click.parse = function(str) {
-    return (str === &#x27;pb-click&#x27;) ? new Click() : undefined;
-  };
+  $registry.runAtRegister((document, config) =&gt; {
+    displayEl = document.createElement(&#x27;div&#x27;);
+    displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    displayEl.style.display = &#x27;none&#x27;;
+    Events.of(displayEl).on(&#x27;dom&#x27;, &#x27;click&#x27;, () =&gt; {
+      displayEl.style.display = &#x27;none&#x27;;
+    });
+    document.body.appendChild(displayEl);
+  });
 
-  return Click;
+  return Helpable;
 });
 &lt;/script&gt;
 </pre>

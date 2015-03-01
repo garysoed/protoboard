@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>src/trigger/click.html - Protoboard</title>
+  <title>3 Basic Usage - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -133,7 +133,7 @@
   </header>
   <section class="main-content">
     <section class="main-sidebar"><div class="sidebar">
-    <section class="collapsible ">
+    <section class="collapsible selected">
       <header>
         <h2>tutorial</h2>
       </header>
@@ -145,7 +145,7 @@
           <li class="">
             <a href="../classes/2 Prerequisites.html">2 Prerequisites</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/3 Basic Usage.html">3 Basic Usage</a>
           </li>
           <li class="">
@@ -287,82 +287,67 @@
 
 
 </section>
-    <section class="main-main"><h4>src/trigger/click.html</h4>
+    <section class="main-main"><div class="class">
+  <section class="class-summary">
+      <header class="tutorial">
+        <h2>3 Basic Usage</h2>
+      </header>
 
-<pre class="code prettyprint linenums">
-&lt;base href=&quot;..&quot;&gt;
-
-&lt;link rel=&quot;import&quot; href=&quot;di.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;events.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;hammerwrapper.html&quot;&gt;
-&lt;link rel=&quot;import&quot; href=&quot;trigger/trigger.html&quot;&gt;
-
-&lt;script&gt;
-DI.bind(&#x27;pb_trigger_Click&#x27;, (pb_Events, HammerWrapper, Trigger) =&gt; {
-
-  /**
-   * Triggers an ability when the element is clicked.
-   *
-   * @class trigger.Click
-   * @extends trigger.Trigger
-   */
-  class Click extends Trigger {
-
-    /**
-     * Registers the given element to trigger the given ability when clicked.
-     *
-     * @method on
-     * @param {Element} element Element to register.
-     * @param {ability.Ability} ability The ability to trigger.
-     */
-    on(element, ability) {
-      pb_Events.of(element, this)
-          .on(&#x27;hammer&#x27;, &#x27;singletap&#x27;, ability.trigger.bind(ability, element));
-    }
-
-    /**
-     * Unregisters the given element from triggering the registered ability when clicked.
-     *
-     * @method off
-     * @param {Element} element Element to unregister.
-     */
-    off(element) {
-      pb_Events.of(element, this).off(&#x27;hammer&#x27;, &#x27;singletap&#x27;);
-    }
-
-    /**
-     * @method toString
-     * @return {string} String pb-click
-     */
-    toString() {
-      return &#x27;pb-click&#x27;;
-    }
-
-    /**
-     * @method helpText
-     */
-    get helpText() {
-      return &#x27;Click&#x27;;
-    }
-  }
-
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Click|undefined} The Click trigger if parse is successful, or &#x60;undefined&#x60;
-   *    otherwise.
-   * @static
-   */
-  Click.parse = function(str) {
-    return (str === &#x27;pb-click&#x27;) ? new Click() : undefined;
-  };
-
-  return Click;
-});
+    <div class="content description">
+      <p>To use this library, you will need to write an HTML file. You will need to do the following:</p>
+<ol>
+<li>Add the following code to the <code>&lt;head&gt;</code> block of the document:<pre class="code prettyprint"><code class="lang-html">&lt;link rel="import" href="path/to/out/di.html"&gt;
+&lt;link rel="import" href="path/to/out/bootstrap.html"&gt;
+</code></pre>
+</li>
+<li>Below the <code>&lt;link&gt;</code> tags added in the previous steps, add the code below. Copy the code
+verbatim.<pre class="code prettyprint"><code class="lang-html">&lt;script&gt;
+  DI.run(function(Bootstrap) { Bootstrap.run(document); });
 &lt;/script&gt;
-</pre>
+</code></pre>
+This code sets up all the custom elements used in the page.</li>
+<li><p>Add custom elements in the body. Be sure to import the appropriate files in the <code>&lt;head&gt;</code>
+block. For example, to add a token:</p>
+<pre class="code prettyprint"><code class="lang-html">&lt;head&gt;
+  &lt;!-- Required --&gt;
+  &lt;link rel="import" href="path/to/out/di.html"&gt;
+  &lt;link rel="import" href="path/to/out/bootstrap.html"&gt;
+
+  &lt;!-- Import token --&gt;
+  &lt;link rel="import" href="path/to/out/component/token.html"&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;pb-c-token&gt;
+    &lt;div&gt;Token Content&lt;/div&gt;
+  &lt;/pb-c-token&gt;
+
+  &lt;script&gt;
+    // Required
+    DI.run(function(Bootstrap) { Bootstrap.run(document); });
+  &lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+</li>
+</ol>
+<p>To help with debugging for missing imports, you can open the developer tools (Alt + &#8984; for
+Chrome on Mac) and check the Console tab. It should tell you elements which are missing imports.
+For instance <code>Element pb-r-bag is resolved</code> indicates that the import for <code>bag.html</code> is missing.</p>
+<p>More information on using the element is in the API pages. You can also see
+<a href="https://github.com/garysoed/protoboard/blob/master/ex/all/index.html">all/index.html
+</a> for examples on how to use every element. You can also play around with every element on
+that page.</p>
+
+    </div>
+
+  </section>
+
+
+
+
+</div>
+
+
 
 </section>
   </section>
