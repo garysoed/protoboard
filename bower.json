@@ -5,10 +5,9 @@
   "authors": [
     "Gary Soedarsono <garysoed@gmail.com>"
   ],
-  "main": ["out/**/*"]
   "license": "MIT",
   "ignore": [
-    "**/.*",
+    "src/*",
     "node_modules",
     "bower_components",
     "test",
