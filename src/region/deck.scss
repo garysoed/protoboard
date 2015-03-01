@@ -5,6 +5,7 @@
 pb-r-deck {
   @include region-border();
   @extend .pb-card;
+  display: inline-block;
 }
 
 pb-r-deck > * {

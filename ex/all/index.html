@@ -10,6 +10,7 @@
     <link rel="import" href="out/region/deck.html">
     <link rel="import" href="out/region/hand.html">
     <link rel="import" href="out/region/rect.html">
+    <link rel="import" href="out/surface/rectgrid.html">
     <link rel="import" href="out/ui/context.html">
     <link rel="import" href="out/ui/preview.html">
     <link rel="import" href="out/ui/previewer.html">
@@ -27,9 +28,13 @@
         text-align: center;
       }
 
-      .pb-distribute::shadow #root {
-        outline: 2px solid green;
-        outline-offset: -2px;
+      pb-s-rectgrid > pb-r-deck {
+        display: block;
+      }
+
+      pb-s-rectgrid > pb-r-deck[pb-col="0"][pb-row="0"],
+      pb-s-rectgrid > pb-r-deck[pb-col="1"][pb-row="1"] {
+        background-color: black;
       }
     </style>
   </head>
@@ -216,6 +221,23 @@
       <tbody>
         <tr>
           <td>Rectangle Grid</td>
+          <td>
+            <pb-s-rectgrid pb-row="2" pb-col="2">
+              <pb-r-deck pb-col="0" pb-row="0"></pb-r-deck>
+              <pb-r-deck pb-col="1" pb-row="0"></pb-r-deck>
+              <pb-r-deck pb-col="0" pb-row="1"></pb-r-deck>
+              <pb-r-deck pb-col="1" pb-row="1"></pb-r-deck>
+            </pb-s-rectgrid>
+          </td>
+          <td>
+            Layout components in a rectangular grid
+          </td>
+          <td>
+            <ul>
+              <li>Chess board</li>
+              <li>Grid board</li>
+            </ul>
+          </td>
         </tr>
       </tbody>
 
