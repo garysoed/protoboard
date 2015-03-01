@@ -7,7 +7,6 @@
   ],
   "license": "MIT",
   "ignore": [
-    ".",
     "src",
     "tutorial",
     "node_modules",
