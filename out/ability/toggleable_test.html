@@ -1,0 +1,85 @@
+<html><head>
+  <base href="../..">
+  <title>Toggleable Unit Tests</title>
+
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/ability/toggleable.html">
+  <link rel="import" href="out/di.html">
+</head>
+<body>
+  <script>"use strict";
+
+DI["with"]("$registry", function (Registry) {
+  return new Registry();
+})["with"]("doc", function () {
+  return document.currentScript.ownerDocument;
+}).run(function (expect, _, _M, doc, Toggleable) {
+  describe("Toggleable", function () {
+    var el = undefined;
+
+    beforeEach(function (done) {
+      el = doc.createElement("div");
+      done();
+    });
+
+    describe("#init", function () {
+      it("should set the default values", function () {
+        var toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+        toggleable.init(el);
+        expect($(el).attr(toggleable.attrName)).to.equal("true");
+        expect($(el).attr(toggleable.attrActive)).to.be.equal("true");
+      });
+      it("should do nothing if enabled is set", function () {
+        var value = "value";
+        var toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+
+        $(el).attr(toggleable.attrName, value);
+        toggleable.init(el);
+
+        expect($(el).attr(toggleable.attrName)).to.equal(value);
+        expect($(el).attr(toggleable.attrActive)).to.be.equal("true");
+      });
+      it("should do nothing if state is set", function () {
+        var value = "value";
+        var toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+
+        $(el).attr(toggleable.attrActive, value);
+        toggleable.init(el);
+
+        expect($(el).attr(toggleable.attrName)).to.equal("true");
+        expect($(el).attr(toggleable.attrActive)).to.be.equal(value);
+      });
+    });
+
+    describe("#trigger", function () {
+      var toggleable = undefined;
+
+      beforeEach(function (done) {
+        toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+        done();
+      });
+
+      it("should toggle the state", function () {
+        $(el).attr(toggleable.attrName, "true");
+        $(el).attr(toggleable.attrActive, "true");
+        toggleable.trigger(el);
+
+        expect($(el).attr(toggleable.attrActive)).to.equal("false");
+      });
+      it("should do nothing if disabled", function () {
+        $(el).attr(toggleable.attrName, "false");
+        $(el).attr(toggleable.attrActive, "true");
+        toggleable.trigger(el);
+
+        expect($(el).attr(toggleable.attrActive)).to.equal("true");
+      });
+    });
+
+    afterEach(function (done) {
+      _.reset();
+      done();
+    });
+  });
+});</script>
+</body></html>

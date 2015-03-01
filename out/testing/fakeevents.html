@@ -1,0 +1,46 @@
+<html><head><base href="../..">
+
+<link rel="import" href="out/di.html">
+
+<script>"use strict";
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+DI.bind("pb_t_FakeEvents", function () {
+  var FakeEvents = (function () {
+    function FakeEvents() {
+      this.handlers = new Map();
+    }
+
+    _prototypeProperties(FakeEvents, null, {
+      of: {
+        value: function of(element, scope) {
+          this.element = element;
+          this.scope = scope;
+          return this;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      on: {
+        value: function on(type, eventName, handler) {
+          if (!this.handlers.has(type)) {
+            this.handlers.set(type, new Map());
+          }
+
+          this.handlers.get(type).set(eventName, handler);
+          return this;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return FakeEvents;
+  })();
+});</script></head><body></body></html>

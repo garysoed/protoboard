@@ -1,0 +1,131 @@
+<html><head><base href="../..">
+
+<link rel="import" href="out/di.html">
+<link rel="import" href="out/utils.html">
+
+<script>"use strict";
+
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
+
+DI.bind("pb_service_DragDrop", function (Utils) {
+  /**
+   * Service that keeps track of drag and drop.
+   *
+   * @class service.DragDrop
+   * @static
+   */
+
+  // Private symbols
+  var __lastDraggedEl__ = Symbol();
+  var __offsetX__ = Symbol();
+  var __offsetY__ = Symbol();
+
+  var DragDrop = Object.defineProperties((function () {
+    var _Object$defineProperties = {};
+
+    _defineProperty(_Object$defineProperties, __lastDraggedEl__, null);
+
+    _defineProperty(_Object$defineProperties, "dragStart", function dragStart(draggedEl, offsetX, offsetY) {
+      this[__lastDraggedEl__] = draggedEl;
+      this[__offsetX__] = offsetX;
+      this[__offsetY__] = offsetY;
+      $(this).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
+    });
+
+    _defineProperty(_Object$defineProperties, "dragEnd", function dragEnd() {
+      this[__lastDraggedEl__] = null;
+      this[__offsetX__] = undefined;
+      this[__offsetY__] = undefined;
+      $(this).trigger(DragDrop.Events.LAST_DRAGGED_EL_CHANGED);
+    });
+
+    return _Object$defineProperties;
+  })(), {
+    lastDraggedEl: {
+      get: function () {
+        return this[__lastDraggedEl__];
+      },
+      enumerable: true,
+      configurable: true
+    },
+    offsetX: {
+      get: function () {
+        return this[__offsetX__];
+      },
+      enumerable: true,
+      configurable: true
+    },
+    offsetY: {
+      get: function () {
+        return this[__offsetY__];
+      },
+      enumerable: true,
+      configurable: true
+    }
+  });
+
+  DragDrop.Events = {
+    /**
+     * Type of event dispatched when the last element that was dragged has changed.
+     *
+     * @property Events.LAST_DRAGGED_EL_CHANGED
+     * @type string
+     */
+    LAST_DRAGGED_EL_CHANGED: "dragdrop-last_dragged_el_changed"
+  };
+
+  return DragDrop;
+});
+
+
+/**
+ * Start dragging the given element.
+ *
+ * @method dragStart
+ * @param {!Element} draggedEl The element that is dragged.
+ * @param {number} offsetX The x offset from the mouse cursor to the top left edge of the element
+ *     being dragged.
+ * @param {number} offsetY The y offset from the mouse cursor to the top left edge of the element
+ *     being dragged.
+ */
+
+
+/**
+ * Ends the drag process.
+ *
+ * @method dragEnd
+ */
+
+
+/**
+ * Last element that was dragged.
+ *
+ * @property lastDraggedEl
+ * @type Element
+ * @readonly
+ */
+
+
+/**
+ * The x offset from the mouse cursor to the top left edge of the element being dragged.
+ *
+ * @property offsetX
+ * @type number
+ * @readonly
+ */
+
+
+/**
+ * The y offset from the mouse cursor to the top left edge of the element being dragged.
+ *
+ * @property offsetY
+ * @type number
+ * @readonly
+ */</script></head><body></body></html>

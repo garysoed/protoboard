@@ -1,0 +1,272 @@
+<html><head>
+  <base href="..">
+  <title>DI Unit Tests</title>
+
+  <link rel="import" href="out/di.html">
+  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="out/testutils.html">
+</head>
+<body>
+  <script>"use strict";
+
+DI.run(function (pb_t) {
+  var expect = chai.expect;
+  var _ = spies.Spies;
+
+  var doc = document.currentScript.ownerDocument;
+
+  describe("DI", function () {
+    describe("DI$Provider", function () {
+      describe("#resolve", function () {
+        it("should prefer the value from the local scope", function () {
+          var localScope = new DI.Scope()["with"]("a", function () {
+            return 1;
+          });
+          var givenScope = new DI.Scope()["with"]("a", function () {
+            return 2;
+          });
+          var innerFn = _.spiedFunction().overrideReturn(4);
+          var fn = function (a) {
+            return innerFn(a);
+          };
+
+          var provider = new DI.Provider(fn, localScope);
+          expect(provider.resolve(givenScope)).to.be.equal(4);
+          expect(innerFn).calledWith(1).at.least(1);
+        });
+        it("should prefer the value from the given scope if value from local scope cannot be resolved", function () {
+          var localScope = new DI.Scope();
+          var givenScope = new DI.Scope()["with"]("a", function () {
+            return 1;
+          });
+          var innerFn = _.spiedFunction().overrideReturn(4);
+          var fn = function (a) {
+            return innerFn(a);
+          };
+
+          var provider = new DI.Provider(fn, localScope);
+          expect(provider.resolve(givenScope)).to.be.equal(4);
+          expect(innerFn).calledWith(1).at.least(1);
+        });
+        it("should use the global value if given or local scopes cannot resolve the value", function () {
+          DI.bind("a", function () {
+            return 2;
+          });
+          var givenScope = new DI.Scope();
+          var innerFn = _.spiedFunction().overrideReturn(4);
+          var fn = function (a) {
+            return innerFn(a);
+          };
+
+          var provider = new DI.Provider(fn, new DI.Scope());
+          expect(provider.resolve(givenScope)).to.be.equal(4);
+          expect(innerFn).calledWith(2).at.least(1);
+        });
+        it("should call the function using its arguments for bound values", function () {
+          var rv = 3;
+          var innerFn = _.spiedFunction().overrideReturn(rv);
+          var fn = function (a, b) {
+            return innerFn(a, b);
+          };
+
+          var boundedValues = {
+            a: 1,
+            b: 2
+          };
+          var scope = new DI.Scope()["with"]("a", function () {
+            return 1;
+          })["with"]("b", function () {
+            return 2;
+          });
+
+          var provider = new DI.Provider(fn, scope);
+
+          expect(provider.resolve(scope)).to.be.equal(rv);
+        });
+        it("should cache the result for the same scope", function () {
+          var scope = {};
+          var fn = _.spiedFunction().overrideReturn(3);
+          var provider = new DI.Provider(fn, scope);
+          provider.resolve(scope);
+          provider.resolve(scope);
+
+          expect(fn).called().to.be.equal(1);
+        });
+        it("should call the function again for a different scope", function () {
+          var scope1 = {};
+          var scope2 = {};
+          var fn = _.spiedFunction().overrideReturn(3);
+
+          var provider = new DI.Provider(fn, scope1);
+
+          provider.resolve(scope1);
+          provider.resolve(scope2);
+
+          expect(fn).called().to.be.equal(2);
+        });
+        it("should throw exception if an argument cannot be found", function () {
+          var name = "name";
+
+          var provider = new DI.Provider(function (a) {
+            return 3;
+          }, DI, name);
+
+          expect(function () {
+            return provider.resolve(DI);
+          }).to["throw"]("" + name);
+        });
+        it("should throw exception if an argument cannot be found for nameless provider", function () {
+          var provider = new DI.Provider(function (a) {
+            return 3;
+          }, DI);
+          expect(function () {
+            return provider.resolve(DI);
+          }).to["throw"]("running expression");
+        });
+        it("should print warning if the function returns undefined", function () {
+          var name = "name";
+
+          _.spy(console, "warn").overrideReturn();
+
+          var provider = new DI.Provider(function () {
+            return undefined;
+          }, DI, name);
+          provider.resolve(DI);
+          expect(console.warn).calledWith("Value of " + name + " is undefined").at.least(1);
+        });
+        it("should try to resolve optional argument", function () {
+          var scope = new DI.Scope().constant("a", 3);
+          var provider = new DI.Provider(function (opt_a) {
+            return opt_a;
+          }, scope);
+          expect(provider.resolve(scope)).to.equal(3);
+        });
+        it("should return pass undefined for optional unresolvable argument", function () {
+          var provider = new DI.Provider(function (opt_a) {
+            return opt_a;
+          }, DI);
+          expect(provider.resolve(DI)).to.be.undefined();
+        });
+      });
+    });
+
+    describe("DI$BindingTree", function () {
+      describe("#add", function () {
+        it("should create the expected tree", function () {
+          var tree = new DI.BindingTree();
+          var __values__ = pb_t.getSymbol(tree, "values");
+          tree.add("a_b", "aB");
+          tree.add("b_b", "bB");
+          tree.add("a_c", "aC");
+
+          expect(tree[__values__].get("c")).to.be.eql({ key: "a_c", value: "aC" });
+
+          var subTree = tree[__values__].get("b");
+          expect(subTree[__values__].get("a")).to.be.eql({ key: "a_b", value: "aB" });
+          expect(subTree[__values__].get("b")).to.be.eql({ key: "b_b", value: "bB" });
+        });
+        it("should throw exception if a key is already bound", function () {
+          var tree = new DI.BindingTree();
+          tree.add("a", "a");
+          expect(function () {
+            return tree.add("a", "b");
+          }).to["throw"]("Key a");
+        });
+      });
+
+      describe("#get", function () {
+        var tree = undefined;
+        beforeEach(function (done) {
+          tree = new DI.BindingTree();
+          tree.add("a_b", "aB");
+          tree.add("b_b", "bB");
+          tree.add("c", "c");
+          done();
+        });
+
+        it("should return the value if the key has no collisions", function () {
+          expect(tree.get("c")).to.be.equal("c");
+        });
+        it("should return the value if the key has collision", function () {
+          expect(tree.get("b_b")).to.be.equal("bB");
+        });
+        it("should return undefined if value cannot be found", function () {
+          expect(tree.get("d")).to.be.undefined();
+        });
+        it("should return undefined if duplicate values cannot be resolved.", function () {
+          expect(tree.get("b")).to.be.undefined();
+        });
+      });
+    });
+
+    describe("DI$Scope", function () {
+      describe("#with", function () {
+        it("should return a child scope with the local binding added and parent reference", function () {
+          var scope = new DI.Scope();
+          var __parentScope__ = pb_t.getSymbol(scope, "parentScope");
+          var __localBindings__ = pb_t.getSymbol(scope, "localBindings");
+
+          var value = "value";
+          var child = scope["with"]("a", function () {
+            return value;
+          });
+          expect(child[__parentScope__]).to.be.equal(scope);
+          expect(child[__localBindings__].get("a").resolve(child)).to.be.equal(value);
+        });
+      });
+
+      describe("#bind", function () {
+        it("should bind the given value and key globally", function () {
+          var scope = new DI.Scope();
+          var value = "value";
+          scope.bind("v", function () {
+            return value;
+          });
+          expect(DI.bindings.get("v").resolve(scope)).to.be.equal(value);
+        });
+      });
+
+      describe("#get", function () {
+        it("should resolve the value bound in the local scope first", function () {
+          DI.bind("a", function () {
+            return 3;
+          });
+          var scope = DI["with"]("a", function () {
+            return 1;
+          })["with"]("a", function () {
+            return 2;
+          });
+          expect(scope.get("a")).to.be.equal(2);
+        });
+        it("should resolve the value bound in the parent scope", function () {
+          DI.bind("a", function () {
+            return 3;
+          });
+          var scope = DI["with"]("a", function () {
+            return 1;
+          })["with"]("b", function () {
+            return 2;
+          });
+          expect(scope.get("a")).to.be.equal(1);
+        });
+        it("should resolve to the globally bound value", function () {
+          DI.bind("a", function () {
+            return 3;
+          });
+          expect(DI.get("a")).to.be.equal(3);
+        });
+        it("should return undefined if no values is bound", function () {
+          expect(DI.get("a")).to.be.undefined();
+        });
+      });
+    });
+
+    afterEach(function (done) {
+      var __values__ = pb_t.getSymbol(DI.bindings, "values");
+      DI.bindings[__values__] = new Map();
+      _.reset();
+      done();
+    });
+  });
+});</script>
+</body></html>

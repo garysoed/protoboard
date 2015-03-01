@@ -1,0 +1,143 @@
+<html><head>
+  <base href="..">
+  <title>Events Unit Tests</title>
+
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/di.html">
+  <link rel="import" href="out/events.html">
+  <link rel="import" href="out/testutils.html">
+</head>
+<body>
+  <script>"use strict";
+
+DI["with"]("doc", function () {
+  return document.currentScript.ownerDocument;
+}).run(function (expect, _, _M, doc, Events, pb_t) {
+  var Action = Events.Action;
+
+  var __isRegistered__ = pb_t.getSymbol(Action.prototype, "isRegistered");
+  var __register__ = pb_t.getSymbol(Action.prototype, "register");
+  var __unregister__ = pb_t.getSymbol(Action.prototype, "unregister");
+
+  describe("Events", function () {
+    var el = undefined;
+    var scope = undefined;
+    var scope2 = undefined;
+
+    beforeEach(function (done) {
+      el = doc.createElement("div");
+      scope = Symbol();
+      scope2 = Symbol();
+      done();
+    });
+
+    describe("#__isRegistered__", function () {
+      it("should return true if handler is not defined but some handler is registered", function () {
+        var eventName = "event";
+        Events.of(el, scope).on("dom", eventName, function () {});
+        expect(Events.of(el, scope)[__isRegistered__]("dom", eventName)).to.be["true"]();
+      });
+      it("should return false if no handler of the given type is registered", function () {
+        var eventName = "eventName";
+        Events.of(el, scope).on("dom", eventName, function () {});
+        expect(Events.of(el, scope)[__isRegistered__]("jquery", eventName)).to.be["false"]();
+      });
+      it("should return false if handler is not defined and no handler is registered", function () {
+        expect(Events.of(el, scope)[__isRegistered__]("dom", "event")).to.be["false"]();
+      });
+      it("should return true if a handler is registered to the given event name", function () {
+        var eventName = "event";
+        Events.of(el, scope).on("dom", eventName, function () {});
+        expect(Events.of(el, scope)[__isRegistered__]("dom", eventName)).to.be["true"]();
+      });
+      it("should return false if the scope is different", function () {
+        Events.of(el, scope).on("dom", "event", function () {});
+        expect(Events.of(el, scope2)[__isRegistered__]("dom", "event")).to.be["false"]();
+      });
+    });
+
+    describe("#__register__", function () {
+      var eventName = "event";
+      var handler = function () {};
+
+      it("should listen to the given handler", function () {
+        _.spy(el, "addEventListener");
+
+        Events.of(el, scope)[__register__]("dom", eventName, handler);
+        expect(el.addEventListener).calledWith(eventName, handler).at.least(1);
+      });
+      it("should do nothing if the given handler is already listened", function () {
+        var eventType = "dom";
+        Events.of(el, scope)[__register__](eventType, eventName, handler);
+
+        _.spy(el, "addEventListener");
+        Events.of(el, scope)[__register__](eventType, eventName, handler);
+        expect(el.addEventListener).called().to.be.equal(0);
+      });
+    });
+
+    describe("#__unregister__", function () {
+      var type0 = "dom";
+      var type1 = "jquery";
+      var event0 = "event0";
+      var event1 = "event1";
+      var event2 = "event2";
+      var handler00 = function () {};
+      var handler01 = function () {};
+      var handler12 = function () {};
+
+      beforeEach(function (done) {
+        Events.of(el, scope)[__register__](type0, event0, handler00)[__register__](type0, event1, handler01)[__register__](type1, event2, handler12);
+        done();
+      });
+
+      it("should unregister all handlers in the scope if nothing is given", function () {
+        _.spy(el, "removeEventListener");
+        _.spy($.prototype, "off");
+
+        Events.of(el, scope)[__unregister__]();
+        expect(el.removeEventListener).calledWith(event0, handler00).at.least(1);
+        expect(el.removeEventListener).calledWith(event1, handler01).at.least(1);
+        expect($(el).off).calledWith(event2, handler12).at.least(1);
+      });
+      it("should unregister all handlers listening to the given type", function () {
+        _.spy(el, "removeEventListener");
+        _.spy($.prototype, "off");
+
+        Events.of(el, scope)[__unregister__](type0);
+        expect(el.removeEventListener).calledWith(event0, handler00).at.least(1);
+        expect(el.removeEventListener).calledWith(event1, handler01).at.least(1);
+        expect($(el).off).called().to.be.equal(0);
+      });
+      it("should unregister all handlers listening to the given type and event name", function () {
+        _.spy(el, "removeEventListener");
+        _.spy($.prototype, "off");
+
+        Events.of(el, scope)[__unregister__](type0, event0);
+        expect(el.removeEventListener).calledWith(event0, handler00).at.least(1);
+        expect(el.removeEventListener).calledWith(event1, _M.any()).to.be.equal(0);
+        expect($(el).off).called().to.be.equal(0);
+      });
+      it("should unlisten the given handler listening to the given event name", function () {
+        _.spy(el, "removeEventListener");
+        _.spy($.prototype, "off");
+
+        Events.of(el, scope)[__unregister__](type0, event0, handler00);
+        expect(el.removeEventListener).calledWith(event0, handler00).at.least(1);
+        expect(el.removeEventListener).calledWith(event1, _M.any()).to.be.equal(0);
+        expect($(el).off).called().to.be.equal(0);
+      });
+      it("should not crash if no event is registered", function () {
+        Events.of(el, scope)[__unregister__]();
+        Events.of(el, scope)[__unregister__]();
+      });
+    });
+
+    afterEach(function (done) {
+      _.reset();
+      done();
+    });
+  });
+});</script>
+</body></html>

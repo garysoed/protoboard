@@ -1,0 +1,162 @@
+<html><head>
+  <base href="../..">
+  <title>Template Unit Tests</title>
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/di.html">
+  <link rel="import" href="out/service/config.html">
+  <link rel="import" href="out/third_party/handlebars.html">
+  <link rel="import" href="out/ui/template.html">
+</head>
+<body>
+  <template>
+  </template>
+
+  <div id="testholder"></div>
+
+  <script>"use strict";
+
+DI["with"]("$registry", function (Registry) {
+  return new Registry();
+})["with"]("Handlebars", function (_) {
+  var handlebars = Handlebars.create();
+  handlebars.registerHelper = function (name, fn) {
+    handlebars.helperName = name;
+    handlebars.helperFn = fn;
+  };
+  return handlebars;
+}).constant("doc", document.currentScript.ownerDocument).constant("DI", window.DI).run(function (expect, _, _M, $registry, Config, Handlebars, Template, doc) {
+  describe("Template", function () {
+    var origTemplate = undefined;
+    var forHelper = undefined;
+
+    before(function (done) {
+      $registry.register(doc, Config);
+      expect(Handlebars.helperName).to.equal("pb-for");
+      forHelper = Handlebars.helperFn;
+      done();
+    });
+
+    describe("#createdCallback", function () {
+      it("should replace the innerHTML", function () {
+        var templateStr = "Template String";
+        doc.querySelector("template").innerHTML = templateStr;
+        var compiledTemplateStr = "Compiled template string";
+        var compiledTemplate = _.spiedFunction().overrideReturn(compiledTemplateStr);
+        var promise = { then: _.spiedFunction() };
+
+        _.spy(Handlebars, "compile").overrideReturn(compiledTemplate);
+        _.spy(Promise, "all").overrideReturn(promise);
+
+        var templateEl = $(doc.body.querySelector("#testholder")).html("<pb-u-template template=\"template\"></pb-u-template>")[0];
+
+        expect(Promise.all).calledWith([]).at.least(1);
+
+        var callbackCaptor = _M.isA(Function);
+        expect(promise.then).calledWith(callbackCaptor).at.least(1);
+        callbackCaptor.matchingArgs[0]([]);
+
+        expect(Handlebars.compile).calledWith(templateStr).at.least(1);
+        expect(templateEl.innerHTML).to.be.equal(compiledTemplateStr);
+      });
+      it("should take data as variable name to global", function () {
+        window.a = { b: "data" };
+        var compiledTemplate = _.spiedFunction().overrideReturn("");
+        var promise = { then: _.spiedFunction() };
+
+        _.spy(Handlebars, "compile").overrideReturn(compiledTemplate);
+        _.spy(Promise, "all").overrideReturn(promise);
+
+        var templateEl = $(doc.body.querySelector("#testholder")).html("<pb-u-template template=\"template\" data-a=\"a.b\"></pb-u-template>")[0];
+
+        expect(Promise.all).calledWith([["a", "data"]]).at.least(1);
+
+        var callbackCaptor = _M.isA(Function);
+        expect(promise.then).calledWith(callbackCaptor).at.least(1);
+        callbackCaptor.matchingArgs[0]([["a", "data"]]);
+
+        expect(compiledTemplate).calledWith({ a: window.a.b }).at.least(1);
+      });
+      it("should take data as string value", function () {
+        var data = "data";
+        var compiledTemplate = _.spiedFunction().overrideReturn("");
+        var promise = { then: _.spiedFunction() };
+
+        _.spy(Handlebars, "compile").overrideReturn(compiledTemplate);
+        _.spy(Promise, "all").overrideReturn(promise);
+
+        var templateEl = $(doc.body.querySelector("#testholder")).html("<pb-u-template template=\"template\" data-a=\"data\"></pb-u-template>")[0];
+
+        expect(Promise.all).calledWith([["a", data]]).at.least(1);
+
+        var callbackCaptor = _M.isA(Function);
+        expect(promise.then).calledWith(callbackCaptor).at.least(1);
+        callbackCaptor.matchingArgs[0]([["a", data]]);
+
+        expect(compiledTemplate).calledWith({ a: data }).at.least(1);
+      });
+      it("should take promise as a value", function () {
+        var data = "data";
+        window.a = Promise.resolve(data);
+        var compiledTemplate = _.spiedFunction().overrideReturn("");
+        var promise = { then: _.spiedFunction() };
+
+        _.spy(Handlebars, "compile").overrideReturn(compiledTemplate);
+        _.spy(Promise, "all").overrideReturn(promise);
+
+        var templateEl = $(doc.body.querySelector("#testholder")).html("<pb-u-template template=\"template\" data-a=\"a\"></pb-u-template>")[0];
+
+        expect(Promise.all).calledWith([["a", window.a]]).at.least(1);
+
+        var callbackCaptor = _M.isA(Function);
+        expect(promise.then).calledWith(callbackCaptor).at.least(1);
+        callbackCaptor.matchingArgs[0]([["a", data]]);
+
+        expect(compiledTemplate).calledWith({ a: data }).at.least(1);
+      });
+    });
+
+    describe("#pb-for", function () {
+      it("should repeat the inner block a number of times", function () {
+        var content = "content";
+        var options = {
+          fn: _.spiedFunction().overrideReturn(content)
+        };
+
+        var result = forHelper.call(Handlebars, "0", "5", "2", options);
+        expect(result).to.be.equal(content + content + content);
+
+        var isAObject = _M.isA(Object);
+        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(3);
+
+        var indexes = isAObject.matchingArgs.map(function (arg) {
+          return arg.data.index;
+        });
+        expect(indexes).to.be.eql([0, 2, 4]);
+      });
+      it("should default step to 1", function () {
+        var content = "content";
+        var options = {
+          fn: _.spiedFunction().overrideReturn(content)
+        };
+
+        var result = forHelper.call(Handlebars, "0", "2", options);
+        expect(result).to.be.equal(content + content);
+
+        var isAObject = _M.isA(Object);
+        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(2);
+
+        var indexes = isAObject.matchingArgs.map(function (arg) {
+          return arg.data.index;
+        });
+        expect(indexes).to.be.eql([0, 1]);
+      });
+    });
+
+    afterEach(function (done) {
+      _.reset();
+      done();
+    });
+  });
+});</script>
+</body></html>
