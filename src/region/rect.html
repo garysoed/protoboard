@@ -107,10 +107,6 @@ DI
           let dTop = Move.mouseY - rect.top - rect.height / 2;
           movedElement.style.left = `${movedElement.offsetLeft + dLeft}px`;
           movedElement.style.top = `${movedElement.offsetTop + dTop}px`;
-
-          if (movedElement.attachedCallback) {
-            movedElement.attachedCallback();
-          }
         }
       }
     }

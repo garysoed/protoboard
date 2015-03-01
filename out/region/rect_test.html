@@ -63,7 +63,6 @@ DI["with"]("$registry", function (Registry) {
           expect(Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
           expect(lastDraggedEl.style.left).to.be.equal("22px");
           expect(lastDraggedEl.style.top).to.be.equal("-100px");
-          expect(lastDraggedEl.attachedCallback).calledWith().at.least(1);
         });
       });
 
