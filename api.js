@@ -36,7 +36,6 @@ YUI.add("yuidoc-meta", function(Y) {
         "service.Move",
         "service.Preview",
         "service.Registry",
-        "surface.RectGrid",
         "trigger.Click",
         "trigger.DoubleClick",
         "trigger.Key",

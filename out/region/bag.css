@@ -1,0 +1,46 @@
+/** 
+ * All scss files depend on this file. To change the theme, change the theme below and
+ * recompile the SCSS files.
+ */
+/** http://paletton.com/#uid=1000u0k00lo01tG00pj01hu09dg */
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+/* Borders */
+/* Sizes */
+.pb-component::shadow #root, pb-r-bag::shadow #root {
+  height: 50px;
+  width: 50px; }
+
+.pb-card::shadow #root {
+  border-radius: 5px;
+  height: 100px;
+  width: 75px; }
+
+.pb-key:hover {
+  outline: 6px dashed #666666;
+  outline-offset: -3px; }
+
+pb-r-bag > :not([pb-placeholder]) {
+  display: none; }
+
+pb-r-bag::shadow #root {
+  border: 1px solid #888888; }
+
+/* The placeholder */
+.pb-placeholder {
+  background-color: #c8c8c8;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  width: 50px; }
+
+[pb-placeholder] {
+  position: absolute; }
+
+[pb-placeholder]:only-child {
+  display: none; }
+
+[pb-placeholder].pb-dragged {
+  -webkit-filter: drop-shadow(0px 2px 5px #3f3f3f);
+  z-index: 1; }
+
+/*# sourceMappingURL=bag.css.map */

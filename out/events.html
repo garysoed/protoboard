@@ -1,0 +1,321 @@
+<html><head><base href=".">
+
+<link rel="import" href="hammerwrapper.html">
+<link rel="import" href="third_party/keypress.html">
+<link rel="import" href="utils.html">
+
+<script>"use strict";
+
+var _this = this;
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+DI.bind("pb_Events", function (HammerWrapper, Keypress, Utils) {
+  // Private symbols.
+  var __element__ = Symbol();
+  var __elementScopeMap__ = Symbol();
+  var __registryRef__ = Symbol();
+  var __scopeMap__ = Symbol();
+
+  var __isRegistered__ = Symbol("isRegistered");
+  var __register__ = Symbol("register");
+  var __unregister__ = Symbol("unregister");
+
+  var TYPES = {
+    DOM: "dom",
+    HAMMER: "hammer",
+    JQUERY: "jquery",
+    KEYBOARD: "keyboard"
+  };
+
+  var HANDLERS = (function () {
+    var _HANDLERS = {};
+
+    _defineProperty(_HANDLERS, TYPES.DOM, {
+      register: function (action, eventName, handler) {
+        action[__element__].addEventListener(eventName, handler);
+      },
+      unregister: function (action, eventName, handler) {
+        action[__element__].removeEventListener(eventName, handler);
+      }
+    });
+
+    _defineProperty(_HANDLERS, TYPES.HAMMER, {
+      register: function (action, eventName, handler) {
+        HammerWrapper.on(action[__element__], eventName, handler);
+      },
+      unregister: function (action, eventName, handler) {
+        HammerWrapper.off(action[__element__], eventName, handler);
+      }
+    });
+
+    _defineProperty(_HANDLERS, TYPES.JQUERY, {
+      register: function (action, eventName, handler) {
+        $(action[__element__]).on(eventName, handler);
+      },
+      unregister: function (action, eventName, handler) {
+        $(action[__element__]).off(eventName, handler);
+      }
+    });
+
+    _defineProperty(_HANDLERS, TYPES.KEYBOARD, {
+      __registryRef__: Symbol(),
+      register: function (action, eventName, handler) {
+        var ref = new Keypress();
+        ref.simple_combo(eventName, handler);
+        action[__element__][_this[__registryRef__]] = ref;
+      },
+      unregister: function (action, eventName, handler) {
+        action[__element__][_this[__registryRef__]].stop_listening();
+      }
+    });
+
+    return _HANDLERS;
+  })();
+
+  var Action = (function () {
+    /**
+     * Helper class for using {{#crossLink "Events"}}{{/crossLink}}.
+     * @class Events.Action
+     * @constructor
+     * @param {Element} element Element to operate on.
+     * @param {Object} scope Scope of the registered events.
+     */
+    function Action(element, scope) {
+      this[__element__] = element;
+
+      if (!this[__element__][__scopeMap__]) {
+        this[__element__][__scopeMap__] = new Map();
+      }
+
+      if (!this[__element__][__scopeMap__].has(scope)) {
+        this[__element__][__scopeMap__].set(scope, new Map());
+      }
+
+      this[__elementScopeMap__] = this[__element__][__scopeMap__].get(scope);
+    }
+
+    _prototypeProperties(Action, null, (function () {
+      var _prototypeProperties2 = {};
+
+      _defineProperty(_prototypeProperties2, __isRegistered__, {
+
+        /**
+         * @method __isRegistered__
+         * @param {string} type The type of event to be checked.
+         * @param {string} eventName Name of the event to be checked.
+         * @private
+         */
+        value: function (type, eventName) {
+          if (!this[__elementScopeMap__].get(type)) {
+            return false;
+          }
+
+          return this[__elementScopeMap__].get(type).has(eventName);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, __register__, {
+
+        /**
+         * Registers the given handler to the given event name for the given type.
+         *
+         * @method __register__
+         * @param {string} type The type of event to register the handler to.
+         * @param {string} eventName Name of the event to register the handler to.
+         * @param {Function} handler Handler to be called for the given event.
+         * @return {Events} The Events object for chaining.
+         * @private
+         */
+        value: function (type, eventName, handler) {
+          if (this[__isRegistered__](type, eventName)) {
+            return this;
+          }
+
+          HANDLERS[type].register(this, eventName, handler);
+
+          if (!this[__elementScopeMap__].has(type)) {
+            this[__elementScopeMap__].set(type, new Map());
+          }
+
+          this[__elementScopeMap__].get(type).set(eventName, handler);
+          return this;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, __unregister__, {
+
+        /**
+         * Unregisters the handlers in the scope for the element.
+         *
+         * - If only type and eventName are given, all handlers listening to that event name of that type
+         *   will be unregistered.
+         * - If only type is given, all handlers listening for that type will be unregistered.
+         * - If nothing is given, all handlers in the scope will be unregistered.
+         *
+         * @method __unregister__
+         * @param {string=} type Type of event to unregister.
+         * @param {string=} eventName If given, all handlers listening to this event will be
+         *     unregistered.
+         * @return {!Events} The Events object for chaining.
+         * @private
+         */
+        value: function (type, eventName) {
+          if (!type) {
+            // Unregisters all events.
+            for (var _iterator = this[__elementScopeMap__].keys()[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+              var registeredType = _step.value;
+              this[__unregister__](registeredType);
+            }
+
+            return this;
+          }
+
+          var typeMap = this[__elementScopeMap__].get(type);
+          if (!typeMap) {
+            return this;
+          }
+
+          if (!eventName) {
+            // Unregisters all events of the given type.
+            if (typeMap) {
+              for (var _iterator2 = typeMap.keys()[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
+                var event = _step2.value;
+                this[__unregister__](type, event);
+              }
+            }
+            return this;
+          }
+
+          var registeredEvent = typeMap.get(eventName);
+          if (registeredEvent) {
+            // Unregister the given event name.
+            HANDLERS[type].unregister(this, eventName, registeredEvent);
+            this[__elementScopeMap__].get(type)["delete"](eventName);
+          }
+
+          return this;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "on", {
+
+        /**
+         * Calls on method of the corresponding type on the element, registering the given event name
+         * and handler.
+         *
+         * @method on
+         * @param {string} type The registration type.
+         * @param {string} eventName Name of the event to register the handler to.
+         * @param {Function} handler Handler to be called for the given event.
+         * @return {Events.Action} The Action object for chaining.
+         */
+        value: function on(type, eventName, handler) {
+          return this[__register__](type, eventName, handler);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "off", {
+
+        /**
+         * Calls off method of the corresponding type on the element, unregistering the handlers in the
+         * scope for the element.
+         *
+         * - If eventName is given, all handlers listening to that event name will be unlistened.
+         * - If nothing is given, all handlers in the scope will be unlistened.
+         *
+         * @method off
+         * @param {string} type The registration type.
+         * @param {string} [eventName] If given, all handlers listening to this event will be
+         *     unlistened.
+         * @return {Events.Action} The Action object for chaining.
+         */
+        value: function off(type, eventName) {
+          return this[__unregister__](type, eventName);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      return _prototypeProperties2;
+    })());
+
+    return Action;
+  })();
+
+  /**
+   * Utility class to register / unregister events easily. This library handles 4 methods of
+   * registrations:
+   * - DOM
+   * - <a href="http://hammerjs.github.io/">HammerJS</a>
+   * - <a href="http://jquery.com/">JQuery</a>
+   * - <a href="http://dmauro.github.io/Keypress/">Keypress</a>
+   *
+   * For a given scope object, only one handler can be bound to an event type.
+   *
+   * ```javascript
+   * var scope = {};
+   *
+   * // Register for events.
+   * Events.of(element, scope)
+   *     .on('dom', 'click', handleClick)        // Handles DOM click event.
+   *     .on('hammer', 'tap', handleTap)         // Handles HammerJS tap event.
+   *     .on('jquery', 'mouseup', handleMouseUp) // Handles mouseup event through JQuery.
+   *     .on('keyboard', 'a', handleKeyA);       // Handles keypress a
+   *
+   * // Unregister events in the given scope.
+   * Events.of(element, scope)
+   *     .off('hammer')         // Unregisters all hammer events.
+   *     .off('dom', 'click')   // Unregisters all DOM click events.
+   *     .off();                // Unregisters all events in this scope.
+   * ```
+   *
+   * @class Events
+   * @static
+   */
+
+  var Events = {
+    /**
+     * Creates an Events object that operates on the given element with the given scope.
+     *
+     * @method of
+     * @param {Element} element The element to operate on.
+     * @param {Object} scope Scope of the registered events.
+     * @return {Events.Action} Chainable action object.
+     * @static
+     */
+    of: function of(element, scope) {
+      return new Action(element, scope);
+    }
+  };
+
+  if (window.TEST_MODE) {
+    Events.Action = Action;
+  }
+
+  return Events;
+});</script></head><body></body></html>

@@ -1,0 +1,234 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/abilities.html">
+<link rel="import" href="ability/droppable.html">
+<link rel="import" href="ability/helpable.html">
+<link rel="import" href="check.html">
+<link rel="import" href="di.html">
+<link rel="import" href="region/region.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="trigger/click.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<link rel="stylesheet" type="text/css" href="region/rect.css">
+
+<template>
+  <div id="root">
+    <content></content>
+  </div>
+</template>
+
+<script>"use strict";
+
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === undefined) {
+      return undefined;
+    }
+    return getter.call(receiver);
+  }
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+  return doc.querySelector("template");
+}).bind("pb_region_Rect", function ($registry, Check, Click, Config, Droppable, Helpable, Key, Move, Region, Utils, doc, template) {
+  var EL_NAME = "pb-r-rect";
+
+  // Private symbols
+  var __mutationObserver__ = Symbol("mutationObserver");
+  var __onDomMutation__ = Symbol("onDomMutation");
+
+  var FlexDroppable = (function (Droppable) {
+    /**
+     * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
+     * Elements with this ability adds the picked element as its child element when triggered. The
+     * dropped element is positioned to be directly below the mouse cursor when the drop happened.
+     *
+     * @constructor
+     * @class region.Rect.FlexDroppable
+     * @param {string} [name=pb-droppable] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
+     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     * @extends ability.Droppable
+     */
+    function FlexDroppable() {
+      var _this = this;
+      var name = arguments[0] === undefined ? "pb-droppable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+      return (function () {
+        _get(Object.getPrototypeOf(FlexDroppable.prototype), "constructor", _this).call(_this, name, defaultTrigger, defaultEnabled);
+        _this[__mutationObserver__] = new MutationObserver(_this[__onDomMutation__].bind(_this));
+      })();
+    }
+
+    _inherits(FlexDroppable, Droppable);
+
+    _prototypeProperties(FlexDroppable, null, (function () {
+      var _prototypeProperties2 = {};
+
+      _defineProperty(_prototypeProperties2, __onDomMutation__, {
+
+        /**
+         * Handles event when the MutationObserver observes changes to the child list.
+         *
+         * @method __onDomMutation__
+         * @param {Array} mutations Array of MutationRecords.
+         * @private
+         */
+        value: function (mutations) {
+          mutations.forEach(function (mutation) {
+            Utils.toArray(mutation.removedNodes).forEach(function (removedNode) {
+              removedNode.style.left = "";
+              removedNode.style.top = "";
+            });
+          });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "init", {
+
+        /**
+         * Sets the default configuration for this ability on the given element.
+         *
+         * @method init
+         * @param {Element} el The element to set the default configuration to.
+         */
+        value: function init(el) {
+          _get(Object.getPrototypeOf(FlexDroppable.prototype), "init", this).call(this, el);
+
+          this[__mutationObserver__].observe(el, { childList: true });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "trigger", {
+
+        /**
+         * Drop the last dragged element on the given element
+         *
+         * @method trigger
+         * @param {Element} el The element to drop the dragged element into.
+         */
+        value: function trigger(el) {
+          if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
+            var movedElement = Move.movedElements.values().next().value;
+
+            if (movedElement) {
+              el.appendChild(movedElement);
+
+              var rect = movedElement.getBoundingClientRect();
+              var dLeft = Move.mouseX - rect.left - rect.width / 2;
+              var dTop = Move.mouseY - rect.top - rect.height / 2;
+              movedElement.style.left = "" + (movedElement.offsetLeft + dLeft) + "px";
+              movedElement.style.top = "" + (movedElement.offsetTop + dTop) + "px";
+            }
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      return _prototypeProperties2;
+    })());
+
+    return FlexDroppable;
+  })(Droppable);
+
+  /**
+   * An arbitrary rectangular region. You can position elements anywhere in this region.
+   *
+   * Supported abilities:
+   * - {{#crossLink "region.Rect.FlexDroppable"}}drop{{/crossLink}}
+   *
+   * @class region.Rect
+   * @extends region.Region
+   */
+  var Rect = (function (Region) {
+    function Rect() {
+      if (Object.getPrototypeOf(Rect) !== null) {
+        Object.getPrototypeOf(Rect).apply(this, arguments);
+      }
+    }
+
+    _inherits(Rect, Region);
+
+    _prototypeProperties(Rect, null, {
+      createdCallback: {
+
+        /**
+         * Called when the element is created.
+         *
+         * @method createdCallback
+         */
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Rect.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return Rect;
+  })(Region);
+
+  Config.add(EL_NAME, new Helpable("help"), new FlexDroppable("drop", new Key("d"), true));
+  $registry.add(EL_NAME, Rect.prototype);
+
+  if (window.TEST_MODE) {
+    Rect.FlexDroppable = FlexDroppable;
+  }
+
+  return Rect;
+});</script></head><body></body></html>

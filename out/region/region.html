@@ -1,0 +1,43 @@
+<html><head><base href="..">
+
+<link rel="import" href="di.html">
+<link rel="import" href="pbelement.html">
+
+<script>"use strict";
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.bind("pb_region_Region", function (PbElement) {
+  /**
+   * Base class of all regions.
+   *
+   * @class region.Region
+   * @extends PbElement
+   */
+  var Region = (function (PbElement) {
+    function Region() {
+      if (Object.getPrototypeOf(Region) !== null) {
+        Object.getPrototypeOf(Region).apply(this, arguments);
+      }
+    }
+
+    _inherits(Region, PbElement);
+
+    return Region;
+  })(PbElement);
+
+  return Region;
+});</script></head><body></body></html>

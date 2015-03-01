@@ -1,0 +1,147 @@
+/** 
+ * All scss files depend on this file. To change the theme, change the theme below and
+ * recompile the SCSS files.
+ */
+/** http://paletton.com/#uid=1000u0k00lo01tG00pj01hu09dg */
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+/* Borders */
+/* Sizes */
+.pb-component::shadow #root {
+  height: 50px;
+  width: 50px; }
+
+.pb-card::shadow #root {
+  border-radius: 5px;
+  height: 100px;
+  width: 75px; }
+
+.pb-key:hover {
+  outline: 6px dashed #666666;
+  outline-offset: -3px; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 8px;
+  height: 100vh;
+  box-sizing: border-box; }
+
+input {
+  width: 40px; }
+
+#top-section {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  flex: 1; }
+
+#active-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column; }
+
+#draft {
+  display: flex;
+  justify-content: space-between; }
+
+pb-u-previewer {
+  width: 25%;
+  margin: 20px; }
+
+#rift {
+  display: flex; }
+
+#riftdeck {
+  margin-right: 20px; }
+
+#riftdiscard {
+  margin-left: 20px; }
+
+#riftchoice {
+  display: flex; }
+
+#riftchoice > *,
+#staples > * {
+  margin-left: 5px;
+  margin-right: 5px; }
+
+#environment {
+  display: flex; }
+
+#staples {
+  display: flex; }
+
+#playarea {
+  flex: 1;
+  position: relative; }
+  #playarea pb-r-rect {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0; }
+
+pb-c-card.Base .pb-front {
+  background-color: #ffaaff; }
+
+pb-c-card.Air .pb-front {
+  background-color: #aaaaaa; }
+
+pb-c-card.Earth .pb-front {
+  background-color: #aaffaa; }
+
+pb-c-card.Fire .pb-front {
+  background-color: #ffaaaa; }
+
+pb-c-card.Water .pb-front {
+  background-color: #aaaaff; }
+
+.pb-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center; }
+
+#bottom-section ul {
+  display: flex;
+  list-style-type: none;
+  -webkit-padding-start: 0;
+  -webkit-margin-before: 1em;
+  -webkit-margin-after: 1em; }
+  #bottom-section ul li {
+    padding: 10px;
+    cursor: pointer; }
+    #bottom-section ul li input {
+      margin-left: 10px; }
+#bottom-section pb-r-hand::shadow #root {
+  height: 100px; }
+
+#bottom-section.player1 li.player1 {
+  background-color: #c8c8c8; }
+#bottom-section.player1 #player1area {
+  display: block; }
+
+#switcher {
+  height: 135px; }
+
+#bottom-section.player2 li.player2 {
+  background-color: #c8c8c8; }
+#bottom-section.player2 #player2area {
+  display: block; }
+
+.playerarea {
+  display: none; }
+  .playerarea .hand {
+    display: flex; }
+    .playerarea .hand pb-r-deck {
+      margin-right: 20px; }
+    .playerarea .hand .decksize {
+      margin-right: 20px; }
+    .playerarea .hand pb-r-hand {
+      flex: 1; }
+  .playerarea .buttons {
+    margin-top: 15px; }
+
+/*# sourceMappingURL=gazer.css.map */

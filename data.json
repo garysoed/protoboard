@@ -1,7 +1,7 @@
 {
     "project": {
         "name": "Protoboard",
-        "description": "A library to easily prototype boardgames. This is meant to be used for prototyping ideas and is therefore focused on ease and flexibility of creating different game components. Aesthetics, performance, and correctness are outside the scope of this project.",
+        "description": "Checkout the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
         "version": "0.1.0",
         "url": "https://github.com/garysoed/protoboard",
         "colorMain": "#004000",
@@ -180,9 +180,7 @@
         "src/surface/rectgrid.html": {
             "name": "src/surface/rectgrid.html",
             "modules": {},
-            "classes": {
-                "surface.RectGrid": 1
-            },
+            "classes": {},
             "fors": {},
             "namespaces": {}
         },
@@ -389,7 +387,6 @@
                 "service.Move": 1,
                 "service.Preview": 1,
                 "service.Registry": 1,
-                "surface.RectGrid": 1,
                 "trigger.Click": 1,
                 "trigger.DoubleClick": 1,
                 "trigger.Key": 1,
@@ -896,7 +893,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/rect.html",
-            "line": 119,
+            "line": 115,
             "description": "An arbitrary rectangular region. You can position elements anywhere in this region.\n\nSupported abilities:\n- {{#crossLink \"region.Rect.FlexDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
         },
@@ -955,20 +952,6 @@
             "line": 13,
             "description": "A service that collects functions to be ran at bootstrap.",
             "is_constructor": 1
-        },
-        "surface.RectGrid": {
-            "name": "surface.RectGrid",
-            "shortname": "surface.RectGrid",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/surface/rectgrid.html",
-            "line": 63,
-            "description": "A surface that lays out its components in a grid. To use this, add attributes `pb-row` and\n`pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns in the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```javascript\n<pb-s-rectgrid pb-row=\"2\" pb-col=\"3\">\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Right</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Right</div>\n</pb-s-rectgrid>\n```",
-            "extends": "PbElement"
         },
         "trigger.Click": {
             "name": "trigger.Click",
@@ -1832,7 +1815,7 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 130,
+            "line": 126,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2006,15 +1989,21 @@
         },
         {
             "file": "src/surface/rectgrid.html",
-            "line": 84,
-            "description": "Called when the element is created",
-            "itemtype": "method",
-            "name": "createdCallback",
-            "class": "surface.RectGrid"
+            "line": 63,
+            "description": "A surface that lays out its components in a grid. To use this, add attributes `pb-row` and\n`pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns in the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```javascript\n<pb-s-rectgrid pb-row=\"2\" pb-col=\"3\">\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Right</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Right</div>\n</pb-s-rectgrid>\n```",
+            "class": "trigger.Click"
         },
         {
             "file": "src/surface/rectgrid.html",
-            "line": 119,
+            "line": 81,
+            "description": "Called when the element is created",
+            "itemtype": "method",
+            "name": "createdCallback",
+            "class": "trigger.Click"
+        },
+        {
+            "file": "src/surface/rectgrid.html",
+            "line": 116,
             "description": "Returns the element at the given row and column, or null if not found.",
             "itemtype": "method",
             "name": "get",
@@ -2034,7 +2023,7 @@
                 "description": "The HTML element at the given row and col, or null if not found.",
                 "type": "HTMLElement|null"
             },
-            "class": "surface.RectGrid"
+            "class": "trigger.Click"
         },
         {
             "file": "src/trigger/click.html",
@@ -3277,6 +3266,10 @@
         }
     ],
     "warnings": [
+        {
+            "message": "Missing item type\nA surface that lays out its components in a grid. To use this, add attributes `pb-row` and\n`pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns in the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```javascript\n<pb-s-rectgrid pb-row=\"2\" pb-col=\"3\">\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Right</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Right</div>\n</pb-s-rectgrid>\n```",
+            "line": " src/surface/rectgrid.html:63"
+        },
         {
             "message": "Missing item type\nReturns the value corresponding to the given key.",
             "line": " src/di.html:162"

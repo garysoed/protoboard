@@ -1,0 +1,57 @@
+<html><head><base href="..">
+
+<link rel="import" href="di.html">
+<link rel="import" href="trigger/click.html">
+<link rel="import" href="trigger/key.html">
+
+<script>"use strict";
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+DI.bind("pb_trigger_Triggers", function (Click, Key) {
+  // Private symbols
+  var __observer__ = Symbol();
+  var __target__ = Symbol();
+  var __triggers__ = Symbol();
+
+  var __onMutation__ = Symbol();
+
+  var Registrar = (function () {
+    function Registrar(target) {
+      this[__target__] = target;
+    }
+
+    _prototypeProperties(Registrar, null, {
+      add: {
+        value: function add(trigger) {
+          if (!this[__target__][__triggers__]) {
+            this[__target__][__triggers__] = new Map();
+          }
+          this[__target__][__triggers__].set(trigger.attrName, trigger);
+          return this;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return Registrar;
+  })();
+
+  var Triggers = {
+    parse: function parse(str) {
+      var trigger = Click.parse(str) || Key.parse(str);
+
+      if (!trigger) {
+        throw "Unparsable trigger string: " + str;
+      }
+      return trigger;
+    }
+  };
+
+  return Triggers;
+});</script></head><body></body></html>
