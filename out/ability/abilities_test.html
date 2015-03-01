@@ -1,0 +1,220 @@
+<html><head>
+  <base href="../..">
+  <title>ability.Abilities Unit Tests</title>
+
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/ability/abilities.html">
+  <link rel="import" href="out/di.html">
+</head>
+<body>
+  <script>"use strict";
+
+DI["with"]("fakeTriggerable", function (t) {
+  return t.createFakeAbility("fakeTriggerable");
+})["with"]("pb_ability_Triggerable", function (fakeTriggerable) {
+  return function (config, knownAbilities) {
+    fakeTriggerable.config = config;
+    fakeTriggerable.knownAbilities = knownAbilities;
+    return fakeTriggerable;
+  };
+})["with"]("doc", function () {
+  return document.currentScript.ownerDocument;
+}).run(function (expect, _, _M, doc, pb_t, Abilities, Utils) {
+  describe("ability.Abilities", function () {
+    describe("$Builder", function () {
+      var el = undefined;
+      var builder = undefined;
+
+      beforeEach(function (done) {
+        el = doc.createElement("div");
+        builder = new Abilities.Builder(el);
+        done();
+      });
+
+      describe("#add", function () {
+        it("should add ability to a clean element", function () {
+          var ability = pb_t.createFakeAbility("Ability");
+
+          expect(builder.add(ability)).to.equal(builder);
+
+          var abilities = el[pb_t.getSymbol(el, "abilities")];
+          expect(abilities.get(ability.attrName)).to.equal(ability);
+          expect(abilities.get(ability.attrTrigger)).to.equal(ability);
+        });
+        it("should add ability to an element with another ability", function () {
+          var ability1 = pb_t.createFakeAbility("Ability 1");
+          var ability2 = pb_t.createFakeAbility("Ability 2");
+
+          expect(builder.add(ability1).add(ability2)).to.equal(builder);
+
+          var abilities = el[pb_t.getSymbol(el, "abilities")];
+          expect(abilities.get(ability1.attrName)).to.equal(ability1);
+          expect(abilities.get(ability1.attrTrigger)).to.equal(ability1);
+
+          expect(abilities.get(ability2.attrName)).to.equal(ability2);
+          expect(abilities.get(ability2.attrTrigger)).to.equal(ability2);
+        });
+        it("should throw exception if an ability with the same name has been registered", function () {
+          var ability1 = pb_t.createFakeAbility("Ability");
+          var ability2 = pb_t.createFakeAbility("Ability");
+
+          builder.add(ability1);
+
+          expect(function () {
+            return builder.add(ability2);
+          }).to["throw"]("" + ability1.attrName + " is already registered");
+        });
+        it("should throw exception if an ability with the same trigger has been registered", function () {
+          var ability1 = pb_t.createFakeAbility("Ability");
+          ability1.attrName = "AttrName";
+          var ability2 = pb_t.createFakeAbility("Ability");
+          ability2.attrName = "AttrName2";
+
+          builder.add(ability1);
+
+          expect(function () {
+            return builder.add(ability2);
+          }).to["throw"]("" + ability1.attrTrigger + " is already registered");
+        });
+      });
+
+      describe("#getAll", function () {
+        it("should return the abilities correctly", function () {
+          var ability = pb_t.createFakeAbility("Ability");
+          builder.add(ability);
+
+          var map = builder.getAll();
+          expect(map.size).to.be.equal(1);
+          expect(map.get(ability.attrName)).to.be.equal(ability);
+        });
+        it("should return empty map if the element has no abilities", function () {
+          expect(builder.getAll().size).to.be.equal(0);
+        });
+      });
+
+      describe("#trigger", function () {
+        it("should trigger the ability", function () {
+          var ability = pb_t.createFakeAbility("ability");
+          builder.add(ability);
+
+          _.spy(ability, "trigger");
+          builder.trigger(ability.attrName);
+          expect(ability.trigger).calledWith(el).at.least(1);
+        });
+        it("should throw error if the element has no abilities", function () {
+          expect(function () {
+            return builder.trigger("ability");
+          }).to["throw"](Error);
+        });
+        it("should throw error if the element does not have the specified ability", function () {
+          var ability = pb_t.createFakeAbility("ability");
+          builder.add(ability);
+          expect(function () {
+            return builder.trigger("other ability");
+          }).to["throw"](Error);
+        });
+      });
+    });
+
+    describe("#__onMutation__", function () {
+      var __onMutation__ = pb_t.getSymbol(Abilities, "onMutation");
+
+      it("should call updateConfig for every record object", function () {
+        var ability1 = pb_t.createFakeAbility("ability 1");
+        var ability2 = pb_t.createFakeAbility("ability 2");
+        var records = [{
+          target: doc.createElement("div"),
+          attributeName: ability1.attrName
+        }, {
+          target: doc.createElement("title"),
+          attributeName: ability2.attrName
+        }];
+
+        Abilities.of(records[0].target).add(ability1);
+        Abilities.of(records[1].target).add(ability2);
+
+        Abilities[__onMutation__](records);
+        expect(ability1.updateConfig).calledWith(records[0].target).at.least(1);
+        expect(ability2.updateConfig).calledWith(records[1].target).at.least(1);
+      });
+      it("should not throw exception if the element has no abilities", function () {
+        Abilities[__onMutation__]([{
+          target: doc.createElement("div"),
+          attributeName: "attributeName"
+        }]);
+      });
+      it("should not throw exception if the element has no attribute that has been mutated", function () {
+        var ability = pb_t.createFakeAbility("ability");
+        ability.attrName = "attrName";
+        ability.attrTrigger = "attrTrigger";
+        var el = doc.createElement("div");
+
+        Abilities.of(el).add(ability);
+
+        Abilities[__onMutation__]([{ target: el, attributeName: "nonExistent" }]);
+      });
+    });
+
+    describe("#init", function () {
+      var el = undefined;
+
+      beforeEach(function (done) {
+        el = doc.createElement("div");
+        done();
+      });
+
+      it("should observe mutation and call set default value for every registered ability", function () {
+        var ability1 = pb_t.createFakeAbility("ability 1");
+        var ability2 = pb_t.createFakeAbility("ability 2");
+
+        Abilities.of(el).add(ability1).add(ability2);
+
+        _.spy(Utils, "extendFn");
+
+        Abilities.init(el);
+
+        expect(ability1.init).calledWith(el).at.least(1);
+        expect(ability2.init).calledWith(el).at.least(1);
+
+        var observer = el[pb_t.getSymbol(el, "observer")];
+        _.spy(observer, "observe");
+        _.spy(observer, "disconnect");
+
+        // Check the attached callback.
+        var attachedCallbackCaptor = _M.isA(Function);
+        expect(Utils.extendFn).calledWith(el, "attachedCallback", attachedCallbackCaptor).at.least(1);
+        attachedCallbackCaptor.matchingArgs[0]();
+
+        var configCaptor = _M.isA(Object);
+        expect(observer.observe).calledWith(el, configCaptor).at.least(1);
+
+        var config = configCaptor.matchingArgs[0];
+        expect(config.attributes).to.be["true"]();
+
+        // Check the detached callback.
+        var detachedCallbackCaptor = _M.isA(Function);
+        expect(Utils.extendFn).calledWith(el, "detachedCallback", detachedCallbackCaptor).at.least(1);
+        detachedCallbackCaptor.matchingArgs[0]();
+
+        expect(observer.disconnect).calledWith().at.least(1);
+      });
+      it("should handle element with no registered abilities", function () {
+        Abilities.init(el);
+        expect(el[pb_t.getSymbol(el, "observer")]).to.be.instanceOf(MutationObserver);
+      });
+      it("should throw exception if the element has been initialized", function () {
+        Abilities.init(el);
+        expect(function () {
+          return Abilities.init(el);
+        }).to["throw"]("already initialized");
+      });
+    });
+
+    afterEach(function (done) {
+      _.reset();
+      done();
+    });
+  });
+});</script>
+</body></html>

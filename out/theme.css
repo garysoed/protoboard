@@ -1,0 +1,18 @@
+/** 
+ * All scss files depend on this file. To change the theme, change the theme below and
+ * recompile the SCSS files.
+ */
+/** http://paletton.com/#uid=1000u0k00lo01tG00pj01hu09dg */
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+/* Borders */
+/* Sizes */
+.pb-component::shadow #root {
+  height: 50px;
+  width: 50px; }
+
+.pb-card::shadow #root {
+  border-radius: 5px;
+  height: 100px;
+  width: 75px; }
+
+/*# sourceMappingURL=theme.css.map */

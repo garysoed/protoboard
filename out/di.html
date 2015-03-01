@@ -1,0 +1,388 @@
+<html><head><base href=".">
+<script>"use strict";
+
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+(function () {
+  var getGlobal = function (key, scope) {
+    var globalProvider = bindings.get(key);
+    if (globalProvider === undefined) {
+      return undefined;
+    } else {
+      return globalProvider.resolve(scope);
+    }
+  };
+
+  // Private symbols.
+  var __function__ = Symbol();
+  var __localBindings__ = Symbol("localBindings");
+  var __localScope__ = Symbol("localScope");
+  var __name__ = Symbol();
+  var __parentScope__ = Symbol("parentScope");
+  var __resolvedValues__ = Symbol();
+  var __values__ = Symbol("values");
+
+  var __get__ = Symbol("get");
+
+  var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
+  var SEPARATOR = "_";
+
+  var Provider = (function () {
+    /**
+     * @class DI.Provider
+     * @constructor
+     * @param {Function} fn The function to run. The function's arguments will be bound based on
+     *    their names.
+     * @param {string} [name=null] Reference name of the provider. This is used for detecting cyclic
+     *    dependencies.
+     */
+    function Provider(fn, localScope) {
+      var name = arguments[2] === undefined ? null : arguments[2];
+      this[__function__] = fn;
+      this[__localScope__] = localScope;
+      this[__name__] = name;
+      this[__resolvedValues__] = new Map();
+    }
+
+    _prototypeProperties(Provider, null, {
+      resolve: {
+
+        /**
+         * Resolves the provider. Resolved values are cached per scope.
+         *
+         * @method resolve
+         * @param {DI.Scope} scope The scope to resolve the value in.
+         * @return {Object} The resolved value for the given scope.
+         */
+        value: function resolve(scope) {
+          var _this = this;
+          if (!this[__resolvedValues__].has(scope)) {
+            (function () {
+              var argsString = _this[__function__].toString().match(FN_ARGS)[1];
+              var args = argsString ? argsString.split(",") : [];
+
+              var resolvedArgs = args.map(function (arg) {
+                arg = arg.trim();
+                var optional = false;
+
+                if (arg.substring(0, 4) === "opt_") {
+                  arg = arg.substring(4);
+                  optional = true;
+                }
+
+                // TODO(gs): Handle cyclic dependency.
+                var value = undefined;
+
+                try {
+                  // Check the local scope first.
+                  value = _this[__localScope__][__get__](arg, scope);
+
+                  if (value === undefined) {
+                    // If value cannot be resolved in the local scope, check the given scope.
+                    value = scope[__get__](arg, scope);
+                  }
+
+                  if (value === undefined) {
+                    // If value cannot be resolved in the local scope, check the global bindings.
+                    value = getGlobal(arg, scope);
+                  }
+                } catch (e) {
+                  // TODO(gs): Make a shared method.
+                  if (_this[__name__]) {
+                    throw "" + e + "\n\twhile providing " + _this[__name__];
+                  } else {
+                    throw "" + e + "\n\twhile running expression";
+                  }
+                }
+
+                if (value === undefined) {
+                  if (optional) {
+                    return undefined;
+                  } else if (_this[__name__]) {
+                    throw "Cannot find " + arg + " while providing " + _this[__name__];
+                  } else {
+                    throw "Cannot find " + arg + " while running expression";
+                  }
+                }
+
+                return value;
+              });
+
+              var value = undefined;
+
+              try {
+                value = _this[__function__].apply(null, resolvedArgs);
+              } catch (e) {
+                if (_this[__name__]) {
+                  throw "Uncaught exception " + e + "\n\twhile running provider " + _this[__name__];
+                } else {
+                  throw "Uncaught exception " + e + "\n\twhile running expression";
+                }
+              }
+
+              if (value === undefined && _this[__name__]) {
+                console.warn("Value of " + _this[__name__] + " is undefined");
+              }
+
+              _this[__resolvedValues__].set(scope, value);
+            })();
+          }
+
+          return this[__resolvedValues__].get(scope);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return Provider;
+  })();
+
+  var BindingTree = (function () {
+    /**
+     * Represents a tree of bound values keyed by binding key.
+     * @class DI.BindingTree
+     * @constructor
+     */
+    function BindingTree() {
+      this[__values__] = new Map();
+    }
+
+    _prototypeProperties(BindingTree, null, {
+      add: {
+
+        /**
+         * Adds the given key and value to the tree. The tree will try to bind using the last segment of
+         * the key. If this causes a conflict, it will create a subtree.
+         *
+         * @method add
+         * @param {string} key The key to bind the value to.
+         * @param {Object} value The value to be bound.
+         * @param {number} [depth=0] The depth of the key to use as binding key. This should not be
+         *    called from outside the class.
+         */
+        value: function add(key, value) {
+          var depth = arguments[2] === undefined ? 0 : arguments[2];
+          var segments = key.split(SEPARATOR);
+          var bindingKey = segments[segments.length - 1 - depth];
+
+          if (!this[__values__].has(bindingKey)) {
+            this[__values__].set(bindingKey, {
+              key: key,
+              value: value
+            });
+          } else {
+            // There is already a value corresponding to this key
+            var existingValue = this[__values__].get(bindingKey);
+            if (existingValue.key === key) {
+              throw "Key " + key + " is already bound";
+            }
+
+            var newTree = new BindingTree();
+            this[__values__].set(bindingKey, newTree);
+            newTree.add(existingValue.key, existingValue.value, depth + 1);
+            newTree.add(key, value, depth + 1);
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      get: {
+
+        /**
+         * Returns the value corresponding to the given key.
+         *
+         * @param {string} key Key of the value to return.
+         * @param {number} [depth=0] The depth of the key to use as binding key. This should not be
+         *    called from outside the class.
+         * @return {any} The bound value, or undefined if the value cannot be found, or if the key has
+         *    collision but collision cannot be resolved.
+         */
+        value: function get(key) {
+          var depth = arguments[1] === undefined ? 0 : arguments[1];
+          var segments = key.split(SEPARATOR);
+          var bindingKey = segments[segments.length - 1 - depth];
+
+          if (bindingKey === undefined) {
+            return undefined;
+          }
+
+          if (!this[__values__].has(bindingKey)) {
+            return undefined;
+          }
+
+          var value = this[__values__].get(bindingKey);
+          if (value instanceof BindingTree) {
+            return value.get(key, depth + 1);
+          } else {
+            return value.value;
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return BindingTree;
+  })();
+
+  var Scope = (function () {
+    /**
+     * Scope containing local bindings.
+     *
+     * @class DI.Scope
+     * @constructor
+     * @param {DI.Scope} [parentScope=null] The parent scope.
+     */
+    function Scope() {
+      var parentScope = arguments[0] === undefined ? null : arguments[0];
+      this[__localBindings__] = new BindingTree();
+      this[__parentScope__] = parentScope;
+    }
+
+    _prototypeProperties(Scope, null, (function () {
+      var _prototypeProperties2 = {};
+
+      _defineProperty(_prototypeProperties2, __get__, {
+        value: function (key, scope) {
+          var provider = this[__localBindings__].get(key);
+          if (provider === undefined) {
+            if (this[__parentScope__]) {
+              return this[__parentScope__][__get__](key, scope);
+            } else {
+              return undefined;
+            }
+          } else {
+            return provider.resolve(scope);
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "with", {
+
+        /**
+         * Creates a new child scope with the given value bound to the given key in its local binding.
+         *
+         * @method with
+         * @param {string} key The key to bound the value to.
+         * @param {Function} fn The function to run. The function's arguments will be bound based on
+         *    their names.
+         * @return {DI.Scope} The newly created child scope.
+         */
+        value: function _with(key, value) {
+          var childScope = new Scope(this);
+          childScope[__localBindings__].add(key, new Provider(value, this, key));
+          return childScope;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "constant", {
+        value: function constant(key, value) {
+          return this["with"](key, function () {
+            return value;
+          });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "bind", {
+
+        /**
+         * Globally binds the given value to the given key.
+         *
+         * @method bind
+         * @param {string} key The key to bound the value to.
+         * @param {Function} fn The function to run. The function's arguments will be bound based on
+         *    their names.
+         */
+        value: function bind(key, value) {
+          bindings.add(key, new Provider(value, this, key));
+          return this;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "get", {
+
+        /**
+         * Returns the provider bound to the given key and resolve it in this scope. This will first check
+         * for the local bindings, then its ancestors. If no binding is found in the ancestral path, this
+         * will check for the global bindings.
+         *
+         * @method get
+         * @param {string} key Key whose bound value should be returned.
+         * @return {any} The value bound to the given key, or undefined if no values can be found.
+         */
+        value: function get(key) {
+          var value = this[__get__](key);
+          if (value === undefined) {
+            return getGlobal(key, this);
+          } else {
+            return value;
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "run", {
+
+        /**
+         * Runs the given function after injecting any dependencies.
+         *
+         * @method run
+         * @param {Function} fn The function to run. The function's arguments will be bound based on
+         *    their names.
+         */
+        value: function run(fn) {
+          new Provider(fn, this).resolve(this);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      return _prototypeProperties2;
+    })());
+
+    return Scope;
+  })();
+
+  var bindings = new BindingTree();
+
+  var DI = new Scope();
+  window.DI = DI;
+
+  if (window.TEST_MODE) {
+    DI.Scope = Scope;
+    DI.BindingTree = BindingTree;
+    DI.Provider = Provider;
+    DI.bindings = bindings;
+  }
+})();</script></head><body></body></html>

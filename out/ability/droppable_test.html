@@ -1,0 +1,85 @@
+<html><head>
+  <base href="../..">
+  <title>Droppable Unit Tests</title>
+
+  <link rel="import" href="out/testbase.html">
+
+  <link rel="import" href="out/ability/droppable.html">
+  <link rel="import" href="out/events.html">
+  <link rel="import" href="out/di.html">
+  <link rel="import" href="out/service/move.html">
+  <link rel="import" href="out/service/registry.html">
+  <link rel="import" href="out/third_party/jquery.html">
+  <link rel="import" href="out/utils.html">
+</head>
+<body>
+  <script>"use strict";
+
+DI.constant("Move", {
+  movedElements: []
+})["with"]("$registry", function (Registry) {
+  return new Registry();
+})["with"]("doc", function () {
+  return document.currentScript.ownerDocument;
+}).run(function (expect, _, _M, doc, $, Droppable, Move, Utils) {
+  describe("Droppable", function () {
+    var el = undefined;
+
+    beforeEach(function (done) {
+      el = doc.createElement("div");
+      done();
+    });
+
+    describe("#init", function () {
+      it("should set the default value if the attribute is not set", function () {
+        var droppable = new Droppable(undefined, undefined, false);
+        droppable.init(el);
+        expect($(el).attr(droppable.attrName)).to.equal("false");
+      });
+      it("should not set the default value if the attribute is set", function () {
+        var value = "value";
+        var droppable = new Droppable();
+        $(el).attr(droppable.attrName, value);
+        droppable.init(el);
+        expect($(el).attr(droppable.attrName)).to.equal(value);
+      });
+    });
+
+    describe("#trigger", function () {
+      var droppable = undefined;
+
+      it("should add the moved elements if enabled", function () {
+        var child1 = doc.createElement("div");
+        var child2 = doc.createElement("h1");
+
+        droppable = new Droppable(undefined, undefined, true);
+        droppable.init(el);
+
+        Move.movedElements = [child1, child2];
+
+        droppable.trigger(el);
+
+        expect(Utils.toArray(el.children)).to.eql([child1]);
+      });
+      it("should do nothing if not enabled", function () {
+        var child1 = doc.createElement("div");
+        var child2 = doc.createElement("h1");
+
+        droppable = new Droppable(undefined, undefined, false);
+        droppable.init(el);
+
+        Move.movedElements = [child1, child2];
+
+        droppable.trigger(el);
+
+        expect(el.children.length).to.equal(0);
+      });
+    });
+
+    afterEach(function (done) {
+      _.reset();
+      done();
+    });
+  });
+});</script>
+</body></html>

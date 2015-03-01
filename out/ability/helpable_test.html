@@ -1,0 +1,56 @@
+<html><head>
+  <base href="../..">
+  <title>ability.Helpable Unit Tests</title>
+
+  <link rel="import" href="out/di.html">
+  <link rel="import" href="out/ability/abilities.html">
+  <link rel="import" href="out/ability/helpable.html">
+  <link rel="import" href="out/service/config.html">
+  <link rel="import" href="out/service/registry.html">
+  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="out/trigger/click.html">
+  <link rel="import" href="out/trigger/key.html">
+</head>
+<body>
+  <script>"use strict";
+
+DI["with"]("$registry", function (Registry) {
+  return new Registry();
+}).constant("doc", document.currentScript.ownerDocument).run(function (expect, _, Abilities, Click, Config, Helpable, Key, doc, pb_t, $registry) {
+  describe("ability.Helpable", function () {
+    var displayEl = undefined;
+
+    beforeEach(function (done) {
+      displayEl = doc.createElement("div");
+
+      _.spy(doc, "createElement").overrideReturn(displayEl);
+      $registry.register(doc, Config);
+      _.reset(doc.createElement);
+      done();
+    });
+
+    describe("#trigger", function () {
+      it("should add the abilities as child of the display element and show the element", function () {
+        var ability1 = pb_t.createFakeAbility("ability", new Click());
+        var ability2 = pb_t.createFakeAbility("ability2", new Key("a"));
+        var helpable = new Helpable();
+        var el = doc.createElement("div");
+        Abilities.of(el).add(helpable).add(ability1).add(ability2);
+        Abilities.init(el);
+
+        helpable.trigger(el);
+        var children = displayEl.children;
+        expect(children.length).to.be.equal(3);
+
+        var child1 = children.item(0);
+        expect(child1.innerText).to.be.equal("?: " + helpable.attrName);
+      });
+    });
+
+    afterEach(function (done) {
+      _.reset();
+      done();
+    });
+  });
+});</script>
+</body></html>

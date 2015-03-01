@@ -1,0 +1,180 @@
+<html><head><base href="..">
+
+<link rel="import" href="di.html">
+<link rel="import" href="events.html">
+<link rel="import" href="pbelement.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="service/preview.html">
+<link rel="import" href="utils.html">
+
+<template>
+  <div id="root">
+    <content></content>
+  </div>
+</template>
+
+<script>"use strict";
+
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === undefined) {
+      return undefined;
+    }
+    return getter.call(receiver);
+  }
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+  return doc.querySelector("template");
+}).bind("pb_ui_Previewer", function ($registry, Config, Events, PbElement, service_Preview, Utils, doc, template) {
+  /**
+   * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered
+   * over. This works in tandem with {{#crossLink ui.Preview}}{{/crossLink}} and
+   * {{#crossLink service.Preview}}{{/crossLink}}.
+   *
+   * @class ui.Previewer
+   * @extends PbElement
+   */
+
+  var EL_NAME = "pb-u-previewer";
+
+  // Private symbols.
+  var __previewElHandler__ = Symbol();
+
+  var __onPreviewElChanged__ = Symbol("onPreviewElChanged");
+
+  var Previewer = (function (PbElement) {
+    function Previewer() {
+      if (Object.getPrototypeOf(Previewer) !== null) {
+        Object.getPrototypeOf(Previewer).apply(this, arguments);
+      }
+    }
+
+    _inherits(Previewer, PbElement);
+
+    _prototypeProperties(Previewer, null, (function () {
+      var _prototypeProperties2 = {};
+
+      _defineProperty(_prototypeProperties2, __onPreviewElChanged__, {
+
+        /**
+         * Called when the preview element has changed.
+         *
+         * @method __onPreviewElChanged__
+         * @private
+         */
+        value: function () {
+          if (service_Preview.previewedEl) {
+            this.innerHTML = service_Preview.previewedEl.innerHTML;
+          } else {
+            this.innerHTML = "";
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "createdCallback", {
+
+        /**
+         * Called when the element is created
+         *
+         * @method createdCallback
+         */
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Previewer.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+
+          this.attachedCallback();
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "attachedCallback", {
+
+        /**
+         * Called when the element is attached to the document.
+         *
+         * @method attachedCallback
+         */
+        value: function attachedCallback() {
+          _get(Object.getPrototypeOf(Previewer.prototype), "attachedCallback", this).call(this);
+          this[__previewElHandler__] = Events.of(service_Preview, this).on("jquery", service_Preview.Events.ELEMENT_CHANGED, this[__onPreviewElChanged__].bind(this));
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "detachedCallback", {
+
+        /**
+         * Called when the element is detached from the document.
+         *
+         * @method detachedCallback
+         */
+        value: function detachedCallback() {
+          Events.of(service_Preview, this).off();
+          _get(Object.getPrototypeOf(Previewer.prototype), "detachedCallback", this).call(this);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      return _prototypeProperties2;
+    })());
+
+    return Previewer;
+  })(PbElement);
+
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Previewer.prototype);
+
+  return Previewer;
+});</script></head><body></body></html>

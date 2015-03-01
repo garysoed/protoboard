@@ -1,0 +1,10 @@
+.pb-shuffleable-animate {
+  -webkit-animation: pb-shuffle 0.5s linear 0s 1 normal; }
+
+@-webkit-keyframes pb-shuffle {
+  from {
+    transform: rotateZ(0deg); }
+  to {
+    transform: rotateZ(360deg); } }
+
+/*# sourceMappingURL=shuffleable.css.map */
