@@ -5,6 +5,7 @@
     <link rel="import" href="out/bootstrap.html">
     <link rel="import" href="out/component/card.html">
     <link rel="import" href="out/component/token.html">
+    <link rel="import" href="out/di.html">
     <link rel="import" href="out/region/bag.html">
     <link rel="import" href="out/region/deck.html">
     <link rel="import" href="out/region/hand.html">
@@ -66,7 +67,7 @@
                 Default - back
               </div>
             </pb-c-card>
-            <pb-c-card pb-click="Rotateable" 
+            <pb-c-card pb-click="Rotateable"
                        pb-dblclick="Toggleable"
                        pb-orientation-index="0"
                        pb-rotateable="0 90"
@@ -236,7 +237,7 @@
           <td id="previewer">Previewer</td>
           <td><pb-u-previewer></pb-u-previewer></td>
           <td>
-            This displays the content of a <code>pb-u-preview</code> element when a mouse hovers 
+            This displays the content of a <code>pb-u-preview</code> element when a mouse hovers
             over its parent element. This is useful to display more details of a component, while
             preserving screen real estate. See the Card for an example.
           </td>
@@ -245,11 +246,7 @@
     </table>
 
     <script>
-    DI.run(function(Bootstrap) { Bootstrap.run(document); });
-
-      var l = new keypress.Listener();
-      l.simple_combo('a', function() { console.log('keypress a'); });
-      l.simple_combo('a', function() { console.log('keypress a2'); });
+      DI.run(function(Bootstrap) { Bootstrap.run(document); });
 
       var headers = document.querySelectorAll('thead');
       for (var i = 0; i < headers.length; i++) {
