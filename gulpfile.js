@@ -90,8 +90,17 @@ function subYuiMd() {
 }
 
 gulp.task('clean', shell.task('rm -r out'));
+gulp.task('doc-gen', shell.task('yuidoc --config yuidoc.json'));
 
-gulp.task('doc', shell.task('yuidoc --config yuidoc.json'));
+gulp.task('demo', function() {
+  return gulp.src(['out/**', 'ex/**', 'bower_components/**'], { base: '.' })
+      .pipe(gulp.dest('../protoboard-doc'));
+});
+
+gulp.task('doc', ['demo', 'doc-gen'], function() {
+  return gulp.src(['doc/**'])
+      .pipe(gulp.dest('../protoboard-doc'));
+});
 
 gulp.task('jshint', function() {
   return gulp.src(['./src/**/*.html', './test/**/*.html'])
