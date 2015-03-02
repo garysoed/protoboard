@@ -15,7 +15,15 @@ var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
 var myth   = require('gulp-myth');
 
-var gutil   = require('gulp-util');
+var gutil    = require('gulp-util');
+var minimist = require('minimist');
+
+var options = minimist(process.argv.slice(2), {
+  'string': 'theme',
+  'default': {
+    'theme': './themes/slateblue.json'
+  }
+});
 
 function chain(fn) {
   return through.obj(function(file, enc, callback) {
@@ -70,42 +78,19 @@ function sub6to5() {
   //     .pipe(debug, {title: chalk.green('6to5')});
 }
 
+function readJsonTheme(file) {
+  var json = require(file);
+  var base = json.base ? readJsonTheme(json.base) : {};
+  for (var key in json.vars) {
+    base[key] = json.vars[key];
+  }
+  return base;
+}
+
 function subMyth() {
   return chain(function(stream) {
-    // TODO(gs): Pull the map from json.
     return stream
-        .pipe(myth({
-          'map': {
-            '--color-lighter': '#c8c8c8',
-            '--color-light': '#a7a7a7',
-            '--color-normal': '#888888',
-            '--color-dark': '#666666',
-            '--color-darker': '#3f3f3f',
-            '--color-background': 'white',
-            '--color-foreground': 'black',
-
-            '--color-border': 'var(--color-normal)',
-            '--color-background-accent': 'var(--color-lighter)',
-            '--color-background-accent-dark': 'var(--color-light)',
-            '--color-highlight': 'var(--color-dark)',
-            '--color-shadow': 'var(--color-darker)',
-            '--color-font': 'var(--color-foreground)',
-            '--color-font-highlight': 'var(--color-background)',
-
-            '--drop-shadow-layer-1': '0px 2px 5px rgba(var(--color-shadow), 1)',
-
-            '--card-height': '100px',
-            '--card-width': '75px',
-            '--component-width': '50px',
-            '--component-height': '50px',
-
-            '--border': '1px solid var(--color-border)',
-
-            '--font': '\'Roboto\', Helvetica, Arial, sans-serif',
-
-            '--transition-duration': '.3s'
-          }
-        }));
+        .pipe(myth({ 'map': readJsonTheme(options.theme) }));
   })
 }
 
