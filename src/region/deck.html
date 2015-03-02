@@ -10,9 +10,28 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="region/deck.css">
-
 <template>
+  <style>
+    :host {
+      border: var(--border);
+      display: inline-block;
+    }
+
+    ::content > * {
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+    }
+
+    #root {
+      height: var(--card-height);
+      width: var(--card-width);
+      position: relative;
+    }
+  </style>
+
   <div id="root">
     <content></content>
   </div>

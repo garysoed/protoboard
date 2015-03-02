@@ -11,9 +11,32 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="region/bag.css">
-
 <template id="main">
+  <style>#root {
+  border: 1px solid #888888;
+  height: 50px;
+  width: 50px;
+}
+
+/* The placeholder */
+
+::content > :not([pb-placeholder]) {
+  display: none;
+}
+
+::content > [pb-placeholder] {
+  position: absolute;
+  background-color: #c8c8c8;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  width: 50px;
+}
+
+::content > [pb-placeholder]:only-child {
+  display: none;
+}</style>
+
   <div id="root">
     <content></content>
   </div>

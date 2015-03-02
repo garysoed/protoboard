@@ -11,9 +11,21 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="region/rect.css">
-
 <template>
+  <style>
+    :host {
+      border: var(--border);
+    }
+
+    ::content > * {
+      position: absolute;
+    }
+
+    #root {
+      position: relative;
+    }
+  </style>
+
   <div id="root">
     <content></content>
   </div>

@@ -3,6 +3,31 @@
 <link rel="import" href="di.html">
 <link rel="import" href="service/config.html">
 
+<style>/* TODO(gs): Move this to myth? */
+
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+
+body {
+  background-color: white;
+  color: black;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  font-size: small;
+}
+
+p {
+  margin-after: .5em;
+  margin-before: .5em;
+}
+
+.pb-trbl-fit,
+* /deep/ .pb-trbl-fit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}</style>
+
 <script>"use strict";
 
 DI.bind("$registry", function (Registry) {

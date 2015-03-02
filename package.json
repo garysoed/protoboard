@@ -28,6 +28,7 @@
     "gulp-html-subs": "git://github.com/garysoed/gulp-html-subs",
     "gulp-jshint": "^1.9.0",
     "gulp-logger": "0.0.2",
+    "gulp-myth": "^1.0.2",
     "gulp-plumber": "^0.6.6",
     "gulp-ruby-sass": "^0.7.1",
     "gulp-shell": "^0.2.11",
@@ -43,6 +44,7 @@
     "karma-mocha-reporter": "^0.3.1",
     "karma-story-reporter": "^0.2.2",
     "mocha": "^2.0.0",
+    "myth": "git://github.com/garysoed/myth",
     "spies": "git://github.com/garysoed/spies.git",
     "stringbuilder": "0.0.10",
     "yuimd": "file:../yuimd"

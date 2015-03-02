@@ -13,10 +13,6 @@ $color-highlight: $color-dark;
   border: 1px solid $color-border;
 }
 
-@mixin card-border() {
-  border-radius: 5px;
-}
-
 @mixin layer($level) {
   @if $level == 1 {
     -webkit-filter: drop-shadow(0px 2px 5px rgba($color-shadow, 1));
@@ -67,15 +63,4 @@ $transition-duration: .3s;
 .pb-component::shadow #root {
   height: $component-height;
   width: $component-width;
-}
-
-.pb-card::shadow #root {
-  @include card-border();
-  height: $card-height;
-  width: $card-width;
-}
-
-.pb-key:hover {
-  outline: 6px dashed $color-highlight;
-  outline-offset: -3px;
 }

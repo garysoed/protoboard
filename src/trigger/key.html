@@ -5,6 +5,13 @@
 <link rel="import" href="service/move.html">
 <link rel="import" href="trigger/trigger.html">
 
+<style>
+  .pb-key:hover {
+    outline: 6px dashed var(--color-highlight);
+    outline-offset: -3px;
+  }
+</style>
+
 <script>
 DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
   // Private symbols.

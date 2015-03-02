@@ -10,9 +10,75 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="component/card.css">
-
 <template>
+  <style>#root {
+  width: 75px;
+  height: 100px;
+  -webkit-perspective: 800px;
+  perspective: 800px;
+  position: relative;
+}
+
+#container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transition: -webkit-transform .3s;
+  transition: transform .3s;
+}
+
+:host([tap-active="true"]) {
+  -webkit-transform: rotateZ(90deg);
+  transform: rotateZ(90deg);
+}
+
+:host([tap="true"]) {
+  transition: -webkit-transform .3s;
+  transition: transform .3s;
+}
+
+:host([flip-active="true"])::shadow #container {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+:host([flip-active="true"].pb-dragged) .pb-front,
+:host(.pb-dragged):not([flip-active="true"]) .pb-back {
+  -webkit-filter: drop-shadow(0px 2px 5px rgba(#3f3f3f, 1));
+  filter: drop-shadow(0px 2px 5px rgba(#3f3f3f, 1));
+  z-index: 1;
+}
+
+:host([flip-active="true"].pb-dragged) .pb-back,
+:host(.pb-dragged):not([flip-active="true"]) .pb-front {
+  display: none;
+}
+
+::content div {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 5px;
+  height: 100px;
+  width: 75px;
+}
+
+::content .pb-back {
+  background-color: #a7a7a7;
+  border: 1px solid #888888;
+  box-sizing: border-box;
+}
+
+::content .pb-front {
+  background-color: #c8c8c8;
+  position: absolute;
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  border: 5px solid #888888;
+  box-sizing: border-box;
+}</style>
+
   <div id="root">
     <div id="container">
       <content select=".pb-front"></content>

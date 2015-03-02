@@ -10,9 +10,26 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="region/deck.css">
-
 <template>
+  <style>:host {
+  border: 1px solid #888888;
+  display: inline-block;
+}
+
+::content > * {
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+}
+
+#root {
+  height: 100px;
+  width: 75px;
+  position: relative;
+}</style>
+
   <div id="root">
     <content></content>
   </div>

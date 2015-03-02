@@ -13,6 +13,7 @@ var yuidoc = require('gulp-yuidoc');
 var yuimd  = require('yuimd');
 var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
+var myth   = require('gulp-myth');
 
 var gutil   = require('gulp-util');
 
@@ -55,11 +56,11 @@ function subJsHint() {
 
 function sub6to5() {
   return chain(function(stream) {
-    var replace = subs();
+    var scriptSubs = subs('script');
     return stream
-        .pipe(replace.extract)
+        .pipe(scriptSubs.extract)
             .pipe(to5({modules: 'ignore'}))
-        .pipe(replace.inject);
+        .pipe(scriptSubs.inject);
   });
 
   // return new subtask('6to5')
@@ -67,6 +68,55 @@ function sub6to5() {
   //         .pipe(to5, {modules: 'ignore'})
   //     .pipe(function() { return replace.inject; })
   //     .pipe(debug, {title: chalk.green('6to5')});
+}
+
+function subMyth() {
+  return chain(function(stream) {
+    // TODO(gs): Pull the map from json.
+    return stream
+        .pipe(myth({
+          'map': {
+            '--color-lighter': '#c8c8c8',
+            '--color-light': '#a7a7a7',
+            '--color-normal': '#888888',
+            '--color-dark': '#666666',
+            '--color-darker': '#3f3f3f',
+            '--color-background': 'white',
+            '--color-foreground': 'black',
+
+            '--color-border': 'var(--color-normal)',
+            '--color-background-accent': 'var(--color-lighter)',
+            '--color-background-accent-dark': 'var(--color-light)',
+            '--color-highlight': 'var(--color-dark)',
+            '--color-shadow': 'var(--color-darker)',
+            '--color-font': 'var(--color-foreground)',
+            '--color-font-highlight': 'var(--color-background)',
+
+            '--drop-shadow-layer-1': '0px 2px 5px rgba(var(--color-shadow), 1)',
+
+            '--card-height': '100px',
+            '--card-width': '75px',
+            '--component-width': '50px',
+            '--component-height': '50px',
+
+            '--border': '1px solid var(--color-border)',
+
+            '--font': '\'Roboto\', Helvetica, Arial, sans-serif',
+
+            '--transition-duration': '.3s'
+          }
+        }));
+  })
+}
+
+function subMythHtml() {
+  return chain(function(stream) {
+    var styleSubs = subs('style');
+    return stream
+        .pipe(styleSubs.extract)
+            .pipe(subMyth())
+        .pipe(styleSubs.inject);
+  });
 }
 
 function subSass() {
@@ -90,8 +140,8 @@ function subYuiMd() {
 }
 
 gulp.task('clean', shell.task('rm -r out'));
-gulp.task('doc-gen', shell.task('yuidoc --config yuidoc.json'));
 
+gulp.task('doc-gen', shell.task('yuidoc --config yuidoc.json'));
 gulp.task('demo', function() {
   return gulp.src(['out/**', 'ex/**', 'bower_components/**'], { base: '.' })
       .pipe(gulp.dest('../protoboard-doc'));
@@ -108,10 +158,17 @@ gulp.task('jshint', function() {
       .pipe(subJsHint());
 })
 
-gulp.task('6to5-src', ['jshint'], function() {
+gulp.task('src', ['jshint'], function() {
   return gulp.src(['./src/**/*.html'])
       .pipe(sub6to5())
+      .pipe(subMythHtml())
       .pipe(gulp.dest('out'));
+});
+
+gulp.task('ex', ['src'], function() {
+  return gulp.src('./ex/**/*.css')
+      .pipe(subMyth())
+      .pipe(gulp.dest('out/ex'));
 });
 
 gulp.task('6to5-test', ['jshint'], function() {
@@ -120,7 +177,7 @@ gulp.task('6to5-test', ['jshint'], function() {
       .pipe(gulp.dest('out'));
 });
 
-gulp.task('karma', ['6to5-src', '6to5-test'], function(done) {
+gulp.task('karma', ['src', '6to5-test'], function(done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
@@ -134,43 +191,14 @@ gulp.task('karma-dev', function(done) {
   }, done);
 });
 
-gulp.task('sass-src', function() {
-  return gulp.src(['./src/**/*.scss', '!./src/themes/*.scss'])
-      .pipe(subSass())
-      .pipe(gulp.dest('out'));
-});
-
-gulp.task('sass-ex', function() {
-  return gulp.src(['ex/**/*.scss', '!./src/themes/*.scss'])
-      .pipe(subSass())
-      .pipe(gulp.dest('out'));
-});
-
 gulp.task('watch', function() {
-  // SASS
-  gulp.watch(['src/**/*.scss'], function(event) {
-    gulp.src(['src/**/*.scss'])
-        .pipe(plumber())
-        .pipe(subSass())
-        .pipe(debug({title: chalk.green('sass')}))
-        .pipe(gulp.dest('out'));
-  });
-
-  // SASS for examples
-  gulp.watch(['ex/**/*.scss', 'src/themes/*.scss'], function(event) {
-    gulp.src(['ex/**/*.scss', '!./src/themes/*.scss'])
-        .pipe(plumber())
-        .pipe(subSass())
-        .pipe(debug({title: chalk.green('sass')}))
-        .pipe(gulp.dest('ex'));
-  });
-
   // 6to5
   gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
     var base = event.path.substring(__dirname.length).split('/')[1];
     gulp.src(event.path, {base: base})
         .pipe(plumber())
         .pipe(sub6to5())
+        .pipe(subMythHtml())
         .pipe(debug({title: chalk.green('6to5')}))
         .pipe(gulp.dest('out'));
   });
@@ -185,6 +213,6 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('compile', ['6to5-src', '6to5-test', 'sass-src', 'sass-ex']);
+gulp.task('compile', ['src', '6to5-test', 'sass-src', 'sass-ex']);
 gulp.task('check', ['karma']);
 gulp.task('push', ['check', 'doc'], shell.task('git push'));

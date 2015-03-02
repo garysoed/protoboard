@@ -11,9 +11,33 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="region/hand.css">
-
 <template>
+  <style>#root {
+  border: 1px solid #888888;
+  position: relative;
+}
+
+#content {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+::content > *:hover {
+  -webkit-filter: drop-shadow(0px 2px 5px rgba(#3f3f3f, 1));
+  filter: drop-shadow(0px 2px 5px rgba(#3f3f3f, 1));
+}
+
+::content > *:last-child {
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}</style>
+
   <div id="root">
     <div id="content">
       <content></content>

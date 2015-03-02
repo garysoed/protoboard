@@ -8,27 +8,33 @@
 <link rel="import" href="utils.html">
 
 <template id="main">
-  <style>
-    #root {
-      display: inline-block;
-    }
+  <style>#root {
+  display: inline-block;
+}
 
-    #content {
-      display: flex;
-      flex-direction: column;
-    }
+#content {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
 
-    .row {
-      display: flex;
-      flex-direction: row;
-    }
+.row {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
 
-    .col {
-      /* TODO(gs): Add CSS var */
-      width: 100px;
-      height: 100px;
-    }
-  </style>
+.col {
+  /* TODO(gs): Add CSS var */
+  width: 100px;
+  height: 100px;
+}</style>
 
   <div id="root">
     <div id="content"></div>
@@ -109,6 +115,7 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("templateMain",
    *
    * ```html
    * <pb-s-rectgrid pb-row="2" pb-col="3">
+   *   <!-- Third column is empty -->
    *   <div pb-row="0" pb-col="0">Top Left</div>
    *   <div pb-row="0" pb-col="1">Top Right</div>
    *   <div pb-row="1" pb-col="0">Bottom Left</div>
@@ -119,6 +126,7 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("templateMain",
    * You can customize the tiles by using `pb-s-rectgrid::shadow .col` CSS selector.
    *
    * @class surface.RectGrid
+   * @since 0.2
    * @extends PbElement
    */
   var RectGrid = (function (PbElement) {
