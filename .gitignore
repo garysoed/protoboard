@@ -3,3 +3,5 @@ bower_components/
 .sass-cache/
 *.css
 *.map
+out/**/*_test.html
+out/testbase.html
