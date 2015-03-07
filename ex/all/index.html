@@ -4,6 +4,7 @@
   <head>
     <link rel="import" href="out/bootstrap.html">
     <link rel="import" href="out/component/card.html">
+    <link rel="import" href="out/component/dice.html">
     <link rel="import" href="out/component/token.html">
     <link rel="import" href="out/di.html">
     <link rel="import" href="out/region/bag.html">
@@ -131,6 +132,33 @@
 
         <tr>
           <td>Dice</td>
+          <td>
+            <pb-c-dice type="d2"></pb-c-dice>
+            <pb-c-dice type="d4"></pb-c-dice>
+            <pb-c-dice type="d6"></pb-c-dice>
+            <pb-c-dice type="d8"></pb-c-dice>
+            <pb-c-dice type="d10"></pb-c-dice>
+            <pb-c-dice type="d12"></pb-c-dice>
+            <pb-c-dice type="d20"></pb-c-dice>
+            <pb-c-dice>
+              <div>&nbsp;</div>
+              <div>1</div>
+              <div>2</div>
+              <div>&nbsp;</div>
+              <div>1!</div>
+              <div>2!</div>
+            </pb-c-dice>
+            <pb-c-dice flip="true">
+              <div pb-dice-pair>
+                <div>Cust 1</div>
+                <div>Opps 1</div>
+              </div>
+              <div pb-dice-pair>
+                <div>Cust 2</div>
+                <div>Opps 2</div>
+              </div>
+            </pb-c-dice>
+          </td>
         </tr>
       </tbody>
 

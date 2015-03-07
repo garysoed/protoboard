@@ -156,7 +156,7 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
    *   <div class="pb-back">Back side</div>
    * </pb-c-card>
    * ```
-    * @class component.Card
+   * @class component.Card
    * @extends component.Component
    */
   var Card = (function (Component) {
@@ -190,7 +190,7 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
     return Card;
   })(Component);
 
-  Config.add("pb-c-card", new Helpable("help"), new Pickable("pick", new Key("q"), true), new Toggleable("flip", new Click(), true), new Toggleable("tap", new Key("t"), true));
+  Config.add(EL_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true), new Toggleable("flip", new Click(), true), new Toggleable("tap", new Key("t"), true));
 
   $registry.add(EL_NAME, Card.prototype);
 

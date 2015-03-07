@@ -177,14 +177,14 @@ gulp.task('karma-dev', function(done) {
 });
 
 gulp.task('watch', function() {
-  // 6to5
+  // src
   gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
     var base = event.path.substring(__dirname.length).split('/')[1];
     gulp.src(event.path, {base: base})
         .pipe(plumber())
         .pipe(sub6to5())
         .pipe(subMythHtml())
-        .pipe(debug({title: chalk.green('6to5')}))
+        .pipe(debug({title: chalk.green('src')}))
         .pipe(gulp.dest('out'));
   });
 
