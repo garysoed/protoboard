@@ -119,7 +119,6 @@ DI
    *   <div class="pb-back">Back side</div>
    * </pb-c-card>
    * ```
-
    * @class component.Card
    * @extends component.Component
    */
@@ -139,7 +138,7 @@ DI
   }
 
   Config.add(
-      'pb-c-card',
+      EL_NAME,
       new Helpable('help'),
       new Pickable('pick', new Key('q'), true),
       new Toggleable('flip', new Click(), true),

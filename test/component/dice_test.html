@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>component.Dice Unit Tests</title>
+
+  <link rel="import" href="testbase.html">
+
+  <link rel="import" href="component/dice.html">
+  <link rel="import" href="di.html">
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="third_party/jquery.html">
+</head>
+<body>
+  <div id="testholder"></div>
+  <script>
+  DI
+      .with('$registry', Registry => new Registry())
+      .constant('doc', document.currentScript.ownerDocument)
+      .run((expect, $, _, doc, $registry, Config, Dice) => {
+
+  describe('component.Dice', () => {
+    before(done => {
+      $registry.register(doc, Config);
+      done();
+    });
+
+    describe('#createdCallback', () => {
+      it('should correctly create a d4', () => {
+        $(doc.body.querySelector('#testholder'))
+            .html('<pb-c-dice type="d4"></pb-c-dice>');
+        let el = doc.querySelector('#testholder pb-c-dice');
+
+        expect(el.children.length).to.be.equal(2);
+
+        let child1 = el.children.item(0);
+        expect(child1.children.length).to.be.equal(2);
+        expect(child1.children.item(0).innerHTML).to.be.equal('1');
+        expect(child1.children.item(1).innerHTML).to.be.equal('4');
+
+        let child2 = el.children.item(1);
+        expect(child2.children.length).to.be.equal(2);
+        expect(child2.children.item(0).innerHTML).to.be.equal('2');
+        expect(child2.children.item(1).innerHTML).to.be.equal('3');
+      });
+      it('should ignore unsupported type', () => {
+        $(doc.body.querySelector('#testholder'))
+            .html('<pb-c-dice type="invalid"></pb-c-dice>');
+        let el = doc.querySelector('#testholder pb-c-dice');
+
+        expect(el.children.length).to.be.equal(0);
+      });
+      it('should pair up the custom children', () => {
+        $(doc.body.querySelector('#testholder'))
+            .html(
+                '<pb-c-dice>' +
+                  '<div>1</div>' +
+                  '<div>2</div>' +
+                  '<div>3</div>' +
+                  '<div>4</div>' +
+                '</pb-c-dice>');
+        let el = doc.querySelector('#testholder pb-c-dice');
+
+        expect(el.children.length).to.be.equal(2);
+
+        let child1 = el.children.item(0);
+        expect($(child1).attr('pb-dice-pair')).to.not.be.undefined();
+        expect(child1.children.length).to.be.equal(2);
+        expect(child1.children.item(0).innerHTML).to.be.equal('1');
+        expect(child1.children.item(1).innerHTML).to.be.equal('4');
+
+        let child2 = el.children.item(1);
+        expect($(child2).attr('pb-dice-pair')).to.not.be.undefined();
+        expect(child2.children.length).to.be.equal(2);
+        expect(child2.children.item(0).innerHTML).to.be.equal('2');
+        expect(child2.children.item(1).innerHTML).to.be.equal('3');
+      });
+      it('should do nothing if the children are already paired', () => {
+        $(doc.body.querySelector('#testholder'))
+            .html(
+                '<pb-c-dice>' +
+                  '<div pb-dice-pair>' +
+                    '<div>1</div>' +
+                    '<div>2</div>' +
+                  '</div>' +
+                  '<div pb-dice-pair>' +
+                    '<div>3</div>' +
+                    '<div>4</div>' +
+                  '</div>' +
+                '</pb-c-dice>');
+        let el = doc.querySelector('#testholder pb-c-dice');
+
+        expect(el.children.length).to.be.equal(2);
+
+        let child1 = el.children.item(0);
+        expect(child1.children.length).to.be.equal(2);
+        expect(child1.children.item(0).innerHTML).to.be.equal('1');
+        expect(child1.children.item(1).innerHTML).to.be.equal('2');
+
+        let child2 = el.children.item(1);
+        expect(child2.children.length).to.be.equal(2);
+        expect(child2.children.item(0).innerHTML).to.be.equal('3');
+        expect(child2.children.item(1).innerHTML).to.be.equal('4');
+      });
+    });
+
+    describe('$Rollable', () => {
+      let el;
+
+      beforeEach(done => {
+        el = doc.createElement('div');
+        done();
+      });
+
+      describe('#init', () => {
+        it('should set the default enabled if not set', () => {
+          let rollable = new Dice.Rollable(undefined, undefined, true);
+          rollable.init(el);
+
+          expect($(el).attr(rollable.attrName)).to.be.equal('true');
+        });
+        it('should set the default show a if not set', () => {
+          let rollable = new Dice.Rollable(undefined, undefined, undefined, true);
+          rollable.init(el);
+
+          expect($(el).attr('show-a')).to.be.equal('true');
+        });
+        it('should not set any default values if they are set', () => {
+          let rollable = new Dice.Rollable();
+          $(el)
+              .attr(rollable.attrName, 'false')
+              .attr('show-a', 'false');
+          rollable.init(el);
+
+          expect($(el).attr(rollable.attrName)).to.be.equal('false');
+          expect($(el).attr('show-a')).to.be.equal('false');
+        });
+      });
+
+      describe('#trigger', () => {
+        it('should set the show-a attribute value', () => {
+          let rollable = new Dice.Rollable();
+          _.spy(Math, 'random').overrideReturn(0.2);
+
+          $(el).attr('show-a', 'true');
+          rollable.init(el);
+          rollable.trigger(el);
+          expect($(el).attr('show-a')).to.be.equal('false');
+        });
+      });
+    });
+
+    describe('$DiceFlippable', () => {
+      let el;
+      beforeEach(done => {
+        el = doc.createElement('div');
+        done();
+      });
+
+      describe('#init', () => {
+        it('should set the default enabled if not set', () => {
+          let flippable = new Dice.DiceFlippable(undefined, undefined, true);
+          flippable.init(el);
+
+          expect($(el).attr(flippable.attrName)).to.be.equal('true');
+        });
+        it('should set the default show a if not set', () => {
+          let flippable = new Dice.DiceFlippable(undefined, undefined, undefined, true);
+          flippable.init(el);
+
+          expect($(el).attr('show-a')).to.be.equal('true');
+        });
+        it('should not set any default values if they are set', () => {
+          let flippable = new Dice.DiceFlippable();
+          $(el)
+              .attr(flippable.attrName, 'false')
+              .attr('show-a', 'false');
+          flippable.init(el);
+
+          expect($(el).attr(flippable.attrName)).to.be.equal('false');
+          expect($(el).attr('show-a')).to.be.equal('false');
+        });
+      });
+
+      describe('#trigger', () => {
+        it('should flip the dice to the opposite side', () => {
+          let flippable = new Dice.DiceFlippable();
+          $(el)
+              .attr(flippable.attrName, 'true')
+              .attr('show-a', 'true');
+
+          flippable.init(el);
+          flippable.trigger(el);
+
+          expect($(el).attr('show-a')).to.be.equal('false');
+        });
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    });
+  });
+  });
+  </script>
+</body>

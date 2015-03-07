@@ -32,7 +32,7 @@ p {
 
 DI.bind("$registry", function (Registry) {
   return new Registry();
-}).bind("pb_Bootstrap", function ($registry, opt_Bag, opt_Card, opt_Deck, opt_Hand, opt_ui_Preview, opt_ui_Previewer, opt_Rect, opt_RectGrid, opt_ui_Template, opt_Token, Config, Utils) {
+}).bind("pb_Bootstrap", function ($registry, opt_Bag, opt_Card, opt_Dice, opt_Deck, opt_Hand, opt_ui_Preview, opt_ui_Previewer, opt_Rect, opt_RectGrid, opt_ui_Template, opt_Token, Config, Utils) {
   return {
     run: function run(document) {
       document.addEventListener("DOMContentLoaded", function () {
