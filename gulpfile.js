@@ -205,5 +205,4 @@ gulp.task('pack', ['src', 'ex'], function() {
       .pipe(zip('bin.zip'))
       .pipe(gulp.dest('dist'));
 });
-gulp.task('check', ['karma']);
-gulp.task('push', ['check', 'doc', 'pack'], shell.task('git push'));
+gulp.task('check', ['karma', 'doc', 'pack']);
