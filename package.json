@@ -35,6 +35,7 @@
     "gulp-subtask": "^0.2.3",
     "gulp-watch": "^4.1.0",
     "gulp-yuidoc": "^0.1.2",
+    "gulp-zip": "^2.0.3",
     "http-server": "^0.7.2",
     "jsdom": "^3.0.2",
     "jshint-stylish": "^1.0.0",

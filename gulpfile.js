@@ -14,6 +14,7 @@ var yuimd  = require('yuimd');
 var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
 var myth   = require('gulp-myth');
+var zip    = require('gulp-zip');
 
 var gutil    = require('gulp-util');
 var minimist = require('minimist');
@@ -199,5 +200,10 @@ gulp.task('watch', function() {
 });
 
 gulp.task('compile', ['src', '6to5-test']);
+gulp.task('pack', ['src', 'ex'], function() {
+  return gulp.src('out/**/*')
+      .pipe(zip('bin.zip'))
+      .pipe(gulp.dest('dist'));
+});
 gulp.task('check', ['karma']);
-gulp.task('push', ['check', 'doc'], shell.task('git push'));
+gulp.task('push', ['check', 'doc', 'pack'], shell.task('git push'));
