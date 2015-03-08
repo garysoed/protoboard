@@ -1,12 +1,10 @@
 <html><head><base href="../..">
 
-<script src="bower_components/handlebars/handlebars.js">"use strict";</script>
+<script src="bower_components/handlebars/handlebars.js"></script>
 
 <link rel="import" href="out/di.html">
 
-<script>"use strict";
-
-DI.bind("Handlebars", function () {
-  return Handlebars;
-});</script>
+<script>
+DI.bind('Handlebars', () => Handlebars);
+</script>
 </head><body></body></html>

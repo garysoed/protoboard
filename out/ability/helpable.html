@@ -44,72 +44,23 @@
   </div>
 </template>
 
-<script>"use strict";
+<script>
+DI
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', doc => doc.querySelector('template'))
+    .bind('pb_ability_Helpable', (
+        Abilities,
+        Ability,
+        Events,
+        Key,
+        Utils,
+        doc,
+        template,
+        $registry) => {
 
-var _slicedToArray = function (arr, i) {
-  if (Array.isArray(arr)) {
-    return arr;
-  } else {
-    var _arr = [];
+  let displayEl = null;
 
-    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-      _arr.push(_step.value);
-
-      if (i && _arr.length === i) break;
-    }
-
-    return _arr;
-  }
-};
-
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
-
-DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
-  return doc.querySelector("template");
-}).bind("pb_ability_Helpable", function (Abilities, Ability, Events, Key, Utils, doc, template, $registry) {
-  var displayEl = null;
-
-  var Helpable = (function (Ability) {
+  class Helpable extends Ability {
     /**
      * Displays the triggers for all registered abilities.
      *
@@ -120,61 +71,40 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
      *    key.
      * @extends ability.Ability
      */
-    function Helpable() {
-      var _this = this;
-      var name = arguments[0] === undefined ? "pb-helpable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Key("?") : arguments[1];
-      return (function () {
-        _get(Object.getPrototypeOf(Helpable.prototype), "constructor", _this).call(_this, name, defaultTrigger);
-      })();
+    constructor(name = 'pb-helpable', defaultTrigger = new Key('?')) {
+      super(name, defaultTrigger);
     }
 
-    _inherits(Helpable, Ability);
-
-    _prototypeProperties(Helpable, null, {
-      trigger: {
-
-        /**
-         * Displays the triggers for all abilities registered to this element.
-         *
-         * @method trigger
-         * @param {Element} el The element whose abilities should be displayed.
-         */
-        value: function trigger(el) {
-          var abilities = Abilities.of(el).getAll();
-          displayEl.innerHTML = "";
-          var doc = displayEl.ownerDocument;
-          for (var _iterator = abilities[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-            var _ref = _step.value;
-            var _ref2 = _slicedToArray(_ref, 2);
-
-            var name = _ref2[0];
-            var ability = _ref2[1];
-            var entry = doc.createElement("div");
-            entry.innerHTML = "<div class=\"trigger\">" + ability.getTrigger(el).helpText + "</div>: " + name;
-            displayEl.appendChild(entry);
-          }
-
-          displayEl.style.display = "";
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+    /**
+     * Displays the triggers for all abilities registered to this element.
+     *
+     * @method trigger
+     * @param {Element} el The element whose abilities should be displayed.
+     */
+    trigger(el) {
+      let abilities = Abilities.of(el).getAll();
+      displayEl.innerHTML = '';
+      let doc = displayEl.ownerDocument;
+      for (let [name, ability] of abilities) {
+        let entry = doc.createElement('div');
+        entry.innerHTML = `<div class="trigger">${ability.getTrigger(el).helpText}</div>: ${name}`;
+        displayEl.appendChild(entry);
       }
-    });
 
-    return Helpable;
-  })(Ability);
+      displayEl.style.display = '';
+    }
+  }
 
-  $registry.runAtRegister(function (document, config) {
-    displayEl = document.createElement("div");
+  $registry.runAtRegister((document, config) => {
+    displayEl = document.createElement('div');
     displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-    displayEl.style.display = "none";
-    Events.of(displayEl).on("dom", "click", function () {
-      displayEl.style.display = "none";
+    displayEl.style.display = 'none';
+    Events.of(displayEl).on('dom', 'click', () => {
+      displayEl.style.display = 'none';
     });
     document.body.appendChild(displayEl);
   });
 
   return Helpable;
-});</script></head><body></body></html>
+});
+</script></head><body></body></html>

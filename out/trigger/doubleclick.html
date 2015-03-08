@@ -4,104 +4,54 @@
 <link rel="import" href="hammerwrapper.html">
 <link rel="import" href="trigger/trigger.html">
 
-<script>"use strict";
+<script>
+DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper, Trigger) => {
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
-
-DI.bind("pb_trigger_DoubleClick", function (Events, HammerWrapper, Trigger) {
   /**
    * Triggers an ability when the element is double clicked.
    *
    * @class trigger.DoubleClick
    * @extends trigger.Trigger
    */
-  var DoubleClick = (function (Trigger) {
-    function DoubleClick() {
-      if (Object.getPrototypeOf(DoubleClick) !== null) {
-        Object.getPrototypeOf(DoubleClick).apply(this, arguments);
-      }
+  class DoubleClick extends Trigger {
+
+    /**
+     * Registers the given element to trigger the given ability when double clicked.
+     *
+     * @method on
+     * @param {Element} element Element to register.
+     * @param {ability.Ability} ability The ability to trigger.
+     */
+    on(element, ability) {
+      Events.of(element, this)
+          .on('hammer', 'doubletap', ability.trigger.bind(ability, element));
     }
 
-    _inherits(DoubleClick, Trigger);
+    /**
+     * Unregisters the given element from triggering the registered ability when double clicked.
+     *
+     * @method off
+     * @param {Element} element Element to unregister.
+     */
+    off(element) {
+      Events.of(element, this).off('hammer', 'doubletap');
+    }
 
-    _prototypeProperties(DoubleClick, null, {
-      on: {
+    /**
+     * @method toString
+     * @return {string} String pb-dblclick
+     */
+    toString() {
+      return 'pb-dblclick';
+    }
 
-        /**
-         * Registers the given element to trigger the given ability when double clicked.
-         *
-         * @method on
-         * @param {Element} element Element to register.
-         * @param {ability.Ability} ability The ability to trigger.
-         */
-        value: function on(element, ability) {
-          Events.of(element, this).on("hammer", "doubletap", ability.trigger.bind(ability, element));
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      },
-      off: {
-
-        /**
-         * Unregisters the given element from triggering the registered ability when double clicked.
-         *
-         * @method off
-         * @param {Element} element Element to unregister.
-         */
-        value: function off(element) {
-          Events.of(element, this).off("hammer", "doubletap");
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      },
-      toString: {
-
-        /**
-         * @method toString
-         * @return {string} String pb-dblclick
-         */
-        value: function toString() {
-          return "pb-dblclick";
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      },
-      helpText: {
-
-        /**
-         * @method helpText
-         */
-        get: function () {
-          return "Double Click";
-        },
-        enumerable: true,
-        configurable: true
-      }
-    });
-
-    return DoubleClick;
-  })(Trigger);
+    /**
+     * @method helpText
+     */
+    get helpText() {
+      return 'Double Click';
+    }
+  }
 
   /**
    * Parses the input string
@@ -112,9 +62,10 @@ DI.bind("pb_trigger_DoubleClick", function (Events, HammerWrapper, Trigger) {
    *    `undefined` otherwise.
    * @static
    */
-  DoubleClick.parse = function (str) {
-    return str === "pb-dblclick" ? new DoubleClick() : undefined;
+  DoubleClick.parse = function(str) {
+    return (str === 'pb-dblclick') ? new DoubleClick() : undefined;
   };
 
   return DoubleClick;
-});</script></head><body></body></html>
+});
+</script></head><body></body></html>

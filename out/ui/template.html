@@ -7,60 +7,10 @@
 <link rel="import" href="service/config.html">
 <link rel="import" href="utils.html">
 
-<script>"use strict";
+<script>
+DI
+    .bind('pb_ui_Template', ($registry, Check, Config, PbElement, Utils, Handlebars) => {
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
-
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
-
-DI.bind("pb_ui_Template", function ($registry, Check, Config, PbElement, Utils, Handlebars) {
   /**
    * When this element is created, it will process a <a href="http://handlebarsjs.com/">Handlebars
    * JS</a> template and it is given and replace itself with the processed templates.
@@ -95,94 +45,71 @@ DI.bind("pb_ui_Template", function ($registry, Check, Config, PbElement, Utils, 
    * @extends PbElement
    */
 
-  var EL_NAME = "pb-u-template";
+  const EL_NAME = 'pb-u-template';
 
-  var ATTR_TEMPLATE = "pb-template";
+  const ATTR_TEMPLATE = 'pb-template';
 
   // Private symbols.
-  var __getGlobal__ = Symbol();
+  const __getGlobal__ = Symbol();
 
-  var Template = (function (PbElement) {
-    function Template() {
-      if (Object.getPrototypeOf(Template) !== null) {
-        Object.getPrototypeOf(Template).apply(this, arguments);
-      }
+  class Template extends PbElement {
+
+    [__getGlobal__](path) {
+      return path.split('.').reduce((previousValue, currentValue) => {
+        if (previousValue) {
+          return previousValue[currentValue];
+        } else {
+          return previousValue;
+        }
+      }, window);
     }
 
-    _inherits(Template, PbElement);
+    /**
+     * Called when the element is created
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
 
-    _prototypeProperties(Template, null, (function () {
-      var _prototypeProperties2 = {};
+      // Get the data
+      let dataPromises = [];
+      for (let key in this.dataset) {
+        let valueStr = this.dataset[key];
+        let value = this[__getGlobal__](valueStr) || valueStr;
+        if (value instanceof Promise) {
+          dataPromises.push(value.then(result => {
+            return [key, result];
+          }));
+        } else {
+          dataPromises.push(Promise.resolve([key, value]));
+        }
+      }
 
-      _defineProperty(_prototypeProperties2, __getGlobal__, {
-        value: function (path) {
-          return path.split(".").reduce(function (previousValue, currentValue) {
-            if (previousValue) {
-              return previousValue[currentValue];
-            } else {
-              return previousValue;
-            }
-          }, window);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "createdCallback", {
-
-        /**
-         * Called when the element is created
-         *
-         * @method createdCallback
-         */
-        value: function createdCallback() {
-          var _this = this;
-          _get(Object.getPrototypeOf(Template.prototype), "createdCallback", this).call(this);
-
-          // Get the data
-          var dataPromises = [];
-          for (var key in this.dataset) {
-            (function (key) {
-              var valueStr = _this.dataset[key];
-              var value = _this[__getGlobal__](valueStr) || valueStr;
-              if (value instanceof Promise) {
-                dataPromises.push(value.then(function (result) {
-                  return [key, result];
-                }));
-              } else {
-                dataPromises.push(Promise.resolve([key, value]));
-              }
-            })(key);
-          }
-
-          Promise.all(dataPromises).then(function (dataArray) {
-            var data = Utils.fromArrayOfArrays(dataArray);
-            var templateStr = _this.ownerDocument.querySelector($(_this).attr("template")).innerHTML.replace("&gt;", ">");
-            $(_this).replaceWith(Handlebars.compile(templateStr)(data));
+      Promise.all(dataPromises)
+          .then(dataArray => {
+            let data = Utils.fromArrayOfArrays(dataArray);
+            let templateStr = this.ownerDocument
+                .querySelector($(this).attr('template'))
+                .innerHTML
+                .replace('&gt;', '>');
+            $(this).replaceWith(Handlebars.compile(templateStr)(data));
           });
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      return _prototypeProperties2;
-    })());
-
-    return Template;
-  })(PbElement);
+    }
+  }
 
   // Use function since Handlebars changes the context of this.
-  Handlebars.registerHelper("pb-for", function (from, to, step, options) {
+  Handlebars.registerHelper('pb-for', function(from, to, step, options) {
     if (options === undefined) {
       // Shift the args if step is not defined.
       options = step;
       step = 1;
     }
-    var rv = "";
-    for (var i = Check(from).isInt().orThrows(); i < Check(to).isInt().orThrows(); i += Check(step).isInt().orThrows()) {
-      var data = Handlebars.createFrame(options.data || {});
+    let rv = '';
+    for (let i = Check(from).isInt().orThrows();
+        i < Check(to).isInt().orThrows();
+        i += Check(step).isInt().orThrows()) {
+      let data = Handlebars.createFrame(options.data || {});
       data.index = i;
       rv += options.fn(this, { data: data });
     }
@@ -193,5 +120,6 @@ DI.bind("pb_ui_Template", function ($registry, Check, Config, PbElement, Utils, 
   $registry.add(EL_NAME, Template.prototype);
 
   return Template;
-});</script>
+});
+</script>
 </head><body></body></html>

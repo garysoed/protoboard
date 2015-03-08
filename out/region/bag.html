@@ -23,63 +23,35 @@
   <div class="pb-placeholder">???</div>
 </template>
 
-<script>"use strict";
+<script>
+DI
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', doc => doc.querySelector('template#main'))
+    .with('placeHolderTmp', doc => doc.querySelector('template#placeholder'))
+    .bind('pb_region_Bag', (
+        $registry,
+        Click,
+        Config,
+        Droppable,
+        Helpable,
+        Key,
+        Move,
+        Pickable,
+        Region,
+        Utils,
+        doc,
+        template,
+        placeHolderTmp) => {
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
-
-DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
-  return doc.querySelector("template#main");
-})["with"]("placeHolderTmp", function (doc) {
-  return doc.querySelector("template#placeholder");
-}).bind("pb_region_Bag", function ($registry, Click, Config, Droppable, Helpable, Key, Move, Pickable, Region, Utils, doc, template, placeHolderTmp) {
-  var EL_NAME = "pb-r-bag";
-  var ATTR_PLACEHOLDER = "pb-placeholder";
-  var ATTR_PLACEHOLDER_CONTENT = "pb-placeholder-content";
+  const EL_NAME = 'pb-r-bag';
+  const ATTR_PLACEHOLDER = 'pb-placeholder';
+  const ATTR_PLACEHOLDER_CONTENT = 'pb-placeholder-content';
 
   // Private symbols
-  var __placeHolderEl__ = Symbol("placeHolderEl");
+  const __placeHolderEl__ = Symbol('placeHolderEl');
 
-  var RandomPickable = (function (Pickable) {
+  class RandomPickable extends Pickable {
+
     /**
      * Element with this ability has content that can be picked and dragged around. When triggered,
      * a random child of the element will be picked. The child element can be dropped on elements
@@ -92,44 +64,25 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Pickable
      */
-    function RandomPickable() {
-      var _this = this;
-      var name = arguments[0] === undefined ? "pb-pickable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
-      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
-      return (function () {
-        _get(Object.getPrototypeOf(RandomPickable.prototype), "constructor", _this).call(_this, name, defaultTrigger, defaultEnabled);
-      })();
+    constructor(name = 'pb-pickable', defaultTrigger = new Click(), defaultEnabled = true) {
+      super(name, defaultTrigger, defaultEnabled);
     }
 
-    _inherits(RandomPickable, Pickable);
-
-    _prototypeProperties(RandomPickable, null, {
-      trigger: {
-
-        /**
-         * Picks up a random child element of the given element.
-         *
-         * @method trigger
-         * @param {Element} el The element whose child element should be randomly picked.
-         */
-        value: function trigger(el) {
-          var candidates = Utils.toArray(el.children).filter(function (child) {
-            return $(child).attr(ATTR_PLACEHOLDER) === undefined;
-          });
-          var moved = candidates[Math.round(Math.random() * (candidates.length - 1))];
-          if (moved) {
-            Move.add(moved);
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+    /**
+     * Picks up a random child element of the given element.
+     *
+     * @method trigger
+     * @param {Element} el The element whose child element should be randomly picked.
+     */
+    trigger(el) {
+      let candidates = Utils.toArray(el.children)
+          .filter(child => $(child).attr(ATTR_PLACEHOLDER) === undefined);
+      let moved = candidates[Math.round(Math.random() * (candidates.length - 1))];
+      if (moved) {
+        Move.add(moved);
       }
-    });
-
-    return RandomPickable;
-  })(Pickable);
+    }
+  }
 
   /**
    * A collection of components. You cannot see the component until you drag one out of it.
@@ -153,60 +106,49 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
    * @extends region.Region
    */
 
-  var Bag = (function (Region) {
-    function Bag() {
-      if (Object.getPrototypeOf(Bag) !== null) {
-        Object.getPrototypeOf(Bag).apply(this, arguments);
+  class Bag extends Region {
+
+    /**
+     * Called when the element is created.
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+
+      this[__placeHolderEl__] = this.querySelector(`[${ATTR_PLACEHOLDER}]`);
+
+      if (!this[__placeHolderEl__]) {
+        let placeHolderContent = this.querySelector(`[${ATTR_PLACEHOLDER_CONTENT}]`) ||
+            Utils.activateTemplate(placeHolderTmp, doc);
+
+        this[__placeHolderEl__] = doc.createElement('div');
+        this[__placeHolderEl__].appendChild(placeHolderContent);
+        $(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, '');
+        this.insertBefore(this[__placeHolderEl__], this.lastChild);
       }
+
+      this.attachedCallback();
     }
-
-    _inherits(Bag, Region);
-
-    _prototypeProperties(Bag, null, {
-      createdCallback: {
-
-        /**
-         * Called when the element is created.
-         *
-         * @method createdCallback
-         */
-        value: function createdCallback() {
-          _get(Object.getPrototypeOf(Bag.prototype), "createdCallback", this).call(this);
-
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-
-          this[__placeHolderEl__] = this.querySelector("[" + ATTR_PLACEHOLDER + "]");
-
-          if (!this[__placeHolderEl__]) {
-            var placeHolderContent = this.querySelector("[" + ATTR_PLACEHOLDER_CONTENT + "]") || Utils.activateTemplate(placeHolderTmp, doc);
-
-            this[__placeHolderEl__] = doc.createElement("div");
-            this[__placeHolderEl__].appendChild(placeHolderContent);
-            $(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, "");
-            this.insertBefore(this[__placeHolderEl__], this.lastChild);
-          }
-
-          this.attachedCallback();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      }
-    });
-
-    return Bag;
-  })(Region);
+  }
 
   Bag.prototype[__placeHolderEl__] = null;
 
-  Config.add(EL_NAME, new Helpable("help"), new Droppable("drop", new Key("d")), new RandomPickable("pick", new Key("q")));
+  Config.add(
+      EL_NAME,
+      new Helpable('help'),
+      new Droppable('drop', new Key('d')),
+      new RandomPickable('pick', new Key('q')));
 
   $registry.add(EL_NAME, Bag.prototype);
 
-  if (window.TEST_MODE) {
+  if (window['TEST_MODE']) {
     Bag.RandomPickable = RandomPickable;
   }
 
   return Bag;
-});</script>
+});
+</script>
 </head><body></body></html>

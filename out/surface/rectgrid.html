@@ -39,60 +39,26 @@
   </div>
 </template>
 
-<script>"use strict";
+<script>
+DI
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('templateMain', doc => doc.querySelector('template#main'))
+    .with('templateRow', doc => doc.querySelector('template#row'))
+    .with('templateCol', doc => doc.querySelector('template#col'))
+    .bind('pb_surface_RectGrid', (
+        $registry,
+        Check,
+        Config,
+        PbElement,
+        Utils,
+        doc,
+        templateMain,
+        templateRow,
+        templateCol) => {
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
-
-DI.constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", function (doc) {
-  return doc.querySelector("template#main");
-})["with"]("templateRow", function (doc) {
-  return doc.querySelector("template#row");
-})["with"]("templateCol", function (doc) {
-  return doc.querySelector("template#col");
-}).bind("pb_surface_RectGrid", function ($registry, Check, Config, PbElement, Utils, doc, templateMain, templateRow, templateCol) {
-  var ATTR_ROW = "pb-row";
-  var ATTR_COL = "pb-col";
-  var EL_NAME = "pb-s-rectgrid";
+  const ATTR_ROW = 'pb-row';
+  const ATTR_COL = 'pb-col';
+  const EL_NAME = 'pb-s-rectgrid';
 
   /**
    * A surface that lays out its components in a grid. To use this, add attributes `pb-row` and
@@ -110,77 +76,63 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("templateMain",
    * </pb-s-rectgrid>
    * ```
    */
-  var RectGrid = (function (PbElement) {
-    function RectGrid() {
-      if (Object.getPrototypeOf(RectGrid) !== null) {
-        Object.getPrototypeOf(RectGrid).apply(this, arguments);
+  class RectGrid extends PbElement {
+
+    /**
+     * Called when the element is created
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+
+      // Create the shadow DOM.
+      this.createShadowRoot()
+          .appendChild(Utils.activateTemplate(templateMain, doc));
+
+      // Initializes the data.
+      let rowCount = Check($(this).attr(ATTR_ROW)).isInt().orThrows();
+      let colCount = Check($(this).attr(ATTR_COL)).isInt().orThrows();
+      let rootEl = this.shadowRoot.querySelector('#content');
+
+      // Add the rows.
+      for (let row = 0; row < rowCount; row++) {
+        rootEl.appendChild(Utils.activateTemplate(templateRow, doc));
       }
-    }
 
-    _inherits(RectGrid, PbElement);
-
-    _prototypeProperties(RectGrid, null, {
-      createdCallback: {
-
-        /**
-         * Called when the element is created
-         *
-         * @method createdCallback
-         */
-        value: function createdCallback() {
-          _get(Object.getPrototypeOf(RectGrid.prototype), "createdCallback", this).call(this);
-
-          // Create the shadow DOM.
-          this.createShadowRoot().appendChild(Utils.activateTemplate(templateMain, doc));
-
-          // Initializes the data.
-          var rowCount = Check($(this).attr(ATTR_ROW)).isInt().orThrows();
-          var colCount = Check($(this).attr(ATTR_COL)).isInt().orThrows();
-          var rootEl = this.shadowRoot.querySelector("#content");
-
-          // Add the rows.
-          for (var row = 0; row < rowCount; row++) {
-            rootEl.appendChild(Utils.activateTemplate(templateRow, doc));
-          }
-
-          $(this.shadowRoot.querySelectorAll("#content > div")).each(function (row, rowEl) {
-            for (var col = 0; col < colCount; col++) {
-              var colEl = Utils.activateTemplate(templateCol, doc);
-              $(colEl.querySelector("content")).attr("select", "[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]").attr(ATTR_ROW, row).attr(ATTR_COL, col);
+      $(this.shadowRoot.querySelectorAll('#content > div'))
+          .each((row, rowEl) => {
+            for (let col = 0; col < colCount; col++) {
+              let colEl = Utils.activateTemplate(templateCol, doc);
+              $(colEl.querySelector('content'))
+                  .attr('select', `[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`)
+                  .attr(ATTR_ROW, row)
+                  .attr(ATTR_COL, col);
               rowEl.appendChild(colEl);
             }
           });
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      },
-      get: {
+    }
 
-        /**
-         * Returns the element at the given row and column, or null if not found.
-         *
-         * @method get
-         * @param {number} row The row index of the element to be returned.
-         * @param {number} col The col index of the element to be returned.
-         * @return {HTMLElement|null} The HTML element at the given row and col, or null if not found.
-         */
-        value: function get(row, col) {
-          var contentEl = this.shadowRoot.querySelector("content[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]");
-          return contentEl ? contentEl.getDistributedNodes()[0] : null;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      }
-    });
-
-    return RectGrid;
-  })(PbElement);
+    /**
+     * Returns the element at the given row and column, or null if not found.
+     *
+     * @method get
+     * @param {number} row The row index of the element to be returned.
+     * @param {number} col The col index of the element to be returned.
+     * @return {HTMLElement|null} The HTML element at the given row and col, or null if not found.
+     */
+    get(row, col) {
+      let contentEl = this.shadowRoot
+          .querySelector(`content[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`);
+      return contentEl ? contentEl.getDistributedNodes()[0] : null;
+    }
+  }
 
   Config.add(EL_NAME);
   $registry.add(EL_NAME, RectGrid.prototype);
 
   return RectGrid;
-});</script>
+
+});
+</script>
 </head><body></body></html>

@@ -4,47 +4,43 @@
 <link rel="import" href="trigger/click.html">
 <link rel="import" href="utils.html">
 
-<script>"use strict";
-
-DI.bind("pb_t", function (_, Utils) {
-  var TestUtil = {
-    createFakeAbility: function createFakeAbility(name, trigger) {
+<script>
+DI.bind('pb_t', (_, Utils) => {
+  let TestUtil = {
+    createFakeAbility(name, trigger) {
       return {
-        attrName: "attr" + name,
-        attrTrigger: "attr" + name + "Trigger",
-        getTrigger: function () {
-          return trigger;
-        },
+        attrName: `attr${name}`,
+        attrTrigger: `attr${name}Trigger`,
+        getTrigger: () => trigger,
         init: _.spiedFunction(),
         updateConfig: _.spiedFunction(),
         trigger: _.spiedFunction()
       };
     },
 
-    createFakeEvents: function createFakeEvents() {
-      var fake = {};
+    createFakeEvents() {
+      let fake = {};
       fake.of = _.spiedFunction().overrideReturn(fake);
       fake.on = _.spiedFunction().overrideReturn(fake);
       fake.off = _.spiedFunction().overrideReturn(fake);
       return fake;
     },
 
-    createFakeTrigger: function createFakeTrigger(name) {
+    createFakeTrigger(name) {
       return {
-        toString: function toString() {
-          return name;
-        },
+        toString() { return name; },
         on: _.spiedFunction(),
         off: _.spiedFunction()
       };
     },
 
-    getSymbol: function getSymbol(obj, name) {
-      return Object.getOwnPropertySymbols(obj).find(function (symbol) {
-        return "Symbol(" + name + ")" === symbol.toString();
+    getSymbol(obj, name) {
+      return Object.getOwnPropertySymbols(obj).find(symbol => {
+        return `Symbol(${name})` === symbol.toString();
       });
     }
   };
 
   return TestUtil;
-});</script></head><body></body></html>
+});
+</script></head><body></body></html>

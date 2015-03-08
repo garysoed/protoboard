@@ -3,37 +3,21 @@
 <link rel="import" href="di.html">
 <link rel="import" href="utils.html">
 
-<script>"use strict";
+<script>
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
-
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-DI.bind("pb_Check", function (Utils) {
-  var check = function (input) {
-    return new Check(input);
-  };
+DI.bind('pb_Check', (Utils) => {
 
   // Private symbols.
-  var __checked__ = Symbol();
-  var __input__ = Symbol();
-  var __value__ = Symbol();
+  const __checked__ = Symbol();
+  const __input__ = Symbol();
+  const __value__ = Symbol();
 
-  var __onFailure__ = Symbol();
-  var __onSuccess__ = Symbol();
+  const __onFailure__ = Symbol();
+  const __onSuccess__ = Symbol();
 
 
-  var Check = (function () {
+  class Check {
+
     /**
      * Utility class to check string values and parse them to different types.
      *
@@ -58,152 +42,114 @@ DI.bind("pb_Check", function (Utils) {
      * @param {Array} checked Array of strings that describe the check that has failed on the input
      *    string.
      */
-    function Check(input) {
-      var value = arguments[1] === undefined ? undefined : arguments[1];
-      var checked = arguments[2] === undefined ? [] : arguments[2];
+    constructor(input, value = undefined, checked = []) {
       this[__checked__] = checked;
       this[__input__] = input;
       this[__value__] = value;
     }
 
-    _prototypeProperties(Check, null, (function () {
-      var _prototypeProperties2 = {};
+    /**
+     * Handles when a check has failed.
+     *
+     * @method __onFailure__
+     * @param {string} checked The description of check that has been done.
+     * @return {Check} A new Check object with the appended checked description.
+     * @private
+     */
+    [__onFailure__](checked) {
+      return new Check(
+          this[__input__],
+          this[__value__],
+          this[__checked__].concat(checked));
+    }
 
-      _defineProperty(_prototypeProperties2, __onFailure__, {
+    /**
+     * Handles when a parse has succeeded.
+     *
+     * @method __onSuccess__
+     * @param {any} value The value successfully parsed from the string input.
+     * @return {Check} A new check object with the first successfully parsed value.
+     * @private
+     */
+    [__onSuccess__](value) {
+      if (this[__value__] === undefined) {
+        return new Check(this[__input__], value);
+      } else {
+        return new Check(this[__input__], this[__value__]);
+      }
+    }
 
-        /**
-         * Handles when a check has failed.
-         *
-         * @method __onFailure__
-         * @param {string} checked The description of check that has been done.
-         * @return {Check} A new Check object with the appended checked description.
-         * @private
-         */
-        value: function (checked) {
-          return new Check(this[__input__], this[__value__], this[__checked__].concat(checked));
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
+    /**
+     * Try to parse the input string as an int with the given radix.
+     *
+     * @method isInt
+     * @param {number} radix Radix to use to parse the input string. Defaults to 10.
+     * @return {Check} A new instance of the Check object used for chaining.
+     */
+    isInt(radix = 10) {
+      let output = Number.parseInt(this[__input__], radix);
+      if (Number.isNaN(output)) {
+        return this[__onFailure__](`int(radix = ${radix})`);
+      }
 
-      _defineProperty(_prototypeProperties2, __onSuccess__, {
+      return this[__onSuccess__](output);
+    }
 
-        /**
-         * Handles when a parse has succeeded.
-         *
-         * @method __onSuccess__
-         * @param {any} value The value successfully parsed from the string input.
-         * @return {Check} A new check object with the first successfully parsed value.
-         * @private
-         */
-        value: function (value) {
-          if (this[__value__] === undefined) {
-            return new Check(this[__input__], value);
-          } else {
-            return new Check(this[__input__], this[__value__]);
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
+    /**
+     * Try to parse the input string as a boolean.
+     *
+     * @method isBoolean
+     * @return {Check} A new instance of the Check object used for chaining.
+     */
+    isBoolean() {
+      if (typeof this[__input__] !== 'string') {
+        return this[__onFailure__]('boolean');
+      } else if (this[__input__].toLowerCase() === 'true') {
+        return this[__onSuccess__](true);
+      } else if (this[__input__].toLowerCase() === 'false') {
+        return this[__onSuccess__](false);
+      } else {
+        return this[__onFailure__]('boolean');
+      }
+    }
 
-      _defineProperty(_prototypeProperties2, "isInt", {
+    /**
+     * Throws an exception if no parse has been successful.
+     *
+     * @method orThrows
+     * @param {string} msg The error message to throw. If not defined, will use an auto generated
+     *    one.
+     * @return {any} The first successful parsed value.
+     */
+    orThrows(msg) {
+      if (this[__value__] === undefined) {
+        if (!msg) {
+          msg = `Illegal Exception. Checked: ${this[__checked__].join(', ')} ` +
+              `but was ${this[__input__]}`;
+        }
+        throw new Error(msg);
+      } else {
+        return this[__value__];
+      }
+    }
 
-        /**
-         * Try to parse the input string as an int with the given radix.
-         *
-         * @method isInt
-         * @param {number} radix Radix to use to parse the input string. Defaults to 10.
-         * @return {Check} A new instance of the Check object used for chaining.
-         */
-        value: function isInt() {
-          var radix = arguments[0] === undefined ? 10 : arguments[0];
-          var output = Number.parseInt(this[__input__], radix);
-          if (Number.isNaN(output)) {
-            return this[__onFailure__]("int(radix = " + radix + ")");
-          }
+    /**
+     * Use the given value if no parse attempts have been successful.
+     *
+     * @method orUse
+     * @param {any} backup Value to use as backup if no parsing has been successful.
+     * @return {any} The first successful parsed value, or the given backup value if no parse
+     *    attempts were successful.
+     */
+    orUse(backup) {
+      return (this[__value__] === undefined) ? backup : this[__value__];
+    }
+  }
 
-          return this[__onSuccess__](output);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "isBoolean", {
-
-        /**
-         * Try to parse the input string as a boolean.
-         *
-         * @method isBoolean
-         * @return {Check} A new instance of the Check object used for chaining.
-         */
-        value: function isBoolean() {
-          if (typeof this[__input__] !== "string") {
-            return this[__onFailure__]("boolean");
-          } else if (this[__input__].toLowerCase() === "true") {
-            return this[__onSuccess__](true);
-          } else if (this[__input__].toLowerCase() === "false") {
-            return this[__onSuccess__](false);
-          } else {
-            return this[__onFailure__]("boolean");
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "orThrows", {
-
-        /**
-         * Throws an exception if no parse has been successful.
-         *
-         * @method orThrows
-         * @param {string} msg The error message to throw. If not defined, will use an auto generated
-         *    one.
-         * @return {any} The first successful parsed value.
-         */
-        value: function orThrows(msg) {
-          if (this[__value__] === undefined) {
-            if (!msg) {
-              msg = "Illegal Exception. Checked: " + this[__checked__].join(", ") + " " + ("but was " + this[__input__]);
-            }
-            throw new Error(msg);
-          } else {
-            return this[__value__];
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "orUse", {
-
-        /**
-         * Use the given value if no parse attempts have been successful.
-         *
-         * @method orUse
-         * @param {any} backup Value to use as backup if no parsing has been successful.
-         * @return {any} The first successful parsed value, or the given backup value if no parse
-         *    attempts were successful.
-         */
-        value: function orUse(backup) {
-          return this[__value__] === undefined ? backup : this[__value__];
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      return _prototypeProperties2;
-    })());
-
-    return Check;
-  })();
+  function check(input) {
+    return new Check(input);
+  }
 
   return check;
-});</script></head><body></body></html>
+});
+</script></head><body></body></html>

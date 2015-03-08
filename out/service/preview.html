@@ -2,18 +2,9 @@
 
 <link rel="import" href="utils.html">
 
-<script>"use strict";
+<script>
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
-
-DI.bind("pb_service_Preview", function (Utils) {
+DI.bind('pb_service_Preview', (Utils) => {
   /**
    * Service that lets the user preview an element on mouse hover.
    *
@@ -22,47 +13,39 @@ DI.bind("pb_service_Preview", function (Utils) {
    */
 
   // Private symbols
-  var __previewedEl__ = Symbol();
+  const __previewedEl__ = Symbol();
 
-  var Preview = Object.defineProperties((function () {
-    var _Object$defineProperties = {};
+  let Preview = {
 
-    _defineProperty(_Object$defineProperties, __previewedEl__, null);
+    [__previewedEl__]: null,
 
-    _defineProperty(_Object$defineProperties, "Events", {
+    /**
+     * Element that is being previewed, if any. If null, no element is being previewed.
+     *
+     * @property previewedEl
+     * @type Element|null
+     */
+    get previewedEl() {
+      return this[__previewedEl__];
+    },
+    set previewedEl(el) {
+      let changed = this[__previewedEl__] !== el;
+      this[__previewedEl__] = el;
+      if (changed) {
+        $(this).trigger(Preview.Events.ELEMENT_CHANGED);
+      }
+    },
+
+    Events: {
       /**
        * Fired when the previewed element has been changed.
        *
        * @event element-changed
        */
-      ELEMENT_CHANGED: "element-changed"
-    });
-
-    return _Object$defineProperties;
-  })(), {
-    previewedEl: {
-      get: function () {
-        return this[__previewedEl__];
-      },
-      set: function (el) {
-        var changed = this[__previewedEl__] !== el;
-        this[__previewedEl__] = el;
-        if (changed) {
-          $(this).trigger(Preview.Events.ELEMENT_CHANGED);
-        }
-      },
-      enumerable: true,
-      configurable: true
+      ELEMENT_CHANGED: 'element-changed'
     }
-  });
+  };
 
   return Preview;
 });
-
-
-/**
- * Element that is being previewed, if any. If null, no element is being previewed.
- *
- * @property previewedEl
- * @type Element|null
- */</script></head><body></body></html>
+</script></head><body></body></html>

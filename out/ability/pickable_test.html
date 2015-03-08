@@ -7,50 +7,52 @@
   <link rel="import" href="out/testbase.html">
 </head>
 <body>
-  <script>"use strict";
+  <script>
+  DI
+      .with('$registry', Registry => new Registry())
+      .constant('Move', { add() {} })
+      .constant('doc', document.currentScript.ownerDocument)
+      .run((expect, _, $, doc, Move, Pickable) => {
 
-DI["with"]("$registry", function (Registry) {
-  return new Registry();
-}).constant("Move", { add: function add() {} }).constant("doc", document.currentScript.ownerDocument).run(function (expect, _, $, doc, Move, Pickable) {
-  describe("ability.Pickable", function () {
-    var el = undefined;
+  describe('ability.Pickable', () => {
+    let el;
 
-    beforeEach(function (done) {
-      el = doc.createElement("div");
+    beforeEach(done => {
+      el = doc.createElement('div');
       done();
     });
 
-    describe("#init", function () {
-      it("should set the default value if the attribute is not set", function () {
-        var pickable = new Pickable(undefined, undefined, true);
+    describe('#init', () => {
+      it('should set the default value if the attribute is not set', () => {
+        let pickable = new Pickable(undefined, undefined, true);
         pickable.init(el);
-        expect($(el).attr(pickable.attrName)).to.be.equal("true");
+        expect($(el).attr(pickable.attrName)).to.be.equal('true');
       });
-      it("should not set the default value if the attribute is set", function () {
-        var value = "value";
-        var pickable = new Pickable(undefined, undefined, true);
+      it('should not set the default value if the attribute is set', () => {
+        let value = 'value';
+        let pickable = new Pickable(undefined, undefined, true);
         $(el).attr(pickable.attrName, value);
         pickable.init(el);
         expect($(el).attr(pickable.attrName)).to.equal(value);
       });
     });
 
-    describe("#trigger", function () {
-      it("should add the element to Move if enabled", function () {
-        var pickable = new Pickable(undefined, undefined, true);
+    describe('#trigger', () => {
+      it('should add the element to Move if enabled', () => {
+        let pickable = new Pickable(undefined, undefined, true);
         pickable.init(el);
 
-        _.spy(Move, "add");
+        _.spy(Move, 'add');
 
         pickable.trigger(el);
 
         expect(Move.add).calledWith(el).at.least(1);
       });
-      it("should do nothing if not enabled", function () {
-        var pickable = new Pickable(undefined, undefined, false);
+      it('should do nothing if not enabled', () => {
+        let pickable = new Pickable(undefined, undefined, false);
         pickable.init(el);
 
-        _.spy(Move, "add");
+        _.spy(Move, 'add');
 
         pickable.trigger(el, {});
 
@@ -58,10 +60,11 @@ DI["with"]("$registry", function (Registry) {
       });
     });
 
-    afterEach(function (done) {
+    afterEach(done => {
       _.reset();
       done();
     });
   });
-});</script>
+  });
+  </script>
 </body></html>

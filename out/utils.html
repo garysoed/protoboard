@@ -2,9 +2,9 @@
 
 <link rel="import" href="di.html">
 
-<script>"use strict";
+<script>
+DI.bind('pb_Utils', () => {
 
-DI.bind("pb_Utils", function () {
   /**
    * Various miscellaneous utilities. They are not meant for general usage, but feel free to use
    * them.
@@ -21,7 +21,7 @@ DI.bind("pb_Utils", function () {
      * @param {Document} doc The document object to obtain the template from.
      * @return {Node} The node in the template.
      */
-    extractTemplate: function extractTemplate(templateQuery, doc) {
+    extractTemplate(templateQuery, doc) {
       return this.activateTemplate(doc.querySelector(templateQuery), doc);
     },
 
@@ -33,7 +33,7 @@ DI.bind("pb_Utils", function () {
      * @param  {Document} doc The document object to activate the template in.
      * @return {Element} The activated template element.
      */
-    activateTemplate: function activateTemplate(template, doc) {
+    activateTemplate(template, doc) {
       return doc.importNode(template.content, true);
     },
 
@@ -46,8 +46,8 @@ DI.bind("pb_Utils", function () {
      * @return {Function} The referenced function, or noop function if the referenced function does
      *    not exist.
      */
-    nonNullFn: function nonNullFn(scope, name) {
-      return scope[name] || function () {};
+    nonNullFn(scope, name) {
+      return scope[name] || (() => {});
     },
 
     /**
@@ -61,9 +61,9 @@ DI.bind("pb_Utils", function () {
      *    arguments: property name, change type, and the old value of the property.
      * @return {Function} The handler used to unobserve the object.
      */
-    observe: function observe(object, property, handler) {
-      var newHandler = function (changes) {
-        changes.forEach(function (change) {
+    observe(object, property, handler) {
+      var newHandler = function(changes) {
+        changes.forEach(change => {
           if (!property || change.name === property) {
             handler(change.name, change.type, change.oldValue);
           }
@@ -84,32 +84,29 @@ DI.bind("pb_Utils", function () {
      *    value and will wait for the function to return true. Otherwise, this will wait for the
      *    property to match this.
      */
-    waitFor: function waitFor(object, property, condition) {
-      var promise = new Promise(function (resolve, reject) {
-        var truthFn = typeof condition === "function" ? condition : function (v) {
-          return v === condition;
-        };
+    waitFor(object, property, condition) {
+      let promise = new Promise((resolve, reject) => {
+        let truthFn = (typeof condition === 'function') ?
+            condition : v => v === condition;
         if (truthFn(object[property])) {
           resolve(object, property);
         } else {
-          (function () {
-            var observer = function (changes) {
-              if (truthFn(object[property])) {
-                Object.unobserve(object, observer);
-                resolve(object, property);
-              }
-            };
-            Object.observe(object, observer);
-          })();
+          let observer = (changes) => {
+            if (truthFn(object[property])) {
+              Object.unobserve(object, observer);
+              resolve(object, property);
+            }
+          };
+          Object.observe(object, observer);
         }
       });
 
       return promise;
     },
 
-    watch: function watch(fn) {
-      var promise = new Promise(function (resolve, reject) {
-        var id = setInterval(function () {
+    watch(fn) {
+      let promise = new Promise((resolve, reject) => {
+        let id = setInterval(() => {
           if (fn()) {
             clearInterval(id);
             resolve();
@@ -129,8 +126,8 @@ DI.bind("pb_Utils", function () {
      *    equal, -1 if the second object is smaller than the first, or undefined if the two cannot
      *    be compared.
      */
-    compare: function compare(a, b) {
-      if (typeof a === "number" && typeof b === "number") {
+    compare(a, b) {
+      if (typeof a === 'number' && typeof b === 'number') {
         if (a < b) {
           return -1;
         } else if (a > b) {
@@ -150,44 +147,40 @@ DI.bind("pb_Utils", function () {
      * @param  {Object} obj An array like object to convert.
      * @return {Array} Array object converted from the given array like object.
      */
-    toArray: function toArray(obj) {
-      var array = [];
-      for (var i = 0; i < obj.length; i++) {
+    toArray(obj) {
+      let array = [];
+      for (let i = 0; i < obj.length; i++) {
         array[i] = obj[i];
       }
       return array;
     },
 
-    toMap: function toMap(obj) {
+    toMap(obj) {
       if (obj instanceof NamedNodeMap) {
-        var data = [];
-        for (var i = 0; i < obj.length; i++) {
-          var item = obj.item(i);
+        let data = [];
+        for (let i = 0; i < obj.length; i++) {
+          let item = obj.item(i);
           data.push([item.name, item]);
         }
         return new Map(data);
       } else {
-        throw "Unsupported type of " + obj;
+        throw `Unsupported type of ${obj}`;
       }
     },
 
-    toArrayOfArrays: function toArrayOfArrays(obj) {
-      var array = [];
-      for (var _iterator = Object.keys(obj)[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-        var key = _step.value;
+    toArrayOfArrays(obj) {
+      let array = [];
+      for (let key of Object.keys(obj)) {
         array.push([key, obj[key]]);
       }
-
       return array;
     },
 
-    fromArrayOfArrays: function fromArrayOfArrays(array) {
-      var obj = {};
-      for (var _iterator2 = array[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
-        var entry = _step2.value;
+    fromArrayOfArrays(array) {
+      let obj = {};
+      for (let entry of array) {
         obj[entry[0]] = entry[1];
       }
-
       return obj;
     },
 
@@ -203,18 +196,18 @@ DI.bind("pb_Utils", function () {
      * @param {boolean} callBefore True iff the function should be called before the original
      *     function. Defaults to false.
      */
-    extendFn: function extendFn(scope, name, fn, callBefore) {
-      var oldFn = scope[name];
-      scope[name] = function () {
+    extendFn(scope, name, fn, callBefore) {
+      let oldFn = scope[name];
+      scope[name] = function() {
         if (callBefore) {
-          var rv = fn.apply(this, arguments);
+          let rv = fn.apply(this, arguments);
           if (!oldFn) {
             return rv;
           }
         }
 
         if (oldFn) {
-          var rv = oldFn.apply(this, arguments);
+          let rv = oldFn.apply(this, arguments);
           if (callBefore) {
             return rv;
           }
@@ -233,16 +226,18 @@ DI.bind("pb_Utils", function () {
      * @param {Function} fn The function to be curried.
      * @return {Function} The curried function.
      */
-    curry: function curry(fn) {
-      return function () {
+    curry(fn) {
+      return function() {
         if (arguments.length >= fn.length) {
           return fn.apply(this, arguments);
         } else {
-          var argArray = Utils.toArray(arguments);
+          let argArray = Utils.toArray(arguments);
           return Utils.curry(fn.bind.apply(fn, [this].concat(argArray)));
         }
       };
-    } };
+    },
+  };
 
   return Utils;
-});</script></head><body></body></html>
+});
+</script></head><body></body></html>

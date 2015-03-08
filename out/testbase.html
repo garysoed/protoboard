@@ -1,27 +1,19 @@
 <html><head><base href="..">
-<script src="node_modules/chai/chai.js">"use strict";</script>
+<script src="node_modules/chai/chai.js"></script>
 
-<script>"use strict";
-
-var TEST_MODE = true;</script>
+<script>
+  var TEST_MODE = true;
+</script>
 <link rel="import" href="out/third_party/jquery.html">
 <link rel="import" href="out/third_party/spies.html">
 
 <link rel="import" href="out/di.html">
 <link rel="import" href="out/testutils.html">
 
-<script>"use strict";
-
-DI.bind("_F", function () {
-  return spies.Fakes;
-});
-DI.bind("_M", function () {
-  return spies.Matchers;
-});
-DI.bind("expect", function () {
-  return chai.expect;
-});
-DI.bind("TEST_MODE", function () {
-  return true;
-});</script>
+<script>
+DI.bind('_F', () => spies.Fakes);
+DI.bind('_M', () => spies.Matchers);
+DI.bind('expect', () => chai.expect);
+DI.bind('TEST_MODE', () => true);
+</script>
 </head><body></body></html>

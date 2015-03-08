@@ -4,31 +4,18 @@
 <link rel="import" href="polyfill.html">
 <link rel="import" href="utils.html">
 
-<script>"use strict";
+<script>
+DI.bind('pb_ability_Abilities', Utils => {
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
-
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-DI.bind("pb_ability_Abilities", function (Utils) {
   // Private symbols.
-  var __abilities__ = Symbol("abilities");
-  var __element__ = Symbol();
-  var __observer__ = Symbol("observer");
+  const __abilities__ = Symbol('abilities');
+  const __element__ = Symbol();
+  const __observer__ = Symbol('observer');
 
-  var __onMutation__ = Symbol("onMutation");
+  const __onMutation__ = Symbol('onMutation');
 
-  var Builder = (function () {
+  class Builder {
+
     /**
      * Builder helper for using {{#crossLink "ability.Abilities"}}Abilities{{/crossLink}}.
      *
@@ -37,100 +24,78 @@ DI.bind("pb_ability_Abilities", function (Utils) {
      * @param {Element} el Element to add abilities to.
      * @private
      */
-    function Builder(el) {
+    constructor(el) {
       this[__element__] = el;
     }
 
-    _prototypeProperties(Builder, null, {
-      add: {
-
-        /**
-         * Adds the given ability to the element specified in the builder.
-         *
-         * @method add
-         * @param {ability.Ability} ability The ability to add.
-         * @return {ability.Abilities.Builder} This builder object for chaining.
-         */
-        value: function add(ability) {
-          var key = ability.attrName;
-          if (!this[__element__][__abilities__]) {
-            this[__element__][__abilities__] = new Map();
-          }
-
-          if (this[__element__][__abilities__].has(ability.attrName)) {
-            throw "Ability with key " + ability.attrName + " is already registered";
-          }
-          this[__element__][__abilities__].set(ability.attrName, ability);
-
-          if (this[__element__][__abilities__].has(ability.attrTrigger)) {
-            throw "Ability with key " + ability.attrTrigger + " is already registered";
-          }
-          this[__element__][__abilities__].set(ability.attrTrigger, ability);
-
-          return this;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      },
-      getAll: {
-
-        /**
-         * @method getAll
-         * @return {Map} Map of ability name to ability of the element in context. This excludes the
-         *    trigger attribute of the abilities.
-         */
-        value: function getAll() {
-          if (!this[__element__][__abilities__]) {
-            return new Map();
-          }
-
-          var abilities = new Set(this[__element__][__abilities__].values());
-          var map = new Map();
-          for (var _iterator = abilities[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-            var ability = _step.value;
-            map.set(ability.attrName, ability);
-          }
-
-          return map;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      },
-      trigger: {
-
-        /**
-         * Triggers the ability corresponding to the given name.
-         *
-         * @method trigger
-         * @param {string} name Name of the ability to trigger. Refer to the element's API for the
-         *    names.
-         * @return {ability.Abilities.Builder} This builder object for chaining.
-         */
-        value: function trigger(name) {
-          var el = this[__element__];
-          var ability = null;
-          if (el[__abilities__]) {
-            ability = el[__abilities__].get(name);
-          }
-
-          if (!ability) {
-            throw new Error("Ability " + name + " is not registered with element " + el);
-          }
-
-          ability.trigger(el);
-
-          return this;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+    /**
+     * Adds the given ability to the element specified in the builder.
+     *
+     * @method add
+     * @param {ability.Ability} ability The ability to add.
+     * @return {ability.Abilities.Builder} This builder object for chaining.
+     */
+    add(ability) {
+      let key = ability.attrName;
+      if (!this[__element__][__abilities__]) {
+        this[__element__][__abilities__] = new Map();
       }
-    });
 
-    return Builder;
-  })();
+      if (this[__element__][__abilities__].has(ability.attrName)) {
+        throw `Ability with key ${ability.attrName} is already registered`;
+      }
+      this[__element__][__abilities__].set(ability.attrName, ability);
+
+      if (this[__element__][__abilities__].has(ability.attrTrigger)) {
+        throw `Ability with key ${ability.attrTrigger} is already registered`;
+      }
+      this[__element__][__abilities__].set(ability.attrTrigger, ability);
+
+      return this;
+    }
+
+    /**
+     * @method getAll
+     * @return {Map} Map of ability name to ability of the element in context. This excludes the
+     *    trigger attribute of the abilities.
+     */
+    getAll() {
+      if (!this[__element__][__abilities__]) {
+        return new Map();
+      }
+
+      let abilities = new Set(this[__element__][__abilities__].values());
+      let map = new Map();
+      for (let ability of abilities) {
+        map.set(ability.attrName, ability);
+      }
+      return map;
+    }
+
+    /**
+     * Triggers the ability corresponding to the given name.
+     *
+     * @method trigger
+     * @param {string} name Name of the ability to trigger. Refer to the element's API for the
+     *    names.
+     * @return {ability.Abilities.Builder} This builder object for chaining.
+     */
+    trigger(name) {
+      let el = this[__element__];
+      let ability = null;
+      if (el[__abilities__]) {
+        ability = el[__abilities__].get(name);
+      }
+
+      if (!ability) {
+        throw new Error(`Ability ${name} is not registered with element ${el}`);
+      }
+
+      ability.trigger(el);
+
+      return this;
+    }
+  }
 
   /**
    * Helper class to register abilities to custom elements. You can use this class to customize
@@ -146,27 +111,46 @@ DI.bind("pb_ability_Abilities", function (Utils) {
    * @class ability.Abilities
    * @static
    */
-  var Abilities = (function () {
-    var _Abilities = {};
+  const Abilities = {
 
-    _defineProperty(_Abilities, __onMutation__, function (records) {
-      for (var _iterator2 = records[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
-        var record = _step2.value;
-        var el = record.target;
-        var attrName = record.attributeName;
+    /**
+     * Handler called when the MutationObserver detected a change.
+     *
+     * @method __onMutation__
+     * @param {Array} records Array of {{#crossLink "MutationRecord"}}{{/crossLink}}s.
+     * @private
+     */
+    [__onMutation__](records) {
+      for (let record of records) {
+        let el = record.target;
+        let attrName = record.attributeName;
         if (el[__abilities__] && el[__abilities__].has(attrName)) {
           el[__abilities__].get(attrName).updateConfig(el);
         }
       }
-    });
+    },
 
-    _defineProperty(_Abilities, "of", function of(el) {
+    /**
+     * Creates a new {{#crossLink "ability.Abilities.Builder"}}Builder{{/crossLink}} to operate on
+     * the given element.
+     *
+     * @method of
+     * @param {Element} el Element that the Builder should operate on.
+     * @return {ability.Abilities.Builder} The builder object.
+     */
+    of(el) {
       return new Builder(el);
-    });
+    },
 
-    _defineProperty(_Abilities, "init", function init(el) {
+    /**
+     * Initializes the added abilities on the given element.
+     *
+     * @method init
+     * @param {Element} el The element to initialize.
+     */
+    init(el) {
       if (el[__observer__]) {
-        throw "Element " + el + " is already initialized";
+        throw `Element ${el} is already initialized`;
       }
       el[__observer__] = new MutationObserver(this[__onMutation__]);
 
@@ -174,57 +158,32 @@ DI.bind("pb_ability_Abilities", function (Utils) {
         return;
       }
 
-      var observerConfig = {
+      let observerConfig = {
         attributes: true
       };
 
-      Utils.extendFn(el, "attachedCallback", function () {
-        return el[__observer__].observe(el, observerConfig);
-      });
-      Utils.extendFn(el, "detachedCallback", function () {
-        return el[__observer__].disconnect();
-      });
+      Utils.extendFn(
+          el,
+          'attachedCallback',
+          () => el[__observer__].observe(el, observerConfig));
+      Utils.extendFn(
+          el,
+          'detachedCallback',
+          () => el[__observer__].disconnect());
 
-      var abilities = new Set(el[__abilities__].values());
-      abilities.forEach(function (ability) {
+      let abilities = new Set(el[__abilities__].values());
+      abilities.forEach(ability => {
         ability.init(el);
       });
-    });
+    }
+  };
 
-    return _Abilities;
-  })();
-
-  if (window.TEST_MODE) {
+  if (window['TEST_MODE']) {
     Abilities.Builder = Builder;
   }
 
   return Abilities;
 });
 
-
-/**
- * Handler called when the MutationObserver detected a change.
- *
- * @method __onMutation__
- * @param {Array} records Array of {{#crossLink "MutationRecord"}}{{/crossLink}}s.
- * @private
- */
-
-
-/**
- * Creates a new {{#crossLink "ability.Abilities.Builder"}}Builder{{/crossLink}} to operate on
- * the given element.
- *
- * @method of
- * @param {Element} el Element that the Builder should operate on.
- * @return {ability.Abilities.Builder} The builder object.
- */
-
-
-/**
- * Initializes the added abilities on the given element.
- *
- * @method init
- * @param {Element} el The element to initialize.
- */</script>
+</script>
 </head><body></body></html>

@@ -3,26 +3,37 @@
 <link rel="import" href="di.html">
 <link rel="import" href="service/config.html">
 
-<script>"use strict";
-
-DI.bind("$registry", function (Registry) {
-  return new Registry();
-}).bind("pb_Bootstrap", function ($registry, opt_Bag, opt_Card, opt_Deck, opt_Hand, opt_ui_Preview, opt_ui_Previewer, opt_Rect, opt_ui_Template, opt_Token, Config, Utils) {
+<script>
+DI
+    .bind('$registry', Registry => new Registry())
+    .bind('pb_Bootstrap', (
+      $registry,
+      opt_Bag,
+      opt_Card,
+      opt_Deck,
+      opt_Hand,
+      opt_ui_Preview,
+      opt_ui_Previewer,
+      opt_Rect,
+      opt_ui_Template,
+      opt_Token,
+      Config,
+      Utils) => {
   return {
-    run: function run(document) {
-      document.addEventListener("DOMContentLoaded", function () {
+    run(document) {
+      document.addEventListener('DOMContentLoaded', () => {
         $registry.register(document, Config);
 
-        var tags = Utils.toArray(document.querySelectorAll(":unresolved")).map(function (el) {
-          return el.tagName.toLowerCase();
-        });
-        var tagSet = new Set(tags);
-        for (var _iterator = tagSet[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-          var tag = _step.value;
-          console.warn("Element " + tag + " is unresolved");
+        let tags = Utils.
+            toArray(document.querySelectorAll(':unresolved')).
+            map(el => el.tagName.toLowerCase());
+        let tagSet = new Set(tags);
+        for (let tag of tagSet) {
+          console.warn(`Element ${tag} is unresolved`);
         }
       });
     }
   };
-});</script>
+});
+</script>
 </head><body></body></html>

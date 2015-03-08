@@ -13,41 +13,42 @@
 <body>
   <pb-r-rect></pb-r-rect>
 
-  <script>"use strict";
+  <script>
+  DI
+      .with('$registry', Registry => new Registry())
+      .with('FlexDroppable', Rect => Rect.FlexDroppable)
+      .constant('pb_service_Move', {
+        movedElements: [],
+        remove: () => {},
+        mouseX: 0,
+        mouseY: 0
+      })
+      .constant('doc', document.currentScript.ownerDocument)
+      .run((expect, _, doc, FlexDroppable, Move, Rect, Utils, pb_t) => {
 
-DI["with"]("$registry", function (Registry) {
-  return new Registry();
-})["with"]("FlexDroppable", function (Rect) {
-  return Rect.FlexDroppable;
-}).constant("pb_service_Move", {
-  movedElements: [],
-  remove: function () {},
-  mouseX: 0,
-  mouseY: 0
-}).constant("doc", document.currentScript.ownerDocument).run(function (expect, _, doc, FlexDroppable, Move, Rect, Utils, pb_t) {
-  var __onDomMutation__ = pb_t.getSymbol(FlexDroppable.prototype, "onDomMutation");
+  let __onDomMutation__ = pb_t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
 
-  describe("Rect", function () {
-    describe("$FlexDroppable", function () {
-      var el = undefined;
-      var flexDroppable = undefined;
+  describe('Rect', () => {
+    describe('$FlexDroppable', () => {
+      let el;
+      let flexDroppable;
 
-      var __mutationObserver__ = undefined;
+      let __mutationObserver__;
 
-      beforeEach(function (done) {
+      beforeEach(done => {
         flexDroppable = new FlexDroppable();
-        el = doc.createElement("div");
+        el = doc.createElement('div');
         flexDroppable.init(el);
 
-        __mutationObserver__ = pb_t.getSymbol(flexDroppable, "mutationObserver");
+        __mutationObserver__ = pb_t.getSymbol(flexDroppable, 'mutationObserver');
         done();
       });
 
-      describe("#trigger", function () {
-        it("should append the last dragged element and position it correctly", function () {
-          var lastDraggedEl = doc.createElement("div");
+      describe('#trigger', () => {
+        it('should append the last dragged element and position it correctly', () => {
+          let lastDraggedEl = doc.createElement('div');
           lastDraggedEl.attachedCallback = _.spiedFunction();
-          _.spy(lastDraggedEl, "getBoundingClientRect").overrideReturn({
+          _.spy(lastDraggedEl, 'getBoundingClientRect').overrideReturn({
             left: 56,
             top: 78,
             width: 24,
@@ -61,30 +62,34 @@ DI["with"]("$registry", function (Registry) {
           flexDroppable.trigger(el);
 
           expect(Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
-          expect(lastDraggedEl.style.left).to.be.equal("22px");
-          expect(lastDraggedEl.style.top).to.be.equal("-100px");
+          expect(lastDraggedEl.style.left).to.be.equal('22px');
+          expect(lastDraggedEl.style.top).to.be.equal('-100px');
         });
       });
 
-      describe("__onDomMutation__", function () {
-        it("should set the left and top of removed elements to 0, 0", function () {
-          var el1 = { style: {} };
-          var el2 = { style: {} };
-          var el3 = { style: {} };
+      describe('__onDomMutation__', () => {
+        it('should set the left and top of removed elements to 0, 0', () => {
+          let el1 = { style: {} };
+          let el2 = { style: {} };
+          let el3 = { style: {} };
 
-          flexDroppable[__onDomMutation__]([{ removedNodes: [el1, el2] }, { removedNodes: [el3] }]);
+          flexDroppable[__onDomMutation__]([
+            { removedNodes: [ el1, el2 ] },
+            { removedNodes: [ el3 ] }
+          ]);
 
-          expect(el1.style).to.be.eql({ left: "", top: "" });
-          expect(el2.style).to.be.eql({ left: "", top: "" });
-          expect(el3.style).to.be.eql({ left: "", top: "" });
+          expect(el1.style).to.be.eql({ left: '', top: '' });
+          expect(el2.style).to.be.eql({ left: '', top: '' });
+          expect(el3.style).to.be.eql({ left: '', top: '' });
         });
       });
     });
 
-    afterEach(function (done) {
+    afterEach(done => {
       _.reset();
       done();
     });
   });
-});</script>
+  });
+  </script>
 </body></html>

@@ -4,23 +4,33 @@
 <link rel="import" href="service/registry.html">
 <link rel="import" href="utils.html">
 
-<script>"use strict";
+<script>
+window.Scope = DI.with('$registry', Registry => new Registry());
+window.Scope
+    .run((
+      $registry,
+      opt_Bag,
+      opt_Card,
+      opt_Deck,
+      opt_Hand,
+      opt_ui_Preview,
+      opt_ui_Previewer,
+      opt_Rect,
+      opt_ui_Template,
+      opt_Token,
+      Utils) => {
 
-window.Scope = DI["with"]("$registry", function (Registry) {
-  return new Registry();
-});
-window.Scope.run(function ($registry, opt_Bag, opt_Card, opt_Deck, opt_Hand, opt_ui_Preview, opt_ui_Previewer, opt_Rect, opt_ui_Template, opt_Token, Utils) {
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener('DOMContentLoaded', () => {
     $registry.register(document);
 
-    var tags = Utils.toArray(document.querySelectorAll(":unresolved")).map(function (el) {
-      return el.tagName.toLowerCase();
-    });
-    var tagSet = new Set(tags);
-    for (var _iterator = tagSet[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-      var tag = _step.value;
-      console.warn("Element " + tag + " is unresolved");
+    let tags = Utils.
+        toArray(document.querySelectorAll(':unresolved')).
+        map(el => el.tagName.toLowerCase());
+    let tagSet = new Set(tags);
+    for (let tag of tagSet) {
+      console.warn(`Element ${tag} is unresolved`);
     }
   });
-});</script>
+});
+</script>
 </head><body></body></html>
