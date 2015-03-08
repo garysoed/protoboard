@@ -136,23 +136,24 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
     [__onKeyPress__](event) {
       const char = String.fromCharCode(event.keyCode);
       let triggeredEl = null;
-      for (let [el, keyMap] of this[__hoveredEls__]) {
-        if (keyMap.has(char)) {
-          let abilitySet = keyMap.get(char);
-          for (let ability of abilitySet) {
-            triggeredEl = el;
-            ability.trigger(el);
-            break;
-          }
-        }
 
-        if (triggeredEl) {
-          break;
+      // First, find the triggered element that is the deepest in the chain.
+      for (let [el, keyMap] of this[__hoveredEls__]) {
+        if (keyMap.has(char) && (!triggeredEl || triggeredEl.contains(el))) {
+          triggeredEl = el;
         }
       }
 
-      // Stop listening for the triggered element.
+      console.log(triggeredEl);
+
+      // Trigger the element and stop listening for the triggered element.
       if (triggeredEl) {
+        let abilitySet = this[__hoveredEls__].get(triggeredEl).get(char);
+        for (let ability of abilitySet) {
+          ability.trigger(triggeredEl);
+          break;
+        }
+
         // Check if the mouse is still inside the triggered el.
         const rect = triggeredEl.getBoundingClientRect();
         if (Move.movedElements.has(triggeredEl)
