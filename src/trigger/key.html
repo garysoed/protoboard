@@ -144,8 +144,6 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
         }
       }
 
-      console.log(triggeredEl);
-
       // Trigger the element and stop listening for the triggered element.
       if (triggeredEl) {
         let abilitySet = this[__hoveredEls__].get(triggeredEl).get(char);

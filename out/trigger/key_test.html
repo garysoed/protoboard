@@ -83,15 +83,16 @@ DI.constant("doc", document.currentScript.ownerDocument).constant("pb_service_Mo
           done();
         });
 
-        it("should trigger only the first hovered element and unlisten to the element if the mouse is not on the element", function () {
+        it("should trigger only the deepest hovered element and unlisten to the element if the mouse is not on the element", function () {
           var el1 = doc.createElement("div");
           var el2 = doc.createElement("div");
+          el1.appendChild(el2);
           var ability1 = pb_t.createFakeAbility("ability1");
           var ability2 = pb_t.createFakeAbility("ability2");
           Service.add(el1, "a", ability1);
           Service.add(el2, "a", ability2);
 
-          _.spy(el1, "getBoundingClientRect").overrideReturn({
+          _.spy(el2, "getBoundingClientRect").overrideReturn({
             left: 12,
             right: 34,
             top: 56,
@@ -107,11 +108,11 @@ DI.constant("doc", document.currentScript.ownerDocument).constant("pb_service_Mo
           handler(event);
 
           // Check that the first ability is called.
-          expect(ability1.trigger).calledWith(el1).at.least(1);
-          expect(ability2.trigger).called().to.be.equal(0);
+          expect(ability1.trigger).called().to.be.equal(0);
+          expect(ability2.trigger).calledWith(el2).at.least(1);
 
           // Check that the ability is deleted.
-          expect(Service[pb_t.getSymbol(Service, "hoveredEls")].has(el1)).to.be["false"]();
+          expect(Service[pb_t.getSymbol(Service, "hoveredEls")].has(el2)).to.be["false"]();
         });
         it("should not crash if no element is hovered over", function () {
           handler({ keyCode: 97 });
