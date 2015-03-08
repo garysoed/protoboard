@@ -13,6 +13,7 @@ var yuidoc = require('gulp-yuidoc');
 var yuimd  = require('yuimd');
 var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
+var zip    = require('gulp-zip');
 
 var gutil   = require('gulp-util');
 
@@ -186,5 +187,10 @@ gulp.task('watch', function() {
 });
 
 gulp.task('compile', ['6to5-src', '6to5-test', 'sass-src', 'sass-ex']);
+gulp.task('pack', ['6to5-src', 'sass-src', 'sass-ex'], function() {
+  return gulp.src('out/**/*')
+      .pipe(zip('bin.zip'))
+      .pipe(gulp.dest('dist'));
+});
 gulp.task('check', ['karma']);
-gulp.task('push', ['check', 'doc'], shell.task('git push'));
+gulp.task('push', ['check', 'doc', 'pack'], shell.task('git push'));
