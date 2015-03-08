@@ -1,6 +1,5 @@
 Library to easily prototype board games. Check [here](https://garysoed.github.com/protoboard) for full documentation, or [here](https://garysoed.github.com/protoboard/ex/all/index.html) for demo of supported components.
 
-[![Throughput Graph](https://graphs.waffle.io/garysoed/protoboard/throughput.svg)](https://waffle.io/garysoed/protoboard/metrics)
 
 ## Release notes
 ### v 0.1.0
