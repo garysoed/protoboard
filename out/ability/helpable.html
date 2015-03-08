@@ -9,6 +9,7 @@
 
 <template>
   <style>#root {
+  color: white;
   position: fixed;
   top: 0;
   left: 0;
@@ -18,6 +19,9 @@
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
@@ -39,12 +43,25 @@ content::content div.trigger {
   width: 60px;
   text-align: right;
   -webkit-margin-after: 6px;
+}
+
+content::content div.entry {
+  width: 120px;
+}
+
+footer {
+  margin-top: 75px;
+  font-size: 0.75rem;
 }</style>
 
   <div id="root">
+    <header>
+      <content select="h1"></content>
+    </header>
     <div>
-      <content></content>
+      <content select="div"></content>
     </div>
+    <footer>Click anywhere to close this</footer>
   </div>
 </template>
 
@@ -147,7 +164,13 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
         value: function trigger(el) {
           var abilities = Abilities.of(el).getAll();
           displayEl.innerHTML = "";
+
           var doc = displayEl.ownerDocument;
+
+          var headerEl = doc.createElement("h1");
+          headerEl.innerText = el.nodeName;
+          displayEl.appendChild(headerEl);
+
           for (var _iterator = abilities[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
             var _ref = _step.value;
             var _ref2 = _slicedToArray(_ref, 2);
@@ -155,6 +178,7 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
             var name = _ref2[0];
             var ability = _ref2[1];
             var entry = doc.createElement("div");
+            entry.classList.add("entry");
             entry.innerHTML = "<div class=\"trigger\">" + ability.getTrigger(el).helpText + "</div>: " + name;
             displayEl.appendChild(entry);
           }
