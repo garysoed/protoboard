@@ -3,14 +3,15 @@ pb-r-bag [pb-placeholder-content].custom {
   line-height: 50px;
   height: 50px;
   text-align: center;
-  width: 50px; }
+  width: 50px;
+}
 
 pb-r-hand::shadow #root {
   height: 100px;
-  width: 300px; }
+  width: 300px;
+}
 
 pb-r-rect::shadow #root {
   height: 300px;
-  width: 300px; }
-
-/*# sourceMappingURL=regions.css.map */
+  width: 300px;
+}
