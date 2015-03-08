@@ -224,29 +224,28 @@ DI.bind("pb_trigger_Key", function (Events, Move, Trigger, $registry, opt_TEST_M
     _defineProperty(_Object$defineProperties, __onKeyPress__, function (event) {
       var char = String.fromCharCode(event.keyCode);
       var triggeredEl = null;
+
+      // First, find the triggered element that is the deepest in the chain.
       for (var _iterator = this[__hoveredEls__][Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
         var _ref = _step.value;
         var _ref2 = _slicedToArray(_ref, 2);
 
         var el = _ref2[0];
         var keyMap = _ref2[1];
-        if (keyMap.has(char)) {
-          var abilitySet = keyMap.get(char);
-          for (var _iterator2 = abilitySet[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
-            var ability = _step2.value;
-            triggeredEl = el;
-            ability.trigger(el);
-            break;
-          }
-        }
-
-        if (triggeredEl) {
-          break;
+        if (keyMap.has(char) && (!triggeredEl || triggeredEl.contains(el))) {
+          triggeredEl = el;
         }
       }
 
-      // Stop listening for the triggered element.
+      // Trigger the element and stop listening for the triggered element.
       if (triggeredEl) {
+        var abilitySet = this[__hoveredEls__].get(triggeredEl).get(char);
+        for (var _iterator2 = abilitySet[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
+          var ability = _step2.value;
+          ability.trigger(triggeredEl);
+          break;
+        }
+
         // Check if the mouse is still inside the triggered el.
         var rect = triggeredEl.getBoundingClientRect();
         if (Move.movedElements.has(triggeredEl) || rect.left > Move.mouseX || rect.right < Move.mouseX || rect.top > Move.mouseY || rect.bottom < Move.mouseY) {
