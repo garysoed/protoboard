@@ -90,7 +90,7 @@ function readJsonTheme(file) {
 function subMyth() {
   return chain(function(stream) {
     return stream
-        .pipe(myth({ 'map': readJsonTheme(options.theme) }));
+        .pipe(myth({ 'variables': readJsonTheme(options.theme) }));
   })
 }
 

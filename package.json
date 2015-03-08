@@ -45,7 +45,7 @@
     "karma-story-reporter": "^0.2.2",
     "minimist": "^1.1.0",
     "mocha": "^2.0.0",
-    "myth": "git://github.com/garysoed/myth",
+    "myth": "^1.4.0",
     "spies": "git://github.com/garysoed/spies.git",
     "stringbuilder": "0.0.10",
     "yuimd": "file:../yuimd"
