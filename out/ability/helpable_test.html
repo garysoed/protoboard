@@ -40,10 +40,12 @@ DI["with"]("$registry", function (Registry) {
 
         helpable.trigger(el);
         var children = displayEl.children;
-        expect(children.length).to.be.equal(3);
+        expect(children.length).to.be.equal(4);
 
-        var child1 = children.item(0);
-        expect(child1.innerText).to.be.equal("?: " + helpable.attrName);
+        expect(children.item(0).innerText).to.be.equal(el.nodeName);
+        expect(children.item(1).innerText).to.be.equal("?: " + helpable.attrName);
+        expect(children.item(2).innerText).to.be.equal("Click: " + ability1.attrName);
+        expect(children.item(3).innerText).to.be.equal("a: " + ability2.attrName);
       });
     });
 

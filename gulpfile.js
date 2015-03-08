@@ -141,7 +141,7 @@ gulp.task('sass-src', function() {
 });
 
 gulp.task('sass-ex', function() {
-  return gulp.src(['ex/**/*.scss', './src/themes/*.scss'])
+  return gulp.src(['ex/**/*.scss', '!./src/themes/*.scss'])
       .pipe(subSass())
       .pipe(gulp.dest('ex'));
 });
