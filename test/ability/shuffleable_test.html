@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>ability.Shuffleable Unit Tests</title>
 
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="testbase.html">
 
-  <link rel="import" href="out/ability/shuffleable.html">
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/service/registry.html">
+  <link rel="import" href="ability/shuffleable.html">
+  <link rel="import" href="di.html">
+  <link rel="import" href="service/registry.html">
 </head>
 <body>
   <script>
@@ -72,7 +72,7 @@
       });
       it('should be noop if attribute value is bad', () => {
         $(el).attr('pb-shuffleable', 'invalid');
-        
+
         _.spy(Math, 'random');
         shuffleable.trigger(el);
         expect(Math.random).called().to.be.equal(0);

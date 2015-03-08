@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>ui.Previewer Unit Tests</title>
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="testbase.html">
 
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/service/config.html">
-  <link rel="import" href="out/service/registry.html">
-  <link rel="import" href="out/testutils.html">
-  <link rel="import" href="out/ui/previewer.html">
+  <link rel="import" href="di.html">
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="testutils.html">
+  <link rel="import" href="ui/previewer.html">
 </head>
 <body>
   <script>
@@ -52,7 +52,7 @@
       it('should set the inner HTML of the previewEl', () => {
         let innerHTML = 'test inner HTML';
         service_Preview.previewedEl = { innerHTML: innerHTML };
-        
+
         let previewer = doc.createElement('pb-u-previewer');
         previewer[__onPreviewElChanged__]();
         expect(previewer.innerHTML).to.be.equal(innerHTML);
