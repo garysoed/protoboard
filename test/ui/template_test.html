@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>Template Unit Tests</title>
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="testbase.html">
 
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/service/config.html">
-  <link rel="import" href="out/third_party/handlebars.html">
-  <link rel="import" href="out/ui/template.html">
+  <link rel="import" href="di.html">
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="third_party/handlebars.html">
+  <link rel="import" href="ui/template.html">
 </head>
 <body>
   <template>
@@ -41,7 +41,7 @@
       forHelper = Handlebars.helperFn;
       done();
     });
-      
+
     describe('#createdCallback', () => {
       it('should replace the innerHTML', () => {
         let templateStr = 'Template String';

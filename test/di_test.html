@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="..">
+  <base href=".">
   <title>DI Unit Tests</title>
 
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/testbase.html">
-  <link rel="import" href="out/testutils.html">
+  <link rel="import" href="di.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="testutils.html">
 </head>
 <body>
   <script>
@@ -75,7 +75,7 @@
             let provider = new DI.Provider(fn, scope);
             provider.resolve(scope);
             provider.resolve(scope);
-            
+
             expect(fn).called().to.be.equal(1);
           });
           it('should call the function again for a different scope', () => {
@@ -87,7 +87,7 @@
 
             provider.resolve(scope1);
             provider.resolve(scope2);
-            
+
             expect(fn).called().to.be.equal(2);
           });
           it('should throw exception if an argument cannot be found', () => {
@@ -132,7 +132,7 @@
             tree.add('a_c', 'aC');
 
             expect(tree[__values__].get('c')).to.be.eql({ key: 'a_c', value: 'aC' });
-            
+
             let subTree = tree[__values__].get('b');
             expect(subTree[__values__].get('a')).to.be.eql({ key: 'a_b', value: 'aB' });
             expect(subTree[__values__].get('b')).to.be.eql({ key: 'b_b', value: 'bB' });
