@@ -16,22 +16,54 @@
   </div>
 </template>
 
-<script>
-DI
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_component_Token', (
-        $registry,
-        Component,
-        Config,
-        Helpable,
-        Key,
-        Pickable,
-        Utils,
-        doc,
-        template) => {
+<script>"use strict";
 
-  const EL_NAME = 'pb-c-token';
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === undefined) {
+      return undefined;
+    }
+    return getter.call(receiver);
+  }
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+  return doc.querySelector("template");
+}).bind("pb_component_Token", function ($registry, Component, Config, Helpable, Key, Pickable, Utils, doc, template) {
+  var EL_NAME = "pb-c-token";
 
   /**
    * A simple movable component with only one state. Examples of token:
@@ -55,26 +87,39 @@ DI
    * @class component.Token
    * @extends component.Component
    */
-  class Token extends Component {
-
-    /**
-     * Called when the element is created.
-     *
-     * @method createdCallback
-     */
-    createdCallback() {
-      super.createdCallback();
-      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  var Token = (function (Component) {
+    function Token() {
+      if (Object.getPrototypeOf(Token) !== null) {
+        Object.getPrototypeOf(Token).apply(this, arguments);
+      }
     }
-  }
 
-  Config.add(
-      'pb-c-token',
-      new Helpable('help'),
-      new Pickable('pick', new Key('q'), true));
+    _inherits(Token, Component);
+
+    _prototypeProperties(Token, null, {
+      createdCallback: {
+
+        /**
+         * Called when the element is created.
+         *
+         * @method createdCallback
+         */
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Token.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return Token;
+  })(Component);
+
+  Config.add("pb-c-token", new Helpable("help"), new Pickable("pick", new Key("q"), true));
 
   $registry.add(EL_NAME, Token.prototype);
 
   return Token;
-});
-</script></head><body></body></html>
+});</script></head><body></body></html>

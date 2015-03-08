@@ -13,82 +13,73 @@
   <link rel="import" href="out/utils.html">
 </head>
 <body>
-  <script>
-    DI
-        .constant('Move', {
-          movedElements: []
-        })
-        .with('$registry', Registry => new Registry())
-        .with('doc', () => document.currentScript.ownerDocument)
-        .run((
-            expect,
-            _,
-            _M,
-            doc,
-            $,
-            Droppable,
-            Move,
-            Utils) => {
+  <script>"use strict";
 
-      describe('Droppable', () => {
-        let el;
+DI.constant("Move", {
+  movedElements: []
+})["with"]("$registry", function (Registry) {
+  return new Registry();
+})["with"]("doc", function () {
+  return document.currentScript.ownerDocument;
+}).run(function (expect, _, _M, doc, $, Droppable, Move, Utils) {
+  describe("Droppable", function () {
+    var el = undefined;
 
-        beforeEach(done => {
-          el = doc.createElement('div');
-          done();
-        });
+    beforeEach(function (done) {
+      el = doc.createElement("div");
+      done();
+    });
 
-        describe('#init', () => {
-          it('should set the default value if the attribute is not set', () => {
-            let droppable = new Droppable(undefined, undefined, false);
-            droppable.init(el);
-            expect($(el).attr(droppable.attrName)).to.equal('false');
-          });
-          it('should not set the default value if the attribute is set', () => {
-            let value = 'value';
-            let droppable = new Droppable();
-            $(el).attr(droppable.attrName, value);
-            droppable.init(el);
-            expect($(el).attr(droppable.attrName)).to.equal(value);
-          });
-        });
-
-        describe('#trigger', () => {
-          let droppable;
-
-          it('should add the moved elements if enabled', () => {
-            let child1 = doc.createElement('div');
-            let child2 = doc.createElement('h1');
-
-            droppable = new Droppable(undefined, undefined, true);
-            droppable.init(el);
-
-            Move.movedElements = [child1, child2];
-
-            droppable.trigger(el);
-
-            expect(Utils.toArray(el.children)).to.eql([child1]);
-          });
-          it('should do nothing if not enabled', () => {
-            let child1 = doc.createElement('div');
-            let child2 = doc.createElement('h1');
-
-            droppable = new Droppable(undefined, undefined, false);
-            droppable.init(el);
-
-            Move.movedElements = [child1, child2];
-
-            droppable.trigger(el);
-
-            expect(el.children.length).to.equal(0);
-          });
-        });
-
-        afterEach(done => {
-          _.reset();
-          done();
-        });
+    describe("#init", function () {
+      it("should set the default value if the attribute is not set", function () {
+        var droppable = new Droppable(undefined, undefined, false);
+        droppable.init(el);
+        expect($(el).attr(droppable.attrName)).to.equal("false");
+      });
+      it("should not set the default value if the attribute is set", function () {
+        var value = "value";
+        var droppable = new Droppable();
+        $(el).attr(droppable.attrName, value);
+        droppable.init(el);
+        expect($(el).attr(droppable.attrName)).to.equal(value);
       });
     });
-  </script>
+
+    describe("#trigger", function () {
+      var droppable = undefined;
+
+      it("should add the moved elements if enabled", function () {
+        var child1 = doc.createElement("div");
+        var child2 = doc.createElement("h1");
+
+        droppable = new Droppable(undefined, undefined, true);
+        droppable.init(el);
+
+        Move.movedElements = [child1, child2];
+
+        droppable.trigger(el);
+
+        expect(Utils.toArray(el.children)).to.eql([child1]);
+      });
+      it("should do nothing if not enabled", function () {
+        var child1 = doc.createElement("div");
+        var child2 = doc.createElement("h1");
+
+        droppable = new Droppable(undefined, undefined, false);
+        droppable.init(el);
+
+        Move.movedElements = [child1, child2];
+
+        droppable.trigger(el);
+
+        expect(el.children.length).to.equal(0);
+      });
+    });
+
+    afterEach(function (done) {
+      _.reset();
+      done();
+    });
+  });
+});</script>
 </body></html>

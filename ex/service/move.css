@@ -1,0 +1,44 @@
+/** 
+ * All scss files depend on this file. To change the theme, change the theme below and
+ * recompile the SCSS files.
+ */
+/** http://paletton.com/#uid=1000u0k00lo01tG00pj01hu09dg */
+@import url(http://fonts.googleapis.com/css?family=Roboto);
+/* Borders */
+/* Sizes */
+.pb-component::shadow #root {
+  height: 50px;
+  width: 50px; }
+
+.pb-card::shadow #root {
+  border-radius: 5px;
+  height: 100px;
+  width: 75px; }
+
+.pb-key:hover {
+  outline: 6px dashed #666666;
+  outline-offset: -3px; }
+
+.pb-move {
+  -webkit-filter: drop-shadow(0px 2px 5px #3f3f3f);
+  z-index: 1;
+  opacity: 0.75;
+  position: fixed;
+  pointer-events: none; }
+
+.pb-move > * {
+  position: absolute; }
+
+.pb-move > *:nth-child(2) {
+  transform: rotateZ(-20deg); }
+
+.pb-move > *:nth-child(3) {
+  transform: rotateZ(15deg); }
+
+.pb-move > *:nth-child(4) {
+  transform: rotateZ(-35deg); }
+
+.pb-move > *:nth-child(5) {
+  transform: rotateZ(40deg); }
+
+/*# sourceMappingURL=move.css.map */

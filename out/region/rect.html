@@ -19,31 +19,69 @@
   </div>
 </template>
 
-<script>
-DI
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_region_Rect', (
-        $registry,
-        Check,
-        Click,
-        Config,
-        Droppable,
-        Helpable,
-        Key,
-        Move,
-        Region,
-        Utils,
-        doc,
-        template) => {
-  const EL_NAME = 'pb-r-rect';
+<script>"use strict";
+
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === undefined) {
+      return undefined;
+    }
+    return getter.call(receiver);
+  }
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+  return doc.querySelector("template");
+}).bind("pb_region_Rect", function ($registry, Check, Click, Config, Droppable, Helpable, Key, Move, Region, Utils, doc, template) {
+  var EL_NAME = "pb-r-rect";
 
   // Private symbols
-  const __mutationObserver__ = Symbol('mutationObserver');
-  const __onDomMutation__ = Symbol('onDomMutation');
+  var __mutationObserver__ = Symbol("mutationObserver");
+  var __onDomMutation__ = Symbol("onDomMutation");
 
-  class FlexDroppable extends Droppable {
-
+  var FlexDroppable = (function (Droppable) {
     /**
      * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
      * Elements with this ability adds the picked element as its child element when triggered. The
@@ -56,61 +94,95 @@ DI
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Droppable
      */
-    constructor(name = 'pb-droppable', defaultTrigger = new Click(), defaultEnabled = true) {
-      super(name, defaultTrigger, defaultEnabled);
-      this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
+    function FlexDroppable() {
+      var _this = this;
+      var name = arguments[0] === undefined ? "pb-droppable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+      return (function () {
+        _get(Object.getPrototypeOf(FlexDroppable.prototype), "constructor", _this).call(_this, name, defaultTrigger, defaultEnabled);
+        _this[__mutationObserver__] = new MutationObserver(_this[__onDomMutation__].bind(_this));
+      })();
     }
 
-    /**
-     * Handles event when the MutationObserver observes changes to the child list.
-     *
-     * @method __onDomMutation__
-     * @param {Array} mutations Array of MutationRecords.
-     * @private
-     */
-    [__onDomMutation__](mutations) {
-      mutations.forEach(mutation => {
-        Utils.toArray(mutation.removedNodes).forEach(removedNode => {
-          removedNode.style.left = '';
-          removedNode.style.top = '';
-        });
+    _inherits(FlexDroppable, Droppable);
+
+    _prototypeProperties(FlexDroppable, null, (function () {
+      var _prototypeProperties2 = {};
+
+      _defineProperty(_prototypeProperties2, __onDomMutation__, {
+
+        /**
+         * Handles event when the MutationObserver observes changes to the child list.
+         *
+         * @method __onDomMutation__
+         * @param {Array} mutations Array of MutationRecords.
+         * @private
+         */
+        value: function (mutations) {
+          mutations.forEach(function (mutation) {
+            Utils.toArray(mutation.removedNodes).forEach(function (removedNode) {
+              removedNode.style.left = "";
+              removedNode.style.top = "";
+            });
+          });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
       });
-    }
 
-    /**
-     * Sets the default configuration for this ability on the given element.
-     *
-     * @method init
-     * @param {Element} el The element to set the default configuration to.
-     */
-    init(el) {
-      super.init(el);
+      _defineProperty(_prototypeProperties2, "init", {
 
-      this[__mutationObserver__].observe(el, { childList: true });
-    }
+        /**
+         * Sets the default configuration for this ability on the given element.
+         *
+         * @method init
+         * @param {Element} el The element to set the default configuration to.
+         */
+        value: function init(el) {
+          _get(Object.getPrototypeOf(FlexDroppable.prototype), "init", this).call(this, el);
 
-    /**
-     * Drop the last dragged element on the given element
-     *
-     * @method trigger
-     * @param {Element} el The element to drop the dragged element into.
-     */
-    trigger(el) {
-      if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
-        let movedElement = Move.movedElements.values().next().value;
+          this[__mutationObserver__].observe(el, { childList: true });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
 
-        if (movedElement) {
-          el.appendChild(movedElement);
+      _defineProperty(_prototypeProperties2, "trigger", {
 
-          let rect = movedElement.getBoundingClientRect();
-          let dLeft = Move.mouseX - rect.left - rect.width / 2;
-          let dTop = Move.mouseY - rect.top - rect.height / 2;
-          movedElement.style.left = `${movedElement.offsetLeft + dLeft}px`;
-          movedElement.style.top = `${movedElement.offsetTop + dTop}px`;
-        }
-      }
-    }
-  }
+        /**
+         * Drop the last dragged element on the given element
+         *
+         * @method trigger
+         * @param {Element} el The element to drop the dragged element into.
+         */
+        value: function trigger(el) {
+          if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
+            var movedElement = Move.movedElements.values().next().value;
+
+            if (movedElement) {
+              el.appendChild(movedElement);
+
+              var rect = movedElement.getBoundingClientRect();
+              var dLeft = Move.mouseX - rect.left - rect.width / 2;
+              var dTop = Move.mouseY - rect.top - rect.height / 2;
+              movedElement.style.left = "" + (movedElement.offsetLeft + dLeft) + "px";
+              movedElement.style.top = "" + (movedElement.offsetTop + dTop) + "px";
+            }
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      return _prototypeProperties2;
+    })());
+
+    return FlexDroppable;
+  })(Droppable);
 
   /**
    * An arbitrary rectangular region. You can position elements anywhere in this region.
@@ -121,30 +193,42 @@ DI
    * @class region.Rect
    * @extends region.Region
    */
-  class Rect extends Region {
-
-    /**
-     * Called when the element is created.
-     *
-     * @method createdCallback
-     */
-    createdCallback() {
-      super.createdCallback();
-      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  var Rect = (function (Region) {
+    function Rect() {
+      if (Object.getPrototypeOf(Rect) !== null) {
+        Object.getPrototypeOf(Rect).apply(this, arguments);
+      }
     }
-  }
 
-  Config.add(
-      EL_NAME,
-      new Helpable('help'),
-      new FlexDroppable('drop', new Key('d'), true));
+    _inherits(Rect, Region);
+
+    _prototypeProperties(Rect, null, {
+      createdCallback: {
+
+        /**
+         * Called when the element is created.
+         *
+         * @method createdCallback
+         */
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Rect.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return Rect;
+  })(Region);
+
+  Config.add(EL_NAME, new Helpable("help"), new FlexDroppable("drop", new Key("d"), true));
   $registry.add(EL_NAME, Rect.prototype);
 
-  if (window['TEST_MODE']) {
+  if (window.TEST_MODE) {
     Rect.FlexDroppable = FlexDroppable;
   }
 
   return Rect;
-
-});
-</script></head><body></body></html>
+});</script></head><body></body></html>

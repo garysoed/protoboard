@@ -5,13 +5,18 @@
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="trigger/triggers.html">
 
-<script>
-DI.bind('pb_ability_Ability', ($, Triggers) => {
+<script>"use strict";
 
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+DI.bind("pb_ability_Ability", function ($, Triggers) {
   // Private symbols.
-  const __name__ = Symbol();
-  const __defaultTrigger__ = Symbol('defaultTrigger');
-  const __triggerMap__ = Symbol('triggerMap');
+  var __name__ = Symbol();
+  var __defaultTrigger__ = Symbol("defaultTrigger");
+  var __triggerMap__ = Symbol("triggerMap");
 
   /**
    * Base class for all abilities. Any abilities must extend this class and implement the methods
@@ -19,8 +24,7 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
    *
    * @class ability.Ability
    */
-  class Ability {
-
+  var Ability = (function () {
     /**
      * @constructor
      * @class ability.Ability
@@ -28,93 +32,124 @@ DI.bind('pb_ability_Ability', ($, Triggers) => {
      *    added to an element. It therefore must be unique for the element.
      * @param {trigger.Trigger} defaultTrigger The default trigger to trigger this ability.
      */
-    constructor(name, defaultTrigger) {
+    function Ability(name, defaultTrigger) {
       this[__name__] = name;
       this[__defaultTrigger__] = defaultTrigger;
     }
 
-    /**
-     * Initializes the ability on the given element.
-     *
-     * @method init
-     * @param {Element} el The element to set the default values to.
-     */
-    init(el) {
-      if ($(el).attr(this.attrTrigger) === undefined) {
-        $(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
+    _prototypeProperties(Ability, null, {
+      init: {
+
+        /**
+         * Initializes the ability on the given element.
+         *
+         * @method init
+         * @param {Element} el The element to set the default values to.
+         */
+        value: function init(el) {
+          if ($(el).attr(this.attrTrigger) === undefined) {
+            $(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
+          }
+
+          this.updateConfig(el);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      updateConfig: {
+
+        /**
+         * Updates the inner state of the ability based on changes to the element.
+         *
+         * @method updateConfig
+         * @param {Element} el Element whose attributes have changed.
+         */
+        value: function updateConfig(el) {
+          if (!el[__triggerMap__]) {
+            el[__triggerMap__] = new Map();
+          }
+
+          var newValue = $(el).attr(this.attrTrigger);
+          if (!el[__triggerMap__].has(this) || newValue !== el[__triggerMap__].get(this).toString()) {
+            if (el[__triggerMap__].has(this)) {
+              el[__triggerMap__].get(this).off(el);
+            }
+            var trigger = Triggers.parse($(el).attr(this.attrTrigger));
+            trigger.on(el, this);
+            el[__triggerMap__].set(this, trigger);
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      trigger: {
+
+        /**
+         * Triggers the effect of the ability on the given element.
+         *
+         * @method trigger
+         * @param {Element} el The element to trigger the ability on.
+         */
+        value: function trigger(el) {},
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      getTrigger: {
+
+        /**
+         * Returns the trigger for this ability on this element.
+         *
+         * @method getTrigger
+         * @param {Element} el The element to return the trigger for this ability for.
+         * @return {trigger.Trigger|null} The trigger for this ability on this element, or null if there
+         *    is none.
+         */
+        value: function getTrigger(el) {
+          return el[__triggerMap__] ? el[__triggerMap__].get(this) : null;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      attrName: {
+
+        /**
+         * Name of the ability. This is also the name of the attribute on the element corresponding to
+         * this ability.
+         *
+         * @property attrName
+         * @type string
+         * @final
+         */
+        get: function () {
+          return this[__name__];
+        },
+        enumerable: true,
+        configurable: true
+      },
+      attrTrigger: {
+
+        /**
+         * The name of the attribute on the element corresponding to this ability that sets the trigger
+         * for this ability. This is the name of the ability with a <code>-on</code> postfix.
+         *
+         * @property attrTrigger
+         * @type string
+         * @final
+         */
+        get: function () {
+          return "" + this[__name__] + "-on";
+        },
+        enumerable: true,
+        configurable: true
       }
+    });
 
-      this.updateConfig(el);
-    }
-
-    /**
-     * Updates the inner state of the ability based on changes to the element.
-     *
-     * @method updateConfig
-     * @param {Element} el Element whose attributes have changed.
-     */
-    updateConfig(el) {
-      if (!el[__triggerMap__]) {
-        el[__triggerMap__] = new Map();
-      }
-
-      let newValue = $(el).attr(this.attrTrigger);
-      if (!el[__triggerMap__].has(this)
-          || newValue !== el[__triggerMap__].get(this).toString()) {
-        if (el[__triggerMap__].has(this)) {
-          el[__triggerMap__].get(this).off(el);
-        }
-        let trigger = Triggers.parse($(el).attr(this.attrTrigger));
-        trigger.on(el, this);
-        el[__triggerMap__].set(this, trigger);
-      }
-    }
-
-    /**
-     * Triggers the effect of the ability on the given element.
-     *
-     * @method trigger
-     * @param {Element} el The element to trigger the ability on.
-     */
-    trigger(el) { }
-
-    /**
-     * Returns the trigger for this ability on this element.
-     *
-     * @method getTrigger
-     * @param {Element} el The element to return the trigger for this ability for.
-     * @return {trigger.Trigger|null} The trigger for this ability on this element, or null if there
-     *    is none.
-     */
-    getTrigger(el) {
-      return el[__triggerMap__] ? el[__triggerMap__].get(this) : null;
-    }
-
-    /**
-     * Name of the ability. This is also the name of the attribute on the element corresponding to
-     * this ability.
-     *
-     * @property attrName
-     * @type string
-     * @final
-     */
-    get attrName() {
-      return this[__name__];
-    }
-
-    /**
-     * The name of the attribute on the element corresponding to this ability that sets the trigger
-     * for this ability. This is the name of the ability with a <code>-on</code> postfix.
-     *
-     * @property attrTrigger
-     * @type string
-     * @final
-     */
-    get attrTrigger() {
-      return `${this[__name__]}-on`;
-    }
-  }
+    return Ability;
+  })();
 
   return Ability;
-});
-</script></head><body></body></html>
+});</script></head><body></body></html>

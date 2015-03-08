@@ -8,14 +8,55 @@
 
 <link rel="stylesheet" href="../bower_components/animate.css/animate.min.css">
 
-<script>
-DI.bind('pb_ability_Shuffleable', ($, Ability, Check, Click, Utils) => {
+<script>"use strict";
 
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === undefined) {
+      return undefined;
+    }
+    return getter.call(receiver);
+  }
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.bind("pb_ability_Shuffleable", function ($, Ability, Check, Click, Utils) {
   // Private symbols.
-  const __defaultEnabled__ = Symbol();
+  var __defaultEnabled__ = Symbol();
 
-  class Shuffleable extends Ability {
-
+  var Shuffleable = (function (Ability) {
     /**
      * Elements with this ability shuffles its children when triggered.
      *
@@ -26,60 +67,86 @@ DI.bind('pb_ability_Shuffleable', ($, Ability, Check, Click, Utils) => {
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Ability
      */
-    constructor(name = 'pb-shuffleable', defaultTrigger = new Click(), defaultEnabled = true) {
-      super(name, defaultTrigger);
+    function Shuffleable() {
+      var _this = this;
+      var name = arguments[0] === undefined ? "pb-shuffleable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+      return (function () {
+        _get(Object.getPrototypeOf(Shuffleable.prototype), "constructor", _this).call(_this, name, defaultTrigger);
 
-      this[__defaultEnabled__] = defaultEnabled;
+        _this[__defaultEnabled__] = defaultEnabled;
+      })();
     }
 
-    /**
-     * Sets the default configuration for this ability on the given element.
-     *
-     * @method init
-     * @param {Element} el The element to set the default configuration to.
-     */
-    init(el) {
-      super.init(el);
+    _inherits(Shuffleable, Ability);
 
-      if ($(el).attr(this.attrName) === undefined) {
-        $(el).attr(this.attrName, this[__defaultEnabled__]);
-      }
-    }
+    _prototypeProperties(Shuffleable, null, {
+      init: {
 
-    /**
-     * Shuffles the given element's children, if this ability is enabled on the element.
-     *
-     * @method trigger
-     * @param {Element} el Element whose children should be shuffled.
-     */
-    trigger(el) {
-      if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
-        let pairs = Utils.toArray(el.children).map(child => [child, Math.random()]);
-        pairs.sort((a, b) => Utils.compare(a[1], b[1]));
+        /**
+         * Sets the default configuration for this ability on the given element.
+         *
+         * @method init
+         * @param {Element} el The element to set the default configuration to.
+         */
+        value: function init(el) {
+          _get(Object.getPrototypeOf(Shuffleable.prototype), "init", this).call(this, el);
 
-        let shuffled = pairs.map(pair => pair[0]);
-        shuffled.forEach(shuffledEl => {
-          el.appendChild(shuffledEl);
-
-          if (shuffledEl.classList.contains('pb-shuffleable-animate')) {
-            shuffledEl.classList.remove('pb-shuffleable-animate');
+          if ($(el).attr(this.attrName) === undefined) {
+            $(el).attr(this.attrName, this[__defaultEnabled__]);
           }
-          shuffledEl.classList.add('pb-shuffleable-animate');
-        });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      trigger: {
 
-        // Animate the deck
-        $(el).one(
-            'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
-            () => {
-              el.classList.remove('animated');
-              el.classList.remove('wobble');
+        /**
+         * Shuffles the given element's children, if this ability is enabled on the element.
+         *
+         * @method trigger
+         * @param {Element} el Element whose children should be shuffled.
+         */
+        value: function trigger(el) {
+          if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
+            var pairs = Utils.toArray(el.children).map(function (child) {
+              return [child, Math.random()];
             });
-        el.classList.add('animated');
-        el.classList.add('wobble');
+            pairs.sort(function (a, b) {
+              return Utils.compare(a[1], b[1]);
+            });
+
+            var shuffled = pairs.map(function (pair) {
+              return pair[0];
+            });
+            shuffled.forEach(function (shuffledEl) {
+              el.appendChild(shuffledEl);
+
+              if (shuffledEl.classList.contains("pb-shuffleable-animate")) {
+                shuffledEl.classList.remove("pb-shuffleable-animate");
+              }
+              shuffledEl.classList.add("pb-shuffleable-animate");
+            });
+
+            // Animate the deck
+            $(el).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
+              el.classList.remove("animated");
+              el.classList.remove("wobble");
+            });
+            el.classList.add("animated");
+            el.classList.add("wobble");
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
       }
-    }
-  }
+    });
+
+    return Shuffleable;
+  })(Ability);
 
   return Shuffleable;
-});
-</script></head><body></body></html>
+});</script></head><body></body></html>

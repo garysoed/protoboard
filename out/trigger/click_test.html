@@ -6,52 +6,50 @@
   <link rel="import" href="out/trigger/click.html">
 </head>
 <body>
-  <script>
-  DI
-      .constant('doc', document.currentScript.ownerDocument)
-      .with('Events', pb_t => pb_t.createFakeEvents())
-      .run((_, _M, expect, Click, Events, doc, pb_t) => {
+  <script>"use strict";
 
-    describe('Click', () => {
-      let click;
+DI.constant("doc", document.currentScript.ownerDocument)["with"]("Events", function (pb_t) {
+  return pb_t.createFakeEvents();
+}).run(function (_, _M, expect, Click, Events, doc, pb_t) {
+  describe("Click", function () {
+    var click = undefined;
 
-      beforeEach(done => {
-        click = new Click();
-        done();
-      });
+    beforeEach(function (done) {
+      click = new Click();
+      done();
+    });
 
-      describe('#on', () => {
-        it('should register singletap on hammer', () => {
-          let ability = pb_t.createFakeAbility('test');
-          let element = doc.createElement('div');
+    describe("#on", function () {
+      it("should register singletap on hammer", function () {
+        var ability = pb_t.createFakeAbility("test");
+        var element = doc.createElement("div");
 
-          click.on(element, ability);
+        click.on(element, ability);
 
-          expect(Events.of).calledWith(element, click).at.least(1);
-          let handlerCaptor = _M.isA(Function);
-          expect(Events.on).calledWith('hammer', 'singletap', handlerCaptor).at.least(1);
+        expect(Events.of).calledWith(element, click).at.least(1);
+        var handlerCaptor = _M.isA(Function);
+        expect(Events.on).calledWith("hammer", "singletap", handlerCaptor).at.least(1);
 
-          handlerCaptor.matchingArgs[0]();
-          expect(ability.trigger).calledWith(element).at.least(1);
-        });
-      });
-
-      describe('#off', () => {
-        it('should unregister singletap on hammer', () => {
-          let element = doc.createElement('div');
-
-          click.off(element);
-
-          expect(Events.of).calledWith(element, click).at.least(1);
-          expect(Events.off).calledWith('hammer', 'singletap').at.least(1);
-        });
-      });
-
-      afterEach(done => {
-        _.reset();
-        done();
+        handlerCaptor.matchingArgs[0]();
+        expect(ability.trigger).calledWith(element).at.least(1);
       });
     });
+
+    describe("#off", function () {
+      it("should unregister singletap on hammer", function () {
+        var element = doc.createElement("div");
+
+        click.off(element);
+
+        expect(Events.of).calledWith(element, click).at.least(1);
+        expect(Events.off).calledWith("hammer", "singletap").at.least(1);
+      });
+    });
+
+    afterEach(function (done) {
+      _.reset();
+      done();
+    });
   });
-  </script>
+});</script>
 </body></html>

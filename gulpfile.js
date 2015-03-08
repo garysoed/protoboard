@@ -55,7 +55,7 @@ function subJsHint() {
 
 function sub6to5() {
   return chain(function(stream) {
-    var replace = subs();
+    var replace = subs('script');
     return stream
         .pipe(replace.extract)
             .pipe(to5({modules: 'ignore'}))

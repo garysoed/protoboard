@@ -2,51 +2,79 @@
 
 <link rel="import" href="di.html">
 
-<script>
-DI.bind('pb_trigger_Trigger', () => {
+<script>"use strict";
 
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+DI.bind("pb_trigger_Trigger", function () {
   /**
    * Base class of all triggers. Triggers should be stateless and immutable.
    *
    * @class trigger.Trigger
    */
-  class Trigger {
-    /**
-     * Registers the given element to trigger the given ability when clicked.
-     *
-     * @method on
-     * @param {Element} element Element to register.
-     * @param {ability.Ability} ability The ability to trigger.
-     */
-    on(element, ability) {
-      throw new Error('unimplemented');
-    }
+  var Trigger = (function () {
+    function Trigger() {}
 
-    /**
-     * Unregisters the given element from triggering the registered ability when clicked.
-     *
-     * @method off
-     * @param {Element} element Element to unregister.
-     */
-    off(element) {
-      throw new Error('unimplemented');
-    }
+    _prototypeProperties(Trigger, null, {
+      on: {
+        /**
+         * Registers the given element to trigger the given ability when clicked.
+         *
+         * @method on
+         * @param {Element} element Element to register.
+         * @param {ability.Ability} ability The ability to trigger.
+         */
+        value: function on(element, ability) {
+          throw new Error("unimplemented");
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      off: {
 
-    /**
-     * @method toString
-     * @return {string} String representation of the trigger. This can be used to set the trigger of
-     *    an ability.
-     */
-    toString() {
-      throw new Error('unimplemented');
-    }
+        /**
+         * Unregisters the given element from triggering the registered ability when clicked.
+         *
+         * @method off
+         * @param {Element} element Element to unregister.
+         */
+        value: function off(element) {
+          throw new Error("unimplemented");
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      toString: {
 
-    get helpText() {
-      throw new Error('unimplemented');
-    }
-  }
+        /**
+         * @method toString
+         * @return {string} String representation of the trigger. This can be used to set the trigger of
+         *    an ability.
+         */
+        value: function toString() {
+          throw new Error("unimplemented");
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      helpText: {
+        get: function () {
+          throw new Error("unimplemented");
+        },
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return Trigger;
+  })();
 
   return Trigger;
-});
-</script>
+});</script>
 </head><body></body></html>

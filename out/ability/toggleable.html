@@ -6,18 +6,68 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<script>
-DI.bind('pb_ability_Toggleable', (Ability, Check, Key, Utils) => {
+<script>"use strict";
 
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === undefined) {
+      return undefined;
+    }
+    return getter.call(receiver);
+  }
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.bind("pb_ability_Toggleable", function (Ability, Check, Key, Utils) {
   // Private symbols.
-  const __defaultEnabled__ = Symbol();
-  const __defaultActive__ = Symbol();
+  var __defaultEnabled__ = Symbol();
+  var __defaultActive__ = Symbol();
 
-  const __isEnabled__ = Symbol();
-  const __isActive__ = Symbol();
+  var __isEnabled__ = Symbol();
+  var __isActive__ = Symbol();
 
-  class Toggleable extends Ability {
-
+  var Toggleable = (function (Ability) {
     /**
      * Provides decorator to make an element toggleable between two states.
      *
@@ -31,84 +81,125 @@ DI.bind('pb_ability_Toggleable', (Ability, Check, Key, Utils) => {
      *    default.
      * @extends ability.Ability
      */
-    constructor(
-        name = 'pb-toggleable',
-        defaultTrigger = new Key('t'),
-        defaultConfig = { enabled: true, active: false }) {
-      super(name, defaultTrigger);
+    function Toggleable() {
+      var _this = this;
+      var name = arguments[0] === undefined ? "pb-toggleable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Key("t") : arguments[1];
+      var defaultConfig = arguments[2] === undefined ? { enabled: true, active: false } : arguments[2];
+      return (function () {
+        _get(Object.getPrototypeOf(Toggleable.prototype), "constructor", _this).call(_this, name, defaultTrigger);
 
-      if (typeof defaultConfig === 'boolean') {
-        this[__defaultEnabled__] = defaultConfig;
-        this[__defaultActive__] = false;
-      } else {
-        this[__defaultEnabled__] = defaultConfig.enabled;
-        this[__defaultActive__] = defaultConfig.active;
-      }
+        if (typeof defaultConfig === "boolean") {
+          _this[__defaultEnabled__] = defaultConfig;
+          _this[__defaultActive__] = false;
+        } else {
+          _this[__defaultEnabled__] = defaultConfig.enabled;
+          _this[__defaultActive__] = defaultConfig.active;
+        }
+      })();
     }
 
-    /**
-     * @method __isEnabled__
-     * @param {Element} el Element to check.
-     * @return {boolean} True iff the ability is enabled for the given element.
-     * @private
-     */
-    [__isEnabled__](el) {
-      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-    }
+    _inherits(Toggleable, Ability);
 
-    /**
-     * @method __isActive__
-     * @param {Element} el Element to check.
-     * @return {boolean} True iff the element is currently active.
-     * @private
-     */
-    [__isActive__](el) {
-      return Check($(el).attr(this.attrActive)).isBoolean().orThrows();
-    }
+    _prototypeProperties(Toggleable, null, (function () {
+      var _prototypeProperties2 = {};
 
-    /**
-     * Sets the default configuration for this ability on the given element.
-     *
-     * @method init
-     * @param {Element} el The element to set the default configuration to.
-     */
-    init(el) {
-      super.init(el);
-      if ($(el).attr(this.attrName) === undefined) {
-        $(el).attr(this.attrName, this[__defaultEnabled__]);
-      }
+      _defineProperty(_prototypeProperties2, __isEnabled__, {
 
-      if ($(el).attr(this.attrActive) === undefined) {
-        $(el).attr(this.attrActive, this[__defaultActive__]);
-      }
-    }
+        /**
+         * @method __isEnabled__
+         * @param {Element} el Element to check.
+         * @return {boolean} True iff the ability is enabled for the given element.
+         * @private
+         */
+        value: function (el) {
+          return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
 
-    /**
-     * Toggles the state of the given element, if the ability is enabled on the element.
-     *
-     * @method trigger
-     * @param {Element} el Element that should be toggled.
-     */
-    trigger(el) {
-      if (this[__isEnabled__](el)) {
-        $(el).attr(this.attrActive, !this[__isActive__](el));
-      }
-    }
+      _defineProperty(_prototypeProperties2, __isActive__, {
 
-    /**
-     * The name of the attribute on the element corresponding to this ability that indicates that
-     * the element is in active state. This is the name of the ability with a <code>-active</code>
-     * postfix.
-     *
-     * @property attrActive
-     * @type string
-     * @final
-     */
-    get attrActive() {
-      return `${this.attrName}-active`;
-    }
-  }
+        /**
+         * @method __isActive__
+         * @param {Element} el Element to check.
+         * @return {boolean} True iff the element is currently active.
+         * @private
+         */
+        value: function (el) {
+          return Check($(el).attr(this.attrActive)).isBoolean().orThrows();
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "init", {
+
+        /**
+         * Sets the default configuration for this ability on the given element.
+         *
+         * @method init
+         * @param {Element} el The element to set the default configuration to.
+         */
+        value: function init(el) {
+          _get(Object.getPrototypeOf(Toggleable.prototype), "init", this).call(this, el);
+          if ($(el).attr(this.attrName) === undefined) {
+            $(el).attr(this.attrName, this[__defaultEnabled__]);
+          }
+
+          if ($(el).attr(this.attrActive) === undefined) {
+            $(el).attr(this.attrActive, this[__defaultActive__]);
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "trigger", {
+
+        /**
+         * Toggles the state of the given element, if the ability is enabled on the element.
+         *
+         * @method trigger
+         * @param {Element} el Element that should be toggled.
+         */
+        value: function trigger(el) {
+          if (this[__isEnabled__](el)) {
+            $(el).attr(this.attrActive, !this[__isActive__](el));
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "attrActive", {
+
+        /**
+         * The name of the attribute on the element corresponding to this ability that indicates that
+         * the element is in active state. This is the name of the ability with a <code>-active</code>
+         * postfix.
+         *
+         * @property attrActive
+         * @type string
+         * @final
+         */
+        get: function () {
+          return "" + this.attrName + "-active";
+        },
+        enumerable: true,
+        configurable: true
+      });
+
+      return _prototypeProperties2;
+    })());
+
+    return Toggleable;
+  })(Ability);
 
   return Toggleable;
-});
-</script></head><body></body></html>
+});</script></head><body></body></html>

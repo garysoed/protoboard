@@ -12,50 +12,45 @@
   <link rel="import" href="out/trigger/key.html">
 </head>
 <body>
-  <script>
-  DI
-      .with('$registry', Registry => new Registry())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, Abilities, Click, Config, Helpable, Key, doc, pb_t, $registry) => {
+  <script>"use strict";
 
-  describe('ability.Helpable', () => {
-    let displayEl;
+DI["with"]("$registry", function (Registry) {
+  return new Registry();
+}).constant("doc", document.currentScript.ownerDocument).run(function (expect, _, Abilities, Click, Config, Helpable, Key, doc, pb_t, $registry) {
+  describe("ability.Helpable", function () {
+    var displayEl = undefined;
 
-    beforeEach(done => {
-      displayEl = doc.createElement('div');
+    beforeEach(function (done) {
+      displayEl = doc.createElement("div");
 
-      _.spy(doc, 'createElement').overrideReturn(displayEl);
+      _.spy(doc, "createElement").overrideReturn(displayEl);
       $registry.register(doc, Config);
       _.reset(doc.createElement);
       done();
     });
 
-    describe('#trigger', () => {
-      it('should add the abilities as child of the display element and show the element', () => {
-        let ability1 = pb_t.createFakeAbility('ability', new Click());
-        let ability2 = pb_t.createFakeAbility('ability2', new Key('a'));
-        let helpable = new Helpable();
-        let el = doc.createElement('div');
-        Abilities.of(el)
-            .add(helpable)
-            .add(ability1)
-            .add(ability2);
+    describe("#trigger", function () {
+      it("should add the abilities as child of the display element and show the element", function () {
+        var ability1 = pb_t.createFakeAbility("ability", new Click());
+        var ability2 = pb_t.createFakeAbility("ability2", new Key("a"));
+        var helpable = new Helpable();
+        var el = doc.createElement("div");
+        Abilities.of(el).add(helpable).add(ability1).add(ability2);
         Abilities.init(el);
 
         helpable.trigger(el);
-        let children = displayEl.children;
+        var children = displayEl.children;
         expect(children.length).to.be.equal(3);
 
         var child1 = children.item(0);
-        expect(child1.innerText).to.be.equal(`?: ${helpable.attrName}`);
+        expect(child1.innerText).to.be.equal("?: " + helpable.attrName);
       });
     });
 
-    afterEach(done => {
+    afterEach(function (done) {
       _.reset();
       done();
     });
   });
-  });
-  </script>
+});</script>
 </body></html>

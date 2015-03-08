@@ -5,17 +5,26 @@
 
 <link rel="stylesheet" href="service/move.css">
 
-<script>
-DI.bind('pb_service_Move', ($registry, Events, Utils) => {
+<script>"use strict";
 
+var _defineProperty = function (obj, key, value) {
+  return Object.defineProperty(obj, key, {
+    value: value,
+    enumerable: true,
+    configurable: true,
+    writable: true
+  });
+};
+
+DI.bind("pb_service_Move", function ($registry, Events, Utils) {
   // Private symbols.
-  const __container__ = Symbol('container');
-  const __document__ = Symbol();
-  const __mouseX__ = Symbol();
-  const __mouseY__ = Symbol();
+  var __container__ = Symbol("container");
+  var __document__ = Symbol();
+  var __mouseX__ = Symbol();
+  var __mouseY__ = Symbol();
 
-  const __moveContainer__ = Symbol('moveContainer');
-  const __onMouseMove__ = Symbol('onMouseMove');
+  var __moveContainer__ = Symbol("moveContainer");
+  var __onMouseMove__ = Symbol("onMouseMove");
 
   /**
    * Service that handles moving elements around. Used by
@@ -32,111 +41,137 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
    * @class service.Move
    * @static
    */
-  let Move = {
-    /**
-     * Reference to the document that the service operates in.
-     *
-     * @property __document__
-     * @type Document
-     * @private
-     */
-    [__document__]: undefined,
+  var Move = Object.defineProperties((function () {
+    var _Object$defineProperties = {};
 
-    /**
-     * The container of all the moved elements.
-     *
-     * @property __container__
-     * @type Element
-     * @private
-     */
-    [__container__]: null,
+    _defineProperty(_Object$defineProperties, __document__, undefined);
 
-    /**
-     * Moves the container element to the last known location of the mouse.
-     *
-     * @method __moveContainer__
-     * @private
-     */
-    [__moveContainer__]() {
-      let width = 0;
-      let height = 0;
-      Utils.toArray(this[__container__].children).forEach(child => {
-        let rect = child.getBoundingClientRect();
+    _defineProperty(_Object$defineProperties, __container__, null);
+
+    _defineProperty(_Object$defineProperties, __moveContainer__, function () {
+      var width = 0;
+      var height = 0;
+      Utils.toArray(this[__container__].children).forEach(function (child) {
+        var rect = child.getBoundingClientRect();
         width = Math.max(rect.width, width);
         height = Math.max(rect.height, height);
       });
 
-      this[__container__].style.left = `${this[__mouseX__] - width / 2}px`;
-      this[__container__].style.top = `${this[__mouseY__] - height / 2}px`;
-    },
+      this[__container__].style.left = "" + (this[__mouseX__] - width / 2) + "px";
+      this[__container__].style.top = "" + (this[__mouseY__] - height / 2) + "px";
+    });
 
-    /**
-     * Handles event when the mouse is moved.
-     *
-     * @method __onMouseMove__
-     * @param {MouseEvent} event The corresponding mouse event.
-     * @private
-     */
-    [__onMouseMove__](event) {
+    _defineProperty(_Object$defineProperties, __onMouseMove__, function (event) {
       this[__moveContainer__]();
       this[__mouseX__] = event.clientX;
       this[__mouseY__] = event.clientY;
-    },
+    });
 
-    /**
-     * Sets the given element as being moved.
-     *
-     * @method add
-     * @param {Element} el Element to move.
-     */
-    add(el) {
+    _defineProperty(_Object$defineProperties, "add", function add(el) {
       this[__container__].appendChild(el);
       this[__moveContainer__]();
-    },
+    });
 
-    /**
-     * The elements that are being moved.
-     *
-     * @property movedElements
-     * @type Set
-     * @final
-     */
-    get movedElements() {
-      return new Set(Utils.toArray(this[__container__].children));
+    return _Object$defineProperties;
+  })(), {
+    movedElements: {
+      get: function () {
+        return new Set(Utils.toArray(this[__container__].children));
+      },
+      enumerable: true,
+      configurable: true
     },
-
-    /**
-     * Last known X coordinate of the mouse in px.
-     *
-     * @property mouseX
-     * @type number
-     * @final
-     */
-    get mouseX() {
-      return this[__mouseX__];
+    mouseX: {
+      get: function () {
+        return this[__mouseX__];
+      },
+      enumerable: true,
+      configurable: true
     },
-
-    /**
-     * Last known Y coordinate of the mouse in px.
-     *
-     * @property mouseY
-     * @type number
-     * @final
-     */
-    get mouseY() {
-      return this[__mouseY__];
+    mouseY: {
+      get: function () {
+        return this[__mouseY__];
+      },
+      enumerable: true,
+      configurable: true
     }
-  };
+  });
 
-  $registry.runAtRegister(doc => {
-    Events.of(doc.body, Move)
-        .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
+  $registry.runAtRegister(function (doc) {
+    Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
     Move[__document__] = doc;
-    Move[__container__] = doc.createElement('div');
-    Move[__container__].classList.add('pb-move');
+    Move[__container__] = doc.createElement("div");
+    Move[__container__].classList.add("pb-move");
     doc.body.appendChild(Move[__container__]);
   });
 
   return Move;
 });
-</script></head><body></body></html>
+/**
+ * Reference to the document that the service operates in.
+ *
+ * @property __document__
+ * @type Document
+ * @private
+ */
+
+
+/**
+ * The container of all the moved elements.
+ *
+ * @property __container__
+ * @type Element
+ * @private
+ */
+
+
+/**
+ * Moves the container element to the last known location of the mouse.
+ *
+ * @method __moveContainer__
+ * @private
+ */
+
+
+/**
+ * Handles event when the mouse is moved.
+ *
+ * @method __onMouseMove__
+ * @param {MouseEvent} event The corresponding mouse event.
+ * @private
+ */
+
+
+/**
+ * Sets the given element as being moved.
+ *
+ * @method add
+ * @param {Element} el Element to move.
+ */
+
+
+/**
+ * The elements that are being moved.
+ *
+ * @property movedElements
+ * @type Set
+ * @final
+ */
+
+
+/**
+ * Last known X coordinate of the mouse in px.
+ *
+ * @property mouseX
+ * @type number
+ * @final
+ */
+
+
+/**
+ * Last known Y coordinate of the mouse in px.
+ *
+ * @property mouseY
+ * @type number
+ * @final
+ */</script></head><body></body></html>

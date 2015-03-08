@@ -11,46 +11,44 @@
   <link rel="import" href="out/utils.html">
 </head>
 <body>
-  <script>
-  DI
-      .constant('Move', {
-        movedElements: [],
-        mouseX: 0
-      })
-      .with('$registry', Registry => new Registry())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, $, doc, Hand, Move, Utils) => {
+  <script>"use strict";
 
-  describe('region.Hand.ReorderableDroppable', () => {
-    describe('#trigger', () => {
-      let el;
-      let droppable;
+DI.constant("Move", {
+  movedElements: [],
+  mouseX: 0
+})["with"]("$registry", function (Registry) {
+  return new Registry();
+}).constant("doc", document.currentScript.ownerDocument).run(function (expect, _, $, doc, Hand, Move, Utils) {
+  describe("region.Hand.ReorderableDroppable", function () {
+    describe("#trigger", function () {
+      var el = undefined;
+      var droppable = undefined;
 
-      beforeEach(done => {
-        el = doc.createElement('div');
+      beforeEach(function (done) {
+        el = doc.createElement("div");
         droppable = new Hand.ReorderableDroppable();
-        $(el).attr(droppable.attrName, 'true');
+        $(el).attr(droppable.attrName, "true");
         done();
       });
 
-      it('should insert before the correct child', () => {
-        let child1 = doc.createElement('div');
-        _.spy(child1, 'getBoundingClientRect').overrideReturn({
+      it("should insert before the correct child", function () {
+        var child1 = doc.createElement("div");
+        _.spy(child1, "getBoundingClientRect").overrideReturn({
           left: 10,
           width: 20
         });
 
-        let child2 = doc.createElement('div');
-        _.spy(child2, 'getBoundingClientRect').overrideReturn({
+        var child2 = doc.createElement("div");
+        _.spy(child2, "getBoundingClientRect").overrideReturn({
           left: 35,
           width: 20
         });
 
         el.appendChild(child1);
         el.appendChild(child2);
-        el.classList.add('pb-over');
+        el.classList.add("pb-over");
 
-        let dragged = doc.createElement('div');
+        var dragged = doc.createElement("div");
 
         Move.movedElements = [dragged];
         Move.mouseX = 40;
@@ -59,15 +57,15 @@
 
         expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
       });
-      it('should insert as the last child if eventX is too far to the right', () => {
-        let child1 = doc.createElement('div');
-        _.spy(child1, 'getBoundingClientRect').overrideReturn({
+      it("should insert as the last child if eventX is too far to the right", function () {
+        var child1 = doc.createElement("div");
+        _.spy(child1, "getBoundingClientRect").overrideReturn({
           left: 10,
           width: 20
         });
 
-        let child2 = doc.createElement('div');
-        _.spy(child2, 'getBoundingClientRect').overrideReturn({
+        var child2 = doc.createElement("div");
+        _.spy(child2, "getBoundingClientRect").overrideReturn({
           left: 35,
           width: 20
         });
@@ -75,7 +73,7 @@
         el.appendChild(child1);
         el.appendChild(child2);
 
-        let dragged = doc.createElement('div');
+        var dragged = doc.createElement("div");
         Move.movedElements = [dragged];
         Move.mouseX = 50;
 
@@ -83,16 +81,15 @@
 
         expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
       });
-      it('should not crash if there are no last dragged element', () => {
+      it("should not crash if there are no last dragged element", function () {
         Move.movedElements = [];
         droppable.trigger(el);
       });
     });
-    afterEach(done => {
+    afterEach(function (done) {
       _.reset();
       done();
     });
   });
-  });
-  </script>
+});</script>
 </body></html>

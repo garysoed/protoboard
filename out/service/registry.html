@@ -2,70 +2,94 @@
 
 <link rel="import" href="di.html">
 
-<script>
+<script>"use strict";
 
-DI.bind('pb_service_Registry', () => {
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
 
-  const __elements__ = Symbol();
-  const __toRun__ = Symbol();
+DI.bind("pb_service_Registry", function () {
+  var __elements__ = Symbol();
+  var __toRun__ = Symbol();
 
-  class Registry {
+  var Registry = (function () {
     /**
      * A service that collects functions to be ran at bootstrap.
      *
      * @constructor
      * @class service.Registry
      */
-    constructor() {
+    function Registry() {
       this[__elements__] = new Map();
       this[__toRun__] = [];
     }
 
-    /**
-     * Sets the given element name and prototype to be registered as custom element at bootstrap.
-     *
-     * @method add
-     * @param {name} name Element name to register
-     * @param {Object} prototype Prototype object of the custom element.
-     */
-    add(name, prototype) {
-      if (this[__elements__].has(name)) {
-        throw `${name} is already registered`;
-      }
-      this[__elements__].set(name, prototype);
-      this.runAtRegister((doc, Config) => {
-        Config.init(name, prototype);
-        doc.registerElement(name, { prototype: prototype });
-      });
-    }
+    _prototypeProperties(Registry, null, {
+      add: {
 
-    /**
-     * Runs the given function at bootstrap.
-     *
-     * @method runAtRegister
-     * @param {Function} fn The function to run. This function takes in a
-     *    {{#crossLink "Document"}}{{/crossLink}} and a
-     *    {{#crossLink "service.Config"}}{{/crossLink}}.
-     */
-    runAtRegister(fn) {
-      this[__toRun__].push(fn);
-    }
+        /**
+         * Sets the given element name and prototype to be registered as custom element at bootstrap.
+         *
+         * @method add
+         * @param {name} name Element name to register
+         * @param {Object} prototype Prototype object of the custom element.
+         */
+        value: function add(name, prototype) {
+          if (this[__elements__].has(name)) {
+            throw "" + name + " is already registered";
+          }
+          this[__elements__].set(name, prototype);
+          this.runAtRegister(function (doc, Config) {
+            Config.init(name, prototype);
+            doc.registerElement(name, { prototype: prototype });
+          });
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      runAtRegister: {
 
-    /**
-     * Runs all the collected functions.
-     *
-     * @method register
-     * @param {Document} doc Document object to run the functions in.
-     * @param {service.Config} Config The configuration service to use.
-     */
-    register(doc, Config) {
-      for (let fn of this[__toRun__]) {
-        fn(doc, Config);
+        /**
+         * Runs the given function at bootstrap.
+         *
+         * @method runAtRegister
+         * @param {Function} fn The function to run. This function takes in a
+         *    {{#crossLink "Document"}}{{/crossLink}} and a
+         *    {{#crossLink "service.Config"}}{{/crossLink}}.
+         */
+        value: function runAtRegister(fn) {
+          this[__toRun__].push(fn);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      register: {
+
+        /**
+         * Runs all the collected functions.
+         *
+         * @method register
+         * @param {Document} doc Document object to run the functions in.
+         * @param {service.Config} Config The configuration service to use.
+         */
+        value: function register(doc, Config) {
+          for (var _iterator = this[__toRun__][Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+            var fn = _step.value;
+            fn(doc, Config);
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
       }
-    }
-  }
+    });
+
+    return Registry;
+  })();
 
   return Registry;
-});
-</script>
+});</script>
 </head><body></body></html>

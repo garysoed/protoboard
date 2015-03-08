@@ -4,11 +4,31 @@
 <link rel="import" href="trigger/triggers.html">
 <link rel="import" href="utils.html">
 
-<script>
-DI.bind('pb_PbElement', (Abilities, Utils) => {
+<script>"use strict";
 
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.bind("pb_PbElement", function (Abilities, Utils) {
   // Private symbols.
-  const __isCreated__ = Symbol();
+  var __isCreated__ = Symbol();
 
   /**
    * Base class of all ProtoBoard elements.
@@ -16,47 +36,77 @@ DI.bind('pb_PbElement', (Abilities, Utils) => {
    * @class PbElement
    * @extends HTMLElement
    */
-  class PbElement extends HTMLElement {
-
-    /**
-     * Called when the element is created
-     *
-     * @method createdCallback
-     */
-    createdCallback() {
-      Abilities.init(this);
-      this[__isCreated__] = false;
+  var PbElement = (function (HTMLElement) {
+    function PbElement() {
+      if (Object.getPrototypeOf(PbElement) !== null) {
+        Object.getPrototypeOf(PbElement).apply(this, arguments);
+      }
     }
 
-    /**
-     * Called when the element is attached to the document.
-     *
-     * @method attachedCallback
-     */
-    attachedCallback() {
-      this[__isCreated__] = true;
-    }
+    _inherits(PbElement, HTMLElement);
 
-    /**
-     * Called when the element is detached from the document.
-     *
-     * @method detachedCallback
-     */
-    detachedCallback() { }
+    _prototypeProperties(PbElement, null, {
+      createdCallback: {
 
-    /**
-     * True iff the element has been created.
-     *
-     * @type boolean
-     * @property isCreated
-     * @final
-     */
-    get isCreated() {
-      return this[__isCreated__];
-    }
-  }
+        /**
+         * Called when the element is created
+         *
+         * @method createdCallback
+         */
+        value: function createdCallback() {
+          Abilities.init(this);
+          this[__isCreated__] = false;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      attachedCallback: {
+
+        /**
+         * Called when the element is attached to the document.
+         *
+         * @method attachedCallback
+         */
+        value: function attachedCallback() {
+          this[__isCreated__] = true;
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      detachedCallback: {
+
+        /**
+         * Called when the element is detached from the document.
+         *
+         * @method detachedCallback
+         */
+        value: function detachedCallback() {},
+        writable: true,
+        enumerable: true,
+        configurable: true
+      },
+      isCreated: {
+
+        /**
+         * True iff the element has been created.
+         *
+         * @type boolean
+         * @property isCreated
+         * @final
+         */
+        get: function () {
+          return this[__isCreated__];
+        },
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return PbElement;
+  })(HTMLElement);
 
   return PbElement;
-});
-</script>
+});</script>
 </head><body></body></html>

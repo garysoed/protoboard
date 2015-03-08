@@ -18,23 +18,53 @@
   </div>
 </template>
 
-<script>
-DI
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_region_Deck', (
-        $registry,
-        Abilities,
-        Config,
-        Droppable,
-        Helpable,
-        Key,
-        Region,
-        Shuffleable,
-        Utils,
-        doc,
-        template) => {
+<script>"use strict";
 
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _get = function get(object, property, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+    if (getter === undefined) {
+      return undefined;
+    }
+    return getter.call(receiver);
+  }
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+  return doc.querySelector("template");
+}).bind("pb_region_Deck", function ($registry, Abilities, Config, Droppable, Helpable, Key, Region, Shuffleable, Utils, doc, template) {
   /**
    * Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.
    * Any child elements of this class are considered to be in the deck.
@@ -61,30 +91,42 @@ DI
    * @extends region.Region
    */
 
-  const EL_NAME = 'pb-r-deck';
+  var EL_NAME = "pb-r-deck";
 
-  class Deck extends Region {
-
-    /**
-     * Called when the element is created.
-     *
-     * @method createdCallback
-     */
-    createdCallback() {
-      super.createdCallback();
-      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-      this.attachedCallback();
+  var Deck = (function (Region) {
+    function Deck() {
+      if (Object.getPrototypeOf(Deck) !== null) {
+        Object.getPrototypeOf(Deck).apply(this, arguments);
+      }
     }
-  }
 
-  Config.add(
-      EL_NAME,
-      new Helpable('help'),
-      new Shuffleable('shuffle', new Key('s'), true),
-      new Droppable('drop', new Key('d'), true));
+    _inherits(Deck, Region);
+
+    _prototypeProperties(Deck, null, {
+      createdCallback: {
+
+        /**
+         * Called when the element is created.
+         *
+         * @method createdCallback
+         */
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Deck.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.attachedCallback();
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return Deck;
+  })(Region);
+
+  Config.add(EL_NAME, new Helpable("help"), new Shuffleable("shuffle", new Key("s"), true), new Droppable("drop", new Key("d"), true));
 
   $registry.add(EL_NAME, Deck.prototype);
 
   return Deck;
-});
-</script></head><body></body></html>
+});</script></head><body></body></html>

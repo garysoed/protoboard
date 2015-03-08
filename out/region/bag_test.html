@@ -19,95 +19,94 @@
   <pb-r-bag id="hasPlaceholder">
     <div pb-placeholder="">Placeholder</div>
   </pb-r-bag>
-  <script>
-  DI
-      .with('$registry', Registry => new Registry())
-      .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, doc, Bag, Config, Move, pb_t, $registry) => {
+  <script>"use strict";
 
-  let RandomPickable = Bag.RandomPickable;
+DI["with"]("$registry", function (Registry) {
+  return new Registry();
+})["with"]("doc", function () {
+  return document.currentScript.ownerDocument;
+}).run(function (expect, _, doc, Bag, Config, Move, pb_t, $registry) {
+  var RandomPickable = Bag.RandomPickable;
 
   // Private symbols
-  let __draggable__ = pb_t.getSymbol(Bag.prototype, 'draggable');
-  let __placeHolderEl__ = pb_t.getSymbol(Bag.prototype, 'placeHolderEl');
+  var __draggable__ = pb_t.getSymbol(Bag.prototype, "draggable");
+  var __placeHolderEl__ = pb_t.getSymbol(Bag.prototype, "placeHolderEl");
 
-  describe('Bag', () => {
-    before(done => {
+  describe("Bag", function () {
+    before(function (done) {
       $registry.register(doc, Config);
       done();
     });
 
-    describe('#createdCallback', () => {
-      it('should create placeholder and its content if none is specified', () => {
-        let el = doc.querySelector('#emptyChildren');
-        let placeholder = el.querySelector('[pb-placeholder]');
+    describe("#createdCallback", function () {
+      it("should create placeholder and its content if none is specified", function () {
+        var el = doc.querySelector("#emptyChildren");
+        var placeholder = el.querySelector("[pb-placeholder]");
         expect(placeholder).to.exist();
         expect(placeholder.childElementCount).to.be.at.least(1);
       });
-      it('should not create placeholder content if it is specified', () => {
-        let el = doc.querySelector('#hasContent');
-        let placeholders = el.querySelectorAll('[pb-placeholder]');
+      it("should not create placeholder content if it is specified", function () {
+        var el = doc.querySelector("#hasContent");
+        var placeholders = el.querySelectorAll("[pb-placeholder]");
 
         expect(placeholders.length).to.equal(1);
 
-        let placeholder = placeholders.item(0);
-        expect(placeholder.querySelector('[pb-placeholder-content]').innerHTML)
-            .to.equal('content');
+        var placeholder = placeholders.item(0);
+        expect(placeholder.querySelector("[pb-placeholder-content]").innerHTML).to.equal("content");
       });
-      it('should not create placeholder or its content if placeholder is specified', () => {
-        let el = doc.querySelector('#hasPlaceholder');
-        let placeholders = el.querySelectorAll('[pb-placeholder]');
+      it("should not create placeholder or its content if placeholder is specified", function () {
+        var el = doc.querySelector("#hasPlaceholder");
+        var placeholders = el.querySelectorAll("[pb-placeholder]");
 
         expect(placeholders.length).to.equal(1);
 
-        let placeholder = placeholders.item(0);
-        expect(placeholder.innerHTML).to.equal('Placeholder');
+        var placeholder = placeholders.item(0);
+        expect(placeholder.innerHTML).to.equal("Placeholder");
       });
     });
 
-    describe('$RandomPickable', () => {
-      describe('#trigger', () => {
-        it('should randomly pick a child element with no pb-placeholder attribute', () => {
-          let el = doc.createElement('div');
-          let selectedChild = doc.createElement('div');
-          let placeHolderEl = doc.createElement('div');
-          $(placeHolderEl).attr('pb-placeholder', '');
+    describe("$RandomPickable", function () {
+      describe("#trigger", function () {
+        it("should randomly pick a child element with no pb-placeholder attribute", function () {
+          var el = doc.createElement("div");
+          var selectedChild = doc.createElement("div");
+          var placeHolderEl = doc.createElement("div");
+          $(placeHolderEl).attr("pb-placeholder", "");
 
           el.appendChild(placeHolderEl);
-          el.appendChild(doc.createElement('div'));
+          el.appendChild(doc.createElement("div"));
           el.appendChild(selectedChild);
-          el.appendChild(doc.createElement('div'));
+          el.appendChild(doc.createElement("div"));
 
-          let pickable = new RandomPickable();
+          var pickable = new RandomPickable();
 
-          _.spy(Math, 'random').overrideReturn(0.5);
-          _.spy(Move, 'add');
+          _.spy(Math, "random").overrideReturn(0.5);
+          _.spy(Move, "add");
 
           pickable.trigger(el);
 
           expect(Move.add).calledWith(selectedChild).at.least(1);
         });
-        it('should not crash if there are no children', () => {
-          let el = doc.createElement('div');
-          let placeHolderEl = doc.createElement('div');
-          $(placeHolderEl).attr('pb-placeholder', '');
+        it("should not crash if there are no children", function () {
+          var el = doc.createElement("div");
+          var placeHolderEl = doc.createElement("div");
+          $(placeHolderEl).attr("pb-placeholder", "");
 
-          _.spy(Move, 'add');
+          _.spy(Move, "add");
 
           el.appendChild(placeHolderEl);
 
-          let pickable = new RandomPickable();
+          var pickable = new RandomPickable();
           pickable.trigger(el);
           expect(Move.add).called().to.equal(0);
         });
       });
     });
 
-    afterEach(done => {
+    afterEach(function (done) {
       _.reset();
       done();
     });
   });
-  });
-  </script>
+});</script>
 </body></html>

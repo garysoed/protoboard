@@ -8,85 +8,88 @@
   <link rel="import" href="out/di.html">
 </head>
 <body>
-  <script>
-  DI
-      .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, doc, Check) => {
+  <script>"use strict";
 
-  describe('Check', () => {
-    describe('#onInt', () => {
-      it('should parse defaulting radix to 10', () => {
-        expect(Check('123').isInt().orThrows()).to.be.equal(123);
+DI["with"]("doc", function () {
+  return document.currentScript.ownerDocument;
+}).run(function (expect, _, doc, Check) {
+  describe("Check", function () {
+    describe("#onInt", function () {
+      it("should parse defaulting radix to 10", function () {
+        expect(Check("123").isInt().orThrows()).to.be.equal(123);
       });
-      it('should handle radix other than 10', () => {
-        expect(Check('12').isInt(5).orThrows()).to.be.equal(7);
+      it("should handle radix other than 10", function () {
+        expect(Check("12").isInt(5).orThrows()).to.be.equal(7);
       });
-      it('should error when the input string is not a number', () => {
-        expect(Check('abc').isInt().orUse('NaN')).to.be.equal('NaN');
+      it("should error when the input string is not a number", function () {
+        expect(Check("abc").isInt().orUse("NaN")).to.be.equal("NaN");
       });
-      it('should error on undefined', () => {
-        expect(Check(undefined).isInt().orUse('error')).to.be.equal('error');
+      it("should error on undefined", function () {
+        expect(Check(undefined).isInt().orUse("error")).to.be.equal("error");
       });
-      it('should error on null', () => {
-        expect(Check(null).isInt().orUse('error')).to.be.equal('error');
+      it("should error on null", function () {
+        expect(Check(null).isInt().orUse("error")).to.be.equal("error");
       });
     });
 
-    describe('#isBoolean', () => {
-      it('should parse true', () => {
-        expect(Check('true').isBoolean().orThrows()).to.be.true();
+    describe("#isBoolean", function () {
+      it("should parse true", function () {
+        expect(Check("true").isBoolean().orThrows()).to.be["true"]();
       });
-      it('should parse false', () => {
-        expect(Check('false').isBoolean().orThrows()).to.be.false();
+      it("should parse false", function () {
+        expect(Check("false").isBoolean().orThrows()).to.be["false"]();
       });
-      it('should parse TRUE', () => {
-        expect(Check('TRUE').isBoolean().orThrows()).to.be.true();
+      it("should parse TRUE", function () {
+        expect(Check("TRUE").isBoolean().orThrows()).to.be["true"]();
       });
-      it('should parse FALSE', () => {
-        expect(Check('FALSE').isBoolean().orThrows()).to.be.false();
+      it("should parse FALSE", function () {
+        expect(Check("FALSE").isBoolean().orThrows()).to.be["false"]();
       });
-      it('should error on undefined', () => {
-        expect(Check(undefined).isBoolean().orUse('error')).to.be.equal('error');
+      it("should error on undefined", function () {
+        expect(Check(undefined).isBoolean().orUse("error")).to.be.equal("error");
       });
-      it('should error on null', () => {
-        expect(Check(null).isBoolean().orUse('error')).to.be.equal('error');
-      });
-    });
-
-    describe('#orThrows', () => {
-      it('should throw using an auto generated value', () => {
-        expect(() => Check(undefined).isInt().orThrows()).to.throw(/int/);
-      });
-      it('should throw using the specified message', () => {
-        var message = 'Error message';
-        expect(() => Check(null).isInt().orThrows(message)).to.throw(message);
-      });
-      it('should handle multiple parse attempts', () => {
-        expect(Check('12').isBoolean().isInt().orThrows()).to.be.equal(12);
-      });
-      it('should return the first successful parsed value', () => {
-        expect(Check('12').isInt().isBoolean().orThrows()).to.be.equal(12);
+      it("should error on null", function () {
+        expect(Check(null).isBoolean().orUse("error")).to.be.equal("error");
       });
     });
 
-    describe('#orUse', () => {
-      it('should return the successful parse value', () => {
-        expect(Check('12').isInt().orUse('234')).to.be.equal(12);
+    describe("#orThrows", function () {
+      it("should throw using an auto generated value", function () {
+        expect(function () {
+          return Check(undefined).isInt().orThrows();
+        }).to["throw"](/int/);
       });
-      it('should return the first successful parse value', () => {
-        expect(Check('12').isInt().isBoolean().orUse('123')).to.be.equal(12);
+      it("should throw using the specified message", function () {
+        var message = "Error message";
+        expect(function () {
+          return Check(null).isInt().orThrows(message);
+        }).to["throw"](message);
       });
-      it('should return the given backup value if there were no successful parse', () => {
-        var backup = 'backup value';
+      it("should handle multiple parse attempts", function () {
+        expect(Check("12").isBoolean().isInt().orThrows()).to.be.equal(12);
+      });
+      it("should return the first successful parsed value", function () {
+        expect(Check("12").isInt().isBoolean().orThrows()).to.be.equal(12);
+      });
+    });
+
+    describe("#orUse", function () {
+      it("should return the successful parse value", function () {
+        expect(Check("12").isInt().orUse("234")).to.be.equal(12);
+      });
+      it("should return the first successful parse value", function () {
+        expect(Check("12").isInt().isBoolean().orUse("123")).to.be.equal(12);
+      });
+      it("should return the given backup value if there were no successful parse", function () {
+        var backup = "backup value";
         expect(Check(null).isInt().orUse(backup)).to.be.equal(backup);
       });
     });
 
-    afterEach(done => {
+    afterEach(function (done) {
       _.reset();
       done();
     });
   });
-  });
-  </script>
+});</script>
 </body></html>

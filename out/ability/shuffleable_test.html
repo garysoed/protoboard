@@ -9,84 +9,86 @@
   <link rel="import" href="out/service/registry.html">
 </head>
 <body>
-  <script>
-  DI
-      .with('$registry', Registry => new Registry())
-      .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, doc, Shuffleable, Utils) => {
+  <script>"use strict";
 
-  describe('ability.Shuffleable', () => {
-    let el;
-    let shuffleable;
+DI["with"]("$registry", function (Registry) {
+  return new Registry();
+})["with"]("doc", function () {
+  return document.currentScript.ownerDocument;
+}).run(function (expect, _, doc, Shuffleable, Utils) {
+  describe("ability.Shuffleable", function () {
+    var el = undefined;
+    var shuffleable = undefined;
 
-    beforeEach(done => {
-      el = doc.createElement('div');
+    beforeEach(function (done) {
+      el = doc.createElement("div");
       shuffleable = new Shuffleable(undefined, undefined, true);
       done();
     });
 
-    describe('#init', () => {
-      it('should set the default value if attribute is not set', () => {
+    describe("#init", function () {
+      it("should set the default value if attribute is not set", function () {
         shuffleable.init(el);
-        expect($(el).attr(shuffleable.attrName)).to.be.equal('true');
+        expect($(el).attr(shuffleable.attrName)).to.be.equal("true");
       });
-      it('should be noop if the attribute is set', () => {
-        $(el).attr(shuffleable.attrName, 'false');
+      it("should be noop if the attribute is set", function () {
+        $(el).attr(shuffleable.attrName, "false");
         shuffleable.init(el);
-        expect($(el).attr(shuffleable.attrName)).to.be.equal('false');
+        expect($(el).attr(shuffleable.attrName)).to.be.equal("false");
       });
     });
 
-    describe('#trigger', () => {
-      let children = [];
-      let origRandom;
+    describe("#trigger", function () {
+      var children = [];
+      var origRandom = undefined;
 
-      beforeEach(done => {
-        children.push(doc.createElement('div'));
-        children.push(doc.createElement('a'));
-        children.push(doc.createElement('p'));
+      beforeEach(function (done) {
+        children.push(doc.createElement("div"));
+        children.push(doc.createElement("a"));
+        children.push(doc.createElement("p"));
 
-        children.forEach(function(child) {
+        children.forEach(function (child) {
           el.appendChild(child);
         });
 
         origRandom = Math.random;
-        let ordering = [1, 3, 2];
-        Math.random = () => { return ordering.pop(); };
+        var ordering = [1, 3, 2];
+        Math.random = function () {
+          return ordering.pop();
+        };
         done();
       });
 
-      it('should shuffle if enabled', () => {
-        $(el).attr('pb-shuffleable', 'true');
+      it("should shuffle if enabled", function () {
+        $(el).attr("pb-shuffleable", "true");
         shuffleable.trigger(el);
         expect(Utils.toArray(el.children)).to.be.eql([children[2], children[0], children[1]]);
       });
-      it('should be noop if disabled', () => {
-        $(el).attr('pb-shuffleable', 'false');
+      it("should be noop if disabled", function () {
+        $(el).attr("pb-shuffleable", "false");
 
-        _.spy(Math, 'random');
+        _.spy(Math, "random");
         shuffleable.trigger(el);
         expect(Math.random).called().to.be.equal(0);
       });
-      it('should be noop if attribute value is bad', () => {
-        $(el).attr('pb-shuffleable', 'invalid');
-        
-        _.spy(Math, 'random');
+      it("should be noop if attribute value is bad", function () {
+        $(el).attr("pb-shuffleable", "invalid");
+
+        _.spy(Math, "random");
         shuffleable.trigger(el);
         expect(Math.random).called().to.be.equal(0);
       });
 
-      afterEach(done => {
+      afterEach(function (done) {
         Math.random = origRandom;
         done();
       });
     });
 
-    afterEach(done => {
+    afterEach(function (done) {
       _.reset();
       done();
     });
   });
-  });
-  </script>
+});</script>
 </body></html>
