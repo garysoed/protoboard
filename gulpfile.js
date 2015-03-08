@@ -198,6 +198,6 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('compile', ['src', '6to5-test', 'sass-src', 'sass-ex']);
+gulp.task('compile', ['src', '6to5-test']);
 gulp.task('check', ['karma']);
 gulp.task('push', ['check', 'doc'], shell.task('git push'));
