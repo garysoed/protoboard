@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>service.Template Unit Tests</title>
+
+  <link rel="import" href="check.html">
+  <link rel="import" href="di.html">
+  <link rel="import" href="service/template.html">
+  <link rel="import" href="testbase.html">
+</head>
+<body>
+  <script>
+  DI
+      .with('Handlebars', () => {
+        return {
+          helpers: {},
+          registerHelper(name, helper) {
+            this.helpers[name] = helper;
+          },
+          registerPartial() {
+            return this;
+          }
+        };
+      })
+      .constant('doc', document.currentScript.ownerDocument)
+      .run((expect, _, _M, doc, Check, Handlebars, service_Template) => {
+
+  describe('service.Template', () => {
+    describe('#addPartial', () => {
+      it('should register partial to Handlebars', () => {
+        let name = 'partialName';
+        let el = doc.createElement('div');
+        el.innerHTML = '{{&gt; abc}}';
+
+        _.spy(Handlebars, 'registerPartial');
+
+        service_Template.addPartial(name, el);
+        expect(Handlebars.registerPartial).calledWith(name, '{{> abc}}').at.least(1);
+      });
+    });
+
+    describe('#addData and #get', () => {
+      it('should handle adding data before retrieval', done => {
+        let name = 'data';
+        let data = {};
+        service_Template.addData(name, data);
+        service_Template.get(name)
+            .then(result => {
+              expect(result).to.be.eql([name, data]);
+              done();
+            });
+      });
+      it('should handle adding data after retrieval', done => {
+        let name = 'data';
+        let data = {};
+        service_Template.get(name)
+            .then(result => {
+              expect(result).to.be.eql([name, data]);
+              done();
+            });
+        service_Template.addData(name, data);
+      });
+    });
+
+    describe('$pb-for helper', () => {
+      let forHelper;
+
+      beforeEach(done => {
+        forHelper = Handlebars.helpers['pb-for'];
+        Handlebars.createFrame = input => input;
+        done();
+      });
+
+      it('should repeat the inner block a number of times', () => {
+        let content = 'content';
+        let options = {
+          fn: _.spiedFunction().overrideReturn(content)
+        };
+
+        let result = forHelper.call(Handlebars, '0', '5', '2', options);
+        expect(result).to.be.equal(content + content + content);
+
+        let isAObject = _M.isA(Object);
+        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(3);
+
+        let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
+        expect(indexes).to.be.eql([0, 2, 4]);
+      });
+      it('should default step to 1', () => {
+        let content = 'content';
+        let options = {
+          fn: _.spiedFunction().overrideReturn(content)
+        };
+
+        let result = forHelper.call(Handlebars, '0', '2', options);
+        expect(result).to.be.equal(content + content);
+
+        let isAObject = _M.isA(Object);
+        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(2);
+
+        let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
+        expect(indexes).to.be.eql([0, 1]);
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    });
+  });
+  });
+  </script>
+</body>

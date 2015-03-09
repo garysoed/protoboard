@@ -156,6 +156,22 @@ DI.bind("pb_Check", function (Utils) {
         configurable: true
       });
 
+      _defineProperty(_prototypeProperties2, "isList", {
+        value: function isList() {
+          var separator = arguments[0] === undefined ? " " : arguments[0];
+          if (typeof this[__input__] !== "string") {
+            return this[__onFailure__]("list");
+          }
+
+          return this[__onSuccess__](this[__input__].split(separator).filter(function (str) {
+            return str.length > 0;
+          }));
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
       _defineProperty(_prototypeProperties2, "orThrows", {
 
         /**

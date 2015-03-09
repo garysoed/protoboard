@@ -12,37 +12,9 @@ DI
     .bind('pb_ui_Template', ($registry, Check, Config, PbElement, Utils, Handlebars) => {
 
   /**
-   * When this element is created, it will process a <a href="http://handlebarsjs.com/">Handlebars
-   * JS</a> template and it is given and replace itself with the processed templates.
-   *
-   * To refer to the template, add `template="<template_selector>"`, where `template_selector` is a
-   * CSS selector to the template element. This template element contains the Handlebars template.
-   *
-   * To pass in variables into the template, add `data-<name>="<var>"` attributes to the element,
-   * where `name` is the key to be used in the template, and var is the property name accessible
-   * globally.
-   *
-   * ```html
-   * <template id="test">
-   *   {{#with company}}
-   *     Name is {{name}}
-   *   {{/with}}
-   * </template>
-   *
-   * window['org'] = { name: 'GitHub' };
-   *
-   * <!-- The DIV content will be "Name is GitHub" -->
-   * <div>
-   *   <pb-u-template template="template#test" data-company="org"></pb-u-template>
-   * </div>
-   * ```
-   *
-   * This class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for
-   * loop that copies the inner block several times. You can access the index of the loop using the
-   * `@index` variable.
-   *
    * @class ui.Template
    * @extends PbElement
+   * @deprecated ui.Generate
    */
 
   const EL_NAME = 'pb-u-template';

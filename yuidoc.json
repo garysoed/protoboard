@@ -17,10 +17,20 @@
       "./tutorial"
     ],
     "external": {
-      "data": {
-        "base": "../assets/redirect.html#",
-        "json": "./node_modules/doctheme/externals/dom.json"
-      }
+      "data": [
+        {
+          "base": "../assets/redirect.html#",
+          "json": "./node_modules/doctheme/externals/dom.json"
+        },
+        {
+          "base": "../assets/redirect.html#",
+          "json": "./node_modules/doctheme/externals/element.json"
+        },
+        {
+          "base": "../assets/redirect.html#",
+          "json": "./node_modules/doctheme/externals/js.json"
+        }
+      ]
     },
     "extension": ".html,.js",
     "helpers": ["./node_modules/doctheme/helpers.js"],

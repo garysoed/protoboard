@@ -11,7 +11,9 @@
     <link rel="import" href="out/region/deck.html">
     <link rel="import" href="out/region/hand.html">
     <link rel="import" href="out/region/rect.html">
+    <link rel="import" href="out/service/template.html">
     <link rel="import" href="out/surface/rectgrid.html">
+    <link rel="import" href="out/ui/generate.html">
     <link rel="import" href="out/ui/preview.html">
     <link rel="import" href="out/ui/previewer.html">
 
@@ -278,9 +280,6 @@
       </thead>
       <tbody>
         <tr>
-          <td>Menu</td>
-        </tr>
-        <tr>
           <td id="previewer">Previewer</td>
           <td><pb-u-previewer></pb-u-previewer></td>
           <td>
@@ -289,11 +288,49 @@
             preserving screen real estate. See the Card for an example.
           </td>
         </tr>
+        <tr>
+          <td>Template</td>
+          <td>
+            <template id="card">
+              <li style="color: {{color}};">
+                {{name}}
+              </li>
+            </template>
+            <pb-u-generate input="cards game">
+              <template>
+                <div style="text-align: left;">
+                  Characters of {{game.name}}:
+                  <ul>
+                  {{#each cards}}
+                    {{> card}}
+                  {{/each}}
+                  </ul>
+                </div>
+              </template>
+            </pb-u-generate>
+          </td>
+        </tr>
       </tbody>
     </table>
 
     <script>
-      DI.run(function(Bootstrap) { Bootstrap.run(document); });
+      DI.run(function(Bootstrap, service_Template) {
+        service_Template
+            .addPartial('card', document.querySelector('template#card'))
+            .addData('cards', [
+              { name: 'Mrs Peacock', color: 'blue' },
+              { name: 'Miss Scarlet', color: 'red' },
+              { name: 'Prof Plum', color: 'purple' },
+              { name: 'Rev Green', color: 'green' },
+              { name: 'Colonel Mustard', color: 'gold' },
+              { name: 'Mrs. White', color: 'grey' }
+            ])
+            .addData('game', {
+              name: 'Clue',
+              year: 1949
+            });
+        Bootstrap.run(document);
+      });
 
       var headers = document.querySelectorAll('thead');
       for (var i = 0; i < headers.length; i++) {

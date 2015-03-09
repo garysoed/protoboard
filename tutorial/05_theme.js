@@ -45,6 +45,6 @@
  * you did not set it in your theme file.
  *
  * @class 5 Theming
- * @since 0.2
+ * @since 0.2.0
  * @module tutorial
  */

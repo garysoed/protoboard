@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>ui.Generate Unit Tests</title>
+
+  <link rel="import" href="config.html">
+  <link rel="import" href="di.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="service/template.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="ui/generate.html">
+  <link rel="import" href="utils.html">
+</head>
+<body>
+  <div id="testHolder"></div>
+  <template id="test">
+    <pb-u-generate input="dataA dataB">
+      <template>
+        <div>Data A: {{dataA}}</div>
+        <div>Data B: {{dataB}}</div>
+      </template>
+    </pb-u-generate>
+  </template>
+  <script>
+  DI
+      .with('$registry', Registry => new Registry())
+      .constant('doc', document.currentScript.ownerDocument)
+      .run((expect, _, Config, $registry, doc, Generate, service_Template, Utils) => {
+
+  describe('ui.Generate', () => {
+    before(done => {
+      $registry.register(doc, Config);
+      done();
+    });
+
+    describe('#createdCallback', () => {
+      it('should replace itself with data registered to service.Template', done => {
+        let dataA = 'a';
+        let dataB = 'B';
+
+        let template = doc.querySelector('#test');
+        let holderEl = doc.querySelector('#testHolder');
+        let generateEl = Utils.activateTemplate(template, doc);
+        holderEl.appendChild(generateEl);
+
+        Utils
+            .watch(() => {
+              return doc.querySelector('pb-u-generate') === null;
+            })
+            .then(() => {
+              expect(holderEl.children.length).to.be.equal(2);
+              expect(holderEl.children.item(0).innerText).to.be.equal(`Data A: ${dataA}`);
+              expect(holderEl.children.item(1).innerText).to.be.equal(`Data B: ${dataB}`);
+              done();
+            });
+
+        service_Template
+            .addData('dataA', dataA)
+            .addData('dataB', dataB);
+      });
+    });
+  });
+  });
+  </script>
+</body>
