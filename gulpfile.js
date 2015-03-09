@@ -125,7 +125,7 @@ function subYuiMd() {
   });
 }
 
-gulp.task('clean', shell.task('rm -r out'));
+gulp.task('clean', shell.task('rm -r out doc'));
 
 gulp.task('doc-gen', shell.task('yuidoc --config yuidoc.json'));
 gulp.task('demo', function() {
