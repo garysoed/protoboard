@@ -1,23 +1,19 @@
 var gulp    = require('gulp');
 var debug   = require('gulp-debug');
 var plumber = require('gulp-plumber');
-var through = require('through2');
-var subtask = require('gulp-subtask')(gulp);
 
-var chalk  = require('chalk');
 var jshint = require('gulp-jshint');
-var karma  = require('karma').server;
-var shell  = require('gulp-shell');
-var sass   = require('gulp-ruby-sass');
-var yuidoc = require('gulp-yuidoc');
-var yuimd  = require('yuimd');
-var to5    = require('gulp-6to5');
-var subs   = require('gulp-html-subs');
 var myth   = require('gulp-myth');
+var shell  = require('gulp-shell');
+var subs   = require('gulp-html-subs');
+var to5    = require('gulp-6to5');
 var zip    = require('gulp-zip');
 
-var gutil    = require('gulp-util');
+var chalk    = require('chalk');
+var karma    = require('karma').server;
 var minimist = require('minimist');
+var through  = require('through2');
+var yuidoc   = require('yuidocjs');
 
 var options = minimist(process.argv.slice(2), {
   'string': 'theme',
@@ -71,12 +67,6 @@ function sub6to5() {
             .pipe(to5({modules: 'ignore'}))
         .pipe(scriptSubs.inject);
   });
-
-  // return new subtask('6to5')
-  //     .pipe(function() { return replace.extract; })
-  //         .pipe(to5, {modules: 'ignore'})
-  //     .pipe(function() { return replace.inject; })
-  //     .pipe(debug, {title: chalk.green('6to5')});
 }
 
 function readJsonTheme(file) {
@@ -109,19 +99,6 @@ function subSass() {
   return chain(function(stream) {
     return stream
         .pipe(sass({loadPath: ['src/themes']}));
-  });
-}
-
-function subYuiMd() {
-  return chain(function(stream) {
-      return stream.pipe(yuidoc.parser({
-        extension: '.html'
-      }))
-      .pipe(yuimd({
-        'projectName': 'Protoboard',
-        '$home': 'doc-theme/Home.theme',
-        '$class': 'doc-theme/class.theme'
-      }));
   });
 }
 
