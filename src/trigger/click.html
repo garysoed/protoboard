@@ -47,7 +47,11 @@ DI.bind('pb_trigger_Click', (pb_Events, HammerWrapper, Trigger) => {
     }
 
     /**
-     * @method helpText
+     * The help text to be displayed by {{#crossLink "ability.Helpable"}}{{/crossLink}}.
+     *
+     * @property helpText
+     * @type string
+     * @final
      */
     get helpText() {
       return 'Click';

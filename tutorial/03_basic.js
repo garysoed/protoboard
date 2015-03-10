@@ -42,9 +42,8 @@
  * For instance `Element pb-r-bag is resolved` indicates that the import for `bag.html` is missing.
  *
  * More information on using the element is in the API pages. You can also see
- * <a href="https://github.com/garysoed/protoboard/blob/master/ex/all/index.html">all/index.html
- * </a> for examples on how to use every element. You can also play around with every element on
- * that page.
+ * [all/index.html](https://github.com/garysoed/protoboard/blob/master/ex/all/index.html) for
+ * examples on how to use every element. You can also play around with every element on that page.
  *
  * @class 3 Basic Usage
  * @module tutorial

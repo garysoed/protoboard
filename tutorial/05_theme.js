@@ -1,8 +1,11 @@
 /**
  * Protoboard supports basic theming using
- * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables">
- * CSS variables</a>. However, since CSS variables is not widely supported, Protoboard relies on
- * <a href="http://www.myth.io/">Myth</a> to compile the variables. You can do this by running:
+ * [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables). However,
+ * since CSS variables is not widely supported, Protoboard relies on [Myth](http://www.myth.io/) to
+ * compile the variables.
+ *
+ * You will need the source code. After running `npm install` in the source directory's root, you
+ * can compile the CSS by running:
  * ```bash
  * gulp src
  * ```

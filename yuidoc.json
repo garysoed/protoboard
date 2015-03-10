@@ -1,6 +1,6 @@
 {
   "name": "Protoboard",
-  "description": "Checkout the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
+  "description": "Check out the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
   "version": "0.1.0",
   "url": "https://github.com/garysoed/protoboard",
   "colorMain": "#004000",

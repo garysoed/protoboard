@@ -70,8 +70,8 @@ DI.bind("pb_ui_Generate", function ($registry, Check, Config, PbElement, service
   var EL_NAME = "pb-u-generate";
 
   /**
-   * When this element is created, it will process a <a href="http://handlebarsjs.com/">Handlebars
-   * JS</a> template within it and replace itself with the processed template.
+   * When this element is created, it will process a [Handlebars](http://handlebarsjs.com/) template
+   * within it and replace itself with the processed template.
    *
    * The template must be enclosed within a {{#crossLink "&lt;template&gt;"}}{{/crossLink}} tag. For
    * example:
@@ -79,9 +79,9 @@ DI.bind("pb_ui_Generate", function ($registry, Check, Config, PbElement, service
    * <pb-u-generate>
    *   <template>
    *     Template's content.
-   *     {{#if hasCustom}}
-   *       You can call {{> customPartials}} too.
-   *     {{/if}}
+   *     \{{#if hasCustom}}
+   *       You can call \{{> customPartials}} too.
+   *     \{{/if}}
    *   </template>
    * </pb-u-generate>
    * ```
@@ -92,11 +92,11 @@ DI.bind("pb_ui_Generate", function ($registry, Check, Config, PbElement, service
    * ```html
    * <pb-u-generate input="cards game">
    *   <template>
-   *     Cards of game "{{game.name}}":
+   *     Cards of game "\{{game.name}}":
    *     <ul>
-   *     {{#each cards}}
+   *     \{{#each cards}}
    *       <li>{{name}}</li>
-   *     {{/each}}
+   *     \{{/each}}
    *     </ul>
    *   </template>
    * </pb-u-generate>

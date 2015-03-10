@@ -30,7 +30,7 @@
   flex-direction: row;
 }
 
-.col {
+.tile {
   /* TODO(gs): Add CSS var */
   width: 100px;
   height: 100px;
@@ -46,7 +46,7 @@
 </template>
 
 <template id="col">
-  <div class="col">
+  <div class="tile">
     <content></content>
   </div>
 </template>
@@ -123,7 +123,7 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("templateMain",
    * </pb-s-rectgrid>
    * ```
    *
-   * You can customize the tiles by using `pb-s-rectgrid::shadow .col` CSS selector.
+   * You can customize the tiles by using `pb-s-rectgrid::shadow .tile` CSS selector.
    *
    * @class surface.RectGrid
    * @since 0.2.0

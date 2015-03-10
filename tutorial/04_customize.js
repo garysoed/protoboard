@@ -12,7 +12,7 @@
  * - You can change the trigger for each ability by setting the attribute of the component / region
  *   with a `-on` prefix. For example:
  *   ```html
- *   <pb-c-token pickable="pb-key-p">
+ *   <pb-c-token pickable-on="pb-key-p">
  *   ```
  *   That sets the token to be picked when the user hovers over the token and presses `p`. Look at
  *   classes extending {{#crossLink "trigger.Trigger"}}{{/crossLink}} for more triggers.
