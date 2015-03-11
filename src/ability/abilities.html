@@ -5,7 +5,8 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI.bind('pb_ability_Abilities', Utils => {
+DI
+    .bind('pb_ability_Abilities', ['', Utils => {
 
   // Private symbols.
   const __abilities__ = Symbol('abilities');
@@ -183,6 +184,6 @@ DI.bind('pb_ability_Abilities', Utils => {
   }
 
   return Abilities;
-});
+}]);
 
 </script>

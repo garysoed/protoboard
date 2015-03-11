@@ -31,9 +31,13 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   var __localScope__ = Symbol("localScope");
   var __name__ = Symbol();
   var __parentScope__ = Symbol("parentScope");
+  var __prefix__ = Symbol("prefix");
+  var __prefixes__ = Symbol();
   var __resolvedValues__ = Symbol();
   var __values__ = Symbol("values");
 
+  var __appendPrefix__ = Symbol("");
+  var __createProvider__ = Symbol();
   var __get__ = Symbol("get");
 
   var FN_ARGS = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
@@ -43,14 +47,18 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
     /**
      * @class DI.Provider
      * @constructor
-     * @param {Function} fn The function to run. The function's arguments will be bound based on
-     *    their names.
+     * @param {Function} fn The function whose arguments should be resolved. The names will be used as
+     *    the key.
+     * @param {Array} prefixes Array of prefixes to add to the given function's argument's names.
+     * @param {DI.Scope} localScope The local scope. This will be prioritized when checking for bound
+     *    values.
      * @param {string} [name=null] Reference name of the provider. This is used for detecting cyclic
      *    dependencies.
      */
-    function Provider(fn, localScope) {
-      var name = arguments[2] === undefined ? null : arguments[2];
+    function Provider(fn, prefixes, localScope) {
+      var name = arguments[3] === undefined ? null : arguments[3];
       this[__function__] = fn;
+      this[__prefixes__] = prefixes;
       this[__localScope__] = localScope;
       this[__name__] = name;
       this[__resolvedValues__] = new Map();
@@ -73,8 +81,10 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
               var argsString = _this[__function__].toString().match(FN_ARGS)[1];
               var args = argsString ? argsString.split(",") : [];
 
-              var resolvedArgs = args.map(function (arg) {
+              var resolvedArgs = args.map(function (arg, i) {
+                var prefix = _this[__prefixes__].length > i ? _this[__prefixes__][i] : "";
                 arg = arg.trim();
+                arg = prefix ? "" + prefix + "." + arg : arg;
                 var optional = false;
 
                 if (arg.substring(0, 4) === "opt_") {
@@ -251,12 +261,48 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
      */
     function Scope() {
       var parentScope = arguments[0] === undefined ? null : arguments[0];
+      var prefix = arguments[1] === undefined ? "" : arguments[1];
       this[__localBindings__] = new BindingTree();
       this[__parentScope__] = parentScope;
+      this[__prefix__] = prefix;
     }
 
     _prototypeProperties(Scope, null, (function () {
       var _prototypeProperties2 = {};
+
+      _defineProperty(_prototypeProperties2, __appendPrefix__, {
+        value: function (newPrefix) {
+          if (this[__prefix__]) {
+            return "" + newPrefix + "." + this[__prefix__];
+          } else {
+            return newPrefix;
+          }
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, __createProvider__, {
+        value: function (value) {
+          var name = arguments[1] === undefined ? null : arguments[1];
+          var fn = undefined;
+          var prefixes = undefined;
+          if (typeof value === "function") {
+            // TODO(gs): Remove this case.
+            fn = value;
+            prefixes = [];
+          } else {
+            fn = value.splice(value.length - 1)[0];
+            prefixes = value;
+          }
+
+          return new Provider(fn, prefixes.map(this[__appendPrefix__].bind(this)), this, name);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
 
       _defineProperty(_prototypeProperties2, __get__, {
         value: function (key, scope) {
@@ -289,7 +335,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
          */
         value: function _with(key, value) {
           var childScope = new Scope(this);
-          childScope[__localBindings__].add(key, new Provider(value, this, key));
+          childScope[__localBindings__].add(this[__appendPrefix__](key), this[__createProvider__](value, key));
           return childScope;
         },
         writable: true,
@@ -298,6 +344,16 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
       });
 
       _defineProperty(_prototypeProperties2, "constant", {
+
+        /**
+         * Creates a new child scope with the given value bound to the given key in its local binding.
+         * This is similar to {{#crossLink "DI.Scope/with"}}{{/crossLink}}, but the value is a constant.
+         *
+         * @method constant
+         * @param {string} key The key to bound the value to.
+         * @param {Object} value The object to bind to the given key.
+         * @return {DI.Scope} The newly created child scope.
+         */
         value: function constant(key, value) {
           return this["with"](key, function () {
             return value;
@@ -319,7 +375,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
          *    their names.
          */
         value: function bind(key, value) {
-          bindings.add(key, new Provider(value, this, key));
+          bindings.add(this[__appendPrefix__](key), this[__createProvider__](value, key));
           return this;
         },
         writable: true,
@@ -339,7 +395,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
          * @return {any} The value bound to the given key, or undefined if no values can be found.
          */
         value: function get(key) {
-          var value = this[__get__](key);
+          var value = this[__get__](this[__appendPrefix__](key));
           if (value === undefined) {
             return getGlobal(key, this);
           } else {
@@ -361,7 +417,24 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
          *    their names.
          */
         value: function run(fn) {
-          new Provider(fn, this).resolve(this);
+          this[__createProvider__](fn).resolve(this);
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+
+      _defineProperty(_prototypeProperties2, "prefix", {
+
+        /**
+         * Prefix any keys given to this scope with the given prefix.
+         *
+         * @method prefix
+         * @param {string} prefix The prefix to add.
+         * @return {DI.Scope} The newly created child scope with the given prefix.
+         */
+        value: function prefix(prefix) {
+          return new Scope(this, this[__appendPrefix__](prefix));
         },
         writable: true,
         enumerable: true,

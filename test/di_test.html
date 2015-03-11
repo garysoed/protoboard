@@ -25,7 +25,7 @@
             let innerFn = _.spiedFunction().overrideReturn(4);
             let fn = a => innerFn(a);
 
-            let provider = new DI.Provider(fn, localScope);
+            let provider = new DI.Provider(fn, [], localScope);
             expect(provider.resolve(givenScope)).to.be.equal(4);
             expect(innerFn).calledWith(1).at.least(1);
           });
@@ -35,10 +35,19 @@
             let innerFn = _.spiedFunction().overrideReturn(4);
             let fn = a => innerFn(a);
 
-            let provider = new DI.Provider(fn, localScope);
+            let provider = new DI.Provider(fn, [], localScope);
             expect(provider.resolve(givenScope)).to.be.equal(4);
             expect(innerFn).calledWith(1).at.least(1);
+          });
+          it('should append the prefix when resolving', () => {
+            let localScope = new DI.Scope();
+            let givenScope = new DI.Scope().with('prefix.a', () => 1);
+            let innerFn = _.spiedFunction().overrideReturn(4);
+            let fn = a => innerFn(a);
 
+            let provider = new DI.Provider(fn, ['prefix'], localScope);
+            expect(provider.resolve(givenScope)).to.be.equal(4);
+            expect(innerFn).calledWith(1).at.least(1);
           });
           it('should use the global value if given or local scopes cannot resolve the value', () => {
             DI.bind('a', () => 2);
@@ -46,7 +55,7 @@
             let innerFn = _.spiedFunction().overrideReturn(4);
             let fn = a => innerFn(a);
 
-            let provider = new DI.Provider(fn, new DI.Scope());
+            let provider = new DI.Provider(fn, [], new DI.Scope());
             expect(provider.resolve(givenScope)).to.be.equal(4);
             expect(innerFn).calledWith(2).at.least(1);
           });
@@ -65,14 +74,14 @@
                 .with('a', () => 1)
                 .with('b', () => 2);
 
-            let provider = new DI.Provider(fn, scope);
+            let provider = new DI.Provider(fn, [], scope);
 
             expect(provider.resolve(scope)).to.be.equal(rv);
           });
           it('should cache the result for the same scope', () => {
             let scope = {};
             let fn = _.spiedFunction().overrideReturn(3);
-            let provider = new DI.Provider(fn, scope);
+            let provider = new DI.Provider(fn, [], scope);
             provider.resolve(scope);
             provider.resolve(scope);
 
@@ -83,7 +92,7 @@
             let scope2 = {};
             let fn = _.spiedFunction().overrideReturn(3);
 
-            let provider = new DI.Provider(fn, scope1);
+            let provider = new DI.Provider(fn, [], scope1);
 
             provider.resolve(scope1);
             provider.resolve(scope2);
@@ -93,12 +102,12 @@
           it('should throw exception if an argument cannot be found', () => {
             let name = 'name';
 
-            let provider = new DI.Provider(a => 3, DI, name);
+            let provider = new DI.Provider(a => 3, [], DI, name);
 
             expect(() => provider.resolve(DI)).to.throw(`${name}`);
           });
           it('should throw exception if an argument cannot be found for nameless provider', () => {
-            let provider = new DI.Provider(a => 3, DI);
+            let provider = new DI.Provider(a => 3, [], DI);
             expect(() => provider.resolve(DI)).to.throw('running expression');
           });
           it('should print warning if the function returns undefined', () => {
@@ -106,17 +115,17 @@
 
             _.spy(console, 'warn').overrideReturn();
 
-            let provider = new DI.Provider(() => undefined, DI, name);
+            let provider = new DI.Provider(() => undefined, [], DI, name);
             provider.resolve(DI);
             expect(console.warn).calledWith(`Value of ${name} is undefined`).at.least(1);
           });
           it('should try to resolve optional argument', () => {
             let scope = new DI.Scope().constant('a', 3);
-            let provider = new DI.Provider(opt_a => opt_a, scope);
+            let provider = new DI.Provider(opt_a => opt_a, [], scope);
             expect(provider.resolve(scope)).to.equal(3);
           });
           it('should return pass undefined for optional unresolvable argument', () => {
-            let provider = new DI.Provider(opt_a => opt_a, DI);
+            let provider = new DI.Provider(opt_a => opt_a, [], DI);
             expect(provider.resolve(DI)).to.be.undefined();
           });
         });
@@ -213,6 +222,13 @@
           });
           it('should return undefined if no values is bound', () => {
             expect(DI.get('a')).to.be.undefined();
+          });
+        });
+
+        describe('#prefix', () => {
+          it('should append the given prefix to the existing prefix in the scope', () => {
+            let scope = DI.prefix('a').prefix('b');
+            expect(scope[pb_t.getSymbol(scope, 'prefix')]).to.be.equal('b.a');
           });
         });
       });
