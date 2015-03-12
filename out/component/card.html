@@ -131,9 +131,9 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
   return doc.querySelector("template");
-}).bind("pb_component_Card", function (Click, Component, Config, Helpable, Key, Pickable, Toggleable, Utils, doc, template, $registry) {
+}]).bind("component.Card", ["trigger", "component", "service", "ability", "trigger", "ability", "ability", "", "", "", "", function (Click, Component, Config, Helpable, Key, Pickable, Toggleable, Utils, doc, template, $registry) {
   var EL_NAME = "pb-c-card";
 
   /**
@@ -195,5 +195,5 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
   $registry.add(EL_NAME, Card.prototype);
 
   return Card;
-});</script>
+}]);</script>
 </head><body></body></html>

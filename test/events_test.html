@@ -14,7 +14,7 @@
   <script>
   DI
       .prefix('pb')
-      .with('doc', () => document.currentScript.ownerDocument)
+      .constant('doc', document.currentScript.ownerDocument)
       .run(['/', '/', '/', '', '', '', (expect, _, _M, doc, Events, t) => {
 
   let Action = Events.Action;

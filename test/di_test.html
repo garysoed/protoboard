@@ -22,8 +22,8 @@
       describe('DI$Provider', () => {
         describe('#resolve', () => {
           it('should prefer the value from the local scope', () => {
-            let localScope = new DI.Scope().with('a', () => 1);
-            let givenScope = new DI.Scope().with('a', () => 2);
+            let localScope = new DI.Scope().constant('a', 1);
+            let givenScope = new DI.Scope().constant('a', 2);
             let innerFn = _.spiedFunction().overrideReturn(4);
             let fn = a => innerFn(a);
 
@@ -33,7 +33,7 @@
           });
           it('should prefer the value from the given scope if value from local scope cannot be resolved', () => {
             let localScope = new DI.Scope();
-            let givenScope = new DI.Scope().with('a', () => 1);
+            let givenScope = new DI.Scope().constant('a', 1);
             let innerFn = _.spiedFunction().overrideReturn(4);
             let fn = a => innerFn(a);
 
@@ -43,7 +43,7 @@
           });
           it('should append the prefix when resolving', () => {
             let localScope = new DI.Scope();
-            let givenScope = new DI.Scope().with('prefix.a', () => 1);
+            let givenScope = new DI.Scope().constant('prefix.a', 1);
             let innerFn = _.spiedFunction().overrideReturn(4);
             let fn = a => innerFn(a);
 
@@ -52,7 +52,7 @@
             expect(innerFn).calledWith(1).at.least(1);
           });
           it('should use the global value if given or local scopes cannot resolve the value', () => {
-            DI.bind('a', () => 2);
+            DI.bind('a', [() => 2]);
             let givenScope = new DI.Scope();
             let innerFn = _.spiedFunction().overrideReturn(4);
             let fn = a => innerFn(a);
@@ -73,8 +73,8 @@
               'b': 2
             };
             let scope = new DI.Scope()
-                .with('a', () => 1)
-                .with('b', () => 2);
+                .constant('a', 1)
+                .constant('b', 2);
 
             let provider = new DI.Provider(fn, [], scope);
 
@@ -188,7 +188,7 @@
             const __localBindings__ = t.getSymbol(scope, 'localBindings');
 
             let value = 'value';
-            let child = scope.with('a', () => value);
+            let child = scope.with('a', [() => value]);
             expect(child[__parentScope__]).to.be.equal(scope);
             expect(child[__localBindings__].get('a').resolve(child)).to.be.equal(value);
           });
@@ -198,28 +198,28 @@
           it('should bind the given value and key globally', () => {
             let scope = new DI.Scope();
             let value = 'value';
-            scope.bind('v', () => value);
+            scope.bind('v', [() => value]);
             expect(DI.bindings.get('v').resolve(scope)).to.be.equal(value);
           });
         });
 
         describe('#get', () => {
           it('should resolve the value bound in the local scope first', () => {
-            DI.bind('a', () => 3);
+            DI.bind('a', [() => 3]);
             let scope = DI
-                .with('a', () => 1)
-                .with('a', () => 2);
+                .constant('a', 1)
+                .constant('a', 2);
             expect(scope.get('a')).to.be.equal(2);
           });
           it('should resolve the value bound in the parent scope', () => {
-            DI.bind('a', () => 3);
+            DI.bind('a', [() => 3]);
             let scope = DI
-                .with('a', () => 1)
-                .with('b', () => 2);
+                .constant('a', 1)
+                .constant('b', 2);
             expect(scope.get('a')).to.be.equal(1);
           });
           it('should resolve to the globally bound value', () => {
-            DI.bind('a', () => 3);
+            DI.bind('a', [() => 3]);
             expect(DI.get('a')).to.be.equal(3);
           });
           it('should return undefined if no values is bound', () => {

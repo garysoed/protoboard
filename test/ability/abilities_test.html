@@ -13,15 +13,15 @@
   <script>
   DI
       .prefix('pb')
-      .with('fakeTriggerable', t => t.createFakeAbility('fakeTriggerable'))
-      .with('ability.Triggerable', fakeTriggerable => {
+      .with('fakeTriggerable', ['', t => t.createFakeAbility('fakeTriggerable')])
+      .with('ability.Triggerable', ['', fakeTriggerable => {
         return (config, knownAbilities) => {
           fakeTriggerable.config = config;
           fakeTriggerable.knownAbilities = knownAbilities;
           return fakeTriggerable;
         };
-      })
-      .with('doc', () => document.currentScript.ownerDocument)
+      }])
+      .constant('doc', document.currentScript.ownerDocument)
       .run([
           '/', '/', '/', '', '', 'ability', '',
           (expect, _, _M, doc, t, Abilities, Utils) => {

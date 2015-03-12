@@ -13,7 +13,7 @@
   <script>
   DI
       .prefix('pb')
-      .with('trigger.Triggers', () => {
+      .with('trigger.Triggers', [() => {
         return {
           trigger: undefined,
           triggerStr: undefined,
@@ -22,7 +22,7 @@
             return this.trigger;
           }
         };
-      })
+      }])
       .constant('doc', document.currentScript.ownerDocument)
       .run([
           '/', '/', '/', '', 'ability', 'trigger', '',

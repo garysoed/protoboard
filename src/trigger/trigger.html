@@ -3,7 +3,7 @@
 <link rel="import" href="di.html">
 
 <script>
-DI.bind('pb.trigger.Trigger', () => {
+DI.bind('pb.trigger.Trigger', [() => {
 
   /**
    * Base class of all triggers. Triggers should be stateless and immutable.
@@ -43,5 +43,5 @@ DI.bind('pb.trigger.Trigger', () => {
   }
 
   return Trigger;
-});
+}]);
 </script>

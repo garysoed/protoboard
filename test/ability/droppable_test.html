@@ -22,7 +22,7 @@
           movedElements: []
         })
         .with('$registry', ['service', Registry => new Registry()])
-        .with('doc', () => document.currentScript.ownerDocument)
+        .constant('doc', document.currentScript.ownerDocument)
         .run([
             '/', '/', '/', '', '/', 'ability', 'service', '',
             (expect, _, _M, doc, $, Droppable, Move, Utils) => {

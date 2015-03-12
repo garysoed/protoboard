@@ -31,22 +31,38 @@
 
 <script>
 DI
-    .bind('$registry', Registry => new Registry())
-    .bind('pb_Bootstrap', (
-      $registry,
-      opt_Bag,
-      opt_Card,
-      opt_Dice,
-      opt_Deck,
-      opt_ui_Generate,
-      opt_Hand,
-      opt_ui_Preview,
-      opt_ui_Previewer,
-      opt_Rect,
-      opt_RectGrid,
-      opt_Token,
-      Config,
-      Utils) => {
+    .prefix('pb')
+    .bind('$registry', ['service', Registry => new Registry()])
+    .bind('Bootstrap', [
+      '',
+      'region?',
+      'component?',
+      'component?',
+      'region?',
+      'ui?',
+      'region?',
+      'ui?',
+      'ui?',
+      'region?',
+      'surface?',
+      'component?',
+      'service',
+      '',
+      (
+          $registry,
+          Bag,
+          Card,
+          Dice,
+          Deck,
+          Generate,
+          Hand,
+          Preview,
+          Previewer,
+          Rect,
+          RectGrid,
+          Token,
+          Config,
+          Utils) => {
   return {
     run(document) {
       document.addEventListener('DOMContentLoaded', () => {
@@ -62,5 +78,5 @@ DI
       });
     }
   };
-});
+}]);
 </script>

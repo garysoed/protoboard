@@ -12,16 +12,14 @@
 <body>
   <script>
   DI
-      .with('Handlebars', () => {
-        return {
-          helpers: {},
-          registerHelper(name, helper) {
-            this.helpers[name] = helper;
-          },
-          registerPartial() {
-            return this;
-          }
-        };
+      .constant('Handlebars', {
+        helpers: {},
+        registerHelper(name, helper) {
+          this.helpers[name] = helper;
+        },
+        registerPartial() {
+          return this;
+        }
       })
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)

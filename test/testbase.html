@@ -11,8 +11,8 @@
 <link rel="import" href="testutils.html">
 
 <script>
-DI.bind('_F', () => spies.Fakes);
-DI.bind('_M', () => spies.Matchers);
-DI.bind('expect', () => chai.expect);
-DI.bind('TEST_MODE', () => true);
+DI.bind('_F', [() => spies.Fakes]);
+DI.bind('_M', [() => spies.Matchers]);
+DI.bind('expect', [() => chai.expect]);
+DI.bind('TEST_MODE', [() => true]);
 </script>

@@ -82,20 +82,33 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_component_Card', (
-        Click,
-        Component,
-        Config,
-        Helpable,
-        Key,
-        Pickable,
-        Toggleable,
-        Utils,
-        doc,
-        template,
-        $registry) => {
+    .with('template', ['', doc => doc.querySelector('template')])
+    .bind('component.Card', [
+        'trigger',
+        'component',
+        'service',
+        'ability',
+        'trigger',
+        'ability',
+        'ability',
+        '',
+        '',
+        '',
+        '',
+        (
+            Click,
+            Component,
+            Config,
+            Helpable,
+            Key,
+            Pickable,
+            Toggleable,
+            Utils,
+            doc,
+            template,
+            $registry) => {
 
   const EL_NAME = 'pb-c-card';
 
@@ -147,6 +160,5 @@ DI
   $registry.add(EL_NAME, Card.prototype);
 
   return Card;
-
-});
+}]);
 </script>

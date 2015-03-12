@@ -9,7 +9,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-DI.bind("pb.trigger.Trigger", function () {
+DI.bind("pb.trigger.Trigger", [function () {
   /**
    * Base class of all triggers. Triggers should be stateless and immutable.
    *
@@ -69,5 +69,5 @@ DI.bind("pb.trigger.Trigger", function () {
   })();
 
   return Trigger;
-});</script>
+}]);</script>
 </head><body></body></html>

@@ -30,9 +30,9 @@ p {
 
 <script>"use strict";
 
-DI.bind("$registry", function (Registry) {
+DI.prefix("pb").bind("$registry", ["service", function (Registry) {
   return new Registry();
-}).bind("pb_Bootstrap", function ($registry, opt_Bag, opt_Card, opt_Dice, opt_Deck, opt_ui_Generate, opt_Hand, opt_ui_Preview, opt_ui_Previewer, opt_Rect, opt_RectGrid, opt_Token, Config, Utils) {
+}]).bind("Bootstrap", ["", "region?", "component?", "component?", "region?", "ui?", "region?", "ui?", "ui?", "region?", "surface?", "component?", "service", "", function ($registry, Bag, Card, Dice, Deck, Generate, Hand, Preview, Previewer, Rect, RectGrid, Token, Config, Utils) {
   return {
     run: function run(document) {
       document.addEventListener("DOMContentLoaded", function () {
@@ -49,5 +49,5 @@ DI.bind("$registry", function (Registry) {
       });
     }
   };
-});</script>
+}]);</script>
 </head><body></body></html>

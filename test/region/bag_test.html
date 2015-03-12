@@ -25,7 +25,7 @@
   DI
       .prefix('pb')
       .with('$registry', ['service', Registry => new Registry()])
-      .with('doc', () => document.currentScript.ownerDocument)
+      .constant('doc', document.currentScript.ownerDocument)
       .run([
           '/', '/', '', 'region', 'service', 'service', '', '',
           (expect, _, doc, Bag, Config, Move, t, $registry) => {

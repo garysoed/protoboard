@@ -5,5 +5,5 @@
 <link rel="import" href="out/di.html">
 
 <script>
-DI.bind('Keypress', () => window['keypress'].Listener);
+DI.bind('Keypress', [() => window['keypress'].Listener]);
 </script>

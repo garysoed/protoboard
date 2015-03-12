@@ -217,17 +217,8 @@ class Scope {
   }
 
   [__createProvider__](value, name = null) {
-    let fn;
-    let prefixes;
-    if (typeof value === 'function') {
-      fn = value;
-      prefixes = [];
-    } else {
-      fn = value.splice(value.length - 1)[0];
-      prefixes = value;
-    }
-
-    prefixes = prefixes.map(prefix => {
+    let fn = value.splice(value.length - 1)[0];
+    let prefixes = value.map(prefix => {
       return [this[__prefix__], prefix].filter(i => !!i).join('.');
     });
 
@@ -273,7 +264,7 @@ class Scope {
    * @return {DI.Scope} The newly created child scope.
    */
   constant(key, value) {
-    return this.with(key, () => value);
+    return this.with(key, [() => value]);
   }
 
   /**
