@@ -20,7 +20,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.bind("pb_region_Region", function (PbElement) {
+DI.prefix("pb").bind("region.Region", ["", function (PbElement) {
   /**
    * Base class of all regions.
    *
@@ -40,4 +40,4 @@ DI.bind("pb_region_Region", function (PbElement) {
   })(PbElement);
 
   return Region;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

@@ -15,13 +15,14 @@
 <body>
   <script>
   DI
-      .constant('Move', {
+      .prefix('pb')
+      .constant('service.Move', {
         movedElements: [],
         mouseX: 0
       })
-      .with('$registry', Registry => new Registry())
+      .with('$registry', ['service', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, $, doc, Hand, Move, Utils) => {
+      .run(['/', '/', '/', '', 'region', 'service', '', (expect, _, $, doc, Hand, Move, Utils) => {
 
   describe('region.Hand.ReorderableDroppable', () => {
     describe('#trigger', () => {
@@ -95,6 +96,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

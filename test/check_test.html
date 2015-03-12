@@ -12,8 +12,9 @@
 <body>
   <script>
   DI
+      .prefix('pb')
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, doc, Check) => {
+      .run(['/', '/', '', '', (expect, _, doc, Check) => {
 
   describe('Check', () => {
     describe('#onInt', () => {
@@ -89,6 +90,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

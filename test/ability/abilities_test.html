@@ -12,8 +12,9 @@
 <body>
   <script>
   DI
+      .prefix('pb')
       .with('fakeTriggerable', t => t.createFakeAbility('fakeTriggerable'))
-      .with('pb_ability_Triggerable', fakeTriggerable => {
+      .with('ability.Triggerable', fakeTriggerable => {
         return (config, knownAbilities) => {
           fakeTriggerable.config = config;
           fakeTriggerable.knownAbilities = knownAbilities;
@@ -21,7 +22,9 @@
         };
       })
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, pb_t, Abilities, Utils) => {
+      .run([
+          '/', '/', '/', '', '', 'ability', '',
+          (expect, _, _M, doc, t, Abilities, Utils) => {
 
   describe('ability.Abilities', () => {
     describe('$Builder', () => {
@@ -37,21 +40,21 @@
 
       describe('#add', () => {
         it('should add ability to a clean element', () => {
-          let ability = pb_t.createFakeAbility('Ability');
+          let ability = t.createFakeAbility('Ability');
 
           expect(builder.add(ability)).to.equal(builder);
 
-          let abilities = el[pb_t.getSymbol(el, 'abilities')];
+          let abilities = el[t.getSymbol(el, 'abilities')];
           expect(abilities.get(ability.attrName)).to.equal(ability);
           expect(abilities.get(ability.attrTrigger)).to.equal(ability);
         });
         it('should add ability to an element with another ability', () => {
-          let ability1 = pb_t.createFakeAbility('Ability 1');
-          let ability2 = pb_t.createFakeAbility('Ability 2');
+          let ability1 = t.createFakeAbility('Ability 1');
+          let ability2 = t.createFakeAbility('Ability 2');
 
           expect(builder.add(ability1).add(ability2)).to.equal(builder);
 
-          let abilities = el[pb_t.getSymbol(el, 'abilities')];
+          let abilities = el[t.getSymbol(el, 'abilities')];
           expect(abilities.get(ability1.attrName)).to.equal(ability1);
           expect(abilities.get(ability1.attrTrigger)).to.equal(ability1);
 
@@ -59,8 +62,8 @@
           expect(abilities.get(ability2.attrTrigger)).to.equal(ability2);
         });
         it('should throw exception if an ability with the same name has been registered', () => {
-          let ability1 = pb_t.createFakeAbility('Ability');
-          let ability2 = pb_t.createFakeAbility('Ability');
+          let ability1 = t.createFakeAbility('Ability');
+          let ability2 = t.createFakeAbility('Ability');
 
           builder.add(ability1);
 
@@ -69,9 +72,9 @@
               .throw(`${ability1.attrName} is already registered`);
         });
         it('should throw exception if an ability with the same trigger has been registered', () => {
-          let ability1 = pb_t.createFakeAbility('Ability');
+          let ability1 = t.createFakeAbility('Ability');
           ability1.attrName = 'AttrName';
-          let ability2 = pb_t.createFakeAbility('Ability');
+          let ability2 = t.createFakeAbility('Ability');
           ability2.attrName = 'AttrName2';
 
           builder.add(ability1);
@@ -84,7 +87,7 @@
 
       describe('#getAll', () => {
         it('should return the abilities correctly', () => {
-          let ability = pb_t.createFakeAbility('Ability');
+          let ability = t.createFakeAbility('Ability');
           builder.add(ability);
 
           var map = builder.getAll();
@@ -98,7 +101,7 @@
 
       describe('#trigger', () => {
         it('should trigger the ability', () => {
-          let ability = pb_t.createFakeAbility('ability');
+          let ability = t.createFakeAbility('ability');
           builder.add(ability);
 
           _.spy(ability, 'trigger');
@@ -109,7 +112,7 @@
           expect(() => builder.trigger('ability')).to.throw(Error);
         });
         it('should throw error if the element does not have the specified ability', () => {
-          let ability = pb_t.createFakeAbility('ability');
+          let ability = t.createFakeAbility('ability');
           builder.add(ability);
           expect(() => builder.trigger('other ability')).to.throw(Error);
         });
@@ -118,11 +121,11 @@
 
     describe('#__onMutation__', () => {
 
-      const __onMutation__ = pb_t.getSymbol(Abilities, 'onMutation');
+      const __onMutation__ = t.getSymbol(Abilities, 'onMutation');
 
       it('should call updateConfig for every record object', () => {
-        let ability1 = pb_t.createFakeAbility('ability 1');
-        let ability2 = pb_t.createFakeAbility('ability 2');
+        let ability1 = t.createFakeAbility('ability 1');
+        let ability2 = t.createFakeAbility('ability 2');
         let records = [
           {
             target: doc.createElement('div'),
@@ -148,7 +151,7 @@
         }]);
       });
       it('should not throw exception if the element has no attribute that has been mutated', () => {
-        let ability = pb_t.createFakeAbility('ability');
+        let ability = t.createFakeAbility('ability');
         ability.attrName = 'attrName';
         ability.attrTrigger = 'attrTrigger';
         let el = doc.createElement('div');
@@ -169,8 +172,8 @@
       });
 
       it('should observe mutation and call set default value for every registered ability', () => {
-        let ability1 = pb_t.createFakeAbility('ability 1');
-        let ability2 = pb_t.createFakeAbility('ability 2');
+        let ability1 = t.createFakeAbility('ability 1');
+        let ability2 = t.createFakeAbility('ability 2');
 
         Abilities.of(el)
             .add(ability1)
@@ -183,7 +186,7 @@
         expect(ability1.init).calledWith(el).at.least(1);
         expect(ability2.init).calledWith(el).at.least(1);
 
-        let observer = el[pb_t.getSymbol(el, 'observer')];
+        let observer = el[t.getSymbol(el, 'observer')];
         _.spy(observer, 'observe');
         _.spy(observer, 'disconnect');
 
@@ -213,7 +216,7 @@
       });
       it('should handle element with no registered abilities', () => {
         Abilities.init(el);
-        expect(el[pb_t.getSymbol(el, 'observer')]).to.be.instanceOf(MutationObserver);
+        expect(el[t.getSymbol(el, 'observer')]).to.be.instanceOf(MutationObserver);
       });
       it('should throw exception if the element has been initialized', () => {
         Abilities.init(el);
@@ -226,6 +229,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

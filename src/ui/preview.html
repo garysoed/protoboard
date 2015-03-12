@@ -10,7 +10,10 @@
 
 <script>
 DI
-.bind('pb_ui_Preview', (Config, Events, PbElement, service_Preview, $registry, Utils) => {
+    .prefix('pb')
+    .bind('ui.Preview', [
+        'service', '', '', 'service', '', '',
+        (Config, Events, PbElement, Preview, $registry, Utils) => {
 
   /**
    * Class that contains a preview if the mouse enters the parent element. This will display
@@ -37,7 +40,7 @@ DI
   const __onMouseOver__ = Symbol();
   const __onMouseOut__ = Symbol();
 
-  class Preview extends PbElement {
+  class PreviewElement extends PbElement {
 
     /**
      * Callback called when the mouse has left the parent element.
@@ -46,7 +49,7 @@ DI
      * @private
      */
     [__onMouseOut__]() {
-      service_Preview.previewedEl = null;
+      Preview.previewedEl = null;
     }
 
     /**
@@ -56,7 +59,7 @@ DI
      * @private
      */
     [__onMouseOver__]() {
-      service_Preview.previewedEl = this;
+      Preview.previewedEl = this;
     }
 
     /**
@@ -98,8 +101,8 @@ DI
   }
 
   Config.add(EL_NAME);
-  $registry.add(EL_NAME, Preview.prototype);
+  $registry.add(EL_NAME, PreviewElement.prototype);
 
-  return Preview;
-});
+  return PreviewElement;
+}]);
 </script>

@@ -49,24 +49,39 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_component_Dice', (
-        $,
-        Ability,
-        Check,
-        Click,
-        Component,
-        Config,
-        Helpable,
-        Key,
-        Pickable,
-        Shuffleable,
-        Utils,
-        $registry,
-        doc,
-        template,
-        opt_TEST_MODE) => {
+    .with('template', ['', doc => doc.querySelector('template')])
+    .bind('component.Dice', [
+        '/',
+        'ability',
+        '',
+        'trigger',
+        'component',
+        'service',
+        'ability',
+        'trigger',
+        'ability',
+        'ability',
+        '',
+        '',
+        '',
+        '',
+        '',
+          ($,
+          Ability,
+          Check,
+          Click,
+          Component,
+          Config,
+          Helpable,
+          Key,
+          Pickable,
+          Shuffleable,
+          Utils,
+          $registry,
+          doc,
+          template) => {
 
   const EL_NAME = 'pb-c-dice';
   const ATTR_PAIR = 'pb-dice-pair';
@@ -336,11 +351,9 @@ DI
 
   $registry.add(EL_NAME, Dice.prototype);
 
-  if (opt_TEST_MODE) {
-    Dice.DiceFlippable = DiceFlippable;
-    Dice.Rollable = Rollable;
-  }
+  Dice.DiceFlippable = DiceFlippable;
+  Dice.Rollable = Rollable;
 
   return Dice;
-});
+}]);
 </script>

@@ -48,7 +48,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.bind("pb_component_Component", function (PbElement, Utils) {
+DI.prefix("pb").bind("component.Component", ["", "", function (PbElement, Utils) {
   /**
    * Base class for all components.
    *
@@ -79,4 +79,4 @@ DI.bind("pb_component_Component", function (PbElement, Utils) {
   })(PbElement);
 
   return Component;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

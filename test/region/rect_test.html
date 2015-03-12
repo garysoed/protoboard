@@ -17,18 +17,21 @@
 
   <script>
   DI
-      .with('$registry', Registry => new Registry())
-      .with('FlexDroppable', Rect => Rect.FlexDroppable)
-      .constant('pb_service_Move', {
+      .prefix('pb')
+      .with('$registry', ['service', Registry => new Registry()])
+      .constant('service.Move', {
         movedElements: [],
         remove: () => {},
         mouseX: 0,
         mouseY: 0
       })
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, doc, FlexDroppable, Move, Rect, Utils, pb_t) => {
+      .run([
+          '/', '/', '', 'service', 'region', '', '',
+          (expect, _, doc, Move, Rect, Utils, t) => {
 
-  let __onDomMutation__ = pb_t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
+  let FlexDroppable = Rect.FlexDroppable;
+  let __onDomMutation__ = t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
 
   describe('Rect', () => {
     describe('$FlexDroppable', () => {
@@ -42,7 +45,7 @@
         el = doc.createElement('div');
         flexDroppable.init(el);
 
-        __mutationObserver__ = pb_t.getSymbol(flexDroppable, 'mutationObserver');
+        __mutationObserver__ = t.getSymbol(flexDroppable, 'mutationObserver');
         done();
       });
 
@@ -92,6 +95,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

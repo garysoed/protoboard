@@ -13,7 +13,7 @@ var _defineProperty = function (obj, key, value) {
   });
 };
 
-DI.bind("pb_service_Preview", function (Utils) {
+DI.prefix("pb").bind("service.Preview", ["", function (Utils) {
   /**
    * Service that lets the user preview an element on mouse hover.
    *
@@ -57,7 +57,7 @@ DI.bind("pb_service_Preview", function (Utils) {
   });
 
   return Preview;
-});
+}]);
 
 
 /**

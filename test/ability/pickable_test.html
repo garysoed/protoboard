@@ -11,10 +11,11 @@
 <body>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
-      .constant('Move', { add() {} })
+      .prefix('pb')
+      .with('$registry', ['service', Registry => new Registry()])
+      .constant('service.Move', { add() {} })
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, $, doc, Move, Pickable) => {
+      .run(['/', '/', '/', '', 'service', 'ability', (expect, _, $, doc, Move, Pickable) => {
 
   describe('ability.Pickable', () => {
     let el;
@@ -67,6 +68,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

@@ -5,7 +5,7 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI.bind('pb_t', (_, Utils) => {
+DI.bind('pb.t', ['', 'pb', (_, Utils) => {
   let TestUtil = {
     createFakeAbility(name, trigger) {
       return {
@@ -42,5 +42,5 @@ DI.bind('pb_t', (_, Utils) => {
   };
 
   return TestUtil;
-});
+}]);
 </script>

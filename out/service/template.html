@@ -7,7 +7,7 @@
 
 <script>"use strict";
 
-DI.bind("pb_service_Template", function ($, Check, Events, Handlebars) {
+DI.prefix("pb").bind("service.Template", ["/", "", "", "/", function ($, Check, Events, Handlebars) {
   var promiseMap = new Map();
 
   /**
@@ -111,4 +111,4 @@ DI.bind("pb_service_Template", function ($, Check, Events, Handlebars) {
   });
 
   return Service;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

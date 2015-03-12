@@ -125,9 +125,9 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
   return doc.querySelector("template");
-}).bind("pb_ability_Helpable", function (Abilities, Ability, Events, Key, Utils, doc, template, $registry) {
+}]).bind("ability.Helpable", ["ability", "ability", "", "trigger", "", "", "", "", function (Abilities, Ability, Events, Key, Utils, doc, template, $registry) {
   var displayEl = null;
 
   var Helpable = (function (Ability) {
@@ -205,4 +205,4 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
   });
 
   return Helpable;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

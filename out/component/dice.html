@@ -98,9 +98,9 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
   return doc.querySelector("template");
-}).bind("pb_component_Dice", function ($, Ability, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template, opt_TEST_MODE) {
+}]).bind("component.Dice", ["/", "ability", "", "trigger", "component", "service", "ability", "trigger", "ability", "ability", "", "", "", "", "", function ($, Ability, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template) {
   var EL_NAME = "pb-c-dice";
   var ATTR_PAIR = "pb-dice-pair";
   var ATTR_SHOW_A = "show-a";
@@ -433,10 +433,8 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
 
   $registry.add(EL_NAME, Dice.prototype);
 
-  if (opt_TEST_MODE) {
-    Dice.DiceFlippable = DiceFlippable;
-    Dice.Rollable = Rollable;
-  }
+  Dice.DiceFlippable = DiceFlippable;
+  Dice.Rollable = Rollable;
 
   return Dice;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

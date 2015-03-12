@@ -61,17 +61,12 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_ability_Helpable', (
-        Abilities,
-        Ability,
-        Events,
-        Key,
-        Utils,
-        doc,
-        template,
-        $registry) => {
+    .with('template', ['', doc => doc.querySelector('template')])
+    .bind('ability.Helpable', [
+        'ability', 'ability', '', 'trigger', '', '', '', '',
+        (Abilities, Ability, Events, Key, Utils, doc, template, $registry) => {
 
   let displayEl = null;
 
@@ -128,5 +123,5 @@ DI
   });
 
   return Helpable;
-});
+}]);
 </script>

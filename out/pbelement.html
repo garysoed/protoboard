@@ -26,7 +26,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.bind("pb_PbElement", function (Abilities, Utils) {
+DI.prefix("pb").bind("PbElement", ["ability", "", function (Abilities, Utils) {
   // Private symbols.
   var __isCreated__ = Symbol();
 
@@ -108,5 +108,5 @@ DI.bind("pb_PbElement", function (Abilities, Utils) {
   })(HTMLElement);
 
   return PbElement;
-});</script>
+}]);</script>
 </head><body></body></html>

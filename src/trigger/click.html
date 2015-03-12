@@ -6,7 +6,9 @@
 <link rel="import" href="trigger/trigger.html">
 
 <script>
-DI.bind('pb_trigger_Click', (pb_Events, HammerWrapper, Trigger) => {
+DI
+    .prefix('pb')
+    .bind('trigger.Click', ['', '', 'trigger', (Events, HammerWrapper, Trigger) => {
 
   /**
    * Triggers an ability when the element is clicked.
@@ -24,7 +26,7 @@ DI.bind('pb_trigger_Click', (pb_Events, HammerWrapper, Trigger) => {
      * @param {ability.Ability} ability The ability to trigger.
      */
     on(element, ability) {
-      pb_Events.of(element, this)
+      Events.of(element, this)
           .on('hammer', 'singletap', ability.trigger.bind(ability, element));
     }
 
@@ -35,7 +37,7 @@ DI.bind('pb_trigger_Click', (pb_Events, HammerWrapper, Trigger) => {
      * @param {Element} element Element to unregister.
      */
     off(element) {
-      pb_Events.of(element, this).off('hammer', 'singletap');
+      Events.of(element, this).off('hammer', 'singletap');
     }
 
     /**
@@ -72,5 +74,5 @@ DI.bind('pb_trigger_Click', (pb_Events, HammerWrapper, Trigger) => {
   };
 
   return Click;
-});
+}]);
 </script>

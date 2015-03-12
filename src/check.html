@@ -5,7 +5,9 @@
 
 <script>
 
-DI.bind('pb_Check', (Utils) => {
+DI
+    .prefix('pb')
+    .bind('Check', ['', Utils => {
 
   // Private symbols.
   const __checked__ = Symbol();
@@ -162,5 +164,5 @@ DI.bind('pb_Check', (Utils) => {
   }
 
   return check;
-});
+}]);
 </script>

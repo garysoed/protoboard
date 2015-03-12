@@ -49,7 +49,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.bind("pb_ability_Droppable", function (Ability, Check, Click, Move) {
+DI.prefix("pb").bind("ability.Droppable", ["ability", "", "trigger", "service", function (Ability, Check, Click, Move) {
   // Private symbols.
   var __defaultEnabled__ = Symbol();
 
@@ -128,4 +128,4 @@ DI.bind("pb_ability_Droppable", function (Ability, Check, Click, Move) {
   })(Ability);
 
   return Droppable;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

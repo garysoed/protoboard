@@ -61,7 +61,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $registry, Utils) {
+DI.prefix("pb").bind("ui.Preview", ["service", "", "", "service", "", "", function (Config, Events, PbElement, Preview, $registry, Utils) {
   /**
    * Class that contains a preview if the mouse enters the parent element. This will display
    * the children element as preview.
@@ -87,16 +87,16 @@ DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $
   var __onMouseOver__ = Symbol();
   var __onMouseOut__ = Symbol();
 
-  var Preview = (function (PbElement) {
-    function Preview() {
-      if (Object.getPrototypeOf(Preview) !== null) {
-        Object.getPrototypeOf(Preview).apply(this, arguments);
+  var PreviewElement = (function (PbElement) {
+    function PreviewElement() {
+      if (Object.getPrototypeOf(PreviewElement) !== null) {
+        Object.getPrototypeOf(PreviewElement).apply(this, arguments);
       }
     }
 
-    _inherits(Preview, PbElement);
+    _inherits(PreviewElement, PbElement);
 
-    _prototypeProperties(Preview, null, (function () {
+    _prototypeProperties(PreviewElement, null, (function () {
       var _prototypeProperties2 = {};
 
       _defineProperty(_prototypeProperties2, __onMouseOut__, {
@@ -108,7 +108,7 @@ DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $
          * @private
          */
         value: function () {
-          service_Preview.previewedEl = null;
+          Preview.previewedEl = null;
         },
         writable: true,
         enumerable: true,
@@ -124,7 +124,7 @@ DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $
          * @private
          */
         value: function () {
-          service_Preview.previewedEl = this;
+          Preview.previewedEl = this;
         },
         writable: true,
         enumerable: true,
@@ -139,7 +139,7 @@ DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $
          * @method createdCallback
          */
         value: function createdCallback() {
-          _get(Object.getPrototypeOf(Preview.prototype), "createdCallback", this).call(this);
+          _get(Object.getPrototypeOf(PreviewElement.prototype), "createdCallback", this).call(this);
           this.createShadowRoot();
           this.attachedCallback();
         },
@@ -156,7 +156,7 @@ DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $
          * @method attachedCallback
          */
         value: function attachedCallback() {
-          _get(Object.getPrototypeOf(Preview.prototype), "attachedCallback", this).call(this);
+          _get(Object.getPrototypeOf(PreviewElement.prototype), "attachedCallback", this).call(this);
           if (this.parentElement) {
             Events.of(this.parentElement, this).on("dom", "mouseenter", this[__onMouseOver__].bind(this)).on("dom", "mouseleave", this[__onMouseOut__].bind(this));
           }
@@ -177,7 +177,7 @@ DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $
           if (this.parentElement) {
             Events.of(this.parentElement, this).off();
           }
-          _get(Object.getPrototypeOf(Preview.prototype), "detachedCallback", this).call(this);
+          _get(Object.getPrototypeOf(PreviewElement.prototype), "detachedCallback", this).call(this);
         },
         writable: true,
         enumerable: true,
@@ -187,11 +187,11 @@ DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $
       return _prototypeProperties2;
     })());
 
-    return Preview;
+    return PreviewElement;
   })(PbElement);
 
   Config.add(EL_NAME);
-  $registry.add(EL_NAME, Preview.prototype);
+  $registry.add(EL_NAME, PreviewElement.prototype);
 
-  return Preview;
-});</script></head><body></body></html>
+  return PreviewElement;
+}]);</script></head><body></body></html>

@@ -15,7 +15,7 @@ var _defineProperty = function (obj, key, value) {
   });
 };
 
-DI.bind("pb_HammerWrapper", function (Utils) {
+DI.prefix("pb").bind("HammerWrapper", ["", function (Utils) {
   /**
    * Wrapper around [HammerJS](http://hammerjs.github.io/).
    *
@@ -60,7 +60,7 @@ DI.bind("pb_HammerWrapper", function (Utils) {
   })();
 
   return HammerWrapper;
-});
+}]);
 
 
 /**

@@ -12,9 +12,10 @@
 <body>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service', Registry => new Registry()])
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, Toggleable) => {
+      .run(['/', '/', '/', '', 'ability', (expect, _, _M, doc, Toggleable) => {
 
   describe('Toggleable', () => {
     let el;
@@ -82,6 +83,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

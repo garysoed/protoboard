@@ -10,9 +10,10 @@
 <body>
   <script>
   DI
+      .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .with('Events', pb_t => pb_t.createFakeEvents())
-      .run((_, _M, expect, Click, Events, doc, pb_t) => {
+      .with('Events', ['', t => t.createFakeEvents()])
+      .run(['/', '/', '/', 'trigger', '', '', '', (_, _M, expect, Click, Events, doc, t) => {
 
     describe('Click', () => {
       let click;
@@ -24,7 +25,7 @@
 
       describe('#on', () => {
         it('should register singletap on hammer', () => {
-          let ability = pb_t.createFakeAbility('test');
+          let ability = t.createFakeAbility('test');
           let element = doc.createElement('div');
 
           click.on(element, ability);
@@ -54,6 +55,6 @@
         done();
       });
     });
-  });
+  }]);
   </script>
 </body>

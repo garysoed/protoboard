@@ -5,7 +5,9 @@
 <link rel="import" href="trigger/trigger.html">
 
 <script>
-DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper, Trigger) => {
+DI
+    .prefix('pb')
+    .bind('trigger.DoubleClick', ['', '', 'trigger', (Events, HammerWrapper, Trigger) => {
 
   /**
    * Triggers an ability when the element is double clicked.
@@ -71,5 +73,5 @@ DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper, Trigger) => {
   };
 
   return DoubleClick;
-});
+}]);
 </script>

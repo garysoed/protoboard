@@ -10,7 +10,9 @@
 </head>
 <body>
   <script>
-  DI.run(pb_t => {
+  DI
+      .prefix('pb')
+      .run(['', t => {
     let expect = chai.expect;
     let _ = spies.Spies;
 
@@ -121,11 +123,11 @@
           });
           it('should try to resolve optional argument', () => {
             let scope = new DI.Scope().constant('a', 3);
-            let provider = new DI.Provider(opt_a => opt_a, [], scope);
+            let provider = new DI.Provider(a => a, ['?'], scope);
             expect(provider.resolve(scope)).to.equal(3);
           });
-          it('should return pass undefined for optional unresolvable argument', () => {
-            let provider = new DI.Provider(opt_a => opt_a, [], DI);
+          it('should return undefined for optional unresolvable argument', () => {
+            let provider = new DI.Provider(a => a, ['?'], DI);
             expect(provider.resolve(DI)).to.be.undefined();
           });
         });
@@ -135,7 +137,7 @@
         describe('#add', () => {
           it('should create the expected tree', () => {
             let tree = new DI.BindingTree();
-            let __values__ = pb_t.getSymbol(tree, 'values');
+            let __values__ = t.getSymbol(tree, 'values');
             tree.add('a_b', 'aB');
             tree.add('b_b', 'bB');
             tree.add('a_c', 'aC');
@@ -182,8 +184,8 @@
         describe('#with', () => {
           it('should return a child scope with the local binding added and parent reference', () => {
             let scope = new DI.Scope();
-            const __parentScope__ = pb_t.getSymbol(scope, 'parentScope');
-            const __localBindings__ = pb_t.getSymbol(scope, 'localBindings');
+            const __parentScope__ = t.getSymbol(scope, 'parentScope');
+            const __localBindings__ = t.getSymbol(scope, 'localBindings');
 
             let value = 'value';
             let child = scope.with('a', () => value);
@@ -228,18 +230,18 @@
         describe('#prefix', () => {
           it('should append the given prefix to the existing prefix in the scope', () => {
             let scope = DI.prefix('a').prefix('b');
-            expect(scope[pb_t.getSymbol(scope, 'prefix')]).to.be.equal('b.a');
+            expect(scope[t.getSymbol(scope, 'prefix')]).to.be.equal('b.a');
           });
         });
       });
 
       afterEach(done => {
-        const __values__ = pb_t.getSymbol(DI.bindings, 'values');
+        const __values__ = t.getSymbol(DI.bindings, 'values');
         DI.bindings[__values__] = new Map();
         _.reset();
         done();
       });
     });
-  });
+  }]);
   </script>
 </body>

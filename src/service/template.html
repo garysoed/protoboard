@@ -7,7 +7,8 @@
 
 <script>
 DI
-    .bind('pb_service_Template', ($, Check, Events, Handlebars) => {
+    .prefix('pb')
+    .bind('service.Template', ['/', '', '', '/', ($, Check, Events, Handlebars) => {
 
   const promiseMap = new Map();
 
@@ -117,6 +118,6 @@ DI
   });
 
   return Service;
-});
+}]);
 
 </script>

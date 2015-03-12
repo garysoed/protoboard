@@ -23,15 +23,18 @@
   </pb-r-bag>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service', Registry => new Registry()])
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, doc, Bag, Config, Move, pb_t, $registry) => {
+      .run([
+          '/', '/', '', 'region', 'service', 'service', '', '',
+          (expect, _, doc, Bag, Config, Move, t, $registry) => {
 
   let RandomPickable = Bag.RandomPickable;
 
   // Private symbols
-  let __draggable__ = pb_t.getSymbol(Bag.prototype, 'draggable');
-  let __placeHolderEl__ = pb_t.getSymbol(Bag.prototype, 'placeHolderEl');
+  let __draggable__ = t.getSymbol(Bag.prototype, 'draggable');
+  let __placeHolderEl__ = t.getSymbol(Bag.prototype, 'placeHolderEl');
 
   describe('Bag', () => {
     before(done => {
@@ -110,6 +113,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

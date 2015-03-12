@@ -26,7 +26,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.bind("pb_trigger_DoubleClick", function (Events, HammerWrapper, Trigger) {
+DI.prefix("pb").bind("trigger.DoubleClick", ["", "", "trigger", function (Events, HammerWrapper, Trigger) {
   /**
    * Triggers an ability when the element is double clicked.
    *
@@ -121,4 +121,4 @@ DI.bind("pb_trigger_DoubleClick", function (Events, HammerWrapper, Trigger) {
   };
 
   return DoubleClick;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

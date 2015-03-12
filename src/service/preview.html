@@ -4,7 +4,9 @@
 
 <script>
 
-DI.bind('pb_service_Preview', (Utils) => {
+DI
+    .prefix('pb')
+    .bind('service.Preview', ['', (Utils) => {
   /**
    * Service that lets the user preview an element on mouse hover.
    *
@@ -47,5 +49,5 @@ DI.bind('pb_service_Preview', (Utils) => {
   };
 
   return Preview;
-});
+}]);
 </script>

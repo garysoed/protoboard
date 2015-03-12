@@ -16,9 +16,12 @@
 <body>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, Abilities, Click, Config, Helpable, Key, doc, pb_t, $registry) => {
+      .run([
+          '/', '/', 'ability', 'trigger', 'service', 'ability', 'trigger', '', '', '',
+          (expect, _, Abilities, Click, Config, Helpable, Key, doc, t, $registry) => {
 
   describe('ability.Helpable', () => {
     let displayEl;
@@ -34,8 +37,8 @@
 
     describe('#trigger', () => {
       it('should add the abilities as child of the display element and show the element', () => {
-        let ability1 = pb_t.createFakeAbility('ability', new Click());
-        let ability2 = pb_t.createFakeAbility('ability2', new Key('a'));
+        let ability1 = t.createFakeAbility('ability', new Click());
+        let ability2 = t.createFakeAbility('ability2', new Key('a'));
         let helpable = new Helpable();
         let el = doc.createElement('div');
         Abilities.of(el)
@@ -60,6 +63,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

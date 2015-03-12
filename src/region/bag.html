@@ -49,23 +49,37 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template#main'))
-    .with('placeHolderTmp', doc => doc.querySelector('template#placeholder'))
-    .bind('pb_region_Bag', (
-        $registry,
-        Click,
-        Config,
-        Droppable,
-        Helpable,
-        Key,
-        Move,
-        Pickable,
-        Region,
-        Utils,
-        doc,
-        template,
-        placeHolderTmp) => {
+    .with('template', ['', doc => doc.querySelector('template#main')])
+    .with('placeHolderTmp', ['', doc => doc.querySelector('template#placeholder')])
+    .bind('region.Bag', [
+        '',
+        'trigger',
+        'service',
+        'ability',
+        'ability',
+        'trigger',
+        'service',
+        'ability',
+        'region',
+        '',
+        '',
+        '',
+        '',
+          ($registry,
+          Click,
+          Config,
+          Droppable,
+          Helpable,
+          Key,
+          Move,
+          Pickable,
+          Region,
+          Utils,
+          doc,
+          template,
+          placeHolderTmp) => {
 
   const EL_NAME = 'pb-r-bag';
   const ATTR_PLACEHOLDER = 'pb-placeholder';
@@ -173,5 +187,5 @@ DI
   }
 
   return Bag;
-});
+}]);
 </script>

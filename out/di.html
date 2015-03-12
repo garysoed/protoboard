@@ -25,6 +25,12 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
     }
   };
 
+  var append = function (l, r) {
+    return [l, r].filter(function (i) {
+      return !!i;
+    }).join(".");
+  };
+
   // Private symbols.
   var __function__ = Symbol();
   var __localBindings__ = Symbol("localBindings");
@@ -36,7 +42,6 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   var __resolvedValues__ = Symbol();
   var __values__ = Symbol("values");
 
-  var __appendPrefix__ = Symbol("");
   var __createProvider__ = Symbol();
   var __get__ = Symbol("get");
 
@@ -84,12 +89,16 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
               var resolvedArgs = args.map(function (arg, i) {
                 var prefix = _this[__prefixes__].length > i ? _this[__prefixes__][i] : "";
                 arg = arg.trim();
-                arg = prefix ? "" + prefix + "." + arg : arg;
-                var optional = false;
 
-                if (arg.substring(0, 4) === "opt_") {
-                  arg = arg.substring(4);
+                var optional = false;
+                var prefixEnd = prefix[prefix.length - 1];
+                if (prefixEnd === "?") {
+                  prefix = prefix.substring(0, prefix.length - 1);
                   optional = true;
+                }
+
+                if (prefixEnd !== "/") {
+                  arg = prefix ? "" + prefix + "." + arg : arg;
                 }
 
                 // TODO(gs): Handle cyclic dependency.
@@ -270,21 +279,9 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
     _prototypeProperties(Scope, null, (function () {
       var _prototypeProperties2 = {};
 
-      _defineProperty(_prototypeProperties2, __appendPrefix__, {
-        value: function (newPrefix) {
-          if (this[__prefix__]) {
-            return "" + newPrefix + "." + this[__prefix__];
-          } else {
-            return newPrefix;
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
       _defineProperty(_prototypeProperties2, __createProvider__, {
         value: function (value) {
+          var _this2 = this;
           var name = arguments[1] === undefined ? null : arguments[1];
           var fn = undefined;
           var prefixes = undefined;
@@ -297,7 +294,13 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
             prefixes = value;
           }
 
-          return new Provider(fn, prefixes.map(this[__appendPrefix__].bind(this)), this, name);
+          prefixes = prefixes.map(function (prefix) {
+            return [_this2[__prefix__], prefix].filter(function (i) {
+              return !!i;
+            }).join(".");
+          });
+
+          return new Provider(fn, prefixes, this, name);
         },
         writable: true,
         enumerable: true,
@@ -334,8 +337,8 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
          * @return {DI.Scope} The newly created child scope.
          */
         value: function _with(key, value) {
-          var childScope = new Scope(this);
-          childScope[__localBindings__].add(this[__appendPrefix__](key), this[__createProvider__](value, key));
+          var childScope = new Scope(this, this[__prefix__]);
+          childScope[__localBindings__].add(append(this[__prefix__], key), this[__createProvider__](value, key));
           return childScope;
         },
         writable: true,
@@ -375,7 +378,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
          *    their names.
          */
         value: function bind(key, value) {
-          bindings.add(this[__appendPrefix__](key), this[__createProvider__](value, key));
+          bindings.add(append(this[__prefix__], key), this[__createProvider__](value, key));
           return this;
         },
         writable: true,
@@ -395,7 +398,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
          * @return {any} The value bound to the given key, or undefined if no values can be found.
          */
         value: function get(key) {
-          var value = this[__get__](this[__appendPrefix__](key));
+          var value = this[__get__](append(this[__prefix__], key));
           if (value === undefined) {
             return getGlobal(key, this);
           } else {
@@ -434,7 +437,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
          * @return {DI.Scope} The newly created child scope with the given prefix.
          */
         value: function prefix(prefix) {
-          return new Scope(this, this[__appendPrefix__](prefix));
+          return new Scope(this, append(prefix, this[__prefix__]));
         },
         writable: true,
         enumerable: true,

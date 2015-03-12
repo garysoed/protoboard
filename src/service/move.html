@@ -33,7 +33,9 @@
 </style>
 
 <script>
-DI.bind('pb_service_Move', ($registry, Events, Utils) => {
+DI
+    .prefix('pb')
+    .bind('service.Move', ['', '', '', ($registry, Events, Utils) => {
 
   // Private symbols.
   const __container__ = Symbol('container');
@@ -165,5 +167,5 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
   });
 
   return Move;
-});
+}]);
 </script>

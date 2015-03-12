@@ -82,9 +82,9 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
   return doc.querySelector("template");
-}).bind("pb_region_Rect", function ($registry, Check, Click, Config, Droppable, Helpable, Key, Move, Region, Utils, doc, template) {
+}]).bind("region.Rect", ["", "", "trigger", "service", "ability", "ability", "trigger", "service", "region", "", "", "", function ($registry, Check, Click, Config, Droppable, Helpable, Key, Move, Region, Utils, doc, template) {
   var EL_NAME = "pb-r-rect";
 
   // Private symbols
@@ -236,9 +236,7 @@ DI.constant("doc", document.currentScript.ownerDocument)["with"]("template", fun
   Config.add(EL_NAME, new Helpable("help"), new FlexDroppable("drop", new Key("d"), true));
   $registry.add(EL_NAME, Rect.prototype);
 
-  if (window.TEST_MODE) {
-    Rect.FlexDroppable = FlexDroppable;
-  }
+  Rect.FlexDroppable = FlexDroppable;
 
   return Rect;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

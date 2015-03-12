@@ -17,20 +17,15 @@
 <body>
   <script>
     DI
-        .constant('Move', {
+        .prefix('pb')
+        .constant('service.Move', {
           movedElements: []
         })
-        .with('$registry', Registry => new Registry())
+        .with('$registry', ['service', Registry => new Registry()])
         .with('doc', () => document.currentScript.ownerDocument)
-        .run((
-            expect,
-            _,
-            _M,
-            doc,
-            $,
-            Droppable,
-            Move,
-            Utils) => {
+        .run([
+            '/', '/', '/', '', '/', 'ability', 'service', '',
+            (expect, _, _M, doc, $, Droppable, Move, Utils) => {
 
       describe('Droppable', () => {
         let el;
@@ -91,6 +86,6 @@
           done();
         });
       });
-    });
+    }]);
   </script>
 </body>

@@ -5,7 +5,9 @@
 <link rel="import" href="trigger/key.html">
 
 <script>
-DI.bind('pb_trigger_Triggers', (Click, Key) => {
+DI
+    .prefix('pb.trigger')
+    .bind('Triggers', ['', '', (Click, Key) => {
 
   // Private symbols
   const __observer__ = Symbol();
@@ -40,5 +42,5 @@ DI.bind('pb_trigger_Triggers', (Click, Key) => {
   };
 
   return Triggers;
-});
+}]);
 </script>

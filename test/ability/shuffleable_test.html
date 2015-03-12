@@ -13,9 +13,10 @@
 <body>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service', Registry => new Registry()])
       .with('doc', () => document.currentScript.ownerDocument)
-      .run((expect, _, doc, Shuffleable, Utils) => {
+      .run(['/', '/', '', 'ability', '', (expect, _, doc, Shuffleable, Utils) => {
 
   describe('ability.Shuffleable', () => {
     let el;
@@ -89,6 +90,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

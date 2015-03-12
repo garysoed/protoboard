@@ -46,7 +46,7 @@ var _defineProperty = function (obj, key, value) {
   });
 };
 
-DI.bind("pb_service_Move", function ($registry, Events, Utils) {
+DI.prefix("pb").bind("service.Move", ["", "", "", function ($registry, Events, Utils) {
   // Private symbols.
   var __container__ = Symbol("container");
   var __document__ = Symbol();
@@ -136,7 +136,7 @@ DI.bind("pb_service_Move", function ($registry, Events, Utils) {
   });
 
   return Move;
-});
+}]);
 /**
  * Reference to the document that the service operates in.
  *

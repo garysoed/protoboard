@@ -24,9 +24,12 @@
   </template>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, Config, $registry, doc, Generate, service_Template, Utils) => {
+      .run([
+          '/', '/', 'service', '', '', 'ui', 'service', '',
+          (expect, _, Config, $registry, doc, Generate, Template, Utils) => {
 
   describe('ui.Generate', () => {
     before(done => {
@@ -55,12 +58,12 @@
               done();
             });
 
-        service_Template
+        Template
             .addData('dataA', dataA)
             .addData('dataB', dataB);
       });
     });
   });
-  });
+  }]);
   </script>
 </body>

@@ -9,7 +9,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-DI.bind("pb_service_Registry", function () {
+DI.prefix("pb").bind("service.Registry", [function () {
   var __elements__ = Symbol();
   var __toRun__ = Symbol();
 
@@ -91,5 +91,5 @@ DI.bind("pb_service_Registry", function () {
   })();
 
   return Registry;
-});</script>
+}]);</script>
 </head><body></body></html>

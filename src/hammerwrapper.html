@@ -5,7 +5,9 @@
 <link rel="import" href="di.html">
 
 <script>
-DI.bind('pb_HammerWrapper', Utils => {
+DI
+    .prefix('pb')
+    .bind('HammerWrapper', ['', Utils => {
 
   /**
    * Wrapper around [HammerJS](http://hammerjs.github.io/).
@@ -73,5 +75,5 @@ DI.bind('pb_HammerWrapper', Utils => {
   };
 
   return HammerWrapper;
-});
+}]);
 </script>

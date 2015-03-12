@@ -33,21 +33,34 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_region_Rect', (
-        $registry,
-        Check,
-        Click,
-        Config,
-        Droppable,
-        Helpable,
-        Key,
-        Move,
-        Region,
-        Utils,
-        doc,
-        template) => {
+    .with('template', ['', doc => doc.querySelector('template')])
+    .bind('region.Rect', [
+        '',
+        '',
+        'trigger',
+        'service',
+        'ability',
+        'ability',
+        'trigger',
+        'service',
+        'region',
+        '',
+        '',
+        '',
+          ($registry,
+          Check,
+          Click,
+          Config,
+          Droppable,
+          Helpable,
+          Key,
+          Move,
+          Region,
+          Utils,
+          doc,
+          template) => {
   const EL_NAME = 'pb-r-rect';
 
   // Private symbols
@@ -152,11 +165,8 @@ DI
       new FlexDroppable('drop', new Key('d'), true));
   $registry.add(EL_NAME, Rect.prototype);
 
-  if (window['TEST_MODE']) {
-    Rect.FlexDroppable = FlexDroppable;
-  }
+  Rect.FlexDroppable = FlexDroppable;
 
   return Rect;
-
-});
+}]);
 </script>

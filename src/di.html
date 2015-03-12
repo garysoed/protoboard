@@ -13,7 +13,6 @@ const __prefixes__ = Symbol();
 const __resolvedValues__ = Symbol();
 const __values__ = Symbol('values');
 
-const __appendPrefix__ = Symbol('');
 const __createProvider__ = Symbol();
 const __get__ = Symbol('get');
 
@@ -56,12 +55,16 @@ class Provider {
       let resolvedArgs = args.map((arg, i) => {
         let prefix = this[__prefixes__].length > i ? this[__prefixes__][i] : '';
         arg = arg.trim();
-        arg = prefix ? `${prefix}.${arg}` : arg;
-        let optional = false;
 
-        if (arg.substring(0, 4) === 'opt_') {
-          arg = arg.substring(4);
+        let optional = false;
+        let prefixEnd = prefix[prefix.length - 1];
+        if (prefixEnd === '?') {
+          prefix = prefix.substring(0, prefix.length - 1);
           optional = true;
+        }
+
+        if (prefixEnd !== '/') {
+          arg = prefix ? `${prefix}.${arg}` : arg;
         }
 
         // TODO(gs): Handle cyclic dependency.
@@ -213,14 +216,6 @@ class Scope {
     this[__prefix__] = prefix;
   }
 
-  [__appendPrefix__](newPrefix) {
-    if (this[__prefix__]) {
-      return `${newPrefix}.${this[__prefix__]}`;
-    } else {
-      return newPrefix;
-    }
-  }
-
   [__createProvider__](value, name = null) {
     let fn;
     let prefixes;
@@ -233,7 +228,11 @@ class Scope {
       prefixes = value;
     }
 
-    return new Provider(fn, prefixes.map(this[__appendPrefix__].bind(this)), this, name);
+    prefixes = prefixes.map(prefix => {
+      return [this[__prefix__], prefix].filter(i => !!i).join('.');
+    });
+
+    return new Provider(fn, prefixes, this, name);
   }
 
   [__get__](key, scope) {
@@ -259,9 +258,9 @@ class Scope {
    * @return {DI.Scope} The newly created child scope.
    */
   with(key, value) {
-    let childScope = new Scope(this);
+    let childScope = new Scope(this, this[__prefix__]);
     childScope[__localBindings__]
-        .add(this[__appendPrefix__](key), this[__createProvider__](value, key));
+        .add(append(this[__prefix__], key), this[__createProvider__](value, key));
     return childScope;
   }
 
@@ -287,7 +286,7 @@ class Scope {
    *    their names.
    */
   bind(key, value) {
-    bindings.add(this[__appendPrefix__](key), this[__createProvider__](value, key));
+    bindings.add(append(this[__prefix__], key), this[__createProvider__](value, key));
     return this;
   }
 
@@ -301,7 +300,7 @@ class Scope {
    * @return {any} The value bound to the given key, or undefined if no values can be found.
    */
   get(key) {
-    let value = this[__get__](this[__appendPrefix__](key));
+    let value = this[__get__](append(this[__prefix__], key));
     if (value === undefined) {
       return getGlobal(key, this);
     } else {
@@ -328,7 +327,7 @@ class Scope {
    * @return {DI.Scope} The newly created child scope with the given prefix.
    */
   prefix(prefix) {
-    return new Scope(this, this[__appendPrefix__](prefix));
+    return new Scope(this, append(prefix, this[__prefix__]));
   }
 }
 
@@ -341,6 +340,10 @@ function getGlobal(key, scope) {
   } else {
     return globalProvider.resolve(scope);
   }
+}
+
+function append(l, r) {
+  return [l, r].filter(i => !!i).join('.');
 }
 
 const DI = new Scope();

@@ -23,8 +23,11 @@
           }
         };
       })
+      .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, Check, Handlebars, service_Template) => {
+      .run([
+          '/', '/', '/', '', '', '/', 'service',
+          (expect, _, _M, doc, Check, Handlebars, Template) => {
 
   describe('service.Template', () => {
     describe('#addPartial', () => {
@@ -35,7 +38,7 @@
 
         _.spy(Handlebars, 'registerPartial');
 
-        service_Template.addPartial(name, el);
+        Template.addPartial(name, el);
         expect(Handlebars.registerPartial).calledWith(name, '{{> abc}}').at.least(1);
       });
     });
@@ -44,8 +47,8 @@
       it('should handle adding data before retrieval', done => {
         let name = 'data';
         let data = {};
-        service_Template.addData(name, data);
-        service_Template.get(name)
+        Template.addData(name, data);
+        Template.get(name)
             .then(result => {
               expect(result).to.be.eql([name, data]);
               done();
@@ -54,12 +57,12 @@
       it('should handle adding data after retrieval', done => {
         let name = 'data';
         let data = {};
-        service_Template.get(name)
+        Template.get(name)
             .then(result => {
               expect(result).to.be.eql([name, data]);
               done();
             });
-        service_Template.addData(name, data);
+        Template.addData(name, data);
       });
     });
 
@@ -109,6 +112,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

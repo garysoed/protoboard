@@ -42,21 +42,34 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_region_Hand', (
-        $registry,
-        Abilities,
-        Check,
-        Config,
-        Droppable,
-        Helpable,
-        Key,
-        Move,
-        Region,
-        Utils,
-        doc,
-        template) => {
+    .with('template', ['', doc => doc.querySelector('template')])
+    .bind('region.Hand', [
+        '',
+        'ability',
+        '',
+        'service',
+        'ability',
+        'ability',
+        'trigger',
+        'service',
+        'region',
+        '',
+        '',
+        '',
+          ($registry,
+          Abilities,
+          Check,
+          Config,
+          Droppable,
+          Helpable,
+          Key,
+          Move,
+          Region,
+          Utils,
+          doc,
+          template) => {
 
   const EL_NAME = 'pb-r-hand';
 
@@ -178,5 +191,5 @@ DI
   }
 
   return Hand;
-});
+}]);
 </script>

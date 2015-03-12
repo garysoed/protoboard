@@ -1,17 +1,11 @@
 <html><head><base href="..">
 
 <link rel="import" href="ability/abilities.html">
-<link rel="import" href="ability/droppable.html">
-<link rel="import" href="ability/pickable.html">
-<link rel="import" href="ability/shuffleable.html">
-<link rel="import" href="ability/toggleable.html">
-<link rel="import" href="trigger/click.html">
-<link rel="import" href="trigger/key.html">
 <link rel="import" href="di.html">
 
 <script>"use strict";
 
-DI.bind("pb_service_Config", function (Abilities, Click, Droppable, Key, Pickable, Shuffleable, Toggleable) {
+DI.prefix("pb").bind("service.Config", ["ability", function (Abilities) {
   var configuration = {};
 
   var Config = {
@@ -42,5 +36,5 @@ DI.bind("pb_service_Config", function (Abilities, Click, Droppable, Key, Pickabl
   };
 
   return Config;
-});</script>
+}]);</script>
 </head><body></body></html>

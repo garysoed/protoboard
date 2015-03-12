@@ -27,7 +27,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.bind("pb_trigger_Click", function (pb_Events, HammerWrapper, Trigger) {
+DI.prefix("pb").bind("trigger.Click", ["", "", "trigger", function (Events, HammerWrapper, Trigger) {
   /**
    * Triggers an ability when the element is clicked.
    *
@@ -54,7 +54,7 @@ DI.bind("pb_trigger_Click", function (pb_Events, HammerWrapper, Trigger) {
          * @param {ability.Ability} ability The ability to trigger.
          */
         value: function on(element, ability) {
-          pb_Events.of(element, this).on("hammer", "singletap", ability.trigger.bind(ability, element));
+          Events.of(element, this).on("hammer", "singletap", ability.trigger.bind(ability, element));
         },
         writable: true,
         enumerable: true,
@@ -69,7 +69,7 @@ DI.bind("pb_trigger_Click", function (pb_Events, HammerWrapper, Trigger) {
          * @param {Element} element Element to unregister.
          */
         value: function off(element) {
-          pb_Events.of(element, this).off("hammer", "singletap");
+          Events.of(element, this).off("hammer", "singletap");
         },
         writable: true,
         enumerable: true,
@@ -122,4 +122,4 @@ DI.bind("pb_trigger_Click", function (pb_Events, HammerWrapper, Trigger) {
   };
 
   return Click;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

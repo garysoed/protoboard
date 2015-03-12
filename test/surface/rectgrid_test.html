@@ -16,9 +16,12 @@
   </pb-s-rectgrid>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, _M, $registry, doc, Config, RectGrid) => {
+      .run([
+          '/', '/', '/', '', '', 'service', 'surface',
+          (expect, _, _M, $registry, doc, Config, RectGrid) => {
 
   describe('RectGrid', () => {
     before(done => {
@@ -76,6 +79,6 @@
       });
     });
   });
-  });
+  }]);
   </script>
 </body>

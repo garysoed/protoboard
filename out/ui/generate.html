@@ -66,7 +66,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.bind("pb_ui_Generate", function ($registry, Check, Config, PbElement, service_Template) {
+DI.prefix("pb").bind("ui.Generate", ["", "", "service", "", "service", function ($registry, Check, Config, PbElement, Template) {
   var EL_NAME = "pb-u-generate";
 
   /**
@@ -106,8 +106,8 @@ DI.bind("pb_ui_Generate", function ($registry, Check, Config, PbElement, service
    * {{#crossLink "service.Template"}}{{/crossLink}}. So in the example above, we can register the
    * data as follows:
    * ```javascript
-   * DI.run(function(service_Template, Bootstrap) {
-   *   service_Template
+   * DI.run(['pb.service', 'pb', function(Template, Bootstrap) {
+   *   Template
    *       .addData('cards', [
    *         { name: 'Apprentice' },
    *         { name: 'Jack of All Trades' },
@@ -118,7 +118,7 @@ DI.bind("pb_ui_Generate", function ($registry, Check, Config, PbElement, service
    *         name: 'Awesome deck building game'
    *       });
    *   Bootstrap.run(document);
-   * });
+   * }]);
    * ```
    *
    * With the above example, this will produce the following:
@@ -158,7 +158,7 @@ DI.bind("pb_ui_Generate", function ($registry, Check, Config, PbElement, service
 
           // Gets the data.
           var promises = Check($(this).attr("input")).isList().orThrows().map(function (name) {
-            return service_Template.get(name);
+            return Template.get(name);
           });
           Promise.all(promises).then(function (dataList) {
             var dataObj = {};
@@ -188,4 +188,4 @@ DI.bind("pb_ui_Generate", function ($registry, Check, Config, PbElement, service
   $registry.add(EL_NAME, Generate.prototype);
 
   return Generate;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

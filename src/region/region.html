@@ -4,7 +4,9 @@
 <link rel="import" href="pbelement.html">
 
 <script>
-DI.bind('pb_region_Region', PbElement => {
+DI
+    .prefix('pb')
+    .bind('region.Region', ['', PbElement => {
 
   /**
    * Base class of all regions.
@@ -16,5 +18,5 @@ DI.bind('pb_region_Region', PbElement => {
   }
 
   return Region;
-});
+}]);
 </script>

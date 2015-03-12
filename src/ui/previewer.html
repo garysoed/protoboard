@@ -15,17 +15,12 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_ui_Previewer', (
-        $registry,
-        Config,
-        Events,
-        PbElement,
-        service_Preview,
-        Utils,
-        doc,
-        template) => {
+    .with('template', ['', doc => doc.querySelector('template')])
+    .bind('ui.Previewer', [
+        '', 'service', '', '', 'service', '', '', '', (
+        $registry, Config, Events, PbElement, Preview, Utils, doc, template) => {
 
   /**
    * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered
@@ -52,8 +47,8 @@ DI
      * @private
      */
     [__onPreviewElChanged__]() {
-      if (service_Preview.previewedEl) {
-        this.innerHTML = service_Preview.previewedEl.innerHTML;
+      if (Preview.previewedEl) {
+        this.innerHTML = Preview.previewedEl.innerHTML;
       } else {
         this.innerHTML = '';
       }
@@ -79,9 +74,9 @@ DI
      */
     attachedCallback() {
       super.attachedCallback();
-      this[__previewElHandler__] = Events.of(service_Preview, this)
+      this[__previewElHandler__] = Events.of(Preview, this)
           .on('jquery',
-              service_Preview.Events.ELEMENT_CHANGED,
+              Preview.Events.ELEMENT_CHANGED,
               this[__onPreviewElChanged__].bind(this));
     }
 
@@ -91,7 +86,7 @@ DI
      * @method detachedCallback
      */
     detachedCallback() {
-      Events.of(service_Preview, this).off();
+      Events.of(Preview, this).off();
       super.detachedCallback();
     }
   }
@@ -100,5 +95,5 @@ DI
   $registry.add(EL_NAME, Previewer.prototype);
 
   return Previewer;
-});
+}]);
 </script>

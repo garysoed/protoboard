@@ -4,7 +4,7 @@
 
 <script>"use strict";
 
-DI.bind("pb_Utils", function () {
+DI.prefix("pb").bind("Utils", [function () {
   /**
    * Various miscellaneous utilities. They are not meant for general usage, but feel free to use
    * them.
@@ -245,4 +245,4 @@ DI.bind("pb_Utils", function () {
     } };
 
   return Utils;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

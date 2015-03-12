@@ -13,7 +13,11 @@
 </style>
 
 <script>
-DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
+DI
+    .prefix('pb')
+    .bind('trigger.Key', [
+        '', 'service', 'trigger', '',
+        (Events, Move, Trigger, $registry) => {
   // Private symbols.
   const __active__ = Symbol();
   const __key__ = Symbol('key');
@@ -243,10 +247,8 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
     Service.init(doc);
   });
 
-  if (opt_TEST_MODE) {
-    Key.Service = Service;
-  }
+  Key.Service = Service;
 
   return Key;
-});
+}]);
 </script>
