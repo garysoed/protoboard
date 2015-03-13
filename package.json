@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/garysoed/protoboard",
   "devDependencies": {
+    "DI": "git://github.com/garysoed/di",
     "chai": "^1.9.2",
     "chalk": "^0.5.1",
     "gulp": "^3.8.10",
@@ -38,6 +39,5 @@
     "spies": "git://github.com/garysoed/spies.git",
     "through2": "^0.6.3"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

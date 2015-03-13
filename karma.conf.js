@@ -26,11 +26,12 @@ module.exports = function(config) {
       { pattern: 'bower_components/jquery/dist/jquery.js', included: false },
       { pattern: 'bower_components/Keypress/keypress.js', included: false },
       { pattern: 'node_modules/chai/chai.js', included: false },
+      { pattern: 'node_modules/DI/out/bin.js', included: false },
       { pattern: 'node_modules/traceur/bin/traceur-runtime.js', included: false },
       { pattern: 'node_modules/spies/**', included: false },
 
       { pattern: 'out/testbase.html', included: false},
-      { pattern: 'out/**/*_test.html', included: true}
+      { pattern: 'out/**/*_test.html', included: true }
     ],
 
 
