@@ -6,13 +6,13 @@
     <link rel="import" href="out/component/card.html">
     <link rel="import" href="out/component/dice.html">
     <link rel="import" href="out/component/token.html">
-    <link rel="import" href="out/di.html">
     <link rel="import" href="out/region/bag.html">
     <link rel="import" href="out/region/deck.html">
     <link rel="import" href="out/region/hand.html">
     <link rel="import" href="out/region/rect.html">
     <link rel="import" href="out/service/template.html">
     <link rel="import" href="out/surface/rectgrid.html">
+    <link rel="import" href="out/third_party/di.html">
     <link rel="import" href="out/ui/generate.html">
     <link rel="import" href="out/ui/preview.html">
     <link rel="import" href="out/ui/previewer.html">
@@ -314,8 +314,8 @@
     </table>
 
     <script>
-      DI.run(function(Bootstrap, service_Template) {
-        service_Template
+      DI.prefix('pb').run(['', 'service', function(Bootstrap, Template) {
+        Template
             .addPartial('card', document.querySelector('template#card'))
             .addData('cards', [
               { name: 'Mrs Peacock', color: 'blue' },
@@ -330,7 +330,7 @@
               year: 1949
             });
         Bootstrap.run(document);
-      });
+      }]);
 
       var headers = document.querySelectorAll('thead');
       for (var i = 0; i < headers.length; i++) {

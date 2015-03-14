@@ -23,18 +23,12 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_component_Token', (
-        $registry,
-        Component,
-        Config,
-        Helpable,
-        Key,
-        Pickable,
-        Utils,
-        doc,
-        template) => {
+    .with('template', ['', doc => doc.querySelector('template')])
+    .bind('pb_component_Token', [
+        '', 'component', 'service', 'ability', 'trigger', 'ability', '', '', '',
+        ($registry, Component, Config, Helpable, Key, Pickable, Utils, doc, template) => {
 
   const EL_NAME = 'pb-c-token';
 
@@ -81,5 +75,5 @@ DI
   $registry.add(EL_NAME, Token.prototype);
 
   return Token;
-});
+}]);
 </script>
