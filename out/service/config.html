@@ -5,7 +5,7 @@
 
 <script>"use strict";
 
-DI.prefix("pb").bind("service.Config", ["ability.=", function (Abilities) {
+DI.prefix("pb").bind("service.Config", ["ability", function (Abilities) {
   var configuration = {};
 
   var Config = {

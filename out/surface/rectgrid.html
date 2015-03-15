@@ -95,13 +95,13 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", ["=", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", ["", function (doc) {
   return doc.querySelector("template#main");
-}])["with"]("templateRow", ["=", function (doc) {
+}])["with"]("templateRow", ["", function (doc) {
   return doc.querySelector("template#row");
-}])["with"]("templateCol", ["=", function (doc) {
+}])["with"]("templateCol", ["", function (doc) {
   return doc.querySelector("template#col");
-}]).bind("surface.RectGrid", ["=", "=", "service.=", "=", "=", "=", "=", "=", "=", function ($registry, Check, Config, PbElement, Utils, doc, templateMain, templateRow, templateCol) {
+}]).bind("surface.RectGrid", ["", "", "service", "", "", "", "", "", "", function ($registry, Check, Config, PbElement, Utils, doc, templateMain, templateRow, templateCol) {
   var ATTR_ROW = "pb-row";
   var ATTR_COL = "pb-col";
   var EL_NAME = "pb-s-rectgrid";

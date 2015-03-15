@@ -61,7 +61,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").bind("ui.Preview", ["service.=", "=", "=", "service.=", "=", "=", function (Config, Events, PbElement, Preview, $registry, Utils) {
+DI.prefix("pb").bind("ui.Preview", ["service", "", "", "service", "", "", function (Config, Events, PbElement, Preview, $registry, Utils) {
   /**
    * Class that contains a preview if the mouse enters the parent element. This will display
    * the children element as preview.

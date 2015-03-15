@@ -6,7 +6,7 @@
 
 <script>"use strict";
 
-DI.bind("pb.t", ["=", "pb.=", function (_, Utils) {
+DI.bind("pb.t", ["", "pb", function (_, Utils) {
   var TestUtil = {
     createFakeAbility: function createFakeAbility(name, trigger) {
       return {

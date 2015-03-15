@@ -30,9 +30,9 @@ p {
 
 <script>"use strict";
 
-DI.prefix("pb").bind("$registry", ["service.=", function (Registry) {
+DI.prefix("pb").bind("$registry", ["service", function (Registry) {
   return new Registry();
-}]).bind("Bootstrap", ["=", "service.=", "=", "region.Bag?", "component.Card?", "component.Dice?", "region.Deck?", "ui.Generate?", "region.Hand?", "ui.Preview?", "ui.Previewer?", "region.Rect?", "surface.RectGrid?", "component.Token?", function ($registry, Config, Utils) {
+}]).bind("Bootstrap", ["", "region?", "component?", "component?", "region?", "ui?", "region?", "ui?", "ui?", "region?", "surface?", "component?", "service", "", function ($registry, Bag, Card, Dice, Deck, Generate, Hand, Preview, Previewer, Rect, RectGrid, Token, Config, Utils) {
   return {
     run: function run(document) {
       document.addEventListener("DOMContentLoaded", function () {

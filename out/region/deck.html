@@ -79,9 +79,9 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
   return doc.querySelector("template");
-}]).bind("region.Deck", ["=", "ability.=", "service.=", "ability.=", "ability.=", "trigger.=", "region.=", "ability.=", "=", "=", "=", function ($registry, Abilities, Config, Droppable, Helpable, Key, Region, Shuffleable, Utils, doc, template) {
+}]).bind("region.Deck", ["", "ability", "service", "ability", "ability", "trigger", "region", "ability", "", "", "", function ($registry, Abilities, Config, Droppable, Helpable, Key, Region, Shuffleable, Utils, doc, template) {
   /**
    * Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.
    * Any child elements of this class are considered to be in the deck.

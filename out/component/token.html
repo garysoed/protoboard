@@ -64,9 +64,9 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
   return doc.querySelector("template");
-}]).bind("component.Token", ["=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "=", "=", "=", function ($registry, Component, Config, Helpable, Key, Pickable, Utils, doc, template) {
+}]).bind("pb_component_Token", ["", "component", "service", "ability", "trigger", "ability", "", "", "", function ($registry, Component, Config, Helpable, Key, Pickable, Utils, doc, template) {
   var EL_NAME = "pb-c-token";
 
   /**

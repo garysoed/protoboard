@@ -98,9 +98,9 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
   return doc.querySelector("template");
-}]).bind("component.Dice", ["/=", "ability.=", "=", "trigger.=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "ability.=", "=", "=", "=", "=", function ($, Ability, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template) {
+}]).bind("component.Dice", ["/", "ability", "", "trigger", "component", "service", "ability", "trigger", "ability", "ability", "", "", "", "", "", function ($, Ability, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template) {
   var EL_NAME = "pb-c-dice";
   var ATTR_PAIR = "pb-dice-pair";
   var ATTR_SHOW_A = "show-a";

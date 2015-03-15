@@ -59,7 +59,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").bind("ability.Toggleable", ["ability.=", "=", "trigger.=", "=", function (Ability, Check, Key, Utils) {
+DI.prefix("pb").bind("ability.Toggleable", ["ability", "", "trigger", "", function (Ability, Check, Key, Utils) {
   // Private symbols.
   var __defaultEnabled__ = Symbol();
   var __defaultActive__ = Symbol();

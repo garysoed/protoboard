@@ -57,7 +57,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", function (Events, Move, Trigger, $registry) {
+DI.prefix("pb").bind("trigger.Key", ["", "service", "trigger", "", function (Events, Move, Trigger, $registry) {
   // Private symbols.
   var __active__ = Symbol();
   var __key__ = Symbol("key");

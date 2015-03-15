@@ -20,7 +20,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
+DI.prefix("pb").bind("ability.Abilities", ["", function (Utils) {
   // Private symbols.
   var __abilities__ = Symbol("abilities");
   var __element__ = Symbol();
