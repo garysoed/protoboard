@@ -11,7 +11,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-DI.prefix("pb.trigger").bind("Triggers", ["", "", function (Click, Key) {
+DI.prefix("pb.trigger").bind("Triggers", ["=", "=", function (Click, Key) {
   // Private symbols
   var __observer__ = Symbol();
   var __target__ = Symbol();

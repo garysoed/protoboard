@@ -19,7 +19,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-DI.prefix("pb").bind("Check", ["", function (Utils) {
+DI.prefix("pb").bind("Check", ["=", function (Utils) {
   var check = function (input) {
     return new Check(input);
   };
