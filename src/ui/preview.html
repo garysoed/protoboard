@@ -12,7 +12,7 @@
 DI
     .prefix('pb')
     .bind('ui.Preview', [
-        'service', '', '', 'service', '', '',
+        'service.=', '=', '=', 'service.=', '=', '=',
         (Config, Events, PbElement, Preview, $registry, Utils) => {
 
   /**

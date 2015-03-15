@@ -41,19 +41,19 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['', doc => doc.querySelector('template')])
+    .with('template', ['=', doc => doc.querySelector('template')])
     .bind('region.Deck', [
-        '',
-        'ability',
-        'service',
-        'ability',
-        'ability',
-        'trigger',
-        'region',
-        'ability',
-        '',
-        '',
-        '',
+        '=',
+        'ability.=',
+        'service.=',
+        'ability.=',
+        'ability.=',
+        'trigger.=',
+        'region.=',
+        'ability.=',
+        '=',
+        '=',
+        '=',
         (
             $registry,
             Abilities,

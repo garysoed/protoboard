@@ -16,7 +16,7 @@
 DI
     .prefix('pb')
     .bind('trigger.Key', [
-        '', 'service', 'trigger', '',
+        '=', 'service.=', 'trigger.=', '=',
         (Events, Move, Trigger, $registry) => {
   // Private symbols.
   const __active__ = Symbol();

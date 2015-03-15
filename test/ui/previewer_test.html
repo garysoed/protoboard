@@ -15,31 +15,10 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service', Registry => new Registry()])
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run([
-          '/',
-          '/',
-          '/',
-          '',
-          'service',
-          '',
-          'service',
-          '',
-          'ui',
-          '',
-          '',
-            (expect,
-            _,
-            _M,
-            doc,
-            Preview,
-            Utils,
-            Config,
-            Events,
-            Previewer,
-            t,
-            $registry) => {
+      .run(['/=', '/=', '/=', '=', 'service.=', '=', 'service.=', '=', 'ui.=', '=', '=',
+          (expect, _, _M, doc, Preview, Utils, Config, Events, Previewer, t, $registry) => {
 
   let __onPreviewElChanged__ = t.getSymbol(Previewer.prototype, 'onPreviewElChanged');
 

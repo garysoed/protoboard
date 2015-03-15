@@ -6,7 +6,7 @@
 
 DI
     .prefix('pb')
-    .bind('service.Preview', ['', (Utils) => {
+    .bind('service.Preview', ['=', (Utils) => {
   /**
    * Service that lets the user preview an element on mouse hover.
    *

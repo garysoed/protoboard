@@ -12,10 +12,11 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service', Registry => new Registry()])
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('service.Move', { add() {} })
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/', '/', '/', '', 'service', 'ability', (expect, _, $, doc, Move, Pickable) => {
+      .run(['/=', '/=', '/=', '=', 'service.=', 'ability.=',
+          (expect, _, $, doc, Move, Pickable) => {
 
   describe('ability.Pickable', () => {
     let el;

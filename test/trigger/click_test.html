@@ -12,8 +12,9 @@
   DI
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .with('Events', ['', t => t.createFakeEvents()])
-      .run(['/', '/', '/', 'trigger', '', '', '', (_, _M, expect, Click, Events, doc, t) => {
+      .with('Events', ['=', t => t.createFakeEvents()])
+      .run(['/=', '/=', '/=', 'trigger.=', '=', '=', '=',
+          (_, _M, expect, Click, Events, doc, t) => {
 
     describe('Click', () => {
       let click;

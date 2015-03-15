@@ -32,7 +32,7 @@
  *
  *      <script>
  *        // Required
- *        DI.run(['pb', function(Bootstrap) { Bootstrap.run(document); }]);
+ *        DI.run(['pb.=', function(Bootstrap) { Bootstrap.run(document); }]);
  *      </script>
  *    </body>
  *    ```

@@ -21,7 +21,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-DI.prefix("pb").bind("Events", ["", "/", "", function (HammerWrapper, Keypress, Utils) {
+DI.prefix("pb").bind("Events", ["=", "/=", "=", function (HammerWrapper, Keypress, Utils) {
   // Private symbols.
   var __element__ = Symbol();
   var __elementScopeMap__ = Symbol();

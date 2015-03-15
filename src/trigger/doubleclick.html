@@ -7,7 +7,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('trigger.DoubleClick', ['', '', 'trigger', (Events, HammerWrapper, Trigger) => {
+    .bind('trigger.DoubleClick', ['=', '=', 'trigger.=', (Events, HammerWrapper, Trigger) => {
 
   /**
    * Triggers an ability when the element is double clicked.

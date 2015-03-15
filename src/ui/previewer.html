@@ -17,9 +17,9 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['', doc => doc.querySelector('template')])
+    .with('template', ['=', doc => doc.querySelector('template')])
     .bind('ui.Previewer', [
-        '', 'service', '', '', 'service', '', '', '', (
+        '=', 'service.=', '=', '=', 'service.=', '=', '=', '=', (
         $registry, Config, Events, PbElement, Preview, Utils, doc, template) => {
 
   /**

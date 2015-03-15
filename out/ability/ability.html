@@ -12,7 +12,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-DI.prefix("pb").bind("ability.Ability", ["/", "trigger", function ($, Triggers) {
+DI.prefix("pb").bind("ability.Ability", ["/=", "trigger.=", function ($, Triggers) {
   // Private symbols.
   var __name__ = Symbol();
   var __defaultTrigger__ = Symbol("defaultTrigger");

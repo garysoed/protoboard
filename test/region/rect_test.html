@@ -18,7 +18,7 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service', Registry => new Registry()])
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('service.Move', {
         movedElements: [],
         remove: () => {},
@@ -27,7 +27,7 @@
       })
       .constant('doc', document.currentScript.ownerDocument)
       .run([
-          '/', '/', '', 'service', 'region', '', '',
+          '/=', '/=', '=', 'service.=', 'region.=', '=', '=',
           (expect, _, doc, Move, Rect, Utils, t) => {
 
   let FlexDroppable = Rect.FlexDroppable;

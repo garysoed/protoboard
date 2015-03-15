@@ -314,7 +314,7 @@
     </table>
 
     <script>
-      DI.prefix('pb').run(['', 'service', function(Bootstrap, Template) {
+      DI.run(['pb.=', 'pb.service.=', function(Bootstrap, Template) {
         Template
             .addPartial('card', document.querySelector('template#card'))
             .addData('cards', [

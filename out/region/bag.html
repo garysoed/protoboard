@@ -90,11 +90,11 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
   return doc.querySelector("template#main");
-}])["with"]("placeHolderTmp", ["", function (doc) {
+}])["with"]("placeHolderTmp", ["=", function (doc) {
   return doc.querySelector("template#placeholder");
-}]).bind("region.Bag", ["", "trigger", "service", "ability", "ability", "trigger", "service", "ability", "region", "", "", "", "", function ($registry, Click, Config, Droppable, Helpable, Key, Move, Pickable, Region, Utils, doc, template, placeHolderTmp) {
+}]).bind("region.Bag", ["=", "trigger.=", "service.=", "ability.=", "ability.=", "trigger.=", "service.=", "ability.=", "region.=", "=", "=", "=", "=", function ($registry, Click, Config, Droppable, Helpable, Key, Move, Pickable, Region, Utils, doc, template, placeHolderTmp) {
   var EL_NAME = "pb-r-bag";
   var ATTR_PLACEHOLDER = "pb-placeholder";
   var ATTR_PLACEHOLDER_CONTENT = "pb-placeholder-content";

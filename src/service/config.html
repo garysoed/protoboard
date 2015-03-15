@@ -6,7 +6,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('service.Config', ['ability', (Abilities) => {
+    .bind('service.Config', ['ability.=', (Abilities) => {
   const configuration = {};
 
   const Config = {

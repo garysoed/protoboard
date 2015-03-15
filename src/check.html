@@ -7,7 +7,7 @@
 
 DI
     .prefix('pb')
-    .bind('Check', ['', Utils => {
+    .bind('Check', ['=', Utils => {
 
   // Private symbols.
   const __checked__ = Symbol();

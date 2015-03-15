@@ -66,9 +66,9 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["", function (doc) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
   return doc.querySelector("template");
-}]).bind("ui.Previewer", ["", "service", "", "", "service", "", "", "", function ($registry, Config, Events, PbElement, Preview, Utils, doc, template) {
+}]).bind("ui.Previewer", ["=", "service.=", "=", "=", "service.=", "=", "=", "=", function ($registry, Config, Events, PbElement, Preview, Utils, doc, template) {
   /**
    * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered
    * over. This works in tandem with {{#crossLink ui.Preview}}{{/crossLink}} and

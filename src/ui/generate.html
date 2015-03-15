@@ -10,7 +10,7 @@
 DI
     .prefix('pb')
     .bind('ui.Generate', [
-      '', '', 'service', '', 'service',
+      '=', '=', 'service.=', '=', 'service.=',
       ($registry, Check, Config, PbElement, Template) => {
 
   const EL_NAME = 'pb-u-generate';

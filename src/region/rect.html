@@ -35,20 +35,20 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['', doc => doc.querySelector('template')])
+    .with('template', ['=', doc => doc.querySelector('template')])
     .bind('region.Rect', [
-        '',
-        '',
-        'trigger',
-        'service',
-        'ability',
-        'ability',
-        'trigger',
-        'service',
-        'region',
-        '',
-        '',
-        '',
+        '=',
+        '=',
+        'trigger.=',
+        'service.=',
+        'ability.=',
+        'ability.=',
+        'trigger.=',
+        'service.=',
+        'region.=',
+        '=',
+        '=',
+        '=',
           ($registry,
           Check,
           Click,

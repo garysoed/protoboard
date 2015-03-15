@@ -44,20 +44,20 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['', doc => doc.querySelector('template')])
+    .with('template', ['=', doc => doc.querySelector('template')])
     .bind('region.Hand', [
-        '',
-        'ability',
-        '',
-        'service',
-        'ability',
-        'ability',
-        'trigger',
-        'service',
-        'region',
-        '',
-        '',
-        '',
+        '=',
+        'ability.=',
+        '=',
+        'service.=',
+        'ability.=',
+        'ability.=',
+        'trigger.=',
+        'service.=',
+        'region.=',
+        '=',
+        '=',
+        '=',
           ($registry,
           Abilities,
           Check,

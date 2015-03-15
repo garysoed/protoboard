@@ -39,5 +39,7 @@
     "spies": "git://github.com/garysoed/spies.git",
     "through2": "^0.6.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "di-js": "^1.0.2"
+  }
 }

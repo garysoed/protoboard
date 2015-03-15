@@ -8,7 +8,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('trigger.Click', ['', '', 'trigger', (Events, HammerWrapper, Trigger) => {
+    .bind('trigger.Click', ['=', '=', 'trigger.=', (Events, HammerWrapper, Trigger) => {
 
   /**
    * Triggers an ability when the element is clicked.

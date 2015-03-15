@@ -49,19 +49,19 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('templateMain', ['', doc => doc.querySelector('template#main')])
-    .with('templateRow', ['', doc => doc.querySelector('template#row')])
-    .with('templateCol', ['', doc => doc.querySelector('template#col')])
+    .with('templateMain', ['=', doc => doc.querySelector('template#main')])
+    .with('templateRow', ['=', doc => doc.querySelector('template#row')])
+    .with('templateCol', ['=', doc => doc.querySelector('template#col')])
     .bind('surface.RectGrid', [
-        '',
-        '',
-        'service',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
+        '=',
+        '=',
+        'service.=',
+        '=',
+        '=',
+        '=',
+        '=',
+        '=',
+        '=',
           ($registry,
           Check,
           Config,

@@ -63,9 +63,9 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['', doc => doc.querySelector('template')])
+    .with('template', ['=', doc => doc.querySelector('template')])
     .bind('ability.Helpable', [
-        'ability', 'ability', '', 'trigger', '', '', '', '',
+        'ability.=', 'ability.=', '=', 'trigger.=', '=', '=', '=', '=',
         (Abilities, Ability, Events, Key, Utils, doc, template, $registry) => {
 
   let displayEl = null;

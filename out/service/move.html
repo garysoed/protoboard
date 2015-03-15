@@ -46,7 +46,7 @@ var _defineProperty = function (obj, key, value) {
   });
 };
 
-DI.prefix("pb").bind("service.Move", ["", "", "", function ($registry, Events, Utils) {
+DI.prefix("pb").bind("service.Move", ["=", "=", "=", function ($registry, Events, Utils) {
   // Private symbols.
   var __container__ = Symbol("container");
   var __document__ = Symbol();

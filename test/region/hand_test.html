@@ -20,9 +20,10 @@
         movedElements: [],
         mouseX: 0
       })
-      .with('$registry', ['service', Registry => new Registry()])
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/', '/', '/', '', 'region', 'service', '', (expect, _, $, doc, Hand, Move, Utils) => {
+      .run(['/=', '/=', '/=', '=', 'region.=', 'service.=', '=',
+          (expect, _, $, doc, Hand, Move, Utils) => {
 
   describe('region.Hand.ReorderableDroppable', () => {
     describe('#trigger', () => {

@@ -8,7 +8,7 @@
 DI
     .prefix('pb')
     .bind('ability.Pickable', [
-        'ability', '', 'trigger', 'service', 'trigger',
+        'ability.=', '=', 'trigger.=', 'service.=', 'trigger.=',
         (Ability, Check, Click, Move, Triggers) => {
 
   // Private symbols.

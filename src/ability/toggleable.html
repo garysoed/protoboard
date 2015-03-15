@@ -10,7 +10,7 @@
 DI
     .prefix('pb')
     .bind('ability.Toggleable', [
-        'ability', '', 'trigger', '',
+        'ability.=', '=', 'trigger.=', '=',
         (Ability, Check, Key, Utils) => {
 
   // Private symbols.

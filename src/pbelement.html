@@ -7,7 +7,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('PbElement', ['ability', '', (Abilities, Utils) => {
+    .bind('PbElement', ['ability.=', '=', (Abilities, Utils) => {
 
   // Private symbols.
   const __isCreated__ = Symbol();

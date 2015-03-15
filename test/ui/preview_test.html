@@ -14,10 +14,10 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service', Registry => new Registry()])
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
       .run([
-          '/', '/', '/', '', 'service', 'ui', '',
+          '/=', '/=', '/=', '=', 'service.=', 'ui.=', '=',
           (expect, _, _M, $registry, Config, Preview, doc) => {
 
   describe('ui.Preview', () => {

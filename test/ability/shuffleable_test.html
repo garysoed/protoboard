@@ -14,9 +14,9 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service', Registry => new Registry()])
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/', '/', '', 'ability', '', (expect, _, doc, Shuffleable, Utils) => {
+      .run(['/=', '/=', '=', 'ability.=', '=', (expect, _, doc, Shuffleable, Utils) => {
 
   describe('ability.Shuffleable', () => {
     let el;

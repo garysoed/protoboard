@@ -9,7 +9,7 @@
 DI
     .prefix('pb')
     .bind('ability.Droppable', [
-        'ability', '', 'trigger', 'service',
+        'ability.=', '=', 'trigger.=', 'service.=',
         (Ability, Check, Click, Move) => {
 
   // Private symbols.

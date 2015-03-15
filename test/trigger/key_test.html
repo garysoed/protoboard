@@ -18,10 +18,10 @@
         mouseY: 0,
         movedElements: new Set()
       })
-      .with('$registry', ['service', Registry => new Registry()])
-      .with('Events', ['', t => t.createFakeEvents()])
+      .with('$registry', ['service.=', Registry => new Registry()])
+      .with('Events', ['=', t => t.createFakeEvents()])
       .run([
-          '/', '/', '/', '', 'trigger', 'service', '', '',
+          '/=', '/=', '/=', '=', 'trigger.=', 'service.=', '=', '=',
           (_, _M, expect, Events, Key, Move, doc, t) => {
 
     describe('Key', () => {

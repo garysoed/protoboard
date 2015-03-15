@@ -35,7 +35,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('service.Move', ['', '', '', ($registry, Events, Utils) => {
+    .bind('service.Move', ['=', '=', '=', ($registry, Events, Utils) => {
 
   // Private symbols.
   const __container__ = Symbol('container');

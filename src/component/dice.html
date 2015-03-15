@@ -51,23 +51,22 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['', doc => doc.querySelector('template')])
+    .with('template', ['=', doc => doc.querySelector('template')])
     .bind('component.Dice', [
-        '/',
-        'ability',
-        '',
-        'trigger',
-        'component',
-        'service',
-        'ability',
-        'trigger',
-        'ability',
-        'ability',
-        '',
-        '',
-        '',
-        '',
-        '',
+        '/=',
+        'ability.=',
+        '=',
+        'trigger.=',
+        'component.=',
+        'service.=',
+        'ability.=',
+        'trigger.=',
+        'ability.=',
+        'ability.=',
+        '=',
+        '=',
+        '=',
+        '=',
           ($,
           Ability,
           Check,
