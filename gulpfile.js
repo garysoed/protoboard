@@ -134,13 +134,13 @@ gulp.task('ex', ['src'], function() {
       .pipe(gulp.dest('out/ex'));
 });
 
-gulp.task('6to5-test', ['jshint'], function() {
+gulp.task('test', ['jshint'], function() {
   return gulp.src(['./test/**/*_test.html', './test/testbase.html'])
       .pipe(sub6to5())
       .pipe(gulp.dest('out'));
 });
 
-gulp.task('karma', ['src', '6to5-test'], function(done) {
+gulp.task('karma', ['src', 'test'], function(done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
@@ -176,7 +176,7 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('compile', ['src', '6to5-test']);
+gulp.task('compile', ['src', 'test', 'ex']);
 gulp.task('pack', ['src', 'ex'], function() {
   return gulp.src('out/**/*')
       .pipe(zip('bin.zip'))

@@ -1,0 +1,65 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="utils.html">
+
+<template id="circle">
+  <svg id="root"
+       version="1.1"
+       baseProfile="full"
+       width="100" height="100"
+       viewBox="0 0 100 100"
+       xmlns="http://www.w3.org/2000/svg">
+    <circle class="pb-shape" cx="50" cy="50" r="50" fill="black" />
+  </svg>
+</template>
+
+<template id="hexagon">
+  <svg id="root"
+       version="1.1"
+       baseProfile="full"
+       width="100" height="100"
+       viewBox="0 0 115.47 100"
+       xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,50 28.867,0 86.603,0 115.47,50 86.603,100 28.867,100" fill="black" />
+  </svg>
+</template>
+
+<script>
+DI
+    .prefix('pb')
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('circleTemplate', ['=', doc => doc.querySelector('template#circle')])
+    .with('hexagonTemplate', ['=', doc => doc.querySelector('template#hexagon')])
+    .bind('ui.Shape',
+        ['/=', 'service.=', '=', '=', '=', '=', '=',
+        ($, Config, Utils, circleTemplate, hexagonTemplate, doc, $registry) => {
+
+  const EL_NAME = 'pb-u-shape';
+  const ATTR_NAME = 'shape';
+
+  class Shape extends HTMLElement {
+    createdCallback() {
+      let shape = $(this).attr(ATTR_NAME);
+      let template;
+      switch (shape) {
+        case 'circle':
+          template = circleTemplate;
+          break;
+        case 'hexagon':
+          template = hexagonTemplate;
+          break;
+        default:
+          throw new Error(`Unrecognized shape: ${shape}`);
+      }
+      this.createShadowRoot()
+          .appendChild(Utils.activateTemplate(template, doc));
+    }
+  }
+
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Shape.prototype);
+
+  return Shape;
+}]);
+</script>

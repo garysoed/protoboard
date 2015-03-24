@@ -1,0 +1,88 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="utils.html">
+
+<template id="circle">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle class="pb-shape" cx="50" cy="50" r="50" fill="black"></circle>
+  </svg>
+</template>
+
+<template id="hexagon">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 115.47 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,50 28.867,0 86.603,0 115.47,50 86.603,100 28.867,100" fill="black"></polygon>
+  </svg>
+</template>
+
+<script>"use strict";
+
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
+};
+
+var _inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) subClass.__proto__ = superClass;
+};
+
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("circleTemplate", ["=", function (doc) {
+  return doc.querySelector("template#circle");
+}])["with"]("hexagonTemplate", ["=", function (doc) {
+  return doc.querySelector("template#hexagon");
+}]).bind("ui.Shape", ["/=", "service.=", "=", "=", "=", "=", "=", function ($, Config, Utils, circleTemplate, hexagonTemplate, doc, $registry) {
+  var EL_NAME = "pb-u-shape";
+  var ATTR_NAME = "shape";
+
+  var Shape = (function (HTMLElement) {
+    function Shape() {
+      if (Object.getPrototypeOf(Shape) !== null) {
+        Object.getPrototypeOf(Shape).apply(this, arguments);
+      }
+    }
+
+    _inherits(Shape, HTMLElement);
+
+    _prototypeProperties(Shape, null, {
+      createdCallback: {
+        value: function createdCallback() {
+          var shape = $(this).attr(ATTR_NAME);
+          var template = undefined;
+          switch (shape) {
+            case "circle":
+              template = circleTemplate;
+              break;
+            case "hexagon":
+              template = hexagonTemplate;
+              break;
+            default:
+              throw new Error("Unrecognized shape: " + shape);
+          }
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+        },
+        writable: true,
+        enumerable: true,
+        configurable: true
+      }
+    });
+
+    return Shape;
+  })(HTMLElement);
+
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Shape.prototype);
+
+  return Shape;
+}]);</script>
+</head><body></body></html>
