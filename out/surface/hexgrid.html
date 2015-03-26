@@ -1,11 +1,7 @@
 <html><head><base href="..">
 
 <link rel="import" href="third_party/di.html">
-
-<link rel="import" href="pbelement.html">
-<link rel="import" href="service/config.html">
-<link rel="import" href="surface/grid.html">
-<link rel="import" href="utils.html">
+<link rel="import" href="ui/shape.html">
 
 <template id="main">
   <style>::content > * {
@@ -32,10 +28,22 @@ pb-u-shape::shadow #root {
   display: flex;
 }
 
+.row:not(:last-child) {
+  margin-bottom: -56.8px;
+}
+
+.row:nth-child(2n) {
+  margin-left: 75px;
+}
+
 .tile {
   width: 100px;
   height: 100px;
   position: relative;
+}
+
+.tile:not(:last-child) {
+  margin-right: 50px;
 }</style>
 
   <div id="root">
@@ -49,7 +57,7 @@ pb-u-shape::shadow #root {
 
 <template id="tile">
   <div class="tile">
-    <pb-u-shape shape="square"></pb-u-shape>
+    <pb-u-shape shape="hexagon"></pb-u-shape>
     <content></content>
   </div>
 </template>
@@ -82,55 +90,53 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   return doc.querySelector("template#row");
 }])["with"]("templateTile", ["=", function (doc) {
   return doc.querySelector("template#tile");
-}]).bind("surface.RectGrid", ["=", "service.=", "surface.=", "=", "=", "=", function ($registry, Config, Grid, templateMain, templateRow, templateTile) {
-  var ATTR_ROW = "pb-row";
-  var ATTR_COL = "pb-col";
-  var EL_NAME = "pb-s-rectgrid";
+}]).bind("surface.HexGrid", ["service.=", "surface.=", "=", "=", "=", "=", function (Config, Grid, $registry, templateMain, templateRow, templateTile) {
+  var EL_NAME = "pb-s-hexgrid";
 
   /**
-   * A surface that lays out its children in a rectangular grid. To use this, add attributes
-   * `pb-row` and `pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns
+   * A surface that lays out its children in a hexagonal grid. To use this, add attributes
+   * `pb-row` and `pb-col` to the element `pb-s-hexgrid`. These are the number of rows and columns
    * in the grid.
    *
    * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes
    * on them to indicate their positions in the grid.
    *
    * ```html
-   * <pb-s-rectgrid pb-row="2" pb-col="3">
+   * <pb-s-hexgrid pb-row="2" pb-col="3">
    *   <!-- Third column is empty -->
    *   <div pb-row="0" pb-col="0">Top Left</div>
-   *   <div pb-row="0" pb-col="1">Top Right</div>
+   *   <div pb-row="0" pb-col="1">Top Middle</div>
    *   <div pb-row="1" pb-col="0">Bottom Left</div>
-   *   <div pb-row="1" pb-col="1">Bottom Right</div>
-   * </pb-s-rectgrid>
+   *   <div pb-row="1" pb-col="1">Bottom Middle</div>
+   * </pb-s-hexgrid>
    * ```
    *
-   * You can customize the tiles by using `pb-s-rectgrid::shadow pb-u-shape::shadow .pb-shape` CSS
+   * You can customize the tiles by using `pb-s-hexgrid::shadow pb-u-shape::shadow .pb-shape` CSS
    * selector. Since the tiles use SVG, you will need to use SVG attributes like `fill`.
    *
    * To select tile on a specific location add selector by attribute `pb-row` and `pb-col`. For
    * example, to color tile (2, 3) red:
    *
    * ```css
-   * pb-s-rectgrid::shadow [pb-col="2"][pb-row="3"] pb-u-shape::shadow .pb-shape {
+   * pb-s-hexgrid::shadow [pb-col="2"][pb-row="3"] pb-u-shape::shadow .pb-shape {
    *   fill: red;
    * }
    * ```
    *
-   * @class surface.RectGrid
+   * @class surface.HexGrid
    * @since 0.2.0
    * @extends surface.Grid
    */
-  var RectGrid = (function (Grid) {
-    function RectGrid() {
-      if (Object.getPrototypeOf(RectGrid) !== null) {
-        Object.getPrototypeOf(RectGrid).apply(this, arguments);
+  var HexGrid = (function (Grid) {
+    function HexGrid() {
+      if (Object.getPrototypeOf(HexGrid) !== null) {
+        Object.getPrototypeOf(HexGrid).apply(this, arguments);
       }
     }
 
-    _inherits(RectGrid, Grid);
+    _inherits(HexGrid, Grid);
 
-    _prototypeProperties(RectGrid, null, {
+    _prototypeProperties(HexGrid, null, {
       rootEl: {
 
         /**
@@ -194,12 +200,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       }
     });
 
-    return RectGrid;
+    return HexGrid;
   })(Grid);
 
   Config.add(EL_NAME);
-  $registry.add(EL_NAME, RectGrid.prototype);
+  $registry.add(EL_NAME, HexGrid.prototype);
 
-  return RectGrid;
-}]);</script>
-</head><body></body></html>
+  return HexGrid;
+}]);</script></head><body></body></html>

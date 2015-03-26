@@ -11,6 +11,7 @@
     <link rel="import" href="out/region/hand.html">
     <link rel="import" href="out/region/rect.html">
     <link rel="import" href="out/service/template.html">
+    <link rel="import" href="out/surface/hexgrid.html">
     <link rel="import" href="out/surface/rectgrid.html">
     <link rel="import" href="out/third_party/di.html">
     <link rel="import" href="out/ui/generate.html">
@@ -18,8 +19,10 @@
     <link rel="import" href="out/ui/previewer.html">
     <link rel="import" href="out/ui/shape.html">
 
+    <link rel="stylesheet" type="text/css" href="out/ex/all/grid.css">
     <link rel="stylesheet" type="text/css" href="out/ex/all/previewer.css">
     <link rel="stylesheet" type="text/css" href="out/ex/all/regions.css">
+    <link rel="stylesheet" type="text/css" href="out/ex/all/shape.css">
     <link rel="stylesheet" type="text/css" href="out/ex/all/table.css">
     <link rel="stylesheet" type="text/css" href="out/ex/all/token.css">
 
@@ -29,15 +32,6 @@
       .front {
         line-height: 100px;
         text-align: center;
-      }
-
-      pb-s-rectgrid > pb-r-deck {
-        display: block;
-      }
-
-      pb-s-rectgrid > pb-r-deck[pb-col="0"][pb-row="0"],
-      pb-s-rectgrid > pb-r-deck[pb-col="1"][pb-row="1"] {
-        background-color: black;
       }
     </style>
   </head>
@@ -117,9 +111,6 @@
             </pb-c-token>
             <pb-c-token>
               <div class="blue triangle"></div>
-            </pb-c-token>
-            <pb-c-token>
-              <pb-u-shape shape="hexagon"></pb-u-shape>
             </pb-c-token>
           </td>
           <td>
@@ -272,6 +263,27 @@
             </ul>
           </td>
         </tr>
+        <tr>
+          <td>Hex Grid</td>
+          <td>
+            <pb-s-hexgrid pb-row="5" pb-col="3">
+              <pb-r-bag pb-col="0" pb-row="0"></pb-r-bag>
+              <pb-r-bag pb-col="1" pb-row="0"></pb-r-bag>
+              <pb-r-bag pb-col="0" pb-row="1"></pb-r-bag>
+              <pb-r-bag pb-col="1" pb-row="1"></pb-r-bag>
+              <pb-r-bag pb-col="2" pb-row="4"></pb-r-bag>
+            </pb-s-hexgrid>
+          </td>
+          <td>
+            Layout components in a hexagonal grid
+          </td>
+          <td>
+            <ul>
+              <li>Hex board</li>
+              <li>Catan board</li>
+            </ul>
+          </td>
+        </tr>
       </tbody>
 
       <thead>
@@ -290,6 +302,18 @@
             This displays the content of a <code>pb-u-preview</code> element when a mouse hovers
             over its parent element. This is useful to display more details of a component, while
             preserving screen real estate. See the Card for an example.
+          </td>
+        </tr>
+        <tr>
+          <td>Shapes</td>
+          <td>
+            <pb-u-shape shape="circle"></pb-u-shape>
+            <pb-u-shape class="gold" shape="square"></pb-u-shape>
+            <pb-u-shape shape="hexagon"></pb-u-shape>
+          </td>
+          <td>
+            Use <code>pb-u-shape</code> to create predefined shapes. You can also customize them
+            using CSS.
           </td>
         </tr>
         <tr>
@@ -312,6 +336,9 @@
                 </div>
               </template>
             </pb-u-generate>
+          </td>
+          <td>
+            You can use Handlebar templates to generate elements easily.
           </td>
         </tr>
       </tbody>

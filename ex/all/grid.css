@@ -1,0 +1,29 @@
+pb-s-rectgrid > pb-r-deck {
+  height: 100px;
+  width: 100px;
+  box-sizing: border-box;
+}
+
+pb-s-rectgrid::shadow [pb-col="0"][pb-row="0"] pb-u-shape::shadow .pb-shape,
+pb-s-rectgrid::shadow [pb-col="1"][pb-row="1"] pb-u-shape::shadow .pb-shape {
+  fill: black;
+  fill-opacity: 1;
+}
+
+pb-s-hexgrid::shadow pb-u-shape::shadow .pb-shape {
+  fill-opacity: 1;
+}
+
+pb-s-hexgrid::shadow [pb-row="0"] pb-u-shape::shadow .pb-shape,
+pb-s-hexgrid::shadow [pb-row="3"] pb-u-shape::shadow .pb-shape {
+  fill: crimson;
+}
+
+pb-s-hexgrid::shadow [pb-row="1"] pb-u-shape::shadow .pb-shape,
+pb-s-hexgrid::shadow [pb-row="4"] pb-u-shape::shadow .pb-shape {
+  fill: forestgreen;
+}
+
+pb-s-hexgrid::shadow [pb-row="2"] pb-u-shape::shadow .pb-shape {
+  fill: cornflowerblue;
+}

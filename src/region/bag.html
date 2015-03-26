@@ -13,10 +13,15 @@
 
 <template id="main">
   <style>
-    #root {
-      border: var(--border);
+    :host {
       height: var(--component-height);
       width: var(--component-width);
+    }
+
+    #root {
+      border: var(--border);
+      width: 100%;
+      height: 100%;
     }
 
     /* The placeholder */

@@ -25,15 +25,27 @@
   </svg>
 </template>
 
+<template id="square">
+  <svg id="root"
+       version="1.1"
+       baseProfile="full"
+       width="100" height="100"
+       viewBox="0 0 100 100"
+       xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,0 100,0 100,100 0,100" fill="black" />
+  </svg>
+</template>
+
 <script>
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
     .with('circleTemplate', ['=', doc => doc.querySelector('template#circle')])
     .with('hexagonTemplate', ['=', doc => doc.querySelector('template#hexagon')])
+    .with('squareTemplate', ['=', doc => doc.querySelector('template#square')])
     .bind('ui.Shape',
-        ['/=', 'service.=', '=', '=', '=', '=', '=',
-        ($, Config, Utils, circleTemplate, hexagonTemplate, doc, $registry) => {
+        ['/=', 'service.=', '=', '=', '=', '=', '=', '=',
+        ($, Config, Utils, circleTemplate, hexagonTemplate, squareTemplate, doc, $registry) => {
 
   const EL_NAME = 'pb-u-shape';
   const ATTR_NAME = 'shape';
@@ -48,6 +60,9 @@ DI
           break;
         case 'hexagon':
           template = hexagonTemplate;
+          break;
+        case 'square':
+          template = squareTemplate;
           break;
         default:
           throw new Error(`Unrecognized shape: ${shape}`);

@@ -15,6 +15,12 @@
   </svg>
 </template>
 
+<template id="square">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,0 100,0 100,100 0,100" fill="black"></polygon>
+  </svg>
+</template>
+
 <script>"use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) {
@@ -41,7 +47,9 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("c
   return doc.querySelector("template#circle");
 }])["with"]("hexagonTemplate", ["=", function (doc) {
   return doc.querySelector("template#hexagon");
-}]).bind("ui.Shape", ["/=", "service.=", "=", "=", "=", "=", "=", function ($, Config, Utils, circleTemplate, hexagonTemplate, doc, $registry) {
+}])["with"]("squareTemplate", ["=", function (doc) {
+  return doc.querySelector("template#square");
+}]).bind("ui.Shape", ["/=", "service.=", "=", "=", "=", "=", "=", "=", function ($, Config, Utils, circleTemplate, hexagonTemplate, squareTemplate, doc, $registry) {
   var EL_NAME = "pb-u-shape";
   var ATTR_NAME = "shape";
 
@@ -65,6 +73,9 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("c
               break;
             case "hexagon":
               template = hexagonTemplate;
+              break;
+            case "square":
+              template = squareTemplate;
               break;
             default:
               throw new Error("Unrecognized shape: " + shape);

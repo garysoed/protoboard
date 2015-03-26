@@ -32,7 +32,7 @@ p {
 
 DI.prefix("pb").bind("$registry", ["service.=", function (Registry) {
   return new Registry();
-}]).bind("Bootstrap", ["=", "service.=", "=", "region.Bag?", "component.Card?", "component.Dice?", "region.Deck?", "ui.Generate?", "region.Hand?", "ui.Preview?", "ui.Previewer?", "ui.Shape?", "region.Rect?", "surface.RectGrid?", "component.Token?", function ($registry, Config, Utils) {
+}]).bind("Bootstrap", ["=", "service.=", "=", "region.Bag?", "component.Card?", "component.Dice?", "region.Deck?", "ui.Generate?", "region.Hand?", "ui.Preview?", "ui.Previewer?", "ui.Shape?", "region.Rect?", "surface.HexGrid?", "surface.RectGrid?", "component.Token?", function ($registry, Config, Utils) {
   return {
     run: function run(document) {
       document.addEventListener("DOMContentLoaded", function () {
