@@ -50,7 +50,32 @@ DI
   const EL_NAME = 'pb-u-shape';
   const ATTR_NAME = 'shape';
 
+  /**
+   * Creates a shape. To create a shape, use the `pb-u-shape` element and specify the attribute
+   * `shape`. Some supported shapes:
+   * - circle
+   * - hexagon
+   * - square
+   *
+   * ```html
+   * <!-- Creates a circle -->
+   * <pb-u-shape shape="circle"></pb-u-shape>
+   * ```
+   *
+   * The created shape is an embedded SVG. So you can customize it using CSS. Use
+   * `pb-u-shape::shadow .pb-shape` to select the shape.
+   *
+   * @class ui.Shape
+   * @since 0.2.0
+   * @extends HTMLElement
+   */
   class Shape extends HTMLElement {
+
+    /**
+     * Called when the element is created.
+     *
+     * @method createdCallback
+     */
     createdCallback() {
       let shape = $(this).attr(ATTR_NAME);
       let template;
