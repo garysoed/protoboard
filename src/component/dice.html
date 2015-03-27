@@ -55,6 +55,7 @@ DI
     .bind('component.Dice', [
         '/=',
         'ability.=',
+        '/=',
         '=',
         'trigger.=',
         'component.=',
@@ -69,6 +70,7 @@ DI
         '=',
           ($,
           Ability,
+          Chance,
           Check,
           Click,
           Component,
@@ -163,7 +165,7 @@ DI
     trigger(el) {
       super.trigger(el);
       if (this[__isEnabled__](el)) {
-        $(el).attr(ATTR_SHOW_A, Math.random() > 0.5);
+        $(el).attr(ATTR_SHOW_A, Chance.bool());
       }
     }
   }

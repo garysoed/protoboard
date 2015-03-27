@@ -17,6 +17,7 @@
     "handlebars": "~2.0.0",
     "hammerjs": "~2.0.4",
     "Keypress": "~2.1.0",
-    "animate.css": "~3.2.1"
+    "animate.css": "~3.2.1",
+    "chance": "~0.7.3"
   }
 }

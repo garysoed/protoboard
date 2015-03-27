@@ -1,0 +1,12 @@
+<html><head><base href="../..">
+
+<script src="bower_components/chance/chance.js">"use strict";</script>
+
+<link rel="import" href="out/third_party/di.html">
+
+<script>"use strict";
+
+DI.bind("Chance", ["pb.=?", function (seed) {
+  return new Chance(seed);
+}]);</script>
+</head><body></body></html>

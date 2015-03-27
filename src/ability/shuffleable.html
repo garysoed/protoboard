@@ -2,6 +2,7 @@
 
 <link rel="import" href="ability/ability.html">
 <link rel="import" href="check.html">
+<link rel="import" href="third_party/chance.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="utils.html">
@@ -12,8 +13,8 @@
 DI
     .prefix('pb')
     .bind('ability.Shuffleable', [
-        '/=', 'ability.=', '=', 'trigger.=', '=',
-        ($, Ability, Check, Click, Utils) => {
+        '/=', 'ability.=', '/=', '=', 'trigger.=', '=',
+        ($, Ability, Chance, Check, Click, Utils) => {
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
@@ -58,10 +59,7 @@ DI
      */
     trigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
-        let pairs = Utils.toArray(el.children).map(child => [child, Math.random()]);
-        pairs.sort((a, b) => Utils.compare(a[1], b[1]));
-
-        let shuffled = pairs.map(pair => pair[0]);
+        let shuffled = Chance.shuffle(Utils.toArray(el.children));
         shuffled.forEach(shuffledEl => {
           el.appendChild(shuffledEl);
 

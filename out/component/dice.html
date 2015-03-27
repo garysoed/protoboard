@@ -100,7 +100,7 @@ var _inherits = function (subClass, superClass) {
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
   return doc.querySelector("template");
-}]).bind("component.Dice", ["/=", "ability.=", "=", "trigger.=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "ability.=", "=", "=", "=", "=", function ($, Ability, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template) {
+}]).bind("component.Dice", ["/=", "ability.=", "/=", "=", "trigger.=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "ability.=", "=", "=", "=", "=", function ($, Ability, Chance, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template) {
   var EL_NAME = "pb-c-dice";
   var ATTR_PAIR = "pb-dice-pair";
   var ATTR_SHOW_A = "show-a";
@@ -195,7 +195,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
         value: function trigger(el) {
           _get(Object.getPrototypeOf(Rollable.prototype), "trigger", this).call(this, el);
           if (this[__isEnabled__](el)) {
-            $(el).attr(ATTR_SHOW_A, Math.random() > 0.5);
+            $(el).attr(ATTR_SHOW_A, Chance.bool());
           }
         },
         writable: true,

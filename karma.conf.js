@@ -19,11 +19,10 @@ module.exports = function(config) {
       { pattern: 'out/**/!(*_test).html', included: false },
 
       // Deps
+      { pattern: 'bower_components/chance/chance.js', included: false },
       { pattern: 'bower_components/jquery/dist/jquery.js', included: false },
-      { pattern: 'bower_components/jQuery-contextMenu/src/jquery.contextMenu.js', included: false },
       { pattern: 'bower_components/hammerjs/hammer.js', included: false },
       { pattern: 'bower_components/handlebars/handlebars.js', included: false },
-      { pattern: 'bower_components/jquery/dist/jquery.js', included: false },
       { pattern: 'bower_components/Keypress/keypress.js', included: false },
       { pattern: 'node_modules/chai/chai.js', included: false },
       { pattern: 'node_modules/di-js/out/bin.min.js', included: false },

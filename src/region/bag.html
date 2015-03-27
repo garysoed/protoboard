@@ -60,6 +60,7 @@ DI
     .with('placeHolderTmp', ['=', doc => doc.querySelector('template#placeholder')])
     .bind('region.Bag', [
         '=',
+        '/=',
         'trigger.=',
         'service.=',
         'ability.=',
@@ -73,6 +74,7 @@ DI
         '=',
         '=',
           ($registry,
+          Chance,
           Click,
           Config,
           Droppable,
@@ -120,9 +122,8 @@ DI
     trigger(el) {
       let candidates = Utils.toArray(el.children)
           .filter(child => $(child).attr(ATTR_PLACEHOLDER) === undefined);
-      let moved = candidates[Math.round(Math.random() * (candidates.length - 1))];
-      if (moved) {
-        Move.add(moved);
+      if (candidates.length > 0) {
+        Move.add(Chance.pick(candidates));
       }
     }
   }

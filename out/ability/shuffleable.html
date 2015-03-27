@@ -2,6 +2,7 @@
 
 <link rel="import" href="ability/ability.html">
 <link rel="import" href="check.html">
+<link rel="import" href="third_party/chance.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="utils.html">
@@ -52,7 +53,7 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "=", "trigger.=", "=", function ($, Ability, Check, Click, Utils) {
+DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "/=", "=", "trigger.=", "=", function ($, Ability, Chance, Check, Click, Utils) {
   // Private symbols.
   var __defaultEnabled__ = Symbol();
 
@@ -111,16 +112,7 @@ DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "=", "trigger.="
          */
         value: function trigger(el) {
           if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
-            var pairs = Utils.toArray(el.children).map(function (child) {
-              return [child, Math.random()];
-            });
-            pairs.sort(function (a, b) {
-              return Utils.compare(a[1], b[1]);
-            });
-
-            var shuffled = pairs.map(function (pair) {
-              return pair[0];
-            });
+            var shuffled = Chance.shuffle(Utils.toArray(el.children));
             shuffled.forEach(function (shuffledEl) {
               el.appendChild(shuffledEl);
 
