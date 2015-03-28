@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>PbElement Unit Tests</title>
+
+  <link rel="import" href="di.html">
+  <link rel="import" href="testbase.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .constant('doc', document.currentScript.ownerDocument)
+      .run(['/=', '/=', '/=', '=', '=', (expect, _, $, doc, PbElement) => {
+
+  describe('PbElement', () => {
+    describe('#createdCallback', () => {
+      let el;
+      let pbElement;
+
+      beforeEach(done => {
+        el = doc.createElement('div');
+        done();
+      });
+
+      it('should create id with the given prefix', () => {
+        let prefix = 'prefix';
+        $(el).attr('pb-id', prefix);
+
+        Object.setPrototypeOf(el, PbElement.prototype);
+        el.createdCallback();
+
+        expect($(el).attr('pb-id')).to.be.equal(`${prefix}-0`);
+      });
+      it('should increment the number for the second element', () => {
+        let prefix = 'prefix2';
+        let el2 = doc.createElement('div');
+
+        $(el).attr('pb-id', prefix);
+        $(el2).attr('pb-id', prefix);
+
+        Object.setPrototypeOf(el, PbElement.prototype);
+        el.createdCallback();
+
+        Object.setPrototypeOf(el2, PbElement.prototype);
+        el2.createdCallback();
+
+        expect($(el2).attr('pb-id')).to.be.equal(`${prefix}-1`);
+      });
+      it('should default the prefix to the element\'s name', () => {
+        Object.setPrototypeOf(el, PbElement.prototype);
+        el.createdCallback();
+
+        expect($(el).attr('pb-id')).to.be.equal('div-0');
+      });
+    });
+  });
+  }]);
+  </script>
+</body>

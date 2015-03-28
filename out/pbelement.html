@@ -26,9 +26,12 @@ var _inherits = function (subClass, superClass) {
   if (superClass) subClass.__proto__ = superClass;
 };
 
-DI.prefix("pb").bind("PbElement", ["ability.=", "=", function (Abilities, Utils) {
+DI.prefix("pb").bind("PbElement", ["/=", "ability.=", "=", function ($, Abilities, Utils) {
   // Private symbols.
   var __isCreated__ = Symbol();
+
+  var ATTR_ID = "pb-id";
+  var IDS = new Map();
 
   /**
    * Base class of all ProtoBoard elements.
@@ -56,6 +59,17 @@ DI.prefix("pb").bind("PbElement", ["ability.=", "=", function (Abilities, Utils)
         value: function createdCallback() {
           Abilities.init(this);
           this[__isCreated__] = false;
+
+          var nameParts = this.nodeName.toLowerCase().split("-");
+          var prefix = $(this).attr(ATTR_ID) || nameParts[nameParts.length - 1];
+
+          if (IDS.has(prefix)) {
+            IDS.set(prefix, IDS.get(prefix) + 1);
+          } else {
+            IDS.set(prefix, 0);
+          }
+
+          $(this).attr(ATTR_ID, "" + prefix + "-" + IDS.get(prefix));
         },
         writable: true,
         enumerable: true,
