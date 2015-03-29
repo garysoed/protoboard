@@ -67,100 +67,36 @@ footer {
 
 <script>"use strict";
 
-var _slicedToArray = function (arr, i) {
-  if (Array.isArray(arr)) {
-    return arr;
-  } else {
-    var _arr = [];
+var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
 
-    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-      _arr.push(_step.value);
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      if (i && _arr.length === i) break;
-    }
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-    return _arr;
-  }
-};
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
   return doc.querySelector("template");
 }]).bind("ability.Helpable", ["ability.=", "ability.=", "=", "trigger.=", "=", "=", "=", "=", function (Abilities, Ability, Events, Key, Utils, doc, template, $registry) {
+
   var displayEl = null;
 
-  var Helpable = (function (Ability) {
-    /**
-     * Displays the triggers for all registered abilities.
-     *
-     * @constructor
-     * @class ability.Helpable
-     * @param {string} [name=pb-helpable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=ability.Key] Default trigger. Defaults to the '?'
-     *    key.
-     * @extends ability.Ability
-     */
+  var Helpable = (function (_Ability) {
     function Helpable() {
-      var _this = this;
       var name = arguments[0] === undefined ? "pb-helpable" : arguments[0];
       var defaultTrigger = arguments[1] === undefined ? new Key("?") : arguments[1];
-      return (function () {
-        _get(Object.getPrototypeOf(Helpable.prototype), "constructor", _this).call(_this, name, defaultTrigger);
-      })();
+
+      _classCallCheck(this, Helpable);
+
+      _get(Object.getPrototypeOf(Helpable.prototype), "constructor", this).call(this, name, defaultTrigger);
     }
 
-    _inherits(Helpable, Ability);
+    _inherits(Helpable, _Ability);
 
-    _prototypeProperties(Helpable, null, {
+    _createClass(Helpable, {
       doTrigger: {
-
-        /**
-         * Displays the triggers for all abilities registered to this element.
-         *
-         * @method doTrigger
-         * @param {Element} el The element whose abilities should be displayed.
-         */
         value: function doTrigger(el) {
           var abilities = Abilities.of(el).getAll();
           displayEl.innerHTML = "";
@@ -171,23 +107,39 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
           headerEl.innerText = el.nodeName;
           displayEl.appendChild(headerEl);
 
-          for (var _iterator = abilities[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-            var _ref = _step.value;
-            var _ref2 = _slicedToArray(_ref, 2);
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
 
-            var name = _ref2[0];
-            var ability = _ref2[1];
-            var entry = doc.createElement("div");
-            entry.classList.add("entry");
-            entry.innerHTML = "<div class=\"trigger\">" + ability.getTrigger(el).helpText + "</div>: " + name;
-            displayEl.appendChild(entry);
+          try {
+            for (var _iterator = abilities[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var _step$value = _slicedToArray(_step.value, 2);
+
+              var _name = _step$value[0];
+              var ability = _step$value[1];
+
+              var entry = doc.createElement("div");
+              entry.classList.add("entry");
+              entry.innerHTML = "<div class=\"trigger\">" + ability.getTrigger(el).helpText + "</div>: " + _name;
+              displayEl.appendChild(entry);
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator["return"]) {
+                _iterator["return"]();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
           }
 
           displayEl.style.display = "";
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 

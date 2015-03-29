@@ -6,56 +6,31 @@
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").bind("PbElement", ["/=", "ability.=", "=", function ($, Abilities, Utils) {
-  // Private symbols.
   var __isCreated__ = Symbol();
 
   var ATTR_ID = "pb-id";
   var IDS = new Map();
 
-  /**
-   * Base class of all ProtoBoard elements.
-   *
-   * @class PbElement
-   * @extends HTMLElement
-   */
-  var PbElement = (function (HTMLElement) {
+  var PbElement = (function (_HTMLElement) {
     function PbElement() {
-      if (Object.getPrototypeOf(PbElement) !== null) {
-        Object.getPrototypeOf(PbElement).apply(this, arguments);
+      _classCallCheck(this, PbElement);
+
+      if (_HTMLElement != null) {
+        _HTMLElement.apply(this, arguments);
       }
     }
 
-    _inherits(PbElement, HTMLElement);
+    _inherits(PbElement, _HTMLElement);
 
-    _prototypeProperties(PbElement, null, {
+    _createClass(PbElement, {
       createdCallback: {
-
-        /**
-         * Called when the element is created
-         *
-         * @method createdCallback
-         */
         value: function createdCallback() {
           Abilities.init(this);
           this[__isCreated__] = false;
@@ -70,51 +45,20 @@ DI.prefix("pb").bind("PbElement", ["/=", "ability.=", "=", function ($, Abilitie
           }
 
           $(this).attr(ATTR_ID, "" + prefix + "-" + IDS.get(prefix));
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       attachedCallback: {
-
-        /**
-         * Called when the element is attached to the document.
-         *
-         * @method attachedCallback
-         */
         value: function attachedCallback() {
           this[__isCreated__] = true;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       detachedCallback: {
-
-        /**
-         * Called when the element is detached from the document.
-         *
-         * @method detachedCallback
-         */
-        value: function detachedCallback() {},
-        writable: true,
-        enumerable: true,
-        configurable: true
+        value: function detachedCallback() {}
       },
       isCreated: {
-
-        /**
-         * True iff the element has been created.
-         *
-         * @type boolean
-         * @property isCreated
-         * @final
-         */
         get: function () {
           return this[__isCreated__];
-        },
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 

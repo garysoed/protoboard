@@ -64,25 +64,11 @@ pb-u-shape::shadow #root {
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", ["=", function (doc) {
   return doc.querySelector("template#main");
@@ -91,112 +77,40 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 }])["with"]("templateTile", ["=", function (doc) {
   return doc.querySelector("template#tile");
 }]).bind("surface.HexGrid", ["service.=", "surface.=", "=", "=", "=", "=", function (Config, Grid, $registry, templateMain, templateRow, templateTile) {
+
   var EL_NAME = "pb-s-hexgrid";
 
-  /**
-   * A surface that lays out its children in a hexagonal grid. To use this, add attributes
-   * `pb-row` and `pb-col` to the element `pb-s-hexgrid`. These are the number of rows and columns
-   * in the grid.
-   *
-   * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes
-   * on them to indicate their positions in the grid.
-   *
-   * ```html
-   * <pb-s-hexgrid pb-row="2" pb-col="3">
-   *   <!-- Third column is empty -->
-   *   <div pb-row="0" pb-col="0">Top Left</div>
-   *   <div pb-row="0" pb-col="1">Top Middle</div>
-   *   <div pb-row="1" pb-col="0">Bottom Left</div>
-   *   <div pb-row="1" pb-col="1">Bottom Middle</div>
-   * </pb-s-hexgrid>
-   * ```
-   *
-   * You can customize the tiles by using `pb-s-hexgrid::shadow pb-u-shape::shadow .pb-shape` CSS
-   * selector. Since the tiles use SVG, you will need to use SVG attributes like `fill`.
-   *
-   * To select tile on a specific location add selector by attribute `pb-row` and `pb-col`. For
-   * example, to color tile (2, 3) red:
-   *
-   * ```css
-   * pb-s-hexgrid::shadow [pb-col="2"][pb-row="3"] pb-u-shape::shadow .pb-shape {
-   *   fill: red;
-   * }
-   * ```
-   *
-   * @class surface.HexGrid
-   * @since 0.2.0
-   * @extends surface.Grid
-   */
-  var HexGrid = (function (Grid) {
+  var HexGrid = (function (_Grid) {
     function HexGrid() {
-      if (Object.getPrototypeOf(HexGrid) !== null) {
-        Object.getPrototypeOf(HexGrid).apply(this, arguments);
+      _classCallCheck(this, HexGrid);
+
+      if (_Grid != null) {
+        _Grid.apply(this, arguments);
       }
     }
 
-    _inherits(HexGrid, Grid);
+    _inherits(HexGrid, _Grid);
 
-    _prototypeProperties(HexGrid, null, {
+    _createClass(HexGrid, {
       rootEl: {
-
-        /**
-         * The root element of the grid. All rows will be added as children to this element.
-         *
-         * @property rootEl
-         * @type Element
-         * @final
-         */
         get: function () {
           return this.shadowRoot.querySelector("#content");
-        },
-        enumerable: true,
-        configurable: true
+        }
       },
       mainTemplate: {
-
-        /**
-         * Main template to render. This will be added as the shadow root of the element.
-         *
-         * @property mainTemplate
-         * @type Element
-         * @final
-         */
         get: function () {
           return templateMain;
-        },
-        enumerable: true,
-        configurable: true
+        }
       },
       rowTemplate: {
-
-        /**
-         * Template to render for every row in the grid. Tiles will be added as children to this
-         * element.
-         *
-         * @property rowTemplate
-         * @type Element
-         * @final
-         */
         get: function () {
           return templateRow;
-        },
-        enumerable: true,
-        configurable: true
+        }
       },
       tileTemplate: {
-
-        /**
-         * Template to render for every tile in the grid.
-         *
-         * @property tileTemplate
-         * @type Element
-         * @final
-         */
         get: function () {
           return templateTile;
-        },
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 

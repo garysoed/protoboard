@@ -47,351 +47,140 @@
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
   return doc.querySelector("template");
 }]).bind("component.Dice", ["/=", "ability.=", "/=", "=", "trigger.=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "ability.=", "=", "=", "=", "=", function ($, Ability, Chance, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template) {
+
   var EL_NAME = "pb-c-dice";
   var ATTR_PAIR = "pb-dice-pair";
   var ATTR_SHOW_A = "show-a";
   var SUPPORTED_TYPES = ["d2", "d4", "d6", "d8", "d10", "d12", "d20"];
 
-  // Private symbols.
   var __defaultEnabled__ = Symbol();
   var __defaultShowA__ = Symbol();
   var __isEnabled__ = Symbol();
   var __isShowA__ = Symbol();
 
-  var Rollable = (function (Shuffleable) {
-    /**
-     * Elements with this ability can shuffle their children. This is very specific to dice and
-     * should not be used for other elements.
-     *
-     * @class component.Dice.Rollable
-     * @since 0.2.0
-     * @constructor
-     * @param {string} [name=pb-rollable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger of the ability.
-     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
-     * @param {boolean} [defaultShowA=true] True iff "Side A" should be shown by default.
-     * @extends ability.Shuffleable
-     */
+  var Rollable = (function (_Shuffleable) {
     function Rollable() {
-      var _this = this;
       var name = arguments[0] === undefined ? "pb-rollable" : arguments[0];
       var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
       var defaultShowA = arguments[3] === undefined ? true : arguments[3];
-      return (function () {
-        _get(Object.getPrototypeOf(Rollable.prototype), "constructor", _this).call(_this, name, defaultTrigger);
 
-        _this[__defaultEnabled__] = defaultEnabled;
-        _this[__defaultShowA__] = defaultShowA;
-      })();
+      _classCallCheck(this, Rollable);
+
+      _get(Object.getPrototypeOf(Rollable.prototype), "constructor", this).call(this, name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
+      this[__defaultShowA__] = defaultShowA;
     }
 
-    _inherits(Rollable, Shuffleable);
+    _inherits(Rollable, _Shuffleable);
 
-    _prototypeProperties(Rollable, null, (function () {
-      var _prototypeProperties2 = {};
+    _createComputedClass(Rollable, [{
+      key: __isEnabled__,
+      value: function (el) {
+        return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+      }
+    }, {
+      key: "init",
+      value: function init(el) {
+        _get(Object.getPrototypeOf(Rollable.prototype), "init", this).call(this, el);
+        if ($(el).attr(this.attrName) === undefined) {
+          $(el).attr(this.attrName, this[__defaultEnabled__]);
+        }
 
-      _defineProperty(_prototypeProperties2, __isEnabled__, {
-
-        /**
-         * @method __isEnabled__
-         * @param {Element} el Element to check.
-         * @return {boolean} True iff the ability is enabled for the given element.
-         * @private
-         */
-        value: function (el) {
-          return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "init", {
-
-        /**
-         * Sets the default configuration for this ability on the given element.
-         *
-         * @method init
-         * @param {Element} el The element to set the default configuration to.
-         */
-        value: function init(el) {
-          _get(Object.getPrototypeOf(Rollable.prototype), "init", this).call(this, el);
-          if ($(el).attr(this.attrName) === undefined) {
-            $(el).attr(this.attrName, this[__defaultEnabled__]);
-          }
-
-          if ($(el).attr(ATTR_SHOW_A) === undefined) {
-            $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "doTrigger", {
-
-        /**
-         * Shuffles the children and randomly selects the side to show.
-         *
-         * @method trigger
-         * @param {Element} el The element to trigger the ability on.
-         */
-        value: function doTrigger(el) {
-          _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
-          if (this[__isEnabled__](el)) {
-            $(el).attr(ATTR_SHOW_A, Chance.bool());
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      return _prototypeProperties2;
-    })());
+        if ($(el).attr(ATTR_SHOW_A) === undefined) {
+          $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+        }
+      }
+    }, {
+      key: "doTrigger",
+      value: function doTrigger(el) {
+        _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
+        if (this[__isEnabled__](el)) {
+          $(el).attr(ATTR_SHOW_A, Chance.bool());
+        }
+      }
+    }]);
 
     return Rollable;
   })(Shuffleable);
 
-  var DiceFlippable = (function (Ability) {
-    /**
-     * Dice with this ability can be flipped to the opposite side. This is very specific to dice and
-     * should not be used for other elements.
-     *
-     * @class component.Dice.DiceFlippable
-     * @since 0.2.0
-     * @constructor
-     * @param {string} [name=pb-dice-flippable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=trigger.Key] Default trigger of the ability.
-     * @param {boolean} [defaultEnabled=false] True iff the ability should be enabled by default.
-     * @param {boolean} [defaultShowA=true] True iff "Side A" should be shown by default.
-     * @extends ability.Ability
-     */
+  var DiceFlippable = (function (_Ability) {
     function DiceFlippable() {
-      var _this2 = this;
       var name = arguments[0] === undefined ? "pb-dice-flippable" : arguments[0];
       var defaultTrigger = arguments[1] === undefined ? new Key("f") : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? false : arguments[2];
       var defaultShowA = arguments[3] === undefined ? true : arguments[3];
-      return (function () {
-        _get(Object.getPrototypeOf(DiceFlippable.prototype), "constructor", _this2).call(_this2, name, defaultTrigger);
 
-        _this2[__defaultEnabled__] = defaultEnabled;
-        _this2[__defaultShowA__] = defaultShowA;
-      })();
+      _classCallCheck(this, DiceFlippable);
+
+      _get(Object.getPrototypeOf(DiceFlippable.prototype), "constructor", this).call(this, name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
+      this[__defaultShowA__] = defaultShowA;
     }
 
-    _inherits(DiceFlippable, Ability);
+    _inherits(DiceFlippable, _Ability);
 
-    _prototypeProperties(DiceFlippable, null, (function () {
-      var _prototypeProperties3 = {};
+    _createComputedClass(DiceFlippable, [{
+      key: __isEnabled__,
+      value: function (el) {
+        return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+      }
+    }, {
+      key: "init",
+      value: function init(el) {
+        _get(Object.getPrototypeOf(DiceFlippable.prototype), "init", this).call(this, el);
+        if ($(el).attr(this.attrName) === undefined) {
+          $(el).attr(this.attrName, this[__defaultEnabled__]);
+        }
 
-      _defineProperty(_prototypeProperties3, __isEnabled__, {
-
-        /**
-         * @method __isEnabled__
-         * @param {Element} el Element to check.
-         * @return {boolean} True iff the ability is enabled for the given element.
-         * @private
-         */
-        value: function (el) {
-          return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties3, "init", {
-
-        /**
-         * Sets the default configuration for this ability on the given element.
-         *
-         * @method init
-         * @param {Element} el The element to set the default configuration to.
-         */
-        value: function init(el) {
-          _get(Object.getPrototypeOf(DiceFlippable.prototype), "init", this).call(this, el);
-          if ($(el).attr(this.attrName) === undefined) {
-            $(el).attr(this.attrName, this[__defaultEnabled__]);
-          }
-
-          if ($(el).attr(ATTR_SHOW_A) === undefined) {
-            $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties3, "doTrigger", {
-
-        /**
-         * Flips the dice to the opposite side.
-         *
-         * @method doTrigger
-         * @param {Element} el The dice to flip.
-         */
-        value: function doTrigger(el) {
-          if (this[__isEnabled__](el)) {
-            $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      return _prototypeProperties3;
-    })());
+        if ($(el).attr(ATTR_SHOW_A) === undefined) {
+          $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+        }
+      }
+    }, {
+      key: "doTrigger",
+      value: function doTrigger(el) {
+        if (this[__isEnabled__](el)) {
+          $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
+        }
+      }
+    }]);
 
     return DiceFlippable;
   })(Ability);
 
-  /**
-   * A representation of a dice. This element has three levels of customizations.
-   *
-   * The most basic level of customization is to use premade dice. To use this, set the type
-   * attribute to a supported dice type. For example:
-   * ```html
-   * <!-- Creates a d2, or a coin -->
-   * <pb-c-dice type="d2"></pb-c-dice>
-   *
-   * <!-- Creates a d20 -->
-   * <pb-c-dice type="d20"></pb-c-dice>
-   * ```
-   * Custom types supported are: `d2`, `d4`, `d6`, `d8`, `d10`, `d12`, `d20`.
-   *
-   * In the next level of customization, you can define all the dice faces by creating children for
-   * each face of the dice. For example, to make the dice used in
-   * [Mage Wars](https://www.boardgamegeek.com/boardgame/101721/mage-wars), do:
-   * ```html
-   * <pb-c-dice>
-   *   <div>&nbsp;</div>
-   *   <div>1</div>
-   *   <div>2</div>
-   *   <div>&nbsp;</div>
-   *   <div>1!</div>
-   *   <div>2!</div>
-   * </pb-c-dice>
-   * ```
-   *
-   * For games that involve flipping dice to the opposite side, like
-   * [Flash Point: Fire Rescue](http://boardgamegeek.com/boardgame/100901/flash-point-fire-rescue),
-   * further customization is needed. The children in the previous example needs to be paired with a
-   * parent element with attribute `pb-dice-pair`. For example, to make a normal d6:
-   * ```html
-   * <pb-c-dice>
-   *   <div pb-dice-pair>
-   *     <div>1</div>
-   *     <div>6</div>
-   *   </div>
-   *   <div pb-dice-pair>
-   *     <div>2</div>
-   *     <div>5</div>
-   *   </div>
-   *   <div pb-dice-pair>
-   *     <div>3</div>
-   *     <div>4</div>
-   *   </div>
-   * </pb-c-dice>
-   * ```
-   * If you do not explicitly specify the pairing, the dice will pair them for you automatically.
-   * The first child will be paired with the last child, second child paired with second last, etc.
-   *
-   * Note that dice must have an even number of faces.
-   *
-   * Default supported abilities:
-   * - {{#crossLink "ability.Pickable"}}pick{{/crossLink}}
-   * - {{#crossLink "component.Dice.Rollable"}}roll{{/crossLink}}: This is similar to
-   *   {{#crossLink ability.Shuffleable}}{{/crossLink}}, except it is customized to handle the face
-   *   pairings.
-   * - {{#crossLink "component.Dice.DiceFlippable"}}flip{{/crossLink}}: Flips the dice to the other
-   *   side.
-   *
-   * @class component.Dice
-   * @since 0.2.0
-   * @extends component.Component
-   */
-  var Dice = (function (Component) {
+  var Dice = (function (_Component) {
     function Dice() {
-      if (Object.getPrototypeOf(Dice) !== null) {
-        Object.getPrototypeOf(Dice).apply(this, arguments);
+      _classCallCheck(this, Dice);
+
+      if (_Component != null) {
+        _Component.apply(this, arguments);
       }
     }
 
-    _inherits(Dice, Component);
+    _inherits(Dice, _Component);
 
-    _prototypeProperties(Dice, null, {
+    _createClass(Dice, {
       createdCallback: {
-
-        /**
-         * Called when the element is created
-         *
-         * @method createdCallback
-         */
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Dice.prototype), "createdCallback", this).call(this);
           this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
 
-          // Check if the dice has any children.
           if (this.children.length <= 0) {
             var type = $(this).attr("type");
             if (SUPPORTED_TYPES.indexOf(type) >= 0) {
@@ -404,7 +193,6 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
             }
           }
 
-          // Checks if the children are paired.
           if (this.querySelectorAll("[" + ATTR_PAIR + "]").length <= 0) {
             var children = Utils.toArray(this.children);
             if (children.length % 2 !== 0) {
@@ -419,10 +207,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
               this.appendChild(pairEl);
             }
           }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 

@@ -89,111 +89,48 @@
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template");
+    return doc.querySelector("template");
 }]).bind("component.Card", ["trigger.=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "ability.=", "=", "=", "=", "=", function (Click, Component, Config, Helpable, Key, Pickable, Toggleable, Utils, doc, template, $registry) {
-  var EL_NAME = "pb-c-card";
 
-  /**
-   * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
-   * - One must have a `pb-front` class. This is the front face of the card.
-   * - One must have a `pb-back` class. This is the back face of the card.
-   *
-   * By default, the card starts by showing its back. If you want to make it start by showing the
-   * front face, add `flippable-active="true"` to the `pb-c-card`.
-   *
-   * Default supported abilities:
-   * - {{#crossLink "ability.Pickable"}}pick{{/crossLink}}
-   * - {{#crossLink "ability.Toggleable"}}flip{{/crossLink}}
-   * - {{#crossLink "ability.Toggleable"}}tap{{/crossLink}}
-   *
-   * ```html
-   * <!-- Example: Create a card that starts by displaying its front side -->
-   * <pb-c-card flippable-active="true">
-   *   <div class="pb-front">Front side</div>
-   *   <div class="pb-back">Back side</div>
-   * </pb-c-card>
-   * ```
-   * @class component.Card
-   * @extends component.Component
-   */
-  var Card = (function (Component) {
-    function Card() {
-      if (Object.getPrototypeOf(Card) !== null) {
-        Object.getPrototypeOf(Card).apply(this, arguments);
-      }
-    }
+    var EL_NAME = "pb-c-card";
 
-    _inherits(Card, Component);
+    var Card = (function (_Component) {
+        function Card() {
+            _classCallCheck(this, Card);
 
-    _prototypeProperties(Card, null, {
-      createdCallback: {
+            if (_Component != null) {
+                _Component.apply(this, arguments);
+            }
+        }
 
-        /**
-         * Called when the element is created
-         *
-         * @method createdCallback
-         */
-        value: function createdCallback() {
-          _get(Object.getPrototypeOf(Card.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-          this.attachedCallback();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      }
-    });
+        _inherits(Card, _Component);
+
+        _createClass(Card, {
+            createdCallback: {
+                value: function createdCallback() {
+                    _get(Object.getPrototypeOf(Card.prototype), "createdCallback", this).call(this);
+                    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+                    this.attachedCallback();
+                }
+            }
+        });
+
+        return Card;
+    })(Component);
+
+    Config.add(EL_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true), new Toggleable("flip", new Click(), true), new Toggleable("tap", new Key("t"), true));
+
+    $registry.add(EL_NAME, Card.prototype);
 
     return Card;
-  })(Component);
-
-  Config.add(EL_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true), new Toggleable("flip", new Click(), true), new Toggleable("tap", new Key("t"), true));
-
-  $registry.add(EL_NAME, Card.prototype);
-
-  return Card;
 }]);</script>
 </head><body></body></html>

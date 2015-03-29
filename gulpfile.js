@@ -2,18 +2,17 @@ var gulp    = require('gulp');
 var debug   = require('gulp-debug');
 var plumber = require('gulp-plumber');
 
+var babel  = require('gulp-babel');
 var jshint = require('gulp-jshint');
 var myth   = require('gulp-myth');
 var shell  = require('gulp-shell');
 var subs   = require('gulp-html-subs');
-var to5    = require('gulp-6to5');
 var zip    = require('gulp-zip');
 
 var chalk    = require('chalk');
 var karma    = require('karma').server;
 var minimist = require('minimist');
 var through  = require('through2');
-var yuidoc   = require('yuidocjs');
 
 var options = minimist(process.argv.slice(2), {
   'string': 'theme',
@@ -59,12 +58,12 @@ function subJsHint() {
   })
 }
 
-function sub6to5() {
+function subBabel() {
   return chain(function(stream) {
     var scriptSubs = subs('script');
     return stream
         .pipe(scriptSubs.extract)
-            .pipe(to5({modules: 'ignore'}))
+            .pipe(babel({modules: 'ignore', comments: false}))
         .pipe(scriptSubs.inject);
   });
 }
@@ -123,7 +122,7 @@ gulp.task('jshint', function() {
 
 gulp.task('src', ['jshint'], function() {
   return gulp.src(['./src/**/*.html'])
-      .pipe(sub6to5())
+      .pipe(subBabel())
       .pipe(subMythHtml())
       .pipe(gulp.dest('out'));
 });
@@ -136,7 +135,7 @@ gulp.task('ex', ['src'], function() {
 
 gulp.task('test', ['jshint'], function() {
   return gulp.src(['./test/**/*_test.html', './test/testbase.html'])
-      .pipe(sub6to5())
+      .pipe(subBabel())
       .pipe(gulp.dest('out'));
 });
 
@@ -160,7 +159,7 @@ gulp.task('watch', function() {
     var base = event.path.substring(__dirname.length).split('/')[1];
     gulp.src(event.path, {base: base})
         .pipe(plumber())
-        .pipe(sub6to5())
+        .pipe(subBabel())
         .pipe(subMythHtml())
         .pipe(debug({title: chalk.green('src')}))
         .pipe(gulp.dest('out'));

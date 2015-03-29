@@ -8,61 +8,14 @@
 <script>"use strict";
 
 DI.prefix("pb").bind("service.Template", ["/=", "=", "=", "/=", function ($, Check, Events, Handlebars) {
+
   var promiseMap = new Map();
 
-  /**
-   * Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
-   * partials and data to the template. For example:
-   * ```javascript
-   * DI.run(function(service_Template) {
-   *   // Registers a partial. The partial value must be contained in the element passed into the
-   *   // service.
-   *   service_Template.addPartial('card', document.querySelector('template'));
-   *
-   *   // Registers data to the template.
-   *   service_Template.addData('cards', [
-   *     { value: 'A', suit: 'Spade' },
-   *     { value: 'A', suit: 'Club' },
-   *     { value: 'A', suit: 'Heart' },
-   *     { value: 'A', suit: 'Diamond' },
-   *   ]);
-   * });
-   * ```
-   *
-   * This class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for
-   * loop that copies the inner block several times. You can access the index of the loop using the
-   * `@index` variable.
-   *
-   * @class service.Template
-   * @static
-   * @since 0.2.0
-   */
   var Service = {
-
-    /**
-     * Registers the given partial.
-     *
-     * @method addPartial
-     * @param {string} name Name to use for the partial.
-     * @param {Element} element Element whose innerHTML contains the partial definition. Note that
-     *    while this class does not enforce it, this element's type should be
-     *    {{#crossLink "&lt;template&gt;"}}{{/crossLink}}. This is to deal with handling ">" to
-     *    allow you to use HTML tags in the partial and calling other partials.
-     * @return {service.Template} This service for chaining.
-     */
     addPartial: function addPartial(name, element) {
       Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
       return this;
     },
-
-    /**
-     * Adds data to be inserted into the templates.
-     *
-     * @method addData
-     * @param {string} name Name to add the data by.
-     * @param {any} data Data to be added.
-     * @return {service.Template} This service for chaining.
-     */
     addData: function addData(name, data) {
       if (promiseMap.has(name)) {
         $(Service).trigger(name, data);
@@ -71,15 +24,6 @@ DI.prefix("pb").bind("service.Template", ["/=", "=", "=", "/=", function ($, Che
       }
       return this;
     },
-
-    /**
-     * Retrieves the data with the given key.
-     *
-     * @method get
-     * @param {string} name Key of the data to retrieve.
-     * @return {Promise} Promise that will be resolved with an array consisting of they key and the
-     *    data requested.
-     */
     get: function get(name) {
       if (!promiseMap.has(name)) {
         promiseMap.set(name, new Promise(function (resolve, reject) {
@@ -93,11 +37,8 @@ DI.prefix("pb").bind("service.Template", ["/=", "=", "=", "/=", function ($, Che
     }
   };
 
-
-  // Use function since Handlebars changes the context of this.
   Handlebars.registerHelper("pb-for", function (from, to, step, options) {
     if (options === undefined) {
-      // Shift the args if step is not defined.
       options = step;
       step = 1;
     }

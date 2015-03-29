@@ -21,7 +21,7 @@
     "chai": "^1.9.2",
     "chalk": "^0.5.1",
     "gulp": "^3.8.10",
-    "gulp-6to5": "^2.0.2",
+    "gulp-babel": "^4.0.0",
     "gulp-debug": "^2.0.0",
     "gulp-html-subs": "git://github.com/garysoed/gulp-html-subs",
     "gulp-jshint": "^1.9.0",

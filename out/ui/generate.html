@@ -8,176 +8,75 @@
 
 <script>"use strict";
 
-var _slicedToArray = function (arr, i) {
-  if (Array.isArray(arr)) {
-    return arr;
-  } else {
-    var _arr = [];
+var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
 
-    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-      _arr.push(_step.value);
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      if (i && _arr.length === i) break;
-    }
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-    return _arr;
-  }
-};
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").bind("ui.Generate", ["=", "=", "service.=", "=", "service.=", function ($registry, Check, Config, PbElement, Template) {
+
   var EL_NAME = "pb-u-generate";
 
-  /**
-   * When this element is created, it will process a [Handlebars](http://handlebarsjs.com/) template
-   * within it and replace itself with the processed template.
-   *
-   * The template must be enclosed within a {{#crossLink "&lt;template&gt;"}}{{/crossLink}} tag. For
-   * example:
-   * ```html
-   * <pb-u-generate>
-   *   <template>
-   *     Template's content.
-   *     \{{#if hasCustom}}
-   *       You can call \{{> customPartials}} too.
-   *     \{{/if}}
-   *   </template>
-   * </pb-u-generate>
-   * ```
-   *
-   * All data in the template's scope must be declared in the `input` attribute. Specify a space
-   * separated names of the variable names. These variables will be available in the template using
-   * the same name. For example:
-   * ```html
-   * <pb-u-generate input="cards game">
-   *   <template>
-   *     Cards of game "\{{game.name}}":
-   *     <ul>
-   *     \{{#each cards}}
-   *       <li>{{name}}</li>
-   *     \{{/each}}
-   *     </ul>
-   *   </template>
-   * </pb-u-generate>
-   * ```
-   *
-   * All data passed into the templates, or custom partials used must be registered using the
-   * {{#crossLink "service.Template"}}{{/crossLink}}. So in the example above, we can register the
-   * data as follows:
-   * ```javascript
-   * DI.run(['pb.service', 'pb', function(Template, Bootstrap) {
-   *   Template
-   *       .addData('cards', [
-   *         { name: 'Apprentice' },
-   *         { name: 'Jack of All Trades' },
-   *         { name: 'Baker' },
-   *         { name: 'Bishop' }
-   *       ])
-   *       .addData('game', {
-   *         name: 'Awesome deck building game'
-   *       });
-   *   Bootstrap.run(document);
-   * }]);
-   * ```
-   *
-   * With the above example, this will produce the following:
-   * ```html
-   * Cards of game "Awesome deck building game":
-   * <ul>
-   *   <li>Apprentice</li>
-   *   <li>Jack of All Trades</li>
-   *   <li>Baker</li>
-   *   <li>Bishop</li>
-   * </ul>
-   * ```
-   *
-   * @class ui.Generate
-   * @since 0.2.0
-   * @extends PbElement
-   */
-  var Generate = (function (PbElement) {
+  var Generate = (function (_PbElement) {
     function Generate() {
-      if (Object.getPrototypeOf(Generate) !== null) {
-        Object.getPrototypeOf(Generate).apply(this, arguments);
+      _classCallCheck(this, Generate);
+
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Generate, PbElement);
+    _inherits(Generate, _PbElement);
 
-    _prototypeProperties(Generate, null, {
+    _createClass(Generate, {
       createdCallback: {
-        /**
-         * Called when the element is created
-         *
-         * @method createdCallback
-         */
         value: function createdCallback() {
           var _this = this;
+
           _get(Object.getPrototypeOf(Generate.prototype), "createdCallback", this).call(this);
 
-          // Gets the data.
           var promises = Check($(this).attr("input")).isList().orThrows().map(function (name) {
             return Template.get(name);
           });
           Promise.all(promises).then(function (dataList) {
             var dataObj = {};
-            for (var _iterator = dataList[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-              var _ref = _step.value;
-              var _ref2 = _slicedToArray(_ref, 2);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
 
-              var name = _ref2[0];
-              var data = _ref2[1];
-              dataObj[name] = data;
+            try {
+              for (var _iterator = dataList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var _step$value = _slicedToArray(_step.value, 2);
+
+                var _name = _step$value[0];
+                var data = _step$value[1];
+
+                dataObj[_name] = data;
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator["return"]) {
+                  _iterator["return"]();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
             }
 
             var templateStr = _this.querySelector("template").innerHTML.replace("&gt;", ">");
             $(_this).replaceWith(Handlebars.compile(templateStr)(dataObj));
           });
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 

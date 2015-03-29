@@ -53,94 +53,41 @@
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
   return doc.querySelector("template#main");
 }])["with"]("placeHolderTmp", ["=", function (doc) {
   return doc.querySelector("template#placeholder");
 }]).bind("region.Bag", ["=", "/=", "trigger.=", "service.=", "ability.=", "ability.=", "trigger.=", "service.=", "ability.=", "region.=", "=", "=", "=", "=", function ($registry, Chance, Click, Config, Droppable, Helpable, Key, Move, Pickable, Region, Utils, doc, template, placeHolderTmp) {
+
   var EL_NAME = "pb-r-bag";
   var ATTR_PLACEHOLDER = "pb-placeholder";
   var ATTR_PLACEHOLDER_CONTENT = "pb-placeholder-content";
 
-  // Private symbols
   var __placeHolderEl__ = Symbol("placeHolderEl");
 
-  var RandomPickable = (function (Pickable) {
-    /**
-     * Element with this ability has content that can be picked and dragged around. When triggered,
-     * a random child of the element will be picked. The child element can be dropped on elements
-     * with {{#crossLink "ability.Droppable"}}{{/crossLink}} ability.
-     *
-     * @constructor
-     * @class region.Bag.RandomPickable
-     * @param {string} [name=pb-pickable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
-     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
-     * @extends ability.Pickable
-     */
+  var RandomPickable = (function (_Pickable) {
     function RandomPickable() {
-      var _this = this;
       var name = arguments[0] === undefined ? "pb-pickable" : arguments[0];
       var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
-      return (function () {
-        _get(Object.getPrototypeOf(RandomPickable.prototype), "constructor", _this).call(_this, name, defaultTrigger, defaultEnabled);
-      })();
+
+      _classCallCheck(this, RandomPickable);
+
+      _get(Object.getPrototypeOf(RandomPickable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
     }
 
-    _inherits(RandomPickable, Pickable);
+    _inherits(RandomPickable, _Pickable);
 
-    _prototypeProperties(RandomPickable, null, {
+    _createClass(RandomPickable, {
       doTrigger: {
-
-        /**
-         * Picks up a random child element of the given element.
-         *
-         * @method doTrigger
-         * @param {Element} el The element whose child element should be randomly picked.
-         */
         value: function doTrigger(el) {
           var candidates = Utils.toArray(el.children).filter(function (child) {
             return $(child).attr(ATTR_PLACEHOLDER) === undefined;
@@ -148,55 +95,26 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
           if (candidates.length > 0) {
             Move.add(Chance.pick(candidates));
           }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
     return RandomPickable;
   })(Pickable);
 
-  /**
-   * A collection of components. You cannot see the component until you drag one out of it.
-   *
-   * To make a bag, create a `pb-r-bag` element. You can override the content of the placeholder by
-   * creating a child element with a `pb-placeholder-content` attribute. This element will be used for
-   * the placeholder content.
-   *
-   * ```html
-   * <!-- Example: Create a bag with a place holder token displaying "SECRET!!" -->
-   * <pb-r-bag>
-   *   <div pb-placeholder-content>SECRET!!</div>
-   * </pb-r-bag>
-   * ```
-   *
-   * Supported abilitie:
-   * - {{#crossLink "region.Bag.RandomPickable"}}pickable{{/crossLink}}
-   * - {{#crossLink "ability.Droppable"}}droppable{{/crossLink}}
-   *
-   * @class region.Bag
-   * @extends region.Region
-   */
-
-  var Bag = (function (Region) {
+  var Bag = (function (_Region) {
     function Bag() {
-      if (Object.getPrototypeOf(Bag) !== null) {
-        Object.getPrototypeOf(Bag).apply(this, arguments);
+      _classCallCheck(this, Bag);
+
+      if (_Region != null) {
+        _Region.apply(this, arguments);
       }
     }
 
-    _inherits(Bag, Region);
+    _inherits(Bag, _Region);
 
-    _prototypeProperties(Bag, null, {
+    _createClass(Bag, {
       createdCallback: {
-
-        /**
-         * Called when the element is created.
-         *
-         * @method createdCallback
-         */
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Bag.prototype), "createdCallback", this).call(this);
 
@@ -214,10 +132,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
           }
 
           this.attachedCallback();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 

@@ -47,102 +47,66 @@
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
   return doc.querySelector("template");
 }]).bind("region.Hand", ["=", "ability.=", "=", "service.=", "ability.=", "ability.=", "trigger.=", "service.=", "region.=", "=", "=", "=", function ($registry, Abilities, Check, Config, Droppable, Helpable, Key, Move, Region, Utils, doc, template) {
+
   var EL_NAME = "pb-r-hand";
 
-  var ReorderableDroppable = (function (Droppable) {
-    /**
-     * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
-     * Elements with this ability adds the picked element as its child element when triggered.
-     * The position of the dropped element depends on the mouse position when the trigger
-     * occured.
-     *
-     * @constructor
-     * @class region.Hand.ReorderableDroppable
-     * @param {string} [name=pb-droppable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=trigger.Key] Default trigger for the ability.
-     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
-     * @extends ability.Droppable
-     */
+  var ReorderableDroppable = (function (_Droppable) {
     function ReorderableDroppable() {
-      var _this = this;
       var name = arguments[0] === undefined ? "pb-droppable" : arguments[0];
       var defaultTrigger = arguments[1] === undefined ? new Key("d") : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
-      return (function () {
-        _get(Object.getPrototypeOf(ReorderableDroppable.prototype), "constructor", _this).call(_this, name, defaultTrigger, defaultEnabled);
-      })();
+
+      _classCallCheck(this, ReorderableDroppable);
+
+      _get(Object.getPrototypeOf(ReorderableDroppable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
     }
 
-    _inherits(ReorderableDroppable, Droppable);
+    _inherits(ReorderableDroppable, _Droppable);
 
-    _prototypeProperties(ReorderableDroppable, null, {
+    _createClass(ReorderableDroppable, {
       doTrigger: {
-
-        /**
-         * Drops the element added to {{#crossLink "service.Move"}}{{/crossLink}} as a child of the
-         * given element. The position of the dropped child depends on the position of the mouse at the
-         * trigger time relative to the other children.
-         *
-         * @method doTrigger
-         * @param {Element} el The element to drop the picked element into.
-         */
         value: function doTrigger(el) {
           if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
             var movedElement = Move.movedElements.values().next().value;
             if (movedElement) {
-              // Go through every children and find the index that the element should be.
               var dropped = false;
-              for (var _iterator = Utils.toArray(el.children)[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-                var child = _step.value;
-                var rect = child.getBoundingClientRect();
-                if (!dropped && rect.left + rect.width / 2 > Move.mouseX) {
-                  dropped = true;
-                  el.insertBefore(movedElement, child);
+              var _iteratorNormalCompletion = true;
+              var _didIteratorError = false;
+              var _iteratorError = undefined;
+
+              try {
+                for (var _iterator = Utils.toArray(el.children)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                  var child = _step.value;
+
+                  var rect = child.getBoundingClientRect();
+                  if (!dropped && rect.left + rect.width / 2 > Move.mouseX) {
+                    dropped = true;
+                    el.insertBefore(movedElement, child);
+                  }
+                }
+              } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion && _iterator["return"]) {
+                    _iterator["return"]();
+                  }
+                } finally {
+                  if (_didIteratorError) {
+                    throw _iteratorError;
+                  }
                 }
               }
 
@@ -151,101 +115,47 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
               }
             }
           }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
     return ReorderableDroppable;
   })(Droppable);
 
-  /**
-   * Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children
-   * are considered to be in the hand. A hand allows the user to reorder the child elements,
-   * depending on where a child element is dropped.
-   *
-   * ```html
-   * <!-- Hand with two tokens -->
-   * <pb-r-deck>
-   *   <pb-c-token id="token1">
-   *     <div>Token 1</div>
-   *   </pb-c-token>
-   *   <pb-c-token id="token2">
-   *     <div>Token 2</div>
-   *   </pb-c-token>
-   * </pb-r-deck>
-   * ```
-   *
-   * Supported abilities:
-   * - {{#crossLink "region.Hand.ReorderableDroppable"}}drop{{/crossLink}}
-   *
-   * @class region.Hand
-   * @extends region.Region
-   */
-  var Hand = (function (Region) {
+  var Hand = (function (_Region) {
     function Hand() {
-      if (Object.getPrototypeOf(Hand) !== null) {
-        Object.getPrototypeOf(Hand).apply(this, arguments);
+      _classCallCheck(this, Hand);
+
+      if (_Region != null) {
+        _Region.apply(this, arguments);
       }
     }
 
-    _inherits(Hand, Region);
+    _inherits(Hand, _Region);
 
-    _prototypeProperties(Hand, null, {
+    _createClass(Hand, {
       createdCallback: {
-
-        /**
-         * Called when the element is created.
-         *
-         * @method createdCallback
-         */
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Hand.prototype), "createdCallback", this).call(this);
           this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
 
           this.attachedCallback();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       attachedCallback: {
-
-        /**
-         * Called when the element is attached to the document.
-         *
-         * @method attachedCallback
-         */
         value: function attachedCallback() {
           _get(Object.getPrototypeOf(Hand.prototype), "attachedCallback", this).call(this);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       detachedCallback: {
-
-        /**
-         * Called when the element is detached from the document.
-         *
-         * @method detachedCallback
-         */
         value: function detachedCallback() {
           _get(Object.getPrototypeOf(Hand.prototype), "detachedCallback", this).call(this);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
     return Hand;
   })(Region);
-
-
-
 
   Config.add(EL_NAME, new Helpable("help"), new ReorderableDroppable("drop", new Key("d"), true));
   $registry.add(EL_NAME, Hand.prototype);

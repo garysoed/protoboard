@@ -6,22 +6,13 @@
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
+var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
-  // Private symbols.
   var __abilities__ = Symbol("abilities");
   var __element__ = Symbol();
   var __observer__ = Symbol("observer");
@@ -29,28 +20,14 @@ DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
   var __onMutation__ = Symbol("onMutation");
 
   var Builder = (function () {
-    /**
-     * Builder helper for using {{#crossLink "ability.Abilities"}}Abilities{{/crossLink}}.
-     *
-     * @constructor
-     * @class ability.Abilities.Builder
-     * @param {Element} el Element to add abilities to.
-     * @private
-     */
     function Builder(el) {
+      _classCallCheck(this, Builder);
+
       this[__element__] = el;
     }
 
-    _prototypeProperties(Builder, null, {
+    _createClass(Builder, {
       add: {
-
-        /**
-         * Adds the given ability to the element specified in the builder.
-         *
-         * @method add
-         * @param {ability.Ability} ability The ability to add.
-         * @return {ability.Abilities.Builder} This builder object for chaining.
-         */
         value: function add(ability) {
           var key = ability.attrName;
           if (!this[__element__][__abilities__]) {
@@ -68,18 +45,9 @@ DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
           this[__element__][__abilities__].set(ability.attrTrigger, ability);
 
           return this;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       getAll: {
-
-        /**
-         * @method getAll
-         * @return {Map} Map of ability name to ability of the element in context. This excludes the
-         *    trigger attribute of the abilities.
-         */
         value: function getAll() {
           if (!this[__element__][__abilities__]) {
             return new Map();
@@ -87,27 +55,35 @@ DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
 
           var abilities = new Set(this[__element__][__abilities__].values());
           var map = new Map();
-          for (var _iterator = abilities[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-            var ability = _step.value;
-            map.set(ability.attrName, ability);
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = abilities[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var ability = _step.value;
+
+              map.set(ability.attrName, ability);
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator["return"]) {
+                _iterator["return"]();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
           }
 
           return map;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       trigger: {
-
-        /**
-         * Triggers the ability corresponding to the given name.
-         *
-         * @method trigger
-         * @param {string} name Name of the ability to trigger. Refer to the element's API for the
-         *    names.
-         * @return {ability.Abilities.Builder} This builder object for chaining.
-         */
         value: function trigger(name) {
           var el = this[__element__];
           var ability = null;
@@ -122,40 +98,43 @@ DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
           ability.trigger(el);
 
           return this;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
     return Builder;
   })();
 
-  /**
-   * Helper class to register abilities to custom elements. You can use this class to customize
-   * abilities, add abilities, and trigger registered abilities. Any interactions should start with
-   * the {{#crossLink "ability.Abilities/of:method"}}{{/crossLink}} method.
-   *
-   * ```javascript
-   * // Registering ability.
-   * Abilities.of(el)
-   *     .add(new Ability());
-   * ```
-   *
-   * @class ability.Abilities
-   * @static
-   */
   var Abilities = (function () {
     var _Abilities = {};
 
     _defineProperty(_Abilities, __onMutation__, function (records) {
-      for (var _iterator2 = records[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
-        var record = _step2.value;
-        var el = record.target;
-        var attrName = record.attributeName;
-        if (el[__abilities__] && el[__abilities__].has(attrName)) {
-          el[__abilities__].get(attrName).updateConfig(el);
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var record = _step.value;
+
+          var el = record.target;
+          var attrName = record.attributeName;
+          if (el[__abilities__] && el[__abilities__].has(attrName)) {
+            el[__abilities__].get(attrName).updateConfig(el);
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
         }
       }
     });
@@ -199,32 +178,5 @@ DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
   }
 
   return Abilities;
-}]);
-
-
-/**
- * Handler called when the MutationObserver detected a change.
- *
- * @method __onMutation__
- * @param {Array} records Array of {{#crossLink "MutationRecord"}}{{/crossLink}}s.
- * @private
- */
-
-
-/**
- * Creates a new {{#crossLink "ability.Abilities.Builder"}}Builder{{/crossLink}} to operate on
- * the given element.
- *
- * @method of
- * @param {Element} el Element that the Builder should operate on.
- * @return {ability.Abilities.Builder} The builder object.
- */
-
-
-/**
- * Initializes the added abilities on the given element.
- *
- * @method init
- * @param {Element} el The element to initialize.
- */</script>
+}]);</script>
 </head><body></body></html>

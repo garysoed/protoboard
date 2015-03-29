@@ -6,13 +6,11 @@
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb.trigger").bind("Triggers", ["=", "=", function (Click, Key) {
-  // Private symbols
   var __observer__ = Symbol();
   var __target__ = Symbol();
   var __triggers__ = Symbol();
@@ -21,10 +19,12 @@ DI.prefix("pb.trigger").bind("Triggers", ["=", "=", function (Click, Key) {
 
   var Registrar = (function () {
     function Registrar(target) {
+      _classCallCheck(this, Registrar);
+
       this[__target__] = target;
     }
 
-    _prototypeProperties(Registrar, null, {
+    _createClass(Registrar, {
       add: {
         value: function add(trigger) {
           if (!this[__target__][__triggers__]) {
@@ -32,10 +32,7 @@ DI.prefix("pb.trigger").bind("Triggers", ["=", "=", function (Click, Key) {
           }
           this[__target__][__triggers__].set(trigger.attrName, trigger);
           return this;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 

@@ -12,195 +12,69 @@
 
 <script>"use strict";
 
-var _slicedToArray = function (arr, i) {
-  if (Array.isArray(arr)) {
-    return arr;
-  } else {
-    var _arr = [];
+var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
 
-    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-      _arr.push(_step.value);
+var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
 
-      if (i && _arr.length === i) break;
-    }
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    return _arr;
-  }
-};
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
-
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", function (Events, Move, Trigger, $registry) {
-  // Private symbols.
   var __active__ = Symbol();
   var __key__ = Symbol("key");
 
   var __onMouseEnter__ = Symbol();
   var __onMouseLeave__ = Symbol("onMouseLeave");
 
-  var Key = (function (Trigger) {
-    /**
-     * Triggers an ability when the given key is pressed while the mouse is over the registered
-     * element.
-     *
-     * @constructor
-     * @class trigger.Key
-     * @param {string} key The key that needs to be pressed to trigger the registered ability.
-     * @extends trigger.Trigger
-     */
+  var Key = (function (_Trigger) {
     function Key(key) {
+      _classCallCheck(this, Key);
+
       this[__key__] = key;
     }
 
-    _inherits(Key, Trigger);
+    _inherits(Key, _Trigger);
 
-    _prototypeProperties(Key, null, (function () {
-      var _prototypeProperties2 = {};
-
-      _defineProperty(_prototypeProperties2, __onMouseEnter__, {
-
-        /**
-         * Handles event called when mouse has entered the element.
-         *
-         * @method __onMouseEnter__
-         * @param {ability.Ability} ability The ability to trigger.
-         * @param {Element} element The element that the mouse has entered.
-         * @private
-         */
-        value: function (ability, element) {
-          Service.add(element, this[__key__], ability);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, __onMouseLeave__, {
-
-        /**
-         * Handles event called when mouse has left the element.
-         *
-         * @method __onMouseLeave__
-         * @param {Element} element The element that the mouse has left.
-         * @private
-         */
-        value: function (element) {
-          Service.remove(element);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "on", {
-
-        /**
-         * Registers the given element to trigger the given ability when a key is pressed while the
-         * mouse is hovering over the element.
-         *
-         * @method on
-         * @param {Element} element Element that needs to be hovered over to trigger the ability.
-         * @param {ability.Ability} ability The ability to trigger.
-         */
-        value: function on(element, ability) {
-          Events.of(element, this).on("dom", "mouseenter", this[__onMouseEnter__].bind(this, ability, element)).on("dom", "mouseleave", this[__onMouseLeave__].bind(this, element));
-          element.classList.add("pb-key");
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "off", {
-
-        /**
-         * Unregisters the given element from any listeners registered in the on method.
-         *
-         * @method off
-         * @param {Element} element Element to unregister the listener from.
-         */
-        value: function off(element) {
-          Events.of(element, this).off();
-          element.classList.remove("pb-key");
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "toString", {
-
-        /**
-         * @method toString
-         * @return {string} String `pb-key-<key>`, where `key` is the key that needs to be pressed to
-         *    trigger this.
-         */
-        value: function toString() {
-          return "pb-key-" + this[__key__];
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "helpText", {
-
-        /**
-         * The help text to be displayed by {{#crossLink "ability.Helpable"}}{{/crossLink}}.
-         *
-         * @property helpText
-         * @type string
-         * @final
-         */
-        get: function () {
-          return this[__key__];
-        },
-        enumerable: true,
-        configurable: true
-      });
-
-      return _prototypeProperties2;
-    })());
+    _createComputedClass(Key, [{
+      key: __onMouseEnter__,
+      value: function (ability, element) {
+        Service.add(element, this[__key__], ability);
+      }
+    }, {
+      key: __onMouseLeave__,
+      value: function (element) {
+        Service.remove(element);
+      }
+    }, {
+      key: "on",
+      value: function on(element, ability) {
+        Events.of(element, this).on("dom", "mouseenter", this[__onMouseEnter__].bind(this, ability, element)).on("dom", "mouseleave", this[__onMouseLeave__].bind(this, element));
+        element.classList.add("pb-key");
+      }
+    }, {
+      key: "off",
+      value: function off(element) {
+        Events.of(element, this).off();
+        element.classList.remove("pb-key");
+      }
+    }, {
+      key: "toString",
+      value: function toString() {
+        return "pb-key-" + this[__key__];
+      }
+    }, {
+      key: "helpText",
+      get: function () {
+        return this[__key__];
+      }
+    }]);
 
     return Key;
   })(Trigger);
 
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Key|undefined} The Key trigger if parse is successful, or `undefined`
-   *    otherwise.
-   * @static
-   */
   Key.parse = function (str) {
     if (str.substring(0, "pb-key-".length) === "pb-key-") {
       return new Key(str.substring("pb-key-".length));
@@ -208,18 +82,10 @@ DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", functio
     return undefined;
   };
 
-  // Element > key > [ability]
   var __hoveredEls__ = Symbol("hoveredEls");
 
   var __onKeyPress__ = Symbol("onKeyPress");
 
-  /**
-   * Helper service for detecting key press.
-   *
-   * @class trigger.Key.Service
-   * @static
-   * @private
-   */
   var Service = Object.defineProperties((function () {
     var _Object$defineProperties = {};
 
@@ -229,28 +95,64 @@ DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", functio
       var char = String.fromCharCode(event.keyCode);
       var triggeredEl = null;
 
-      // First, find the triggered element that is the deepest in the chain.
-      for (var _iterator = this[__hoveredEls__][Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-        var _ref = _step.value;
-        var _ref2 = _slicedToArray(_ref, 2);
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-        var el = _ref2[0];
-        var keyMap = _ref2[1];
-        if (keyMap.has(char) && (!triggeredEl || triggeredEl.contains(el))) {
-          triggeredEl = el;
+      try {
+        for (var _iterator = this[__hoveredEls__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _step$value = _slicedToArray(_step.value, 2);
+
+          var el = _step$value[0];
+          var keyMap = _step$value[1];
+
+          if (keyMap.has(char) && (!triggeredEl || triggeredEl.contains(el))) {
+            triggeredEl = el;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
         }
       }
 
-      // Trigger the element and stop listening for the triggered element.
       if (triggeredEl) {
         var abilitySet = this[__hoveredEls__].get(triggeredEl).get(char);
-        for (var _iterator2 = abilitySet[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
-          var ability = _step2.value;
-          ability.trigger(triggeredEl);
-          break;
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = abilitySet[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var ability = _step2.value;
+
+            ability.trigger(triggeredEl);
+            break;
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+              _iterator2["return"]();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
         }
 
-        // Check if the mouse is still inside the triggered el.
         var rect = triggeredEl.getBoundingClientRect();
         if (Move.movedElements.has(triggeredEl) || rect.left > Move.mouseX || rect.right < Move.mouseX || rect.top > Move.mouseY || rect.bottom < Move.mouseY) {
           this[__hoveredEls__]["delete"](triggeredEl);
@@ -289,8 +191,8 @@ DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", functio
       get: function () {
         return this[__hoveredEls__];
       },
-      enumerable: true,
-      configurable: true
+      configurable: true,
+      enumerable: true
     }
   });
 
@@ -301,56 +203,4 @@ DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", functio
   Key.Service = Service;
 
   return Key;
-}]);
-
-
-/**
- * Handles event when a key press is detected.
- *
- * @method __onKeyPress__
- * @param {Event} event The KeyboardEvent that triggered this handler.
- * @private
- */
-
-
-/**
- * Initializes the service.
- *
- * @method init
- * @param {Document} doc The document to listen to key presses.
- */
-
-
-/**
- * Registers the given element to trigger the given ability when the given key is pressed.
- *
- * @method add
- * @param {Element} element The element to trigger when the given key is pressed.
- * @param {string} key The key to press
- * @param {ability.Ability} ability The ability to trigger.
- */
-
-
-/**
- * Unregisters the given element.
- *
- * @method remove
- * @param {Element} element The element to unregister.
- */
-
-
-/**
- * Clears all registered elements.
- *
- * @method clear
- */
-
-
-/**
- * Map of elements to trigger the ability on. The key is the element, the value is a map of key
- * to a set of abilities.
- *
- * @property hoveredEls
- * @type Map
- * @final
- */</script></head><body></body></html>
+}]);</script></head><body></body></html>

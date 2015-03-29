@@ -37,113 +37,47 @@
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template");
+    return doc.querySelector("template");
 }]).bind("region.Deck", ["=", "ability.=", "service.=", "ability.=", "ability.=", "trigger.=", "region.=", "ability.=", "=", "=", "=", function ($registry, Abilities, Config, Droppable, Helpable, Key, Region, Shuffleable, Utils, doc, template) {
-  /**
-   * Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.
-   * Any child elements of this class are considered to be in the deck.
-   *
-   * ```html
-   * <!-- Example: Deck containing two cards -->
-   * <pb-r-deck>
-   *   <pb-c-card id="card1">
-   *     <div class="pb-front">Front</div>
-   *     <div class="pb-back">Back</div>
-   *   </pb-c-card>
-   *   <pb-c-card id="card2">
-   *     <div class="pb-front">Front</div>
-   *     <div class="pb-back">Back</div>
-   *   </pb-c-card>
-   * </pb-r-deck>
-   * ```
-   *
-   * Supported abilities:
-   * - {{#crossLink "ability.Droppable"}}drop{{/crossLink}}
-   * - {{#crossLink "ability.Shuffleable"}}shuffle{{/crossLink}}
-   *
-   * @class region.Deck
-   * @extends region.Region
-   */
 
-  var EL_NAME = "pb-r-deck";
+    var EL_NAME = "pb-r-deck";
 
-  var Deck = (function (Region) {
-    function Deck() {
-      if (Object.getPrototypeOf(Deck) !== null) {
-        Object.getPrototypeOf(Deck).apply(this, arguments);
-      }
-    }
+    var Deck = (function (_Region) {
+        function Deck() {
+            _classCallCheck(this, Deck);
 
-    _inherits(Deck, Region);
+            if (_Region != null) {
+                _Region.apply(this, arguments);
+            }
+        }
 
-    _prototypeProperties(Deck, null, {
-      createdCallback: {
+        _inherits(Deck, _Region);
 
-        /**
-         * Called when the element is created.
-         *
-         * @method createdCallback
-         */
-        value: function createdCallback() {
-          _get(Object.getPrototypeOf(Deck.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-          this.attachedCallback();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      }
-    });
+        _createClass(Deck, {
+            createdCallback: {
+                value: function createdCallback() {
+                    _get(Object.getPrototypeOf(Deck.prototype), "createdCallback", this).call(this);
+                    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+                    this.attachedCallback();
+                }
+            }
+        });
+
+        return Deck;
+    })(Region);
+
+    Config.add(EL_NAME, new Helpable("help"), new Shuffleable("shuffle", new Key("s"), true), new Droppable("drop", new Key("d"), true));
+
+    $registry.add(EL_NAME, Deck.prototype);
 
     return Deck;
-  })(Region);
-
-  Config.add(EL_NAME, new Helpable("help"), new Shuffleable("shuffle", new Key("s"), true), new Droppable("drop", new Key("d"), true));
-
-  $registry.add(EL_NAME, Deck.prototype);
-
-  return Deck;
 }]);</script></head><body></body></html>

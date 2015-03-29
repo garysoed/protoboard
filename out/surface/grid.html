@@ -4,96 +4,44 @@
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("surface.Grid", ["=", "service.=", "=", "=", "=", function (Check, Config, PbElement, Utils, doc) {
+
   var ATTR_ROW = "pb-row";
   var ATTR_COL = "pb-col";
   var EL_NAME = "pb-s-hexgrid";
 
-  /**
-   * Base class of all grids.
-   *
-   * To implement a custom grid, you will need to implement 4 getters:
-   * - {{#crossLink "surface.Grid/rootEl:property"}}{{/crossLink}}
-   * - {{#crossLink "surface.Grid/mainTemplate:property"}}{{/crossLink}}
-   * - {{#crossLink "surface.Grid/rowTemplate:property"}}{{/crossLink}}
-   * - {{#crossLink "surface.Grid/tileTemplate:property"}}{{/crossLink}}
-   *
-   * @class surface.Grid
-   * @since 0.2.0
-   * @extends PbElement
-   */
-  var Grid = (function (PbElement) {
+  var Grid = (function (_PbElement) {
     function Grid() {
-      if (Object.getPrototypeOf(Grid) !== null) {
-        Object.getPrototypeOf(Grid).apply(this, arguments);
+      _classCallCheck(this, Grid);
+
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Grid, PbElement);
+    _inherits(Grid, _PbElement);
 
-    _prototypeProperties(Grid, null, {
+    _createClass(Grid, {
       createdCallback: {
-
-        /**
-         * Method called when the element is created.
-         *
-         * @method createdCallback
-         */
         value: function createdCallback() {
           var _this = this;
+
           _get(Object.getPrototypeOf(Grid.prototype), "createdCallback", this).call(this);
 
-          // Create the shadow DOM.
           this.createShadowRoot().appendChild(Utils.activateTemplate(this.mainTemplate, doc));
 
-          // Initializes the data.
           var rowCount = Check($(this).attr(ATTR_ROW)).isInt().orThrows();
           var colCount = Check($(this).attr(ATTR_COL)).isInt().orThrows();
           var rootEl = this.rootEl;
 
-          // Add the rows.
           for (var row = 0; row < rowCount; row++) {
             rootEl.appendChild(Utils.activateTemplate(this.rowTemplate, doc));
           }
@@ -106,89 +54,33 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("surf
               rowEl.appendChild(tileEl);
             }
           });
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       get: {
-
-        /**
-         * Returns the element at the given row and column, or null if not found.
-         *
-         * @method get
-         * @param {number} row The row index of the element to be returned.
-         * @param {number} col The col index of the element to be returned.
-         * @return {HTMLElement|null} The HTML element at the given row and col, or null if not found.
-         */
         value: function get(row, col) {
           var contentEl = this.shadowRoot.querySelector("content[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]");
           return contentEl ? contentEl.getDistributedNodes()[0] : null;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       rootEl: {
-
-        /**
-         * The root element of the grid. All rows will be added as children to this element.
-         *
-         * @property rootEl
-         * @type Element
-         * @final
-         */
         get: function () {
           throw new Error("unimplemented");
-        },
-        enumerable: true,
-        configurable: true
+        }
       },
       mainTemplate: {
-
-        /**
-         * Main template to render. This will be added as the shadow root of the element.
-         *
-         * @property mainTemplate
-         * @type Element
-         * @final
-         */
         get: function () {
           throw new Error("unimplemented");
-        },
-        enumerable: true,
-        configurable: true
+        }
       },
       rowTemplate: {
-
-        /**
-         * Template to render for every row in the grid. Tiles will be added as children to this
-         * element.
-         *
-         * @property rowTemplate
-         * @type Element
-         * @final
-         */
         get: function () {
           throw new Error("unimplemented");
-        },
-        enumerable: true,
-        configurable: true
+        }
       },
       tileTemplate: {
-
-        /**
-         * Template to render for every tile in the grid. This must have a content element.
-         *
-         * @property tileTemplate
-         * @type Element
-         * @final
-         */
         get: function () {
           throw new Error("unimplemented");
-        },
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 

@@ -33,6 +33,7 @@ p {
 DI.prefix("pb").bind("$registry", ["service.=", function (Registry) {
   return new Registry();
 }]).bind("Bootstrap", ["=", "service.=", "=", "region.Bag?", "component.Card?", "component.Dice?", "region.Deck?", "ui.Generate?", "region.Hand?", "ui.Preview?", "ui.Previewer?", "ui.Shape?", "region.Rect?", "surface.HexGrid?", "surface.RectGrid?", "component.Token?", function ($registry, Config, Utils) {
+
   return {
     run: function run(document) {
       document.addEventListener("DOMContentLoaded", function () {
@@ -42,9 +43,29 @@ DI.prefix("pb").bind("$registry", ["service.=", function (Registry) {
           return el.tagName.toLowerCase();
         });
         var tagSet = new Set(tags);
-        for (var _iterator = tagSet[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-          var tag = _step.value;
-          console.warn("Element " + tag + " is unresolved");
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = tagSet[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var tag = _step.value;
+
+            console.warn("Element " + tag + " is unresolved");
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
         }
       });
     }

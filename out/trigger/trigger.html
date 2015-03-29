@@ -4,64 +4,31 @@
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.bind("pb.trigger.Trigger", [function () {
-  /**
-   * Base class of all triggers. Triggers should be stateless and immutable.
-   *
-   * @class trigger.Trigger
-   */
   var Trigger = (function () {
-    function Trigger() {}
+    function Trigger() {
+      _classCallCheck(this, Trigger);
+    }
 
-    _prototypeProperties(Trigger, null, {
+    _createClass(Trigger, {
       on: {
-        /**
-         * Registers the given element to trigger the given ability when clicked.
-         *
-         * @method on
-         * @param {Element} element Element to register.
-         * @param {ability.Ability} ability The ability to trigger.
-         */
         value: function on(element, ability) {
           throw new Error("unimplemented");
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       off: {
-
-        /**
-         * Unregisters the given element from triggering the registered ability when clicked.
-         *
-         * @method off
-         * @param {Element} element Element to unregister.
-         */
         value: function off(element) {
           throw new Error("unimplemented");
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       toString: {
-
-        /**
-         * @method toString
-         * @return {string} String representation of the trigger. This can be used to set the trigger of
-         *    an ability.
-         */
         value: function toString() {
           throw new Error("unimplemented");
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
