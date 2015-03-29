@@ -6,7 +6,9 @@
 
 <script>"use strict";
 
-DI.bind("Chance", ["pb.=?", function (seed) {
+DI.bind("pb.seed", [function () {
+  return new Date().getTime();
+}]).bind("Chance", ["pb.=?", function (seed) {
   return new Chance(seed);
 }]);</script>
 </head><body></body></html>

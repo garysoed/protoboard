@@ -54,10 +54,10 @@ DI
      * Drops the next element added to {{#crossLink "service.Move"}}{{/crossLink}} as a child of the
      * given element.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el Element to drop the picked element into.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
         let movedElement = Move.movedElements.values().next().value;
         if (movedElement) {

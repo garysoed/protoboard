@@ -121,17 +121,17 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     _inherits(ReorderableDroppable, Droppable);
 
     _prototypeProperties(ReorderableDroppable, null, {
-      trigger: {
+      doTrigger: {
 
         /**
          * Drops the element added to {{#crossLink "service.Move"}}{{/crossLink}} as a child of the
          * given element. The position of the dropped child depends on the position of the mouse at the
          * trigger time relative to the other children.
          *
-         * @method trigger
+         * @method doTrigger
          * @param {Element} el The element to drop the picked element into.
          */
-        value: function trigger(el) {
+        value: function doTrigger(el) {
           if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
             var movedElement = Move.movedElements.values().next().value;
             if (movedElement) {

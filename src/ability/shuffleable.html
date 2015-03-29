@@ -54,10 +54,10 @@ DI
     /**
      * Shuffles the given element's children, if this ability is enabled on the element.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el Element whose children should be shuffled.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
         let shuffled = Chance.shuffle(Utils.toArray(el.children));
         shuffled.forEach(shuffledEl => {

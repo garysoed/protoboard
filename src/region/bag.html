@@ -116,10 +116,10 @@ DI
     /**
      * Picks up a random child element of the given element.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el The element whose child element should be randomly picked.
      */
-    trigger(el) {
+    doTrigger(el) {
       let candidates = Utils.toArray(el.children)
           .filter(child => $(child).attr(ATTR_PLACEHOLDER) === undefined);
       if (candidates.length > 0) {

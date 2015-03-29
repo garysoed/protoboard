@@ -160,15 +160,15 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
         configurable: true
       });
 
-      _defineProperty(_prototypeProperties2, "trigger", {
+      _defineProperty(_prototypeProperties2, "doTrigger", {
 
         /**
          * Drop the last dragged element on the given element
          *
-         * @method trigger
+         * @method doTrigger
          * @param {Element} el The element to drop the dragged element into.
          */
-        value: function trigger(el) {
+        value: function doTrigger(el) {
           if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
             var movedElement = Move.movedElements.values().next().value;
 

@@ -1,14 +1,15 @@
 <base href="..">
 
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="utils.html">
+<link rel="import" href="service/log.html">
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="trigger/triggers.html">
+<link rel="import" href="utils.html">
 
 <script>
 DI
     .prefix('pb')
-    .bind('ability.Ability', ['/=', 'trigger.=', ($, Triggers) => {
+    .bind('ability.Ability', ['/=', 'service.=', 'trigger.=', ($, Log, Triggers) => {
 
   // Private symbols.
   const __name__ = Symbol();
@@ -78,7 +79,21 @@ DI
      * @method trigger
      * @param {Element} el The element to trigger the ability on.
      */
-    trigger(el) { }
+    trigger(el) {
+      Log.log(this.attrName, $(el).attr('pb-id'));
+      this.doTrigger(el);
+    }
+
+    /**
+     * Actually triggers the effect of the ability on the given element. All abilities must extend
+     * this method.
+     *
+     * @method doTrigger
+     * @param {Element} el The element to trigger the ability on.
+     */
+    doTrigger(el) {
+      throw new Error('Unimplemented');
+    }
 
     /**
      * Returns the trigger for this ability on this element.

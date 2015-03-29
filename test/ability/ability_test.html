@@ -25,8 +25,8 @@
       }])
       .constant('doc', document.currentScript.ownerDocument)
       .run([
-          '/=', '/=', '/=', '=', 'ability.=', 'trigger.=', '=',
-          (expect, _, $, doc, Ability, Triggers, t) => {
+          '/=', '/=', '/=', '=', 'ability.=', 'service.=', 'trigger.=', '=',
+          (expect, _, $, doc, Ability, Log, Triggers, t) => {
 
   describe('ability.Ability', () => {
     let el;
@@ -91,6 +91,27 @@
 
         expect(trigger.off).called().to.be.equal(0);
       });
+    });
+
+    describe('#trigger', () => {
+      it('should log the call', () => {
+        let name = 'name';
+        let id = 'elId';
+        let el = doc.createElement('div');
+        $(el).attr('pb-id', id);
+
+        _.spy(Log, 'log');
+        let ability = new Ability(name, null);
+        _.spy(ability, 'doTrigger').overrideReturn();
+        ability.trigger(el);
+
+        expect(Log.log).calledWith(name, id).at.least(1);
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
     });
   });
   }]);

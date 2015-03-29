@@ -6,6 +6,7 @@
 
 <script>
 DI
+    .bind('pb.seed', [() => (new Date()).getTime()])
     .bind('Chance', ['pb.=?', seed => {
       return new Chance(seed);
     }]);

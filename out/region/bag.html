@@ -133,15 +133,15 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     _inherits(RandomPickable, Pickable);
 
     _prototypeProperties(RandomPickable, null, {
-      trigger: {
+      doTrigger: {
 
         /**
          * Picks up a random child element of the given element.
          *
-         * @method trigger
+         * @method doTrigger
          * @param {Element} el The element whose child element should be randomly picked.
          */
-        value: function trigger(el) {
+        value: function doTrigger(el) {
           var candidates = Utils.toArray(el.children).filter(function (child) {
             return $(child).attr(ATTR_PLACEHOLDER) === undefined;
           });

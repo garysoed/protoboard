@@ -101,16 +101,16 @@ DI.prefix("pb").bind("ability.Droppable", ["ability.=", "=", "trigger.=", "servi
         enumerable: true,
         configurable: true
       },
-      trigger: {
+      doTrigger: {
 
         /**
          * Drops the next element added to {{#crossLink "service.Move"}}{{/crossLink}} as a child of the
          * given element.
          *
-         * @method trigger
+         * @method doTrigger
          * @param {Element} el Element to drop the picked element into.
          */
-        value: function trigger(el) {
+        value: function doTrigger(el) {
           if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
             var movedElement = Move.movedElements.values().next().value;
             if (movedElement) {

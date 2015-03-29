@@ -102,15 +102,15 @@ DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "/=", "=", "trig
         enumerable: true,
         configurable: true
       },
-      trigger: {
+      doTrigger: {
 
         /**
          * Shuffles the given element's children, if this ability is enabled on the element.
          *
-         * @method trigger
+         * @method doTrigger
          * @param {Element} el Element whose children should be shuffled.
          */
-        value: function trigger(el) {
+        value: function doTrigger(el) {
           if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
             var shuffled = Chance.shuffle(Utils.toArray(el.children));
             shuffled.forEach(function (shuffledEl) {

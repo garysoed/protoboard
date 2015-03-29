@@ -153,15 +153,15 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     _inherits(Helpable, Ability);
 
     _prototypeProperties(Helpable, null, {
-      trigger: {
+      doTrigger: {
 
         /**
          * Displays the triggers for all abilities registered to this element.
          *
-         * @method trigger
+         * @method doTrigger
          * @param {Element} el The element whose abilities should be displayed.
          */
-        value: function trigger(el) {
+        value: function doTrigger(el) {
           var abilities = Abilities.of(el).getAll();
           displayEl.innerHTML = "";
 

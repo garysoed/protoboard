@@ -90,10 +90,10 @@ DI
     /**
      * Toggles the state of the given element, if the ability is enabled on the element.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el Element that should be toggled.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (this[__isEnabled__](el)) {
         $(el).attr(this.attrActive, !this[__isActive__](el));
       }

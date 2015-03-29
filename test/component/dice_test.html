@@ -20,8 +20,8 @@
       .with('$registry', ['service.=', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
       .run([
-          '/=', '/=', '/=', '=', '=', 'service.=', 'component.=',
-          (expect, $, _, doc, $registry, Config, Dice) => {
+          '/=', '/=', '/=', '=', '=', '/=', 'service.=', 'component.=',
+          (expect, $, _, doc, $registry, Chance, Config, Dice) => {
 
   describe('component.Dice', () => {
     before(done => {
@@ -144,7 +144,7 @@
       describe('#trigger', () => {
         it('should set the show-a attribute value', () => {
           let rollable = new Dice.Rollable();
-          _.spy(Math, 'random').overrideReturn(0.2);
+          _.spy(Chance, 'bool').overrideReturn(false);
 
           $(el).attr('show-a', 'true');
           rollable.init(el);

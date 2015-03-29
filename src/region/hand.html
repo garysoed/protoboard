@@ -97,10 +97,10 @@ DI
      * given element. The position of the dropped child depends on the position of the mouse at the
      * trigger time relative to the other children.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el The element to drop the picked element into.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
         let movedElement = Move.movedElements.values().next().value;
         if (movedElement) {

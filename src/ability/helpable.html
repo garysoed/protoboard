@@ -88,10 +88,10 @@ DI
     /**
      * Displays the triggers for all abilities registered to this element.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el The element whose abilities should be displayed.
      */
-    trigger(el) {
+    doTrigger(el) {
       let abilities = Abilities.of(el).getAll();
       displayEl.innerHTML = '';
 

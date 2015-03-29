@@ -98,15 +98,15 @@ DI.prefix("pb").bind("ability.Pickable", ["ability.=", "=", "trigger.=", "servic
         enumerable: true,
         configurable: true
       },
-      trigger: {
+      doTrigger: {
 
         /**
          * Picks up the element and makes it follow the mouse cursor.
          *
-         * @method trigger
+         * @method doTrigger
          * @param {Element} el Element to be picked up.
          */
-        value: function trigger(el) {
+        value: function doTrigger(el) {
           if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
             Move.add(el);
           }

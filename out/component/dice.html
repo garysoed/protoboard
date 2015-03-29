@@ -184,7 +184,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
         configurable: true
       });
 
-      _defineProperty(_prototypeProperties2, "trigger", {
+      _defineProperty(_prototypeProperties2, "doTrigger", {
 
         /**
          * Shuffles the children and randomly selects the side to show.
@@ -192,8 +192,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
          * @method trigger
          * @param {Element} el The element to trigger the ability on.
          */
-        value: function trigger(el) {
-          _get(Object.getPrototypeOf(Rollable.prototype), "trigger", this).call(this, el);
+        value: function doTrigger(el) {
+          _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
           if (this[__isEnabled__](el)) {
             $(el).attr(ATTR_SHOW_A, Chance.bool());
           }
@@ -281,15 +281,15 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
         configurable: true
       });
 
-      _defineProperty(_prototypeProperties3, "trigger", {
+      _defineProperty(_prototypeProperties3, "doTrigger", {
 
         /**
          * Flips the dice to the opposite side.
          *
-         * @method trigger
+         * @method doTrigger
          * @param {Element} el The dice to flip.
          */
-        value: function trigger(el) {
+        value: function doTrigger(el) {
           if (this[__isEnabled__](el)) {
             $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
           }

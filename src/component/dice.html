@@ -162,8 +162,8 @@ DI
      * @method trigger
      * @param {Element} el The element to trigger the ability on.
      */
-    trigger(el) {
-      super.trigger(el);
+    doTrigger(el) {
+      super.doTrigger(el);
       if (this[__isEnabled__](el)) {
         $(el).attr(ATTR_SHOW_A, Chance.bool());
       }
@@ -226,10 +226,10 @@ DI
     /**
      * Flips the dice to the opposite side.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el The dice to flip.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (this[__isEnabled__](el)) {
         $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
       }

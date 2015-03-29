@@ -117,10 +117,10 @@ DI
     /**
      * Drop the last dragged element on the given element
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el The element to drop the dragged element into.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
         let movedElement = Move.movedElements.values().next().value;
 

@@ -50,10 +50,10 @@ DI
     /**
      * Picks up the element and makes it follow the mouse cursor.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el Element to be picked up.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
         Move.add(el);
       }
