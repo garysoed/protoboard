@@ -27,3 +27,15 @@ pb-s-hexgrid::shadow [pb-row="4"] pb-u-shape::shadow .pb-shape {
 pb-s-hexgrid::shadow [pb-row="2"] pb-u-shape::shadow .pb-shape {
   fill: cornflowerblue;
 }
+
+pb-s-trianglegrid::shadow [pb-row="0"][pb-col="0"] pb-u-shape::shadow .pb-shape,
+pb-s-trianglegrid::shadow [pb-row="0"][pb-col="2"] pb-u-shape::shadow .pb-shape,
+pb-s-trianglegrid::shadow [pb-row="0"][pb-col="4"] pb-u-shape::shadow .pb-shape,
+pb-s-trianglegrid::shadow [pb-row="1"][pb-col="1"] pb-u-shape::shadow .pb-shape,
+pb-s-trianglegrid::shadow [pb-row="1"][pb-col="3"] pb-u-shape::shadow .pb-shape,
+pb-s-trianglegrid::shadow [pb-row="2"][pb-col="0"] pb-u-shape::shadow .pb-shape,
+pb-s-trianglegrid::shadow [pb-row="2"][pb-col="2"] pb-u-shape::shadow .pb-shape,
+pb-s-trianglegrid::shadow [pb-row="2"][pb-col="4"] pb-u-shape::shadow .pb-shape {
+  fill: indigo;
+  fill-opacity: 1;
+}

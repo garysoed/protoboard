@@ -36,6 +36,17 @@
   </svg>
 </template>
 
+<template id="triangle">
+  <svg id="root"
+       version="1.1"
+       baseProfile="full"
+       width="100" height="100"
+       viewBox="0 0 100 100"
+       xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,93.301 50,6.699 100,93.301" fill="black" />
+  </svg>
+</template>
+
 <script>
 DI
     .prefix('pb')
@@ -43,9 +54,19 @@ DI
     .with('circleTemplate', ['=', doc => doc.querySelector('template#circle')])
     .with('hexagonTemplate', ['=', doc => doc.querySelector('template#hexagon')])
     .with('squareTemplate', ['=', doc => doc.querySelector('template#square')])
+    .with('triangleTemplate', ['=', doc => doc.querySelector('template#triangle')])
     .bind('ui.Shape',
-        ['/=', 'service.=', '=', '=', '=', '=', '=', '=',
-        ($, Config, Utils, circleTemplate, hexagonTemplate, squareTemplate, doc, $registry) => {
+        ['/=', 'service.=', '=', '=', '=', '=', '=', '=', '=',
+        (
+          $,
+          Config,
+          Utils,
+          circleTemplate,
+          hexagonTemplate,
+          squareTemplate,
+          triangleTemplate,
+          doc,
+          $registry) => {
 
   const EL_NAME = 'pb-u-shape';
   const ATTR_NAME = 'shape';
@@ -88,6 +109,9 @@ DI
           break;
         case 'square':
           template = squareTemplate;
+          break;
+        case 'triangle':
+          template = triangleTemplate;
           break;
         default:
           throw new Error(`Unrecognized shape: ${shape}`);

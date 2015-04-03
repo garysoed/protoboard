@@ -21,6 +21,12 @@
   </svg>
 </template>
 
+<template id="triangle">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,93.301 50,6.699 100,93.301" fill="black"></polygon>
+  </svg>
+</template>
+
 <script>"use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -35,7 +41,9 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("c
   return doc.querySelector("template#hexagon");
 }])["with"]("squareTemplate", ["=", function (doc) {
   return doc.querySelector("template#square");
-}]).bind("ui.Shape", ["/=", "service.=", "=", "=", "=", "=", "=", "=", function ($, Config, Utils, circleTemplate, hexagonTemplate, squareTemplate, doc, $registry) {
+}])["with"]("triangleTemplate", ["=", function (doc) {
+  return doc.querySelector("template#triangle");
+}]).bind("ui.Shape", ["/=", "service.=", "=", "=", "=", "=", "=", "=", "=", function ($, Config, Utils, circleTemplate, hexagonTemplate, squareTemplate, triangleTemplate, doc, $registry) {
 
   var EL_NAME = "pb-u-shape";
   var ATTR_NAME = "shape";
@@ -65,6 +73,9 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("c
               break;
             case "square":
               template = squareTemplate;
+              break;
+            case "triangle":
+              template = triangleTemplate;
               break;
             default:
               throw new Error("Unrecognized shape: " + shape);
