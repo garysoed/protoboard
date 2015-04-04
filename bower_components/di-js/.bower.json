@@ -1,0 +1,32 @@
+{
+  "name": "DI",
+  "homepage": "https://github.com/garysoed/di",
+  "authors": [
+    "Gary Soedarsono <garysoed@gmail.com>"
+  ],
+  "description": "Simple JavaScript dependency injection",
+  "main": "out/bin.min.js",
+  "keywords": [
+    "javascript",
+    "dependency",
+    "injection"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "bf486e7a3c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "bf486e7a3c7df13f601d298244fab97676d963a3"
+  },
+  "_source": "git://github.com/garysoed/di.git",
+  "_target": "*",
+  "_originalSource": "di-js",
+  "_direct": true
+}
