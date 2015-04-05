@@ -2,18 +2,9 @@
  * To use this library, you will need to write an HTML file. You will need to do the following:
  * 1. Add the following code to the `<head>` block of the document:
  *    ```html
- *    <link rel="import" href="path/to/out/di.html">
- *    <link rel="import" href="path/to/out/bootstrap.html">
+ *    <link rel="import" href="path/to/protoboard/out/main.html">
  *    ```
- * 2. Below the `<link>` tags added in the previous steps, add the code below. Copy the code
- *    verbatim.
- *    ```html
- *    <script>
- *      DI.run(function(Bootstrap) { Bootstrap.run(document); });
- *    </script>
- *    ```
- *    This code sets up all the custom elements used in the page.
- * 3. Add custom elements in the body. Be sure to import the appropriate files in the `<head>`
+ * 2. Add custom elements in the body. Be sure to import the appropriate files in the `<head>`
  *    block. For example, to add a token:
  *    ```html
  *    <head>

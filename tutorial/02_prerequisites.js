@@ -1,6 +1,9 @@
 /**
  * 1. Install [NPM](https://www.npmjs.com/).
- * 2. Unpack the binary in the directory.
+ * 2. Unpack the binary in the directory, or install using [bower](http://bower.io/):
+ *    ```
+ *    bower install --save protoboard
+ *    ```
  * 3. Protoboard relies on
  *    [HTML Import](http://www.html5rocks.com/en/tutorials/webcomponents/imports/). So you will need
  *    an HTTP server serving static files. A simple one you can use is
