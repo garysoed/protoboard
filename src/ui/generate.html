@@ -94,7 +94,7 @@ DI
       // Gets the data.
       let promises = Check($(this).attr('input'))
           .isList()
-          .orThrows()
+          .orUse([])
           .map(name => Template.get(name));
       Promise
           .all(promises)

@@ -14,6 +14,9 @@
  *
  *      <!-- Import token -->
  *      <link rel="import" href="path/to/out/component/token.html">
+ *
+ *      <!-- This should always come last -->
+ *      <link rel="import" href="path/to/protoboard/out/main.html">
  *    </head>
  *
  *    <body>
@@ -27,6 +30,7 @@
  *      </script>
  *    </body>
  *    ```
+ *    Make sure that all dependencies are ABOVE the `main.html` import.
  *
  * To help with debugging for missing imports, you can open the developer tools (Alt + &#8984; for
  * Chrome on Mac) and check the Console tab. It should tell you elements which are missing imports.

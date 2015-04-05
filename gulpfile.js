@@ -104,6 +104,7 @@ function subSass() {
 gulp.task('copy', function() {
   return gulp
       .src([
+          'bower_components/animate.css/animate.min.css',
           'bower_components/chance/chance.js',
           'bower_components/di-js/out/bin.min.js',
           'bower_components/hammerjs/hammer.js',

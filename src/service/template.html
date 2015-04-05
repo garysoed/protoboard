@@ -16,19 +16,19 @@ DI
    * Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
    * partials and data to the template. For example:
    * ```javascript
-   * DI.run(function(service_Template) {
+   * DI.run(['pb.service.=', function(Template) {
    *   // Registers a partial. The partial value must be contained in the element passed into the
    *   // service.
-   *   service_Template.addPartial('card', document.querySelector('template'));
+   *   Template.addPartial('card', document.querySelector('template'));
    *
    *   // Registers data to the template.
-   *   service_Template.addData('cards', [
+   *   Template.addData('cards', [
    *     { value: 'A', suit: 'Spade' },
    *     { value: 'A', suit: 'Club' },
    *     { value: 'A', suit: 'Heart' },
    *     { value: 'A', suit: 'Diamond' },
    *   ]);
-   * });
+   * }]);
    * ```
    *
    * This class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for

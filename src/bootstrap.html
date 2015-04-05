@@ -2,6 +2,7 @@
 
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="service/config.html">
+<link rel="import" href="service/registry.html">
 
 <style>
     /* TODO(gs): Move this to myth? */
@@ -55,18 +56,20 @@ DI
 
   return {
     run(document) {
-      document.addEventListener('DOMContentLoaded', () => {
-        $registry.register(document, Config);
+      Utils
+          .watch(() => document.readyState === 'interactive' || document.readyState === 'complete')
+          .then(() => {
+            $registry.register(document, Config);
 
-        let tags = Utils.
-            toArray(document.querySelectorAll(':unresolved')).
-            map(el => el.tagName.toLowerCase());
-        let tagSet = new Set(tags);
-        for (let tag of tagSet) {
-          console.warn(`Element ${tag} is unresolved`);
-        }
-      });
-    }
-  };
+            let tags = Utils.
+                toArray(document.querySelectorAll(':unresolved')).
+                map(el => el.tagName.toLowerCase());
+            let tagSet = new Set(tags);
+            for (let tag of tagSet) {
+              console.warn(`Element ${tag} is unresolved`);
+            }
+          });
+      }
+    };
 }]);
 </script>

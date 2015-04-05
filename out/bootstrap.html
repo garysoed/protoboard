@@ -2,6 +2,7 @@
 
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="service/config.html">
+<link rel="import" href="service/registry.html">
 
 <style>/* TODO(gs): Move this to myth? */
 
@@ -36,7 +37,9 @@ DI.prefix("pb").bind("$registry", ["service.=", function (Registry) {
 
   return {
     run: function run(document) {
-      document.addEventListener("DOMContentLoaded", function () {
+      Utils.watch(function () {
+        return document.readyState === "interactive" || document.readyState === "complete";
+      }).then(function () {
         $registry.register(document, Config);
 
         var tags = Utils.toArray(document.querySelectorAll(":unresolved")).map(function (el) {

@@ -40,7 +40,7 @@ DI.prefix("pb").bind("ui.Generate", ["=", "=", "service.=", "=", "service.=", fu
 
           _get(Object.getPrototypeOf(Generate.prototype), "createdCallback", this).call(this);
 
-          var promises = Check($(this).attr("input")).isList().orThrows().map(function (name) {
+          var promises = Check($(this).attr("input")).isList().orUse([]).map(function (name) {
             return Template.get(name);
           });
           Promise.all(promises).then(function (dataList) {
