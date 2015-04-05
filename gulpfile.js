@@ -101,6 +101,20 @@ function subSass() {
   });
 }
 
+gulp.task('copy', function() {
+  return gulp
+      .src([
+          'bower_components/chance/chance.js',
+          'bower_components/di-js/out/bin.min.js',
+          'bower_components/hammerjs/hammer.js',
+          'bower_components/handlebars/handlebars.js',
+          'bower_components/jquery/dist/jquery.js',
+          'bower_components/Keypress/keypress.js'
+        ],
+        { base: 'bower_components' })
+      .pipe(gulp.dest('out/third_party'));
+});
+
 gulp.task('clean', shell.task('rm -r out doc'));
 
 gulp.task('doc-gen', shell.task('yuidoc --config yuidoc.json'));
@@ -120,7 +134,7 @@ gulp.task('jshint', function() {
       .pipe(subJsHint());
 })
 
-gulp.task('src', ['jshint'], function() {
+gulp.task('src', ['jshint', 'copy'], function() {
   return gulp.src(['./src/**/*.html'])
       .pipe(subBabel())
       .pipe(subMythHtml())
@@ -153,7 +167,7 @@ gulp.task('karma-dev', function(done) {
   }, done);
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', ['compile'], function() {
   // src
   gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
     var base = event.path.substring(__dirname.length).split('/')[1];

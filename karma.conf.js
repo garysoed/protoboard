@@ -16,7 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // Generated files
-      { pattern: 'out/**/!(*_test).html', included: false },
+      { pattern: 'out/**/!(*_test).*', included: false },
 
       // Deps
       { pattern: 'bower_components/chance/chance.js', included: false },
