@@ -40,6 +40,9 @@
  * [all/index.html](https://github.com/garysoed/protoboard/blob/master/ex/all/index.html) for
  * examples on how to use every element. You can also play around with every element on that page.
  *
+ * Some example projects:
+ * - [Chess](https://github.com/garysoed/protoboard-chess)
+ *
  * @class 3 Basic Usage
  * @module tutorial
  */
