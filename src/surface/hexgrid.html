@@ -1,7 +1,6 @@
 <base href="..">
 
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="ui/shape.html">
 
 <template id="main">
   <style>
@@ -12,15 +11,6 @@
       left: 0;
       right: 0;
       margin: auto;
-    }
-
-    pb-u-shape {
-      z-index: -1;
-    }
-
-    pb-u-shape::shadow #root {
-      fill-opacity: 0;
-      stroke: var(--color-border);
     }
 
     .row {
@@ -57,7 +47,6 @@
 
 <template id="tile">
   <div class="tile">
-    <pb-u-shape shape="hexagon"></pb-u-shape>
     <content></content>
   </div>
 </template>
@@ -93,17 +82,7 @@ DI
    * </pb-s-hexgrid>
    * ```
    *
-   * You can customize the tiles by using `pb-s-hexgrid::shadow pb-u-shape::shadow .pb-shape` CSS
-   * selector. Since the tiles use SVG, you will need to use SVG attributes like `fill`.
-   *
-   * To select tile on a specific location add selector by attribute `pb-row` and `pb-col`. For
-   * example, to color tile (2, 3) red:
-   *
-   * ```css
-   * pb-s-hexgrid::shadow [pb-col="2"][pb-row="3"] pb-u-shape::shadow .pb-shape {
-   *   fill: red;
-   * }
-   * ```
+   * You can use {{#crossLink "ui.Shape"}}`<pb-u-shape>`{{/crossLink}} to create hexagon shapes.
    *
    * @class surface.HexGrid
    * @since 0.2.0

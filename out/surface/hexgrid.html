@@ -1,7 +1,6 @@
 <html><head><base href="..">
 
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="ui/shape.html">
 
 <template id="main">
   <style>::content > * {
@@ -11,15 +10,6 @@
   left: 0;
   right: 0;
   margin: auto;
-}
-
-pb-u-shape {
-  z-index: -1;
-}
-
-pb-u-shape::shadow #root {
-  fill-opacity: 0;
-  stroke: #8982B8;
 }
 
 .row {
@@ -57,7 +47,6 @@ pb-u-shape::shadow #root {
 
 <template id="tile">
   <div class="tile">
-    <pb-u-shape shape="hexagon"></pb-u-shape>
     <content></content>
   </div>
 </template>

@@ -268,11 +268,40 @@
           <td>Hex Grid</td>
           <td>
             <pb-s-hexgrid pb-row="5" pb-col="3">
-              <pb-r-bag pb-col="0" pb-row="0"></pb-r-bag>
-              <pb-r-bag pb-col="1" pb-row="0"></pb-r-bag>
-              <pb-r-bag pb-col="0" pb-row="1"></pb-r-bag>
-              <pb-r-bag pb-col="1" pb-row="1"></pb-r-bag>
-              <pb-r-bag pb-col="2" pb-row="4"></pb-r-bag>
+              <div pb-col="0" pb-row="0">
+                <pb-u-shape shape="hexagon"></pb-u-shape>
+                <pb-r-bag></pb-r-bag>
+              </div>
+              <div pb-col="1" pb-row="0">
+                <pb-u-shape shape="hexagon"></pb-u-shape>
+                <pb-r-bag></pb-r-bag>
+              </div>
+              <pb-u-shape pb-col="2" pb-row="0" shape="hexagon"></pb-u-shape>
+
+              <div pb-col="0" pb-row="1">
+                <pb-u-shape shape="hexagon"></pb-u-shape>
+                <pb-r-bag></pb-r-bag>
+              </div>
+              <div pb-col="1" pb-row="1">
+                <pb-u-shape shape="hexagon"></pb-u-shape>
+                <pb-r-bag></pb-r-bag>
+              </div>
+              <pb-u-shape pb-col="2" pb-row="1" shape="hexagon"></pb-u-shape>
+
+              <pb-u-shape pb-col="0" pb-row="2" shape="hexagon"></pb-u-shape>
+              <pb-u-shape pb-col="1" pb-row="2" shape="hexagon"></pb-u-shape>
+              <pb-u-shape pb-col="2" pb-row="2" shape="hexagon"></pb-u-shape>
+
+              <pb-u-shape pb-col="0" pb-row="3" shape="hexagon"></pb-u-shape>
+              <pb-u-shape pb-col="1" pb-row="3" shape="hexagon"></pb-u-shape>
+              <pb-u-shape pb-col="2" pb-row="3" shape="hexagon"></pb-u-shape>
+
+              <pb-u-shape pb-col="0" pb-row="4" shape="hexagon"></pb-u-shape>
+              <pb-u-shape pb-col="1" pb-row="4" shape="hexagon"></pb-u-shape>
+              <div pb-col="2" pb-row="4">
+                <pb-u-shape shape="hexagon"></pb-u-shape>
+                <pb-r-bag></pb-r-bag>
+              </div>
             </pb-s-hexgrid>
           </td>
           <td>
@@ -289,6 +318,16 @@
           <td>Triangle Grid</td>
           <td>
             <pb-s-trianglegrid pb-row="3" pb-col="5">
+              <pb-u-generate>
+                <template>
+                  {{#pb-for 0 3}}
+                    {{#pb-for 0 5}}
+                      <pb-u-shape pb-col="{{@index}}" pb-row="{{@../index}}" shape="triangle">
+                      </pb-u-shape>
+                    {{/pb-for}}
+                  {{/pb-for}}
+                </template>
+              </pb-u-generate>
             </pb-s-trianglegrid>
           </td>
           <td>

@@ -18,15 +18,6 @@
       margin: auto;
     }
 
-    pb-u-shape {
-      z-index: -1;
-    }
-
-    pb-u-shape::shadow #root {
-      fill-opacity: 0;
-      stroke: var(--color-border);
-    }
-
     .row {
       display: flex;
     }
@@ -49,7 +40,6 @@
 
 <template id="tile">
   <div class="tile">
-    <pb-u-shape shape="square"></pb-u-shape>
     <content></content>
   </div>
 </template>
@@ -85,18 +75,6 @@ DI
    *   <div pb-row="1" pb-col="0">Bottom Left</div>
    *   <div pb-row="1" pb-col="1">Bottom Right</div>
    * </pb-s-rectgrid>
-   * ```
-   *
-   * You can customize the tiles by using `pb-s-rectgrid::shadow pb-u-shape::shadow .pb-shape` CSS
-   * selector. Since the tiles use SVG, you will need to use SVG attributes like `fill`.
-   *
-   * To select tile on a specific location add selector by attribute `pb-row` and `pb-col`. For
-   * example, to color tile (2, 3) red:
-   *
-   * ```css
-   * pb-s-rectgrid::shadow [pb-col="2"][pb-row="3"] pb-u-shape::shadow .pb-shape {
-   *   fill: red;
-   * }
    * ```
    *
    * @class surface.RectGrid
