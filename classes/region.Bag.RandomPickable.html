@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#4AAE3B">
+  <meta name="theme-color" content="#19760A">
 
   <title>region.Bag.RandomPickable - Protoboard</title>
 
@@ -36,11 +36,13 @@
       white-space: pre;
     }
 
-    .since {
+    .main-since {
       font-family: 'Ubuntu Mono', monospace;
       font-size: 0.8rem;
-      line-height: 2ex;
+      height: 25px;
+      line-height: 25px;
       text-transform: uppercase;
+      overflow: hidden;
     }
 
     h1, h2 {
@@ -139,10 +141,10 @@
       color: #9AE08F;
     }
 
-    .since {
+    .main-since {
       color: #19760A;
     }
-    .reverse .since {
+    .reverse .main-since {
       color: #9AE08F;
     }
 
@@ -221,13 +223,11 @@
   </style>
 </head>
 <body>
-  <section class="main-bar">
-  </section>
   <header class="main-header reverse scroll-top">
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <span class="since">v 0.2.0</span>
+      <div class="main-since">v 0.2.0</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -793,6 +793,8 @@ with <a href="../classes/ability.Droppable.html" class="crosslink">ability.Dropp
       selected.scrollIntoView();
     }
 
+    var MAX_HEIGHT = 25;
+    var sinceEl = document.querySelector('.main-since');
     var headerEl = document.querySelector('.main-header');
     var mainEl = document.querySelector('.main-main');
     mainEl.addEventListener('scroll', function() {
@@ -801,6 +803,10 @@ with <a href="../classes/ability.Droppable.html" class="crosslink">ability.Dropp
       } else {
         headerEl.classList.remove('scroll-top');
       }
+
+      var height = Math.max(0, MAX_HEIGHT - mainEl.scrollTop / mainEl.scrollHeight * 3 * MAX_HEIGHT)
+          + 'px';
+      sinceEl.style.height = height;
     });
 
     document.querySelector('.main-menu-button').addEventListener('click', function() {
