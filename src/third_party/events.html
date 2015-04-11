@@ -1,0 +1,32 @@
+<base href="..">
+
+<script src="third_party/listener/out/bin.min.js"></script>
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+DI
+    .prefix('pb')
+    .bind('Events', [() => {
+
+  let Handlers = window['Events']['Handlers'];
+  Handlers
+      .add(
+          'dom',
+          (element, eventName, handler) => {
+            element.addEventListener(eventName, handler);
+          },
+          (element, eventName, handler) => {
+            element.removeEventListener(eventName, handler);
+          })
+      .add(
+          'jquery',
+          (element, eventName, handler) => {
+            $(element).on(eventName, handler);
+          },
+          (element, eventName, handler) => {
+            $(element).off(eventName, handler);
+          });
+  return window['Events'];
+}]);
+</script>

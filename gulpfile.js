@@ -110,7 +110,8 @@ gulp.task('copy', function() {
           'bower_components/hammerjs/hammer.js',
           'bower_components/handlebars/handlebars.js',
           'bower_components/jquery/dist/jquery.js',
-          'bower_components/Keypress/keypress.js'
+          'bower_components/Keypress/keypress.js',
+          'bower_components/listener/out/bin.min.js'
         ],
         { base: 'bower_components' })
       .pipe(gulp.dest('out/third_party'));

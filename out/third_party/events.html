@@ -1,0 +1,22 @@
+<html><head><base href="..">
+
+<script src="third_party/listener/out/bin.min.js">"use strict";</script>
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+DI.prefix("pb").bind("Events", [function () {
+
+  var Handlers = window.Events.Handlers;
+  Handlers.add("dom", function (element, eventName, handler) {
+    element.addEventListener(eventName, handler);
+  }, function (element, eventName, handler) {
+    element.removeEventListener(eventName, handler);
+  }).add("jquery", function (element, eventName, handler) {
+    $(element).on(eventName, handler);
+  }, function (element, eventName, handler) {
+    $(element).off(eventName, handler);
+  });
+  return window.Events;
+}]);</script></head><body></body></html>

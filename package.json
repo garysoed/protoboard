@@ -39,6 +39,7 @@
     "through2": "^0.6.3"
   },
   "dependencies": {
-    "di-js": "^1.0.2"
+    "di-js": "^1.0.2",
+    "listener": "git://github.com/garysoed/listener"
   }
 }
