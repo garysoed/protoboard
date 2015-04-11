@@ -1,9 +1,10 @@
 .props {
-  padding: 20px;
+  padding: 0 2em;
+  -webkit-margin-after: 2em;
 }
 
-.props:nth-child(2n) {
-  background-color: black;
+.props:first-child {
+  padding-top: 2em;
 }
 
 .props > header {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name=viewport content="width=device-width, initial-scale=1">
-  <title>trigger.Key.Service - Protoboard</title>
+  <title>component.Dice.DiceFlippable - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -297,7 +297,7 @@
           <li class="">
             <a href="../classes/component.Dice.html">component.Dice</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a>
           </li>
           <li class="">
@@ -372,7 +372,7 @@
           <li class="">
             <a href="../classes/trigger.Key.html">trigger.Key</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
           </li>
           <li class="">
@@ -403,16 +403,121 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code><span class="keyword">private</span> <span class="keyword">static</span> trigger.Key.Service</code>
+        <code>component.Dice.DiceFlippable <span class="keyword">extends</span> <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code>
       </header>
+      <div class="since">
+        since 0.2.0
+      </div>
 
     <div class="content description">
-      <p>Helper service for detecting key press.</p>
+      <p>Dice with this ability can be flipped to the opposite side. This is very specific to dice and
+should not be used for other elements.</p>
 
     </div>
 
   </section>
 
+    <section class="collapsible class-subsection">
+      <header>
+        <h2>Constructor</h2>
+      </header>
+      <div>
+          <section class="method">
+            <header id="method_component.Dice.DiceFlippable">
+              <code class="method-signature">component.Dice.DiceFlippable(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultEnabled, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultShowA)</code>
+            </header>
+              <div class="since">
+                since 0.2.0
+              </div>
+            <div class="content">
+              <span class="description"></span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>[name=pb-dice-flippable]</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Name of the ability.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>[defaultTrigger=trigger.Key]</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Default trigger of the ability.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>[defaultEnabled=false]</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>True iff the ability should be enabled by default.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>[defaultShowA=true]</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>True iff "Side A" should be shown by default.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>[name=pb-dice-flippable]</code></dt>
+                <dd><p>Name of the ability.</p>
+          </dd>
+                <dt><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code> <code>[defaultTrigger=trigger.Key]</code></dt>
+                <dd><p>Default trigger of the ability.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code> <code>[defaultEnabled=false]</code></dt>
+                <dd><p>True iff the ability should be enabled by default.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code> <code>[defaultShowA=true]</code></dt>
+                <dd><p>True iff "Side A" should be shown by default.</p>
+          </dd>
+              </dl>
+          
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+      </div>
+    </section>
 
     <section class="collapsible class-subsection">
       <header>
@@ -420,14 +525,36 @@
       </header>
       <div>
           <section class="props">
-            <header id="property_hoveredEls">
-              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map.html" class="crosslink external" target="_blank">Map</a> hoveredEls</code>
+            <header id="property_attrName">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> attrName</code>
             </header>
             <div class="content">
-              <span class="description"><p>Map of elements to trigger the ability on. The key is the element, the value is a map of key
-          to a set of abilities.</p>
+              <span class="description"><p>&lt;p&gt;Name of the ability. This is also the name of the attribute on the element corresponding to
+          this ability.&lt;/p&gt;</p>
           </span>
           
+                <footer>
+                  Defined in <code><a href="ability.Ability.html#method_attrName">ability.Ability</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_attrTrigger">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> attrTrigger</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>&lt;p&gt;The name of the attribute on the element corresponding to this ability that sets the trigger
+          for this ability. This is the name of the ability with a &lt;code&gt;-on&lt;/code&gt; postfix.&lt;/p&gt;</p>
+          </span>
+          
+                <footer>
+                  Defined in <code><a href="ability.Ability.html#method_attrTrigger">ability.Ability</a></code>
+                </footer>
+              
             </div>
           
           </section>
@@ -441,54 +568,24 @@
       </header>
       <div>
           <section class="method">
-            <header id="method_add">
-              <code class="method-signature">add(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> key, <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> ability)</code>
+            <header id="method_doTrigger">
+              <code class="method-signature">doTrigger(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Registers the given element to trigger the given ability when the given key is pressed.</p>
+              <span class="description"><p>Flips the dice to the opposite side.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>element</code></p>
+                      <p><code>el</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The element to trigger when the given key is pressed.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>key</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The key to press</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>ability</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The ability to trigger.</p>
+                      <p>The dice to flip.</p>
           
                     </td>
                   </tr>
@@ -497,31 +594,62 @@
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to trigger when the given key is pressed.</p>
-          </dd>
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>key</code></dt>
-                <dd><p>The key to press</p>
-          </dd>
-                <dt><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code> <code>ability</code></dt>
-                <dd><p>The ability to trigger.</p>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>The dice to flip.</p>
           </dd>
               </dl>
           
-          
+                <footer>
+                  Overrides <code><a href="ability.Ability.html#method_doTrigger">ability.Ability</a></code>
+                </footer>
+              
             </div>
           
             <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header id="method_clear">
-              <code class="method-signature">clear()</code>
+            <header id="method_getTrigger">
+              <code class="method-signature">getTrigger(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el) => <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null.html" class="crosslink external" target="_blank">Null</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Clears all registered elements.</p>
+              <span class="description"><p>&lt;p&gt;Returns the trigger for this ability on this element.&lt;/p&gt;</p>
           </span>
           
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>el</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;The element to return the trigger for this ability for.&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;The element to return the trigger for this ability for.&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;</p>
+          </dd>
+              </dl>
+          
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null.html" class="crosslink external" target="_blank">Null</a></code><span class="description"><p>&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;The trigger for this ability on this element, or null if there
+          is none.&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;</p>
+          </span>
+                </div>
+          
+                <footer>
+                  Defined in <code><a href="ability.Ability.html#method_getTrigger">ability.Ability</a></code>
+                </footer>
+              
             </div>
           
             <div class="divider"></div>
@@ -529,23 +657,23 @@
           
           <section class="method">
             <header id="method_init">
-              <code class="method-signature">init(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc)</code>
+              <code class="method-signature">init(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Initializes the service.</p>
+              <span class="description"><p>Sets the default configuration for this ability on the given element.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>doc</code></p>
+                      <p><code>el</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code></p>
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The document to listen to key presses.</p>
+                      <p>The element to set the default configuration to.</p>
           
                     </td>
                   </tr>
@@ -554,36 +682,39 @@
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>doc</code></dt>
-                <dd><p>The document to listen to key presses.</p>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>The element to set the default configuration to.</p>
           </dd>
               </dl>
           
-          
+                <footer>
+                  Overrides <code><a href="ability.Ability.html#method_init">ability.Ability</a></code>
+                </footer>
+              
             </div>
           
             <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header id="method_remove">
-              <code class="method-signature">remove(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element)</code>
+            <header id="method_trigger">
+              <code class="method-signature">trigger(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Unregisters the given element.</p>
+              <span class="description"><p>&lt;p&gt;Triggers the effect of the ability on the given element.&lt;/p&gt;</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>element</code></p>
+                      <p><code>el</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The element to unregister.</p>
+                      <p>&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;The element to trigger the ability on.&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;</p>
           
                     </td>
                   </tr>
@@ -592,12 +723,58 @@
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to unregister.</p>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;The element to trigger the ability on.&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;</p>
           </dd>
               </dl>
           
           
+                <footer>
+                  Defined in <code><a href="ability.Ability.html#method_trigger">ability.Ability</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_updateConfig">
+              <code class="method-signature">updateConfig(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>&lt;p&gt;Updates the inner state of the ability based on changes to the element.&lt;/p&gt;</p>
+          </span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>el</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;Element whose attributes have changed.&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;Element whose attributes have changed.&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;</p>
+          </dd>
+              </dl>
+          
+          
+                <footer>
+                  Defined in <code><a href="ability.Ability.html#method_updateConfig">ability.Ability</a></code>
+                </footer>
+              
             </div>
           
             <div class="divider"></div>

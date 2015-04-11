@@ -1,6 +1,6 @@
 pre.prettyprint {
   background-color: #26292C;
-  border: 2px solid #515559;
+  border: 2px solid;
   padding: 20px;
   margin: 10px;
   line-height: 2.7ex;
@@ -43,4 +43,10 @@ pre.prettyprint .atv {
 
 pre.prettyprint .lit {
   color: #F6F080;
+}
+
+@media screen and (max-width: 900px) {
+  pre.prettyprint code {
+    white-space: pre-wrap;
+  }
 }

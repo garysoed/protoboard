@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name=viewport content="width=device-width, initial-scale=1">
-  <title>trigger.Key.Service - Protoboard</title>
+  <title>service.Log - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -336,7 +336,7 @@
           <li class="">
             <a href="../classes/region.Region.html">region.Region</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/service.Log.html">service.Log</a>
           </li>
           <li class="">
@@ -372,7 +372,7 @@
           <li class="">
             <a href="../classes/trigger.Key.html">trigger.Key</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
           </li>
           <li class="">
@@ -403,11 +403,66 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code><span class="keyword">private</span> <span class="keyword">static</span> trigger.Key.Service</code>
+        <code><span class="keyword">static</span> service.Log</code>
       </header>
+      <div class="since">
+        since 0.2.0
+      </div>
 
     <div class="content description">
-      <p>Helper service for detecting key press.</p>
+      <p>A service to log events and happenings in a game. Use this service to collect statistics about
+a game session.</p>
+<p>By default, the service records all triggers to every
+<a href="../classes/ability.Ability.html" class="crosslink">abilities</a> loaded. The format of a log entry is:
+<code>&lt;timestamp&gt;: &lt;category&gt; - &lt;value&gt;</code>. For abilities, <code>category</code> is the ability's name, and the
+<code>value</code> is the value of <code>pb-id</code> of the element the ability acts on.</p>
+<p>For every Protoboard component, region, and surface, you can customize the prefix of the id by
+specifying the <code>pb-id</code> attribute. When the element is activated, Protoboard will append a
+number to the attribute to make sure that they are unique. For instance:</p>
+<pre class="code prettyprint"><code class="language-html">&lt;pb-c-card pb-id="attack"&gt;&lt;/pb-c-card&gt;
+</code></pre>
+<p>will have its <code>pb-id</code> set to <code>attack-0</code>. So when the card is <code>flip</code>ped, this service will log
+<code>3/28/2015, 6:01:48 PM: flip - attack-0</code>.</p>
+<p>For entries not handled by Abilities, you can also add log entries manually. Use the
+<a href="../classes/service.Log.html#method_log" class="crosslink">log</a> method. For instance:</p>
+<pre class="code prettyprint"><code class="language-javascript">DI.run(['service.=', function(Log) {
+  Log.log('player-count', 2);
+}]);
+</code></pre>
+<p>will generate entry: <code>3/28/2015, 6:01:48 PM: player-count - 2</code>.</p>
+<p>You can also customize the string output using the
+<a href="../classes/service.Log.html#method_addProcessor" class="crosslink">addProcessor</a> method. For example:</p>
+<pre class="code prettyprint"><code class="language-javascript">DI.run(['service.=', function(Log) {
+  Log
+      .addProcessor(function(timestamp, category, value) {
+        if (category !== 'player-count') {
+          return timestamp.toLocaleString() + ': ' + category + ' on ' + value;
+        } else {
+          return null;
+        }
+      })
+     .addProcessor(Log.defaultProcessor)
+     .log('player-count', 2)
+     .log('rng-seed', 1234);
+}]);
+</code></pre>
+<p>A processor is a function that takes 3 arguments:</p>
+<ol>
+<li><code>timestamp</code> of type <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a>.</li>
+<li><code>category</code> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>.</li>
+<li><code>value</code>
+You can specify more than one processors. The processors will be called in the other that they
+are added to the service. The value that will be used for the log entry is the value returned
+by the first processor that returns a non empty string.</li>
+</ol>
+<p>So the example above will generate:</p>
+<pre class="code prettyprint"><code>3/28/2015, 6:21:47 PM: player-count on 2
+3/28/2015, 6:21:53 PM: rng-seed - 1234
+</code></pre>
+<p>The custom processor was used to generate the entry for <code>player-count</code>, while the default
+processor was used to generate the one for <code>rng-seed</code>.</p>
+<p>You can retrieve the entries using <a href="../classes/service.Log.html#property_blob" class="crosslink">blob</a> as
+a blob, or <a href="../classes/service.Log.html#property_entries" class="crosslink">entries</a> as a string.</p>
 
     </div>
 
@@ -420,12 +475,38 @@
       </header>
       <div>
           <section class="props">
-            <header id="property_hoveredEls">
-              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map.html" class="crosslink external" target="_blank">Map</a> hoveredEls</code>
+            <header id="property_blob">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Blob.html" class="crosslink external" target="_blank">Blob</a> blob</code>
             </header>
             <div class="content">
-              <span class="description"><p>Map of elements to trigger the ability on. The key is the element, the value is a map of key
-          to a set of abilities.</p>
+              <span class="description"><p>The entries as a blob.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_defaultProcessor">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> defaultProcessor</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Default processor of the service. This processor is also used if no custom processors are
+          added.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_entries">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> entries</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>The entries as a string.</p>
           </span>
           
             </div>
@@ -441,54 +522,33 @@
       </header>
       <div>
           <section class="method">
-            <header id="method_add">
-              <code class="method-signature">add(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> key, <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> ability)</code>
+            <header id="method_addProcessor">
+              <code class="method-signature">addProcessor(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> processor) => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Registers the given element to trigger the given ability when the given key is pressed.</p>
+              <span class="description"><p>Adds a processor to process a log entry.
+          A processor is a function that takes 3 arguments:</p>
+          <ol>
+          <li><code>timestamp</code> of type <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a>.</li>
+          <li><code>category</code> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>.</li>
+          <li><code>value</code>
+          You can specify more than one processors. The processors will be called in the other that
+          they are added to the service. The value that will be used for the log entry is the value
+          returned by the first processor that returns a non empty string.</li>
+          </ol>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>element</code></p>
+                      <p><code>processor</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The element to trigger when the given key is pressed.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>key</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The key to press</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>ability</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The ability to trigger.</p>
+                      <p>The processor to add.</p>
           
                     </td>
                   </tr>
@@ -497,17 +557,15 @@
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to trigger when the given key is pressed.</p>
-          </dd>
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>key</code></dt>
-                <dd><p>The key to press</p>
-          </dd>
-                <dt><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code> <code>ability</code></dt>
-                <dd><p>The ability to trigger.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>processor</code></dt>
+                <dd><p>The processor to add.</p>
           </dd>
               </dl>
           
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
           
             </div>
           
@@ -516,11 +574,15 @@
           
           <section class="method">
             <header id="method_clear">
-              <code class="method-signature">clear()</code>
+              <code class="method-signature">clear() => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Clears all registered elements.</p>
+              <span class="description"><p>Removes all entries that have been added to this service.</p>
           </span>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
           
             </div>
           
@@ -528,24 +590,57 @@
           </section>
           
           <section class="method">
-            <header id="method_init">
-              <code class="method-signature">init(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc)</code>
+            <header id="method_clearProcessors">
+              <code class="method-signature">clearProcessors() => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Initializes the service.</p>
+              <span class="description"><p>Removes all processors that have been added to this service.</p>
+          </span>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_log">
+              <code class="method-signature">log(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> category, Any value) => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Adds an entry to the log.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>doc</code></p>
+                      <p><code>category</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code></p>
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The document to listen to key presses.</p>
+                      <p>The category of the entry. Use this to identify the type of the log.
+          For instance, "click", "flip".</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>value</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code>Any</code></p>
+                    </td>
+                    <td class="description">
+                      <p>The value of the category for the entry.</p>
           
                     </td>
                   </tr>
@@ -554,49 +649,19 @@
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>doc</code></dt>
-                <dd><p>The document to listen to key presses.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>category</code></dt>
+                <dd><p>The category of the entry. Use this to identify the type of the log.
+          For instance, "click", "flip".</p>
+          </dd>
+                <dt><code>Any</code> <code>value</code></dt>
+                <dd><p>The value of the category for the entry.</p>
           </dd>
               </dl>
           
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method">
-            <header id="method_remove">
-              <code class="method-signature">remove(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Unregisters the given element.</p>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
           </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The element to unregister.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to unregister.</p>
-          </dd>
-              </dl>
-          
+                </div>
           
             </div>
           

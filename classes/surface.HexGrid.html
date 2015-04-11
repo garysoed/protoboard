@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name=viewport content="width=device-width, initial-scale=1">
-  <title>trigger.Key.Service - Protoboard</title>
+  <title>surface.HexGrid - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -354,7 +354,7 @@
           <li class="">
             <a href="../classes/surface.Grid.html">surface.Grid</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/surface.HexGrid.html">surface.HexGrid</a>
           </li>
           <li class="">
@@ -372,7 +372,7 @@
           <li class="">
             <a href="../classes/trigger.Key.html">trigger.Key</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
           </li>
           <li class="">
@@ -403,11 +403,27 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code><span class="keyword">private</span> <span class="keyword">static</span> trigger.Key.Service</code>
+        <code>surface.HexGrid <span class="keyword">extends</span> <a href="../classes/surface.Grid.html" class="crosslink">surface.Grid</a></code>
       </header>
+      <div class="since">
+        since 0.2.0
+      </div>
 
     <div class="content description">
-      <p>Helper service for detecting key press.</p>
+      <p>A surface that lays out its children in a hexagonal grid. To use this, add attributes
+<code>pb-row</code> and <code>pb-col</code> to the element <code>pb-s-hexgrid</code>. These are the number of rows and columns
+in the grid.</p>
+<p>Add the contents of the grid as children of this element. Use <code>pb-row</code> and <code>pb-col</code> attributes
+on them to indicate their positions in the grid.</p>
+<pre class="code prettyprint"><code class="language-html">&lt;pb-s-hexgrid pb-row="2" pb-col="3"&gt;
+  &lt;!-- Third column is empty --&gt;
+  &lt;div pb-row="0" pb-col="0"&gt;Top Left&lt;/div&gt;
+  &lt;div pb-row="0" pb-col="1"&gt;Top Middle&lt;/div&gt;
+  &lt;div pb-row="1" pb-col="0"&gt;Bottom Left&lt;/div&gt;
+  &lt;div pb-row="1" pb-col="1"&gt;Bottom Middle&lt;/div&gt;
+&lt;/pb-s-hexgrid&gt;
+</code></pre>
+<p>You can use <a href="../classes/ui.Shape.html" class="crosslink"><code>&lt;pb-u-shape&gt;</code></a> to create hexagon shapes.</p>
 
     </div>
 
@@ -420,14 +436,82 @@
       </header>
       <div>
           <section class="props">
-            <header id="property_hoveredEls">
-              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map.html" class="crosslink external" target="_blank">Map</a> hoveredEls</code>
+            <header id="property_isCreated">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> isCreated</code>
             </header>
             <div class="content">
-              <span class="description"><p>Map of elements to trigger the ability on. The key is the element, the value is a map of key
-          to a set of abilities.</p>
+              <span class="description"><p>True iff the element has been created.</p>
           </span>
           
+                <footer>
+                  Defined in <code><a href="PbElement.html#method_isCreated">PbElement</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_mainTemplate">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> mainTemplate</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Main template to render. This will be added as the shadow root of the element.</p>
+          </span>
+                <footer>
+                  Overrides <code><a href="surface.Grid.html#method_mainTemplate">surface.Grid</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_rootEl">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> rootEl</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>The root element of the grid. All rows will be added as children to this element.</p>
+          </span>
+                <footer>
+                  Overrides <code><a href="surface.Grid.html#method_rootEl">surface.Grid</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_rowTemplate">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> rowTemplate</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Template to render for every row in the grid. Tiles will be added as children to this
+          element.</p>
+          </span>
+                <footer>
+                  Overrides <code><a href="surface.Grid.html#method_rowTemplate">surface.Grid</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_tileTemplate">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> tileTemplate</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Template to render for every tile in the grid.</p>
+          </span>
+                <footer>
+                  Overrides <code><a href="surface.Grid.html#method_tileTemplate">surface.Grid</a></code>
+                </footer>
+              
             </div>
           
           </section>
@@ -441,24 +525,74 @@
       </header>
       <div>
           <section class="method">
-            <header id="method_add">
-              <code class="method-signature">add(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> key, <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> ability)</code>
+            <header id="method_attachedCallback">
+              <code class="method-signature">attachedCallback()</code>
             </header>
             <div class="content">
-              <span class="description"><p>Registers the given element to trigger the given ability when the given key is pressed.</p>
+              <span class="description"><p>Called when the element is attached to the document.</p>
+          </span>
+          
+                <footer>
+                  Defined in <code><a href="PbElement.html#method_attachedCallback">PbElement</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_createdCallback">
+              <code class="method-signature">createdCallback()</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>&lt;p&gt;Method called when the element is created.&lt;/p&gt;</p>
+          </span>
+                <footer>
+                  Overrides <code><a href="PbElement.html#method_createdCallback">PbElement</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_detachedCallback">
+              <code class="method-signature">detachedCallback()</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Called when the element is detached from the document.</p>
+          </span>
+          
+                <footer>
+                  Defined in <code><a href="PbElement.html#method_detachedCallback">PbElement</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_get">
+              <code class="method-signature">get(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a> row, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a> col) => <a href="https://developer.mozilla.org/en/Document_Object_Model_(DOM)/HTMLElement" class="crosslink external" target="_blank">HTMLElement</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null.html" class="crosslink external" target="_blank">Null</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>&lt;p&gt;Returns the element at the given row and column, or null if not found.&lt;/p&gt;</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>element</code></p>
+                      <p><code>row</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The element to trigger when the given key is pressed.</p>
+                      <p>&lt;p&gt;The row index of the element to be returned.&lt;/p&gt;</p>
           
                     </td>
                   </tr>
@@ -467,28 +601,13 @@
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>key</code></p>
+                      <p><code>col</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The key to press</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>ability</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The ability to trigger.</p>
+                      <p>&lt;p&gt;The col index of the element to be returned.&lt;/p&gt;</p>
           
                     </td>
                   </tr>
@@ -497,107 +616,23 @@
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to trigger when the given key is pressed.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></code> <code>row</code></dt>
+                <dd><p>&lt;p&gt;The row index of the element to be returned.&lt;/p&gt;</p>
           </dd>
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>key</code></dt>
-                <dd><p>The key to press</p>
-          </dd>
-                <dt><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code> <code>ability</code></dt>
-                <dd><p>The ability to trigger.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></code> <code>col</code></dt>
+                <dd><p>&lt;p&gt;The col index of the element to be returned.&lt;/p&gt;</p>
           </dd>
               </dl>
           
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method">
-            <header id="method_clear">
-              <code class="method-signature">clear()</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Clears all registered elements.</p>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/Document_Object_Model_(DOM)/HTMLElement" class="crosslink external" target="_blank">HTMLElement</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null.html" class="crosslink external" target="_blank">Null</a></code><span class="description"><p>&lt;p&gt;The HTML element at the given row and col, or null if not found.&lt;/p&gt;</p>
           </span>
+                </div>
           
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method">
-            <header id="method_init">
-              <code class="method-signature">init(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Initializes the service.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>doc</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The document to listen to key presses.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>doc</code></dt>
-                <dd><p>The document to listen to key presses.</p>
-          </dd>
-              </dl>
-          
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method">
-            <header id="method_remove">
-              <code class="method-signature">remove(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Unregisters the given element.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The element to unregister.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to unregister.</p>
-          </dd>
-              </dl>
-          
-          
+                <footer>
+                  Defined in <code><a href="surface.Grid.html#method_get">surface.Grid</a></code>
+                </footer>
+              
             </div>
           
             <div class="divider"></div>

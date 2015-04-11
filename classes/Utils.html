@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
   <title>Utils - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -15,26 +16,29 @@
   <link rel="stylesheet" href="../assets/css/props.css">
   <link rel="stylesheet" href="../assets/css/sidebar.css">
   <style>
-    @import url(http://fonts.googleapis.com/css?family=Roboto);
-    @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono);
+    @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700|Roboto:400,700);
 
     body {
-      background-color: #222;
-      color: white;
       display: flex;
       flex-direction: column;
       font-family: 'Roboto', Helvetica, Arial, sans-serif;
       font-size: smaller;
-      line-height: 3ex;
+      line-height: 3.5ex;
       margin: 0;
       height: 100vh;
     }
 
     .description code {
-      color: #F6F080;
-      background-color: #444;
       border-radius: 4px;
       padding: 2px 4px;
+      white-space: pre;
+    }
+
+    .since {
+      font-family: 'Ubuntu Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 2ex;
+      text-transform: uppercase;
     }
 
     h1, h2 {
@@ -42,12 +46,7 @@
     }
 
     a, a:visited {
-      color: gold;
       text-decoration: none;
-    }
-
-    a.external {
-      color: darkorange;
     }
 
     a:hover {
@@ -66,16 +65,11 @@
       padding: 0;
     }
 
-    code .keyword {
-      color: #808080;
-    }
-
     div.content {
       max-width: 50em;
     }
 
     section.collapsible > header {
-      background-color: #004000;
       padding: 5px 20px;
       cursor: pointer;
       -webkit-user-select: none;
@@ -85,17 +79,6 @@
 
     section.collapsible > header h2 {
       font-size: 1.2em;
-    }
-
-    section.collapsible > header::after {
-      background-image: -webkit-linear-gradient(270deg, #004000, transparent);
-      content: '';
-      display: block;
-      height: 10px;
-      position: absolute;
-      width: 100%;
-      left: 0;
-      bottom: -10px;
     }
 
     section.collapsible.collapsed > header {
@@ -108,31 +91,146 @@
     }
 
     footer {
-      border: 2px solid #004000;
       padding: 15px;
       -webkit-margin-before: 20px;
     }
 
-    header.tutorial {
-      color: #008000;
+    footer.warn {
+      border-color: crimson;
+      color: crimson;
+    }
+
+    dl {
+      padding: 15px;
+    }
+
+    table, dl {
+      border: 1px solid;
+    }
+
+    header {
+      font-weight: 700;
     }
   </style>
+
+  <!-- COLORS!!! -->
   <style>
-    header.main-header h1 a {
-      color: #008000;
+    body {
+      background-color: white;
+      color: black;
+    }
+    .reverse {
+      background-color: #19760A;
+      color: #9AE08F;
+    }
+
+    table, dl {
+      border-color: #19760A;
+    }
+
+    a, a:visited,
+    a.external, a.external:visited {
+      color: #19760A;
+    }
+    .reverse a, .reverse a:visited,
+    .reverse a.external, .reverse a.external:visited {
+      color: #9AE08F;
+    }
+
+    .since {
+      color: #19760A;
+    }
+    .reverse .since {
+      color: #9AE08F;
+    }
+
+    header.main-header {
+      -webkit-filter: drop-shadow(0px 2px 5px #19760A);
+    }
+
+    header.main-header.scroll-top {
+      -webkit-filter: none;
+    }
+
+    li.sidebar-selected {
+      background-color: #9AE08F;
+    }
+    .reverse li.sidebar-selected a {
+      color: black;
+    }
+
+    section.collapsible > header {
+      background-color: #19760A;
+      color: white;
+    }
+    .reverse section.collapsible > header {
+      background-color: #4AAE3B;
+      color: black;
+    }
+
+    section.collapsible > header:hover h2 {
+      -webkit-filter: drop-shadow(0px 0px 5px white);
+    }
+    .reverse section.collapsible > header:hover h2 {
+      -webkit-filter: drop-shadow(0px 0px 5px black);
+    }
+
+    .description code {
+      color: #62870C;
+      background-color: #DAF49C;
+    }
+
+    code .keyword {
+      color: #62870C;
+    }
+
+    .description pre code {
+      background-color: transparent;
+    }
+
+    pre.prettyprint {
+      border-color: #19760A;
+    }
+
+    header.tutorial {
+      color: #19760A;
+    }
+
+    footer {
+      border: 2px solid #19760A;
+    }
+
+    .divider {
+      border-color: #19760A;
+    }
+
+    .method tbody:nth-child(2n) {
+      background-color: #9AE08F;
+    }
+
+    .method tbody:nth-child(2n+1) {
+      background-color: white;
+    }
+
+    .main-bar {
+      background-color: #19760A;
+      color: black;
     }
   </style>
 </head>
 <body>
-  <header class="main-header">
-    <div>
+  <section class="main-bar">
+  </section>
+  <header class="main-header reverse scroll-top">
+    <div class="main-menu-button">&#9776;</div>
+    <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <span class="main-subtitle">v 0.1.0</span>
+      <span class="since">v 0.2.0</span>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
   <section class="main-content">
-    <section class="main-sidebar"><div class="sidebar">
+    <section class="main-sidebar reverse"><div class="sidebar">
     <section class="collapsible ">
       <header>
         <h2>tutorial</h2>
@@ -150,6 +248,9 @@
           </li>
           <li class="">
             <a href="../classes/4 Customizing Components.html">4 Customizing Components</a>
+          </li>
+          <li class="">
+            <a href="../classes/5 Theming.html">5 Theming</a>
           </li>
         </ul>
       </div>
@@ -194,22 +295,16 @@
             <a href="../classes/component.Component.html">component.Component</a>
           </li>
           <li class="">
+            <a href="../classes/component.Dice.html">component.Dice</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.Rollable.html">component.Dice.Rollable</a>
+          </li>
+          <li class="">
             <a href="../classes/component.Token.html">component.Token</a>
-          </li>
-          <li class="">
-            <a href="../classes/DI.BindingTree.html">DI.BindingTree</a>
-          </li>
-          <li class="">
-            <a href="../classes/DI.Provider.html">DI.Provider</a>
-          </li>
-          <li class="">
-            <a href="../classes/DI.Scope.html">DI.Scope</a>
-          </li>
-          <li class="">
-            <a href="../classes/Events.html">Events</a>
-          </li>
-          <li class="">
-            <a href="../classes/Events.Action.html">Events.Action</a>
           </li>
           <li class="">
             <a href="../classes/HammerWrapper.html">HammerWrapper</a>
@@ -242,6 +337,9 @@
             <a href="../classes/region.Region.html">region.Region</a>
           </li>
           <li class="">
+            <a href="../classes/service.Log.html">service.Log</a>
+          </li>
+          <li class="">
             <a href="../classes/service.Move.html">service.Move</a>
           </li>
           <li class="">
@@ -249,6 +347,21 @@
           </li>
           <li class="">
             <a href="../classes/service.Registry.html">service.Registry</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Template.html">service.Template</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.Grid.html">surface.Grid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.HexGrid.html">surface.HexGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.RectGrid.html">surface.RectGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.TriangleGrid.html">surface.TriangleGrid</a>
           </li>
           <li class="">
             <a href="../classes/trigger.Click.html">trigger.Click</a>
@@ -266,13 +379,16 @@
             <a href="../classes/trigger.Trigger.html">trigger.Trigger</a>
           </li>
           <li class="">
+            <a href="../classes/ui.Generate.html">ui.Generate</a>
+          </li>
+          <li class="">
             <a href="../classes/ui.Preview.html">ui.Preview</a>
           </li>
           <li class="">
             <a href="../classes/ui.Previewer.html">ui.Previewer</a>
           </li>
           <li class="">
-            <a href="../classes/ui.Template.html">ui.Template</a>
+            <a href="../classes/ui.Shape.html">ui.Shape</a>
           </li>
           <li class="sidebar-selected">
             <a href="../classes/Utils.html">Utils</a>
@@ -306,13 +422,14 @@ them.</p>
       </header>
       <div>
           <section class="method">
-            <header>
+            <header id="method_activateTemplate">
               <code class="method-signature">activateTemplate(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> template, <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc) => <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Activates the given teplate element.</p>
+              <span class="description"><p>Activates the given template element.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -344,22 +461,35 @@ them.</p>
           
                 </tbody>
               </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>template</code></dt>
+                <dd><p>The template element.</p>
+          </dd>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>doc</code></dt>
+                <dd><p>The document object to activate the template in.</p>
+          </dd>
+              </dl>
+          
                 <div class="method-returns">
                   <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code><span class="description"><p>The activated template element.</p>
           </span>
                 </div>
           
             </div>
+          
+            <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header>
+            <header id="method_compare">
               <code class="method-signature">compare(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> a, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> b) => <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined.html" class="crosslink external" target="_blank">Undefined</a></code>
             </header>
             <div class="content">
               <span class="description"><p>A comparison function that handles every type.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -391,24 +521,37 @@ them.</p>
           
                 </tbody>
               </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></code> <code>a</code></dt>
+                <dd><p>First object to compare.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></code> <code>b</code></dt>
+                <dd><p>Second object to compare.</p>
+          </dd>
+              </dl>
+          
                 <div class="method-returns">
                   <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined.html" class="crosslink external" target="_blank">Undefined</a></code><span class="description"><p>-1 if the first object is smaller than the second, 0 if they are
-             equal, -1 if the second object is smaller than the first, or undefined if the two cannot
-             be compared.</p>
+          equal, -1 if the second object is smaller than the first, or undefined if the two cannot
+          be compared.</p>
           </span>
                 </div>
           
             </div>
+          
+            <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header>
+            <header id="method_curry">
               <code class="method-signature">curry(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> fn) => <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code>
             </header>
             <div class="content">
               <span class="description"><p>Makes the given function curried.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -425,16 +568,25 @@ them.</p>
           
                 </tbody>
               </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>fn</code></dt>
+                <dd><p>The function to be curried.</p>
+          </dd>
+              </dl>
+          
                 <div class="method-returns">
                   <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code><span class="description"><p>The curried function.</p>
           </span>
                 </div>
           
             </div>
+          
+            <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header>
+            <header id="method_extendFn">
               <code class="method-signature">extendFn(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> scope, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> fn, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> callBefore)</code>
             </header>
             <div class="content">
@@ -442,7 +594,8 @@ them.</p>
           function. The given function will be called with the same arguments and scope as the original
           function.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -498,7 +651,7 @@ them.</p>
                     </td>
                     <td class="description">
                       <p>True iff the function should be called before the original
-              function. Defaults to false.</p>
+          function. Defaults to false.</p>
           
                     </td>
                   </tr>
@@ -506,17 +659,37 @@ them.</p>
                 </tbody>
               </table>
           
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></code> <code>scope</code></dt>
+                <dd><p>The object containing the function to replace.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
+                <dd><p>The name of the function to replace.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>fn</code></dt>
+                <dd><p>Function to be called.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code> <code>callBefore</code></dt>
+                <dd><p>True iff the function should be called before the original
+          function. Defaults to false.</p>
+          </dd>
+              </dl>
+          
+          
             </div>
+          
+            <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header>
+            <header id="method_extractTemplate">
               <code class="method-signature">extractTemplate(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> templateQuery, <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc) => <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Node.html" class="crosslink external" target="_blank">Node</a></code>
             </header>
             <div class="content">
               <span class="description"><p>Extracts the given template from the given document.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -548,22 +721,35 @@ them.</p>
           
                 </tbody>
               </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>templateQuery</code></dt>
+                <dd><p>The query used to obtain the template.</p>
+          </dd>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>doc</code></dt>
+                <dd><p>The document object to obtain the template from.</p>
+          </dd>
+              </dl>
+          
                 <div class="method-returns">
                   <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Node.html" class="crosslink external" target="_blank">Node</a></code><span class="description"><p>The node in the template.</p>
           </span>
                 </div>
           
             </div>
+          
+            <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header>
+            <header id="method_nonNullFn">
               <code class="method-signature">nonNullFn(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> scope, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name) => <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code>
             </header>
             <div class="content">
               <span class="description"><p>Returns the referenced function, or noop function if the referenced function does not exist.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -595,23 +781,36 @@ them.</p>
           
                 </tbody>
               </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></code> <code>scope</code></dt>
+                <dd><p>Object containing the referenced function.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
+                <dd><p>Name of the function to return.</p>
+          </dd>
+              </dl>
+          
                 <div class="method-returns">
                   <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code><span class="description"><p>The referenced function, or noop function if the referenced function does
-             not exist.</p>
+          not exist.</p>
           </span>
                 </div>
           
             </div>
+          
+            <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header>
+            <header id="method_observe">
               <code class="method-signature">observe(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> object, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null.html" class="crosslink external" target="_blank">Null</a> property, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> handler) => <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code>
             </header>
             <div class="content">
               <span class="description"><p>Observes the given property on the given object.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -637,7 +836,7 @@ them.</p>
                     </td>
                     <td class="description">
                       <p>The property name to listen to, or null to listen to all
-             properties.</p>
+          properties.</p>
           
                     </td>
                   </tr>
@@ -653,29 +852,47 @@ them.</p>
                     </td>
                     <td class="description">
                       <p>Handler called when a property has changed. The handler accepts 3
-             arguments: property name, change type, and the old value of the property.</p>
+          arguments: property name, change type, and the old value of the property.</p>
           
                     </td>
                   </tr>
           
                 </tbody>
               </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></code> <code>object</code></dt>
+                <dd><p>Object to observe changes to.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> | <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null.html" class="crosslink external" target="_blank">Null</a></code> <code>property</code></dt>
+                <dd><p>The property name to listen to, or null to listen to all
+          properties.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>handler</code></dt>
+                <dd><p>Handler called when a property has changed. The handler accepts 3
+          arguments: property name, change type, and the old value of the property.</p>
+          </dd>
+              </dl>
+          
                 <div class="method-returns">
                   <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code><span class="description"><p>The handler used to unobserve the object.</p>
           </span>
                 </div>
           
             </div>
+          
+            <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header>
+            <header id="method_toArray">
               <code class="method-signature">toArray(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> obj) => <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></code>
             </header>
             <div class="content">
               <span class="description"><p>Converts the given "array like" object to array.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -692,23 +909,33 @@ them.</p>
           
                 </tbody>
               </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></code> <code>obj</code></dt>
+                <dd><p>An array like object to convert.</p>
+          </dd>
+              </dl>
+          
                 <div class="method-returns">
                   <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></code><span class="description"><p>Array object converted from the given array like object.</p>
           </span>
                 </div>
           
             </div>
+          
+            <div class="divider"></div>
           </section>
           
           <section class="method">
-            <header>
+            <header id="method_waitFor">
               <code class="method-signature">waitFor(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> object, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> property, Any condition)</code>
             </header>
             <div class="content">
               <span class="description"><p>Returns a Promise that waits for the given property of the given object to fulfill the given
           condition.</p>
           </span>
-              <table>
+          
+              <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
@@ -749,8 +976,8 @@ them.</p>
                     </td>
                     <td class="description">
                       <p>If Function, this method will call the function with the property
-             value and will wait for the function to return true. Otherwise, this will wait for the
-             property to match this.</p>
+          value and will wait for the function to return true. Otherwise, this will wait for the
+          property to match this.</p>
           
                     </td>
                   </tr>
@@ -758,7 +985,24 @@ them.</p>
                 </tbody>
               </table>
           
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></code> <code>object</code></dt>
+                <dd><p>Object containing the property to wait for.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>property</code></dt>
+                <dd><p>The name of the property to wait for.</p>
+          </dd>
+                <dt><code>Any</code> <code>condition</code></dt>
+                <dd><p>If Function, this method will call the function with the property
+          value and will wait for the function to return true. Otherwise, this will wait for the
+          property to match this.</p>
+          </dd>
+              </dl>
+          
+          
             </div>
+          
+            <div class="divider"></div>
           </section>
           
       </div>
@@ -774,7 +1018,10 @@ them.</p>
   <script src="../assets/vendor/prettify/prettify-min.js"></script>
   <script>prettyPrint();</script>
   <script>
-    var els = document.querySelectorAll('section.collapsible');
+
+    var isMobile = false;
+    var rootEl = isMobile ? document.querySelector('.main-main') : document;
+    var els = rootEl.querySelectorAll('section.collapsible');
     for (var i = 0; i < els.length; i++) {
       var section = els.item(i);
       var content = section.querySelector('div');
@@ -786,5 +1033,24 @@ them.</p>
       }.bind(header, section, content, height));
       content.style.height = height;
     }
+
+    var selected = document.querySelector('.sidebar-selected');
+    if (selected) {
+      selected.scrollIntoView();
+    }
+
+    var headerEl = document.querySelector('.main-header');
+    var mainEl = document.querySelector('.main-main');
+    mainEl.addEventListener('scroll', function() {
+      if (mainEl.scrollTop <= 0) {
+        headerEl.classList.add('scroll-top');
+      } else {
+        headerEl.classList.remove('scroll-top');
+      }
+    });
+
+    document.querySelector('.main-menu-button').addEventListener('click', function() {
+      document.querySelector('section.main-sidebar').classList.toggle('expand');
+    });
   </script>
 </html>

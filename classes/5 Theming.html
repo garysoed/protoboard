@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name=viewport content="width=device-width, initial-scale=1">
-  <title>trigger.Key.Service - Protoboard</title>
+  <title>5 Theming - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -231,7 +231,7 @@
   </header>
   <section class="main-content">
     <section class="main-sidebar reverse"><div class="sidebar">
-    <section class="collapsible ">
+    <section class="collapsible selected">
       <header>
         <h2>tutorial</h2>
       </header>
@@ -249,13 +249,13 @@
           <li class="">
             <a href="../classes/4 Customizing Components.html">4 Customizing Components</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/5 Theming.html">5 Theming</a>
           </li>
         </ul>
       </div>
     </section>
-    <section class="collapsible selected">
+    <section class="collapsible ">
       <header>
         <h2>api</h2>
       </header>
@@ -372,7 +372,7 @@
           <li class="">
             <a href="../classes/trigger.Key.html">trigger.Key</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
           </li>
           <li class="">
@@ -402,209 +402,59 @@
 </section>
     <section class="main-main"><div class="class">
   <section class="class-summary">
-      <header>
-        <code><span class="keyword">private</span> <span class="keyword">static</span> trigger.Key.Service</code>
+      <header class="tutorial">
+        <h2>5 Theming</h2>
       </header>
+      <div class="since">
+        since 0.2.0
+      </div>
 
     <div class="content description">
-      <p>Helper service for detecting key press.</p>
+      <p>Protoboard supports basic theming using
+<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables">CSS variables</a>. However,
+since CSS variables is not widely supported, Protoboard relies on <a href="http://www.myth.io/">Myth</a> to
+compile the variables.</p>
+<p>You will need the source code. After running <code>npm install</code> in the source directory's root, you
+can compile the CSS by running:</p>
+<pre class="code prettyprint"><code class="language-bash">gulp src
+</code></pre>
+<p>To compile the source code, or:</p>
+<pre class="code prettyprint"><code class="language-bash">gulp ex
+</code></pre>
+<p>To compile the source and example codes.</p>
+<p>The script reads from JSON files in the <code>./themes</code> directory. By default, they use the
+<code>./themes/slateblue.json</code> theme. To change the colour theme to "medium sea green", you can run:</p>
+<pre class="code prettyprint"><code class="language-bash">gulp ex --theme ./themes/mediumseagreen.json
+</code></pre>
+<p>Though Protoboard comes with several themes, you can make your own theme. Create a json file with
+two keys: <code>base</code> and <code>vars</code>:</p>
+<pre class="code prettyprint"><code class="language-json">{
+  "base": "./themes/base.json"
+  "vars": {
+    "--color-lighter": "#CBC7E2",
+    "--color-light": "#ABA5CF",
+    "--color-normal": "#8982B8",
+    "--color-dark": "#6B62A4",
+    "--color-darker": "#50468F"
+  }
+}
+</code></pre>
+<p>The <code>vars</code> entry defines the colors used throughout the framework. You can see
+<code>./themes/base.json</code> for additional variables to override. This include transition time, shadow
+size, border size, etc.</p>
+<p>The <code>base</code> is a reference to another theme file. The path is relative to the location of the
+<code>gulpfile.js</code> and should always start with <code>.</code> or <code>..</code>. The base theme file will be used for
+variables that the framework uses but are not defined in your theme file. You can chain the
+dependencies for multiple levels, but it is recommended to always depend on <code>./themes/base.json</code>
+in the dependency chain, since new variables might be introduced, and might break your themes if
+you did not set it in your theme file.</p>
 
     </div>
 
   </section>
 
 
-    <section class="collapsible class-subsection">
-      <header>
-        <h2>Properties</h2>
-      </header>
-      <div>
-          <section class="props">
-            <header id="property_hoveredEls">
-              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map.html" class="crosslink external" target="_blank">Map</a> hoveredEls</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Map of elements to trigger the ability on. The key is the element, the value is a map of key
-          to a set of abilities.</p>
-          </span>
-          
-            </div>
-          
-          </section>
-          
-      </div>
-    </section>
 
-    <section class="collapsible class-subsection">
-      <header>
-        <h2>Methods</h2>
-      </header>
-      <div>
-          <section class="method">
-            <header id="method_add">
-              <code class="method-signature">add(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> key, <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> ability)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Registers the given element to trigger the given ability when the given key is pressed.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The element to trigger when the given key is pressed.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>key</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The key to press</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>ability</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The ability to trigger.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to trigger when the given key is pressed.</p>
-          </dd>
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>key</code></dt>
-                <dd><p>The key to press</p>
-          </dd>
-                <dt><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code> <code>ability</code></dt>
-                <dd><p>The ability to trigger.</p>
-          </dd>
-              </dl>
-          
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method">
-            <header id="method_clear">
-              <code class="method-signature">clear()</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Clears all registered elements.</p>
-          </span>
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method">
-            <header id="method_init">
-              <code class="method-signature">init(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Initializes the service.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>doc</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The document to listen to key presses.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>doc</code></dt>
-                <dd><p>The document to listen to key presses.</p>
-          </dd>
-              </dl>
-          
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method">
-            <header id="method_remove">
-              <code class="method-signature">remove(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Unregisters the given element.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The element to unregister.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to unregister.</p>
-          </dd>
-              </dl>
-          
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-      </div>
-    </section>
 
 </div>
 

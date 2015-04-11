@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
   <title>tutorial - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
@@ -15,26 +16,29 @@
   <link rel="stylesheet" href="../assets/css/props.css">
   <link rel="stylesheet" href="../assets/css/sidebar.css">
   <style>
-    @import url(http://fonts.googleapis.com/css?family=Roboto);
-    @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono);
+    @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700|Roboto:400,700);
 
     body {
-      background-color: #222;
-      color: white;
       display: flex;
       flex-direction: column;
       font-family: 'Roboto', Helvetica, Arial, sans-serif;
       font-size: smaller;
-      line-height: 3ex;
+      line-height: 3.5ex;
       margin: 0;
       height: 100vh;
     }
 
     .description code {
-      color: #F6F080;
-      background-color: #444;
       border-radius: 4px;
       padding: 2px 4px;
+      white-space: pre;
+    }
+
+    .since {
+      font-family: 'Ubuntu Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 2ex;
+      text-transform: uppercase;
     }
 
     h1, h2 {
@@ -42,12 +46,7 @@
     }
 
     a, a:visited {
-      color: gold;
       text-decoration: none;
-    }
-
-    a.external {
-      color: darkorange;
     }
 
     a:hover {
@@ -66,16 +65,11 @@
       padding: 0;
     }
 
-    code .keyword {
-      color: #808080;
-    }
-
     div.content {
       max-width: 50em;
     }
 
     section.collapsible > header {
-      background-color: #004000;
       padding: 5px 20px;
       cursor: pointer;
       -webkit-user-select: none;
@@ -85,17 +79,6 @@
 
     section.collapsible > header h2 {
       font-size: 1.2em;
-    }
-
-    section.collapsible > header::after {
-      background-image: -webkit-linear-gradient(270deg, #004000, transparent);
-      content: '';
-      display: block;
-      height: 10px;
-      position: absolute;
-      width: 100%;
-      left: 0;
-      bottom: -10px;
     }
 
     section.collapsible.collapsed > header {
@@ -108,31 +91,146 @@
     }
 
     footer {
-      border: 2px solid #004000;
       padding: 15px;
       -webkit-margin-before: 20px;
     }
 
-    header.tutorial {
-      color: #008000;
+    footer.warn {
+      border-color: crimson;
+      color: crimson;
+    }
+
+    dl {
+      padding: 15px;
+    }
+
+    table, dl {
+      border: 1px solid;
+    }
+
+    header {
+      font-weight: 700;
     }
   </style>
+
+  <!-- COLORS!!! -->
   <style>
-    header.main-header h1 a {
-      color: #008000;
+    body {
+      background-color: white;
+      color: black;
+    }
+    .reverse {
+      background-color: #19760A;
+      color: #9AE08F;
+    }
+
+    table, dl {
+      border-color: #19760A;
+    }
+
+    a, a:visited,
+    a.external, a.external:visited {
+      color: #19760A;
+    }
+    .reverse a, .reverse a:visited,
+    .reverse a.external, .reverse a.external:visited {
+      color: #9AE08F;
+    }
+
+    .since {
+      color: #19760A;
+    }
+    .reverse .since {
+      color: #9AE08F;
+    }
+
+    header.main-header {
+      -webkit-filter: drop-shadow(0px 2px 5px #19760A);
+    }
+
+    header.main-header.scroll-top {
+      -webkit-filter: none;
+    }
+
+    li.sidebar-selected {
+      background-color: #9AE08F;
+    }
+    .reverse li.sidebar-selected a {
+      color: black;
+    }
+
+    section.collapsible > header {
+      background-color: #19760A;
+      color: white;
+    }
+    .reverse section.collapsible > header {
+      background-color: #4AAE3B;
+      color: black;
+    }
+
+    section.collapsible > header:hover h2 {
+      -webkit-filter: drop-shadow(0px 0px 5px white);
+    }
+    .reverse section.collapsible > header:hover h2 {
+      -webkit-filter: drop-shadow(0px 0px 5px black);
+    }
+
+    .description code {
+      color: #62870C;
+      background-color: #DAF49C;
+    }
+
+    code .keyword {
+      color: #62870C;
+    }
+
+    .description pre code {
+      background-color: transparent;
+    }
+
+    pre.prettyprint {
+      border-color: #19760A;
+    }
+
+    header.tutorial {
+      color: #19760A;
+    }
+
+    footer {
+      border: 2px solid #19760A;
+    }
+
+    .divider {
+      border-color: #19760A;
+    }
+
+    .method tbody:nth-child(2n) {
+      background-color: #9AE08F;
+    }
+
+    .method tbody:nth-child(2n+1) {
+      background-color: white;
+    }
+
+    .main-bar {
+      background-color: #19760A;
+      color: black;
     }
   </style>
 </head>
 <body>
-  <header class="main-header">
-    <div>
+  <section class="main-bar">
+  </section>
+  <header class="main-header reverse scroll-top">
+    <div class="main-menu-button">&#9776;</div>
+    <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <span class="main-subtitle">v 0.1.0</span>
+      <span class="since">v 0.2.0</span>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
   <section class="main-content">
-    <section class="main-sidebar"><div class="sidebar">
+    <section class="main-sidebar reverse"><div class="sidebar">
     <section class="collapsible ">
       <header>
         <h2>tutorial</h2>
@@ -150,6 +248,9 @@
           </li>
           <li class="">
             <a href="../classes/4 Customizing Components.html">4 Customizing Components</a>
+          </li>
+          <li class="">
+            <a href="../classes/5 Theming.html">5 Theming</a>
           </li>
         </ul>
       </div>
@@ -194,22 +295,16 @@
             <a href="../classes/component.Component.html">component.Component</a>
           </li>
           <li class="">
+            <a href="../classes/component.Dice.html">component.Dice</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.Rollable.html">component.Dice.Rollable</a>
+          </li>
+          <li class="">
             <a href="../classes/component.Token.html">component.Token</a>
-          </li>
-          <li class="">
-            <a href="../classes/DI.BindingTree.html">DI.BindingTree</a>
-          </li>
-          <li class="">
-            <a href="../classes/DI.Provider.html">DI.Provider</a>
-          </li>
-          <li class="">
-            <a href="../classes/DI.Scope.html">DI.Scope</a>
-          </li>
-          <li class="">
-            <a href="../classes/Events.html">Events</a>
-          </li>
-          <li class="">
-            <a href="../classes/Events.Action.html">Events.Action</a>
           </li>
           <li class="">
             <a href="../classes/HammerWrapper.html">HammerWrapper</a>
@@ -242,6 +337,9 @@
             <a href="../classes/region.Region.html">region.Region</a>
           </li>
           <li class="">
+            <a href="../classes/service.Log.html">service.Log</a>
+          </li>
+          <li class="">
             <a href="../classes/service.Move.html">service.Move</a>
           </li>
           <li class="">
@@ -249,6 +347,21 @@
           </li>
           <li class="">
             <a href="../classes/service.Registry.html">service.Registry</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Template.html">service.Template</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.Grid.html">surface.Grid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.HexGrid.html">surface.HexGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.RectGrid.html">surface.RectGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.TriangleGrid.html">surface.TriangleGrid</a>
           </li>
           <li class="">
             <a href="../classes/trigger.Click.html">trigger.Click</a>
@@ -266,13 +379,16 @@
             <a href="../classes/trigger.Trigger.html">trigger.Trigger</a>
           </li>
           <li class="">
+            <a href="../classes/ui.Generate.html">ui.Generate</a>
+          </li>
+          <li class="">
             <a href="../classes/ui.Preview.html">ui.Preview</a>
           </li>
           <li class="">
             <a href="../classes/ui.Previewer.html">ui.Previewer</a>
           </li>
           <li class="">
-            <a href="../classes/ui.Template.html">ui.Template</a>
+            <a href="../classes/ui.Shape.html">ui.Shape</a>
           </li>
           <li class="">
             <a href="../classes/Utils.html">Utils</a>
@@ -294,40 +410,35 @@ though we do provide some basic support for theming.</p>
 <ol>
 <li>JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)</li>
 <li>HTML: Developers can use preexisting HTML elements to write their own game.</li>
-<li>Themes: This library comes with some existing themes. You can customize the color themes, and
-if you use CSS, you can customize in greater details (coming next).</li>
+<li><a href="../classes/5 Theming.html" class="crosslink">Theme</a>: This library comes with some existing themes. You
+can customize the color themes, and if you use CSS, you can customize in greater details.</li>
 </ol>
-<p>Some glossary of terminologies for the API:</p>
-<dl>
-  <dt><a href="../classes/ability.Ability.html" class="crosslink">Ability</a></dt>
-  <dd>These are where the main logic happens. A Component can have several abilities, each
-  triggered with a Trigger.</dd>
-
-  <dt><a href="../classes/component.Component.html" class="crosslink">Component</a></dt>
-  <dd>Components are the basic entity of a board. They provide main interaction with the players.
-  Every component has one or more abilities registered to it. Check the
-  <a href="../classes/component.Component.html" class="crosslink">API reference</a> to see the ability names
-  registered to a component.</dd>
-
-  <dt><a href="../classes/region.Region.html" class="crosslink">Region</a></dt>
-  <dd>Regions can contain other components. They cannot be moved and can contain one or more
-  components. Examples include: deck, bag, and hand.</dd>
-
-  <dt><a href="../classes/trigger.Trigger.html" class="crosslink">Trigger</a></dt>
-  <dd>Triggers listen to events in the document and triggers the ability it is associated with.
-  The most common trigger that this library relies on by default is the
-  <a href="../classes/trigger.Key.html" class="crosslink">Key</a> trigger. To trigger a component, point at the
-  component and press the appropriate key.</dd>
-
-  <dt>UI</dt>
-  <dd>This library also comes with several basic UI elements for convenience. These elements do
-  not have a real life counterpart.</dd>
-</dl>
-
+<p>Some glossary of terminologies for the API:
+<dl><dt><a href="../classes/ability.Ability.html" class="crosslink">Ability</a></dt>
+<dd>These are where the main logic happens. A Component can have several abilities,
+each triggered with a Trigger.</dd></p>
+<p><dt><a href="../classes/component.Component.html" class="crosslink">Component</a></dt>
+<dd>Components are the basic entity of a board. They provide main interaction with
+the players. Every component has one or more abilities registered to it. Check the
+<a href="../classes/component.Component.html" class="crosslink">API reference</a> to see the ability names
+registered to a component.</dd></p>
+<p><dt><a href="../classes/region.Region.html" class="crosslink">Region</a></dt>
+<dd>Regions can contain other components. They cannot be moved and can contain one or
+more components. Examples include: deck, bag, and hand.</dd></p>
+<p><dt><a href="../classes/trigger.Trigger.html" class="crosslink">Trigger</a></dt>
+<dd>Triggers listen to events in the document and triggers the ability it is
+associated with. The most common trigger that this library relies on by default is the
+<a href="../classes/trigger.Key.html" class="crosslink">Key</a> trigger. To trigger a component, point at the
+component and press the appropriate key.</dd></p>
+<p><dt>UI</dt>
+<dd>This library also comes with several basic UI elements for convenience. These
+elements do not have a real life counterpart.</dd>
+</dl></p>
 <p>Every element introduced in Protoboard has 3 parts of its name:</p>
 <ol>
 <li><code>pb-</code> is the prefix of every Protoboard element.</li>
-<li>The second prefix indicates the type of element:<ul>
+<li>The second prefix indicates the type of element:
+<ul>
 <li><code>pb-c-</code> indicates a component</li>
 <li><code>pb-r-</code> indicates a region</li>
 <li><code>pb-u-</code> indicates a UI element.</li>
@@ -345,20 +456,24 @@ if you use CSS, you can customize in greater details (coming next).</li>
             <li><a href="../classes/2 Prerequisites.html">2 Prerequisites</a></li>
             <li><a href="../classes/3 Basic Usage.html">3 Basic Usage</a></li>
             <li><a href="../classes/4 Customizing Components.html">4 Customizing Components</a></li>
+            <li><a href="../classes/5 Theming.html">5 Theming</a></li>
         </ul>
     </div>
     <div class="yui3-u-1-2">
     </div>
 </div>
 <br><br>
-<span class="foundat">Module description found: <a href="../../files/tutorial_04_customize.js.html#l1"><code>tutorial&#x2F;04_customize.js:1</code></a></span>
+<span class="foundat">Module description found: <a href="../../files/tutorial_05_theme.js.html#l1"><code>tutorial&#x2F;05_theme.js:1</code></a></span>
 </section>
   </section>
 </body>
   <script src="../assets/vendor/prettify/prettify-min.js"></script>
   <script>prettyPrint();</script>
   <script>
-    var els = document.querySelectorAll('section.collapsible');
+
+    var isMobile = false;
+    var rootEl = isMobile ? document.querySelector('.main-main') : document;
+    var els = rootEl.querySelectorAll('section.collapsible');
     for (var i = 0; i < els.length; i++) {
       var section = els.item(i);
       var content = section.querySelector('div');
@@ -370,5 +485,24 @@ if you use CSS, you can customize in greater details (coming next).</li>
       }.bind(header, section, content, height));
       content.style.height = height;
     }
+
+    var selected = document.querySelector('.sidebar-selected');
+    if (selected) {
+      selected.scrollIntoView();
+    }
+
+    var headerEl = document.querySelector('.main-header');
+    var mainEl = document.querySelector('.main-main');
+    mainEl.addEventListener('scroll', function() {
+      if (mainEl.scrollTop <= 0) {
+        headerEl.classList.add('scroll-top');
+      } else {
+        headerEl.classList.remove('scroll-top');
+      }
+    });
+
+    document.querySelector('.main-menu-button').addEventListener('click', function() {
+      document.querySelector('section.main-sidebar').classList.toggle('expand');
+    });
   </script>
 </html>

@@ -5,11 +5,20 @@
 .sidebar ul {
   list-style-type: none;
   -webkit-padding-start: 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
 }
 
 .sidebar li {
-  padding: 0 20px;
+  padding: 0 20px 0 40px;
   line-height: 2em;
+}
+
+.sidebar li:not(.sidebar-selected):first-child {
+  -webkit-margin-before: 1em;
+}
+.sidebar li:not(.sidebar-selected):last-child {
+  -webkit-margin-after: 1em;
 }
 
 .sidebar h2 {
@@ -19,7 +28,12 @@
 li.sidebar-selected {
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: #222;
-  margin-top: 10px;
-  margin-bottom: 10px;
+}
+
+li.sidebar-selected:not(:first-child) {
+  -webkit-margin-before: 1em;
+}
+
+li.sidebar-selected:not(:last-child) {
+  -webkit-margin-after: 1em;
 }

@@ -5,12 +5,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "2 Prerequisites",
         "3 Basic Usage",
         "4 Customizing Components",
+        "5 Theming",
         "Check",
-        "DI.BindingTree",
-        "DI.Provider",
-        "DI.Scope",
-        "Events",
-        "Events.Action",
         "HammerWrapper",
         "PbElement",
         "Utils",
@@ -24,6 +20,9 @@ YUI.add("yuidoc-meta", function(Y) {
         "ability.Toggleable",
         "component.Card",
         "component.Component",
+        "component.Dice",
+        "component.Dice.DiceFlippable",
+        "component.Dice.Rollable",
         "component.Token",
         "region.Bag",
         "region.Bag.RandomPickable",
@@ -33,17 +32,24 @@ YUI.add("yuidoc-meta", function(Y) {
         "region.Rect",
         "region.Rect.FlexDroppable",
         "region.Region",
+        "service.Log",
         "service.Move",
         "service.Preview",
         "service.Registry",
+        "service.Template",
+        "surface.Grid",
+        "surface.HexGrid",
+        "surface.RectGrid",
+        "surface.TriangleGrid",
         "trigger.Click",
         "trigger.DoubleClick",
         "trigger.Key",
         "trigger.Key.Service",
         "trigger.Trigger",
+        "ui.Generate",
         "ui.Preview",
         "ui.Previewer",
-        "ui.Template"
+        "ui.Shape"
     ],
     "modules": [
         "api",
@@ -57,7 +63,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "tutorial",
             "name": "tutorial",
-            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. Themes: This library comes with some existing themes. You can customize the color themes, and\n   if you use CSS, you can customize in greater details (coming next).\n\nSome glossary of terminologies for the API:\n<dl>\n  <dt>{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}</dt>\n  <dd>These are where the main logic happens. A Component can have several abilities, each\n  triggered with a Trigger.</dd>\n\n  <dt>{{#crossLink \"component.Component\"}}Component{{/crossLink}}</dt>\n  <dd>Components are the basic entity of a board. They provide main interaction with the players.\n  Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.</dd>\n\n  <dt>{{#crossLink \"region.Region\"}}Region{{/crossLink}}</dt>\n  <dd>Regions can contain other components. They cannot be moved and can contain one or more\n  components. Examples include: deck, bag, and hand.</dd>\n\n  <dt>{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}</dt>\n  <dd>Triggers listen to events in the document and triggers the ability it is associated with.\n  The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.</dd>\n\n  <dt>UI</dt>\n  <dd>This library also comes with several basic UI elements for convenience. These elements do\n  not have a real life counterpart.</dd>\n</dl>\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n  - `pb-c-` indicates a component\n  - `pb-r-` indicates a region\n  - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
+            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. {{#crossLink \"5 Theming\"}}Theme{{/crossLink}}: This library comes with some existing themes. You\ncan customize the color themes, and if you use CSS, you can customize in greater details.\n\nSome glossary of terminologies for the API:\n{{#html 'dl'}}\n  {{#html 'dt'}}{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}{{/html}}\n  {{#html 'dd'}}These are where the main logic happens. A Component can have several abilities,\n  each triggered with a Trigger.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"component.Component\"}}Component{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Components are the basic entity of a board. They provide main interaction with\n  the players. Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"region.Region\"}}Region{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Regions can contain other components. They cannot be moved and can contain one or\n  more components. Examples include: deck, bag, and hand.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Triggers listen to events in the document and triggers the ability it is\n  associated with. The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.{{/html}}\n\n  {{#html 'dt'}}UI{{/html}}\n  {{#html 'dd'}}This library also comes with several basic UI elements for convenience. These\n  elements do not have a real life counterpart.{{/html}}\n{{/html}}\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n   - `pb-c-` indicates a component\n   - `pb-r-` indicates a region\n   - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
         }
     ]
 } };

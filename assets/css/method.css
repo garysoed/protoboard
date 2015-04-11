@@ -1,9 +1,10 @@
 .method {
-  padding: 20px;
+  padding: 0 2em;
+  -webkit-margin-after: 2em;
 }
 
-.method:nth-child(2n) {
-  background-color: black;
+.method:first-child {
+  padding-top: 2em;
 }
 
 .method > header {
@@ -13,16 +14,8 @@
 
 .method table {
   border-collapse: collapse;
-  margin: 0 20px;
-  width: 100%;
-}
-
-.method tbody:nth-child(2n) {
-  background-color: black;
-}
-
-.method tbody:nth-child(2n+1) {
-  background-color: #222;
+  margin: 2em 20px;
+  width: calc(100% - 40px);
 }
 
 .method td {
@@ -35,10 +28,29 @@
 }
 
 .method-returns {
+  display: flex;
   -webkit-margin-before: 1em;
   -webkit-margin-after: 1em;
   -webkit-margin-start: 0px;
   -webkit-margin-end: 0px;
+}
+
+.method-params-small {
+  display: none;
+}
+
+@media screen and (max-width: 900px) {
+  .method-returns {
+    flex-direction: column;
+  }
+
+  .method-params {
+    display: none;
+  }
+
+  .method-params-small {
+    display: block;
+  }
 }
 
 .method-returns strong {
@@ -48,4 +60,14 @@
 .method-returns p {
   display: inline-block;
   -webkit-margin-start: 1em;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+}
+
+.method-returns code {
+  white-space: pre;
+}
+
+.method:last-child .divider {
+  border: none;
 }
