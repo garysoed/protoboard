@@ -4,15 +4,34 @@
 <link rel="import" href="ability/droppable.html">
 <link rel="import" href="ability/helpable.html">
 <link rel="import" href="ability/shuffleable.html">
-<link rel="import" href="di.html">
 <link rel="import" href="region/region.html">
 <link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="region/deck.css">
-
 <template>
+  <style>
+    :host {
+      border: var(--border);
+      display: inline-block;
+      height: var(--card-height);
+      width: var(--card-width);
+    }
+
+    ::content > * {
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+    }
+
+    #root {
+      position: relative;
+    }
+  </style>
+
   <div id="root">
     <content></content>
   </div>
@@ -20,20 +39,33 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_region_Deck', (
-        $registry,
-        Abilities,
-        Config,
-        Droppable,
-        Helpable,
-        Key,
-        Region,
-        Shuffleable,
-        Utils,
-        doc,
-        template) => {
+    .with('template', ['=', doc => doc.querySelector('template')])
+    .bind('region.Deck', [
+        '=',
+        'ability.=',
+        'service.=',
+        'ability.=',
+        'ability.=',
+        'trigger.=',
+        'region.=',
+        'ability.=',
+        '=',
+        '=',
+        '=',
+        (
+            $registry,
+            Abilities,
+            Config,
+            Droppable,
+            Helpable,
+            Key,
+            Region,
+            Shuffleable,
+            Utils,
+            doc,
+            template) => {
 
   /**
    * Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.
@@ -86,5 +118,5 @@ DI
   $registry.add(EL_NAME, Deck.prototype);
 
   return Deck;
-});
+}]);
 </script>

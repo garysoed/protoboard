@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>ui.Preview Unit Tests</title>
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="testbase.html">
 
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/service/config.html">
-  <link rel="import" href="out/service/registry.html">
-  <link rel="import" href="out/ui/preview.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="ui/preview.html">
 </head>
 <body>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, _M, $registry, Config, ui_Preview, doc) => {
+      .run([
+          '/=', '/=', '/=', '=', 'service.=', 'ui.=', '=',
+          (expect, _, _M, $registry, Config, Preview, doc) => {
 
   describe('ui.Preview', () => {
     before(done => {
@@ -75,6 +78,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

@@ -2,12 +2,16 @@
 
 <link rel="import" href="ability/ability.html">
 <link rel="import" href="check.html">
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
 <script>
-DI.bind('pb_ability_Toggleable', (Ability, Check, Key, Utils) => {
+DI
+    .prefix('pb')
+    .bind('ability.Toggleable', [
+        'ability.=', '=', 'trigger.=', '=',
+        (Ability, Check, Key, Utils) => {
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
@@ -86,10 +90,10 @@ DI.bind('pb_ability_Toggleable', (Ability, Check, Key, Utils) => {
     /**
      * Toggles the state of the given element, if the ability is enabled on the element.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el Element that should be toggled.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (this[__isEnabled__](el)) {
         $(el).attr(this.attrActive, !this[__isActive__](el));
       }
@@ -97,8 +101,7 @@ DI.bind('pb_ability_Toggleable', (Ability, Check, Key, Utils) => {
 
     /**
      * The name of the attribute on the element corresponding to this ability that indicates that
-     * the element is in active state. This is the name of the ability with a <code>-active</code>
-     * postfix.
+     * the element is in active state. This is the name of the ability with a `-active` postfix.
      *
      * @property attrActive
      * @type string
@@ -110,4 +113,4 @@ DI.bind('pb_ability_Toggleable', (Ability, Check, Key, Utils) => {
   }
 
   return Toggleable;
-});
+}]);

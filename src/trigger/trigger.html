@@ -1,9 +1,9 @@
 <base href="..">
 
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 
 <script>
-DI.bind('pb_trigger_Trigger', () => {
+DI.bind('pb.trigger.Trigger', [() => {
 
   /**
    * Base class of all triggers. Triggers should be stateless and immutable.
@@ -40,12 +40,8 @@ DI.bind('pb_trigger_Trigger', () => {
     toString() {
       throw new Error('unimplemented');
     }
-
-    get helpText() {
-      throw new Error('unimplemented');
-    }
   }
 
   return Trigger;
-});
+}]);
 </script>

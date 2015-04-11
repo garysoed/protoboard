@@ -1,12 +1,23 @@
 <base href="..">
 
-<link rel="import" href="di.html">
-<link rel="import" href="events.html">
 <link rel="import" href="service/move.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
 <link rel="import" href="trigger/trigger.html">
 
+<style>
+  .pb-key:hover {
+    outline: 6px dashed var(--color-highlight);
+    outline-offset: -6px;
+  }
+</style>
+
 <script>
-DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
+DI
+    .prefix('pb')
+    .bind('trigger.Key', [
+        '=', 'service.=', 'trigger.=', '=',
+        (Events, Move, Trigger, $registry) => {
   // Private symbols.
   const __active__ = Symbol();
   const __key__ = Symbol('key');
@@ -88,7 +99,11 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
     }
 
     /**
-     * @method helpText
+     * The help text to be displayed by {{#crossLink "ability.Helpable"}}{{/crossLink}}.
+     *
+     * @property helpText
+     * @type string
+     * @final
      */
     get helpText() {
       return this[__key__];
@@ -232,10 +247,8 @@ DI.bind('pb_trigger_Key', (Events, Move, Trigger, $registry, opt_TEST_MODE) => {
     Service.init(doc);
   });
 
-  if (opt_TEST_MODE) {
-    Key.Service = Service;
-  }
+  Key.Service = Service;
 
   return Key;
-});
+}]);
 </script>

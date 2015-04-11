@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>Key Unit Tests</title>
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/testbase.html">
-  <link rel="import" href="out/testutils.html">
-  <link rel="import" href="out/trigger/key.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="testutils.html">
+  <link rel="import" href="trigger/key.html">
 </head>
 <body>
   <script>
   DI
+      .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .constant('pb_service_Move', {
+      .constant('service.Move', {
         mouseX: 0,
         mouseY: 0,
         movedElements: new Set()
       })
-      .with('$registry', Registry => new Registry())
-      .with('Events', pb_t => pb_t.createFakeEvents())
-      .run((_, _M, expect, Events, Key, Move, doc, pb_t) => {
+      .with('$registry', ['service.=', Registry => new Registry()])
+      .with('Events', ['=', t => t.createFakeEvents()])
+      .run([
+          '/=', '/=', '/=', '=', 'trigger.=', 'service.=', '=', '=',
+          (_, _M, expect, Events, Key, Move, doc, t) => {
 
     describe('Key', () => {
       let key;
@@ -32,7 +35,7 @@
       describe('#on', () => {
         it('should register mouseenter, mouseleave, and using keyboardjs', () => {
           let element = doc.createElement('div');
-          let ability = pb_t.createFakeAbility('test');
+          let ability = t.createFakeAbility('test');
           let event = {};
 
           key.on(element, ability);
@@ -90,8 +93,8 @@
             let el1 = doc.createElement('div');
             let el2 = doc.createElement('div');
             el1.appendChild(el2);
-            let ability1 = pb_t.createFakeAbility('ability1');
-            let ability2 = pb_t.createFakeAbility('ability2');
+            let ability1 = t.createFakeAbility('ability1');
+            let ability2 = t.createFakeAbility('ability2');
             Service.add(el1, 'a', ability1);
             Service.add(el2, 'a', ability2);
 
@@ -115,14 +118,14 @@
             expect(ability2.trigger).calledWith(el2).at.least(1);
 
             // Check that the ability is deleted.
-            expect(Service[pb_t.getSymbol(Service, 'hoveredEls')].has(el2)).to.be.false();
+            expect(Service[t.getSymbol(Service, 'hoveredEls')].has(el2)).to.be.false();
           });
           it('should not crash if no element is hovered over', () => {
             handler({ keyCode: 97 });
           });
           it('should not unlisten the element if the mouse is still in the element', () => {
             let el = doc.createElement('div');
-            Service.add(el, 'a', pb_t.createFakeAbility('ability'));
+            Service.add(el, 'a', t.createFakeAbility('ability'));
 
             _.spy(el, 'getBoundingClientRect').overrideReturn({
               left: 12,
@@ -136,12 +139,12 @@
             handler({ keyCode: 97 });
 
             // Check that the ability is still there.
-            const map = Service[pb_t.getSymbol(Service, 'hoveredEls')];
+            const map = Service[t.getSymbol(Service, 'hoveredEls')];
             expect(map.has(el)).to.be.true();
           });
           it('should unlisten to the element if it is being moved', () => {
             let el = doc.createElement('div');
-            Service.add(el, 'a', pb_t.createFakeAbility('ability'));
+            Service.add(el, 'a', t.createFakeAbility('ability'));
 
             _.spy(el, 'getBoundingClientRect').overrideReturn({
               left: 10,
@@ -156,7 +159,7 @@
             handler({ keyCode: 97 });
 
             // Check that the ability is still there.
-            const map = Service[pb_t.getSymbol(Service, 'hoveredEls')];
+            const map = Service[t.getSymbol(Service, 'hoveredEls')];
             expect(map.has(el)).to.be.false();
           });
         });
@@ -177,35 +180,35 @@
           });
 
           it('should add the element to the service', () => {
-            const ability = pb_t.createFakeAbility('ability');
+            const ability = t.createFakeAbility('ability');
             const key = 'a';
             Service.add(el, key, ability);
 
-            const map = Service[pb_t.getSymbol(Service, 'hoveredEls')];
+            const map = Service[t.getSymbol(Service, 'hoveredEls')];
             expect(map.has(el)).to.be.true();
             expect(map.get(el).has(key)).to.be.true();
             expect(map.get(el).get(key).has(ability)).to.be.true();
           });
           it('should handle adding multiple abilities with the same element and key', () => {
-            const ability1 = pb_t.createFakeAbility('ability1');
-            const ability2 = pb_t.createFakeAbility('ability2');
+            const ability1 = t.createFakeAbility('ability1');
+            const ability2 = t.createFakeAbility('ability2');
             const key = 'a';
             Service.add(el, key, ability1);
             Service.add(el, key, ability2);
 
-            const abilitySet = Service[pb_t.getSymbol(Service, 'hoveredEls')].get(el).get(key);
+            const abilitySet = Service[t.getSymbol(Service, 'hoveredEls')].get(el).get(key);
             expect(abilitySet.has(ability1)).to.be.true();
             expect(abilitySet.has(ability2)).to.be.true();
           });
           it('should handle adding multiple keys to the same element', () => {
             const key1 = 'a';
             const key2 = 'b';
-            const ability = pb_t.createFakeAbility('ability');
+            const ability = t.createFakeAbility('ability');
 
             Service.add(el, key1, ability);
             Service.add(el, key2, ability);
 
-            const keyMap = Service[pb_t.getSymbol(Service, 'hoveredEls')].get(el);
+            const keyMap = Service[t.getSymbol(Service, 'hoveredEls')].get(el);
             expect(keyMap.has(key1)).to.be.true();
             expect(keyMap.get(key1).has(ability)).to.be.true();
             expect(keyMap.has(key2)).to.be.true();
@@ -217,10 +220,10 @@
           it('should remove the element from the map', () => {
             const el = doc.createElement('div');
 
-            Service.add(el, 'a', pb_t.createFakeAbility('ability'));
+            Service.add(el, 'a', t.createFakeAbility('ability'));
 
             Service.remove(el);
-            expect(Service[pb_t.getSymbol(Service, 'hoveredEls')].has(el)).to.be.false();
+            expect(Service[t.getSymbol(Service, 'hoveredEls')].has(el)).to.be.false();
           });
           it('should not crash if the element is not in the map', () => {
             Service.remove(doc.createElement('div'));
@@ -235,6 +238,6 @@
         done();
       });
     });
-  });
+  }]);
   </script>
 </body>

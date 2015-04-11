@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>Grid Unit Tests</title>
+  <link rel="import" href="testbase.html">
+
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="surface/grid.html">
+</head>
+<body>
+  <template id="main">
+    <div id="root"></div>
+  </template>
+
+  <template id="row">
+    <div></div>
+  </template>
+
+  <template id="tile">
+    <content></content>
+  </template>
+  <script>
+  DI
+      .prefix('pb')
+      .with('$registry', ['service.=', Registry => new Registry()])
+      .constant('doc', document.currentScript.ownerDocument)
+      .with('template', ['=', doc => doc.querySelector('template#main')])
+      .with('rowTemplate', ['=', doc => doc.querySelector('template#row')])
+      .with('tileTemplate', ['=', doc => doc.querySelector('template#tile')])
+      .run([
+          '/=', '/=', '/=', '=', '=', '/=', '=', '=', '=', 'service.=', 'surface.=',
+          (expect, _, _M, $registry, doc, $, template, rowTemplate, tileTemplate, Config, Grid) => {
+
+  describe('Grid', () => {
+    let grid;
+
+    before(done => {
+      $registry.register(doc, Config);
+      done();
+    });
+
+    beforeEach(done => {
+      Object.defineProperty(Grid.prototype, 'rootEl', {
+        get: function() { return this.shadowRoot.querySelector('#root'); }
+      });
+      Object.defineProperty(Grid.prototype, 'mainTemplate', { get: () => template });
+      Object.defineProperty(Grid.prototype, 'rowTemplate', { get: () => rowTemplate });
+      Object.defineProperty(Grid.prototype, 'tileTemplate', { get: () => tileTemplate });
+
+      grid = doc.createElement('pb-s-grid');
+      $(grid)
+          .attr('pb-row', 2)
+          .attr('pb-col', 3);
+      Object.setPrototypeOf(grid, Grid.prototype);
+
+      done();
+    });
+
+    describe('#created', () => {
+      it('should create the rows and cols', () => {
+        let childEl = doc.createElement('div');
+        $(childEl)
+            .attr('pb-row', 1)
+            .attr('pb-col', 2);
+        grid.appendChild(childEl);
+        grid.createdCallback();
+        let contentEls = grid.shadowRoot.querySelectorAll('content');
+        expect(contentEls.length).to.be.equal(6);
+
+        let correctCellEl = grid.shadowRoot.querySelector('content[pb-row="1"][pb-col="2"]');
+        expect(correctCellEl.getDistributedNodes()[0]).to.contain(childEl);
+      });
+
+      it('should throw exception if row is not a number', () => {
+        let div = doc.createElement('pb-s-rectgrid');
+        Object.setPrototypeOf(div, Grid.prototype);
+        $(div)
+            .attr('pb-row', 'a')
+            .attr('pb-col', 1);
+
+        expect(() => div.createdCallback()).to.throw('a');
+      });
+
+      it('should throw exception if col is not a number', () => {
+        let div = doc.createElement('pb-s-rectgrid');
+        Object.setPrototypeOf(div, Grid.prototype);
+        $(div)
+            .attr('pb-row', 1)
+            .attr('pb-col', 'a');
+
+        expect(() => div.createdCallback()).to.throw('a');
+      });
+    });
+
+    describe('#get', () => {
+      it('should return the correct cell', () => {
+        let childEl = doc.createElement('div');
+        $(childEl)
+            .attr('pb-row', 1)
+            .attr('pb-col', 2);
+        grid.appendChild(childEl);
+
+        grid.createdCallback();
+        expect(grid.get(1, 2)).to.be.equal(childEl);
+      });
+
+      it('should return null if the cell is invalid', () => {
+        grid.createdCallback();
+        expect(grid.get(2, 3)).to.not.exist();
+      });
+    });
+  });
+  }]);
+  </script>
+</body>

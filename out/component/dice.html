@@ -1,0 +1,225 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/ability.html">
+<link rel="import" href="ability/helpable.html">
+<link rel="import" href="ability/pickable.html">
+<link rel="import" href="ability/shuffleable.html">
+<link rel="import" href="check.html">
+<link rel="import" href="component/component.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="trigger/click.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<template>
+  <style>#root {
+  border: 1px solid #8982B8;
+  height: 50px;
+  width: 50px;
+}
+
+:host([show-a="true"]) ::content > [pb-dice-pair] > *:last-child {
+  display: none;
+}
+
+:host([show-a="false"]) ::content > [pb-dice-pair] > *:first-child {
+  display: none;
+}
+
+::content > *:not(:first-child) {
+  display: none;
+}
+
+::content > [pb-dice-pair] {
+  background-color: #CBC7E2;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  line-height: 50px;
+}</style>
+
+  <div id="root">
+    <content></content>
+  </div>
+</template>
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
+  return doc.querySelector("template");
+}]).bind("component.Dice", ["/=", "ability.=", "/=", "=", "trigger.=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "ability.=", "=", "=", "=", "=", function ($, Ability, Chance, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template) {
+
+  var EL_NAME = "pb-c-dice";
+  var ATTR_PAIR = "pb-dice-pair";
+  var ATTR_SHOW_A = "show-a";
+  var SUPPORTED_TYPES = ["d2", "d4", "d6", "d8", "d10", "d12", "d20"];
+
+  var __defaultEnabled__ = Symbol();
+  var __defaultShowA__ = Symbol();
+  var __isEnabled__ = Symbol();
+  var __isShowA__ = Symbol();
+
+  var Rollable = (function (_Shuffleable) {
+    function Rollable() {
+      var name = arguments[0] === undefined ? "pb-rollable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+      var defaultShowA = arguments[3] === undefined ? true : arguments[3];
+
+      _classCallCheck(this, Rollable);
+
+      _get(Object.getPrototypeOf(Rollable.prototype), "constructor", this).call(this, name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
+      this[__defaultShowA__] = defaultShowA;
+    }
+
+    _inherits(Rollable, _Shuffleable);
+
+    _createComputedClass(Rollable, [{
+      key: __isEnabled__,
+      value: function (el) {
+        return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+      }
+    }, {
+      key: "init",
+      value: function init(el) {
+        _get(Object.getPrototypeOf(Rollable.prototype), "init", this).call(this, el);
+        if ($(el).attr(this.attrName) === undefined) {
+          $(el).attr(this.attrName, this[__defaultEnabled__]);
+        }
+
+        if ($(el).attr(ATTR_SHOW_A) === undefined) {
+          $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+        }
+      }
+    }, {
+      key: "doTrigger",
+      value: function doTrigger(el) {
+        _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
+        if (this[__isEnabled__](el)) {
+          $(el).attr(ATTR_SHOW_A, Chance.bool());
+        }
+      }
+    }]);
+
+    return Rollable;
+  })(Shuffleable);
+
+  var DiceFlippable = (function (_Ability) {
+    function DiceFlippable() {
+      var name = arguments[0] === undefined ? "pb-dice-flippable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Key("f") : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? false : arguments[2];
+      var defaultShowA = arguments[3] === undefined ? true : arguments[3];
+
+      _classCallCheck(this, DiceFlippable);
+
+      _get(Object.getPrototypeOf(DiceFlippable.prototype), "constructor", this).call(this, name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
+      this[__defaultShowA__] = defaultShowA;
+    }
+
+    _inherits(DiceFlippable, _Ability);
+
+    _createComputedClass(DiceFlippable, [{
+      key: __isEnabled__,
+      value: function (el) {
+        return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+      }
+    }, {
+      key: "init",
+      value: function init(el) {
+        _get(Object.getPrototypeOf(DiceFlippable.prototype), "init", this).call(this, el);
+        if ($(el).attr(this.attrName) === undefined) {
+          $(el).attr(this.attrName, this[__defaultEnabled__]);
+        }
+
+        if ($(el).attr(ATTR_SHOW_A) === undefined) {
+          $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+        }
+      }
+    }, {
+      key: "doTrigger",
+      value: function doTrigger(el) {
+        if (this[__isEnabled__](el)) {
+          $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
+        }
+      }
+    }]);
+
+    return DiceFlippable;
+  })(Ability);
+
+  var Dice = (function (_Component) {
+    function Dice() {
+      _classCallCheck(this, Dice);
+
+      if (_Component != null) {
+        _Component.apply(this, arguments);
+      }
+    }
+
+    _inherits(Dice, _Component);
+
+    _createClass(Dice, {
+      createdCallback: {
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Dice.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+
+          if (this.children.length <= 0) {
+            var type = $(this).attr("type");
+            if (SUPPORTED_TYPES.indexOf(type) >= 0) {
+              var faceCount = Number.parseInt(type.substring(1));
+              for (var i = 0; i < faceCount; i += 1) {
+                var faceEl = doc.createElement("div");
+                faceEl.innerText = i + 1;
+                this.appendChild(faceEl);
+              }
+            }
+          }
+
+          if (this.querySelectorAll("[" + ATTR_PAIR + "]").length <= 0) {
+            var children = Utils.toArray(this.children);
+            if (children.length % 2 !== 0) {
+              throw new Error("Number of children of dice should be event");
+            }
+
+            for (var i = 0; i < children.length / 2; i++) {
+              var pairEl = doc.createElement("div");
+              $(pairEl).attr(ATTR_PAIR, "");
+              pairEl.appendChild(children[i]);
+              pairEl.appendChild(children[children.length - 1 - i]);
+              this.appendChild(pairEl);
+            }
+          }
+        }
+      }
+    });
+
+    return Dice;
+  })(Component);
+
+  Config.add(EL_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true), new Rollable("roll", new Key("r"), true), new DiceFlippable("flip", new Key("f")));
+
+  $registry.add(EL_NAME, Dice.prototype);
+
+  Dice.DiceFlippable = DiceFlippable;
+  Dice.Rollable = Rollable;
+
+  return Dice;
+}]);</script></head><body></body></html>

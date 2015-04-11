@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="..">
+  <base href=".">
   <title>Utils Unit Tests</title>
 
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="testbase.html">
 
-  <link rel="import" href="out/utils.html">
+  <link rel="import" href="utils.html">
 </head>
 <body>
   <template id="correctTemplate">Correct</template>
@@ -14,8 +14,9 @@
 
   <script>
   DI
+      .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, Utils) => {
+      .run(['/=', '/=', '/=', '=', '=', (expect, _, _M, doc, Utils) => {
 
   describe('Utils', () => {
     describe('#extractTemplate', () => {
@@ -164,7 +165,7 @@
       });
     });
   });
-  });
+  }]);
   </script>
 </body>
 </html>

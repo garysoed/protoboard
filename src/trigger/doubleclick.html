@@ -1,11 +1,13 @@
 <base href="..">
 
-<link rel="import" href="di.html">
 <link rel="import" href="hammerwrapper.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/trigger.html">
 
 <script>
-DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper, Trigger) => {
+DI
+    .prefix('pb')
+    .bind('trigger.DoubleClick', ['=', '=', 'trigger.=', (Events, HammerWrapper, Trigger) => {
 
   /**
    * Triggers an ability when the element is double clicked.
@@ -46,7 +48,11 @@ DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper, Trigger) => {
     }
 
     /**
-     * @method helpText
+     * The help text to be displayed by {{#crossLink "ability.Helpable"}}{{/crossLink}}.
+     *
+     * @property helpText
+     * @type string
+     * @final
      */
     get helpText() {
       return 'Double Click';
@@ -67,5 +73,5 @@ DI.bind('pb_trigger_DoubleClick', (Events, HammerWrapper, Trigger) => {
   };
 
   return DoubleClick;
-});
+}]);
 </script>

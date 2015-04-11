@@ -1,22 +1,31 @@
 {
   "name": "protoboard",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/garysoed/protoboard",
+  "main": "out/main.html",
   "authors": [
     "Gary Soedarsono <garysoed@gmail.com>"
   ],
   "license": "MIT",
   "ignore": [
-    "src",
+    "**/.*",
     "tutorial",
     "node_modules",
-    "test",
-    "tests"
+    "test"
   ],
-  "dependencies": {
+  "devDependencies": {
     "handlebars": "~2.0.0",
     "hammerjs": "~2.0.4",
     "Keypress": "~2.1.0",
-    "animate.css": "~3.2.1"
-  }
+    "animate.css": "~3.2.1",
+    "chance": "~0.7.3",
+    "di-js": "*",
+    "jquery": "~2.1.3"
+  },
+  "description": "Library to make prototyping board games easier",
+  "keywords": [
+    "board",
+    "game",
+    "prototype"
+  ]
 }

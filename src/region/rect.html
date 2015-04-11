@@ -4,16 +4,28 @@
 <link rel="import" href="ability/droppable.html">
 <link rel="import" href="ability/helpable.html">
 <link rel="import" href="check.html">
-<link rel="import" href="di.html">
 <link rel="import" href="region/region.html">
 <link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="region/rect.css">
-
 <template>
+  <style>
+    :host {
+      border: var(--border);
+    }
+
+    ::content > * {
+      position: absolute;
+    }
+
+    #root {
+      position: relative;
+    }
+  </style>
+
   <div id="root">
     <content></content>
   </div>
@@ -21,21 +33,34 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_region_Rect', (
-        $registry,
-        Check,
-        Click,
-        Config,
-        Droppable,
-        Helpable,
-        Key,
-        Move,
-        Region,
-        Utils,
-        doc,
-        template) => {
+    .with('template', ['=', doc => doc.querySelector('template')])
+    .bind('region.Rect', [
+        '=',
+        '=',
+        'trigger.=',
+        'service.=',
+        'ability.=',
+        'ability.=',
+        'trigger.=',
+        'service.=',
+        'region.=',
+        '=',
+        '=',
+        '=',
+          ($registry,
+          Check,
+          Click,
+          Config,
+          Droppable,
+          Helpable,
+          Key,
+          Move,
+          Region,
+          Utils,
+          doc,
+          template) => {
   const EL_NAME = 'pb-r-rect';
 
   // Private symbols
@@ -92,10 +117,10 @@ DI
     /**
      * Drop the last dragged element on the given element
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el The element to drop the dragged element into.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
         let movedElement = Move.movedElements.values().next().value;
 
@@ -140,11 +165,8 @@ DI
       new FlexDroppable('drop', new Key('d'), true));
   $registry.add(EL_NAME, Rect.prototype);
 
-  if (window['TEST_MODE']) {
-    Rect.FlexDroppable = FlexDroppable;
-  }
+  Rect.FlexDroppable = FlexDroppable;
 
   return Rect;
-
-});
+}]);
 </script>

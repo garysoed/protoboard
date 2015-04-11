@@ -1,10 +1,12 @@
 <base href="..">
 
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 
 <script>
 
-DI.bind('pb_service_Registry', () => {
+DI
+    .prefix('pb')
+    .bind('service.Registry', [() => {
 
   const __elements__ = Symbol();
   const __toRun__ = Symbol();
@@ -66,5 +68,5 @@ DI.bind('pb_service_Registry', () => {
   }
 
   return Registry;
-});
+}]);
 </script>

@@ -1,120 +1,58 @@
 <html><head><base href="..">
 
-<link rel="import" href="di.html">
 <link rel="import" href="hammerwrapper.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/trigger.html">
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-DI.bind("pb_trigger_DoubleClick", function (Events, HammerWrapper, Trigger) {
-  /**
-   * Triggers an ability when the element is double clicked.
-   *
-   * @class trigger.DoubleClick
-   * @extends trigger.Trigger
-   */
-  var DoubleClick = (function (Trigger) {
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").bind("trigger.DoubleClick", ["=", "=", "trigger.=", function (Events, HammerWrapper, Trigger) {
+  var DoubleClick = (function (_Trigger) {
     function DoubleClick() {
-      if (Object.getPrototypeOf(DoubleClick) !== null) {
-        Object.getPrototypeOf(DoubleClick).apply(this, arguments);
+      _classCallCheck(this, DoubleClick);
+
+      if (_Trigger != null) {
+        _Trigger.apply(this, arguments);
       }
     }
 
-    _inherits(DoubleClick, Trigger);
+    _inherits(DoubleClick, _Trigger);
 
-    _prototypeProperties(DoubleClick, null, {
+    _createClass(DoubleClick, {
       on: {
-
-        /**
-         * Registers the given element to trigger the given ability when double clicked.
-         *
-         * @method on
-         * @param {Element} element Element to register.
-         * @param {ability.Ability} ability The ability to trigger.
-         */
         value: function on(element, ability) {
           Events.of(element, this).on("hammer", "doubletap", ability.trigger.bind(ability, element));
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       off: {
-
-        /**
-         * Unregisters the given element from triggering the registered ability when double clicked.
-         *
-         * @method off
-         * @param {Element} element Element to unregister.
-         */
         value: function off(element) {
           Events.of(element, this).off("hammer", "doubletap");
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       toString: {
-
-        /**
-         * @method toString
-         * @return {string} String pb-dblclick
-         */
         value: function toString() {
           return "pb-dblclick";
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       helpText: {
-
-        /**
-         * @method helpText
-         */
         get: function () {
           return "Double Click";
-        },
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
     return DoubleClick;
   })(Trigger);
 
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.DoubleClick|undefined} The DoubleClick trigger if parse is successful, or
-   *    `undefined` otherwise.
-   * @static
-   */
   DoubleClick.parse = function (str) {
     return str === "pb-dblclick" ? new DoubleClick() : undefined;
   };
 
   return DoubleClick;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

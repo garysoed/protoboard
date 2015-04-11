@@ -1,0 +1,48 @@
+pb-s-rectgrid > pb-r-deck {
+  height: 100px;
+  width: 100px;
+  box-sizing: border-box;
+}
+
+pb-r-deck[pb-col="0"][pb-row="0"],
+pb-r-deck[pb-col="1"][pb-row="1"] {
+  background-color: black;
+}
+
+pb-s-hexgrid pb-r-bag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+pb-s-hexgrid pb-u-shape[pb-row="0"]::shadow .pb-shape,
+pb-s-hexgrid > [pb-row="0"] pb-u-shape::shadow .pb-shape,
+pb-s-hexgrid pb-u-shape[pb-row="3"]::shadow .pb-shape {
+  fill: crimson;
+}
+
+pb-s-hexgrid pb-u-shape[pb-row="1"]::shadow .pb-shape,
+pb-s-hexgrid > [pb-row="1"] pb-u-shape::shadow .pb-shape,
+pb-s-hexgrid pb-u-shape[pb-row="4"]::shadow .pb-shape,
+pb-s-hexgrid > [pb-row="4"] pb-u-shape::shadow .pb-shape {
+  fill: forestgreen;
+}
+
+pb-s-hexgrid pb-u-shape[pb-row="2"]::shadow .pb-shape {
+  fill: cornflowerblue;
+}
+
+pb-s-trianglegrid pb-u-shape[pb-row="0"][pb-col="0"]::shadow .pb-shape,
+pb-s-trianglegrid pb-u-shape[pb-row="0"][pb-col="2"]::shadow .pb-shape,
+pb-s-trianglegrid pb-u-shape[pb-row="0"][pb-col="4"]::shadow .pb-shape,
+pb-s-trianglegrid pb-u-shape[pb-row="1"][pb-col="1"]::shadow .pb-shape,
+pb-s-trianglegrid pb-u-shape[pb-row="1"][pb-col="3"]::shadow .pb-shape,
+pb-s-trianglegrid pb-u-shape[pb-row="2"][pb-col="0"]::shadow .pb-shape,
+pb-s-trianglegrid pb-u-shape[pb-row="2"][pb-col="2"]::shadow .pb-shape,
+pb-s-trianglegrid pb-u-shape[pb-row="2"][pb-col="4"]::shadow .pb-shape {
+  fill: indigo;
+  fill-opacity: 1;
+}

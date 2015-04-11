@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>Click Unit Tests</title>
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/testbase.html">
-  <link rel="import" href="out/trigger/click.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="trigger/click.html">
 </head>
 <body>
   <script>
   DI
+      .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .with('Events', pb_t => pb_t.createFakeEvents())
-      .run((_, _M, expect, Click, Events, doc, pb_t) => {
+      .with('Events', ['=', t => t.createFakeEvents()])
+      .run(['/=', '/=', '/=', 'trigger.=', '=', '=', '=',
+          (_, _M, expect, Click, Events, doc, t) => {
 
     describe('Click', () => {
       let click;
@@ -24,7 +26,7 @@
 
       describe('#on', () => {
         it('should register singletap on hammer', () => {
-          let ability = pb_t.createFakeAbility('test');
+          let ability = t.createFakeAbility('test');
           let element = doc.createElement('div');
 
           click.on(element, ability);
@@ -54,6 +56,6 @@
         done();
       });
     });
-  });
+  }]);
   </script>
 </body>

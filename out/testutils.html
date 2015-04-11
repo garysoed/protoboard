@@ -1,12 +1,12 @@
 <html><head><base href=".">
 
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
 <link rel="import" href="utils.html">
 
 <script>"use strict";
 
-DI.bind("pb_t", function (_, Utils) {
+DI.bind("pb.t", ["=", "pb.=", function (_, Utils) {
   var TestUtil = {
     createFakeAbility: function createFakeAbility(name, trigger) {
       return {
@@ -47,4 +47,4 @@ DI.bind("pb_t", function (_, Utils) {
   };
 
   return TestUtil;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

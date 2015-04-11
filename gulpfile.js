@@ -1,21 +1,25 @@
 var gulp    = require('gulp');
 var debug   = require('gulp-debug');
 var plumber = require('gulp-plumber');
-var through = require('through2');
-var subtask = require('gulp-subtask')(gulp);
 
-var chalk  = require('chalk');
+var babel  = require('gulp-babel');
 var jshint = require('gulp-jshint');
-var karma  = require('karma').server;
+var myth   = require('gulp-myth');
 var shell  = require('gulp-shell');
-var sass   = require('gulp-ruby-sass');
-var yuidoc = require('gulp-yuidoc');
-var yuimd  = require('yuimd');
-var to5    = require('gulp-6to5');
 var subs   = require('gulp-html-subs');
 var zip    = require('gulp-zip');
 
-var gutil   = require('gulp-util');
+var chalk    = require('chalk');
+var karma    = require('karma').server;
+var minimist = require('minimist');
+var through  = require('through2');
+
+var options = minimist(process.argv.slice(2), {
+  'string': 'theme',
+  'default': {
+    'theme': './themes/slateblue.json'
+  }
+});
 
 function chain(fn) {
   return through.obj(function(file, enc, callback) {
@@ -54,20 +58,40 @@ function subJsHint() {
   })
 }
 
-function sub6to5() {
+function subBabel() {
   return chain(function(stream) {
-    var replace = subs('script');
+    var scriptSubs = subs('script');
     return stream
-        .pipe(replace.extract)
-            .pipe(to5({modules: 'ignore'}))
-        .pipe(replace.inject);
+        .pipe(scriptSubs.extract)
+            .pipe(babel({modules: 'ignore', comments: false}))
+        .pipe(scriptSubs.inject);
   });
+}
 
-  // return new subtask('6to5')
-  //     .pipe(function() { return replace.extract; })
-  //         .pipe(to5, {modules: 'ignore'})
-  //     .pipe(function() { return replace.inject; })
-  //     .pipe(debug, {title: chalk.green('6to5')});
+function readJsonTheme(file) {
+  var json = require(file);
+  var base = json.base ? readJsonTheme(json.base) : {};
+  for (var key in json.vars) {
+    base[key] = json.vars[key];
+  }
+  return base;
+}
+
+function subMyth() {
+  return chain(function(stream) {
+    return stream
+        .pipe(myth({ 'variables': readJsonTheme(options.theme) }));
+  })
+}
+
+function subMythHtml() {
+  return chain(function(stream) {
+    var styleSubs = subs('style');
+    return stream
+        .pipe(styleSubs.extract)
+            .pipe(subMyth())
+        .pipe(styleSubs.inject);
+  });
 }
 
 function subSass() {
@@ -77,22 +101,25 @@ function subSass() {
   });
 }
 
-function subYuiMd() {
-  return chain(function(stream) {
-      return stream.pipe(yuidoc.parser({
-        extension: '.html'
-      }))
-      .pipe(yuimd({
-        'projectName': 'Protoboard',
-        '$home': 'doc-theme/Home.theme',
-        '$class': 'doc-theme/class.theme'
-      }));
-  });
-}
+gulp.task('copy', function() {
+  return gulp
+      .src([
+          'bower_components/animate.css/animate.min.css',
+          'bower_components/chance/chance.js',
+          'bower_components/di-js/out/bin.min.js',
+          'bower_components/hammerjs/hammer.js',
+          'bower_components/handlebars/handlebars.js',
+          'bower_components/jquery/dist/jquery.js',
+          'bower_components/Keypress/keypress.js',
+          'bower_components/listener/out/bin.min.js'
+        ],
+        { base: 'bower_components' })
+      .pipe(gulp.dest('out/third_party'));
+});
 
-gulp.task('clean', shell.task('rm -r out'));
+gulp.task('clean', shell.task('rm -r out doc'));
+
 gulp.task('doc-gen', shell.task('yuidoc --config yuidoc.json'));
-
 gulp.task('demo', function() {
   return gulp.src(['out/**', 'ex/**', 'bower_components/**'], { base: '.' })
       .pipe(gulp.dest('../protoboard-doc'));
@@ -109,19 +136,26 @@ gulp.task('jshint', function() {
       .pipe(subJsHint());
 })
 
-gulp.task('6to5-src', ['jshint'], function() {
+gulp.task('src', ['jshint', 'copy'], function() {
   return gulp.src(['./src/**/*.html'])
-      .pipe(sub6to5())
+      .pipe(subBabel())
+      .pipe(subMythHtml())
       .pipe(gulp.dest('out'));
 });
 
-gulp.task('6to5-test', ['jshint'], function() {
+gulp.task('ex', ['src'], function() {
+  return gulp.src('./ex/**/*.css')
+      .pipe(subMyth())
+      .pipe(gulp.dest('out/ex'));
+});
+
+gulp.task('test', ['jshint'], function() {
   return gulp.src(['./test/**/*_test.html', './test/testbase.html'])
-      .pipe(sub6to5())
+      .pipe(subBabel())
       .pipe(gulp.dest('out'));
 });
 
-gulp.task('karma', ['6to5-src', '6to5-test'], function(done) {
+gulp.task('karma', ['src', 'test'], function(done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
@@ -135,44 +169,15 @@ gulp.task('karma-dev', function(done) {
   }, done);
 });
 
-gulp.task('sass-src', function() {
-  return gulp.src(['./src/**/*.scss', '!./src/themes/*.scss'])
-      .pipe(subSass())
-      .pipe(gulp.dest('out'));
-});
-
-gulp.task('sass-ex', function() {
-  return gulp.src(['ex/**/*.scss', '!./src/themes/*.scss'])
-      .pipe(subSass())
-      .pipe(gulp.dest('ex'));
-});
-
-gulp.task('watch', function() {
-  // SASS
-  gulp.watch(['src/**/*.scss'], function(event) {
-    gulp.src(['src/**/*.scss'])
-        .pipe(plumber())
-        .pipe(subSass())
-        .pipe(debug({title: chalk.green('sass')}))
-        .pipe(gulp.dest('out'));
-  });
-
-  // SASS for examples
-  gulp.watch(['ex/**/*.scss', 'src/themes/*.scss'], function(event) {
-    gulp.src(['ex/**/*.scss', '!./src/themes/*.scss'])
-        .pipe(plumber())
-        .pipe(subSass())
-        .pipe(debug({title: chalk.green('sass')}))
-        .pipe(gulp.dest('ex'));
-  });
-
-  // 6to5
+gulp.task('watch', ['compile'], function() {
+  // src
   gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
     var base = event.path.substring(__dirname.length).split('/')[1];
     gulp.src(event.path, {base: base})
         .pipe(plumber())
-        .pipe(sub6to5())
-        .pipe(debug({title: chalk.green('6to5')}))
+        .pipe(subBabel())
+        .pipe(subMythHtml())
+        .pipe(debug({title: chalk.green('src')}))
         .pipe(gulp.dest('out'));
   });
 
@@ -186,11 +191,10 @@ gulp.task('watch', function() {
   });
 });
 
-gulp.task('compile', ['6to5-src', '6to5-test', 'sass-src', 'sass-ex']);
-gulp.task('pack', ['6to5-src', 'sass-src', 'sass-ex'], function() {
+gulp.task('compile', ['src', 'test', 'ex']);
+gulp.task('pack', ['src', 'ex'], function() {
   return gulp.src('out/**/*')
       .pipe(zip('bin.zip'))
       .pipe(gulp.dest('dist'));
 });
-gulp.task('check', ['karma']);
-gulp.task('push', ['check', 'doc', 'pack'], shell.task('git push'));
+gulp.task('check', ['karma', 'doc']);

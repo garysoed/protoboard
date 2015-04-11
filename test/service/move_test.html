@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>service.Move Unit Tests</title>
 
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/service/move.html">
-  <link rel="import" href="out/service/registry.html">
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="service/move.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="testbase.html">
 </head>
 <body>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, $registry, Move, doc, pb_t) => {
+      .run(['/=', '/=', '=', 'service.=', '=', '=', (expect, _, $registry, Move, doc, t) => {
 
   // Private symbols.
-  const __container__ = pb_t.getSymbol(Move, 'container');
-  const __moveContainer__ = pb_t.getSymbol(Move, 'moveContainer');
-  const __onMouseMove__ = pb_t.getSymbol(Move, 'onMouseMove');
+  const __container__ = t.getSymbol(Move, 'container');
+  const __moveContainer__ = t.getSymbol(Move, 'moveContainer');
+  const __onMouseMove__ = t.getSymbol(Move, 'onMouseMove');
 
   describe('service.Move', () => {
     before(done => {
@@ -48,7 +49,7 @@
         expect(container.style.top).to.equal('57px');
       });
     });
-    
+
     describe('__onMouseMove__', () => {
       it('should set the mouse coordinates correctly and move the container', () => {
         let event = { clientX: 12, clientY: 24};
@@ -81,6 +82,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

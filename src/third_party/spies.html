@@ -1,8 +1,8 @@
 <base href="../..">
 <link rel="import" href="node_modules/spies/main_chai_expect.html">
 
-<link rel="import" href="out/di.html">
+<link rel="import" href="out/third_party/di.html">
 
 <script>
-DI.bind('_', () => spies.Spies);
+DI.bind('_', [() => spies.Spies]);
 </script>

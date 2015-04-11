@@ -1,119 +1,53 @@
 <html><head><base href="..">
 
 <link rel="import" href="check.html">
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="service/move.html">
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
-
-DI.bind("pb_ability_Pickable", function (Ability, Check, Click, Move, Triggers) {
-  // Private symbols.
+DI.prefix("pb").bind("ability.Pickable", ["ability.=", "=", "trigger.=", "service.=", "trigger.=", function (Ability, Check, Click, Move, Triggers) {
   var __defaultEnabled__ = Symbol();
 
-  var Pickable = (function (Ability) {
-    /**
-     * Element with this ability can be picked and dragged around. The element can be dropped on
-     * elements with {{#crossLink "ability.Droppable"}}{{/crossLink}} ability.
-     *
-     * @constructor
-     * @class ability.Pickable
-     * @param {string} [name=pb-pickable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
-     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
-     * @extends ability.Ability
-     */
+  var Pickable = (function (_Ability) {
     function Pickable() {
-      var _this = this;
       var name = arguments[0] === undefined ? "pb-pickable" : arguments[0];
       var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
-      return (function () {
-        _get(Object.getPrototypeOf(Pickable.prototype), "constructor", _this).call(_this, name, defaultTrigger);
 
-        _this[__defaultEnabled__] = defaultEnabled;
-      })();
+      _classCallCheck(this, Pickable);
+
+      _get(Object.getPrototypeOf(Pickable.prototype), "constructor", this).call(this, name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
     }
 
-    _inherits(Pickable, Ability);
+    _inherits(Pickable, _Ability);
 
-    _prototypeProperties(Pickable, null, {
+    _createClass(Pickable, {
       init: {
-
-        /**
-         * Sets the default configuration for this ability on the given element.
-         *
-         * @method init
-         * @param {Element} el The element to set the default configuration to.
-         */
         value: function init(el) {
           _get(Object.getPrototypeOf(Pickable.prototype), "init", this).call(this, el);
 
           if ($(el).attr(this.attrName) === undefined) {
             $(el).attr(this.attrName, this[__defaultEnabled__]);
           }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
-      trigger: {
-
-        /**
-         * Picks up the element and makes it follow the mouse cursor.
-         *
-         * @method trigger
-         * @param {Element} el Element to be picked up.
-         */
-        value: function trigger(el) {
+      doTrigger: {
+        value: function doTrigger(el) {
           if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
             Move.add(el);
           }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
@@ -121,4 +55,4 @@ DI.bind("pb_ability_Pickable", function (Ability, Check, Click, Move, Triggers) 
   })(Ability);
 
   return Pickable;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

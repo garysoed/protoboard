@@ -1,0 +1,360 @@
+<base href="..">
+
+<link rel="import" href="ability/ability.html">
+<link rel="import" href="ability/helpable.html">
+<link rel="import" href="ability/pickable.html">
+<link rel="import" href="ability/shuffleable.html">
+<link rel="import" href="check.html">
+<link rel="import" href="component/component.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="trigger/click.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<template>
+  <style>
+    #root {
+      border: var(--border);
+      height: var(--component-height);
+      width: var(--component-width);
+    }
+
+    :host([show-a="true"]) ::content > [pb-dice-pair] > *:last-child {
+      display: none;
+    }
+
+    :host([show-a="false"]) ::content > [pb-dice-pair] > *:first-child {
+      display: none;
+    }
+
+    ::content > *:not(:first-child) {
+      display: none;
+    }
+
+    ::content > [pb-dice-pair] {
+      background-color: var(--color-background-accent);
+      height: var(--component-height);
+      width: var(--component-width);
+      text-align: center;
+      line-height: var(--component-height);
+    }
+  </style>
+
+  <div id="root">
+    <content></content>
+  </div>
+</template>
+
+<script>
+DI
+    .prefix('pb')
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', ['=', doc => doc.querySelector('template')])
+    .bind('component.Dice', [
+        '/=',
+        'ability.=',
+        '/=',
+        '=',
+        'trigger.=',
+        'component.=',
+        'service.=',
+        'ability.=',
+        'trigger.=',
+        'ability.=',
+        'ability.=',
+        '=',
+        '=',
+        '=',
+        '=',
+          ($,
+          Ability,
+          Chance,
+          Check,
+          Click,
+          Component,
+          Config,
+          Helpable,
+          Key,
+          Pickable,
+          Shuffleable,
+          Utils,
+          $registry,
+          doc,
+          template) => {
+
+  const EL_NAME = 'pb-c-dice';
+  const ATTR_PAIR = 'pb-dice-pair';
+  const ATTR_SHOW_A = 'show-a';
+  const SUPPORTED_TYPES = [
+    'd2',
+    'd4',
+    'd6',
+    'd8',
+    'd10',
+    'd12',
+    'd20'
+  ];
+
+  // Private symbols.
+  const __defaultEnabled__ = Symbol();
+  const __defaultShowA__ = Symbol();
+  const __isEnabled__ = Symbol();
+  const __isShowA__ = Symbol();
+
+  class Rollable extends Shuffleable {
+
+    /**
+     * Elements with this ability can shuffle their children. This is very specific to dice and
+     * should not be used for other elements.
+     *
+     * @class component.Dice.Rollable
+     * @since 0.2.0
+     * @constructor
+     * @param {string} [name=pb-rollable] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger of the ability.
+     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     * @param {boolean} [defaultShowA=true] True iff "Side A" should be shown by default.
+     * @extends ability.Shuffleable
+     */
+    constructor(
+        name = 'pb-rollable',
+        defaultTrigger = new Click(),
+        defaultEnabled = true,
+        defaultShowA = true) {
+      super(name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
+      this[__defaultShowA__] = defaultShowA;
+    }
+
+    /**
+     * @method __isEnabled__
+     * @param {Element} el Element to check.
+     * @return {boolean} True iff the ability is enabled for the given element.
+     * @private
+     */
+    [__isEnabled__](el) {
+      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+    }
+
+    /**
+     * Sets the default configuration for this ability on the given element.
+     *
+     * @method init
+     * @param {Element} el The element to set the default configuration to.
+     */
+    init(el) {
+      super.init(el);
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
+      }
+
+      if ($(el).attr(ATTR_SHOW_A) === undefined) {
+        $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+      }
+    }
+
+    /**
+     * Shuffles the children and randomly selects the side to show.
+     *
+     * @method trigger
+     * @param {Element} el The element to trigger the ability on.
+     */
+    doTrigger(el) {
+      super.doTrigger(el);
+      if (this[__isEnabled__](el)) {
+        $(el).attr(ATTR_SHOW_A, Chance.bool());
+      }
+    }
+  }
+
+  class DiceFlippable extends Ability {
+
+    /**
+     * Dice with this ability can be flipped to the opposite side. This is very specific to dice and
+     * should not be used for other elements.
+     *
+     * @class component.Dice.DiceFlippable
+     * @since 0.2.0
+     * @constructor
+     * @param {string} [name=pb-dice-flippable] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=trigger.Key] Default trigger of the ability.
+     * @param {boolean} [defaultEnabled=false] True iff the ability should be enabled by default.
+     * @param {boolean} [defaultShowA=true] True iff "Side A" should be shown by default.
+     * @extends ability.Ability
+     */
+    constructor(
+        name = 'pb-dice-flippable',
+        defaultTrigger = new Key('f'),
+        defaultEnabled = false,
+        defaultShowA = true) {
+      super(name, defaultTrigger);
+
+      this[__defaultEnabled__] = defaultEnabled;
+      this[__defaultShowA__] = defaultShowA;
+    }
+
+    /**
+     * @method __isEnabled__
+     * @param {Element} el Element to check.
+     * @return {boolean} True iff the ability is enabled for the given element.
+     * @private
+     */
+    [__isEnabled__](el) {
+      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+    }
+
+    /**
+     * Sets the default configuration for this ability on the given element.
+     *
+     * @method init
+     * @param {Element} el The element to set the default configuration to.
+     */
+    init(el) {
+      super.init(el);
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
+      }
+
+      if ($(el).attr(ATTR_SHOW_A) === undefined) {
+        $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+      }
+    }
+
+    /**
+     * Flips the dice to the opposite side.
+     *
+     * @method doTrigger
+     * @param {Element} el The dice to flip.
+     */
+    doTrigger(el) {
+      if (this[__isEnabled__](el)) {
+        $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
+      }
+    }
+  }
+
+  /**
+   * A representation of a dice. This element has three levels of customizations.
+   *
+   * The most basic level of customization is to use premade dice. To use this, set the type
+   * attribute to a supported dice type. For example:
+   * ```html
+   * <!-- Creates a d2, or a coin -->
+   * <pb-c-dice type="d2"></pb-c-dice>
+   *
+   * <!-- Creates a d20 -->
+   * <pb-c-dice type="d20"></pb-c-dice>
+   * ```
+   * Custom types supported are: `d2`, `d4`, `d6`, `d8`, `d10`, `d12`, `d20`.
+   *
+   * In the next level of customization, you can define all the dice faces by creating children for
+   * each face of the dice. For example, to make the dice used in
+   * [Mage Wars](https://www.boardgamegeek.com/boardgame/101721/mage-wars), do:
+   * ```html
+   * <pb-c-dice>
+   *   <div>&nbsp;</div>
+   *   <div>1</div>
+   *   <div>2</div>
+   *   <div>&nbsp;</div>
+   *   <div>1!</div>
+   *   <div>2!</div>
+   * </pb-c-dice>
+   * ```
+   *
+   * For games that involve flipping dice to the opposite side, like
+   * [Flash Point: Fire Rescue](http://boardgamegeek.com/boardgame/100901/flash-point-fire-rescue),
+   * further customization is needed. The children in the previous example needs to be paired with a
+   * parent element with attribute `pb-dice-pair`. For example, to make a normal d6:
+   * ```html
+   * <pb-c-dice>
+   *   <div pb-dice-pair>
+   *     <div>1</div>
+   *     <div>6</div>
+   *   </div>
+   *   <div pb-dice-pair>
+   *     <div>2</div>
+   *     <div>5</div>
+   *   </div>
+   *   <div pb-dice-pair>
+   *     <div>3</div>
+   *     <div>4</div>
+   *   </div>
+   * </pb-c-dice>
+   * ```
+   * If you do not explicitly specify the pairing, the dice will pair them for you automatically.
+   * The first child will be paired with the last child, second child paired with second last, etc.
+   *
+   * Note that dice must have an even number of faces.
+   *
+   * Default supported abilities:
+   * - {{#crossLink "ability.Pickable"}}pick{{/crossLink}}
+   * - {{#crossLink "component.Dice.Rollable"}}roll{{/crossLink}}: This is similar to
+   *   {{#crossLink ability.Shuffleable}}{{/crossLink}}, except it is customized to handle the face
+   *   pairings.
+   * - {{#crossLink "component.Dice.DiceFlippable"}}flip{{/crossLink}}: Flips the dice to the other
+   *   side.
+   *
+   * @class component.Dice
+   * @since 0.2.0
+   * @extends component.Component
+   */
+  class Dice extends Component {
+
+    /**
+     * Called when the element is created
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+
+      // Check if the dice has any children.
+      if (this.children.length <= 0) {
+        let type = $(this).attr('type');
+        if (SUPPORTED_TYPES.indexOf(type) >= 0) {
+          let faceCount = Number.parseInt(type.substring(1));
+          for (let i = 0; i < faceCount; i += 1) {
+            let faceEl = doc.createElement('div');
+            faceEl.innerText = i + 1;
+            this.appendChild(faceEl);
+          }
+        }
+      }
+
+      // Checks if the children are paired.
+      if (this.querySelectorAll(`[${ATTR_PAIR}]`).length <= 0) {
+        let children = Utils.toArray(this.children);
+        if (children.length % 2 !== 0) {
+          throw new Error('Number of children of dice should be event');
+        }
+
+        for (let i = 0; i < children.length / 2; i++) {
+          let pairEl = doc.createElement('div');
+          $(pairEl).attr(ATTR_PAIR, '');
+          pairEl.appendChild(children[i]);
+          pairEl.appendChild(children[children.length - 1 - i]);
+          this.appendChild(pairEl);
+        }
+      }
+    }
+  }
+
+  Config.add(
+      EL_NAME,
+      new Helpable('help'),
+      new Pickable('pick', new Key('q'), true),
+      new Rollable('roll', new Key('r'), true),
+      new DiceFlippable('flip', new Key('f')));
+
+  $registry.add(EL_NAME, Dice.prototype);
+
+  Dice.DiceFlippable = DiceFlippable;
+  Dice.Rollable = Rollable;
+
+  return Dice;
+}]);
+</script>

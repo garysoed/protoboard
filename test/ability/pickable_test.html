@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>ability.Pickable Unit Tests</title>
 
-  <link rel="import" href="out/ability/pickable.html">
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="ability/pickable.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="testbase.html">
 </head>
 <body>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
-      .constant('Move', { add() {} })
+      .prefix('pb')
+      .with('$registry', ['service.=', Registry => new Registry()])
+      .constant('service.Move', { add() {} })
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, $, doc, Move, Pickable) => {
+      .run(['/=', '/=', '/=', '=', 'service.=', 'ability.=',
+          (expect, _, $, doc, Move, Pickable) => {
 
   describe('ability.Pickable', () => {
     let el;
@@ -67,6 +69,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

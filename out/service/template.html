@@ -1,0 +1,55 @@
+<html><head><base href="..">
+
+<link rel="import" href="check.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/handlebars.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>"use strict";
+
+DI.prefix("pb").bind("service.Template", ["/=", "=", "=", "/=", function ($, Check, Events, Handlebars) {
+
+  var promiseMap = new Map();
+
+  var Service = {
+    addPartial: function addPartial(name, element) {
+      Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
+      return this;
+    },
+    addData: function addData(name, data) {
+      if (promiseMap.has(name)) {
+        $(Service).trigger(name, data);
+      } else {
+        promiseMap.set(name, Promise.resolve([name, data]));
+      }
+      return this;
+    },
+    get: function get(name) {
+      if (!promiseMap.has(name)) {
+        promiseMap.set(name, new Promise(function (resolve, reject) {
+          Events.of(Service, this).on("jquery", name, function (event, data) {
+            resolve([name, data]);
+          });
+        }));
+      }
+
+      return promiseMap.get(name);
+    }
+  };
+
+  Handlebars.registerHelper("pb-for", function (from, to, step, options) {
+    if (options === undefined) {
+      options = step;
+      step = 1;
+    }
+    var rv = "";
+    for (var i = Check(from).isInt().orThrows(); i < Check(to).isInt().orThrows(); i += Check(step).isInt().orThrows()) {
+      var data = Handlebars.createFrame(options.data || {});
+      data.index = i;
+      rv += options.fn(this, { data: data });
+    }
+    return rv;
+  });
+
+  return Service;
+}]);</script></head><body></body></html>

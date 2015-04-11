@@ -1,68 +1,23 @@
 <html><head><base href=".">
 
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 
 <script>"use strict";
 
-DI.bind("pb_Utils", function () {
-  /**
-   * Various miscellaneous utilities. They are not meant for general usage, but feel free to use
-   * them.
-   * @class Utils
-   * @static
-   */
+DI.prefix("pb").bind("Utils", [function () {
 
   var Utils = {
-    /**
-     * Extracts the given template from the given document.
-     *
-     * @method  extractTemplate
-     * @param {string} templateQuery The query used to obtain the template.
-     * @param {Document} doc The document object to obtain the template from.
-     * @return {Node} The node in the template.
-     */
     extractTemplate: function extractTemplate(templateQuery, doc) {
       return this.activateTemplate(doc.querySelector(templateQuery), doc);
     },
-
-    /**
-     * Activates the given teplate element.
-     *
-     * @method activateTemplate
-     * @param  {Element} template The template element.
-     * @param  {Document} doc The document object to activate the template in.
-     * @return {Element} The activated template element.
-     */
     activateTemplate: function activateTemplate(template, doc) {
       return doc.importNode(template.content, true);
     },
-
-    /**
-     * Returns the referenced function, or noop function if the referenced function does not exist.
-     *
-     * @method nonNullFn
-     * @param {Object} scope Object containing the referenced function.
-     * @param {string} name Name of the function to return.
-     * @return {Function} The referenced function, or noop function if the referenced function does
-     *    not exist.
-     */
     nonNullFn: function nonNullFn(scope, name) {
       return scope[name] || function () {};
     },
-
-    /**
-     * Observes the given property on the given object.
-     *
-     * @method observe
-     * @param {Object} object Object to observe changes to.
-     * @param {string|null} property The property name to listen to, or null to listen to all
-     *    properties.
-     * @param {Function} handler Handler called when a property has changed. The handler accepts 3
-     *    arguments: property name, change type, and the old value of the property.
-     * @return {Function} The handler used to unobserve the object.
-     */
     observe: function observe(object, property, handler) {
-      var newHandler = function (changes) {
+      var newHandler = function newHandler(changes) {
         changes.forEach(function (change) {
           if (!property || change.name === property) {
             handler(change.name, change.type, change.oldValue);
@@ -72,18 +27,6 @@ DI.bind("pb_Utils", function () {
       Object.observe(object, newHandler);
       return newHandler;
     },
-
-    /**
-     * Returns a Promise that waits for the given property of the given object to fulfill the given
-     * condition.
-     *
-     * @method waitFor
-     * @param {Object} object Object containing the property to wait for.
-     * @param {string} property The name of the property to wait for.
-     * @param {any} condition If Function, this method will call the function with the property
-     *    value and will wait for the function to return true. Otherwise, this will wait for the
-     *    property to match this.
-     */
     waitFor: function waitFor(object, property, condition) {
       var promise = new Promise(function (resolve, reject) {
         var truthFn = typeof condition === "function" ? condition : function (v) {
@@ -118,17 +61,6 @@ DI.bind("pb_Utils", function () {
       });
       return promise;
     },
-
-    /**
-     * A comparison function that handles every type.
-     *
-     * @method compare
-     * @param {Object} a First object to compare.
-     * @param {Object} b Second object to compare.
-     * @return {number|undefined} -1 if the first object is smaller than the second, 0 if they are
-     *    equal, -1 if the second object is smaller than the first, or undefined if the two cannot
-     *    be compared.
-     */
     compare: function compare(a, b) {
       if (typeof a === "number" && typeof b === "number") {
         if (a < b) {
@@ -142,14 +74,6 @@ DI.bind("pb_Utils", function () {
 
       return null;
     },
-
-    /**
-     * Converts the given "array like" object to array.
-     *
-     * @method toArray
-     * @param  {Object} obj An array like object to convert.
-     * @return {Array} Array object converted from the given array like object.
-     */
     toArray: function toArray(obj) {
       var array = [];
       for (var i = 0; i < obj.length; i++) {
@@ -173,9 +97,29 @@ DI.bind("pb_Utils", function () {
 
     toArrayOfArrays: function toArrayOfArrays(obj) {
       var array = [];
-      for (var _iterator = Object.keys(obj)[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-        var key = _step.value;
-        array.push([key, obj[key]]);
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = Object.keys(obj)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var key = _step.value;
+
+          array.push([key, obj[key]]);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
 
       return array;
@@ -183,26 +127,33 @@ DI.bind("pb_Utils", function () {
 
     fromArrayOfArrays: function fromArrayOfArrays(array) {
       var obj = {};
-      for (var _iterator2 = array[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
-        var entry = _step2.value;
-        obj[entry[0]] = entry[1];
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = array[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var entry = _step.value;
+
+          obj[entry[0]] = entry[1];
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
 
       return obj;
     },
-
-    /**
-     * Replaces the specified function to call the given function before or after the original
-     * function. The given function will be called with the same arguments and scope as the original
-     * function.
-     *
-     * @method extendFn
-     * @param {Object} scope The object containing the function to replace.
-     * @param {string} name The name of the function to replace.
-     * @param {Function} fn Function to be called.
-     * @param {boolean} callBefore True iff the function should be called before the original
-     *     function. Defaults to false.
-     */
     extendFn: function extendFn(scope, name, fn, callBefore) {
       var oldFn = scope[name];
       scope[name] = function () {
@@ -225,14 +176,6 @@ DI.bind("pb_Utils", function () {
         }
       };
     },
-
-    /**
-     * Makes the given function curried.
-     *
-     * @method curry
-     * @param {Function} fn The function to be curried.
-     * @return {Function} The curried function.
-     */
     curry: function curry(fn) {
       return function () {
         if (arguments.length >= fn.length) {
@@ -245,4 +188,4 @@ DI.bind("pb_Utils", function () {
     } };
 
   return Utils;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

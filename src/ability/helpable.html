@@ -2,8 +2,8 @@
 
 <link rel="import" href="ability/abilities.html">
 <link rel="import" href="ability/ability.html">
-<link rel="import" href="di.html">
-<link rel="import" href="events.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
@@ -61,17 +61,12 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_ability_Helpable', (
-        Abilities,
-        Ability,
-        Events,
-        Key,
-        Utils,
-        doc,
-        template,
-        $registry) => {
+    .with('template', ['=', doc => doc.querySelector('template')])
+    .bind('ability.Helpable', [
+        'ability.=', 'ability.=', '=', 'trigger.=', '=', '=', '=', '=',
+        (Abilities, Ability, Events, Key, Utils, doc, template, $registry) => {
 
   let displayEl = null;
 
@@ -93,10 +88,10 @@ DI
     /**
      * Displays the triggers for all abilities registered to this element.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el The element whose abilities should be displayed.
      */
-    trigger(el) {
+    doTrigger(el) {
       let abilities = Abilities.of(el).getAll();
       displayEl.innerHTML = '';
 
@@ -128,5 +123,5 @@ DI
   });
 
   return Helpable;
-});
+}]);
 </script>

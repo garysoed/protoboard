@@ -4,16 +4,35 @@
 <link rel="import" href="ability/droppable.html">
 <link rel="import" href="ability/helpable.html">
 <link rel="import" href="check.html">
-<link rel="import" href="di.html">
 <link rel="import" href="region/region.html">
 <link rel="import" href="service/config.html">
 <link rel="import" href="service/move.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="region/hand.css">
-
 <template>
+  <style>
+    #root {
+      border: var(--border);
+      position: relative;
+    }
+
+    #content {
+      display: flex;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    ::content > *:hover {
+      filter: drop-shadow(var(--drop-shadow-layer-1));
+    }
+
+    ::content > *:last-child {
+      flex-shrink: 0;
+    }
+  </style>
+
   <div id="root">
     <div id="content">
       <content></content>
@@ -23,21 +42,34 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_region_Hand', (
-        $registry,
-        Abilities,
-        Check,
-        Config,
-        Droppable,
-        Helpable,
-        Key,
-        Move,
-        Region,
-        Utils,
-        doc,
-        template) => {
+    .with('template', ['=', doc => doc.querySelector('template')])
+    .bind('region.Hand', [
+        '=',
+        'ability.=',
+        '=',
+        'service.=',
+        'ability.=',
+        'ability.=',
+        'trigger.=',
+        'service.=',
+        'region.=',
+        '=',
+        '=',
+        '=',
+          ($registry,
+          Abilities,
+          Check,
+          Config,
+          Droppable,
+          Helpable,
+          Key,
+          Move,
+          Region,
+          Utils,
+          doc,
+          template) => {
 
   const EL_NAME = 'pb-r-hand';
 
@@ -65,10 +97,10 @@ DI
      * given element. The position of the dropped child depends on the position of the mouse at the
      * trigger time relative to the other children.
      *
-     * @method trigger
+     * @method doTrigger
      * @param {Element} el The element to drop the picked element into.
      */
-    trigger(el) {
+    doTrigger(el) {
       if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
         let movedElement = Move.movedElements.values().next().value;
         if (movedElement) {
@@ -159,5 +191,5 @@ DI
   }
 
   return Hand;
-});
+}]);
 </script>

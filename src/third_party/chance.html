@@ -1,0 +1,13 @@
+<base href="..">
+
+<script src="third_party/chance/chance.js"></script>
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+DI
+    .bind('pb.seed', [() => (new Date()).getTime()])
+    .bind('Chance', ['pb.=?', seed => {
+      return new Chance(seed);
+    }]);
+</script>

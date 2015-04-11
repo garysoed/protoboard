@@ -1,13 +1,22 @@
 {
   "name": "Protoboard",
-  "description": "Checkout the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
-  "version": "0.1.0",
+  "description": "Check out the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
+  "version": "0.2.0",
   "url": "https://github.com/garysoed/protoboard",
-  "colorMain": "#004000",
-  "colorMainLight": "#008000",
-  "colorKeyword": "#808080",
-  "colorLink": "gold",
-  "colorLinkExternal": "darkorange",
+  "colorBackground": "white",
+  "colorForeground": "black",
+
+  "colorSectionLightest": "#9AE08F",
+  "colorSectionLight": "#6ECA5F",
+  "colorSectionNormal": "#4AAE3B",
+  "colorSectionDark": "#309620",
+  "colorSectionDarkest": "#19760A",
+
+  "colorCodeLightest": "#DAF49C",
+  "colorCodeLight": "#C2E66D",
+  "colorCodeNormal": "#9FC643",
+  "colorCodeDark": "#82AA24",
+  "colorCodeDarkest": "#62870C",
   "options": {
     "linkNatives": "true",
     "outdir": "./doc",
@@ -17,10 +26,20 @@
       "./tutorial"
     ],
     "external": {
-      "data": {
-        "base": "../assets/redirect.html#",
-        "json": "./node_modules/doctheme/externals/dom.json"
-      }
+      "data": [
+        {
+          "base": "../assets/redirect.html#",
+          "json": "./node_modules/doctheme/externals/dom.json"
+        },
+        {
+          "base": "../assets/redirect.html#",
+          "json": "./node_modules/doctheme/externals/element.json"
+        },
+        {
+          "base": "../assets/redirect.html#",
+          "json": "./node_modules/doctheme/externals/js.json"
+        }
+      ]
     },
     "extension": ".html,.js",
     "helpers": ["./node_modules/doctheme/helpers.js"],

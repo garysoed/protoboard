@@ -1,197 +1,83 @@
 <html><head><base href="..">
 
-<link rel="import" href="events.html">
-<link rel="import" href="di.html">
 <link rel="import" href="pbelement.html">
 <link rel="import" href="service/config.html">
 <link rel="import" href="service/preview.html">
 <link rel="import" href="service/registry.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
 <link rel="import" href="utils.html">
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
-
-DI.bind("pb_ui_Preview", function (Config, Events, PbElement, service_Preview, $registry, Utils) {
-  /**
-   * Class that contains a preview if the mouse enters the parent element. This will display
-   * the children element as preview.
-   *
-   * ```html
-   * <!-- Hover over the div to show "DETAILS" -->
-   * <div id="hover_over_me">
-   *   <pb-u-preview>
-   *     <div>DETAILS</div>
-   *   </pb-u-preview>
-   * </div>
-   * ```
-   *
-   * @class ui.Preview
-   * @extends PbElement
-   */
+DI.prefix("pb").bind("ui.Preview", ["service.=", "=", "=", "service.=", "=", "=", function (Config, Events, PbElement, Preview, $registry, Utils) {
 
   var registered = false;
 
   var EL_NAME = "pb-u-preview";
 
-  // Private symbols
   var __onMouseOver__ = Symbol();
   var __onMouseOut__ = Symbol();
 
-  var Preview = (function (PbElement) {
-    function Preview() {
-      if (Object.getPrototypeOf(Preview) !== null) {
-        Object.getPrototypeOf(Preview).apply(this, arguments);
+  var PreviewElement = (function (_PbElement) {
+    function PreviewElement() {
+      _classCallCheck(this, PreviewElement);
+
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Preview, PbElement);
+    _inherits(PreviewElement, _PbElement);
 
-    _prototypeProperties(Preview, null, (function () {
-      var _prototypeProperties2 = {};
+    _createComputedClass(PreviewElement, [{
+      key: __onMouseOut__,
+      value: function () {
+        Preview.previewedEl = null;
+      }
+    }, {
+      key: __onMouseOver__,
+      value: function () {
+        Preview.previewedEl = this;
+      }
+    }, {
+      key: "createdCallback",
+      value: function createdCallback() {
+        _get(Object.getPrototypeOf(PreviewElement.prototype), "createdCallback", this).call(this);
+        this.createShadowRoot();
+        this.attachedCallback();
+      }
+    }, {
+      key: "attachedCallback",
+      value: function attachedCallback() {
+        _get(Object.getPrototypeOf(PreviewElement.prototype), "attachedCallback", this).call(this);
+        if (this.parentElement) {
+          Events.of(this.parentElement, this).on("dom", "mouseenter", this[__onMouseOver__].bind(this)).on("dom", "mouseleave", this[__onMouseOut__].bind(this));
+        }
+      }
+    }, {
+      key: "detachedCallback",
+      value: function detachedCallback() {
+        if (this.parentElement) {
+          Events.of(this.parentElement, this).off();
+        }
+        _get(Object.getPrototypeOf(PreviewElement.prototype), "detachedCallback", this).call(this);
+      }
+    }]);
 
-      _defineProperty(_prototypeProperties2, __onMouseOut__, {
-
-        /**
-         * Callback called when the mouse has left the parent element.
-         *
-         * @method __onMouseOut__
-         * @private
-         */
-        value: function () {
-          service_Preview.previewedEl = null;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, __onMouseOver__, {
-
-        /**
-         * Callback called when the mouse has entered the parent element.
-         *
-         * @method __onMouseOver__
-         * @private
-         */
-        value: function () {
-          service_Preview.previewedEl = this;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "createdCallback", {
-
-        /**
-         * Called when the element is created
-         *
-         * @method createdCallback
-         */
-        value: function createdCallback() {
-          _get(Object.getPrototypeOf(Preview.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot();
-          this.attachedCallback();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "attachedCallback", {
-
-        /**
-         * Called when the element is attached to the document.
-         *
-         * @method attachedCallback
-         */
-        value: function attachedCallback() {
-          _get(Object.getPrototypeOf(Preview.prototype), "attachedCallback", this).call(this);
-          if (this.parentElement) {
-            Events.of(this.parentElement, this).on("dom", "mouseenter", this[__onMouseOver__].bind(this)).on("dom", "mouseleave", this[__onMouseOut__].bind(this));
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "detachedCallback", {
-
-        /**
-         * Called when the element is detached from the document.
-         *
-         * @method detachedCallback
-         */
-        value: function detachedCallback() {
-          if (this.parentElement) {
-            Events.of(this.parentElement, this).off();
-          }
-          _get(Object.getPrototypeOf(Preview.prototype), "detachedCallback", this).call(this);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      return _prototypeProperties2;
-    })());
-
-    return Preview;
+    return PreviewElement;
   })(PbElement);
 
   Config.add(EL_NAME);
-  $registry.add(EL_NAME, Preview.prototype);
+  $registry.add(EL_NAME, PreviewElement.prototype);
 
-  return Preview;
-});</script></head><body></body></html>
+  return PreviewElement;
+}]);</script></head><body></body></html>

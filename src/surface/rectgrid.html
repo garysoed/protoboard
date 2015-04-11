@@ -1,26 +1,31 @@
 <base href="..">
 
-<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="third_party/di.html">
 
-<link rel="import" href="check.html">
 <link rel="import" href="pbelement.html">
 <link rel="import" href="service/config.html">
+<link rel="import" href="surface/grid.html">
 <link rel="import" href="utils.html">
 
 <template id="main">
   <style>
-    #root {
-      display: inline-block;
-    }
-
-    #content {
-      display: flex;
-      flex-direction: column;
+    ::content > * {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
     }
 
     .row {
       display: flex;
-      flex-direction: row;
+    }
+
+    .tile {
+      width: 100px;
+      height: 100px;
+      position: relative;
     }
   </style>
 
@@ -33,98 +38,94 @@
   <div class="row"></div>
 </template>
 
-<template id="col">
-  <div class="col">
+<template id="tile">
+  <div class="tile">
     <content></content>
   </div>
 </template>
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('templateMain', doc => doc.querySelector('template#main'))
-    .with('templateRow', doc => doc.querySelector('template#row'))
-    .with('templateCol', doc => doc.querySelector('template#col'))
-    .bind('pb_surface_RectGrid', (
-        $registry,
-        Check,
-        Config,
-        PbElement,
-        Utils,
-        doc,
-        templateMain,
-        templateRow,
-        templateCol) => {
+    .with('templateMain', ['=', doc => doc.querySelector('template#main')])
+    .with('templateRow', ['=', doc => doc.querySelector('template#row')])
+    .with('templateTile', ['=', doc => doc.querySelector('template#tile')])
+    .bind('surface.RectGrid', [
+        '=', 'service.=', 'surface.=', '=', '=', '=',
+        ($registry, Config, Grid, templateMain, templateRow, templateTile) => {
 
   const ATTR_ROW = 'pb-row';
   const ATTR_COL = 'pb-col';
   const EL_NAME = 'pb-s-rectgrid';
 
   /**
-   * A surface that lays out its components in a grid. To use this, add attributes `pb-row` and
-   * `pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns in the grid.
+   * A surface that lays out its children in a rectangular grid. To use this, add attributes
+   * `pb-row` and `pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns
+   * in the grid.
    *
    * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes
    * on them to indicate their positions in the grid.
    *
-   * ```javascript
+   * ```html
    * <pb-s-rectgrid pb-row="2" pb-col="3">
+   *   <!-- Third column is empty -->
    *   <div pb-row="0" pb-col="0">Top Left</div>
    *   <div pb-row="0" pb-col="1">Top Right</div>
    *   <div pb-row="1" pb-col="0">Bottom Left</div>
    *   <div pb-row="1" pb-col="1">Bottom Right</div>
    * </pb-s-rectgrid>
    * ```
+   *
+   * @class surface.RectGrid
+   * @since 0.2.0
+   * @extends surface.Grid
    */
-  class RectGrid extends PbElement {
+  class RectGrid extends Grid {
 
     /**
-     * Called when the element is created
+     * The root element of the grid. All rows will be added as children to this element.
      *
-     * @method createdCallback
+     * @property rootEl
+     * @type Element
+     * @final
      */
-    createdCallback() {
-      super.createdCallback();
-
-      // Create the shadow DOM.
-      this.createShadowRoot()
-          .appendChild(Utils.activateTemplate(templateMain, doc));
-
-      // Initializes the data.
-      let rowCount = Check($(this).attr(ATTR_ROW)).isInt().orThrows();
-      let colCount = Check($(this).attr(ATTR_COL)).isInt().orThrows();
-      let rootEl = this.shadowRoot.querySelector('#content');
-
-      // Add the rows.
-      for (let row = 0; row < rowCount; row++) {
-        rootEl.appendChild(Utils.activateTemplate(templateRow, doc));
-      }
-
-      $(this.shadowRoot.querySelectorAll('#content > div'))
-          .each((row, rowEl) => {
-            for (let col = 0; col < colCount; col++) {
-              let colEl = Utils.activateTemplate(templateCol, doc);
-              $(colEl.querySelector('content'))
-                  .attr('select', `[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`)
-                  .attr(ATTR_ROW, row)
-                  .attr(ATTR_COL, col);
-              rowEl.appendChild(colEl);
-            }
-          });
+    get rootEl() {
+      return this.shadowRoot.querySelector('#content');
     }
 
     /**
-     * Returns the element at the given row and column, or null if not found.
+     * Main template to render. This will be added as the shadow root of the element.
      *
-     * @method get
-     * @param {number} row The row index of the element to be returned.
-     * @param {number} col The col index of the element to be returned.
-     * @return {HTMLElement|null} The HTML element at the given row and col, or null if not found.
+     * @property mainTemplate
+     * @type Element
+     * @final
      */
-    get(row, col) {
-      let contentEl = this.shadowRoot
-          .querySelector(`content[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`);
-      return contentEl ? contentEl.getDistributedNodes()[0] : null;
+    get mainTemplate() {
+      return templateMain;
+    }
+
+    /**
+     * Template to render for every row in the grid. Tiles will be added as children to this
+     * element.
+     *
+     * @property rowTemplate
+     * @type Element
+     * @final
+     */
+    get rowTemplate() {
+      return templateRow;
+    }
+
+    /**
+     * Template to render for every tile in the grid.
+     *
+     * @property tileTemplate
+     * @type Element
+     * @final
+     */
+    get tileTemplate() {
+      return templateTile;
     }
   }
 
@@ -132,6 +133,5 @@ DI
   $registry.add(EL_NAME, RectGrid.prototype);
 
   return RectGrid;
-
-});
+}]);
 </script>

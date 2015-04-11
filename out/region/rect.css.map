@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": ";;;;;AAAQ,0DAAkD;;;AAgE1D,2BAA4B;EAC1B,MAAM,EAVW,IAAI;EAWrB,KAAK,EAVW,IAAI;;AAatB,sBAAuB;EArDrB,aAAa,EAAE,GAAG;EAuDlB,MAAM,EAbM,KAAK;EAcjB,KAAK,EAbM,IAAI;;AAgBjB,aAAc;EACZ,OAAO,EAAE,kBAA2B;EACpC,cAAc,EAAE,IAAI;;AC3EtB,SAAU;EDUR,MAAM,EAAE,iBAAuB;;ACNjC,aAAc;EACZ,QAAQ,EAAE,QAAQ;;AAGpB,uBAAwB;EDqCtB,QAAQ,EAAE,QAAQ;EAClB,GAAG,EAAE,CAAC;EACN,KAAK,EAAE,CAAC;EACR,MAAM,EAAE,CAAC;EACT,IAAI,EAAE,CAAC;ECvCP,QAAQ,EAAE,QAAQ",
-"sources": ["../../../../../../../../Users/gsoed/proj/protoboard/src/themes/base.scss","../../region/rect.scss"],
-"names": [],
-"file": "rect.css"
-}

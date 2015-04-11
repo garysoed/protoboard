@@ -1,5 +1,5 @@
-node_modules/
 bower_components/
+node_modules/
 .sass-cache/
 out/**/*_test.html
 out/testbase.html

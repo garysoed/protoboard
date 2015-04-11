@@ -1,23 +1,45 @@
 <html><head><base href="..">
 
-<link rel="import" href="di.html">
 <link rel="import" href="service/registry.html">
+<link rel="import" href="third_party/di.html">
 
-<link rel="stylesheet" href="service/move.css">
+<style>.pb-move {
+  -webkit-filter: drop-shadow(0px 2px 5px rgba(#50468F, 1));
+  filter: drop-shadow(0px 2px 5px rgba(#50468F, 1));
+  opacity: 0.75;
+  position: fixed;
+  pointer-events: none;
+}
+
+.pb-move > * {
+  position: absolute;
+}
+
+.pb-move > *:nth-child(2) {
+  -webkit-transform: rotateZ(-20deg);
+  transform: rotateZ(-20deg);
+}
+
+.pb-move > *:nth-child(3) {
+  -webkit-transform: rotateZ(15deg);
+  transform: rotateZ(15deg);
+}
+
+.pb-move > *:nth-child(4) {
+  -webkit-transform: rotateZ(-35deg);
+  transform: rotateZ(-35deg);
+}
+
+.pb-move > *:nth-child(5) {
+  -webkit-transform: rotateZ(40deg);
+  transform: rotateZ(40deg);
+}</style>
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
+var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
 
-DI.bind("pb_service_Move", function ($registry, Events, Utils) {
-  // Private symbols.
+DI.prefix("pb").bind("service.Move", ["=", "=", "=", function ($registry, Events, Utils) {
   var __container__ = Symbol("container");
   var __document__ = Symbol();
   var __mouseX__ = Symbol();
@@ -26,21 +48,6 @@ DI.bind("pb_service_Move", function ($registry, Events, Utils) {
   var __moveContainer__ = Symbol("moveContainer");
   var __onMouseMove__ = Symbol("onMouseMove");
 
-  /**
-   * Service that handles moving elements around. Used by
-   * {{#crossLink "ability.Droppable"}}{{/crossLink}} and
-   * {{#crossLink "ability.Pickable"}}{{/crossLink}}.
-   *
-   * ```javascript
-   * Move.add(element);  // Sets the element as moved.
-   *
-   * // The element will be moved to a special container. To remove the element, just append it
-   * // somewhere else.
-   * ```
-   *
-   * @class service.Move
-   * @static
-   */
   var Move = Object.defineProperties((function () {
     var _Object$defineProperties = {};
 
@@ -78,22 +85,22 @@ DI.bind("pb_service_Move", function ($registry, Events, Utils) {
       get: function () {
         return new Set(Utils.toArray(this[__container__].children));
       },
-      enumerable: true,
-      configurable: true
+      configurable: true,
+      enumerable: true
     },
     mouseX: {
       get: function () {
         return this[__mouseX__];
       },
-      enumerable: true,
-      configurable: true
+      configurable: true,
+      enumerable: true
     },
     mouseY: {
       get: function () {
         return this[__mouseY__];
       },
-      enumerable: true,
-      configurable: true
+      configurable: true,
+      enumerable: true
     }
   });
 
@@ -106,72 +113,4 @@ DI.bind("pb_service_Move", function ($registry, Events, Utils) {
   });
 
   return Move;
-});
-/**
- * Reference to the document that the service operates in.
- *
- * @property __document__
- * @type Document
- * @private
- */
-
-
-/**
- * The container of all the moved elements.
- *
- * @property __container__
- * @type Element
- * @private
- */
-
-
-/**
- * Moves the container element to the last known location of the mouse.
- *
- * @method __moveContainer__
- * @private
- */
-
-
-/**
- * Handles event when the mouse is moved.
- *
- * @method __onMouseMove__
- * @param {MouseEvent} event The corresponding mouse event.
- * @private
- */
-
-
-/**
- * Sets the given element as being moved.
- *
- * @method add
- * @param {Element} el Element to move.
- */
-
-
-/**
- * The elements that are being moved.
- *
- * @property movedElements
- * @type Set
- * @final
- */
-
-
-/**
- * Last known X coordinate of the mouse in px.
- *
- * @property mouseX
- * @type number
- * @final
- */
-
-
-/**
- * Last known Y coordinate of the mouse in px.
- *
- * @property mouseY
- * @type number
- * @final
- */</script></head><body></body></html>
+}]);</script></head><body></body></html>

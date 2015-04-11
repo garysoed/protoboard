@@ -1,121 +1,59 @@
 <html><head><base href="..">
 
-<link rel="import" href="di.html">
-<link rel="import" href="events.html">
 <link rel="import" href="hammerwrapper.html">
 <link rel="import" href="trigger/trigger.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-DI.bind("pb_trigger_Click", function (pb_Events, HammerWrapper, Trigger) {
-  /**
-   * Triggers an ability when the element is clicked.
-   *
-   * @class trigger.Click
-   * @extends trigger.Trigger
-   */
-  var Click = (function (Trigger) {
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").bind("trigger.Click", ["=", "=", "trigger.=", function (Events, HammerWrapper, Trigger) {
+  var Click = (function (_Trigger) {
     function Click() {
-      if (Object.getPrototypeOf(Click) !== null) {
-        Object.getPrototypeOf(Click).apply(this, arguments);
+      _classCallCheck(this, Click);
+
+      if (_Trigger != null) {
+        _Trigger.apply(this, arguments);
       }
     }
 
-    _inherits(Click, Trigger);
+    _inherits(Click, _Trigger);
 
-    _prototypeProperties(Click, null, {
+    _createClass(Click, {
       on: {
-
-        /**
-         * Registers the given element to trigger the given ability when clicked.
-         *
-         * @method on
-         * @param {Element} element Element to register.
-         * @param {ability.Ability} ability The ability to trigger.
-         */
         value: function on(element, ability) {
-          pb_Events.of(element, this).on("hammer", "singletap", ability.trigger.bind(ability, element));
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+          Events.of(element, this).on("hammer", "singletap", ability.trigger.bind(ability, element));
+        }
       },
       off: {
-
-        /**
-         * Unregisters the given element from triggering the registered ability when clicked.
-         *
-         * @method off
-         * @param {Element} element Element to unregister.
-         */
         value: function off(element) {
-          pb_Events.of(element, this).off("hammer", "singletap");
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+          Events.of(element, this).off("hammer", "singletap");
+        }
       },
       toString: {
-
-        /**
-         * @method toString
-         * @return {string} String pb-click
-         */
         value: function toString() {
           return "pb-click";
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       helpText: {
-
-        /**
-         * @method helpText
-         */
         get: function () {
           return "Click";
-        },
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
     return Click;
   })(Trigger);
 
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Click|undefined} The Click trigger if parse is successful, or `undefined`
-   *    otherwise.
-   * @static
-   */
   Click.parse = function (str) {
     return str === "pb-click" ? new Click() : undefined;
   };
 
   return Click;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

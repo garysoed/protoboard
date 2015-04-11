@@ -1,0 +1,144 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<template id="main">
+  <style>
+    ::content > * {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .row:not(:last-child) {
+      margin-bottom: -56.8px;
+    }
+
+    .row:nth-child(2n) {
+      margin-left: 75px;
+    }
+
+    .tile {
+      width: 100px;
+      height: 100px;
+      position: relative;
+    }
+
+    .tile:not(:last-child) {
+      margin-right: 50px;
+    }
+  </style>
+
+  <div id="root">
+    <div id="content"></div>
+  </div>
+</template>
+
+<template id="row">
+  <div class="row"></div>
+</template>
+
+<template id="tile">
+  <div class="tile">
+    <content></content>
+  </div>
+</template>
+
+<script>
+DI
+    .prefix('pb')
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('templateMain', ['=', doc => doc.querySelector('template#main')])
+    .with('templateRow', ['=', doc => doc.querySelector('template#row')])
+    .with('templateTile', ['=', doc => doc.querySelector('template#tile')])
+    .bind('surface.HexGrid', [
+        'service.=', 'surface.=', '=', '=', '=', '=',
+        (Config, Grid, $registry, templateMain, templateRow, templateTile) => {
+
+  const EL_NAME = 'pb-s-hexgrid';
+
+  /**
+   * A surface that lays out its children in a hexagonal grid. To use this, add attributes
+   * `pb-row` and `pb-col` to the element `pb-s-hexgrid`. These are the number of rows and columns
+   * in the grid.
+   *
+   * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes
+   * on them to indicate their positions in the grid.
+   *
+   * ```html
+   * <pb-s-hexgrid pb-row="2" pb-col="3">
+   *   <!-- Third column is empty -->
+   *   <div pb-row="0" pb-col="0">Top Left</div>
+   *   <div pb-row="0" pb-col="1">Top Middle</div>
+   *   <div pb-row="1" pb-col="0">Bottom Left</div>
+   *   <div pb-row="1" pb-col="1">Bottom Middle</div>
+   * </pb-s-hexgrid>
+   * ```
+   *
+   * You can use {{#crossLink "ui.Shape"}}`<pb-u-shape>`{{/crossLink}} to create hexagon shapes.
+   *
+   * @class surface.HexGrid
+   * @since 0.2.0
+   * @extends surface.Grid
+   */
+  class HexGrid extends Grid {
+
+    /**
+     * The root element of the grid. All rows will be added as children to this element.
+     *
+     * @property rootEl
+     * @type Element
+     * @final
+     */
+    get rootEl() {
+      return this.shadowRoot.querySelector('#content');
+    }
+
+    /**
+     * Main template to render. This will be added as the shadow root of the element.
+     *
+     * @property mainTemplate
+     * @type Element
+     * @final
+     */
+    get mainTemplate() {
+      return templateMain;
+    }
+
+    /**
+     * Template to render for every row in the grid. Tiles will be added as children to this
+     * element.
+     *
+     * @property rowTemplate
+     * @type Element
+     * @final
+     */
+    get rowTemplate() {
+      return templateRow;
+    }
+
+    /**
+     * Template to render for every tile in the grid.
+     *
+     * @property tileTemplate
+     * @type Element
+     * @final
+     */
+    get tileTemplate() {
+      return templateTile;
+    }
+  }
+
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, HexGrid.prototype);
+
+  return HexGrid;
+}]);
+</script>

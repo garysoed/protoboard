@@ -1,70 +1,41 @@
 <html><head><base href="..">
 
-<link rel="import" href="di.html">
-<link rel="import" href="utils.html">
+<link rel="import" href="service/log.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="trigger/triggers.html">
+<link rel="import" href="utils.html">
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-DI.bind("pb_ability_Ability", function ($, Triggers) {
-  // Private symbols.
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").bind("ability.Ability", ["/=", "service.=", "trigger.=", function ($, Log, Triggers) {
   var __name__ = Symbol();
   var __defaultTrigger__ = Symbol("defaultTrigger");
   var __triggerMap__ = Symbol("triggerMap");
 
-  /**
-   * Base class for all abilities. Any abilities must extend this class and implement the methods
-   * in this class.
-   *
-   * @class ability.Ability
-   */
   var Ability = (function () {
-    /**
-     * @constructor
-     * @class ability.Ability
-     * @param {string} name Name of the ability. This is used to identify an ability that has been
-     *    added to an element. It therefore must be unique for the element.
-     * @param {trigger.Trigger} defaultTrigger The default trigger to trigger this ability.
-     */
     function Ability(name, defaultTrigger) {
+      _classCallCheck(this, Ability);
+
       this[__name__] = name;
       this[__defaultTrigger__] = defaultTrigger;
     }
 
-    _prototypeProperties(Ability, null, {
+    _createClass(Ability, {
       init: {
-
-        /**
-         * Initializes the ability on the given element.
-         *
-         * @method init
-         * @param {Element} el The element to set the default values to.
-         */
         value: function init(el) {
           if ($(el).attr(this.attrTrigger) === undefined) {
             $(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
           }
 
           this.updateConfig(el);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       updateConfig: {
-
-        /**
-         * Updates the inner state of the ability based on changes to the element.
-         *
-         * @method updateConfig
-         * @param {Element} el Element whose attributes have changed.
-         */
         value: function updateConfig(el) {
           if (!el[__triggerMap__]) {
             el[__triggerMap__] = new Map();
@@ -79,72 +50,33 @@ DI.bind("pb_ability_Ability", function ($, Triggers) {
             trigger.on(el, this);
             el[__triggerMap__].set(this, trigger);
           }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       trigger: {
-
-        /**
-         * Triggers the effect of the ability on the given element.
-         *
-         * @method trigger
-         * @param {Element} el The element to trigger the ability on.
-         */
-        value: function trigger(el) {},
-        writable: true,
-        enumerable: true,
-        configurable: true
+        value: function trigger(el) {
+          Log.log(this.attrName, $(el).attr("pb-id"));
+          this.doTrigger(el);
+        }
+      },
+      doTrigger: {
+        value: function doTrigger(el) {
+          throw new Error("Unimplemented");
+        }
       },
       getTrigger: {
-
-        /**
-         * Returns the trigger for this ability on this element.
-         *
-         * @method getTrigger
-         * @param {Element} el The element to return the trigger for this ability for.
-         * @return {trigger.Trigger|null} The trigger for this ability on this element, or null if there
-         *    is none.
-         */
         value: function getTrigger(el) {
           return el[__triggerMap__] ? el[__triggerMap__].get(this) : null;
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       attrName: {
-
-        /**
-         * Name of the ability. This is also the name of the attribute on the element corresponding to
-         * this ability.
-         *
-         * @property attrName
-         * @type string
-         * @final
-         */
         get: function () {
           return this[__name__];
-        },
-        enumerable: true,
-        configurable: true
+        }
       },
       attrTrigger: {
-
-        /**
-         * The name of the attribute on the element corresponding to this ability that sets the trigger
-         * for this ability. This is the name of the ability with a <code>-on</code> postfix.
-         *
-         * @property attrTrigger
-         * @type string
-         * @final
-         */
         get: function () {
           return "" + this[__name__] + "-on";
-        },
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
@@ -152,4 +84,4 @@ DI.bind("pb_ability_Ability", function ($, Triggers) {
   })();
 
   return Ability;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

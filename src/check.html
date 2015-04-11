@@ -1,11 +1,13 @@
 <base href=".">
 
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="utils.html">
 
 <script>
 
-DI.bind('pb_Check', (Utils) => {
+DI
+    .prefix('pb')
+    .bind('Check', ['=', Utils => {
 
   // Private symbols.
   const __checked__ = Symbol();
@@ -113,6 +115,17 @@ DI.bind('pb_Check', (Utils) => {
       }
     }
 
+    isList(separator = ' ') {
+      if (typeof this[__input__] !== 'string') {
+        return this[__onFailure__]('list');
+      }
+
+      return this[__onSuccess__](
+          this[__input__]
+              .split(separator)
+              .filter(str => str.length > 0));
+    }
+
     /**
      * Throws an exception if no parse has been successful.
      *
@@ -151,5 +164,5 @@ DI.bind('pb_Check', (Utils) => {
   }
 
   return check;
-});
+}]);
 </script>

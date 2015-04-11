@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>ui.Previewer Unit Tests</title>
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="testbase.html">
 
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/service/config.html">
-  <link rel="import" href="out/service/registry.html">
-  <link rel="import" href="out/testutils.html">
-  <link rel="import" href="out/ui/previewer.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="testutils.html">
+  <link rel="import" href="ui/previewer.html">
 </head>
 <body>
   <script>
   DI
-      .with('$registry', Registry => new Registry())
+      .prefix('pb')
+      .with('$registry', ['service.=', Registry => new Registry()])
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, _M, doc, service_Preview, Utils, Config, Events, Previewer, pb_t, $registry) => {
+      .run(['/=', '/=', '/=', '=', 'service.=', '=', 'service.=', '=', 'ui.=', '=', '=',
+          (expect, _, _M, doc, Preview, Utils, Config, Events, Previewer, t, $registry) => {
 
-  let __onPreviewElChanged__ = pb_t.getSymbol(Previewer.prototype, 'onPreviewElChanged');
+  let __onPreviewElChanged__ = t.getSymbol(Previewer.prototype, 'onPreviewElChanged');
 
   describe('ui.Previewer', () => {
     before(done => {
@@ -27,23 +29,23 @@
     });
 
     describe('#attachedCallback', () => {
-      it('should observe previewedEl in service_Preview', () => {
+      it('should observe previewedEl in Preview', () => {
         _.spy(Utils, 'observe');
         doc.createElement('pb-u-previewer').attachedCallback();
 
-        expect(Utils.observe).calledWith(service_Preview, 'previewedEl', _M.isA(Function));
+        expect(Utils.observe).calledWith(Preview, 'previewedEl', _M.isA(Function));
       });
     });
 
     describe('#detachedCallback', () => {
-      it('should unobserve in service_Preview', () => {
+      it('should unobserve in Preview', () => {
         let offFn = _.spiedFunction();
         let previewer = doc.createElement('pb-u-previewer');
 
         _.spy(Events, 'of').overrideReturn({ off: offFn });
         previewer.detachedCallback();
 
-        expect(Events.of).calledWith(service_Preview, previewer).at.least(1);
+        expect(Events.of).calledWith(Preview, previewer).at.least(1);
         expect(offFn).calledWith().at.least(1);
       });
     });
@@ -51,15 +53,15 @@
     describe('#__onPreviewElChanged__', () => {
       it('should set the inner HTML of the previewEl', () => {
         let innerHTML = 'test inner HTML';
-        service_Preview.previewedEl = { innerHTML: innerHTML };
-        
+        Preview.previewedEl = { innerHTML: innerHTML };
+
         let previewer = doc.createElement('pb-u-previewer');
         previewer[__onPreviewElChanged__]();
         expect(previewer.innerHTML).to.be.equal(innerHTML);
       });
       it('should clear the inner HTML if the previewEl is null', () => {
         let innerHTML = 'test inner HTML';
-        service_Preview.previewedEl = null;
+        Preview.previewedEl = null;
 
         let previewer = doc.createElement('pb-u-previewer');
         previewer[__onPreviewElChanged__]();
@@ -72,6 +74,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

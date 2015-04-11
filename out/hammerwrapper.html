@@ -1,29 +1,13 @@
 <html><head><base href=".">
 
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/hammer.html">
-
-<link rel="import" href="di.html">
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
+var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
 
-DI.bind("pb_HammerWrapper", function (Utils) {
-  /**
-   * Wrapper around <a href="http://hammerjs.github.io/">HammerJS</a>.
-   *
-   * @class HammerWrapper
-   * @static
-   */
-
-  // Private symbols
+DI.prefix("pb").bind("HammerWrapper", ["=", function (Utils) {
   var __hammer__ = Symbol();
   var __getHammer__ = Symbol();
 
@@ -32,7 +16,6 @@ DI.bind("pb_HammerWrapper", function (Utils) {
 
     _defineProperty(_HammerWrapper, __getHammer__, function (el) {
       if (!el[__hammer__]) {
-        // This is not set if the script runs in HTML import.
         if (!el.ownerDocument.parentWindow) {
           el.ownerDocument.parentWindow = window;
         }
@@ -60,34 +43,4 @@ DI.bind("pb_HammerWrapper", function (Utils) {
   })();
 
   return HammerWrapper;
-});
-
-
-/**
- * Creates a new Hammer object, or return a cached one if one already exists.
- *
- * @method __getHammer__
- * @param {Element} el The element associated with the Hammer JS object.
- * @return {Hammer} The Hammer JS object.
- * @private
- */
-
-
-/**
- * Registers the given gesture to the given element and handler.
- *
- * @method on
- * @param {Element} el The element to register.
- * @param {string} gestureType The type of Hammer JS gesture to register.
- * @param {Function} handler The handler function to register.
- */
-
-
-/**
- * Unregisters the given gesture from the given element and handler.
- *
- * @method off
- * @param {Element} el Element to unregister from.
- * @param {string} gestureType Type of Hammer JS gesture to register.
- * @param {Function} handler The handler function to unregister.
- */</script></head><body></body></html>
+}]);</script></head><body></body></html>

@@ -1,9 +1,11 @@
 <base href=".">
 
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 
 <script>
-DI.bind('pb_Utils', () => {
+DI
+    .prefix('pb')
+    .bind('Utils', [() => {
 
   /**
    * Various miscellaneous utilities. They are not meant for general usage, but feel free to use
@@ -26,7 +28,7 @@ DI.bind('pb_Utils', () => {
     },
 
     /**
-     * Activates the given teplate element.
+     * Activates the given template element.
      *
      * @method activateTemplate
      * @param  {Element} template The template element.
@@ -239,5 +241,5 @@ DI.bind('pb_Utils', () => {
   };
 
   return Utils;
-});
+}]);
 </script>

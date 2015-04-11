@@ -1,40 +1,28 @@
 <html><head><base href="..">
 
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 
 <script>"use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-DI.bind("pb_service_Registry", function () {
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").bind("service.Registry", [function () {
+
   var __elements__ = Symbol();
   var __toRun__ = Symbol();
 
   var Registry = (function () {
-    /**
-     * A service that collects functions to be ran at bootstrap.
-     *
-     * @constructor
-     * @class service.Registry
-     */
     function Registry() {
+      _classCallCheck(this, Registry);
+
       this[__elements__] = new Map();
       this[__toRun__] = [];
     }
 
-    _prototypeProperties(Registry, null, {
+    _createClass(Registry, {
       add: {
-
-        /**
-         * Sets the given element name and prototype to be registered as custom element at bootstrap.
-         *
-         * @method add
-         * @param {name} name Element name to register
-         * @param {Object} prototype Prototype object of the custom element.
-         */
         value: function add(name, prototype) {
           if (this[__elements__].has(name)) {
             throw "" + name + " is already registered";
@@ -44,46 +32,40 @@ DI.bind("pb_service_Registry", function () {
             Config.init(name, prototype);
             doc.registerElement(name, { prototype: prototype });
           });
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       runAtRegister: {
-
-        /**
-         * Runs the given function at bootstrap.
-         *
-         * @method runAtRegister
-         * @param {Function} fn The function to run. This function takes in a
-         *    {{#crossLink "Document"}}{{/crossLink}} and a
-         *    {{#crossLink "service.Config"}}{{/crossLink}}.
-         */
         value: function runAtRegister(fn) {
           this[__toRun__].push(fn);
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       },
       register: {
-
-        /**
-         * Runs all the collected functions.
-         *
-         * @method register
-         * @param {Document} doc Document object to run the functions in.
-         * @param {service.Config} Config The configuration service to use.
-         */
         value: function register(doc, Config) {
-          for (var _iterator = this[__toRun__][Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-            var fn = _step.value;
-            fn(doc, Config);
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = this[__toRun__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var fn = _step.value;
+
+              fn(doc, Config);
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator["return"]) {
+                _iterator["return"]();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
           }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
+        }
       }
     });
 
@@ -91,5 +73,5 @@ DI.bind("pb_service_Registry", function () {
   })();
 
   return Registry;
-});</script>
+}]);</script>
 </head><body></body></html>

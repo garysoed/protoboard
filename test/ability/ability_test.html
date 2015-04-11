@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>ability.Ability Unit Tests</title>
 
-  <link rel="import" href="out/ability/ability.html">
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/testbase.html">
-  <link rel="import" href="out/testutils.html">
+  <link rel="import" href="ability/ability.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="testutils.html">
 </head>
 <body>
   <script>
   DI
-      .with('Triggers', () => {
+      .prefix('pb')
+      .with('trigger.Triggers', [() => {
         return {
           trigger: undefined,
           triggerStr: undefined,
@@ -21,9 +22,11 @@
             return this.trigger;
           }
         };
-      })
+      }])
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, $, doc, Ability, Triggers, pb_t) => {
+      .run([
+          '/=', '/=', '/=', '=', 'ability.=', 'service.=', 'trigger.=', '=',
+          (expect, _, $, doc, Ability, Log, Triggers, t) => {
 
   describe('ability.Ability', () => {
     let el;
@@ -36,7 +39,7 @@
     describe('#init', () => {
       it('should set the default value of the trigger', () => {
         let triggerStr = 'triggerStr';
-        let trigger = pb_t.createFakeTrigger(triggerStr);
+        let trigger = t.createFakeTrigger(triggerStr);
         let ability = new Ability('name', trigger);
 
         _.spy(ability, 'updateConfig').overrideReturn();
@@ -47,7 +50,7 @@
       });
       it('should not override the trigger value if it is already set', () => {
         let attrValue = 'value';
-        let trigger = pb_t.createFakeTrigger('triggerName');
+        let trigger = t.createFakeTrigger('triggerName');
         let ability = new Ability('name', trigger);
         $(el).attr(ability.attrTrigger, attrValue);
 
@@ -61,8 +64,8 @@
 
     describe('#updateConfig', () => {
       it('should update the trigger if the trigger changes', () => {
-        let trigger = pb_t.createFakeTrigger('triggerName');
-        let newTrigger = pb_t.createFakeTrigger('new trigger');
+        let trigger = t.createFakeTrigger('triggerName');
+        let newTrigger = t.createFakeTrigger('new trigger');
 
         let ability = new Ability('name', trigger);
         Triggers.trigger = trigger;
@@ -77,10 +80,10 @@
         expect(trigger.off).calledWith(el).at.least(1);
         expect(Triggers.triggerStr).to.be.equal(newTrigger.toString());
         expect(newTrigger.on).calledWith(el, ability).at.least(1);
-        expect(el[pb_t.getSymbol(el, 'triggerMap')].get(ability)).to.be.equal(newTrigger);
+        expect(el[t.getSymbol(el, 'triggerMap')].get(ability)).to.be.equal(newTrigger);
       });
       it('should be noop if the trigger does not change', () => {
-        let trigger = pb_t.createFakeTrigger('triggerName');
+        let trigger = t.createFakeTrigger('triggerName');
         let ability = new Ability('name', trigger);
         $(el).attr(ability.attrTrigger, trigger.toString());
 
@@ -89,7 +92,28 @@
         expect(trigger.off).called().to.be.equal(0);
       });
     });
+
+    describe('#trigger', () => {
+      it('should log the call', () => {
+        let name = 'name';
+        let id = 'elId';
+        let el = doc.createElement('div');
+        $(el).attr('pb-id', id);
+
+        _.spy(Log, 'log');
+        let ability = new Ability(name, null);
+        _.spy(ability, 'doTrigger').overrideReturn();
+        ability.trigger(el);
+
+        expect(Log.log).calledWith(name, id).at.least(1);
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    });
   });
-  });
+  }]);
   </script>
 </body>

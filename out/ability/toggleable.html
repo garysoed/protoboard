@@ -2,204 +2,86 @@
 
 <link rel="import" href="ability/ability.html">
 <link rel="import" href="check.html">
-<link rel="import" href="di.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) {
-  return Object.defineProperty(obj, key, {
-    value: value,
-    enumerable: true,
-    configurable: true,
-    writable: true
-  });
-};
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _prototypeProperties = function (child, staticProps, instanceProps) {
-  if (staticProps) Object.defineProperties(child, staticProps);
-  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
-};
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _get = function get(object, property, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-    if (getter === undefined) {
-      return undefined;
-    }
-    return getter.call(receiver);
-  }
-};
-
-var _inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) subClass.__proto__ = superClass;
-};
-
-DI.bind("pb_ability_Toggleable", function (Ability, Check, Key, Utils) {
-  // Private symbols.
+DI.prefix("pb").bind("ability.Toggleable", ["ability.=", "=", "trigger.=", "=", function (Ability, Check, Key, Utils) {
   var __defaultEnabled__ = Symbol();
   var __defaultActive__ = Symbol();
 
   var __isEnabled__ = Symbol();
   var __isActive__ = Symbol();
 
-  var Toggleable = (function (Ability) {
-    /**
-     * Provides decorator to make an element toggleable between two states.
-     *
-     * @constructor
-     * @class ability.Toggleable
-     * @param {string} [name=pb-toggleable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=trigger.Key] Default trigger for the ability.
-     * @param {Object} defaultConfig Default configuration for the ability.
-     * @param {boolean} defaultConfig.enabled True iff the ability should be enabled by default.
-     * @param {boolean} defaultConfig.active True iff the ability should be toggled to active by
-     *    default.
-     * @extends ability.Ability
-     */
+  var Toggleable = (function (_Ability) {
     function Toggleable() {
-      var _this = this;
       var name = arguments[0] === undefined ? "pb-toggleable" : arguments[0];
       var defaultTrigger = arguments[1] === undefined ? new Key("t") : arguments[1];
       var defaultConfig = arguments[2] === undefined ? { enabled: true, active: false } : arguments[2];
-      return (function () {
-        _get(Object.getPrototypeOf(Toggleable.prototype), "constructor", _this).call(_this, name, defaultTrigger);
 
-        if (typeof defaultConfig === "boolean") {
-          _this[__defaultEnabled__] = defaultConfig;
-          _this[__defaultActive__] = false;
-        } else {
-          _this[__defaultEnabled__] = defaultConfig.enabled;
-          _this[__defaultActive__] = defaultConfig.active;
-        }
-      })();
+      _classCallCheck(this, Toggleable);
+
+      _get(Object.getPrototypeOf(Toggleable.prototype), "constructor", this).call(this, name, defaultTrigger);
+
+      if (typeof defaultConfig === "boolean") {
+        this[__defaultEnabled__] = defaultConfig;
+        this[__defaultActive__] = false;
+      } else {
+        this[__defaultEnabled__] = defaultConfig.enabled;
+        this[__defaultActive__] = defaultConfig.active;
+      }
     }
 
-    _inherits(Toggleable, Ability);
+    _inherits(Toggleable, _Ability);
 
-    _prototypeProperties(Toggleable, null, (function () {
-      var _prototypeProperties2 = {};
+    _createComputedClass(Toggleable, [{
+      key: __isEnabled__,
+      value: function (el) {
+        return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+      }
+    }, {
+      key: __isActive__,
+      value: function (el) {
+        return Check($(el).attr(this.attrActive)).isBoolean().orThrows();
+      }
+    }, {
+      key: "init",
+      value: function init(el) {
+        _get(Object.getPrototypeOf(Toggleable.prototype), "init", this).call(this, el);
+        if ($(el).attr(this.attrName) === undefined) {
+          $(el).attr(this.attrName, this[__defaultEnabled__]);
+        }
 
-      _defineProperty(_prototypeProperties2, __isEnabled__, {
-
-        /**
-         * @method __isEnabled__
-         * @param {Element} el Element to check.
-         * @return {boolean} True iff the ability is enabled for the given element.
-         * @private
-         */
-        value: function (el) {
-          return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, __isActive__, {
-
-        /**
-         * @method __isActive__
-         * @param {Element} el Element to check.
-         * @return {boolean} True iff the element is currently active.
-         * @private
-         */
-        value: function (el) {
-          return Check($(el).attr(this.attrActive)).isBoolean().orThrows();
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "init", {
-
-        /**
-         * Sets the default configuration for this ability on the given element.
-         *
-         * @method init
-         * @param {Element} el The element to set the default configuration to.
-         */
-        value: function init(el) {
-          _get(Object.getPrototypeOf(Toggleable.prototype), "init", this).call(this, el);
-          if ($(el).attr(this.attrName) === undefined) {
-            $(el).attr(this.attrName, this[__defaultEnabled__]);
-          }
-
-          if ($(el).attr(this.attrActive) === undefined) {
-            $(el).attr(this.attrActive, this[__defaultActive__]);
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "trigger", {
-
-        /**
-         * Toggles the state of the given element, if the ability is enabled on the element.
-         *
-         * @method trigger
-         * @param {Element} el Element that should be toggled.
-         */
-        value: function trigger(el) {
-          if (this[__isEnabled__](el)) {
-            $(el).attr(this.attrActive, !this[__isActive__](el));
-          }
-        },
-        writable: true,
-        enumerable: true,
-        configurable: true
-      });
-
-      _defineProperty(_prototypeProperties2, "attrActive", {
-
-        /**
-         * The name of the attribute on the element corresponding to this ability that indicates that
-         * the element is in active state. This is the name of the ability with a <code>-active</code>
-         * postfix.
-         *
-         * @property attrActive
-         * @type string
-         * @final
-         */
-        get: function () {
-          return "" + this.attrName + "-active";
-        },
-        enumerable: true,
-        configurable: true
-      });
-
-      return _prototypeProperties2;
-    })());
+        if ($(el).attr(this.attrActive) === undefined) {
+          $(el).attr(this.attrActive, this[__defaultActive__]);
+        }
+      }
+    }, {
+      key: "doTrigger",
+      value: function doTrigger(el) {
+        if (this[__isEnabled__](el)) {
+          $(el).attr(this.attrActive, !this[__isActive__](el));
+        }
+      }
+    }, {
+      key: "attrActive",
+      get: function () {
+        return "" + this.attrName + "-active";
+      }
+    }]);
 
     return Toggleable;
   })(Ability);
 
   return Toggleable;
-});</script></head><body></body></html>
+}]);</script></head><body></body></html>

@@ -4,15 +4,74 @@
 <link rel="import" href="ability/pickable.html">
 <link rel="import" href="ability/toggleable.html">
 <link rel="import" href="component/component.html">
-<link rel="import" href="di.html">
 <link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="component/card.css">
-
 <template>
+  <style>
+    #root {
+      width: var(--card-width);
+      height: var(--card-height);
+      perspective: 800px;
+      position: relative;
+    }
+
+    #container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform var(--transition-duration);
+    }
+
+    :host([tap-active="true"]) {
+      transform: rotateZ(90deg);
+    }
+
+    :host([tap="true"]) {
+      transition: transform var(--transition-duration);
+    }
+
+    :host([flip-active="true"])::shadow #container {
+      transform: rotateY(180deg);
+    }
+
+    :host([flip-active="true"].pb-dragged) .pb-front,
+    :host(.pb-dragged):not([flip-active="true"]) .pb-back {
+      filter: drop-shadow(var(--drop-shadow-layer-1));
+      z-index: 1;
+    }
+
+    :host([flip-active="true"].pb-dragged) .pb-back,
+    :host(.pb-dragged):not([flip-active="true"]) .pb-front {
+      display: none;
+    }
+
+    ::content > div {
+      backface-visibility: hidden;
+      border-radius: 5px;
+      height: var(--card-height);
+      width: var(--card-width);
+    }
+
+    ::content .pb-back {
+      background-color: var(--color-background-accent-dark);
+      border: var(--border);
+      box-sizing: border-box;
+    }
+
+    ::content .pb-front {
+      background-color: var(--color-background-accent);
+      position: absolute;
+      transform: rotateY(180deg);
+      border: 5px solid var(--color-border);
+      box-sizing: border-box;
+    }
+  </style>
+
   <div id="root">
     <div id="container">
       <content select=".pb-front"></content>
@@ -23,20 +82,33 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_component_Card', (
-        Click,
-        Component,
-        Config,
-        Helpable,
-        Key,
-        Pickable,
-        Toggleable,
-        Utils,
-        doc,
-        template,
-        $registry) => {
+    .with('template', ['=', doc => doc.querySelector('template')])
+    .bind('component.Card', [
+        'trigger.=',
+        'component.=',
+        'service.=',
+        'ability.=',
+        'trigger.=',
+        'ability.=',
+        'ability.=',
+        '=',
+        '=',
+        '=',
+        '=',
+        (
+            Click,
+            Component,
+            Config,
+            Helpable,
+            Key,
+            Pickable,
+            Toggleable,
+            Utils,
+            doc,
+            template,
+            $registry) => {
 
   const EL_NAME = 'pb-c-card';
 
@@ -60,7 +132,6 @@ DI
    *   <div class="pb-back">Back side</div>
    * </pb-c-card>
    * ```
-
    * @class component.Card
    * @extends component.Component
    */
@@ -80,7 +151,7 @@ DI
   }
 
   Config.add(
-      'pb-c-card',
+      EL_NAME,
       new Helpable('help'),
       new Pickable('pick', new Key('q'), true),
       new Toggleable('flip', new Click(), true),
@@ -89,6 +160,5 @@ DI
   $registry.add(EL_NAME, Card.prototype);
 
   return Card;
-
-});
+}]);
 </script>

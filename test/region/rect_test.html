@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="../..">
+  <base href="..">
   <title>Rect Unit Tests</title>
-  <link rel="import" href="out/testbase.html">
+  <link rel="import" href="testbase.html">
 
-  <link rel="import" href="out/di.html">
-  <link rel="import" href="out/region/rect.html">
-  <link rel="import" href="out/service/move.html">
-  <link rel="import" href="out/service/registry.html">
-  <link rel="import" href="out/utils.html">
-  <link rel="import" href="out/testutils.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="region/rect.html">
+  <link rel="import" href="service/move.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="utils.html">
+  <link rel="import" href="testutils.html">
 </head>
 <body>
   <pb-r-rect></pb-r-rect>
 
   <script>
   DI
-      .with('$registry', Registry => new Registry())
-      .with('FlexDroppable', Rect => Rect.FlexDroppable)
-      .constant('pb_service_Move', {
+      .prefix('pb')
+      .with('$registry', ['service.=', Registry => new Registry()])
+      .constant('service.Move', {
         movedElements: [],
         remove: () => {},
         mouseX: 0,
         mouseY: 0
       })
       .constant('doc', document.currentScript.ownerDocument)
-      .run((expect, _, doc, FlexDroppable, Move, Rect, Utils, pb_t) => {
+      .run([
+          '/=', '/=', '=', 'service.=', 'region.=', '=', '=',
+          (expect, _, doc, Move, Rect, Utils, t) => {
 
-  let __onDomMutation__ = pb_t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
+  let FlexDroppable = Rect.FlexDroppable;
+  let __onDomMutation__ = t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
 
   describe('Rect', () => {
     describe('$FlexDroppable', () => {
@@ -42,7 +45,7 @@
         el = doc.createElement('div');
         flexDroppable.init(el);
 
-        __mutationObserver__ = pb_t.getSymbol(flexDroppable, 'mutationObserver');
+        __mutationObserver__ = t.getSymbol(flexDroppable, 'mutationObserver');
         done();
       });
 
@@ -92,6 +95,6 @@
       done();
     });
   });
-  });
+  }]);
   </script>
 </body>

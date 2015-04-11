@@ -16,21 +16,20 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // Generated files
-      { pattern: 'out/**/!(*_test).html', included: false },
+      { pattern: 'out/**/!(*_test).*', included: false },
 
       // Deps
+      { pattern: 'bower_components/chance/chance.js', included: false },
       { pattern: 'bower_components/jquery/dist/jquery.js', included: false },
-      { pattern: 'bower_components/jQuery-contextMenu/src/jquery.contextMenu.js', included: false },
       { pattern: 'bower_components/hammerjs/hammer.js', included: false },
       { pattern: 'bower_components/handlebars/handlebars.js', included: false },
-      { pattern: 'bower_components/jquery/dist/jquery.js', included: false },
+      { pattern: 'bower_components/di-js/out/bin.min.js', included: false },
       { pattern: 'bower_components/Keypress/keypress.js', included: false },
       { pattern: 'node_modules/chai/chai.js', included: false },
-      { pattern: 'node_modules/traceur/bin/traceur-runtime.js', included: false },
       { pattern: 'node_modules/spies/**', included: false },
 
       { pattern: 'out/testbase.html', included: false},
-      { pattern: 'out/**/*_test.html', included: true}
+      { pattern: 'out/**/*_test.html', included: true }
     ],
 
 

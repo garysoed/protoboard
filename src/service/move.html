@@ -1,12 +1,41 @@
 <base href="..">
 
-<link rel="import" href="di.html">
 <link rel="import" href="service/registry.html">
+<link rel="import" href="third_party/di.html">
 
-<link rel="stylesheet" href="service/move.css">
+<style>
+  .pb-move {
+    filter: drop-shadow(var(--drop-shadow-layer-1));
+    opacity: 0.75;
+    position: fixed;
+    pointer-events: none;
+  }
+
+  .pb-move > * {
+    position: absolute;
+  }
+
+  .pb-move > *:nth-child(2) {
+    transform: rotateZ(-20deg);
+  }
+
+  .pb-move > *:nth-child(3) {
+    transform: rotateZ(15deg);
+  }
+
+  .pb-move > *:nth-child(4) {
+    transform: rotateZ(-35deg);
+  }
+
+  .pb-move > *:nth-child(5) {
+    transform: rotateZ(40deg);
+  }
+</style>
 
 <script>
-DI.bind('pb_service_Move', ($registry, Events, Utils) => {
+DI
+    .prefix('pb')
+    .bind('service.Move', ['=', '=', '=', ($registry, Events, Utils) => {
 
   // Private symbols.
   const __container__ = Symbol('container');
@@ -138,5 +167,5 @@ DI.bind('pb_service_Move', ($registry, Events, Utils) => {
   });
 
   return Move;
-});
+}]);
 </script>

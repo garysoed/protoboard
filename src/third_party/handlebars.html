@@ -1,9 +1,9 @@
-<base href="../..">
+<base href="..">
 
-<script src="bower_components/handlebars/handlebars.js"></script>
+<script src="third_party/handlebars/handlebars.js"></script>
 
-<link rel="import" href="out/di.html">
+<link rel="import" href="third_party/di.html">
 
 <script>
-DI.bind('Handlebars', () => Handlebars);
+DI.bind('Handlebars', [() => Handlebars]);
 </script>

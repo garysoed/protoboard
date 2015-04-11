@@ -1,0 +1,96 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="utils.html">
+
+<template id="circle">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle class="pb-shape" cx="50" cy="50" r="50" fill="black"></circle>
+  </svg>
+</template>
+
+<template id="hexagon">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 115.47 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,50 28.867,0 86.603,0 115.47,50 86.603,100 28.867,100" fill="black"></polygon>
+  </svg>
+</template>
+
+<template id="square">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,0 100,0 100,100 0,100" fill="black"></polygon>
+  </svg>
+</template>
+
+<template id="triangle">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,93.301 50,6.699 100,93.301" fill="black"></polygon>
+  </svg>
+</template>
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("circleTemplate", ["=", function (doc) {
+  return doc.querySelector("template#circle");
+}])["with"]("hexagonTemplate", ["=", function (doc) {
+  return doc.querySelector("template#hexagon");
+}])["with"]("squareTemplate", ["=", function (doc) {
+  return doc.querySelector("template#square");
+}])["with"]("triangleTemplate", ["=", function (doc) {
+  return doc.querySelector("template#triangle");
+}]).bind("ui.Shape", ["/=", "service.=", "=", "=", "=", "=", "=", "=", "=", function ($, Config, Utils, circleTemplate, hexagonTemplate, squareTemplate, triangleTemplate, doc, $registry) {
+
+  var EL_NAME = "pb-u-shape";
+  var ATTR_NAME = "shape";
+
+  var Shape = (function (_HTMLElement) {
+    function Shape() {
+      _classCallCheck(this, Shape);
+
+      if (_HTMLElement != null) {
+        _HTMLElement.apply(this, arguments);
+      }
+    }
+
+    _inherits(Shape, _HTMLElement);
+
+    _createClass(Shape, {
+      createdCallback: {
+        value: function createdCallback() {
+          var shape = $(this).attr(ATTR_NAME);
+          var template = undefined;
+          switch (shape) {
+            case "circle":
+              template = circleTemplate;
+              break;
+            case "hexagon":
+              template = hexagonTemplate;
+              break;
+            case "square":
+              template = squareTemplate;
+              break;
+            case "triangle":
+              template = triangleTemplate;
+              break;
+            default:
+              throw new Error("Unrecognized shape: " + shape);
+          }
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+        }
+      }
+    });
+
+    return Shape;
+  })(HTMLElement);
+
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Shape.prototype);
+
+  return Shape;
+}]);</script>
+</head><body></body></html>

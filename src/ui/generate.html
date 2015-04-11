@@ -1,0 +1,119 @@
+<base href="..">
+
+<link rel="import" href="check.html">
+<link rel="import" href="pbelement.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="service/template.html">
+<link rel="import" href="third_party/di.html">
+
+<script>
+DI
+    .prefix('pb')
+    .bind('ui.Generate', [
+      '=', '=', 'service.=', '=', 'service.=',
+      ($registry, Check, Config, PbElement, Template) => {
+
+  const EL_NAME = 'pb-u-generate';
+
+  /**
+   * When this element is created, it will process a [Handlebars](http://handlebarsjs.com/) template
+   * within it and replace itself with the processed template.
+   *
+   * The template must be enclosed within a {{#crossLink "&lt;template&gt;"}}{{/crossLink}} tag. For
+   * example:
+   * ```html
+   * <pb-u-generate>
+   *   <template>
+   *     Template's content.
+   *     \{{#if hasCustom}}
+   *       You can call \{{> customPartials}} too.
+   *     \{{/if}}
+   *   </template>
+   * </pb-u-generate>
+   * ```
+   *
+   * All data in the template's scope must be declared in the `input` attribute. Specify a space
+   * separated names of the variable names. These variables will be available in the template using
+   * the same name. For example:
+   * ```html
+   * <pb-u-generate input="cards game">
+   *   <template>
+   *     Cards of game "\{{game.name}}":
+   *     <ul>
+   *     \{{#each cards}}
+   *       <li>{{name}}</li>
+   *     \{{/each}}
+   *     </ul>
+   *   </template>
+   * </pb-u-generate>
+   * ```
+   *
+   * All data passed into the templates, or custom partials used must be registered using the
+   * {{#crossLink "service.Template"}}{{/crossLink}}. So in the example above, we can register the
+   * data as follows:
+   * ```javascript
+   * DI.run(['pb.service', 'pb', function(Template, Bootstrap) {
+   *   Template
+   *       .addData('cards', [
+   *         { name: 'Apprentice' },
+   *         { name: 'Jack of All Trades' },
+   *         { name: 'Baker' },
+   *         { name: 'Bishop' }
+   *       ])
+   *       .addData('game', {
+   *         name: 'Awesome deck building game'
+   *       });
+   *   Bootstrap.run(document);
+   * }]);
+   * ```
+   *
+   * With the above example, this will produce the following:
+   * ```html
+   * Cards of game "Awesome deck building game":
+   * <ul>
+   *   <li>Apprentice</li>
+   *   <li>Jack of All Trades</li>
+   *   <li>Baker</li>
+   *   <li>Bishop</li>
+   * </ul>
+   * ```
+   *
+   * @class ui.Generate
+   * @since 0.2.0
+   * @extends PbElement
+   */
+  class Generate extends PbElement {
+    /**
+     * Called when the element is created
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+
+      // Gets the data.
+      let promises = Check($(this).attr('input'))
+          .isList()
+          .orUse([])
+          .map(name => Template.get(name));
+      Promise
+          .all(promises)
+          .then(dataList => {
+            let dataObj = {};
+            for (let [name, data] of dataList) {
+              dataObj[name] = data;
+            }
+            let templateStr = this.querySelector('template')
+                .innerHTML
+                .replace('&gt;', '>');
+            $(this).replaceWith(Handlebars.compile(templateStr)(dataObj));
+          });
+    }
+  }
+
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Generate.prototype);
+
+  return Generate;
+}]);
+</script>

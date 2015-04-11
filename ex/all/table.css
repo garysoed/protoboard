@@ -1,70 +1,61 @@
-/** 
- * All scss files depend on this file. To change the theme, change the theme below and
- * recompile the SCSS files.
- */
-/** http://paletton.com/#uid=1000u0k00lo01tG00pj01hu09dg */
-@import url(http://fonts.googleapis.com/css?family=Roboto);
-/* Borders */
-/* Sizes */
-.pb-component::shadow #root {
-  height: 50px;
-  width: 50px; }
-
-.pb-card::shadow #root {
-  border-radius: 5px;
-  height: 100px;
-  width: 75px; }
-
-.pb-key:hover {
-  outline: 6px dashed #666666;
-  outline-offset: -3px; }
-
 /** Table styles */
 table {
-  border-collapse: collapse; }
+  border-collapse: collapse;
+}
 
 td {
-  border: 1px solid #888888;
+  border: var(--border);
   padding: 10px;
-  vertical-align: top; }
+  vertical-align: top;
+}
 
 td:first-child {
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 td.collapse {
-  background-color: #888888;
-  color: white; }
+  background-color: var(--color-normal);
+  color: white;
+}
 
 td.collapse ~ td {
-  display: none; }
+  display: none;
+}
 
 td:nth-child(2), td:nth-child(4) {
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 
 td:nth-child(2) > * {
-  display: inline-block; }
+  display: inline-block;
+}
 
 td:nth-child(2) {
-  text-align: center; }
+  text-align: center;
+}
 
 td > * {
-  white-space: initial; }
+  white-space: initial;
+}
 
 thead {
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 thead td {
-  background-color: #888888;
-  color: #ffffff;
-  padding-left: 20px; }
+  background-color: var(--color-normal);
+  color: var(--color-font-highlight);
+  padding-left: 20px;
+}
 
 thead.collapse + tbody {
-  display: none; }
+  display: none;
+}
 
 col.name {
-  width: 200px; }
+  width: 200px;
+}
 
 col.example {
-  width: 200px; }
-
-/*# sourceMappingURL=table.css.map */
+  width: 200px;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>service.Log Unit Tests</title>
+
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .constant('doc', document.currentScript.ownerDocument)
+      .run(['/=', '/=', '=', 'service.=', (expect, _, doc, Log) => {
+
+  describe('service.Log', () => {
+      let timestamp = 1234;
+      let category = 'test';
+      let value = 12;
+
+    describe('#log', () => {
+      it('should use the default processor when no processors are specified', () => {
+        _.spy(Date, 'now').overrideReturn(timestamp);
+        expect(Log.log(category, value).entries)
+            .to.be.equal(Log.defaultProcessor(new Date(timestamp), category, value));
+      });
+      it('should use the specified processor', () => {
+        let entry = 'entry';
+        let processor = _.spiedFunction().overrideReturn(entry);
+
+        _.spy(Date, 'now').overrideReturn(timestamp);
+
+        Log.addProcessor(processor);
+        expect(Log.log(category, value).entries).to.be.equal(entry);
+        expect(processor).calledWith(new Date(timestamp), category, value);
+      });
+      it('should pick the first processor that returns a non empty string', () => {
+        let entry = 'entry';
+        let processor = _.spiedFunction().overrideReturn(entry);
+
+        _.spy(Date, 'now').overrideReturn(timestamp);
+
+        Log
+            .addProcessor(() => null)
+            .addProcessor(() => '')
+            .addProcessor(processor)
+            .addProcessor(() => 'not used');
+        expect(Log.log(category, value).entries).to.be.equal(entry);
+        expect(processor).calledWith(new Date(timestamp), category, value);
+      });
+      it('should not add any entries if there are no processors that returns a non empty string', () => {
+        Log
+            .addProcessor(() => null)
+            .addProcessor(() => '');
+        expect(Log.log(category, value).entries).to.be.equal('');
+      });
+    });
+
+    describe('#blob', () => {
+      it('should return a blob with the correct content and MIME type', done => {
+        _.spy(Date, 'now').overrideReturn(timestamp);
+
+        let blob = Log.log(category, value).blob;
+        let reader = new FileReader();
+        reader.addEventListener('loadend', () => {
+          expect(reader.result)
+              .to.be.equal(Log.defaultProcessor(new Date(timestamp), category, value));
+          done();
+        });
+        reader.readAsText(blob);
+      });
+    });
+
+    afterEach(done => {
+      Log
+          .clearProcessors()
+          .clear();
+      _.reset();
+      done();
+    });
+  });
+  }]);
+  </script>
+</body>

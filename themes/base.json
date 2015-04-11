@@ -1,0 +1,36 @@
+{
+  "vars": {
+    "--color-lighter": "#c8c8c8",
+    "--color-light": "#a7a7a7",
+    "--color-normal": "#888888",
+    "--color-dark": "#666666",
+    "--color-darker": "#3f3f3f",
+    "--color-background": "white",
+    "--color-foreground": "black",
+
+    "--color-border": "var(--color-normal)",
+    "--color-background-accent": "var(--color-lighter)",
+    "--color-background-accent-dark": "var(--color-light)",
+    "--color-highlight": "var(--color-dark)",
+    "--color-shadow": "var(--color-darker)",
+    "--color-font": "var(--color-foreground)",
+    "--color-font-highlight": "var(--color-background)",
+
+    "--drop-shadow-layer-1": "0px 2px 5px rgba(var(--color-shadow), 1)",
+    "--drop-shadow-layer-2": "0px 4px 10px rgba(var(--color-shadow), .8)",
+    "--drop-shadow-layer-3": "0px 6px 15px rgba(var(--color-shadow), .8)",
+    "--drop-shadow-layer-4": "0px 8px 20px rgba(var(--color-shadow), .8)",
+    "--drop-shadow-layer-5": "0px 10px 25px rgba(var(--color-shadow), .8)",
+
+    "--card-height": "100px",
+    "--card-width": "75px",
+    "--component-width": "50px",
+    "--component-height": "50px",
+
+    "--border": "1px solid var(--color-border)",
+
+    "--font": "\"Roboto\", Helvetica, Arial, sans-serif",
+
+    "--transition-duration": ".3s"
+  }
+}

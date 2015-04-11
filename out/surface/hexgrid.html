@@ -1,0 +1,113 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<template id="main">
+  <style>::content > * {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.row {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.row:not(:last-child) {
+  margin-bottom: -56.8px;
+}
+
+.row:nth-child(2n) {
+  margin-left: 75px;
+}
+
+.tile {
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+
+.tile:not(:last-child) {
+  margin-right: 50px;
+}</style>
+
+  <div id="root">
+    <div id="content"></div>
+  </div>
+</template>
+
+<template id="row">
+  <div class="row"></div>
+</template>
+
+<template id="tile">
+  <div class="tile">
+    <content></content>
+  </div>
+</template>
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", ["=", function (doc) {
+  return doc.querySelector("template#main");
+}])["with"]("templateRow", ["=", function (doc) {
+  return doc.querySelector("template#row");
+}])["with"]("templateTile", ["=", function (doc) {
+  return doc.querySelector("template#tile");
+}]).bind("surface.HexGrid", ["service.=", "surface.=", "=", "=", "=", "=", function (Config, Grid, $registry, templateMain, templateRow, templateTile) {
+
+  var EL_NAME = "pb-s-hexgrid";
+
+  var HexGrid = (function (_Grid) {
+    function HexGrid() {
+      _classCallCheck(this, HexGrid);
+
+      if (_Grid != null) {
+        _Grid.apply(this, arguments);
+      }
+    }
+
+    _inherits(HexGrid, _Grid);
+
+    _createClass(HexGrid, {
+      rootEl: {
+        get: function () {
+          return this.shadowRoot.querySelector("#content");
+        }
+      },
+      mainTemplate: {
+        get: function () {
+          return templateMain;
+        }
+      },
+      rowTemplate: {
+        get: function () {
+          return templateRow;
+        }
+      },
+      tileTemplate: {
+        get: function () {
+          return templateTile;
+        }
+      }
+    });
+
+    return HexGrid;
+  })(Grid);
+
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, HexGrid.prototype);
+
+  return HexGrid;
+}]);</script></head><body></body></html>

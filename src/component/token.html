@@ -3,14 +3,19 @@
 <link rel="import" href="ability/helpable.html">
 <link rel="import" href="ability/pickable.html">
 <link rel="import" href="component/component.html">
-<link rel="import" href="di.html">
 <link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<link rel="stylesheet" type="text/css" href="component/token.css">
-
 <template>
+  <style>
+    :host(.pb-dragged) .pb-back {
+      filter: drop-shadow(var(--drop-shadow-layer-1));
+      z-index: 1;
+    }
+  </style>
+
   <div id="root">
     <content></content>
   </div>
@@ -18,18 +23,12 @@
 
 <script>
 DI
+    .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', doc => doc.querySelector('template'))
-    .bind('pb_component_Token', (
-        $registry,
-        Component,
-        Config,
-        Helpable,
-        Key,
-        Pickable,
-        Utils,
-        doc,
-        template) => {
+    .with('template', ['=', doc => doc.querySelector('template')])
+    .bind('component.Token', [
+        '=', 'component.=', 'service.=', 'ability.=', 'trigger.=', 'ability.=', '=', '=', '=',
+        ($registry, Component, Config, Helpable, Key, Pickable, Utils, doc, template) => {
 
   const EL_NAME = 'pb-c-token';
 
@@ -76,5 +75,5 @@ DI
   $registry.add(EL_NAME, Token.prototype);
 
   return Token;
-});
+}]);
 </script>

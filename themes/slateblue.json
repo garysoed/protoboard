@@ -1,0 +1,10 @@
+{
+  "base": "./themes/base.json",
+  "vars": {
+    "--color-lighter": "#CBC7E2",
+    "--color-light": "#ABA5CF",
+    "--color-normal": "#8982B8",
+    "--color-dark": "#6B62A4",
+    "--color-darker": "#50468F"
+  }
+}

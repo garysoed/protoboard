@@ -1,12 +1,12 @@
-<html><head><base href="../..">
+<html><head><base href="..">
 
-<script src="bower_components/Keypress/keypress.js">"use strict";</script>
+<script src="third_party/Keypress/keypress.js">"use strict";</script>
 
-<link rel="import" href="out/di.html">
+<link rel="import" href="third_party/di.html">
 
 <script>"use strict";
 
-DI.bind("Keypress", function () {
+DI.bind("Keypress", [function () {
   return window.keypress.Listener;
-});</script>
+}]);</script>
 </head><body></body></html>
