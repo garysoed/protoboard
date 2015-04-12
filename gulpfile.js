@@ -70,7 +70,15 @@ function subBabel() {
 
 function readJsonTheme(file) {
   var json = require(file);
-  var base = json.base ? readJsonTheme(json.base) : {};
+  var base;
+  if (json.base) {
+    var basePath = file[0] === '/'
+        ? path.join(path.dirname(file), json.base)
+        : path.join(__dirname, path.dirname(file), json.base);
+    base = readJsonTheme(basePath);
+  } else {
+    base = {};
+  }
   for (var key in json.vars) {
     base[key] = json.vars[key];
   }

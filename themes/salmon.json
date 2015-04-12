@@ -1,5 +1,5 @@
 {
-  "base": "./themes/base.json",
+  "base": "./base.json",
   "vars": {
     "--color-lighter": "#FFC0BA",
     "--color-light": "#FF998F",
