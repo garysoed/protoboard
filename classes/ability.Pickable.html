@@ -151,7 +151,6 @@
     header.main-header {
       -webkit-filter: drop-shadow(0px 2px 5px #19760A);
     }
-
     header.main-header.scroll-top {
       -webkit-filter: none;
     }
@@ -214,11 +213,6 @@
 
     .method tbody:nth-child(2n+1) {
       background-color: white;
-    }
-
-    .main-bar {
-      background-color: #19760A;
-      color: black;
     }
   </style>
 </head>
@@ -792,7 +786,6 @@ elements with <a href="../classes/ability.Droppable.html" class="crosslink">abil
       selected.scrollIntoView();
     }
 
-    var MAX_HEIGHT = 25;
     var sinceEl = document.querySelector('.main-since');
     var headerEl = document.querySelector('.main-header');
     var mainEl = document.querySelector('.main-main');
@@ -803,9 +796,12 @@ elements with <a href="../classes/ability.Droppable.html" class="crosslink">abil
         headerEl.classList.remove('scroll-top');
       }
 
-      var height = Math.max(0, MAX_HEIGHT - mainEl.scrollTop / mainEl.scrollHeight * 3 * MAX_HEIGHT)
-          + 'px';
-      sinceEl.style.height = height;
+      var ratio = Math.max(0, 1 - mainEl.scrollTop / mainEl.scrollHeight * 3);
+      sinceEl.style.height = ratio * 25 + 'px';
+
+      var padding = (10 + 10 * ratio) + 'px';
+      headerEl.style.paddingTop = padding;
+      headerEl.style.paddingBottom = padding;
     });
 
     document.querySelector('.main-menu-button').addEventListener('click', function() {
