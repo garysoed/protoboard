@@ -32,6 +32,7 @@ section.main-content {
   display: flex;
   flex-direction: row;
   flex: 1;
+  position: relative;
 }
 
 section.main-main {
@@ -44,8 +45,9 @@ section.main-main {
 
 @media screen and (max-width: 900px) {
   section.main-sidebar {
-    height: 100%;
-    position: fixed;
+    position: absolute;
+    top: 0;
+    bottom: 0;
   }
 
   section.main-sidebar:not(.expand) {
