@@ -36,13 +36,20 @@
       white-space: pre;
     }
 
-    .main-since {
+    .since {
       font-family: 'Ubuntu Mono', monospace;
       font-size: 0.8rem;
       height: 25px;
       line-height: 25px;
       text-transform: uppercase;
       overflow: hidden;
+    }
+
+    .since {
+      font-family: 'Ubuntu Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 2ex;
+      text-transform: uppercase;
     }
 
     h1, h2 {
@@ -141,10 +148,10 @@
       color: #9AE08F;
     }
 
-    .main-since {
+    .since {
       color: #19760A;
     }
-    .reverse .main-since {
+    .reverse .since {
       color: #9AE08F;
     }
 
@@ -221,7 +228,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="main-since">v 0.2.0</div>
+      <div class="since">v 0.2.0</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -561,7 +568,7 @@
       selected.scrollIntoView();
     }
 
-    var sinceEl = document.querySelector('.main-since');
+    var sinceEl = document.querySelector('.main-header-section .since');
     var headerEl = document.querySelector('.main-header');
     var mainEl = document.querySelector('.main-main');
     mainEl.addEventListener('scroll', function() {
@@ -571,7 +578,8 @@
         headerEl.classList.remove('scroll-top');
       }
 
-      var ratio = Math.max(0, 1 - mainEl.scrollTop / mainEl.scrollHeight * 3);
+      var maxScroll = mainEl.scrollHeight - mainEl.clientHeight;
+      var ratio = Math.max(0, 1 - mainEl.scrollTop / maxScroll * 3);
       sinceEl.style.height = ratio * 25 + 'px';
 
       var padding = (10 + 10 * ratio) + 'px';
