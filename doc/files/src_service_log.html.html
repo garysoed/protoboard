@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#19760A">
+
+  <title>src/service/log.html - Protoboard</title>
+
+  <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+
+  <link rel="stylesheet" href="../assets/css/class.css">
+  <link rel="stylesheet" href="../assets/css/events.css">
+  <link rel="stylesheet" href="../assets/css/index.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/method.css">
+  <link rel="stylesheet" href="../assets/css/prettyprint.css">
+  <link rel="stylesheet" href="../assets/css/props.css">
+  <link rel="stylesheet" href="../assets/css/sidebar.css">
+  <style>
+    @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700|Roboto:400,700);
+
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Roboto', Helvetica, Arial, sans-serif;
+      font-size: smaller;
+      line-height: 3.5ex;
+      margin: 0;
+      height: 100vh;
+    }
+
+    .description code {
+      border-radius: 4px;
+      padding: 2px 4px;
+      white-space: pre;
+    }
+
+    .since {
+      font-family: 'Ubuntu Mono', monospace;
+      font-size: 0.8rem;
+      height: 25px;
+      line-height: 25px;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+
+    .since {
+      font-family: 'Ubuntu Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 2ex;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 5px 0;
+    }
+
+    a, a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    pre,
+    code,
+    a.crosslink {
+      font-family: 'Ubuntu Mono', monospace;
+    }
+
+    .prettyprint code {
+      background-color: transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    div.content {
+      max-width: 50em;
+    }
+
+    section.collapsible > header {
+      padding: 5px 20px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      transition: padding .2s;
+      position: relative;
+    }
+
+    section.collapsible > header h2 {
+      font-size: 1.2em;
+    }
+
+    section.collapsible.collapsed > header {
+      padding-bottom: 5px;
+    }
+
+    section.collapsible > div {
+      overflow: hidden;
+      transition: height .2s;
+    }
+
+    footer {
+      padding: 15px;
+      -webkit-margin-before: 20px;
+    }
+
+    footer.warn {
+      border-color: crimson;
+      color: crimson;
+    }
+
+    dl {
+      padding: 15px;
+    }
+
+    table, dl {
+      border: 1px solid;
+    }
+
+    header {
+      font-weight: 700;
+    }
+  </style>
+
+  <!-- COLORS!!! -->
+  <style>
+    body {
+      background-color: white;
+      color: black;
+    }
+    .reverse {
+      background-color: #19760A;
+      color: #9AE08F;
+    }
+
+    table, dl {
+      border-color: #19760A;
+    }
+
+    a, a:visited,
+    a.external, a.external:visited {
+      color: #19760A;
+    }
+    .reverse a, .reverse a:visited,
+    .reverse a.external, .reverse a.external:visited {
+      color: #9AE08F;
+    }
+
+    .since {
+      color: #19760A;
+    }
+    .reverse .since {
+      color: #9AE08F;
+    }
+
+    header.main-header {
+      -webkit-filter: drop-shadow(0px 2px 5px #19760A);
+    }
+    header.main-header.scroll-top {
+      -webkit-filter: none;
+    }
+
+    li.sidebar-selected {
+      background-color: #9AE08F;
+    }
+    .reverse li.sidebar-selected a {
+      color: black;
+    }
+
+    section.collapsible > header {
+      background-color: #19760A;
+      color: white;
+    }
+    .reverse section.collapsible > header {
+      background-color: #4AAE3B;
+      color: black;
+    }
+
+    section.collapsible > header:hover h2 {
+      -webkit-filter: drop-shadow(0px 0px 5px white);
+    }
+    .reverse section.collapsible > header:hover h2 {
+      -webkit-filter: drop-shadow(0px 0px 5px black);
+    }
+
+    .description code {
+      color: #62870C;
+      background-color: #DAF49C;
+    }
+
+    code .keyword {
+      color: #62870C;
+    }
+
+    .description pre code {
+      background-color: transparent;
+    }
+
+    pre.prettyprint {
+      border-color: #19760A;
+    }
+
+    header.tutorial {
+      color: #19760A;
+    }
+
+    footer {
+      border: 2px solid #19760A;
+    }
+
+    .divider {
+      border-color: #19760A;
+    }
+
+    .method tbody:nth-child(2n) {
+      background-color: #9AE08F;
+    }
+
+    .method tbody:nth-child(2n+1) {
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header reverse scroll-top">
+    <div class="main-menu-button">&#9776;</div>
+    <div class="main-header-section">
+      <h1><a href="../index.html">Protoboard</a></h1>
+      <div class="since">v 0.2.0</div>
+    </div>
+    <a href="https://github.com/garysoed/protoboard">GitHub</a>
+  </header>
+  <section class="main-content">
+    <section class="main-sidebar reverse"><div class="sidebar">
+    <section class="collapsible ">
+      <header>
+        <h2>tutorial</h2>
+      </header>
+      <div>
+        <ul>
+          <li class="">
+            <a href="../classes/1 Overview.html">1 Overview</a>
+          </li>
+          <li class="">
+            <a href="../classes/2 Prerequisites.html">2 Prerequisites</a>
+          </li>
+          <li class="">
+            <a href="../classes/3 Basic Usage.html">3 Basic Usage</a>
+          </li>
+          <li class="">
+            <a href="../classes/4 Customizing Components.html">4 Customizing Components</a>
+          </li>
+          <li class="">
+            <a href="../classes/5 Theming.html">5 Theming</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="collapsible ">
+      <header>
+        <h2>api</h2>
+      </header>
+      <div>
+        <ul>
+          <li class="">
+            <a href="../classes/ability.Abilities.html">ability.Abilities</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Abilities.Builder.html">ability.Abilities.Builder</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Ability.html">ability.Ability</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Droppable.html">ability.Droppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Helpable.html">ability.Helpable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Pickable.html">ability.Pickable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Shuffleable.html">ability.Shuffleable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Toggleable.html">ability.Toggleable</a>
+          </li>
+          <li class="">
+            <a href="../classes/Check.html">Check</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Card.html">component.Card</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Component.html">component.Component</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.html">component.Dice</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.Rollable.html">component.Dice.Rollable</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Token.html">component.Token</a>
+          </li>
+          <li class="">
+            <a href="../classes/HammerWrapper.html">HammerWrapper</a>
+          </li>
+          <li class="">
+            <a href="../classes/PbElement.html">PbElement</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Bag.html">region.Bag</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Bag.RandomPickable.html">region.Bag.RandomPickable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Deck.html">region.Deck</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Hand.html">region.Hand</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Hand.ReorderableDroppable.html">region.Hand.ReorderableDroppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Rect.html">region.Rect</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Rect.FlexDroppable.html">region.Rect.FlexDroppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Region.html">region.Region</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Log.html">service.Log</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Move.html">service.Move</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Preview.html">service.Preview</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Registry.html">service.Registry</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Template.html">service.Template</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.Grid.html">surface.Grid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.HexGrid.html">surface.HexGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.RectGrid.html">surface.RectGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.TriangleGrid.html">surface.TriangleGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Click.html">trigger.Click</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.DoubleClick.html">trigger.DoubleClick</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Key.html">trigger.Key</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Trigger.html">trigger.Trigger</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Generate.html">ui.Generate</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Preview.html">ui.Preview</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Previewer.html">ui.Previewer</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Shape.html">ui.Shape</a>
+          </li>
+          <li class="">
+            <a href="../classes/Utils.html">Utils</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+</div>
+
+
+</section>
+    <section class="main-main"><h4>src/service/log.html</h4>
+
+<pre class="code prettyprint linenums">
+&lt;base href=&quot;..&quot;&gt;
+
+&lt;link rel=&quot;import&quot; href=&quot;third_party/di.html&quot;&gt;
+
+&lt;script&gt;
+DI
+    .prefix(&#x27;pb&#x27;)
+    .bind(&#x27;service.Log&#x27;, [() =&gt; {
+
+  // Private symbols
+  const __entries__ = Symbol();
+  const __meta__ = Symbol();
+  const __processors__ = Symbol();
+
+  /**
+   * A service to log events and happenings in a game. Use this service to collect statistics about
+   * a game session.
+   *
+   * By default, the service records all triggers to every
+   * {{#crossLink &quot;ability.Ability&quot;}}abilities{{/crossLink}} loaded. The format of a log entry is:
+   * &#x60;&lt;timestamp&gt;: &lt;category&gt; - &lt;value&gt;&#x60;. For abilities, &#x60;category&#x60; is the ability&#x27;s name, and the
+   * &#x60;value&#x60; is the value of &#x60;pb-id&#x60; of the element the ability acts on.
+   *
+   * For every Protoboard component, region, and surface, you can customize the prefix of the id by
+   * specifying the &#x60;pb-id&#x60; attribute. When the element is activated, Protoboard will append a
+   * number to the attribute to make sure that they are unique. For instance:
+   * &#x60;&#x60;&#x60;html
+   * &lt;pb-c-card pb-id=&quot;attack&quot;&gt;&lt;/pb-c-card&gt;
+   * &#x60;&#x60;&#x60;
+   * will have its &#x60;pb-id&#x60; set to &#x60;attack-0&#x60;. So when the card is &#x60;flip&#x60;ped, this service will log
+   * &#x60;3/28/2015, 6:01:48 PM: flip - attack-0&#x60;.
+   *
+   * For entries not handled by Abilities, you can also add log entries manually. Use the
+   * {{#crossLink &quot;service.Log/log:method&quot;}}{{/crossLink}} method. For instance:
+   * &#x60;&#x60;&#x60;javascript
+   * DI.run([&#x27;service.=&#x27;, function(Log) {
+   *   Log.log(&#x27;player-count&#x27;, 2);
+   * }]);
+   * &#x60;&#x60;&#x60;
+   * will generate entry: &#x60;3/28/2015, 6:01:48 PM: player-count - 2&#x60;.
+   *
+   * You can also customize the string output using the
+   * {{#crossLink &quot;service.Log/addProcessor:method&quot;}}{{/crossLink}} method. For example:
+   * &#x60;&#x60;&#x60;javascript
+   * DI.run([&#x27;service.=&#x27;, function(Log) {
+   *   Log
+   *       .addProcessor(function(timestamp, category, value) {
+   *         if (category !== &#x27;player-count&#x27;) {
+   *           return timestamp.toLocaleString() + &#x27;: &#x27; + category + &#x27; on &#x27; + value;
+   *         } else {
+   *           return null;
+   *         }
+   *       })
+   *      .addProcessor(Log.defaultProcessor)
+   *      .log(&#x27;player-count&#x27;, 2)
+   *      .log(&#x27;rng-seed&#x27;, 1234);
+   * }]);
+   * &#x60;&#x60;&#x60;
+   * A processor is a function that takes 3 arguments:
+   * 1. &#x60;timestamp&#x60; of type {{#crossLink &quot;Date&quot;}}{{/crossLink}}.
+   * 2. &#x60;category&#x60; {{#crossLink &quot;String&quot;}}{{/crossLink}}.
+   * 3. &#x60;value&#x60;
+   * You can specify more than one processors. The processors will be called in the other that they
+   * are added to the service. The value that will be used for the log entry is the value returned
+   * by the first processor that returns a non empty string.
+   *
+   * So the example above will generate:
+   * &#x60;&#x60;&#x60;
+   * 3/28/2015, 6:21:47 PM: player-count on 2
+   * 3/28/2015, 6:21:53 PM: rng-seed - 1234
+   * &#x60;&#x60;&#x60;
+   * The custom processor was used to generate the entry for &#x60;player-count&#x60;, while the default
+   * processor was used to generate the one for &#x60;rng-seed&#x60;.
+   *
+   * You can retrieve the entries using {{#crossLink &quot;service.Log/blob:property&quot;}}{{/crossLink}} as
+   * a blob, or {{#crossLink &quot;service.Log/entries:property&quot;}}{{/crossLink}} as a string.
+   *
+   * @class service.Log
+   * @static
+   * @since 0.2.0
+   */
+  let Log = {
+    [__entries__]: [],
+    [__meta__]: {},
+    [__processors__]: [],
+
+    /**
+     * Adds an entry to the log.
+     *
+     * @method log
+     * @param {string} category The category of the entry. Use this to identify the type of the log.
+     *    For instance, &quot;click&quot;, &quot;flip&quot;.
+     * @param {Any} value The value of the category for the entry.
+     * @return {service.Log} This service, for chaining.
+     */
+    log(category, value) {
+      let newEntry;
+      let timestamp = new Date(Date.now());
+      if (this[__processors__].length &gt; 0) {
+        newEntry = this[__processors__].reduce(
+            (prevEntry, processor) =&gt; {
+              return prevEntry || processor(timestamp, category, value, this[__meta__]);
+            },
+            null);
+      } else {
+        newEntry = this.defaultProcessor(timestamp, category, value);
+      }
+
+      if (newEntry) {
+        this[__entries__].push(newEntry);
+      }
+
+      return this;
+    },
+
+    /**
+     * Adds a processor to process a log entry.
+     * A processor is a function that takes 3 arguments:
+     * 1. &#x60;timestamp&#x60; of type {{#crossLink &quot;Date&quot;}}{{/crossLink}}.
+     * 2. &#x60;category&#x60; {{#crossLink &quot;String&quot;}}{{/crossLink}}.
+     * 3. &#x60;value&#x60;
+     * You can specify more than one processors. The processors will be called in the other that
+     * they are added to the service. The value that will be used for the log entry is the value
+     * returned by the first processor that returns a non empty string.
+     *
+     * @method addProcessor
+     * @param {Function} processor The processor to add.
+     * @return {service.Log} This service, for chaining.
+     */
+    addProcessor(processor) {
+      this[__processors__].push(processor);
+      return this;
+    },
+
+    /**
+     * Removes all processors that have been added to this service.
+     *
+     * @method clearProcessors
+     * @return {service.Log} This service, for chaining.
+     */
+    clearProcessors() {
+      this[__processors__].splice(0, this[__processors__].length);
+      return this;
+    },
+
+    /**
+     * Removes all entries that have been added to this service.
+     *
+     * @method clear
+     * @return {service.Log} This service, for chaining.
+     */
+    clear() {
+      this[__entries__].splice(0, this[__entries__].length);
+      return this;
+    },
+
+    /**
+     * The entries as a blob.
+     *
+     * @property blob
+     * @type Blob
+     * @final
+     */
+    get blob() {
+      return new Blob([this.entries], { type: &#x27;text/plain&#x27; });
+    },
+
+    /**
+     * The entries as a string.
+     *
+     * @property entries
+     * @type string
+     * @final
+     */
+    get entries() {
+      return this[__entries__].join(&#x27;\n&#x27;);
+    },
+
+    /**
+     * Default processor of the service. This processor is also used if no custom processors are
+     * added.
+     *
+     * @property defaultProcessor
+     * @type Function
+     * @final
+     */
+    get defaultProcessor() {
+      return (timestamp, category, value) =&gt; {
+        return &#x60;${timestamp.toLocaleString()}: ${category} - ${value}&#x60;;
+      };
+    }
+  };
+
+  return Log;
+}]);
+&lt;/script&gt;
+</pre>
+
+</section>
+  </section>
+</body>
+  <script src="../assets/vendor/prettify/prettify-min.js"></script>
+  <script>prettyPrint();</script>
+  <script>
+
+    var isMobile = false;
+    var rootEl = isMobile ? document.querySelector('.main-main') : document;
+    var els = rootEl.querySelectorAll('section.collapsible');
+    for (var i = 0; i < els.length; i++) {
+      var section = els.item(i);
+      var content = section.querySelector('div');
+      var header = section.querySelector('header');
+      var height = content.clientHeight + 'px';
+      header.addEventListener('click', function(section, content, contentHeight) {
+        section.classList.toggle('collapsed');
+        content.style.height = section.classList.contains('collapsed') ? '0' : contentHeight;
+      }.bind(header, section, content, height));
+      content.style.height = height;
+    }
+
+    var selected = document.querySelector('.sidebar-selected');
+    if (selected) {
+      selected.scrollIntoView();
+    }
+
+    var sinceEl = document.querySelector('.main-header-section .since');
+    var headerEl = document.querySelector('.main-header');
+    var mainEl = document.querySelector('.main-main');
+    mainEl.addEventListener('scroll', function() {
+      if (mainEl.scrollTop <= 0) {
+        headerEl.classList.add('scroll-top');
+      } else {
+        headerEl.classList.remove('scroll-top');
+      }
+
+      var maxScroll = mainEl.scrollHeight - mainEl.clientHeight;
+      var ratio = Math.max(0, 1 - mainEl.scrollTop / maxScroll * 3);
+      sinceEl.style.height = ratio * 25 + 'px';
+
+      var padding = (10 + 10 * ratio) + 'px';
+      headerEl.style.paddingTop = padding;
+      headerEl.style.paddingBottom = padding;
+    });
+
+    document.querySelector('.main-menu-button').addEventListener('click', function() {
+      document.querySelector('section.main-sidebar').classList.toggle('expand');
+    });
+  </script>
+</html>

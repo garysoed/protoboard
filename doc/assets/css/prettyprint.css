@@ -1,0 +1,52 @@
+pre.prettyprint {
+  background-color: #26292C;
+  border: 2px solid;
+  padding: 20px;
+  margin: 10px;
+  line-height: 2.7ex;
+}
+
+pre.prettyprint .com {
+  color: #798188;
+}
+
+pre.prettyprint .typ,
+pre.prettyprint .tag {
+  color: #72AACA;
+}
+
+pre.prettyprint .pln {
+  color: white;
+}
+
+pre.prettyprint .str {
+  color: #B7D877;
+}
+
+pre.prettyprint .pun,
+pre.prettyprint .opn,
+pre.prettyprint .clo {
+  color: white;
+}
+
+pre.prettyprint .kwd {
+  color: #FA9A4B;
+}
+
+pre.prettyprint .atn {
+  color: #F6F080;
+}
+
+pre.prettyprint .atv {
+  color: #B7D877;
+}
+
+pre.prettyprint .lit {
+  color: #F6F080;
+}
+
+@media screen and (max-width: 900px) {
+  pre.prettyprint code {
+    white-space: pre-wrap;
+  }
+}

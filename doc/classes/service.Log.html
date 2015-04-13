@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#19760A">
+
+  <title>service.Log - Protoboard</title>
+
+  <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+
+  <link rel="stylesheet" href="../assets/css/class.css">
+  <link rel="stylesheet" href="../assets/css/events.css">
+  <link rel="stylesheet" href="../assets/css/index.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/method.css">
+  <link rel="stylesheet" href="../assets/css/prettyprint.css">
+  <link rel="stylesheet" href="../assets/css/props.css">
+  <link rel="stylesheet" href="../assets/css/sidebar.css">
+  <style>
+    @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700|Roboto:400,700);
+
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Roboto', Helvetica, Arial, sans-serif;
+      font-size: smaller;
+      line-height: 3.5ex;
+      margin: 0;
+      height: 100vh;
+    }
+
+    .description code {
+      border-radius: 4px;
+      padding: 2px 4px;
+      white-space: pre;
+    }
+
+    .since {
+      font-family: 'Ubuntu Mono', monospace;
+      font-size: 0.8rem;
+      height: 25px;
+      line-height: 25px;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+
+    .since {
+      font-family: 'Ubuntu Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 2ex;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 5px 0;
+    }
+
+    a, a:visited {
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    pre,
+    code,
+    a.crosslink {
+      font-family: 'Ubuntu Mono', monospace;
+    }
+
+    .prettyprint code {
+      background-color: transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    div.content {
+      max-width: 50em;
+    }
+
+    section.collapsible > header {
+      padding: 5px 20px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      transition: padding .2s;
+      position: relative;
+    }
+
+    section.collapsible > header h2 {
+      font-size: 1.2em;
+    }
+
+    section.collapsible.collapsed > header {
+      padding-bottom: 5px;
+    }
+
+    section.collapsible > div {
+      overflow: hidden;
+      transition: height .2s;
+    }
+
+    footer {
+      padding: 15px;
+      -webkit-margin-before: 20px;
+    }
+
+    footer.warn {
+      border-color: crimson;
+      color: crimson;
+    }
+
+    dl {
+      padding: 15px;
+    }
+
+    table, dl {
+      border: 1px solid;
+    }
+
+    header {
+      font-weight: 700;
+    }
+  </style>
+
+  <!-- COLORS!!! -->
+  <style>
+    body {
+      background-color: white;
+      color: black;
+    }
+    .reverse {
+      background-color: #19760A;
+      color: #9AE08F;
+    }
+
+    table, dl {
+      border-color: #19760A;
+    }
+
+    a, a:visited,
+    a.external, a.external:visited {
+      color: #19760A;
+    }
+    .reverse a, .reverse a:visited,
+    .reverse a.external, .reverse a.external:visited {
+      color: #9AE08F;
+    }
+
+    .since {
+      color: #19760A;
+    }
+    .reverse .since {
+      color: #9AE08F;
+    }
+
+    header.main-header {
+      -webkit-filter: drop-shadow(0px 2px 5px #19760A);
+    }
+    header.main-header.scroll-top {
+      -webkit-filter: none;
+    }
+
+    li.sidebar-selected {
+      background-color: #9AE08F;
+    }
+    .reverse li.sidebar-selected a {
+      color: black;
+    }
+
+    section.collapsible > header {
+      background-color: #19760A;
+      color: white;
+    }
+    .reverse section.collapsible > header {
+      background-color: #4AAE3B;
+      color: black;
+    }
+
+    section.collapsible > header:hover h2 {
+      -webkit-filter: drop-shadow(0px 0px 5px white);
+    }
+    .reverse section.collapsible > header:hover h2 {
+      -webkit-filter: drop-shadow(0px 0px 5px black);
+    }
+
+    .description code {
+      color: #62870C;
+      background-color: #DAF49C;
+    }
+
+    code .keyword {
+      color: #62870C;
+    }
+
+    .description pre code {
+      background-color: transparent;
+    }
+
+    pre.prettyprint {
+      border-color: #19760A;
+    }
+
+    header.tutorial {
+      color: #19760A;
+    }
+
+    footer {
+      border: 2px solid #19760A;
+    }
+
+    .divider {
+      border-color: #19760A;
+    }
+
+    .method tbody:nth-child(2n) {
+      background-color: #9AE08F;
+    }
+
+    .method tbody:nth-child(2n+1) {
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header reverse scroll-top">
+    <div class="main-menu-button">&#9776;</div>
+    <div class="main-header-section">
+      <h1><a href="../index.html">Protoboard</a></h1>
+      <div class="since">v 0.2.0</div>
+    </div>
+    <a href="https://github.com/garysoed/protoboard">GitHub</a>
+  </header>
+  <section class="main-content">
+    <section class="main-sidebar reverse"><div class="sidebar">
+    <section class="collapsible ">
+      <header>
+        <h2>tutorial</h2>
+      </header>
+      <div>
+        <ul>
+          <li class="">
+            <a href="../classes/1 Overview.html">1 Overview</a>
+          </li>
+          <li class="">
+            <a href="../classes/2 Prerequisites.html">2 Prerequisites</a>
+          </li>
+          <li class="">
+            <a href="../classes/3 Basic Usage.html">3 Basic Usage</a>
+          </li>
+          <li class="">
+            <a href="../classes/4 Customizing Components.html">4 Customizing Components</a>
+          </li>
+          <li class="">
+            <a href="../classes/5 Theming.html">5 Theming</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="collapsible selected">
+      <header>
+        <h2>api</h2>
+      </header>
+      <div>
+        <ul>
+          <li class="">
+            <a href="../classes/ability.Abilities.html">ability.Abilities</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Abilities.Builder.html">ability.Abilities.Builder</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Ability.html">ability.Ability</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Droppable.html">ability.Droppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Helpable.html">ability.Helpable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Pickable.html">ability.Pickable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Shuffleable.html">ability.Shuffleable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.Toggleable.html">ability.Toggleable</a>
+          </li>
+          <li class="">
+            <a href="../classes/Check.html">Check</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Card.html">component.Card</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Component.html">component.Component</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.html">component.Dice</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Dice.Rollable.html">component.Dice.Rollable</a>
+          </li>
+          <li class="">
+            <a href="../classes/component.Token.html">component.Token</a>
+          </li>
+          <li class="">
+            <a href="../classes/HammerWrapper.html">HammerWrapper</a>
+          </li>
+          <li class="">
+            <a href="../classes/PbElement.html">PbElement</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Bag.html">region.Bag</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Bag.RandomPickable.html">region.Bag.RandomPickable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Deck.html">region.Deck</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Hand.html">region.Hand</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Hand.ReorderableDroppable.html">region.Hand.ReorderableDroppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Rect.html">region.Rect</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Rect.FlexDroppable.html">region.Rect.FlexDroppable</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.Region.html">region.Region</a>
+          </li>
+          <li class="sidebar-selected">
+            <a href="../classes/service.Log.html">service.Log</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Move.html">service.Move</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Preview.html">service.Preview</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Registry.html">service.Registry</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Template.html">service.Template</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.Grid.html">surface.Grid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.HexGrid.html">surface.HexGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.RectGrid.html">surface.RectGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/surface.TriangleGrid.html">surface.TriangleGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Click.html">trigger.Click</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.DoubleClick.html">trigger.DoubleClick</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Key.html">trigger.Key</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
+          </li>
+          <li class="">
+            <a href="../classes/trigger.Trigger.html">trigger.Trigger</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Generate.html">ui.Generate</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Preview.html">ui.Preview</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Previewer.html">ui.Previewer</a>
+          </li>
+          <li class="">
+            <a href="../classes/ui.Shape.html">ui.Shape</a>
+          </li>
+          <li class="">
+            <a href="../classes/Utils.html">Utils</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+</div>
+
+
+</section>
+    <section class="main-main"><div class="class">
+  <section class="class-summary">
+      <header>
+        <code><span class="keyword">static</span> service.Log</code>
+      </header>
+      <div class="since">
+        since 0.2.0
+      </div>
+
+    <div class="content description">
+      <p>A service to log events and happenings in a game. Use this service to collect statistics about
+a game session.</p>
+<p>By default, the service records all triggers to every
+<a href="../classes/ability.Ability.html" class="crosslink">abilities</a> loaded. The format of a log entry is:
+<code>&lt;timestamp&gt;: &lt;category&gt; - &lt;value&gt;</code>. For abilities, <code>category</code> is the ability's name, and the
+<code>value</code> is the value of <code>pb-id</code> of the element the ability acts on.</p>
+<p>For every Protoboard component, region, and surface, you can customize the prefix of the id by
+specifying the <code>pb-id</code> attribute. When the element is activated, Protoboard will append a
+number to the attribute to make sure that they are unique. For instance:</p>
+<pre class="code prettyprint"><code class="language-html">&lt;pb-c-card pb-id="attack"&gt;&lt;/pb-c-card&gt;
+</code></pre>
+<p>will have its <code>pb-id</code> set to <code>attack-0</code>. So when the card is <code>flip</code>ped, this service will log
+<code>3/28/2015, 6:01:48 PM: flip - attack-0</code>.</p>
+<p>For entries not handled by Abilities, you can also add log entries manually. Use the
+<a href="../classes/service.Log.html#method_log" class="crosslink">log</a> method. For instance:</p>
+<pre class="code prettyprint"><code class="language-javascript">DI.run(['service.=', function(Log) {
+  Log.log('player-count', 2);
+}]);
+</code></pre>
+<p>will generate entry: <code>3/28/2015, 6:01:48 PM: player-count - 2</code>.</p>
+<p>You can also customize the string output using the
+<a href="../classes/service.Log.html#method_addProcessor" class="crosslink">addProcessor</a> method. For example:</p>
+<pre class="code prettyprint"><code class="language-javascript">DI.run(['service.=', function(Log) {
+  Log
+      .addProcessor(function(timestamp, category, value) {
+        if (category !== 'player-count') {
+          return timestamp.toLocaleString() + ': ' + category + ' on ' + value;
+        } else {
+          return null;
+        }
+      })
+     .addProcessor(Log.defaultProcessor)
+     .log('player-count', 2)
+     .log('rng-seed', 1234);
+}]);
+</code></pre>
+<p>A processor is a function that takes 3 arguments:</p>
+<ol>
+<li><code>timestamp</code> of type <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a>.</li>
+<li><code>category</code> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>.</li>
+<li><code>value</code>
+You can specify more than one processors. The processors will be called in the other that they
+are added to the service. The value that will be used for the log entry is the value returned
+by the first processor that returns a non empty string.</li>
+</ol>
+<p>So the example above will generate:</p>
+<pre class="code prettyprint"><code>3/28/2015, 6:21:47 PM: player-count on 2
+3/28/2015, 6:21:53 PM: rng-seed - 1234
+</code></pre>
+<p>The custom processor was used to generate the entry for <code>player-count</code>, while the default
+processor was used to generate the one for <code>rng-seed</code>.</p>
+<p>You can retrieve the entries using <a href="../classes/service.Log.html#property_blob" class="crosslink">blob</a> as
+a blob, or <a href="../classes/service.Log.html#property_entries" class="crosslink">entries</a> as a string.</p>
+
+    </div>
+
+  </section>
+
+
+    <section class="collapsible class-subsection">
+      <header>
+        <h2>Properties</h2>
+      </header>
+      <div>
+          <section class="props">
+            <header id="property_blob">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Blob.html" class="crosslink external" target="_blank">Blob</a> blob</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>The entries as a blob.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_defaultProcessor">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> defaultProcessor</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Default processor of the service. This processor is also used if no custom processors are
+          added.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_entries">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> entries</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>The entries as a string.</p>
+          </span>
+          
+            </div>
+          
+          </section>
+          
+      </div>
+    </section>
+
+    <section class="collapsible class-subsection">
+      <header>
+        <h2>Methods</h2>
+      </header>
+      <div>
+          <section class="method">
+            <header id="method_addProcessor">
+              <code class="method-signature">addProcessor(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> processor) => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Adds a processor to process a log entry.
+          A processor is a function that takes 3 arguments:</p>
+          <ol>
+          <li><code>timestamp</code> of type <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a>.</li>
+          <li><code>category</code> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>.</li>
+          <li><code>value</code>
+          You can specify more than one processors. The processors will be called in the other that
+          they are added to the service. The value that will be used for the log entry is the value
+          returned by the first processor that returns a non empty string.</li>
+          </ol>
+          </span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>processor</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The processor to add.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>processor</code></dt>
+                <dd><p>The processor to add.</p>
+          </dd>
+              </dl>
+          
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_clear">
+              <code class="method-signature">clear() => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Removes all entries that have been added to this service.</p>
+          </span>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_clearProcessors">
+              <code class="method-signature">clearProcessors() => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Removes all processors that have been added to this service.</p>
+          </span>
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_log">
+              <code class="method-signature">log(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> category, Any value) => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Adds an entry to the log.</p>
+          </span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>category</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The category of the entry. Use this to identify the type of the log.
+          For instance, "click", "flip".</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>value</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code>Any</code></p>
+                    </td>
+                    <td class="description">
+                      <p>The value of the category for the entry.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>category</code></dt>
+                <dd><p>The category of the entry. Use this to identify the type of the log.
+          For instance, "click", "flip".</p>
+          </dd>
+                <dt><code>Any</code> <code>value</code></dt>
+                <dd><p>The value of the category for the entry.</p>
+          </dd>
+              </dl>
+          
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+      </div>
+    </section>
+
+</div>
+
+
+
+</section>
+  </section>
+</body>
+  <script src="../assets/vendor/prettify/prettify-min.js"></script>
+  <script>prettyPrint();</script>
+  <script>
+
+    var isMobile = false;
+    var rootEl = isMobile ? document.querySelector('.main-main') : document;
+    var els = rootEl.querySelectorAll('section.collapsible');
+    for (var i = 0; i < els.length; i++) {
+      var section = els.item(i);
+      var content = section.querySelector('div');
+      var header = section.querySelector('header');
+      var height = content.clientHeight + 'px';
+      header.addEventListener('click', function(section, content, contentHeight) {
+        section.classList.toggle('collapsed');
+        content.style.height = section.classList.contains('collapsed') ? '0' : contentHeight;
+      }.bind(header, section, content, height));
+      content.style.height = height;
+    }
+
+    var selected = document.querySelector('.sidebar-selected');
+    if (selected) {
+      selected.scrollIntoView();
+    }
+
+    var sinceEl = document.querySelector('.main-header-section .since');
+    var headerEl = document.querySelector('.main-header');
+    var mainEl = document.querySelector('.main-main');
+    mainEl.addEventListener('scroll', function() {
+      if (mainEl.scrollTop <= 0) {
+        headerEl.classList.add('scroll-top');
+      } else {
+        headerEl.classList.remove('scroll-top');
+      }
+
+      var maxScroll = mainEl.scrollHeight - mainEl.clientHeight;
+      var ratio = Math.max(0, 1 - mainEl.scrollTop / maxScroll * 3);
+      sinceEl.style.height = ratio * 25 + 'px';
+
+      var padding = (10 + 10 * ratio) + 'px';
+      headerEl.style.paddingTop = padding;
+      headerEl.style.paddingBottom = padding;
+    });
+
+    document.querySelector('.main-menu-button').addEventListener('click', function() {
+      document.querySelector('section.main-sidebar').classList.toggle('expand');
+    });
+  </script>
+</html>

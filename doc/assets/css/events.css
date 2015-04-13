@@ -1,0 +1,12 @@
+.events {
+  padding: 20px;
+}
+
+.events:nth-child(2n) {
+  background-color: black;
+}
+
+.events > header {
+  margin: 0 0 20px;
+  font-size: 1rem;
+}
