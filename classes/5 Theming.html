@@ -417,14 +417,11 @@
 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables">CSS variables</a>. However,
 since CSS variables is not widely supported, Protoboard relies on <a href="http://www.myth.io/">Myth</a> to
 compile the variables.</p>
-<p>You will need the source code. After running <code>npm install</code> in the source directory's root, you
-can compile the CSS by running:</p>
+<p>You will need the source code. If you installed protoboard as a bower package, you will find all
+the files you need under <code>bower_components/protoboard</code>. Run <code>npm install</code> in the source
+directory's root, and you can compile the source code by running:</p>
 <pre class="code prettyprint"><code class="language-bash">gulp src
 </code></pre>
-<p>To compile the source code, or:</p>
-<pre class="code prettyprint"><code class="language-bash">gulp ex
-</code></pre>
-<p>To compile the source and example codes.</p>
 <p>The script reads from JSON files in the <code>./themes</code> directory. By default, they use the
 <code>./themes/slateblue.json</code> theme. To change the colour theme to "medium sea green", you can run:</p>
 <pre class="code prettyprint"><code class="language-bash">gulp ex --theme ./themes/mediumseagreen.json
@@ -432,7 +429,7 @@ can compile the CSS by running:</p>
 <p>Though Protoboard comes with several themes, you can make your own theme. Create a json file with
 two keys: <code>base</code> and <code>vars</code>:</p>
 <pre class="code prettyprint"><code class="language-json">{
-  "base": "./themes/base.json"
+  "base": "./bower_components/protoboard/themes/base.json"
   "vars": {
     "--color-lighter": "#CBC7E2",
     "--color-light": "#ABA5CF",
@@ -446,11 +443,13 @@ two keys: <code>base</code> and <code>vars</code>:</p>
 <code>./themes/base.json</code> for additional variables to override. This include transition time, shadow
 size, border size, etc.</p>
 <p>The <code>base</code> is a reference to another theme file. The path is relative to the location of the
-<code>gulpfile.js</code> and should always start with <code>.</code> or <code>..</code>. The base theme file will be used for
+JSON file and should always start with <code>.</code> or <code>..</code>. The base theme file will be used for
 variables that the framework uses but are not defined in your theme file. You can chain the
 dependencies for multiple levels, but it is recommended to always depend on <code>./themes/base.json</code>
 in the dependency chain, since new variables might be introduced, and might break your themes if
 you did not set it in your theme file.</p>
+<p>If you want to use the theme in your own CSS file, require the <code>loadtheme</code> in your Node JS. This
+is a function that accepts the file name of the theme JSON file.</p>
 
     </div>
 
