@@ -170,8 +170,8 @@ gulp.task('watch', ['compile'], function() {
   });
 });
 
-gulp.task('compile', ['src', 'test', 'ex']);
-gulp.task('pack', ['src', 'ex'], function() {
+gulp.task('compile', ['src', 'test']);
+gulp.task('pack', ['src', 'check'], function() {
   return gulp.src('out/**/*')
       .pipe(zip('bin.zip'))
       .pipe(gulp.dest('dist'));
