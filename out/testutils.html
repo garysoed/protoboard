@@ -16,6 +16,7 @@ DI.bind("pb.t", ["=", "pb.=", function (_, Utils) {
           return trigger;
         },
         init: _.spiedFunction(),
+        isEnabled: _.spiedFunction(),
         updateConfig: _.spiedFunction(),
         trigger: _.spiedFunction()
       };

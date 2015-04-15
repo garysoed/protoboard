@@ -88,7 +88,7 @@ DI
     /**
      * Displays the triggers for all abilities registered to this element.
      *
-     * @method doTrigger
+     * @method doTriggexr
      * @param {Element} el The element whose abilities should be displayed.
      */
     doTrigger(el) {
@@ -102,13 +102,26 @@ DI
       displayEl.appendChild(headerEl);
 
       for (let [name, ability] of abilities) {
-        let entry = doc.createElement('div');
-        entry.classList.add('entry');
-        entry.innerHTML = `<div class="trigger">${ability.getTrigger(el).helpText}</div>: ${name}`;
-        displayEl.appendChild(entry);
+        if (ability.isEnabled(el)) {
+          let entry = doc.createElement('div');
+          entry.classList.add('entry');
+          entry.innerHTML =
+              `<div class="trigger">${ability.getTrigger(el).helpText}</div>: ${name}`;
+          displayEl.appendChild(entry);
+        }
       }
 
       displayEl.style.display = '';
+    }
+
+    /**
+     * Helpable is always enabled.
+     *
+     * @method isEnabled
+     * @return {Boolean} True. Always
+     */
+    isEnabled() {
+      return true;
     }
   }
 

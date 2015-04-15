@@ -49,8 +49,6 @@
 
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
@@ -68,7 +66,6 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
   var __defaultEnabled__ = Symbol();
   var __defaultShowA__ = Symbol();
-  var __isEnabled__ = Symbol();
   var __isShowA__ = Symbol();
 
   var Rollable = (function (_Shuffleable) {
@@ -88,32 +85,26 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
     _inherits(Rollable, _Shuffleable);
 
-    _createComputedClass(Rollable, [{
-      key: __isEnabled__,
-      value: function (el) {
-        return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-      }
-    }, {
-      key: "init",
-      value: function init(el) {
-        _get(Object.getPrototypeOf(Rollable.prototype), "init", this).call(this, el);
-        if ($(el).attr(this.attrName) === undefined) {
-          $(el).attr(this.attrName, this[__defaultEnabled__]);
-        }
+    _createClass(Rollable, {
+      init: {
+        value: function init(el) {
+          _get(Object.getPrototypeOf(Rollable.prototype), "init", this).call(this, el);
+          if ($(el).attr(this.attrName) === undefined) {
+            $(el).attr(this.attrName, this[__defaultEnabled__]);
+          }
 
-        if ($(el).attr(ATTR_SHOW_A) === undefined) {
-          $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+          if ($(el).attr(ATTR_SHOW_A) === undefined) {
+            $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+          }
         }
-      }
-    }, {
-      key: "doTrigger",
-      value: function doTrigger(el) {
-        _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
-        if (this[__isEnabled__](el)) {
+      },
+      doTrigger: {
+        value: function doTrigger(el) {
+          _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
           $(el).attr(ATTR_SHOW_A, Chance.bool());
         }
       }
-    }]);
+    });
 
     return Rollable;
   })(Shuffleable);
@@ -135,31 +126,25 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
     _inherits(DiceFlippable, _Ability);
 
-    _createComputedClass(DiceFlippable, [{
-      key: __isEnabled__,
-      value: function (el) {
-        return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-      }
-    }, {
-      key: "init",
-      value: function init(el) {
-        _get(Object.getPrototypeOf(DiceFlippable.prototype), "init", this).call(this, el);
-        if ($(el).attr(this.attrName) === undefined) {
-          $(el).attr(this.attrName, this[__defaultEnabled__]);
-        }
+    _createClass(DiceFlippable, {
+      init: {
+        value: function init(el) {
+          _get(Object.getPrototypeOf(DiceFlippable.prototype), "init", this).call(this, el);
+          if ($(el).attr(this.attrName) === undefined) {
+            $(el).attr(this.attrName, this[__defaultEnabled__]);
+          }
 
-        if ($(el).attr(ATTR_SHOW_A) === undefined) {
-          $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+          if ($(el).attr(ATTR_SHOW_A) === undefined) {
+            $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+          }
         }
-      }
-    }, {
-      key: "doTrigger",
-      value: function doTrigger(el) {
-        if (this[__isEnabled__](el)) {
+      },
+      doTrigger: {
+        value: function doTrigger(el) {
           $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
         }
       }
-    }]);
+    });
 
     return DiceFlippable;
   })(Ability);

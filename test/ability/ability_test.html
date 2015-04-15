@@ -103,9 +103,24 @@
         _.spy(Log, 'log');
         let ability = new Ability(name, null);
         _.spy(ability, 'doTrigger').overrideReturn();
+        _.spy(ability, 'isEnabled').overrideReturn(true);
         ability.trigger(el);
 
         expect(Log.log).calledWith(name, id).at.least(1);
+        expect(ability.isEnabled).calledWith(el).at.least(1);
+        expect(ability.doTrigger).calledWith(el).at.least(1);
+      });
+
+      it('should not call doTrigger if not enabled', () => {
+        let el = doc.createElement('div');
+        let ability = new Ability(name, null);
+        _.spy(ability, 'doTrigger').overrideReturn();
+        _.spy(ability, 'isEnabled').overrideReturn(false);
+        ability.trigger(el);
+
+        expect(ability.isEnabled).calledWith(el).at.least(1);
+        expect(ability.doTrigger).called().to.equal(0);
+
       });
     });
 

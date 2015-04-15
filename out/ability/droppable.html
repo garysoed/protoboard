@@ -47,11 +47,9 @@ DI.prefix("pb").bind("ability.Droppable", ["ability.=", "=", "trigger.=", "servi
       },
       doTrigger: {
         value: function doTrigger(el) {
-          if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
-            var movedElement = Move.movedElements.values().next().value;
-            if (movedElement) {
-              el.appendChild(movedElement);
-            }
+          var movedElement = Move.movedElements.values().next().value;
+          if (movedElement) {
+            el.appendChild(movedElement);
           }
         }
       }

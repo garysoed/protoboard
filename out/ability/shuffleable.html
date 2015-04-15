@@ -49,24 +49,22 @@ DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "/=", "=", "trig
       },
       doTrigger: {
         value: function doTrigger(el) {
-          if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
-            var shuffled = Chance.shuffle(Utils.toArray(el.children));
-            shuffled.forEach(function (shuffledEl) {
-              el.appendChild(shuffledEl);
+          var shuffled = Chance.shuffle(Utils.toArray(el.children));
+          shuffled.forEach(function (shuffledEl) {
+            el.appendChild(shuffledEl);
 
-              if (shuffledEl.classList.contains("pb-shuffleable-animate")) {
-                shuffledEl.classList.remove("pb-shuffleable-animate");
-              }
-              shuffledEl.classList.add("pb-shuffleable-animate");
-            });
+            if (shuffledEl.classList.contains("pb-shuffleable-animate")) {
+              shuffledEl.classList.remove("pb-shuffleable-animate");
+            }
+            shuffledEl.classList.add("pb-shuffleable-animate");
+          });
 
-            $(el).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
-              el.classList.remove("animated");
-              el.classList.remove("wobble");
-            });
-            el.classList.add("animated");
-            el.classList.add("wobble");
-          }
+          $(el).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
+            el.classList.remove("animated");
+            el.classList.remove("wobble");
+          });
+          el.classList.add("animated");
+          el.classList.add("wobble");
         }
       }
     });

@@ -13,6 +13,7 @@ DI.bind('pb.t', ['=', 'pb.=', (_, Utils) => {
         attrTrigger: `attr${name}Trigger`,
         getTrigger: () => trigger,
         init: _.spiedFunction(),
+        isEnabled: _.spiedFunction(),
         updateConfig: _.spiedFunction(),
         trigger: _.spiedFunction()
       };

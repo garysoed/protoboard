@@ -39,6 +39,9 @@
       it('should add the abilities as child of the display element and show the element', () => {
         let ability1 = t.createFakeAbility('ability', new Click());
         let ability2 = t.createFakeAbility('ability2', new Key('a'));
+        ability1.isEnabled.overrideReturn(true);
+        ability2.isEnabled.overrideReturn(true);
+
         let helpable = new Helpable();
         let el = doc.createElement('div');
         Abilities.of(el)
@@ -56,6 +59,23 @@
         expect(children.item(2).innerText).to.be.equal(`Click: ${ability1.attrName}`);
         expect(children.item(3).innerText).to.be.equal(`a: ${ability2.attrName}`);
       });
+
+      it('should not add disabled abilities', () => {
+        let ability = t.createFakeAbility('disabled', new Click());
+        let helpable = new Helpable();
+        let el = doc.createElement('div');
+        Abilities.of(el)
+            .add(helpable)
+            .add(ability);
+        Abilities.init(el);
+
+        helpable.trigger(el);
+        let children = displayEl.children;
+        expect(children.length).to.be.equal(2);
+
+        expect(children.item(0).innerText).to.be.equal(el.nodeName);
+        expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);;
+      })
     });
 
     afterEach(done => {

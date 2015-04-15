@@ -58,27 +58,25 @@ DI
      * @param {Element} el Element whose children should be shuffled.
      */
     doTrigger(el) {
-      if (Check($(el).attr(this.attrName)).isBoolean().orUse(false)) {
-        let shuffled = Chance.shuffle(Utils.toArray(el.children));
-        shuffled.forEach(shuffledEl => {
-          el.appendChild(shuffledEl);
+      let shuffled = Chance.shuffle(Utils.toArray(el.children));
+      shuffled.forEach(shuffledEl => {
+        el.appendChild(shuffledEl);
 
-          if (shuffledEl.classList.contains('pb-shuffleable-animate')) {
-            shuffledEl.classList.remove('pb-shuffleable-animate');
-          }
-          shuffledEl.classList.add('pb-shuffleable-animate');
-        });
+        if (shuffledEl.classList.contains('pb-shuffleable-animate')) {
+          shuffledEl.classList.remove('pb-shuffleable-animate');
+        }
+        shuffledEl.classList.add('pb-shuffleable-animate');
+      });
 
-        // Animate the deck
-        $(el).one(
-            'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
-            () => {
-              el.classList.remove('animated');
-              el.classList.remove('wobble');
-            });
-        el.classList.add('animated');
-        el.classList.add('wobble');
-      }
+      // Animate the deck
+      $(el).one(
+          'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+          () => {
+            el.classList.remove('animated');
+            el.classList.remove('wobble');
+          });
+      el.classList.add('animated');
+      el.classList.add('wobble');
     }
   }
 

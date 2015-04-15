@@ -90,6 +90,7 @@
           _.spy(Chance, 'pick').overrideReturn(selectedChild);
           _.spy(Move, 'add');
 
+          pickable.init(el);
           pickable.trigger(el);
 
           let childrenCaptor = _M.isA(Array);
@@ -108,6 +109,7 @@
           el.appendChild(placeHolderEl);
 
           let pickable = new RandomPickable();
+          pickable.init(el);
           pickable.trigger(el);
           expect(Move.add).called().to.equal(0);
         });

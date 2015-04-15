@@ -44,9 +44,7 @@ DI.prefix("pb").bind("ability.Pickable", ["ability.=", "=", "trigger.=", "servic
       },
       doTrigger: {
         value: function doTrigger(el) {
-          if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
-            Move.add(el);
-          }
+          Move.add(el);
         }
       }
     });

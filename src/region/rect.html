@@ -121,18 +121,16 @@ DI
      * @param {Element} el The element to drop the dragged element into.
      */
     doTrigger(el) {
-      if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
-        let movedElement = Move.movedElements.values().next().value;
+      let movedElement = Move.movedElements.values().next().value;
 
-        if (movedElement) {
-          el.appendChild(movedElement);
+      if (movedElement) {
+        el.appendChild(movedElement);
 
-          let rect = movedElement.getBoundingClientRect();
-          let dLeft = Move.mouseX - rect.left - rect.width / 2;
-          let dTop = Move.mouseY - rect.top - rect.height / 2;
-          movedElement.style.left = `${movedElement.offsetLeft + dLeft}px`;
-          movedElement.style.top = `${movedElement.offsetTop + dTop}px`;
-        }
+        let rect = movedElement.getBoundingClientRect();
+        let dLeft = Move.mouseX - rect.left - rect.width / 2;
+        let dTop = Move.mouseY - rect.top - rect.height / 2;
+        movedElement.style.left = `${movedElement.offsetLeft + dLeft}px`;
+        movedElement.style.top = `${movedElement.offsetTop + dTop}px`;
       }
     }
   }

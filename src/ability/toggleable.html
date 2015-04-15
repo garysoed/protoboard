@@ -94,9 +94,7 @@ DI
      * @param {Element} el Element that should be toggled.
      */
     doTrigger(el) {
-      if (this[__isEnabled__](el)) {
-        $(el).attr(this.attrActive, !this[__isActive__](el));
-      }
+      $(el).attr(this.attrActive, !this[__isActive__](el));
     }
 
     /**

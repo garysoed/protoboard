@@ -1,5 +1,6 @@
 <html><head><base href="..">
 
+<link rel="import" href="check.html">
 <link rel="import" href="service/log.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
@@ -12,7 +13,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Ability", ["/=", "service.=", "trigger.=", function ($, Log, Triggers) {
+DI.prefix("pb").bind("ability.Ability", ["/=", "=", "service.=", "trigger.=", function ($, Check, Log, Triggers) {
   var __name__ = Symbol();
   var __defaultTrigger__ = Symbol("defaultTrigger");
   var __triggerMap__ = Symbol("triggerMap");
@@ -55,7 +56,9 @@ DI.prefix("pb").bind("ability.Ability", ["/=", "service.=", "trigger.=", functio
       trigger: {
         value: function trigger(el) {
           Log.log(this.attrName, $(el).attr("pb-id"));
-          this.doTrigger(el);
+          if (this.isEnabled(el)) {
+            this.doTrigger(el);
+          }
         }
       },
       doTrigger: {
@@ -66,6 +69,11 @@ DI.prefix("pb").bind("ability.Ability", ["/=", "service.=", "trigger.=", functio
       getTrigger: {
         value: function getTrigger(el) {
           return el[__triggerMap__] ? el[__triggerMap__].get(this) : null;
+        }
+      },
+      isEnabled: {
+        value: function isEnabled(el) {
+          return Check($(el).attr(this.attrName)).isBoolean().orUse(false);
         }
       },
       attrName: {

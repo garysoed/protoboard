@@ -101,22 +101,20 @@ DI
      * @param {Element} el The element to drop the picked element into.
      */
     doTrigger(el) {
-      if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
-        let movedElement = Move.movedElements.values().next().value;
-        if (movedElement) {
-          // Go through every children and find the index that the element should be.
-          let dropped = false;
-          for (let child of Utils.toArray(el.children)) {
-            let rect = child.getBoundingClientRect();
-            if (!dropped && rect.left + rect.width / 2 > Move.mouseX) {
-              dropped = true;
-              el.insertBefore(movedElement, child);
-            }
+      let movedElement = Move.movedElements.values().next().value;
+      if (movedElement) {
+        // Go through every children and find the index that the element should be.
+        let dropped = false;
+        for (let child of Utils.toArray(el.children)) {
+          let rect = child.getBoundingClientRect();
+          if (!dropped && rect.left + rect.width / 2 > Move.mouseX) {
+            dropped = true;
+            el.insertBefore(movedElement, child);
           }
+        }
 
-          if (!dropped) {
-            el.appendChild(movedElement);
-          }
+        if (!dropped) {
+          el.appendChild(movedElement);
         }
       }
     }

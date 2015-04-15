@@ -118,10 +118,12 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
               var _name = _step$value[0];
               var ability = _step$value[1];
 
-              var entry = doc.createElement("div");
-              entry.classList.add("entry");
-              entry.innerHTML = "<div class=\"trigger\">" + ability.getTrigger(el).helpText + "</div>: " + _name;
-              displayEl.appendChild(entry);
+              if (ability.isEnabled(el)) {
+                var entry = doc.createElement("div");
+                entry.classList.add("entry");
+                entry.innerHTML = "<div class=\"trigger\">" + ability.getTrigger(el).helpText + "</div>: " + _name;
+                displayEl.appendChild(entry);
+              }
             }
           } catch (err) {
             _didIteratorError = true;
@@ -139,6 +141,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
           }
 
           displayEl.style.display = "";
+        }
+      },
+      isEnabled: {
+        value: function isEnabled() {
+          return true;
         }
       }
     });

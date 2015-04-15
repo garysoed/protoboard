@@ -100,7 +100,6 @@ DI
   // Private symbols.
   const __defaultEnabled__ = Symbol();
   const __defaultShowA__ = Symbol();
-  const __isEnabled__ = Symbol();
   const __isShowA__ = Symbol();
 
   class Rollable extends Shuffleable {
@@ -130,16 +129,6 @@ DI
     }
 
     /**
-     * @method __isEnabled__
-     * @param {Element} el Element to check.
-     * @return {boolean} True iff the ability is enabled for the given element.
-     * @private
-     */
-    [__isEnabled__](el) {
-      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-    }
-
-    /**
      * Sets the default configuration for this ability on the given element.
      *
      * @method init
@@ -164,9 +153,7 @@ DI
      */
     doTrigger(el) {
       super.doTrigger(el);
-      if (this[__isEnabled__](el)) {
-        $(el).attr(ATTR_SHOW_A, Chance.bool());
-      }
+      $(el).attr(ATTR_SHOW_A, Chance.bool());
     }
   }
 
@@ -197,16 +184,6 @@ DI
     }
 
     /**
-     * @method __isEnabled__
-     * @param {Element} el Element to check.
-     * @return {boolean} True iff the ability is enabled for the given element.
-     * @private
-     */
-    [__isEnabled__](el) {
-      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
-    }
-
-    /**
      * Sets the default configuration for this ability on the given element.
      *
      * @method init
@@ -230,9 +207,7 @@ DI
      * @param {Element} el The dice to flip.
      */
     doTrigger(el) {
-      if (this[__isEnabled__](el)) {
-        $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
-      }
+      $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
     }
   }
 

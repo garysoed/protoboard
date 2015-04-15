@@ -1,5 +1,6 @@
 <base href="..">
 
+<link rel="import" href="check.html">
 <link rel="import" href="service/log.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
@@ -9,7 +10,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('ability.Ability', ['/=', 'service.=', 'trigger.=', ($, Log, Triggers) => {
+    .bind('ability.Ability', ['/=', '=', 'service.=', 'trigger.=', ($, Check, Log, Triggers) => {
 
   // Private symbols.
   const __name__ = Symbol();
@@ -81,7 +82,9 @@ DI
      */
     trigger(el) {
       Log.log(this.attrName, $(el).attr('pb-id'));
-      this.doTrigger(el);
+      if (this.isEnabled(el)) {
+        this.doTrigger(el);
+      }
     }
 
     /**
@@ -105,6 +108,15 @@ DI
      */
     getTrigger(el) {
       return el[__triggerMap__] ? el[__triggerMap__].get(this) : null;
+    }
+
+    /**
+     * @method isEnabled
+     * @param {Element} el The element to check if the ability is enabled on it.
+     * @return {Boolean} True iff the ability is enabled on the given element.
+     */
+    isEnabled(el) {
+      return Check($(el).attr(this.attrName)).isBoolean().orUse(false);
     }
 
     /**

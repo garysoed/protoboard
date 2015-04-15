@@ -54,9 +54,7 @@ DI
      * @param {Element} el Element to be picked up.
      */
     doTrigger(el) {
-      if (Check($(el).attr(this.attrName)).isBoolean().orThrows()) {
-        Move.add(el);
-      }
+      Move.add(el);
     }
   }
 
