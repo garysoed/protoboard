@@ -74,8 +74,8 @@
         expect(children.length).to.be.equal(2);
 
         expect(children.item(0).innerText).to.be.equal(el.nodeName);
-        expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);;
-      })
+        expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);
+      });
     });
 
     afterEach(done => {
