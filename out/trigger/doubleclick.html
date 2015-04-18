@@ -1,6 +1,5 @@
 <html><head><base href="..">
 
-<link rel="import" href="hammerwrapper.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/trigger.html">
 
@@ -12,7 +11,7 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("trigger.DoubleClick", ["=", "=", "trigger.=", function (Events, HammerWrapper, Trigger) {
+DI.prefix("pb").bind("trigger.DoubleClick", ["=", "trigger.=", function (Events, Trigger) {
   var DoubleClick = (function (_Trigger) {
     function DoubleClick() {
       _classCallCheck(this, DoubleClick);

@@ -1,13 +1,12 @@
 <base href="..">
 
-<link rel="import" href="hammerwrapper.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/trigger.html">
 
 <script>
 DI
     .prefix('pb')
-    .bind('trigger.DoubleClick', ['=', '=', 'trigger.=', (Events, HammerWrapper, Trigger) => {
+    .bind('trigger.DoubleClick', ['=', 'trigger.=', (Events, Trigger) => {
 
   /**
    * Triggers an ability when the element is double clicked.

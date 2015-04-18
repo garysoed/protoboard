@@ -1,4 +1,46 @@
 <html><head><base href="..">
 
 <script src="third_party/hammerjs/hammer.js">"use strict";</script>
+
+<script>"use strict";
+
+var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
+
+DI.prefix("pb").bind("Hammer", ["=", function (Utils) {
+  var __hammer__ = Symbol();
+  var __getHammer__ = Symbol();
+
+  var Wrapper = (function () {
+    var _Wrapper = {};
+
+    _defineProperty(_Wrapper, __getHammer__, function (el) {
+      if (!el[__hammer__]) {
+        if (!el.ownerDocument.parentWindow) {
+          el.ownerDocument.parentWindow = window;
+        }
+
+        var hammer = new Hammer.Manager(el);
+        hammer.add(new Hammer.Tap({ event: "doubletap", taps: 2, interval: 250 }));
+        hammer.add(new Hammer.Tap({ event: "singletap", taps: 1, interval: 250 }));
+
+        hammer.get("doubletap").recognizeWith("singletap");
+        hammer.get("singletap").requireFailure("doubletap");
+        el[__hammer__] = hammer;
+      }
+      return el[__hammer__];
+    });
+
+    _defineProperty(_Wrapper, "on", function on(el, gestureType, handler) {
+      this[__getHammer__](el).on(gestureType, handler);
+    });
+
+    _defineProperty(_Wrapper, "off", function off(el, gestureType, handler) {
+      this[__getHammer__](el).off(gestureType, handler);
+    });
+
+    return _Wrapper;
+  })();
+
+  return Wrapper;
+}]);</script>
 </head><body></body></html>

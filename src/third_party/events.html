@@ -3,11 +3,12 @@
 <script src="third_party/listener/out/bin.min.js"></script>
 
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/hammer.html">
 
 <script>
 DI
     .prefix('pb')
-    .bind('Events', [() => {
+    .bind('Events', ['=', Hammer => {
 
   let Handlers = window['Events']['Handlers'];
   Handlers
@@ -26,6 +27,14 @@ DI
           },
           (element, eventName, handler) => {
             $(element).off(eventName, handler);
+          })
+      .add(
+          'hammer',
+          (element, eventName, handler) => {
+            Hammer.on(element, eventName, handler);
+          },
+          (element, eventName, handler) => {
+            Hammer.off(element, eventName, handler);
           });
   return window['Events'];
 }]);
