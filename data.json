@@ -2,7 +2,7 @@
     "project": {
         "name": "Protoboard",
         "description": "Check out the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
-        "version": "0.2.0",
+        "version": "0.2.2",
         "url": "https://github.com/garysoed/protoboard",
         "colorBackground": "white",
         "colorForeground": "black",
@@ -249,6 +249,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/third_party/hammer.html": {
+            "name": "src/third_party/hammer.html",
+            "modules": {},
+            "classes": {
+                "Hammer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/trigger/click.html": {
             "name": "src/trigger/click.html",
             "modules": {},
@@ -327,15 +336,6 @@
             "modules": {},
             "classes": {
                 "Check": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/hammerwrapper.html": {
-            "name": "src/hammerwrapper.html",
-            "modules": {},
-            "classes": {
-                "HammerWrapper": 1
             },
             "fors": {},
             "namespaces": {}
@@ -458,6 +458,7 @@
                 "surface.HexGrid": 1,
                 "surface.RectGrid": 1,
                 "surface.TriangleGrid": 1,
+                "Hammer": 1,
                 "trigger.Click": 1,
                 "trigger.DoubleClick": 1,
                 "trigger.Key": 1,
@@ -468,7 +469,6 @@
                 "ui.Previewer": 1,
                 "ui.Shape": 1,
                 "Check": 1,
-                "HammerWrapper": 1,
                 "PbElement": 1,
                 "Utils": 1
             },
@@ -544,7 +544,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/ability.html",
-            "line": 27,
+            "line": 28,
             "description": "Base class for all abilities. Any abilities must extend this class and implement the methods\nin this class.",
             "is_constructor": 1,
             "params": [
@@ -763,7 +763,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/card.html",
-            "line": 115,
+            "line": 116,
             "description": "A representation of a card. To use this, create a `pb-c-card` element with two child elements:\n- One must have a `pb-front` class. This is the front face of the card.\n- One must have a `pb-back` class. This is the back face of the card.\n\nBy default, the card starts by showing its back. If you want to make it start by showing the\nfront face, add `flippable-active=\"true\"` to the `pb-c-card`.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pick{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}flip{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}tap{{/crossLink}}\n\n```html\n<!-- Example: Create a card that starts by displaying its front side -->\n<pb-c-card flippable-active=\"true\">\n  <div class=\"pb-front\">Front side</div>\n  <div class=\"pb-back\">Back side</div>\n</pb-c-card>\n```",
             "extends": "component.Component"
         },
@@ -791,7 +791,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/dice.html",
-            "line": 108,
+            "line": 107,
             "description": "Elements with this ability can shuffle their children. This is very specific to dice and\nshould not be used for other elements.",
             "since": "0.2.0",
             "is_constructor": 1,
@@ -837,7 +837,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/dice.html",
-            "line": 175,
+            "line": 162,
             "description": "Dice with this ability can be flipped to the opposite side. This is very specific to dice and\nshould not be used for other elements.",
             "since": "0.2.0",
             "is_constructor": 1,
@@ -883,7 +883,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/dice.html",
-            "line": 239,
+            "line": 214,
             "description": "A representation of a dice. This element has three levels of customizations.\n\nThe most basic level of customization is to use premade dice. To use this, set the type\nattribute to a supported dice type. For example:\n```html\n<!-- Creates a d2, or a coin -->\n<pb-c-dice type=\"d2\"></pb-c-dice>\n\n<!-- Creates a d20 -->\n<pb-c-dice type=\"d20\"></pb-c-dice>\n```\nCustom types supported are: `d2`, `d4`, `d6`, `d8`, `d10`, `d12`, `d20`.\n\nIn the next level of customization, you can define all the dice faces by creating children for\neach face of the dice. For example, to make the dice used in\n[Mage Wars](https://www.boardgamegeek.com/boardgame/101721/mage-wars), do:\n```html\n<pb-c-dice>\n  <div>&nbsp;</div>\n  <div>1</div>\n  <div>2</div>\n  <div>&nbsp;</div>\n  <div>1!</div>\n  <div>2!</div>\n</pb-c-dice>\n```\n\nFor games that involve flipping dice to the opposite side, like\n[Flash Point: Fire Rescue](http://boardgamegeek.com/boardgame/100901/flash-point-fire-rescue),\nfurther customization is needed. The children in the previous example needs to be paired with a\nparent element with attribute `pb-dice-pair`. For example, to make a normal d6:\n```html\n<pb-c-dice>\n  <div pb-dice-pair>\n    <div>1</div>\n    <div>6</div>\n  </div>\n  <div pb-dice-pair>\n    <div>2</div>\n    <div>5</div>\n  </div>\n  <div pb-dice-pair>\n    <div>3</div>\n    <div>4</div>\n  </div>\n</pb-c-dice>\n```\nIf you do not explicitly specify the pairing, the dice will pair them for you automatically.\nThe first child will be paired with the last child, second child paired with second last, etc.\n\nNote that dice must have an even number of faces.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pick{{/crossLink}}\n- {{#crossLink \"component.Dice.Rollable\"}}roll{{/crossLink}}: This is similar to\n  {{#crossLink ability.Shuffleable}}{{/crossLink}}, except it is customized to handle the face\n  pairings.\n- {{#crossLink \"component.Dice.DiceFlippable\"}}flip{{/crossLink}}: Flips the dice to the other\n  side.",
             "since": "0.2.0",
             "extends": "component.Component"
@@ -912,7 +912,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/bag.html",
-            "line": 100,
+            "line": 101,
             "description": "Element with this ability has content that can be picked and dragged around. When triggered,\na random child of the element will be picked. The child element can be dropped on elements\nwith {{#crossLink \"ability.Droppable\"}}{{/crossLink}} ability.",
             "is_constructor": 1,
             "params": [
@@ -950,7 +950,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/bag.html",
-            "line": 131,
+            "line": 132,
             "description": "A collection of components. You cannot see the component until you drag one out of it.\n\nTo make a bag, create a `pb-r-bag` element. You can override the content of the placeholder by\ncreating a child element with a `pb-placeholder-content` attribute. This element will be used for\nthe placeholder content.\n\n```html\n<!-- Example: Create a bag with a place holder token displaying \"SECRET!!\" -->\n<pb-r-bag>\n  <div pb-placeholder-content>SECRET!!</div>\n</pb-r-bag>\n```\n\nSupported abilitie:\n- {{#crossLink \"region.Bag.RandomPickable\"}}pickable{{/crossLink}}\n- {{#crossLink \"ability.Droppable\"}}droppable{{/crossLink}}",
             "extends": "region.Region"
         },
@@ -1016,7 +1016,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/hand.html",
-            "line": 125,
+            "line": 123,
             "description": "Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children\nare considered to be in the hand. A hand allows the user to reorder the child elements,\ndepending on where a child element is dropped.\n\n```html\n<!-- Hand with two tokens -->\n<pb-r-deck>\n  <pb-c-token id=\"token1\">\n    <div>Token 1</div>\n  </pb-c-token>\n  <pb-c-token id=\"token2\">\n    <div>Token 2</div>\n  </pb-c-token>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"region.Hand.ReorderableDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
         },
@@ -1068,7 +1068,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/rect.html",
-            "line": 140,
+            "line": 138,
             "description": "An arbitrary rectangular region. You can position elements anywhere in this region.\n\nSupported abilities:\n- {{#crossLink \"region.Rect.FlexDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
         },
@@ -1218,6 +1218,20 @@
             "since": "0.2.0",
             "extends": "surface.Grid"
         },
+        "Hammer": {
+            "name": "Hammer",
+            "shortname": "Hammer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/third_party/hammer.html",
+            "line": 10,
+            "description": "Wrapper around [HammerJS](http://hammerjs.github.io/).",
+            "static": 1
+        },
         "trigger.Click": {
             "name": "trigger.Click",
             "shortname": "trigger.Click",
@@ -1228,7 +1242,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/click.html",
-            "line": 13,
+            "line": 12,
             "description": "Triggers an ability when the element is clicked.",
             "extends": "trigger.Trigger"
         },
@@ -1242,7 +1256,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/doubleclick.html",
-            "line": 12,
+            "line": 11,
             "description": "Triggers an ability when the element is double clicked.",
             "extends": "trigger.Trigger"
         },
@@ -1385,20 +1399,6 @@
                     "type": "Array"
                 }
             ]
-        },
-        "HammerWrapper": {
-            "name": "HammerWrapper",
-            "shortname": "HammerWrapper",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/hammerwrapper.html",
-            "line": 11,
-            "description": "Wrapper around [HammerJS](http://hammerjs.github.io/).",
-            "static": 1
         },
         "PbElement": {
             "name": "PbElement",
@@ -1605,7 +1605,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 39,
+            "line": 40,
             "description": "Initializes the ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1620,7 +1620,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 53,
+            "line": 54,
             "description": "Updates the inner state of the ability based on changes to the element.",
             "itemtype": "method",
             "name": "updateConfig",
@@ -1635,7 +1635,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 76,
+            "line": 77,
             "description": "Triggers the effect of the ability on the given element.",
             "itemtype": "method",
             "name": "trigger",
@@ -1650,7 +1650,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 87,
+            "line": 90,
             "description": "Actually triggers the effect of the ability on the given element. All abilities must extend\nthis method.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -1665,7 +1665,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 98,
+            "line": 101,
             "description": "Returns the trigger for this ability on this element.",
             "itemtype": "method",
             "name": "getTrigger",
@@ -1684,7 +1684,25 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 110,
+            "line": 113,
+            "itemtype": "method",
+            "name": "isEnabled",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to check if the ability is enabled on it.",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "True iff the ability is enabled on the given element.",
+                "type": "Boolean"
+            },
+            "class": "ability.Ability"
+        },
+        {
+            "file": "src/ability/ability.html",
+            "line": 122,
             "description": "Name of the ability. This is also the name of the attribute on the element corresponding to\nthis ability.",
             "itemtype": "property",
             "name": "attrName",
@@ -1694,7 +1712,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 122,
+            "line": 134,
             "description": "The name of the attribute on the element corresponding to this ability that sets the trigger\nfor this ability. This is the name of the ability with a `-on` postfix.",
             "itemtype": "property",
             "name": "attrTrigger",
@@ -1737,7 +1755,7 @@
             "line": 88,
             "description": "Displays the triggers for all abilities registered to this element.",
             "itemtype": "method",
-            "name": "doTrigger",
+            "name": "doTriggexr",
             "params": [
                 {
                     "name": "el",
@@ -1745,6 +1763,18 @@
                     "type": "Element"
                 }
             ],
+            "class": "ability.Helpable"
+        },
+        {
+            "file": "src/ability/helpable.html",
+            "line": 117,
+            "description": "Helpable is always enabled.",
+            "itemtype": "method",
+            "name": "isEnabled",
+            "return": {
+                "description": "True. Always",
+                "type": "Boolean"
+            },
             "class": "ability.Helpable"
         },
         {
@@ -1879,7 +1909,7 @@
         },
         {
             "file": "src/ability/toggleable.html",
-            "line": 102,
+            "line": 100,
             "description": "The name of the attribute on the element corresponding to this ability that indicates that\nthe element is in active state. This is the name of the ability with a `-active` postfix.",
             "itemtype": "property",
             "name": "attrActive",
@@ -1889,7 +1919,7 @@
         },
         {
             "file": "src/component/card.html",
-            "line": 140,
+            "line": 141,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -1897,27 +1927,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 132,
-            "itemtype": "method",
-            "name": "__isEnabled__",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "Element to check.",
-                    "type": "Element"
-                }
-            ],
-            "return": {
-                "description": "True iff the ability is enabled for the given element.",
-                "type": "Boolean"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "component.Dice.Rollable"
-        },
-        {
-            "file": "src/component/dice.html",
-            "line": 142,
+            "line": 131,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1932,7 +1942,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 159,
+            "line": 148,
             "description": "Shuffles the children and randomly selects the side to show.",
             "itemtype": "method",
             "name": "trigger",
@@ -1947,27 +1957,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 199,
-            "itemtype": "method",
-            "name": "__isEnabled__",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "Element to check.",
-                    "type": "Element"
-                }
-            ],
-            "return": {
-                "description": "True iff the ability is enabled for the given element.",
-                "type": "Boolean"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "component.Dice.DiceFlippable"
-        },
-        {
-            "file": "src/component/dice.html",
-            "line": 209,
+            "line": 186,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1982,7 +1972,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 226,
+            "line": 203,
             "description": "Flips the dice to the opposite side.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -1997,7 +1987,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 306,
+            "line": 281,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2013,7 +2003,7 @@
         },
         {
             "file": "src/region/bag.html",
-            "line": 116,
+            "line": 117,
             "description": "Picks up a random child element of the given element.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -2028,7 +2018,7 @@
         },
         {
             "file": "src/region/bag.html",
-            "line": 155,
+            "line": 156,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2059,7 +2049,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 150,
+            "line": 148,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2067,7 +2057,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 163,
+            "line": 161,
             "description": "Called when the element is attached to the document.",
             "itemtype": "method",
             "name": "attachedCallback",
@@ -2075,7 +2065,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 172,
+            "line": 170,
             "description": "Called when the element is detached from the document.",
             "itemtype": "method",
             "name": "detachedCallback",
@@ -2130,7 +2120,7 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 151,
+            "line": 149,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2659,8 +2649,79 @@
             "class": "surface.TriangleGrid"
         },
         {
+            "file": "src/third_party/hammer.html",
+            "line": 23,
+            "description": "Creates a new Hammer object, or return a cached one if one already exists.",
+            "itemtype": "method",
+            "name": "__getHammer__",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element associated with the Hammer JS object.",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "The Hammer JS object.",
+                "type": "Hammer"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Hammer"
+        },
+        {
+            "file": "src/third_party/hammer.html",
+            "line": 50,
+            "description": "Registers the given gesture to the given element and handler.",
+            "itemtype": "method",
+            "name": "on",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to register.",
+                    "type": "Element"
+                },
+                {
+                    "name": "gestureType",
+                    "description": "The type of Hammer JS gesture to register.",
+                    "type": "String"
+                },
+                {
+                    "name": "handler",
+                    "description": "The handler function to register.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Hammer"
+        },
+        {
+            "file": "src/third_party/hammer.html",
+            "line": 62,
+            "description": "Unregisters the given gesture from the given element and handler.",
+            "itemtype": "method",
+            "name": "off",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "Element to unregister from.",
+                    "type": "Element"
+                },
+                {
+                    "name": "gestureType",
+                    "description": "Type of Hammer JS gesture to register.",
+                    "type": "String"
+                },
+                {
+                    "name": "handler",
+                    "description": "The handler function to unregister.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Hammer"
+        },
+        {
             "file": "src/trigger/click.html",
-            "line": 21,
+            "line": 20,
             "description": "Registers the given element to trigger the given ability when clicked.",
             "itemtype": "method",
             "name": "on",
@@ -2680,7 +2741,7 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 33,
+            "line": 32,
             "description": "Unregisters the given element from triggering the registered ability when clicked.",
             "itemtype": "method",
             "name": "off",
@@ -2695,7 +2756,7 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 43,
+            "line": 42,
             "itemtype": "method",
             "name": "toString",
             "return": {
@@ -2706,7 +2767,7 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 51,
+            "line": 50,
             "description": "The help text to be displayed by {{#crossLink \"ability.Helpable\"}}{{/crossLink}}.",
             "itemtype": "property",
             "name": "helpText",
@@ -2716,7 +2777,7 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 63,
+            "line": 62,
             "description": "Parses the input string",
             "itemtype": "method",
             "name": "parse",
@@ -2736,7 +2797,7 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 20,
+            "line": 19,
             "description": "Registers the given element to trigger the given ability when double clicked.",
             "itemtype": "method",
             "name": "on",
@@ -2756,7 +2817,7 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 32,
+            "line": 31,
             "description": "Unregisters the given element from triggering the registered ability when double clicked.",
             "itemtype": "method",
             "name": "off",
@@ -2771,7 +2832,7 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 42,
+            "line": 41,
             "itemtype": "method",
             "name": "toString",
             "return": {
@@ -2782,7 +2843,7 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 50,
+            "line": 49,
             "description": "The help text to be displayed by {{#crossLink \"ability.Helpable\"}}{{/crossLink}}.",
             "itemtype": "property",
             "name": "helpText",
@@ -2792,7 +2853,7 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 62,
+            "line": 61,
             "description": "Parses the input string",
             "itemtype": "method",
             "name": "parse",
@@ -3265,77 +3326,6 @@
                 "type": "Any"
             },
             "class": "Check"
-        },
-        {
-            "file": "src/hammerwrapper.html",
-            "line": 24,
-            "description": "Creates a new Hammer object, or return a cached one if one already exists.",
-            "itemtype": "method",
-            "name": "__getHammer__",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element associated with the Hammer JS object.",
-                    "type": "Element"
-                }
-            ],
-            "return": {
-                "description": "The Hammer JS object.",
-                "type": "Hammer"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "HammerWrapper"
-        },
-        {
-            "file": "src/hammerwrapper.html",
-            "line": 51,
-            "description": "Registers the given gesture to the given element and handler.",
-            "itemtype": "method",
-            "name": "on",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element to register.",
-                    "type": "Element"
-                },
-                {
-                    "name": "gestureType",
-                    "description": "The type of Hammer JS gesture to register.",
-                    "type": "String"
-                },
-                {
-                    "name": "handler",
-                    "description": "The handler function to register.",
-                    "type": "Function"
-                }
-            ],
-            "class": "HammerWrapper"
-        },
-        {
-            "file": "src/hammerwrapper.html",
-            "line": 63,
-            "description": "Unregisters the given gesture from the given element and handler.",
-            "itemtype": "method",
-            "name": "off",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "Element to unregister from.",
-                    "type": "Element"
-                },
-                {
-                    "name": "gestureType",
-                    "description": "Type of Hammer JS gesture to register.",
-                    "type": "String"
-                },
-                {
-                    "name": "handler",
-                    "description": "The handler function to unregister.",
-                    "type": "Function"
-                }
-            ],
-            "class": "HammerWrapper"
         },
         {
             "file": "src/pbelement.html",

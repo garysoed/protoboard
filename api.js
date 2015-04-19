@@ -7,7 +7,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "4 Customizing Components",
         "5 Theming",
         "Check",
-        "HammerWrapper",
+        "Hammer",
         "PbElement",
         "Utils",
         "ability.Abilities",
