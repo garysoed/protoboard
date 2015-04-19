@@ -5,6 +5,15 @@ supported components.
 Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 
 ## Release notes
+### v 0.2.2
+New
+- Contributing guide
+
+Bug Fixes
+- Disabled abilities are shown in Helpable's overlap (#60)
+- Hammer events do not work (#64)
+- `pb-c-card` outline on hover is not at the top (#59)
+
 ### v 0.2.0
 New
 - Theming support
