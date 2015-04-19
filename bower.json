@@ -27,5 +27,8 @@
     "board",
     "game",
     "prototype"
-  ]
+  ],
+  "dependencies": {
+    "listener": "garysoed/listener"
+  }
 }
