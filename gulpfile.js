@@ -105,12 +105,8 @@ gulp.task('copy', function() {
 gulp.task('clean', shell.task('rm -r out doc'));
 
 gulp.task('doc-gen', shell.task('yuidoc --config yuidoc.json'));
-gulp.task('demo', function() {
-  return gulp.src(['out/**', 'ex/**', 'bower_components/**'], { base: '.' })
-      .pipe(gulp.dest('../protoboard-doc'));
-});
 
-gulp.task('doc', ['demo', 'doc-gen'], function() {
+gulp.task('doc', ['doc-gen'], function() {
   return gulp.src(['doc/**'])
       .pipe(gulp.dest('../protoboard-doc'));
 });
@@ -171,9 +167,9 @@ gulp.task('watch', ['compile'], function() {
 });
 
 gulp.task('compile', ['src', 'test']);
-gulp.task('pack', ['src', 'check'], function() {
+gulp.task('pack', ['src', 'check', 'doc'], function() {
   return gulp.src('out/**/*')
       .pipe(zip('bin.zip'))
       .pipe(gulp.dest('dist'));
 });
-gulp.task('check', ['karma', 'doc']);
+gulp.task('check', ['karma']);
