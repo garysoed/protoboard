@@ -1,0 +1,318 @@
+<base href="..">
+
+<link rel="import" href="ability/abilities.html">
+<link rel="import" href="check.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>
+DI
+    .prefix('pb')
+    .bind('service.Acl',
+        ['/=', 'ability.=', '=', '=', '/=?',
+        ($, Abilities, Check, Utils, TEST_MODE) => {
+
+  const ATTR_PREFIX = 'pb-acl-';
+
+  // Private symbols.
+  const __currentPlayer__ = Symbol();
+  const __enabledMap__ = Symbol('enabledMap');
+  const __members__ = Symbol();
+  const __name__ = Symbol();
+  const __observer__ = Symbol();
+  const __parent__ = Symbol();
+  const __registeredEls__ = Symbol();
+
+  const __onMutation__ = Symbol();
+  const __reset__ = Symbol();
+  const __update__ = Symbol('update');
+
+  const GROUPS = new Map();
+
+  class Group {
+
+    /**
+     * Represents a group of players. A group may also contain other groups.
+     *
+     * @constructor
+     * @class service.Acl.Group
+     * @param {string} name Name of the group.
+     * @private
+     */
+    constructor(name) {
+      this[__name__] = name;
+      this[__members__] = new Set();
+    }
+
+    /**
+     * @method contains
+     * @param {string} candidate Name of group or player to check the membership.
+     * @return {Boolean} True iff the given group or player is a member of the current group.
+     */
+    contains(candidate) {
+      if (candidate === this[__name__]) {
+        return true;
+      }
+      for (let member of this[__members__]) {
+        let isMember = (member instanceof Group)
+            ? member.contains(candidate)
+            : member === candidate;
+        if (isMember) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    /**
+     * Adds the given member or group to the current group.
+     *
+     * @method add
+     * @param {string|service.Acl.Group} member The player or group to be added as a member of the
+     *    current group.
+     */
+    add(member) {
+      this[__members__].add(member);
+    }
+  }
+
+  /**
+   * Service that manages ACLs in the app. This allows you to show element differently depending on
+   * the current player. To use this, you first need to register the elements to the service. Then,
+   * you need to define the ACL as follows:
+   * ```html
+   * <div id="acl" pb-acl-readable="player1 player2"></div>
+   * ```
+   * ```javascript
+   *   DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
+   *     AclService.registerElement(document.querySelector('#acl'));
+   *     Bootstrap.run(document);
+   *   }]);
+   * ```
+   *
+   * In the example above, the DIV element will be readable if and only if the current player is set
+   * to `player1` or `player2`. To set the current player, use the
+   * {{#crossLink "service.Acl/currentPlayer:property"}}{{/crossLink}} property. When the DIV is
+   * readable, this service will add a `pb-acl-readable` class to the element. You can use CSS to
+   * display the div differently depending on the current player.
+   *
+   * You can specify any kind of action to the ACL, as long as you prepend it with `pb-acl-`.
+   *
+   * Beside player names, you can also specify group names. When you do this, you will need to
+   * declare the group's members. For instance:
+   * ```html
+   * <div id="acl" pb-acl-readable="corporation"></div>
+   * ```
+   * ```javascript
+   *   DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
+   *     AclService
+   *         .registerElement(document.querySelector('#acl'))
+   *         .addGroup('corporation', 'weyland', 'jinteki', 'nbn');
+   *
+   *     Bootstrap.run(document);
+   *   }]);
+   * ```
+   * The element above will be readable if the current player is a member of the corporation group.
+   * Groups can contain other groups as members.
+   *
+   * When a registered element is a child of another registered element, the child element's
+   * ability will only be enabled if the parent element allows that ability. For instance:
+   * ```html
+   * <div id="section" pb-acl-readable="corporation">
+   *   <div id="acl" pb-acl-readable="megacorp"></div>
+   * </div>
+   * ```
+   *
+   * The `section` div will be readable by all members of corporation group. However, the `acl` div
+   * will only be readable by members of megacorp and corporation group.
+   *
+   * You can control abilities of elements by using the same action as the ability's name. For
+   * example:
+   * ```html
+   * <pb-c-card pb-acl-flip="player1"></pb-c-card>
+   * ```
+   *
+   * only allows player1 to flip the card.
+   *
+   * @class service.Acl
+   * @static
+   */
+  const Service = {
+
+    /**
+     * The current player.
+     *
+     * @property __currentPlayer__
+     * @type string
+     * @private
+     */
+    [__currentPlayer__]: null,
+
+    /**
+     * Set of registered elements.
+     *
+     * @property __registeredEls__
+     * @type Set
+     * @private
+     */
+    [__registeredEls__]: new Set(),
+
+    /**
+     * Resets the cache in the given element.
+     *
+     * @method __reset__
+     * @param {Element} el The element whose cache should be reset.
+     * @private
+     */
+    [__reset__](el) {
+      if (el[__enabledMap__]) {
+        el[__enabledMap__].clear();
+      }
+    },
+
+    /**
+     * Updates the cache for the given element.
+     *
+     * @method __update__
+     * @param {Element} el The element to run the update on.
+     * @private
+     */
+    [__update__](el) {
+      if (!el[__enabledMap__]) {
+        el[__enabledMap__] = new Map();
+      }
+      for (let [attrName, attr] of Utils.toMap(el.attributes)) {
+        if (!attrName.startsWith(ATTR_PREFIX)) {
+          continue;
+        }
+
+        let name = attrName.substring(ATTR_PREFIX.length);
+        let allowedPlayers = Check(attr.value).isList().orUse(null);
+        let enabled = (allowedPlayers === null)
+            || allowedPlayers.length === 0
+            || allowedPlayers.some(player => {
+              return GROUPS.has(player)
+                  ? GROUPS.get(player).contains(this.currentPlayer)
+                  : player === this.currentPlayer;
+            });
+
+        el[__enabledMap__].set(name, enabled);
+        this.isActionEnabled(el, name)
+            .then(enabled => {
+              el.classList.toggle(`pb-acl-${name}`, enabled);
+            });
+      }
+    },
+
+    /**
+     * Handler called when attribute on an element has been changed.
+     *
+     * @method __onMutation__
+     * @param {Array} records Array of {{#crossLink "MutationRecord"}}{{/crossLink}}s.
+     * @private
+     */
+    [__onMutation__](records) {
+      for (let record of records) {
+        let attrName = record.attributeName;
+        if (attrName.startsWith(ATTR_PREFIX)) {
+          this[__reset__](record.target);
+          this[__update__](record.target);
+        }
+      }
+    },
+
+    /**
+     * Registers the given element to watch for ACL changes.
+     *
+     * @method registerElement
+     * @param {Element} el The element to be registered.
+     * @return {service.Acl} This service for chaining.
+     */
+    registerElement(el) {
+      this[__registeredEls__].add(el);
+      if (!el[__observer__]) {
+        el[__observer__] = new MutationObserver(this[__onMutation__].bind(this));
+        el[__observer__].observe(el, { attributes: true });
+      }
+      this[__update__](el);
+      return this;
+    },
+
+    /**
+     * @method isActionEnabled
+     * @param {Element} el The element to check if the action is enabled.
+     * @param {string} actionName The name of action to check.
+     * @return {Promise} Promise that will resolve to true iff the action is enabled on the given
+     *    element.
+     */
+    isActionEnabled(el, actionName) {
+      let parentPromise = el.parentElement
+          ? this.isActionEnabled(el.parentElement, actionName)
+          : Promise.resolve(true);
+
+      if (!el[__enabledMap__]) {
+        el[__enabledMap__] = new Map();
+        this[__update__](el);
+      }
+
+      let currentEnabled =
+          !el[__enabledMap__].has(actionName) || el[__enabledMap__].get(actionName);
+
+      return Promise
+          .all([parentPromise, currentEnabled])
+          .then(([parent, current]) => parent && current);
+    },
+
+    /**
+     * Creates or updates a group to the service.
+     *
+     * @method addGroup
+     * @param {string} name Name of the group to be created
+     * @param {string} ...members Members of the group. This can be a group name, or a player's
+     *    name.
+     */
+    addGroup(name, ...members) {
+      let group = new Group(name);
+      for (let member of members) {
+        if (GROUPS.has(member)) {
+          group.add(GROUPS.get(member));
+        } else {
+          group.add(member);
+        }
+      }
+      GROUPS.set(name, group);
+      return this;
+    },
+
+    /**
+     * The current player.
+     *
+     * @property currentPlayer
+     * @type {string}
+     */
+    get currentPlayer() {
+      return this[__currentPlayer__];
+    },
+    set currentPlayer(player) {
+      this[__currentPlayer__] = player;
+
+      // Resets all registered elements.
+      for (let el of this[__registeredEls__]) {
+        this[__reset__](el);
+      }
+
+      // Updates all registered elements.
+      for (let el of this[__registeredEls__]) {
+        this[__update__](el);
+      }
+    }
+  };
+
+  if (TEST_MODE) {
+    Service.Group = Group;
+    Service.GROUPS = GROUPS;
+  }
+
+  return Service;
+}]);
+</script>

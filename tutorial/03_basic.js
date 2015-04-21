@@ -23,11 +23,6 @@
  *      <pb-c-token>
  *        <div>Token Content</div>
  *      </pb-c-token>
- *
- *      <script>
- *        // Required
- *        DI.run(['pb.=', function(Bootstrap) { Bootstrap.run(document); }]);
- *      </script>
  *    </body>
  *    ```
  *    Make sure that all dependencies are ABOVE the `main.html` import.

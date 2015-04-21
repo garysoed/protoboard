@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>service.Acl Unit Tests</title>
+
+  <link rel="import" href="service/acl.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="testutils.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+  <script>
+  DI
+      .constant('doc', document.currentScript.ownerDocument)
+      .run(['/=', '/=', '=', 'pb.=', '/=', 'pb.service.=', 'pb.=',
+          (expect, _, doc, t, $, Acl, Utils) => {
+
+  const Group = Acl.Group;
+
+  const __setEnabled__ = t.getSymbol(Acl, 'setEnabled');
+  const __update__ = t.getSymbol(Acl, 'update');
+
+  describe('service.Acl', () => {
+    describe('$Group', () => {
+      describe('contains', () => {
+        it('should return true if the candidate is a player who is a member of the group', () => {
+          let member = 'player';
+          let group = new Group('group');
+          group.add(member);
+          expect(group.contains(member)).to.be.true();
+        });
+        it('should return true if the candidate is a group with the same name of the current group', () => {
+          let groupName = 'group';
+          let group = new Group(groupName);
+          expect(group.contains(groupName)).to.be.true();
+        });
+        it('should return true if the candidate is a player who is a member of a subgroup', () => {
+          let member = 'player';
+          let subgroup = new Group('sub');
+          subgroup.add(member);
+          let group = new Group('group');
+          group.add(subgroup);
+
+          expect(group.contains(member)).to.be.true();
+        });
+        it('should return false if the candidate is not a member of the group or its descendants', () => {
+          let member = 'player';
+          let subgroup = new Group('sub');
+          let group = new Group('group');
+          group.add(subgroup);
+
+          expect(group.contains(member)).to.be.false();
+        });
+      });
+    });
+
+    describe('#__update__', () => {
+      it('should check for player membership and add the CSS class', done => {
+        let player = 'player';
+        let action = 'action';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, player);
+
+        Acl.currentPlayer = player;
+        Acl[__update__](el);
+
+        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true();
+        Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
+      });
+      it('should check for group membership and add the CSS class', done => {
+        let group = 'group';
+        let player = 'player';
+        let action = 'action';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, group);
+
+        Acl.currentPlayer = player;
+        Acl.addGroup(group, player);
+        Acl[__update__](el);
+
+        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true();
+        Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
+      });
+      it('should set the CSS class to none if action is disabled', done => {
+        let player = 'player';
+        let action = 'action';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, 'player2');
+
+        Acl.currentPlayer = player;
+        Acl[__update__](el);
+
+        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.false();
+        Utils.watch(() => !el.classList.contains(`pb-acl-${action}`)).then(done);
+      });
+      it('should set the action as enabled if the attribute is set to empty string', done => {
+        let action = 'action';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, '');
+
+        Acl.currentPlayer = 'player';
+        Acl[__update__](el);
+
+        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true();
+        Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
+      });
+    });
+
+    describe('#registerElement', () => {
+      it('should initialize the CSS class of the element', done => {
+        let action = 'action';
+        let player = 'player';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, player);
+
+        Acl.currentPlayer = player;
+        Acl.registerElement(el);
+
+        Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
+      });
+      it('should react to attribute change', done => {
+        let action = 'action';
+        let player = 'player';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, player);
+
+        Acl.currentPlayer = player;
+        Acl.registerElement(el);
+
+        Utils
+            .watch(() => el.classList.contains(`pb-acl-${action}`))
+            .then(() => {
+              $(el).attr(`pb-acl-${action}`, 'player2');
+              return Utils.watch(() => !el.classList.contains(`pb-acl-${action}`));
+            })
+            .then(done);
+      });
+    });
+
+    describe('#isActionEnabled', () => {
+      it('should return true if the action is set to the current player for an orphan element', done => {
+        let action = 'action';
+        let player = 'player';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, player);
+
+        Acl.currentPlayer = player;
+        Acl
+            .registerElement(el)
+            .isActionEnabled(el, action)
+            .then(enabled => {
+              expect(enabled).to.be.true();
+              done();
+            })
+            .catch(done);
+      });
+      it('should return false if the parent element disables the action', done => {
+        let action = 'action';
+        let player = 'player';
+        let child = doc.createElement('div');
+        $(child).attr(`pb-acl-${action}`, player);
+        let parent = doc.createElement('div');
+        $(parent).attr(`pb-acl-${action}`, 'otherplayer');
+        parent.appendChild(child);
+
+        Acl.currentPlayer = player;
+        Acl
+            .registerElement(child)
+            .isActionEnabled(child, action)
+            .then(enabled => {
+              expect(enabled).to.be.false();
+              done();
+            })
+            .catch(done);
+      });
+      it('should work if the element is not registered', done => {
+        let action = 'action';
+        let player = 'player';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, player);
+
+        Acl.currentPlayer = player;
+        Acl
+            .isActionEnabled(el, action)
+            .then(enabled => {
+              expect(enabled).to.be.true();
+              done();
+            })
+            .catch(done);
+      });
+      it('should return true if the action does not have a corresponding attribute', done => {
+        let action = 'action';
+        let player = 'player';
+        let el = doc.createElement('div');
+
+        Acl.currentPlayer = player;
+        Acl
+            .registerElement(el)
+            .isActionEnabled(el, action)
+            .then(enabled => {
+              expect(enabled).to.be.true();
+              done();
+            })
+            .catch(done);
+      });
+    });
+    describe('#addGroup', () => {
+      it('should add members to the group', () => {
+        let groupName = 'groupName';
+        let player1 = 'player1';
+        let player2 = 'player2';
+        Acl.addGroup(groupName, player1, player2);
+
+        let group = Acl.GROUPS.get(groupName);
+        expect(group.contains(player1)).to.be.true();
+        expect(group.contains(player2)).to.be.true();
+      });
+      it('should add a group if the member is a group', () => {
+        let subgroupName = 'subgroupName';
+        let groupName = 'groupName';
+        let member = 'member';
+        Acl
+            .addGroup(subgroupName, member)
+            .addGroup(groupName, subgroupName);
+
+        let group = Acl.GROUPS.get(groupName);
+        expect(group.contains(member)).to.be.true();
+      });
+    });
+    describe('set currentPlayer', () => {
+      it('should refresh registered element', done => {
+        let action = 'action';
+        let player = 'player';
+        let el = doc.createElement('div');
+        $(el).attr(`pb-acl-${action}`, player);
+
+        Acl.currentPlayer = player;
+        Acl.registerElement(el);
+
+        Utils
+            .watch(() => el.classList.contains(`pb-acl-${action}`))
+            .then(() => {
+              Acl.currentPlayer = 'otherPlayer';
+              return Utils.watch(() => !el.classList.contains(`pb-acl-${action}`));
+            })
+            .then(done);
+      });
+    });
+
+    afterEach(done => {
+      Acl.currentPlayer = null;
+      Acl.GROUPS.clear();
+      done();
+    });
+  });
+  }]);
+  </script>
+</body>
