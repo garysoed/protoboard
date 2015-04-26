@@ -38,11 +38,11 @@ DI.prefix("pb").bind("ability.Droppable", ["ability.=", "=", "trigger.=", "servi
     _createClass(Droppable, {
       init: {
         value: function init(el) {
-          _get(Object.getPrototypeOf(Droppable.prototype), "init", this).call(this, el);
-
           if ($(el).attr(this.attrName) === undefined) {
             $(el).attr(this.attrName, this[__defaultEnabled__]);
           }
+
+          _get(Object.getPrototypeOf(Droppable.prototype), "init", this).call(this, el);
         }
       },
       doTrigger: {

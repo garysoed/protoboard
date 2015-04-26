@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>Chance Unit Tests</title>
+
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+  <script>
+  DI
+      .constant('doc', document.currentScript.ownerDocument)
+      .run(['/=', '/=', '=', '/=', (expect, _, doc, Check) => {
+
+  describe('Chance', () => {
+    describe('#binom', () => {
+      function* binomGen(rvs) {
+        rvs.forEach(rv => yield rv);
+      }
+
+      it('should return items that the bool method returns true', () => {
+        let collection = [1, 2, 3];
+        Check.bool = binomGen([true, false, true]).next;
+        expect(Chance.binom(collection)).to.eql([1, 3]);
+      });
+    });
+  });
+  }]);
+  </script>
+</body>

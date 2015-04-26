@@ -76,8 +76,35 @@ DI.prefix("pb").bind("Utils", [function () {
     },
     toArray: function toArray(obj) {
       var array = [];
-      for (var i = 0; i < obj.length; i++) {
-        array[i] = obj[i];
+      if (obj instanceof Set) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = obj[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var item = _step.value;
+
+            array.push(item);
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      } else {
+        for (var i = 0; i < obj.length; i++) {
+          array[i] = obj[i];
+        }
       }
       return array;
     },

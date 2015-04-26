@@ -9,6 +9,17 @@
 DI.bind("pb.seed", [function () {
   return new Date().getTime();
 }]).bind("Chance", ["pb.=?", function (seed) {
-  return new Chance(seed);
+  var chance = new Chance(seed);
+  chance.binom = function (coll, options) {
+    var picked = [];
+    coll.forEach(function (item) {
+      if (chance.bool(options)) {
+        picked.push(item);
+      }
+    });
+    return picked;
+  };
+
+  return chance;
 }]);</script>
 </head><body></body></html>

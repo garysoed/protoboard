@@ -146,13 +146,19 @@ DI
      * Converts the given "array like" object to array.
      *
      * @method toArray
-     * @param  {Object} obj An array like object to convert.
+     * @param {Object} obj An array like object to convert.
      * @return {Array} Array object converted from the given array like object.
      */
     toArray(obj) {
       let array = [];
-      for (let i = 0; i < obj.length; i++) {
-        array[i] = obj[i];
+      if (obj instanceof Set) {
+        for (let item of obj) {
+          array.push(item);
+        }
+      } else {
+        for (let i = 0; i < obj.length; i++) {
+          array[i] = obj[i];
+        }
       }
       return array;
     },

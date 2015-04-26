@@ -8,6 +8,17 @@
 DI
     .bind('pb.seed', [() => (new Date()).getTime()])
     .bind('Chance', ['pb.=?', seed => {
-      return new Chance(seed);
+      let chance = new Chance(seed);
+      chance.binom = (coll, options) => {
+        let picked = [];
+        coll.forEach(item => {
+          if (chance.bool(options)) {
+            picked.push(item);
+          }
+        });
+        return picked;
+      };
+
+      return chance;
     }]);
 </script>

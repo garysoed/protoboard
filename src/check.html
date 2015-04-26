@@ -98,6 +98,21 @@ DI
     }
 
     /**
+     * Try to parse the input string as a float.
+     *
+     * @method isFloat
+     * @return {Check} A new instance of the Check object used for chaining.
+     */
+    isFloat() {
+      let output = Number.parseFloat(this[__input__]);
+      if (Number.isNaN(output)) {
+        return this[__onFailure__]('float');
+      }
+
+      return this[__onSuccess__](output);
+    }
+
+    /**
      * Try to parse the input string as a boolean.
      *
      * @method isBoolean
@@ -115,6 +130,13 @@ DI
       }
     }
 
+    /**
+     * Try to parse the input string as a list of string.
+     *
+     * @method isList
+     * @param {string} [separator=' '] The separator used for the list.
+     * @return {Check} A new instance of the Check object used for chaining.
+     */
     isList(separator = ' ') {
       if (typeof this[__input__] !== 'string') {
         return this[__onFailure__]('list');

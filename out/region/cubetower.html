@@ -1,0 +1,193 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/droppable.html">
+<link rel="import" href="ability/helpable.html">
+<link rel="import" href="check.html">
+<link rel="import" href="region/region.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="service/move.html">
+<link rel="import" href="third_party/chance.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<template>
+  <style>:host {
+  height: 50px;
+  width: 50px;
+}
+
+#root {
+  border: 1px solid #8982B8;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+::content > [pb-tower-level] {
+  display: none;
+}
+
+::content > * {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+}</style>
+
+  <div id="root">
+    <content></content>
+  </div>
+</template>
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
+  return doc.querySelector("template");
+}]).bind("region.CubeTower", ["/=", "=", "=", "=", "/=", "=", "service.=", "ability.=", "ability.=", "trigger.=", "service.=", "region.=", "/=?", "=", function ($, $registry, doc, template, Chance, Check, Config, Droppable, Helpable, Key, Move, Region, TEST_MODE, Utils) {
+
+  var ATTR_TOWER_LEVEL = "pb-tower-level";
+  var EL_NAME = "pb-r-cubetower";
+
+  var __defaultProbabilities__ = Symbol();
+
+  var TowerDroppable = (function (_Droppable) {
+    function TowerDroppable() {
+      var name = arguments[0] === undefined ? "drop" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Key("d") : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+      var defaultProbabilities = arguments[3] === undefined ? [1] : arguments[3];
+
+      _classCallCheck(this, TowerDroppable);
+
+      _get(Object.getPrototypeOf(TowerDroppable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
+      this[__defaultProbabilities__] = defaultProbabilities;
+    }
+
+    _inherits(TowerDroppable, _Droppable);
+
+    _createClass(TowerDroppable, {
+      init: {
+        value: function init(el) {
+          if ($(el).attr(this.attrChances) === undefined) {
+            $(el).attr(this.attrChances, this[__defaultProbabilities__].join(" "));
+          }
+
+          _get(Object.getPrototypeOf(TowerDroppable.prototype), "init", this).call(this, el);
+        }
+      },
+      updateConfig: {
+        value: function updateConfig(el) {
+          _get(Object.getPrototypeOf(TowerDroppable.prototype), "updateConfig", this).call(this, el);
+
+          var probabilities = Check($(el).attr(this.attrChances)).isList().orThrows().map(function (i) {
+            return Check(i).isFloat().orThrows();
+          });
+
+          probabilities.forEach(function (probability) {
+            if (probability < 0 || probability > 1) {
+              throw new Error("Invalid probability value: " + probability);
+            }
+          });
+
+          Utils.toArray(el.querySelectorAll("[" + ATTR_TOWER_LEVEL + "]")).forEach(function (child) {
+            var level = Check($(child).attr(ATTR_TOWER_LEVEL)).isInt().orThrows();
+            if (level >= probabilities.length) {
+              $(child).attr(ATTR_TOWER_LEVEL, null);
+            }
+          });
+        }
+      },
+      doTrigger: {
+        value: function doTrigger(el) {
+          var _this = this;
+
+          var movedElement = Move.movedElements.values().next().value;
+          if (movedElement) {
+            (function () {
+              el.appendChild(movedElement);
+
+              var droppingEls = new Set();
+              droppingEls.add(movedElement);
+
+              var probabilities = Check($(el).attr(_this.attrChances)).isList().orThrows().map(function (i) {
+                return Check(i).isFloat().orThrows();
+              });
+
+              for (var level = 0; level < probabilities.length; level++) {
+                (function (level) {
+                  var passChance = probabilities[level] * 100;
+
+                  Utils.toArray(el.querySelectorAll("[" + ATTR_TOWER_LEVEL + "=\"" + level + "\"]")).forEach(function (child) {
+                    return droppingEls.add(child);
+                  });
+
+                  var stuckEls = Chance.binom(droppingEls, { likelihood: 100 - passChance });
+                  stuckEls.forEach(function (stuckEl) {
+                    $(stuckEl).attr(ATTR_TOWER_LEVEL, level);
+                    droppingEls["delete"](stuckEl);
+                  });
+                })(level);
+              }
+
+              droppingEls.forEach(function (passEl) {
+                return $(passEl).attr(ATTR_TOWER_LEVEL, null);
+              });
+            })();
+          }
+        }
+      },
+      attrChances: {
+        get: function () {
+          return "" + this.attrName + "-chances";
+        }
+      }
+    });
+
+    return TowerDroppable;
+  })(Droppable);
+
+  var CubeTower = (function (_Region) {
+    function CubeTower() {
+      _classCallCheck(this, CubeTower);
+
+      if (_Region != null) {
+        _Region.apply(this, arguments);
+      }
+    }
+
+    _inherits(CubeTower, _Region);
+
+    _createClass(CubeTower, {
+      createdCallback: {
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(CubeTower.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+        }
+      }
+    });
+
+    return CubeTower;
+  })(Region);
+
+  Config.add(EL_NAME, new Helpable("help"), new TowerDroppable("drop", new Key("d"), true));
+  $registry.add(EL_NAME, CubeTower.prototype);
+
+  if (TEST_MODE) {
+    CubeTower.TowerDroppable = TowerDroppable;
+  }
+
+  return CubeTower;
+}]);</script>
+</head><body></body></html>

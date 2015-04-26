@@ -1,0 +1,274 @@
+<base href="..">
+
+<link rel="import" href="ability/droppable.html">
+<link rel="import" href="ability/helpable.html">
+<link rel="import" href="check.html">
+<link rel="import" href="region/region.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="service/move.html">
+<link rel="import" href="third_party/chance.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<template>
+  <style>
+    :host {
+      height: var(--component-height);
+      width: var(--component-width);
+    }
+
+    #root {
+      border: var(--border);
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    ::content > [pb-tower-level] {
+      display: none;
+    }
+
+    ::content > * {
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      position: absolute;
+    }
+  </style>
+
+  <div id="root">
+    <content></content>
+  </div>
+</template>
+
+<script>
+DI
+    .prefix('pb')
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', ['=', doc => doc.querySelector('template')])
+    .bind('region.CubeTower', [
+        '/=',
+        '=',
+        '=',
+        '=',
+        '/=',
+        '=',
+        'service.=',
+        'ability.=',
+        'ability.=',
+        'trigger.=',
+        'service.=',
+        'region.=',
+        '/=?',
+        '=',
+        (
+          $,
+          $registry,
+          doc,
+          template,
+          Chance,
+          Check,
+          Config,
+          Droppable,
+          Helpable,
+          Key,
+          Move,
+          Region,
+          TEST_MODE,
+          Utils) => {
+
+  const ATTR_TOWER_LEVEL = 'pb-tower-level';
+  const EL_NAME = 'pb-r-cubetower';
+
+  // Private constants
+  const __defaultProbabilities__ = Symbol();
+
+  class TowerDroppable extends Droppable {
+    /**
+     * Ability that mimics a "cube tower". Elements dropped using this ability will have to go
+     * through various "levels" of the tower before they are shown. Passing through one level to the
+     * next is done randomly.
+     *
+     * You can set the number of tower levels and the probability to pass through the next level
+     * using the `<ability name>-chances` attribute. For instance, if the ability's name is `drop`
+     * and we want a tower with 3 levels, each having a probability of 0.5, 0.2, 0.1 to go to the
+     * next level, specify:
+     * ```html
+     * <pb-r-cubetower drop-chances="0.5 0.2 0.1"></pb-r-cubetower>
+     * ```
+     *
+     * @constructor
+     * @class region.CubeTower.TowerDroppable
+     * @param {string} [name="drop"] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=trigger.Key] Default trigger of the ability.
+     * @param {boolean} [defaultEnabled=true] True iff the ability is enabled by default.
+     * @param {Array} [defaultProbabilities=[1]] Default probabilities passing through each level.
+     * @extends ability.Droppable
+     * @since 0.3.0
+     */
+    constructor(
+          name = 'drop',
+          defaultTrigger = new Key('d'),
+          defaultEnabled = true,
+          defaultProbabilities = [1]) {
+      super(name, defaultTrigger, defaultEnabled);
+      this[__defaultProbabilities__] = defaultProbabilities;
+    }
+
+    /**
+     * Sets the default configuration for this ability on the given element.
+     *
+     * @method init
+     * @param {Element} el The element to set the default configuration to.
+     */
+    init(el) {
+      if ($(el).attr(this.attrChances) === undefined) {
+        $(el).attr(this.attrChances, this[__defaultProbabilities__].join(' '));
+      }
+
+      super.init(el);
+    }
+
+    /**
+     * Updates the inner state of the ability based on changes to the element.
+     *
+     * @method updateConfig
+     * @param {Element} el Element whose attributes have changed.
+     */
+    updateConfig(el) {
+      super.updateConfig(el);
+
+      const probabilities = Check($(el).attr(this.attrChances))
+          .isList()
+          .orThrows()
+          .map(i => Check(i).isFloat().orThrows());
+
+      // Check that each probability is between 0 and 1.
+      probabilities.forEach(probability => {
+        if (probability < 0 || probability > 1) {
+          throw new Error(`Invalid probability value: ${probability}`);
+        }
+      });
+
+      // Go through every child and spit out the children that are no longer in the tower.
+      Utils
+          .toArray(el.querySelectorAll(`[${ATTR_TOWER_LEVEL}]`))
+          .forEach(child => {
+            let level = Check($(child).attr(ATTR_TOWER_LEVEL)).isInt().orThrows();
+            if (level >= probabilities.length) {
+              $(child).attr(ATTR_TOWER_LEVEL, null);
+            }
+          });
+    }
+
+    /**
+     * Drops the currently moved element into the given element. This also moves elements in every
+     * level of the tower.
+     *
+     * @method doTrigger
+     * @param {Element} el Element to drop the moved element into.
+     */
+    doTrigger(el) {
+      let movedElement = Move.movedElements.values().next().value;
+      if (movedElement) {
+        el.appendChild(movedElement);
+
+        let droppingEls = new Set();
+        droppingEls.add(movedElement);
+
+        const probabilities = Check($(el).attr(this.attrChances))
+          .isList()
+          .orThrows()
+          .map(i => Check(i).isFloat().orThrows());
+
+        for (let level = 0; level < probabilities.length; level++) {
+          let passChance = probabilities[level] * 100;
+
+          // All elements at this level will drop as well.
+          Utils
+              .toArray(el.querySelectorAll(`[${ATTR_TOWER_LEVEL}="${level}"]`))
+              .forEach(child => droppingEls.add(child));
+
+          // Check if the elements that are dropping will stop at this level.
+          let stuckEls = Chance.binom(droppingEls, {likelihood: 100 - passChance});
+          stuckEls.forEach(stuckEl => {
+            $(stuckEl).attr(ATTR_TOWER_LEVEL, level);
+            droppingEls.delete(stuckEl);
+          });
+        }
+
+        // All elements in the droppingEls set have passed through all the levels.
+        droppingEls.forEach(passEl => $(passEl).attr(ATTR_TOWER_LEVEL, null));
+      }
+    }
+
+    /**
+     * Name of the attribute to set the probability of the elements to pass to the next level for
+     * every level in the tower.
+     *
+     * @property attrChances
+     * @type string
+     * @final
+     */
+    get attrChances() {
+      return `${this.attrName}-chances`;
+    }
+  }
+
+  /**
+   * Represents a Cube Tower. This uses
+   * {{#crossLink "region.CubeTower.TowerDroppable"}}{{/crossLink}} to simulate the different levels
+   * in a tower.
+   *
+   * ```html
+   * <!--
+   * 50% chance for items to drop to level 1, and 20% chance for items to exit the tower from
+   * level 1.
+   * -->
+   * <pb-r-cubetower drop-chances="0.5 0.2">
+   *   <!-- Item in level 0 -->
+   *   <div pb-tower-level="0"></div>
+   *   <!-- Item in level 1 -->
+   *   <div pb-tower-level="1"></div>
+   *   <!-- Item outside the tower -->
+   *   <div></div>
+   * </pb-r-cubetower>
+   * ```
+   *
+   * Supported abilities:
+   * - {{#crossLink "region.CubeTower.TowerDroppable"}}drop{{/crossLink}}
+   *
+   * @class region.CubeTower
+   * @extends region.Region
+   * @since 0.3.0
+   */
+  class CubeTower extends Region {
+
+    /**
+     * Called when the element is created.
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    }
+  }
+
+  Config.add(
+      EL_NAME,
+      new Helpable('help'),
+      new TowerDroppable('drop', new Key('d'), true));
+  $registry.add(EL_NAME, CubeTower.prototype);
+
+  if (TEST_MODE) {
+    CubeTower.TowerDroppable = TowerDroppable;
+  }
+
+  return CubeTower;
+}]);
+</script>

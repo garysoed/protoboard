@@ -56,6 +56,16 @@ DI.prefix("pb").bind("Check", ["=", function (Utils) {
         return this[__onSuccess__](output);
       }
     }, {
+      key: "isFloat",
+      value: function isFloat() {
+        var output = Number.parseFloat(this[__input__]);
+        if (Number.isNaN(output)) {
+          return this[__onFailure__]("float");
+        }
+
+        return this[__onSuccess__](output);
+      }
+    }, {
       key: "isBoolean",
       value: function isBoolean() {
         if (typeof this[__input__] !== "string") {

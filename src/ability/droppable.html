@@ -43,11 +43,11 @@ DI
      * @param {Element} el The element to set the default configuration to.
      */
     init(el) {
-      super.init(el);
-
       if ($(el).attr(this.attrName) === undefined) {
         $(el).attr(this.attrName, this[__defaultEnabled__]);
       }
+
+      super.init(el);
     }
 
     /**
