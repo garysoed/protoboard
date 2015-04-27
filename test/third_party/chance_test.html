@@ -5,23 +5,28 @@
   <title>Chance Unit Tests</title>
 
   <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/babel_polyfill.html">
+  <link rel="import" href="third_party/chance.html">
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
   <script>
   DI
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/=', '/=', '=', '/=', (expect, _, doc, Check) => {
+      .run(['/=', '/=', '=', '/=', (expect, _, doc, Chance) => {
 
   describe('Chance', () => {
     describe('#binom', () => {
       function* binomGen(rvs) {
-        rvs.forEach(rv => yield rv);
+        for (let rv of rvs) {
+          yield rv;
+        }
       }
 
       it('should return items that the bool method returns true', () => {
         let collection = [1, 2, 3];
-        Check.bool = binomGen([true, false, true]).next;
+        let gen = binomGen([true, false, true]);
+        Chance.bool = () => gen.next().value;
         expect(Chance.binom(collection)).to.eql([1, 3]);
       });
     });

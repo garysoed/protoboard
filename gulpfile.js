@@ -86,7 +86,7 @@ function subMythHtml() {
   });
 }
 
-gulp.task('copy', function() {
+gulp.task('copy', ['copy-babel-polyfill'], function() {
   return gulp
       .src([
           'bower_components/animate.css/animate.min.css',
@@ -96,10 +96,20 @@ gulp.task('copy', function() {
           'bower_components/handlebars/handlebars.js',
           'bower_components/jquery/dist/jquery.js',
           'bower_components/Keypress/keypress.js',
-          'bower_components/listener/out/bin.min.js'
+          'bower_components/listener/out/bin.min.js',
         ],
         { base: 'bower_components' })
       .pipe(gulp.dest('out/third_party'));
+});
+
+gulp.task('copy-babel-polyfill', function() {
+  return gulp
+      .src([
+          'node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js',
+        ],
+        { base: 'node_modules/gulp-babel/node_modules' })
+      .pipe(gulp.dest('out/third_party'));
+
 });
 
 gulp.task('clean', shell.task('rm -r out doc'));
