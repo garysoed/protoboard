@@ -13,7 +13,6 @@
 <template>
   <style>
     :host {
-      border: var(--border);
       display: inline-block;
       height: var(--card-height);
       width: var(--card-width);
@@ -28,7 +27,11 @@
     }
 
     #root {
+      outline: var(--border);
+      outline-offset: -1px;
       position: relative;
+      height: 100%;
+      width: 100%;
     }
   </style>
 

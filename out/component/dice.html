@@ -14,14 +14,7 @@
 <link rel="import" href="utils.html">
 
 <template>
-  <style>#root {
-  border: 1px solid #8982B8;
-  height: 50px;
-  width: 50px;
-  box-sizing: border-box;
-}
-
-:host([show-a="true"]) ::content > [pb-dice-pair] > *:last-child {
+  <style>:host([show-a="true"]) ::content > [pb-dice-pair] > *:last-child {
   display: none;
 }
 
@@ -35,6 +28,8 @@
 
 ::content > [pb-dice-pair] {
   background-color: #CBC7E2;
+  border: 1px solid #8982B8;
+  box-sizing: border-box;
   height: 50px;
   width: 50px;
   text-align: center;

@@ -18,10 +18,10 @@
 }
 
 #root {
-  border: 1px solid #8982B8;
+  outline: 1px solid #8982B8;
+  outline-offset: -1px;
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
 }
 
 /* The placeholder */
@@ -37,6 +37,9 @@
   line-height: 50px;
   text-align: center;
   width: 50px;
+  outline: 1px solid #8982B8;
+  outline-offset: -1px;
+  z-index: -1;
 }
 
 ::content > [pb-placeholder]:only-child {

@@ -19,10 +19,10 @@
     }
 
     #root {
-      border: var(--border);
+      outline: var(--border);
+      outline-offset: -1px;
       width: 100%;
       height: 100%;
-      box-sizing: border-box;
     }
 
     /* The placeholder */
@@ -37,6 +37,9 @@
       line-height: var(--component-height);
       text-align: center;
       width: var(--component-width);
+      outline: var(--border);
+      outline-offset: -1px;
+      z-index: -1;
     }
 
     ::content > [pb-placeholder]:only-child {

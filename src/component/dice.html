@@ -15,13 +15,6 @@
 
 <template>
   <style>
-    #root {
-      border: var(--border);
-      height: var(--component-height);
-      width: var(--component-width);
-      box-sizing: border-box;
-    }
-
     :host([show-a="true"]) ::content > [pb-dice-pair] > *:last-child {
       display: none;
     }
@@ -36,6 +29,8 @@
 
     ::content > [pb-dice-pair] {
       background-color: var(--color-background-accent);
+      border: var(--border);
+      box-sizing: border-box;
       height: var(--component-height);
       width: var(--component-width);
       text-align: center;
