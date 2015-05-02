@@ -69,12 +69,12 @@ DI
      *
      * @constructor
      * @class region.Rect.FlexDroppable
-     * @param {string} [name=pb-droppable] Name of the ability.
+     * @param {string} [name=droppable] Name of the ability.
      * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Droppable
      */
-    constructor(name = 'pb-droppable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
+    constructor(name = 'droppable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
       super(name, defaultTrigger, defaultEnabled);
       this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
     }

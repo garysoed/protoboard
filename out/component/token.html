@@ -30,38 +30,48 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template");
-}]).bind("component.Token", ["=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "=", "=", "=", function ($registry, Component, Config, Helpable, Key, Pickable, Utils, doc, template) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("component.Token", {
+  $registry: "=",
+  Component: "component.=",
+  Config: "service.=",
+  Helpable: "ability.=",
+  Key: "trigger.=",
+  Pickable: "ability.=",
+  Utils: "=",
+  doc: "=",
+  template: "=" }, function ($i) {
 
   var EL_NAME = "pb-c-token";
 
-  var Token = (function (_Component) {
+  var Token = (function (_$i$Component) {
     function Token() {
       _classCallCheck(this, Token);
 
-      if (_Component != null) {
-        _Component.apply(this, arguments);
+      if (_$i$Component != null) {
+        _$i$Component.apply(this, arguments);
       }
     }
 
-    _inherits(Token, _Component);
+    _inherits(Token, _$i$Component);
 
     _createClass(Token, {
       createdCallback: {
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Token.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
         }
       }
     });
 
     return Token;
-  })(Component);
+  })($i.Component);
 
-  Config.add("pb-c-token", new Helpable("help"), new Pickable("pick", new Key("q"), true));
+  $i.Config.add("pb-c-token", new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true));
 
-  $registry.add(EL_NAME, Token.prototype);
+  $i.$registry.add(EL_NAME, Token.prototype);
 
   return Token;
-}]);</script></head><body></body></html>
+});</script>
+</head><body></body></html>

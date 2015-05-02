@@ -32,7 +32,7 @@ DI
      *
      * @constructor
      * @class ability.Toggleable
-     * @param {string} [name=pb-toggleable] Name of the ability.
+     * @param {string} [name=toggleable] Name of the ability.
      * @param {trigger.Trigger} [defaultTrigger=trigger.Key] Default trigger for the ability.
      * @param {Object} defaultConfig Default configuration for the ability.
      * @param {boolean} defaultConfig.enabled True iff the ability should be enabled by default.
@@ -41,7 +41,7 @@ DI
      * @extends ability.Ability
      */
     constructor(
-        name = 'pb-toggleable',
+        name = 'toggleable',
         defaultTrigger = new $i.Key('t'),
         defaultConfig = { enabled: true, active: false }) {
       super(name, defaultTrigger);

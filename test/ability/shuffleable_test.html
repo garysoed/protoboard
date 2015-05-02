@@ -66,7 +66,7 @@
       });
 
       it('should shuffle if enabled', () => {
-        $(el).attr('pb-shuffleable', 'true');
+        $(el).attr(shuffleable.attrName, 'true');
         let shuffledChildren = [children[2], children[0], children[1]];
 
         $i._.spy($i.Chance, 'shuffle').overrideReturn(shuffledChildren);
@@ -76,14 +76,14 @@
         $i.expect($i.Utils.toArray(el.children)).to.be.eql(shuffledChildren);
       });
       it('should be noop if disabled', () => {
-        $(el).attr('pb-shuffleable', 'false');
+        $(el).attr(shuffleable.attrName, 'false');
 
         $i._.spy($i.Chance, 'shuffle');
         shuffleable.trigger(el);
         $i.expect($i.Chance.shuffle).called().to.be.equal(0);
       });
       it('should be noop if attribute value is bad', () => {
-        $(el).attr('pb-shuffleable', 'invalid');
+        $(el).attr(shuffleable.attrName, 'invalid');
 
         $i._.spy($i.Chance, 'shuffle');
         shuffleable.trigger(el);

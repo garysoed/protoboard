@@ -48,39 +48,51 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-    return doc.querySelector("template");
-}]).bind("region.Deck", ["=", "ability.=", "service.=", "ability.=", "ability.=", "trigger.=", "region.=", "ability.=", "=", "=", "=", function ($registry, Abilities, Config, Droppable, Helpable, Key, Region, Shuffleable, Utils, doc, template) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("region.Deck", {
+  $registry: "=",
+  doc: "=",
+  template: "=",
+  Abilities: "ability.=",
+  Config: "service.=",
+  Droppable: "ability.=",
+  Helpable: "ability.=",
+  Key: "trigger.=",
+  Region: "region.=",
+  Shuffleable: "ability.=",
+  Utils: "=" }, function ($i) {
 
-    var EL_NAME = "pb-r-deck";
+  var EL_NAME = "pb-r-deck";
 
-    var Deck = (function (_Region) {
-        function Deck() {
-            _classCallCheck(this, Deck);
+  var Deck = (function (_$i$Region) {
+    function Deck() {
+      _classCallCheck(this, Deck);
 
-            if (_Region != null) {
-                _Region.apply(this, arguments);
-            }
+      if (_$i$Region != null) {
+        _$i$Region.apply(this, arguments);
+      }
+    }
+
+    _inherits(Deck, _$i$Region);
+
+    _createClass(Deck, {
+      createdCallback: {
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Deck.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+          this.attachedCallback();
         }
-
-        _inherits(Deck, _Region);
-
-        _createClass(Deck, {
-            createdCallback: {
-                value: function createdCallback() {
-                    _get(Object.getPrototypeOf(Deck.prototype), "createdCallback", this).call(this);
-                    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-                    this.attachedCallback();
-                }
-            }
-        });
-
-        return Deck;
-    })(Region);
-
-    Config.add(EL_NAME, new Helpable("help"), new Shuffleable("shuffle", new Key("s"), true), new Droppable("drop", new Key("d"), true));
-
-    $registry.add(EL_NAME, Deck.prototype);
+      }
+    });
 
     return Deck;
-}]);</script></head><body></body></html>
+  })($i.Region);
+
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Shuffleable("shuffle", new $i.Key("s"), true), new $i.Droppable("drop", new $i.Key("d"), true));
+
+  $i.$registry.add(EL_NAME, Deck.prototype);
+
+  return Deck;
+});</script>
+</head><body></body></html>

@@ -85,31 +85,23 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['=', doc => doc.querySelector('template')])
-    .bind('component.Card', [
-        'trigger.=',
-        'component.=',
-        'service.=',
-        'ability.=',
-        'trigger.=',
-        'ability.=',
-        'ability.=',
-        '=',
-        '=',
-        '=',
-        '=',
-        (
-            Click,
-            Component,
-            Config,
-            Helpable,
-            Key,
-            Pickable,
-            Toggleable,
-            Utils,
-            doc,
-            template,
-            $registry) => {
+    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
+    .bind(
+        'component.Card',
+        {
+          $registry: '=',
+          doc: '=',
+          template: '=',
+          Click: 'trigger.=',
+          Component: 'component.=',
+          Config: 'service.=',
+          Helpable: 'ability.=',
+          Key: 'trigger.=',
+          Pickable: 'ability.=',
+          Toggleable: 'ability.=',
+          Utils: '=',
+        },
+        $i => {
 
   const EL_NAME = 'pb-c-card';
 
@@ -136,7 +128,7 @@ DI
    * @class component.Card
    * @extends component.Component
    */
-  class Card extends Component {
+  class Card extends $i.Component {
 
     /**
      * Called when the element is created
@@ -151,15 +143,15 @@ DI
     }
   }
 
-  Config.add(
+  $i.Config.add(
       EL_NAME,
-      new Helpable('help'),
-      new Pickable('pick', new Key('q'), true),
-      new Toggleable('flip', new Click(), true),
-      new Toggleable('tap', new Key('t'), true));
+      new $i.Helpable('help'),
+      new $i.Pickable('pick', new $i.Key('q'), true),
+      new $i.Toggleable('flip', new $i.Click(), true),
+      new $i.Toggleable('tap', new $i.Key('t'), true));
 
-  $registry.add(EL_NAME, Card.prototype);
+  $i.$registry.add(EL_NAME, Card.prototype);
 
   return Card;
-}]);
+});
 </script>

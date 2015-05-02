@@ -98,40 +98,51 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-    return doc.querySelector("template");
-}]).bind("component.Card", ["trigger.=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "ability.=", "=", "=", "=", "=", function (Click, Component, Config, Helpable, Key, Pickable, Toggleable, Utils, doc, template, $registry) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("component.Card", {
+  $registry: "=",
+  doc: "=",
+  template: "=",
+  Click: "trigger.=",
+  Component: "component.=",
+  Config: "service.=",
+  Helpable: "ability.=",
+  Key: "trigger.=",
+  Pickable: "ability.=",
+  Toggleable: "ability.=",
+  Utils: "=" }, function ($i) {
 
-    var EL_NAME = "pb-c-card";
+  var EL_NAME = "pb-c-card";
 
-    var Card = (function (_Component) {
-        function Card() {
-            _classCallCheck(this, Card);
+  var Card = (function (_$i$Component) {
+    function Card() {
+      _classCallCheck(this, Card);
 
-            if (_Component != null) {
-                _Component.apply(this, arguments);
-            }
+      if (_$i$Component != null) {
+        _$i$Component.apply(this, arguments);
+      }
+    }
+
+    _inherits(Card, _$i$Component);
+
+    _createClass(Card, {
+      createdCallback: {
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Card.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.attachedCallback();
         }
-
-        _inherits(Card, _Component);
-
-        _createClass(Card, {
-            createdCallback: {
-                value: function createdCallback() {
-                    _get(Object.getPrototypeOf(Card.prototype), "createdCallback", this).call(this);
-                    this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-                    this.attachedCallback();
-                }
-            }
-        });
-
-        return Card;
-    })(Component);
-
-    Config.add(EL_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true), new Toggleable("flip", new Click(), true), new Toggleable("tap", new Key("t"), true));
-
-    $registry.add(EL_NAME, Card.prototype);
+      }
+    });
 
     return Card;
-}]);</script>
+  })($i.Component);
+
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true), new $i.Toggleable("flip", new $i.Click(), true), new $i.Toggleable("tap", new $i.Key("t"), true));
+
+  $i.$registry.add(EL_NAME, Card.prototype);
+
+  return Card;
+});</script>
 </head><body></body></html>
