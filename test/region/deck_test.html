@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>region.Deck Unit Tests</title>
+
+  <link rel="import" href="region/deck.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .run({ Deck: 'region.=' }, () => {
+    describe('region.Deck', () => {
+      it('should not throw exception when injected', () => {});
+    });
+  });
+  </script>
+</body>

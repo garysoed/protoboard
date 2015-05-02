@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>component.Card Unit Tests</title>
+
+  <link rel="import" href="component/card.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .run({ Card: 'component.=' }, () => {
+    describe('component.Card', () => {
+      it('should not throw exception when injected', () => {});
+    });
+  });
+  </script>
+</body>

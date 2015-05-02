@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>component.Token Unit Tests</title>
+
+  <link rel="import" href="component/token.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .run({ Token: 'component.=' }, () => {
+    describe('component.Token', () => {
+      it('should not throw exception when injected', () => {});
+    });
+  });
+  </script>
+</body>
