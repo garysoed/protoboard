@@ -12,51 +12,59 @@
   DI
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .with('Events', ['=', t => t.createFakeEvents()])
-      .run([
-          '/=', '/=', '/=', 'trigger.=', '=', '=', '=',
-          (_, _M, expect, DoubleClick, Events, doc, t) => {
+      .with('Events', { t: '=' }, $i => $i.t.createFakeEvents())
+      .run(
+          {
+            _: '/=',
+            _M: '/=',
+            doc: '=',
+            expect: '/=',
+            t: '=',
+            DoubleClick: 'trigger.=',
+            Events: '='
+          },
+          $i => {
 
     describe('DoubleClick', () => {
       let doubleClick;
 
       beforeEach(done => {
-        doubleClick = new DoubleClick();
+        doubleClick = new $i.DoubleClick();
         done();
       });
 
       describe('#on', () => {
         it('should register singletap on hammer', () => {
-          let ability = t.createFakeAbility('test');
-          let element = doc.createElement('div');
+          let ability = $i.t.createFakeAbility('test');
+          let element = $i.doc.createElement('div');
 
           doubleClick.on(element, ability);
 
-          expect(Events.of).calledWith(element, doubleClick).at.least(1);
-          let handlerCaptor = _M.isA(Function);
-          expect(Events.on).calledWith('hammer', 'doubletap', handlerCaptor).at.least(1);
+          $i.expect($i.Events.of).calledWith(element, doubleClick).at.least(1);
+          let handlerCaptor = $i._M.isA(Function);
+          $i.expect($i.Events.on).calledWith('hammer', 'doubletap', handlerCaptor).at.least(1);
 
           handlerCaptor.matchingArgs[0]();
-          expect(ability.trigger).calledWith(element).at.least(1);
+          $i.expect(ability.trigger).calledWith(element).at.least(1);
         });
       });
 
       describe('#off', () => {
         it('should unregister doubletap on hammer', () => {
-          let element = doc.createElement('div');
+          let element = $i.doc.createElement('div');
 
           doubleClick.off(element);
 
-          expect(Events.of).calledWith(element, doubleClick).at.least(1);
-          expect(Events.off).calledWith('hammer', 'doubletap').at.least(1);
+          $i.expect($i.Events.of).calledWith(element, doubleClick).at.least(1);
+          $i.expect($i.Events.off).calledWith('hammer', 'doubletap').at.least(1);
         });
       });
 
       afterEach(done => {
-        _.reset();
+        $i._.reset();
         done();
       });
     });
-  }]);
+  });
   </script>
 </body>

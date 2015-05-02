@@ -5,7 +5,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('Hammer', ['=', Utils => {
+    .bind('Hammer', { }, () => {
 
   /**
    * Wrapper around [HammerJS](http://hammerjs.github.io/).
@@ -73,5 +73,5 @@ DI
   };
 
   return Wrapper;
-}]);
+});
 </script>

@@ -5,13 +5,23 @@
 <link rel="import" href="service/config.html">
 <link rel="import" href="service/template.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/handlebars.html">
+<link rel="import" href="third_party/jquery.html">
 
 <script>
 DI
     .prefix('pb')
-    .bind('ui.Generate', [
-      '=', '=', 'service.=', '=', 'service.=',
-      ($registry, Check, Config, PbElement, Template) => {
+    .bind('ui.Generate',
+        {
+          $: '/=',
+          $registry: '=',
+          Check: '=',
+          Config: 'service.=',
+          Handlebars: '/=',
+          PbElement: '=',
+          Template: 'service.=',
+        },
+        $i => {
 
   const EL_NAME = 'pb-u-generate';
 
@@ -82,7 +92,7 @@ DI
    * @since 0.2.0
    * @extends PbElement
    */
-  class Generate extends PbElement {
+  class Generate extends $i.PbElement {
     /**
      * Called when the element is created
      *
@@ -92,10 +102,10 @@ DI
       super.createdCallback();
 
       // Gets the data.
-      let promises = Check($(this).attr('input'))
+      let promises = $i.Check($i.$(this).attr('input'))
           .isList()
           .orUse([])
-          .map(name => Template.get(name));
+          .map(name => $i.Template.get(name));
       Promise
           .all(promises)
           .then(dataList => {
@@ -106,14 +116,14 @@ DI
             let templateStr = this.querySelector('template')
                 .innerHTML
                 .replace('&gt;', '>');
-            $(this).replaceWith(Handlebars.compile(templateStr)(dataObj));
+            $i.$(this).replaceWith($i.Handlebars.compile(templateStr)(dataObj));
           });
     }
   }
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, Generate.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, Generate.prototype);
 
   return Generate;
-}]);
+});
 </script>

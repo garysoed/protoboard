@@ -2,7 +2,6 @@
 
 <link rel="import" href="ability/ability.html">
 <link rel="import" href="check.html">
-<link rel="import" href="third_party/chance.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="utils.html">
@@ -19,13 +18,19 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "/=", "=", "trigger.=", "=", function ($, Ability, Chance, Check, Click, Utils) {
+DI.prefix("pb").bind("ability.Shuffleable", {
+  $: "/=",
+  Ability: "ability.=",
+  Chance: "/=",
+  Click: "trigger.=",
+  Utils: "="
+}, function ($i) {
   var __defaultEnabled__ = Symbol();
 
-  var Shuffleable = (function (_Ability) {
+  var Shuffleable = (function (_$i$Ability) {
     function Shuffleable() {
       var name = arguments[0] === undefined ? "pb-shuffleable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, Shuffleable);
@@ -35,21 +40,21 @@ DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "/=", "=", "trig
       this[__defaultEnabled__] = defaultEnabled;
     }
 
-    _inherits(Shuffleable, _Ability);
+    _inherits(Shuffleable, _$i$Ability);
 
     _createClass(Shuffleable, {
       init: {
         value: function init(el) {
           _get(Object.getPrototypeOf(Shuffleable.prototype), "init", this).call(this, el);
 
-          if ($(el).attr(this.attrName) === undefined) {
-            $(el).attr(this.attrName, this[__defaultEnabled__]);
+          if ($i.$(el).attr(this.attrName) === undefined) {
+            $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
           }
         }
       },
       doTrigger: {
         value: function doTrigger(el) {
-          var shuffled = Chance.shuffle(Utils.toArray(el.children));
+          var shuffled = $i.Chance.shuffle($i.Utils.toArray(el.children));
           shuffled.forEach(function (shuffledEl) {
             el.appendChild(shuffledEl);
 
@@ -59,7 +64,7 @@ DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "/=", "=", "trig
             shuffledEl.classList.add("pb-shuffleable-animate");
           });
 
-          $(el).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
+          $i.$(el).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
             el.classList.remove("animated");
             el.classList.remove("wobble");
           });
@@ -70,7 +75,7 @@ DI.prefix("pb").bind("ability.Shuffleable", ["/=", "ability.=", "/=", "=", "trig
     });
 
     return Shuffleable;
-  })(Ability);
+  })($i.Ability);
 
   return Shuffleable;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

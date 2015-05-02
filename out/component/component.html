@@ -2,7 +2,6 @@
 
 <link rel="import" href="pbelement.html">
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="utils.html">
 
 <script>"use strict";
 
@@ -14,17 +13,17 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("component.Component", ["=", "=", function (PbElement, Utils) {
-  var Component = (function (_PbElement) {
+DI.prefix("pb").bind("component.Component", { PbElement: "=" }, function ($i) {
+  var Component = (function (_$i$PbElement) {
     function Component() {
       _classCallCheck(this, Component);
 
-      if (_PbElement != null) {
-        _PbElement.apply(this, arguments);
+      if (_$i$PbElement != null) {
+        _$i$PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Component, _PbElement);
+    _inherits(Component, _$i$PbElement);
 
     _createClass(Component, {
       createdCallback: {
@@ -35,7 +34,7 @@ DI.prefix("pb").bind("component.Component", ["=", "=", function (PbElement, Util
     });
 
     return Component;
-  })(PbElement);
+  })($i.PbElement);
 
   return Component;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

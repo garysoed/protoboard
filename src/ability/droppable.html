@@ -1,6 +1,5 @@
 <base href="..">
 
-<link rel="import" href="check.html">
 <link rel="import" href="service/move.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
@@ -8,16 +7,21 @@
 <script>
 DI
     .prefix('pb')
-    .bind('ability.Droppable', [
-        'ability.=', '=', 'trigger.=', 'service.=',
-        (Ability, Check, Click, Move) => {
+    .bind(
+        'ability.Droppable',
+        {
+          Ability: 'ability.=',
+          Click: 'trigger.=',
+          Move: 'service.='
+        },
+        $i => {
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
 
   const __isEnabled__ = Symbol();
 
-  class Droppable extends Ability {
+  class Droppable extends $i.Ability {
 
     /**
      * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
@@ -30,7 +34,7 @@ DI
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Ability
      */
-    constructor(name = 'pb-droppable', defaultTrigger = new Click(), defaultEnabled = true) {
+    constructor(name = 'pb-droppable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
       super(name, defaultTrigger);
 
       this[__defaultEnabled__] = defaultEnabled;
@@ -58,7 +62,7 @@ DI
      * @param {Element} el Element to drop the picked element into.
      */
     doTrigger(el) {
-      let movedElement = Move.movedElements.values().next().value;
+      let movedElement = $i.Move.movedElements.values().next().value;
       if (movedElement) {
         el.appendChild(movedElement);
       }
@@ -66,5 +70,5 @@ DI
   }
 
   return Droppable;
-}]);
+});
 </script>

@@ -10,7 +10,15 @@
 <script>
 DI
     .prefix('pb')
-    .bind('ability.Ability', ['/=', '=', 'service.=', 'trigger.=', ($, Check, Log, Triggers) => {
+    .bind(
+        'ability.Ability',
+        {
+          $: '/=',
+          Check: '=',
+          Log: 'service.=',
+          Triggers: 'trigger.='
+        },
+        ($i) => {
 
   // Private symbols.
   const __name__ = Symbol();
@@ -44,8 +52,8 @@ DI
      * @param {Element} el The element to set the default values to.
      */
     init(el) {
-      if ($(el).attr(this.attrTrigger) === undefined) {
-        $(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
+      if ($i.$(el).attr(this.attrTrigger) === undefined) {
+        $i.$(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
       }
 
       this.updateConfig(el);
@@ -62,13 +70,13 @@ DI
         el[__triggerMap__] = new Map();
       }
 
-      let newValue = $(el).attr(this.attrTrigger);
+      let newValue = $i.$(el).attr(this.attrTrigger);
       if (!el[__triggerMap__].has(this)
           || newValue !== el[__triggerMap__].get(this).toString()) {
         if (el[__triggerMap__].has(this)) {
           el[__triggerMap__].get(this).off(el);
         }
-        let trigger = Triggers.parse($(el).attr(this.attrTrigger));
+        let trigger = $i.Triggers.parse($i.$(el).attr(this.attrTrigger));
         trigger.on(el, this);
         el[__triggerMap__].set(this, trigger);
       }
@@ -81,7 +89,7 @@ DI
      * @param {Element} el The element to trigger the ability on.
      */
     trigger(el) {
-      Log.log(this.attrName, $(el).attr('pb-id'));
+      $i.Log.log(this.attrName, $i.$(el).attr('pb-id'));
       if (this.isEnabled(el)) {
         this.doTrigger(el);
       }
@@ -116,7 +124,7 @@ DI
      * @return {Boolean} True iff the ability is enabled on the given element.
      */
     isEnabled(el) {
-      return Check($(el).attr(this.attrName)).isBoolean().orUse(false);
+      return $i.Check($i.$(el).attr(this.attrName)).isBoolean().orUse(false);
     }
 
     /**
@@ -145,5 +153,5 @@ DI
   }
 
   return Ability;
-}]);
+});
 </script>

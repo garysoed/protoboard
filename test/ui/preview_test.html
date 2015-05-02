@@ -14,70 +14,78 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service.=', Registry => new Registry()])
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .run([
-          '/=', '/=', '/=', '=', 'service.=', 'ui.=', '=',
-          (expect, _, _M, $registry, Config, Preview, doc) => {
+      .run(
+          {
+            expect: '/=',
+            _: '/=',
+            _M: '/=',
+            $registry: '=',
+            Config: 'service.=',
+            Preview: 'ui.=',
+            doc: '='
+          },
+          $i => {
 
   describe('ui.Preview', () => {
     before(done => {
-      $registry.register(doc, Config);
+      $i.$registry.register($i.doc, $i.Config);
       done();
     });
 
     describe('#attachedCallback', () => {
       it('should listen to mouse enter and leave on parent element', () => {
-        let parent = document.createElement('div');
-        let preview = document.createElement('pb-u-preview');
+        let parent = $i.doc.createElement('div');
+        let preview = $i.doc.createElement('pb-u-preview');
         parent.appendChild(preview);
 
-        _.spy(parent, 'addEventListener');
+        $i._.spy(parent, 'addEventListener');
 
         preview.attachedCallback();
 
-        expect(parent.addEventListener).calledWith('mouseenter', _M.isA(Function)).at.least(1);
-        expect(parent.addEventListener).calledWith('mouseleave', _M.isA(Function)).at.least(1);
+        $i.expect(parent.addEventListener).calledWith('mouseenter', $i._M.isA(Function)).at.least(1);
+        $i.expect(parent.addEventListener).calledWith('mouseleave', $i._M.isA(Function)).at.least(1);
       });
       it('should not crash if there are no parent elements', () => {
-        document.createElement('pb-u-preview').attachedCallback();
+        $i.doc.createElement('pb-u-preview').attachedCallback();
       });
     });
 
     describe('#detachedCallback', () => {
       it('should stop listening to mouse enter and leave from parent element', () => {
-        let parent = document.createElement('div');
-        let preview = document.createElement('pb-u-preview');
+        let parent = $i.doc.createElement('div');
+        let preview = $i.doc.createElement('pb-u-preview');
         parent.appendChild(preview);
 
-        _.spy(parent, 'addEventListener');
-        _.spy(parent, 'removeEventListener');
+        $i._.spy(parent, 'addEventListener');
+        $i._.spy(parent, 'removeEventListener');
 
         preview.attachedCallback();
 
-        let mouseEnterHandlerMatcher = _M.isA(Function);
-        let mouseLeaveHandlerMatcher = _M.isA(Function);
-        expect(parent.addEventListener)
+        let mouseEnterHandlerMatcher = $i._M.isA(Function);
+        let mouseLeaveHandlerMatcher = $i._M.isA(Function);
+        $i.expect(parent.addEventListener)
             .calledWith('mouseenter', mouseEnterHandlerMatcher).at.least(1);
-        expect(parent.addEventListener)
+        $i.expect(parent.addEventListener)
             .calledWith('mouseleave', mouseLeaveHandlerMatcher).at.least(1);
 
         preview.detachedCallback();
-        expect(parent.removeEventListener)
+        $i.expect(parent.removeEventListener)
             .calledWith('mouseenter', mouseEnterHandlerMatcher.matchingArgs[0]).at.least(1);
-        expect(parent.removeEventListener)
+        $i.expect(parent.removeEventListener)
             .calledWith('mouseleave', mouseLeaveHandlerMatcher.matchingArgs[0]).at.least(1);
       });
       it('should not crash if there are no parent elements', () => {
-        document.createElement('pb-u-preview').detachedCallback();
+        $i.doc.createElement('pb-u-preview').detachedCallback();
       });
     });
 
     afterEach(done => {
-      _.reset();
+      $i._.reset();
       done();
     });
   });
-  }]);
+  });
   </script>
 </body>

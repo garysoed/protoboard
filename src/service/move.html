@@ -35,7 +35,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('service.Move', ['=', '=', '=', ($registry, Events, Utils) => {
+    .bind('service.Move', { $registry: '=', Events: '=', Utils: '=' }, $i => {
 
   // Private symbols.
   const __container__ = Symbol('container');
@@ -89,7 +89,7 @@ DI
     [__moveContainer__]() {
       let width = 0;
       let height = 0;
-      Utils.toArray(this[__container__].children).forEach(child => {
+      $i.Utils.toArray(this[__container__].children).forEach(child => {
         let rect = child.getBoundingClientRect();
         width = Math.max(rect.width, width);
         height = Math.max(rect.height, height);
@@ -157,8 +157,8 @@ DI
     }
   };
 
-  $registry.runAtRegister(doc => {
-    Events.of(doc.body, Move)
+  $i.$registry.runAtRegister(doc => {
+    $i.Events.of(doc.body, Move)
         .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
     Move[__document__] = doc;
     Move[__container__] = doc.createElement('div');
@@ -167,5 +167,5 @@ DI
   });
 
   return Move;
-}]);
+});
 </script>

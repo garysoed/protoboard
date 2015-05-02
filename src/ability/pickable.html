@@ -1,20 +1,26 @@
 <base href="..">
 
-<link rel="import" href="check.html">
+<link rel="import" href="ability/ability.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
 <link rel="import" href="service/move.html">
 
 <script>
 DI
     .prefix('pb')
-    .bind('ability.Pickable', [
-        'ability.=', '=', 'trigger.=', 'service.=', 'trigger.=',
-        (Ability, Check, Click, Move, Triggers) => {
+    .bind('ability.Pickable',
+        {
+          $: '/=',
+          Ability: 'ability.=',
+          Click: 'trigger.=',
+          Move: 'service.=',
+        },
+        $i => {
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
 
-  class Pickable extends Ability {
+  class Pickable extends $i.Ability {
 
     /**
      * Element with this ability can be picked and dragged around. The element can be dropped on
@@ -27,7 +33,7 @@ DI
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Ability
      */
-    constructor(name = 'pb-pickable', defaultTrigger = new Click(), defaultEnabled = true) {
+    constructor(name = 'pb-pickable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
       super(name, defaultTrigger);
 
       this[__defaultEnabled__] = defaultEnabled;
@@ -42,8 +48,8 @@ DI
     init(el) {
       super.init(el);
 
-      if ($(el).attr(this.attrName) === undefined) {
-        $(el).attr(this.attrName, this[__defaultEnabled__]);
+      if ($i.$(el).attr(this.attrName) === undefined) {
+        $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
       }
     }
 
@@ -54,10 +60,10 @@ DI
      * @param {Element} el Element to be picked up.
      */
     doTrigger(el) {
-      Move.add(el);
+      $i.Move.add(el);
     }
   }
 
   return Pickable;
-}]);
+});
 </script>

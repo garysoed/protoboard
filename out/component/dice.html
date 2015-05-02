@@ -51,9 +51,24 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template");
-}]).bind("component.Dice", ["/=", "ability.=", "/=", "=", "trigger.=", "component.=", "service.=", "ability.=", "trigger.=", "ability.=", "ability.=", "=", "=", "=", "=", function ($, Ability, Chance, Check, Click, Component, Config, Helpable, Key, Pickable, Shuffleable, Utils, $registry, doc, template) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("component.Dice", {
+  $: "/=",
+  $registry: "=",
+  doc: "=",
+  template: "=",
+  Ability: "ability.=",
+  Chance: "/=",
+  Check: "=",
+  Click: "trigger.=",
+  Component: "component.=",
+  Config: "service.=",
+  Helpable: "ability.=",
+  Key: "trigger.=",
+  Pickable: "ability.=",
+  Shuffleable: "ability.=",
+  Utils: "=" }, function ($i) {
 
   var EL_NAME = "pb-c-dice";
   var ATTR_PAIR = "pb-dice-pair";
@@ -64,10 +79,10 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   var __defaultShowA__ = Symbol();
   var __isShowA__ = Symbol();
 
-  var Rollable = (function (_Shuffleable) {
+  var Rollable = (function (_$i$Shuffleable) {
     function Rollable() {
       var name = arguments[0] === undefined ? "pb-rollable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
       var defaultShowA = arguments[3] === undefined ? true : arguments[3];
 
@@ -79,36 +94,36 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       this[__defaultShowA__] = defaultShowA;
     }
 
-    _inherits(Rollable, _Shuffleable);
+    _inherits(Rollable, _$i$Shuffleable);
 
     _createClass(Rollable, {
       init: {
         value: function init(el) {
           _get(Object.getPrototypeOf(Rollable.prototype), "init", this).call(this, el);
-          if ($(el).attr(this.attrName) === undefined) {
-            $(el).attr(this.attrName, this[__defaultEnabled__]);
+          if ($i.$(el).attr(this.attrName) === undefined) {
+            $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
           }
 
-          if ($(el).attr(ATTR_SHOW_A) === undefined) {
-            $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+          if ($i.$(el).attr(ATTR_SHOW_A) === undefined) {
+            $i.$(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
           }
         }
       },
       doTrigger: {
         value: function doTrigger(el) {
           _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
-          $(el).attr(ATTR_SHOW_A, Chance.bool());
+          $i.$(el).attr(ATTR_SHOW_A, $i.Chance.bool());
         }
       }
     });
 
     return Rollable;
-  })(Shuffleable);
+  })($i.Shuffleable);
 
-  var DiceFlippable = (function (_Ability) {
+  var DiceFlippable = (function (_$i$Ability) {
     function DiceFlippable() {
       var name = arguments[0] === undefined ? "pb-dice-flippable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Key("f") : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Key("f") : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? false : arguments[2];
       var defaultShowA = arguments[3] === undefined ? true : arguments[3];
 
@@ -120,54 +135,54 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       this[__defaultShowA__] = defaultShowA;
     }
 
-    _inherits(DiceFlippable, _Ability);
+    _inherits(DiceFlippable, _$i$Ability);
 
     _createClass(DiceFlippable, {
       init: {
         value: function init(el) {
           _get(Object.getPrototypeOf(DiceFlippable.prototype), "init", this).call(this, el);
-          if ($(el).attr(this.attrName) === undefined) {
-            $(el).attr(this.attrName, this[__defaultEnabled__]);
+          if ($i.$(el).attr(this.attrName) === undefined) {
+            $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
           }
 
-          if ($(el).attr(ATTR_SHOW_A) === undefined) {
-            $(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+          if ($i.$(el).attr(ATTR_SHOW_A) === undefined) {
+            $i.$(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
           }
         }
       },
       doTrigger: {
         value: function doTrigger(el) {
-          $(el).attr(ATTR_SHOW_A, !Check($(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
+          $i.$(el).attr(ATTR_SHOW_A, !$i.Check($i.$(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
         }
       }
     });
 
     return DiceFlippable;
-  })(Ability);
+  })($i.Ability);
 
-  var Dice = (function (_Component) {
+  var Dice = (function (_$i$Component) {
     function Dice() {
       _classCallCheck(this, Dice);
 
-      if (_Component != null) {
-        _Component.apply(this, arguments);
+      if (_$i$Component != null) {
+        _$i$Component.apply(this, arguments);
       }
     }
 
-    _inherits(Dice, _Component);
+    _inherits(Dice, _$i$Component);
 
     _createClass(Dice, {
       createdCallback: {
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Dice.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
 
           if (this.children.length <= 0) {
-            var type = $(this).attr("type");
+            var type = $i.$(this).attr("type");
             if (SUPPORTED_TYPES.indexOf(type) >= 0) {
               var faceCount = Number.parseInt(type.substring(1));
               for (var i = 0; i < faceCount; i += 1) {
-                var faceEl = doc.createElement("div");
+                var faceEl = $i.doc.createElement("div");
                 faceEl.innerText = i + 1;
                 this.appendChild(faceEl);
               }
@@ -175,14 +190,14 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
           }
 
           if (this.querySelectorAll("[" + ATTR_PAIR + "]").length <= 0) {
-            var children = Utils.toArray(this.children);
+            var children = $i.Utils.toArray(this.children);
             if (children.length % 2 !== 0) {
               throw new Error("Number of children of dice should be event");
             }
 
             for (var i = 0; i < children.length / 2; i++) {
-              var pairEl = doc.createElement("div");
-              $(pairEl).attr(ATTR_PAIR, "");
+              var pairEl = $i.doc.createElement("div");
+              $i.$(pairEl).attr(ATTR_PAIR, "");
               pairEl.appendChild(children[i]);
               pairEl.appendChild(children[children.length - 1 - i]);
               this.appendChild(pairEl);
@@ -193,14 +208,14 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     });
 
     return Dice;
-  })(Component);
+  })($i.Component);
 
-  Config.add(EL_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true), new Rollable("roll", new Key("r"), true), new DiceFlippable("flip", new Key("f")));
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true), new Rollable("roll", new $i.Key("r"), true), new DiceFlippable("flip", new $i.Key("f")));
 
-  $registry.add(EL_NAME, Dice.prototype);
+  $i.$registry.add(EL_NAME, Dice.prototype);
 
   Dice.DiceFlippable = DiceFlippable;
   Dice.Rollable = Rollable;
 
   return Dice;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

@@ -12,63 +12,70 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service.=', Registry => new Registry()])
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('service.Move', { add() {} })
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/=', '/=', '/=', '=', 'service.=', 'ability.=',
-          (expect, _, $, doc, Move, Pickable) => {
+      .run(
+          {
+            expect: '/=',
+            _: '/=',
+            doc: '=',
+            Move: 'service.=',
+            Pickable: 'ability.='
+          },
+          $i => {
 
   describe('ability.Pickable', () => {
     let el;
 
     beforeEach(done => {
-      el = doc.createElement('div');
+      el = $i.doc.createElement('div');
       done();
     });
 
     describe('#init', () => {
       it('should set the default value if the attribute is not set', () => {
-        let pickable = new Pickable(undefined, undefined, true);
+        let pickable = new $i.Pickable(undefined, undefined, true);
         pickable.init(el);
-        expect($(el).attr(pickable.attrName)).to.be.equal('true');
+        $i.expect($(el).attr(pickable.attrName)).to.be.equal('true');
       });
       it('should not set the default value if the attribute is set', () => {
         let value = 'value';
-        let pickable = new Pickable(undefined, undefined, true);
+        let pickable = new $i.Pickable(undefined, undefined, true);
         $(el).attr(pickable.attrName, value);
         pickable.init(el);
-        expect($(el).attr(pickable.attrName)).to.equal(value);
+        $i.expect($(el).attr(pickable.attrName)).to.equal(value);
       });
     });
 
     describe('#trigger', () => {
       it('should add the element to Move if enabled', () => {
-        let pickable = new Pickable(undefined, undefined, true);
+        let pickable = new $i.Pickable(undefined, undefined, true);
         pickable.init(el);
 
-        _.spy(Move, 'add');
+        $i._.spy($i.Move, 'add');
 
         pickable.trigger(el);
 
-        expect(Move.add).calledWith(el).at.least(1);
+        $i.expect($i.Move.add).calledWith(el).at.least(1);
       });
       it('should do nothing if not enabled', () => {
-        let pickable = new Pickable(undefined, undefined, false);
+        let pickable = new $i.Pickable(undefined, undefined, false);
         pickable.init(el);
 
-        _.spy(Move, 'add');
+        $i._.spy($i.Move, 'add');
 
         pickable.trigger(el, {});
 
-        expect(Move.add).called().to.equal(0);
+        $i.expect($i.Move.add).called().to.equal(0);
       });
     });
 
     afterEach(done => {
-      _.reset();
+      $i._.reset();
       done();
     });
   });
-  }]);
+  });
   </script>
 </body>

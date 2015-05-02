@@ -13,7 +13,7 @@
   <script>
   DI
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/=', '/=', '=', '/=', (expect, _, doc, Chance) => {
+      .run({ expect: '/=', Chance: '/=' }, $i => {
 
   describe('Chance', () => {
     describe('#binom', () => {
@@ -26,11 +26,11 @@
       it('should return items that the bool method returns true', () => {
         let collection = [1, 2, 3];
         let gen = binomGen([true, false, true]);
-        Chance.bool = () => gen.next().value;
-        expect(Chance.binom(collection)).to.eql([1, 3]);
+        $i.Chance.bool = () => gen.next().value;
+        $i.expect($i.Chance.binom(collection)).to.eql([1, 3]);
       });
     });
   });
-  }]);
+  });
   </script>
 </body>

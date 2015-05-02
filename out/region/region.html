@@ -9,20 +9,20 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("region.Region", ["=", function (PbElement) {
-  var Region = (function (_PbElement) {
+DI.prefix("pb").bind("region.Region", { PbElement: "=" }, function ($i) {
+  var Region = (function (_$i$PbElement) {
     function Region() {
       _classCallCheck(this, Region);
 
-      if (_PbElement != null) {
-        _PbElement.apply(this, arguments);
+      if (_$i$PbElement != null) {
+        _$i$PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Region, _PbElement);
+    _inherits(Region, _$i$PbElement);
 
     return Region;
-  })(PbElement);
+  })($i.PbElement);
 
   return Region;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

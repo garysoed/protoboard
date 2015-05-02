@@ -21,32 +21,39 @@
         .constant('service.Move', {
           movedElements: []
         })
-        .with('$registry', ['service.=', Registry => new Registry()])
+        .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
         .constant('doc', document.currentScript.ownerDocument)
-        .run([
-            '/=', '/=', '/=', '=', '/=', 'ability.=', 'service.=', '=',
-            (expect, _, _M, doc, $, Droppable, Move, Utils) => {
+        .run(
+            {
+              expect: '/=',
+              doc: '=',
+              $: '/=',
+              Droppable: 'ability.=',
+              Move: 'service.=',
+              Utils: '='
+            },
+            $i => {
 
       describe('Droppable', () => {
         let el;
 
         beforeEach(done => {
-          el = doc.createElement('div');
+          el = $i.doc.createElement('div');
           done();
         });
 
         describe('#init', () => {
           it('should set the default value if the attribute is not set', () => {
-            let droppable = new Droppable(undefined, undefined, false);
+            let droppable = new $i.Droppable(undefined, undefined, false);
             droppable.init(el);
-            expect($(el).attr(droppable.attrName)).to.equal('false');
+            $i.expect($i.$(el).attr(droppable.attrName)).to.equal('false');
           });
           it('should not set the default value if the attribute is set', () => {
             let value = 'value';
-            let droppable = new Droppable();
-            $(el).attr(droppable.attrName, value);
+            let droppable = new $i.Droppable();
+            $i.$(el).attr(droppable.attrName, value);
             droppable.init(el);
-            expect($(el).attr(droppable.attrName)).to.equal(value);
+            $i.expect($i.$(el).attr(droppable.attrName)).to.equal(value);
           });
         });
 
@@ -54,38 +61,33 @@
           let droppable;
 
           it('should add the moved elements if enabled', () => {
-            let child1 = doc.createElement('div');
-            let child2 = doc.createElement('h1');
+            let child1 = $i.doc.createElement('div');
+            let child2 = $i.doc.createElement('h1');
 
-            droppable = new Droppable(undefined, undefined, true);
+            droppable = new $i.Droppable(undefined, undefined, true);
             droppable.init(el);
 
-            Move.movedElements = [child1, child2];
+            $i.Move.movedElements = [child1, child2];
 
             droppable.trigger(el);
 
-            expect(Utils.toArray(el.children)).to.eql([child1]);
+            $i.expect($i.Utils.toArray(el.children)).to.eql([child1]);
           });
           it('should do nothing if not enabled', () => {
-            let child1 = doc.createElement('div');
-            let child2 = doc.createElement('h1');
+            let child1 = $i.doc.createElement('div');
+            let child2 = $i.doc.createElement('h1');
 
-            droppable = new Droppable(undefined, undefined, false);
+            droppable = new $i.Droppable(undefined, undefined, false);
             droppable.init(el);
 
-            Move.movedElements = [child1, child2];
+            $i.Move.movedElements = [child1, child2];
 
             droppable.trigger(el);
 
-            expect(el.children.length).to.equal(0);
+            $i.expect(el.children.length).to.equal(0);
           });
         });
-
-        afterEach(done => {
-          _.reset();
-          done();
-        });
       });
-    }]);
+    });
   </script>
 </body>

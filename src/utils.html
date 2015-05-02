@@ -5,7 +5,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('Utils', [() => {
+    .bind('Utils', {}, () => {
 
   /**
    * Various miscellaneous utilities. They are not meant for general usage, but feel free to use
@@ -247,5 +247,5 @@ DI
   };
 
   return Utils;
-}]);
+});
 </script>

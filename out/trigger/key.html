@@ -22,21 +22,26 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", function (Events, Move, Trigger, $registry) {
+DI.prefix("pb").bind("trigger.Key", {
+  Events: "=",
+  Move: "service.=",
+  Trigger: "trigger.=",
+  $registry: "="
+}, function ($i) {
   var __active__ = Symbol();
   var __key__ = Symbol("key");
 
   var __onMouseEnter__ = Symbol();
   var __onMouseLeave__ = Symbol("onMouseLeave");
 
-  var Key = (function (_Trigger) {
+  var Key = (function (_$i$Trigger) {
     function Key(key) {
       _classCallCheck(this, Key);
 
       this[__key__] = key;
     }
 
-    _inherits(Key, _Trigger);
+    _inherits(Key, _$i$Trigger);
 
     _createComputedClass(Key, [{
       key: __onMouseEnter__,
@@ -51,13 +56,13 @@ DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", functio
     }, {
       key: "on",
       value: function on(element, ability) {
-        Events.of(element, this).on("dom", "mouseenter", this[__onMouseEnter__].bind(this, ability, element)).on("dom", "mouseleave", this[__onMouseLeave__].bind(this, element));
+        $i.Events.of(element, this).on("dom", "mouseenter", this[__onMouseEnter__].bind(this, ability, element)).on("dom", "mouseleave", this[__onMouseLeave__].bind(this, element));
         element.classList.add("pb-key");
       }
     }, {
       key: "off",
       value: function off(element) {
-        Events.of(element, this).off();
+        $i.Events.of(element, this).off();
         element.classList.remove("pb-key");
       }
     }, {
@@ -73,7 +78,7 @@ DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", functio
     }]);
 
     return Key;
-  })(Trigger);
+  })($i.Trigger);
 
   Key.parse = function (str) {
     if (str.substring(0, "pb-key-".length) === "pb-key-") {
@@ -154,14 +159,14 @@ DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", functio
         }
 
         var rect = triggeredEl.getBoundingClientRect();
-        if (Move.movedElements.has(triggeredEl) || rect.left > Move.mouseX || rect.right < Move.mouseX || rect.top > Move.mouseY || rect.bottom < Move.mouseY) {
+        if ($i.Move.movedElements.has(triggeredEl) || rect.left > $i.Move.mouseX || rect.right < $i.Move.mouseX || rect.top > $i.Move.mouseY || rect.bottom < $i.Move.mouseY) {
           this[__hoveredEls__]["delete"](triggeredEl);
         }
       }
     });
 
     _defineProperty(_Object$defineProperties, "init", function init(doc) {
-      Events.of(doc.body, Service).on("dom", "keypress", this[__onKeyPress__].bind(Service));
+      $i.Events.of(doc.body, Service).on("dom", "keypress", this[__onKeyPress__].bind(Service));
     });
 
     _defineProperty(_Object$defineProperties, "add", function add(element, key, ability) {
@@ -196,11 +201,11 @@ DI.prefix("pb").bind("trigger.Key", ["=", "service.=", "trigger.=", "=", functio
     }
   });
 
-  $registry.runAtRegister(function (doc) {
+  $i.$registry.runAtRegister(function (doc) {
     Service.init(doc);
   });
 
   Key.Service = Service;
 
   return Key;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

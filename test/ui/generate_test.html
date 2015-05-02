@@ -4,11 +4,11 @@
   <base href="..">
   <title>ui.Generate Unit Tests</title>
 
-  <link rel="import" href="third_party/di.html">
   <link rel="import" href="service/config.html">
   <link rel="import" href="service/registry.html">
   <link rel="import" href="service/template.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
   <link rel="import" href="ui/generate.html">
   <link rel="import" href="utils.html">
 </head>
@@ -25,15 +25,24 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service.=', Registry => new Registry()])
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .run([
-          '/=', '/=', 'service.=', '=', '=', 'ui.=', 'service.=', '=',
-          (expect, _, Config, $registry, doc, Generate, Template, Utils) => {
+      .run(
+          {
+            expect: '/=',
+            _: '/=',
+            $registry: '=',
+            doc: '=',
+            Config: 'service.=',
+            Generate: 'ui.=',
+            Template: 'service.=',
+            Utils: '=',
+          },
+          $i => {
 
   describe('ui.Generate', () => {
     before(done => {
-      $registry.register(doc, Config);
+      $i.$registry.register($i.doc, $i.Config);
       done();
     });
 
@@ -42,28 +51,28 @@
         let dataA = 'a';
         let dataB = 'B';
 
-        let template = doc.querySelector('#test');
-        let holderEl = doc.querySelector('#testHolder');
-        let generateEl = Utils.activateTemplate(template, doc);
+        let template = $i.doc.querySelector('#test');
+        let holderEl = $i.doc.querySelector('#testHolder');
+        let generateEl = $i.Utils.activateTemplate(template, $i.doc);
         holderEl.appendChild(generateEl);
 
-        Utils
+        $i.Utils
             .watch(() => {
-              return doc.querySelector('pb-u-generate') === null;
+              return $i.doc.querySelector('pb-u-generate') === null;
             })
             .then(() => {
-              expect(holderEl.children.length).to.be.equal(2);
-              expect(holderEl.children.item(0).innerText).to.be.equal(`Data A: ${dataA}`);
-              expect(holderEl.children.item(1).innerText).to.be.equal(`Data B: ${dataB}`);
+              $i.expect(holderEl.children.length).to.be.equal(2);
+              $i.expect(holderEl.children.item(0).innerText).to.be.equal(`Data A: ${dataA}`);
+              $i.expect(holderEl.children.item(1).innerText).to.be.equal(`Data B: ${dataB}`);
               done();
             });
 
-        Template
+        $i.Template
             .addData('dataA', dataA)
             .addData('dataB', dataB);
       });
     });
   });
-  }]);
+  });
   </script>
 </body>

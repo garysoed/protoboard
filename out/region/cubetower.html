@@ -53,19 +53,34 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template");
-}]).bind("region.CubeTower", ["/=", "=", "=", "=", "/=", "=", "service.=", "ability.=", "ability.=", "trigger.=", "service.=", "region.=", "/=?", "=", function ($, $registry, doc, template, Chance, Check, Config, Droppable, Helpable, Key, Move, Region, TEST_MODE, Utils) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("region.CubeTower", {
+  $: "/=",
+  $registry: "=",
+  doc: "=",
+  template: "=",
+  Chance: "/=",
+  Check: "=",
+  Config: "service.=",
+  Droppable: "ability.=",
+  Helpable: "ability.=",
+  Key: "trigger.=",
+  Move: "service.=",
+  Region: "region.=",
+  TEST_MODE: "/=?",
+  Utils: "="
+}, function ($i) {
 
   var ATTR_TOWER_LEVEL = "pb-tower-level";
   var EL_NAME = "pb-r-cubetower";
 
   var __defaultProbabilities__ = Symbol();
 
-  var TowerDroppable = (function (_Droppable) {
+  var TowerDroppable = (function (_$i$Droppable) {
     function TowerDroppable() {
       var name = arguments[0] === undefined ? "drop" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Key("d") : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Key("d") : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
       var defaultProbabilities = arguments[3] === undefined ? [1] : arguments[3];
 
@@ -75,13 +90,13 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       this[__defaultProbabilities__] = defaultProbabilities;
     }
 
-    _inherits(TowerDroppable, _Droppable);
+    _inherits(TowerDroppable, _$i$Droppable);
 
     _createClass(TowerDroppable, {
       init: {
         value: function init(el) {
-          if ($(el).attr(this.attrChances) === undefined) {
-            $(el).attr(this.attrChances, this[__defaultProbabilities__].join(" "));
+          if ($i.$(el).attr(this.attrChances) === undefined) {
+            $i.$(el).attr(this.attrChances, this[__defaultProbabilities__].join(" "));
           }
 
           _get(Object.getPrototypeOf(TowerDroppable.prototype), "init", this).call(this, el);
@@ -91,8 +106,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
         value: function updateConfig(el) {
           _get(Object.getPrototypeOf(TowerDroppable.prototype), "updateConfig", this).call(this, el);
 
-          var probabilities = Check($(el).attr(this.attrChances)).isList().orThrows().map(function (i) {
-            return Check(i).isFloat().orThrows();
+          var probabilities = $i.Check($i.$(el).attr(this.attrChances)).isList().orThrows().map(function (i) {
+            return $i.Check(i).isFloat().orThrows();
           });
 
           probabilities.forEach(function (probability) {
@@ -101,10 +116,10 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
             }
           });
 
-          Utils.toArray(el.querySelectorAll("[" + ATTR_TOWER_LEVEL + "]")).forEach(function (child) {
-            var level = Check($(child).attr(ATTR_TOWER_LEVEL)).isInt().orThrows();
+          $i.Utils.toArray(el.querySelectorAll("[" + ATTR_TOWER_LEVEL + "]")).forEach(function (child) {
+            var level = $i.Check($i.$(child).attr(ATTR_TOWER_LEVEL)).isInt().orThrows();
             if (level >= probabilities.length) {
-              $(child).attr(ATTR_TOWER_LEVEL, null);
+              $i.$(child).attr(ATTR_TOWER_LEVEL, null);
             }
           });
         }
@@ -113,7 +128,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
         value: function doTrigger(el) {
           var _this = this;
 
-          var movedElement = Move.movedElements.values().next().value;
+          var movedElement = $i.Move.movedElements.values().next().value;
           if (movedElement) {
             (function () {
               el.appendChild(movedElement);
@@ -121,28 +136,28 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
               var droppingEls = new Set();
               droppingEls.add(movedElement);
 
-              var probabilities = Check($(el).attr(_this.attrChances)).isList().orThrows().map(function (i) {
-                return Check(i).isFloat().orThrows();
+              var probabilities = $i.Check($i.$(el).attr(_this.attrChances)).isList().orThrows().map(function (i) {
+                return $i.Check(i).isFloat().orThrows();
               });
 
               for (var level = 0; level < probabilities.length; level++) {
                 (function (level) {
                   var passChance = probabilities[level] * 100;
 
-                  Utils.toArray(el.querySelectorAll("[" + ATTR_TOWER_LEVEL + "=\"" + level + "\"]")).forEach(function (child) {
+                  $i.Utils.toArray(el.querySelectorAll("[" + ATTR_TOWER_LEVEL + "=\"" + level + "\"]")).forEach(function (child) {
                     return droppingEls.add(child);
                   });
 
-                  var stuckEls = Chance.binom(droppingEls, { likelihood: 100 - passChance });
+                  var stuckEls = $i.Chance.binom(droppingEls, { likelihood: 100 - passChance });
                   stuckEls.forEach(function (stuckEl) {
-                    $(stuckEl).attr(ATTR_TOWER_LEVEL, level);
+                    $i.$(stuckEl).attr(ATTR_TOWER_LEVEL, level);
                     droppingEls["delete"](stuckEl);
                   });
                 })(level);
               }
 
               droppingEls.forEach(function (passEl) {
-                return $(passEl).attr(ATTR_TOWER_LEVEL, null);
+                return $i.$(passEl).attr(ATTR_TOWER_LEVEL, null);
               });
             })();
           }
@@ -156,38 +171,38 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     });
 
     return TowerDroppable;
-  })(Droppable);
+  })($i.Droppable);
 
-  var CubeTower = (function (_Region) {
+  var CubeTower = (function (_$i$Region) {
     function CubeTower() {
       _classCallCheck(this, CubeTower);
 
-      if (_Region != null) {
-        _Region.apply(this, arguments);
+      if (_$i$Region != null) {
+        _$i$Region.apply(this, arguments);
       }
     }
 
-    _inherits(CubeTower, _Region);
+    _inherits(CubeTower, _$i$Region);
 
     _createClass(CubeTower, {
       createdCallback: {
         value: function createdCallback() {
           _get(Object.getPrototypeOf(CubeTower.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate(template, doc));
         }
       }
     });
 
     return CubeTower;
-  })(Region);
+  })($i.Region);
 
-  Config.add(EL_NAME, new Helpable("help"), new TowerDroppable("drop", new Key("d"), true));
-  $registry.add(EL_NAME, CubeTower.prototype);
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new TowerDroppable("drop", new $i.Key("d"), true));
+  $i.$registry.add(EL_NAME, CubeTower.prototype);
 
-  if (TEST_MODE) {
+  if ($i.TEST_MODE) {
     CubeTower.TowerDroppable = TowerDroppable;
   }
 
   return CubeTower;
-}]);</script>
+});</script>
 </head><body></body></html>

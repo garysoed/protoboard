@@ -6,7 +6,7 @@
 
 DI
     .prefix('pb')
-    .bind('service.Registry', [() => {
+    .bind('service.Registry', {}, () => {
 
   const __elements__ = Symbol();
   const __toRun__ = Symbol();
@@ -68,5 +68,5 @@ DI
   }
 
   return Registry;
-}]);
+});
 </script>

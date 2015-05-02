@@ -140,14 +140,14 @@ gulp.task('test', ['jshint'], function() {
       .pipe(gulp.dest('out'));
 });
 
-gulp.task('karma', ['src', 'test'], function(done) {
+gulp.task('karma', ['compile'], function(done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
   }, done);
 });
 
-gulp.task('karma-dev', function(done) {
+gulp.task('karma-dev', ['compile'], function(done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: false
@@ -176,7 +176,7 @@ gulp.task('watch', ['compile'], function() {
   });
 });
 
-gulp.task('compile', ['src', 'test']);
+gulp.task('compile', ['src', 'test', 'copy']);
 gulp.task('pack', ['src', 'check', 'doc'], function() {
   return gulp.src('out/**/*')
       .pipe(zip('bin.zip'))

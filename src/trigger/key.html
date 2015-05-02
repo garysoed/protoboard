@@ -15,9 +15,15 @@
 <script>
 DI
     .prefix('pb')
-    .bind('trigger.Key', [
-        '=', 'service.=', 'trigger.=', '=',
-        (Events, Move, Trigger, $registry) => {
+    .bind(
+        'trigger.Key',
+        {
+          Events: '=',
+          Move: 'service.=',
+          Trigger: 'trigger.=',
+          $registry: '='
+        },
+        $i => {
   // Private symbols.
   const __active__ = Symbol();
   const __key__ = Symbol('key');
@@ -25,7 +31,7 @@ DI
   const __onMouseEnter__ = Symbol();
   const __onMouseLeave__ = Symbol('onMouseLeave');
 
-  class Key extends Trigger {
+  class Key extends $i.Trigger {
 
     /**
      * Triggers an ability when the given key is pressed while the mouse is over the registered
@@ -72,7 +78,7 @@ DI
      * @param {ability.Ability} ability The ability to trigger.
      */
     on(element, ability) {
-      Events.of(element, this)
+      $i.Events.of(element, this)
           .on('dom', 'mouseenter', this[__onMouseEnter__].bind(this, ability, element))
           .on('dom', 'mouseleave', this[__onMouseLeave__].bind(this, element));
       element.classList.add('pb-key');
@@ -85,7 +91,7 @@ DI
      * @param {Element} element Element to unregister the listener from.
      */
     off(element) {
-      Events.of(element, this).off();
+      $i.Events.of(element, this).off();
       element.classList.remove('pb-key');
     }
 
@@ -169,11 +175,11 @@ DI
 
         // Check if the mouse is still inside the triggered el.
         const rect = triggeredEl.getBoundingClientRect();
-        if (Move.movedElements.has(triggeredEl)
-            || rect.left > Move.mouseX
-            || rect.right < Move.mouseX
-            || rect.top > Move.mouseY
-            || rect.bottom < Move.mouseY) {
+        if ($i.Move.movedElements.has(triggeredEl)
+            || rect.left > $i.Move.mouseX
+            || rect.right < $i.Move.mouseX
+            || rect.top > $i.Move.mouseY
+            || rect.bottom < $i.Move.mouseY) {
           this[__hoveredEls__].delete(triggeredEl);
         }
       }
@@ -186,7 +192,7 @@ DI
      * @param {Document} doc The document to listen to key presses.
      */
     init(doc) {
-      Events.of(doc.body, Service)
+      $i.Events.of(doc.body, Service)
           .on('dom', 'keypress', this[__onKeyPress__].bind(Service));
     },
 
@@ -243,12 +249,12 @@ DI
     }
   };
 
-  $registry.runAtRegister(doc => {
+  $i.$registry.runAtRegister(doc => {
     Service.init(doc);
   });
 
   Key.Service = Service;
 
   return Key;
-}]);
+});
 </script>

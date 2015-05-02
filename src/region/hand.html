@@ -45,36 +45,28 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['=', doc => doc.querySelector('template')])
-    .bind('region.Hand', [
-        '=',
-        'ability.=',
-        '=',
-        'service.=',
-        'ability.=',
-        'ability.=',
-        'trigger.=',
-        'service.=',
-        'region.=',
-        '=',
-        '=',
-        '=',
-          ($registry,
-          Abilities,
-          Check,
-          Config,
-          Droppable,
-          Helpable,
-          Key,
-          Move,
-          Region,
-          Utils,
-          doc,
-          template) => {
+    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
+    .bind('region.Hand',
+        {
+          $registry: '=',
+          Abilities: 'ability.=',
+          Check: '=',
+          Config: 'service.=',
+          Droppable: 'ability.=',
+          Helpable: 'ability.=',
+          Key: 'trigger.=',
+          Move: 'service.=',
+          Region: 'region.=',
+          Utils: '=',
+          doc: '=',
+          template: '=',
+          TEST_MODE: '/=?'
+        },
+        $i => {
 
   const EL_NAME = 'pb-r-hand';
 
-  class ReorderableDroppable extends Droppable {
+  class ReorderableDroppable extends $i.Droppable {
 
     /**
      * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
@@ -89,7 +81,7 @@ DI
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Droppable
      */
-    constructor(name = 'pb-droppable', defaultTrigger = new Key('d'), defaultEnabled = true) {
+    constructor(name = 'pb-droppable', defaultTrigger = new $i.Key('d'), defaultEnabled = true) {
       super(name, defaultTrigger, defaultEnabled);
     }
 
@@ -102,13 +94,13 @@ DI
      * @param {Element} el The element to drop the picked element into.
      */
     doTrigger(el) {
-      let movedElement = Move.movedElements.values().next().value;
+      let movedElement = $i.Move.movedElements.values().next().value;
       if (movedElement) {
         // Go through every children and find the index that the element should be.
         let dropped = false;
-        for (let child of Utils.toArray(el.children)) {
+        for (let child of $i.Utils.toArray(el.children)) {
           let rect = child.getBoundingClientRect();
-          if (!dropped && rect.left + rect.width / 2 > Move.mouseX) {
+          if (!dropped && rect.left + rect.width / 2 > $i.Move.mouseX) {
             dropped = true;
             el.insertBefore(movedElement, child);
           }
@@ -144,7 +136,7 @@ DI
    * @class region.Hand
    * @extends region.Region
    */
-  class Hand extends Region {
+  class Hand extends $i.Region {
 
     /**
      * Called when the element is created.
@@ -154,7 +146,7 @@ DI
     createdCallback() {
       super.createdCallback();
       this.createShadowRoot()
-          .appendChild(Utils.activateTemplate(template, doc));
+          .appendChild($i.Utils.activateTemplate($i.template, $i.doc));
 
       this.attachedCallback();
     }
@@ -179,16 +171,16 @@ DI
   }
 
 
-  Config.add(
+  $i.Config.add(
       EL_NAME,
-      new Helpable('help'),
-      new ReorderableDroppable('drop', new Key('d'), true));
-  $registry.add(EL_NAME, Hand.prototype);
+      new $i.Helpable('help'),
+      new ReorderableDroppable('drop', new $i.Key('d'), true));
+  $i.$registry.add(EL_NAME, Hand.prototype);
 
-  if (window['TEST_MODE']) {
+  if ($i.TEST_MODE) {
     Hand.ReorderableDroppable = ReorderableDroppable;
   }
 
   return Hand;
-}]);
+});
 </script>

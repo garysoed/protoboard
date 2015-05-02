@@ -7,7 +7,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('ability.Abilities', ['=', Utils => {
+    .bind('ability.Abilities', { Utils: '=' }, $i => {
 
   // Private symbols.
   const __abilities__ = Symbol('abilities');
@@ -164,11 +164,11 @@ DI
         attributes: true
       };
 
-      Utils.extendFn(
+      $i.Utils.extendFn(
           el,
           'attachedCallback',
           () => el[__observer__].observe(el, observerConfig));
-      Utils.extendFn(
+      $i.Utils.extendFn(
           el,
           'detachedCallback',
           () => el[__observer__].disconnect());
@@ -185,6 +185,6 @@ DI
   }
 
   return Abilities;
-}]);
+});
 
 </script>

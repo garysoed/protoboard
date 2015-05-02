@@ -49,37 +49,26 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['=', doc => doc.querySelector('template')])
-    .bind('region.CubeTower', [
-        '/=',
-        '=',
-        '=',
-        '=',
-        '/=',
-        '=',
-        'service.=',
-        'ability.=',
-        'ability.=',
-        'trigger.=',
-        'service.=',
-        'region.=',
-        '/=?',
-        '=',
-        (
-          $,
-          $registry,
-          doc,
-          template,
-          Chance,
-          Check,
-          Config,
-          Droppable,
-          Helpable,
-          Key,
-          Move,
-          Region,
-          TEST_MODE,
-          Utils) => {
+    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
+    .bind(
+        'region.CubeTower',
+        {
+          $: '/=',
+          $registry: '=',
+          doc: '=',
+          template: '=',
+          Chance: '/=',
+          Check: '=',
+          Config: 'service.=',
+          Droppable: 'ability.=',
+          Helpable: 'ability.=',
+          Key: 'trigger.=',
+          Move: 'service.=',
+          Region: 'region.=',
+          TEST_MODE: '/=?',
+          Utils: '='
+        },
+        $i => {
 
   const ATTR_TOWER_LEVEL = 'pb-tower-level';
   const EL_NAME = 'pb-r-cubetower';
@@ -87,7 +76,7 @@ DI
   // Private constants
   const __defaultProbabilities__ = Symbol();
 
-  class TowerDroppable extends Droppable {
+  class TowerDroppable extends $i.Droppable {
     /**
      * Ability that mimics a "cube tower". Elements dropped using this ability will have to go
      * through various "levels" of the tower before they are shown. Passing through one level to the
@@ -112,7 +101,7 @@ DI
      */
     constructor(
           name = 'drop',
-          defaultTrigger = new Key('d'),
+          defaultTrigger = new $i.Key('d'),
           defaultEnabled = true,
           defaultProbabilities = [1]) {
       super(name, defaultTrigger, defaultEnabled);
@@ -126,8 +115,8 @@ DI
      * @param {Element} el The element to set the default configuration to.
      */
     init(el) {
-      if ($(el).attr(this.attrChances) === undefined) {
-        $(el).attr(this.attrChances, this[__defaultProbabilities__].join(' '));
+      if ($i.$(el).attr(this.attrChances) === undefined) {
+        $i.$(el).attr(this.attrChances, this[__defaultProbabilities__].join(' '));
       }
 
       super.init(el);
@@ -142,10 +131,10 @@ DI
     updateConfig(el) {
       super.updateConfig(el);
 
-      const probabilities = Check($(el).attr(this.attrChances))
+      const probabilities = $i.Check($i.$(el).attr(this.attrChances))
           .isList()
           .orThrows()
-          .map(i => Check(i).isFloat().orThrows());
+          .map(i => $i.Check(i).isFloat().orThrows());
 
       // Check that each probability is between 0 and 1.
       probabilities.forEach(probability => {
@@ -155,12 +144,12 @@ DI
       });
 
       // Go through every child and spit out the children that are no longer in the tower.
-      Utils
+      $i.Utils
           .toArray(el.querySelectorAll(`[${ATTR_TOWER_LEVEL}]`))
           .forEach(child => {
-            let level = Check($(child).attr(ATTR_TOWER_LEVEL)).isInt().orThrows();
+            let level = $i.Check($i.$(child).attr(ATTR_TOWER_LEVEL)).isInt().orThrows();
             if (level >= probabilities.length) {
-              $(child).attr(ATTR_TOWER_LEVEL, null);
+              $i.$(child).attr(ATTR_TOWER_LEVEL, null);
             }
           });
     }
@@ -173,36 +162,36 @@ DI
      * @param {Element} el Element to drop the moved element into.
      */
     doTrigger(el) {
-      let movedElement = Move.movedElements.values().next().value;
+      let movedElement = $i.Move.movedElements.values().next().value;
       if (movedElement) {
         el.appendChild(movedElement);
 
         let droppingEls = new Set();
         droppingEls.add(movedElement);
 
-        const probabilities = Check($(el).attr(this.attrChances))
+        const probabilities = $i.Check($i.$(el).attr(this.attrChances))
           .isList()
           .orThrows()
-          .map(i => Check(i).isFloat().orThrows());
+          .map(i => $i.Check(i).isFloat().orThrows());
 
         for (let level = 0; level < probabilities.length; level++) {
           let passChance = probabilities[level] * 100;
 
           // All elements at this level will drop as well.
-          Utils
+          $i.Utils
               .toArray(el.querySelectorAll(`[${ATTR_TOWER_LEVEL}="${level}"]`))
               .forEach(child => droppingEls.add(child));
 
           // Check if the elements that are dropping will stop at this level.
-          let stuckEls = Chance.binom(droppingEls, {likelihood: 100 - passChance});
+          let stuckEls = $i.Chance.binom(droppingEls, {likelihood: 100 - passChance});
           stuckEls.forEach(stuckEl => {
-            $(stuckEl).attr(ATTR_TOWER_LEVEL, level);
+            $i.$(stuckEl).attr(ATTR_TOWER_LEVEL, level);
             droppingEls.delete(stuckEl);
           });
         }
 
         // All elements in the droppingEls set have passed through all the levels.
-        droppingEls.forEach(passEl => $(passEl).attr(ATTR_TOWER_LEVEL, null));
+        droppingEls.forEach(passEl => $i.$(passEl).attr(ATTR_TOWER_LEVEL, null));
       }
     }
 
@@ -246,7 +235,7 @@ DI
    * @extends region.Region
    * @since 0.3.0
    */
-  class CubeTower extends Region {
+  class CubeTower extends $i.Region {
 
     /**
      * Called when the element is created.
@@ -255,20 +244,20 @@ DI
      */
     createdCallback() {
       super.createdCallback();
-      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this.createShadowRoot().appendChild($i.Utils.activateTemplate(template, doc));
     }
   }
 
-  Config.add(
+  $i.Config.add(
       EL_NAME,
-      new Helpable('help'),
-      new TowerDroppable('drop', new Key('d'), true));
-  $registry.add(EL_NAME, CubeTower.prototype);
+      new $i.Helpable('help'),
+      new TowerDroppable('drop', new $i.Key('d'), true));
+  $i.$registry.add(EL_NAME, CubeTower.prototype);
 
-  if (TEST_MODE) {
+  if ($i.TEST_MODE) {
     CubeTower.TowerDroppable = TowerDroppable;
   }
 
   return CubeTower;
-}]);
+});
 </script>

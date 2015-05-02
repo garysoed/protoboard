@@ -60,37 +60,28 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['=', doc => doc.querySelector('template#main')])
-    .with('placeHolderTmp', ['=', doc => doc.querySelector('template#placeholder')])
-    .bind('region.Bag', [
-        '=',
-        '/=',
-        'trigger.=',
-        'service.=',
-        'ability.=',
-        'ability.=',
-        'trigger.=',
-        'service.=',
-        'ability.=',
-        'region.=',
-        '=',
-        '=',
-        '=',
-        '=',
-          ($registry,
-          Chance,
-          Click,
-          Config,
-          Droppable,
-          Helpable,
-          Key,
-          Move,
-          Pickable,
-          Region,
-          Utils,
-          doc,
-          template,
-          placeHolderTmp) => {
+    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template#main'))
+    .with('placeHolderTmp', { doc: '=' }, $i => $i.doc.querySelector('template#placeholder'))
+    .bind('region.Bag',
+        {
+          $: '/=',
+          $registry: '=',
+          doc: '=',
+          template: '=',
+          placeHolderTmp: '=',
+          Chance: '/=',
+          Click: 'trigger.=',
+          Config: 'service.=',
+          Droppable: 'ability.=',
+          Helpable: 'ability.=',
+          Key: 'trigger.=',
+          Move: 'service.=',
+          Pickable: 'ability.=',
+          Region: 'region.=',
+          Utils: '=',
+          TEST_MODE: '/=?'
+        },
+        $i => {
 
   const EL_NAME = 'pb-r-bag';
   const ATTR_PLACEHOLDER = 'pb-placeholder';
@@ -99,7 +90,7 @@ DI
   // Private symbols
   const __placeHolderEl__ = Symbol('placeHolderEl');
 
-  class RandomPickable extends Pickable {
+  class RandomPickable extends $i.Pickable {
 
     /**
      * Element with this ability has content that can be picked and dragged around. When triggered,
@@ -113,7 +104,7 @@ DI
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Pickable
      */
-    constructor(name = 'pb-pickable', defaultTrigger = new Click(), defaultEnabled = true) {
+    constructor(name = 'pb-pickable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
       super(name, defaultTrigger, defaultEnabled);
     }
 
@@ -124,10 +115,10 @@ DI
      * @param {Element} el The element whose child element should be randomly picked.
      */
     doTrigger(el) {
-      let candidates = Utils.toArray(el.children)
-          .filter(child => $(child).attr(ATTR_PLACEHOLDER) === undefined);
+      let candidates = $i.Utils.toArray(el.children)
+          .filter(child => $i.$(child).attr(ATTR_PLACEHOLDER) === undefined);
       if (candidates.length > 0) {
-        Move.add(Chance.pick(candidates));
+        $i.Move.add($i.Chance.pick(candidates));
       }
     }
   }
@@ -154,7 +145,7 @@ DI
    * @extends region.Region
    */
 
-  class Bag extends Region {
+  class Bag extends $i.Region {
 
     /**
      * Called when the element is created.
@@ -164,17 +155,17 @@ DI
     createdCallback() {
       super.createdCallback();
 
-      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
 
       this[__placeHolderEl__] = this.querySelector(`[${ATTR_PLACEHOLDER}]`);
 
       if (!this[__placeHolderEl__]) {
         let placeHolderContent = this.querySelector(`[${ATTR_PLACEHOLDER_CONTENT}]`) ||
-            Utils.activateTemplate(placeHolderTmp, doc);
+            $i.Utils.activateTemplate($i.placeHolderTmp, $i.doc);
 
-        this[__placeHolderEl__] = doc.createElement('div');
+        this[__placeHolderEl__] = $i.doc.createElement('div');
         this[__placeHolderEl__].appendChild(placeHolderContent);
-        $(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, '');
+        $i.$(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, '');
         this.insertBefore(this[__placeHolderEl__], this.lastChild);
       }
 
@@ -184,18 +175,18 @@ DI
 
   Bag.prototype[__placeHolderEl__] = null;
 
-  Config.add(
+  $i.Config.add(
       EL_NAME,
-      new Helpable('help'),
-      new Droppable('drop', new Key('d')),
-      new RandomPickable('pick', new Key('q')));
+      new $i.Helpable('help'),
+      new $i.Droppable('drop', new $i.Key('d')),
+      new RandomPickable('pick', new $i.Key('q')));
 
-  $registry.add(EL_NAME, Bag.prototype);
+  $i.$registry.add(EL_NAME, Bag.prototype);
 
-  if (window['TEST_MODE']) {
+  if ($i.TEST_MODE) {
     Bag.RandomPickable = RandomPickable;
   }
 
   return Bag;
-}]);
+});
 </script>

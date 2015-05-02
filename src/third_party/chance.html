@@ -6,9 +6,9 @@
 
 <script>
 DI
-    .bind('pb.seed', [() => (new Date()).getTime()])
-    .bind('Chance', ['pb.=?', seed => {
-      let chance = new Chance(seed);
+    .bind('pb.seed', {}, () => (new Date()).getTime())
+    .bind('Chance', { seed: 'pb.=?' }, $i => {
+      let chance = new Chance($i.seed);
       chance.binom = (coll, options) => {
         let picked = [];
         coll.forEach(item => {
@@ -20,5 +20,5 @@ DI
       };
 
       return chance;
-    }]);
+    });
 </script>

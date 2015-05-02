@@ -12,7 +12,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
+DI.prefix("pb").bind("ability.Abilities", { Utils: "=" }, function ($i) {
   var __abilities__ = Symbol("abilities");
   var __element__ = Symbol();
   var __observer__ = Symbol("observer");
@@ -157,10 +157,10 @@ DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
         attributes: true
       };
 
-      Utils.extendFn(el, "attachedCallback", function () {
+      $i.Utils.extendFn(el, "attachedCallback", function () {
         return el[__observer__].observe(el, observerConfig);
       });
-      Utils.extendFn(el, "detachedCallback", function () {
+      $i.Utils.extendFn(el, "detachedCallback", function () {
         return el[__observer__].disconnect();
       });
 
@@ -178,5 +178,5 @@ DI.prefix("pb").bind("ability.Abilities", ["=", function (Utils) {
   }
 
   return Abilities;
-}]);</script>
+});</script>
 </head><body></body></html>

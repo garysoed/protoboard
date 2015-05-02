@@ -13,7 +13,12 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Ability", ["/=", "=", "service.=", "trigger.=", function ($, Check, Log, Triggers) {
+DI.prefix("pb").bind("ability.Ability", {
+  $: "/=",
+  Check: "=",
+  Log: "service.=",
+  Triggers: "trigger.="
+}, function ($i) {
   var __name__ = Symbol();
   var __defaultTrigger__ = Symbol("defaultTrigger");
   var __triggerMap__ = Symbol("triggerMap");
@@ -29,8 +34,8 @@ DI.prefix("pb").bind("ability.Ability", ["/=", "=", "service.=", "trigger.=", fu
     _createClass(Ability, {
       init: {
         value: function init(el) {
-          if ($(el).attr(this.attrTrigger) === undefined) {
-            $(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
+          if ($i.$(el).attr(this.attrTrigger) === undefined) {
+            $i.$(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
           }
 
           this.updateConfig(el);
@@ -42,12 +47,12 @@ DI.prefix("pb").bind("ability.Ability", ["/=", "=", "service.=", "trigger.=", fu
             el[__triggerMap__] = new Map();
           }
 
-          var newValue = $(el).attr(this.attrTrigger);
+          var newValue = $i.$(el).attr(this.attrTrigger);
           if (!el[__triggerMap__].has(this) || newValue !== el[__triggerMap__].get(this).toString()) {
             if (el[__triggerMap__].has(this)) {
               el[__triggerMap__].get(this).off(el);
             }
-            var trigger = Triggers.parse($(el).attr(this.attrTrigger));
+            var trigger = $i.Triggers.parse($i.$(el).attr(this.attrTrigger));
             trigger.on(el, this);
             el[__triggerMap__].set(this, trigger);
           }
@@ -55,7 +60,7 @@ DI.prefix("pb").bind("ability.Ability", ["/=", "=", "service.=", "trigger.=", fu
       },
       trigger: {
         value: function trigger(el) {
-          Log.log(this.attrName, $(el).attr("pb-id"));
+          $i.Log.log(this.attrName, $i.$(el).attr("pb-id"));
           if (this.isEnabled(el)) {
             this.doTrigger(el);
           }
@@ -73,7 +78,7 @@ DI.prefix("pb").bind("ability.Ability", ["/=", "=", "service.=", "trigger.=", fu
       },
       isEnabled: {
         value: function isEnabled(el) {
-          return Check($(el).attr(this.attrName)).isBoolean().orUse(false);
+          return $i.Check($i.$(el).attr(this.attrName)).isBoolean().orUse(false);
         }
       },
       attrName: {
@@ -92,4 +97,4 @@ DI.prefix("pb").bind("ability.Ability", ["/=", "=", "service.=", "trigger.=", fu
   })();
 
   return Ability;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

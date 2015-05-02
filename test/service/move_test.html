@@ -13,40 +13,49 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service.=', Registry => new Registry()])
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/=', '/=', '=', 'service.=', '=', '=', (expect, _, $registry, Move, doc, t) => {
+      .run(
+            {
+              expect: '/=',
+              _: '/=',
+              $registry: '=',
+              Move: 'service.=',
+              doc: '=',
+              t: '='
+            },
+            $i => {
 
   // Private symbols.
-  const __container__ = t.getSymbol(Move, 'container');
-  const __moveContainer__ = t.getSymbol(Move, 'moveContainer');
-  const __onMouseMove__ = t.getSymbol(Move, 'onMouseMove');
+  const __container__ = $i.t.getSymbol($i.Move, 'container');
+  const __moveContainer__ = $i.t.getSymbol($i.Move, 'moveContainer');
+  const __onMouseMove__ = $i.t.getSymbol($i.Move, 'onMouseMove');
 
   describe('service.Move', () => {
     before(done => {
-      $registry.register(doc);
+      $i.$registry.register($i.doc);
       done();
     });
 
     describe('__moveContainer__', () => {
       it('should set the left and top coordinates of the container correctly', () => {
-        let child1 = doc.createElement('div');
-        _.spy(child1, 'getBoundingClientRect').overrideReturn({ width: 20, height: 30 });
-        let child2 = doc.createElement('div');
-        _.spy(child2, 'getBoundingClientRect').overrideReturn({ width: 10, height: 40 });
+        let child1 = $i.doc.createElement('div');
+        $i._.spy(child1, 'getBoundingClientRect').overrideReturn({ width: 20, height: 30 });
+        let child2 = $i.doc.createElement('div');
+        $i._.spy(child2, 'getBoundingClientRect').overrideReturn({ width: 10, height: 40 });
 
-        let container = Move[__container__];
+        let container = $i.Move[__container__];
         container.appendChild(child1);
         container.appendChild(child2);
 
         let x = 55;
         let y = 77;
-        Move[__onMouseMove__]({ clientX: x, clientY: y });
+        $i.Move[__onMouseMove__]({ clientX: x, clientY: y });
 
-        Move[__moveContainer__]();
+        $i.Move[__moveContainer__]();
 
-        expect(container.style.left).to.equal('45px');
-        expect(container.style.top).to.equal('57px');
+        $i.expect(container.style.left).to.equal('45px');
+        $i.expect(container.style.top).to.equal('57px');
       });
     });
 
@@ -54,34 +63,34 @@
       it('should set the mouse coordinates correctly and move the container', () => {
         let event = { clientX: 12, clientY: 24};
 
-        _.spy(Move, __moveContainer__);
+        $i._.spy($i.Move, __moveContainer__);
 
-        Move[__onMouseMove__](event);
+        $i.Move[__onMouseMove__](event);
 
-        expect(Move.mouseX).to.equal(event.clientX);
-        expect(Move.mouseY).to.equal(event.clientY);
-        expect(Move[__moveContainer__]).calledWith().at.least(1);
+        $i.expect($i.Move.mouseX).to.equal(event.clientX);
+        $i.expect($i.Move.mouseY).to.equal(event.clientY);
+        $i.expect($i.Move[__moveContainer__]).calledWith().at.least(1);
       });
     });
 
     describe('add', () => {
       it('should add the element to the container and move the container', () => {
-        let el = doc.createElement('div');
+        let el = $i.doc.createElement('div');
 
-        _.spy(Move, __moveContainer__);
+        $i._.spy($i.Move, __moveContainer__);
 
-        Move.add(el);
+        $i.Move.add(el);
 
-        expect(Move[__moveContainer__]).calledWith().at.least(1);
-        expect(Move[__container__].contains(el)).to.be.true();
+        $i.expect($i.Move[__moveContainer__]).calledWith().at.least(1);
+        $i.expect($i.Move[__container__].contains(el)).to.be.true();
       });
     });
 
     afterEach(done => {
-      _.reset();
+      $i._.reset();
       done();
     });
   });
-  }]);
+  });
   </script>
 </body>

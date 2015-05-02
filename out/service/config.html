@@ -5,7 +5,7 @@
 
 <script>"use strict";
 
-DI.prefix("pb").bind("service.Config", ["ability.=", function (Abilities) {
+DI.prefix("pb").bind("service.Config", { Abilities: "ability.=" }, function ($i) {
   var configuration = {};
 
   var Config = {
@@ -24,7 +24,7 @@ DI.prefix("pb").bind("service.Config", ["ability.=", function (Abilities) {
     },
 
     init: function init(elName, proto) {
-      var builder = Abilities.of(proto);
+      var builder = $i.Abilities.of(proto);
       if (!configuration[elName]) {
         console.warn("No configuration for " + elName);
         return;
@@ -36,5 +36,5 @@ DI.prefix("pb").bind("service.Config", ["ability.=", function (Abilities) {
   };
 
   return Config;
-}]);</script>
+});</script>
 </head><body></body></html>

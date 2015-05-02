@@ -6,10 +6,10 @@
 
 <script>"use strict";
 
-DI.bind("pb.seed", [function () {
+DI.bind("pb.seed", {}, function () {
   return new Date().getTime();
-}]).bind("Chance", ["pb.=?", function (seed) {
-  var chance = new Chance(seed);
+}).bind("Chance", { seed: "pb.=?" }, function ($i) {
+  var chance = new Chance($i.seed);
   chance.binom = function (coll, options) {
     var picked = [];
     coll.forEach(function (item) {
@@ -21,5 +21,5 @@ DI.bind("pb.seed", [function () {
   };
 
   return chance;
-}]);</script>
+});</script>
 </head><body></body></html>

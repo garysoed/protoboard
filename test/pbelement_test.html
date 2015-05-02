@@ -12,7 +12,15 @@
   DI
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/=', '/=', '/=', '=', '=', (expect, _, $, doc, PbElement) => {
+      .run(
+          {
+            expect: '/=',
+            _: '/=',
+            $: '/=',
+            doc: '=',
+            PbElement: '='
+          },
+          $i => {
 
   describe('PbElement', () => {
     describe('#createdCallback', () => {
@@ -20,42 +28,42 @@
       let pbElement;
 
       beforeEach(done => {
-        el = doc.createElement('div');
+        el = $i.doc.createElement('div');
         done();
       });
 
       it('should create id with the given prefix', () => {
         let prefix = 'prefix';
-        $(el).attr('pb-id', prefix);
+        $i.$(el).attr('pb-id', prefix);
 
-        Object.setPrototypeOf(el, PbElement.prototype);
+        Object.setPrototypeOf(el, $i.PbElement.prototype);
         el.createdCallback();
 
-        expect($(el).attr('pb-id')).to.be.equal(`${prefix}-0`);
+        $i.expect($i.$(el).attr('pb-id')).to.be.equal(`${prefix}-0`);
       });
       it('should increment the number for the second element', () => {
         let prefix = 'prefix2';
-        let el2 = doc.createElement('div');
+        let el2 = $i.doc.createElement('div');
 
-        $(el).attr('pb-id', prefix);
-        $(el2).attr('pb-id', prefix);
+        $i.$(el).attr('pb-id', prefix);
+        $i.$(el2).attr('pb-id', prefix);
 
-        Object.setPrototypeOf(el, PbElement.prototype);
+        Object.setPrototypeOf(el, $i.PbElement.prototype);
         el.createdCallback();
 
-        Object.setPrototypeOf(el2, PbElement.prototype);
+        Object.setPrototypeOf(el2, $i.PbElement.prototype);
         el2.createdCallback();
 
-        expect($(el2).attr('pb-id')).to.be.equal(`${prefix}-1`);
+        $i.expect($i.$(el2).attr('pb-id')).to.be.equal(`${prefix}-1`);
       });
       it('should default the prefix to the element\'s name', () => {
-        Object.setPrototypeOf(el, PbElement.prototype);
+        Object.setPrototypeOf(el, $i.PbElement.prototype);
         el.createdCallback();
 
-        expect($(el).attr('pb-id')).to.be.equal('div-0');
+        $i.expect($i.$(el).attr('pb-id')).to.be.equal('div-0');
       });
     });
   });
-  }]);
+  });
   </script>
 </body>

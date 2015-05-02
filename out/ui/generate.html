@@ -5,6 +5,8 @@
 <link rel="import" href="service/config.html">
 <link rel="import" href="service/template.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/handlebars.html">
+<link rel="import" href="third_party/jquery.html">
 
 <script>"use strict";
 
@@ -18,20 +20,27 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ui.Generate", ["=", "=", "service.=", "=", "service.=", function ($registry, Check, Config, PbElement, Template) {
+DI.prefix("pb").bind("ui.Generate", {
+  $: "/=",
+  $registry: "=",
+  Check: "=",
+  Config: "service.=",
+  Handlebars: "/=",
+  PbElement: "=",
+  Template: "service.=" }, function ($i) {
 
   var EL_NAME = "pb-u-generate";
 
-  var Generate = (function (_PbElement) {
+  var Generate = (function (_$i$PbElement) {
     function Generate() {
       _classCallCheck(this, Generate);
 
-      if (_PbElement != null) {
-        _PbElement.apply(this, arguments);
+      if (_$i$PbElement != null) {
+        _$i$PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Generate, _PbElement);
+    _inherits(Generate, _$i$PbElement);
 
     _createClass(Generate, {
       createdCallback: {
@@ -40,8 +49,8 @@ DI.prefix("pb").bind("ui.Generate", ["=", "=", "service.=", "=", "service.=", fu
 
           _get(Object.getPrototypeOf(Generate.prototype), "createdCallback", this).call(this);
 
-          var promises = Check($(this).attr("input")).isList().orUse([]).map(function (name) {
-            return Template.get(name);
+          var promises = $i.Check($i.$(this).attr("input")).isList().orUse([]).map(function (name) {
+            return $i.Template.get(name);
           });
           Promise.all(promises).then(function (dataList) {
             var dataObj = {};
@@ -74,17 +83,18 @@ DI.prefix("pb").bind("ui.Generate", ["=", "=", "service.=", "=", "service.=", fu
             }
 
             var templateStr = _this.querySelector("template").innerHTML.replace("&gt;", ">");
-            $(_this).replaceWith(Handlebars.compile(templateStr)(dataObj));
+            $i.$(_this).replaceWith($i.Handlebars.compile(templateStr)(dataObj));
           });
         }
       }
     });
 
     return Generate;
-  })(PbElement);
+  })($i.PbElement);
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, Generate.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, Generate.prototype);
 
   return Generate;
-}]);</script></head><body></body></html>
+});</script>
+</head><body></body></html>

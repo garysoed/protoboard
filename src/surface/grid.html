@@ -1,18 +1,25 @@
 <base href="..">
 
+<link rel="import" href="check.html">
+<link rel="import" href="pbelement.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="utils.html">
 
 <script>
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .bind('surface.Grid', [
-        '=', 'service.=', '=', '=', '=',
-        (Check, Config, PbElement, Utils, doc) => {
+    .bind('surface.Grid',
+        {
+          doc: '=',
+          Check: '=',
+          PbElement: '=',
+          Utils: '=',
+        },
+        $i => {
 
   const ATTR_ROW = 'pb-row';
   const ATTR_COL = 'pb-col';
-  const EL_NAME = 'pb-s-hexgrid';
 
   /**
    * Base class of all grids.
@@ -27,7 +34,7 @@ DI
    * @since 0.2.0
    * @extends PbElement
    */
-  class Grid extends PbElement {
+  class Grid extends $i.PbElement {
 
     /**
      * Method called when the element is created.
@@ -39,22 +46,22 @@ DI
 
       // Create the shadow DOM.
       this.createShadowRoot()
-          .appendChild(Utils.activateTemplate(this.mainTemplate, doc));
+          .appendChild($i.Utils.activateTemplate(this.mainTemplate, $i.doc));
 
       // Initializes the data.
-      let rowCount = Check($(this).attr(ATTR_ROW)).isInt().orThrows();
-      let colCount = Check($(this).attr(ATTR_COL)).isInt().orThrows();
+      let rowCount = $i.Check($(this).attr(ATTR_ROW)).isInt().orThrows();
+      let colCount = $i.Check($(this).attr(ATTR_COL)).isInt().orThrows();
       let rootEl = this.rootEl;
 
       // Add the rows.
       for (let row = 0; row < rowCount; row++) {
-        rootEl.appendChild(Utils.activateTemplate(this.rowTemplate, doc));
+        rootEl.appendChild($i.Utils.activateTemplate(this.rowTemplate, $i.doc));
       }
 
       $(rootEl.children)
           .each((row, rowEl) => {
             for (let col = 0; col < colCount; col++) {
-              let tileEl = Utils.activateTemplate(this.tileTemplate, doc);
+              let tileEl = $i.Utils.activateTemplate(this.tileTemplate, $i.doc);
               $(tileEl.querySelector('content'))
                   .attr('select', `[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`);
               $(tileEl.children[0])
@@ -126,5 +133,5 @@ DI
   }
 
   return Grid;
-}]);
+});
 </script>

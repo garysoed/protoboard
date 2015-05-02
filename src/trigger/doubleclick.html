@@ -6,7 +6,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('trigger.DoubleClick', ['=', 'trigger.=', (Events, Trigger) => {
+    .bind('trigger.DoubleClick', { Events: '=', Trigger: 'trigger.=' }, $i => {
 
   /**
    * Triggers an ability when the element is double clicked.
@@ -14,7 +14,7 @@ DI
    * @class trigger.DoubleClick
    * @extends trigger.Trigger
    */
-  class DoubleClick extends Trigger {
+  class DoubleClick extends $i.Trigger {
 
     /**
      * Registers the given element to trigger the given ability when double clicked.
@@ -24,7 +24,7 @@ DI
      * @param {ability.Ability} ability The ability to trigger.
      */
     on(element, ability) {
-      Events.of(element, this)
+      $i.Events.of(element, this)
           .on('hammer', 'doubletap', ability.trigger.bind(ability, element));
     }
 
@@ -35,7 +35,7 @@ DI
      * @param {Element} element Element to unregister.
      */
     off(element) {
-      Events.of(element, this).off('hammer', 'doubletap');
+      $i.Events.of(element, this).off('hammer', 'doubletap');
     }
 
     /**
@@ -72,5 +72,5 @@ DI
   };
 
   return DoubleClick;
-}]);
+});
 </script>

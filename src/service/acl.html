@@ -1,16 +1,19 @@
 <base href="..">
 
-<link rel="import" href="ability/abilities.html">
 <link rel="import" href="check.html">
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="utils.html">
 
 <script>
 DI
     .prefix('pb')
     .bind('service.Acl',
-        ['/=', 'ability.=', '=', '=', '/=?',
-        ($, Abilities, Check, Utils, TEST_MODE) => {
+        {
+          Check: '=',
+          Utils: '=',
+          TEST_MODE: '/=?'
+        },
+        $i => {
 
   const ATTR_PREFIX = 'pb-acl-';
 
@@ -182,13 +185,13 @@ DI
       if (!el[__enabledMap__]) {
         el[__enabledMap__] = new Map();
       }
-      for (let [attrName, attr] of Utils.toMap(el.attributes)) {
+      for (let [attrName, attr] of $i.Utils.toMap(el.attributes)) {
         if (!attrName.startsWith(ATTR_PREFIX)) {
           continue;
         }
 
         let name = attrName.substring(ATTR_PREFIX.length);
-        let allowedPlayers = Check(attr.value).isList().orUse(null);
+        let allowedPlayers = $i.Check(attr.value).isList().orUse(null);
         let enabled = (allowedPlayers === null)
             || allowedPlayers.length === 0
             || allowedPlayers.some(player => {
@@ -309,11 +312,11 @@ DI
     }
   };
 
-  if (TEST_MODE) {
+  if ($i.TEST_MODE) {
     Service.Group = Group;
     Service.GROUPS = GROUPS;
   }
 
   return Service;
-}]);
+});
 </script>

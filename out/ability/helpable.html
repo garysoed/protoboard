@@ -77,28 +77,37 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template");
-}]).bind("ability.Helpable", ["ability.=", "ability.=", "=", "trigger.=", "=", "=", "=", "=", function (Abilities, Ability, Events, Key, Utils, doc, template, $registry) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("ability.Helpable", {
+  $registry: "=",
+  doc: "=",
+  template: "=",
+  Abilities: "ability.=",
+  Ability: "ability.=",
+  Events: "=",
+  Key: "trigger.=",
+  Utils: "="
+}, function ($i) {
 
   var displayEl = null;
 
-  var Helpable = (function (_Ability) {
+  var Helpable = (function (_$i$Ability) {
     function Helpable() {
       var name = arguments[0] === undefined ? "pb-helpable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Key("?") : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Key("?") : arguments[1];
 
       _classCallCheck(this, Helpable);
 
       _get(Object.getPrototypeOf(Helpable.prototype), "constructor", this).call(this, name, defaultTrigger);
     }
 
-    _inherits(Helpable, _Ability);
+    _inherits(Helpable, _$i$Ability);
 
     _createClass(Helpable, {
       doTrigger: {
         value: function doTrigger(el) {
-          var abilities = Abilities.of(el).getAll();
+          var abilities = $i.Abilities.of(el).getAll();
           displayEl.innerHTML = "";
 
           var doc = displayEl.ownerDocument;
@@ -151,17 +160,17 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     });
 
     return Helpable;
-  })(Ability);
+  })($i.Ability);
 
-  $registry.runAtRegister(function (document, config) {
+  $i.$registry.runAtRegister(function (document, config) {
     displayEl = document.createElement("div");
-    displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    displayEl.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
     displayEl.style.display = "none";
-    Events.of(displayEl).on("dom", "click", function () {
+    $i.Events.of(displayEl).on("dom", "click", function () {
       displayEl.style.display = "none";
     });
     document.body.appendChild(displayEl);
   });
 
   return Helpable;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

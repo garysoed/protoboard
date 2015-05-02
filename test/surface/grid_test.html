@@ -25,94 +25,106 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service.=', Registry => new Registry()])
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .with('template', ['=', doc => doc.querySelector('template#main')])
-      .with('rowTemplate', ['=', doc => doc.querySelector('template#row')])
-      .with('tileTemplate', ['=', doc => doc.querySelector('template#tile')])
-      .run([
-          '/=', '/=', '/=', '=', '=', '/=', '=', '=', '=', 'service.=', 'surface.=',
-          (expect, _, _M, $registry, doc, $, template, rowTemplate, tileTemplate, Config, Grid) => {
+      .with('template', { doc: '=' }, $i => $i.doc.querySelector('template#main'))
+      .with('rowTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#row'))
+      .with('tileTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#tile'))
+      .run(
+          {
+            _: '/=',
+            _M: '/=',
+            $: '/=',
+            $registry: '=',
+            doc: '=',
+            expect: '/=',
+            template: '=',
+            rowTemplate: '=',
+            tileTemplate: '=',
+            Config: 'service.=',
+            Grid: 'surface.='
+          },
+          $i => {
 
   describe('Grid', () => {
     let grid;
 
     before(done => {
-      $registry.register(doc, Config);
+      $i.$registry.register($i.doc, $i.Config);
       done();
     });
 
     beforeEach(done => {
-      Object.defineProperty(Grid.prototype, 'rootEl', {
+      Object.defineProperty($i.Grid.prototype, 'rootEl', {
         get: function() { return this.shadowRoot.querySelector('#root'); }
       });
-      Object.defineProperty(Grid.prototype, 'mainTemplate', { get: () => template });
-      Object.defineProperty(Grid.prototype, 'rowTemplate', { get: () => rowTemplate });
-      Object.defineProperty(Grid.prototype, 'tileTemplate', { get: () => tileTemplate });
+      Object.defineProperty($i.Grid.prototype, 'mainTemplate', { get: () => $i.template });
+      Object.defineProperty($i.Grid.prototype, 'rowTemplate', { get: () => $i.rowTemplate });
+      Object.defineProperty($i.Grid.prototype, 'tileTemplate', { get: () => $i.tileTemplate });
 
-      grid = doc.createElement('pb-s-grid');
-      $(grid)
+      grid = $i.doc.createElement('pb-s-grid');
+      $i.$(grid)
           .attr('pb-row', 2)
           .attr('pb-col', 3);
-      Object.setPrototypeOf(grid, Grid.prototype);
+      Object.setPrototypeOf(grid, $i.Grid.prototype);
 
       done();
     });
 
     describe('#created', () => {
       it('should create the rows and cols', () => {
-        let childEl = doc.createElement('div');
-        $(childEl)
+        let childEl = $i.doc.createElement('div');
+        $i.$(childEl)
             .attr('pb-row', 1)
             .attr('pb-col', 2);
         grid.appendChild(childEl);
         grid.createdCallback();
         let contentEls = grid.shadowRoot.querySelectorAll('content');
-        expect(contentEls.length).to.be.equal(6);
+        $i.expect(contentEls.length).to.be.equal(6);
 
         let correctCellEl = grid.shadowRoot.querySelector('content[pb-row="1"][pb-col="2"]');
-        expect(correctCellEl.getDistributedNodes()[0]).to.contain(childEl);
+        $i.expect(correctCellEl.getDistributedNodes()[0]).to.contain(childEl);
       });
 
       it('should throw exception if row is not a number', () => {
-        let div = doc.createElement('pb-s-rectgrid');
-        Object.setPrototypeOf(div, Grid.prototype);
-        $(div)
+        let div = $i.doc.createElement('pb-s-rectgrid');
+        Object.setPrototypeOf(div, $i.Grid.prototype);
+        $i.$(div)
             .attr('pb-row', 'a')
             .attr('pb-col', 1);
 
-        expect(() => div.createdCallback()).to.throw('a');
+        $i.expect(() => div.createdCallback()).to.throw('a');
       });
 
       it('should throw exception if col is not a number', () => {
-        let div = doc.createElement('pb-s-rectgrid');
-        Object.setPrototypeOf(div, Grid.prototype);
-        $(div)
+        let div = $i.doc.createElement('pb-s-rectgrid');
+        Object.setPrototypeOf(div, $i.Grid.prototype);
+        $i.$(div)
             .attr('pb-row', 1)
             .attr('pb-col', 'a');
 
-        expect(() => div.createdCallback()).to.throw('a');
+        $i.expect(() => div.createdCallback()).to.throw('a');
       });
     });
 
     describe('#get', () => {
       it('should return the correct cell', () => {
-        let childEl = doc.createElement('div');
-        $(childEl)
+        let childEl = $i.doc.createElement('div');
+        $i.$(childEl)
             .attr('pb-row', 1)
             .attr('pb-col', 2);
         grid.appendChild(childEl);
 
         grid.createdCallback();
-        expect(grid.get(1, 2)).to.be.equal(childEl);
+        $i.expect(grid.get(1, 2)).to.be.equal(childEl);
       });
 
       it('should return null if the cell is invalid', () => {
         grid.createdCallback();
-        expect(grid.get(2, 3)).to.not.exist();
+        $i.expect(grid.get(2, 3)).to.not.exist();
       });
     });
   });
-  }]);
+  });
   </script>
 </body>

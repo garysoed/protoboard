@@ -13,7 +13,7 @@
   <script>
   DI
       .prefix('pb')
-      .with('trigger.Triggers', [() => {
+      .with('trigger.Triggers', {}, () => {
         return {
           trigger: undefined,
           triggerStr: undefined,
@@ -22,74 +22,83 @@
             return this.trigger;
           }
         };
-      }])
+      })
       .constant('doc', document.currentScript.ownerDocument)
-      .run([
-          '/=', '/=', '/=', '=', 'ability.=', 'service.=', 'trigger.=', '=',
-          (expect, _, $, doc, Ability, Log, Triggers, t) => {
+      .run(
+          {
+            expect: '/=',
+            _: '/=',
+            $: '/=',
+            doc: '=',
+            Ability: 'ability.=',
+            Log: 'service.=',
+            Triggers: 'trigger.=',
+            t: '='
+          },
+          $i => {
 
   describe('ability.Ability', () => {
     let el;
 
     beforeEach(done => {
-      el = doc.createElement('div');
+      el = $i.doc.createElement('div');
       done();
     });
 
     describe('#init', () => {
       it('should set the default value of the trigger', () => {
         let triggerStr = 'triggerStr';
-        let trigger = t.createFakeTrigger(triggerStr);
-        let ability = new Ability('name', trigger);
+        let trigger = $i.t.createFakeTrigger(triggerStr);
+        let ability = new $i.Ability('name', trigger);
 
-        _.spy(ability, 'updateConfig').overrideReturn();
+        $i._.spy(ability, 'updateConfig').overrideReturn();
 
         ability.init(el);
-        expect($(el).attr(ability.attrTrigger)).to.be.equal(triggerStr);
-        expect(ability.updateConfig).calledWith(el).at.least(1);
+        $i.expect($i.$(el).attr(ability.attrTrigger)).to.be.equal(triggerStr);
+        $i.expect(ability.updateConfig).calledWith(el).at.least(1);
       });
       it('should not override the trigger value if it is already set', () => {
         let attrValue = 'value';
-        let trigger = t.createFakeTrigger('triggerName');
-        let ability = new Ability('name', trigger);
-        $(el).attr(ability.attrTrigger, attrValue);
+        let trigger = $i.t.createFakeTrigger('triggerName');
+        let ability = new $i.Ability('name', trigger);
+        $i.$(el).attr(ability.attrTrigger, attrValue);
 
-        _.spy(ability, 'updateConfig').overrideReturn();
+        $i._.spy(ability, 'updateConfig').overrideReturn();
 
         ability.init(el);
-        expect($(el).attr(ability.attrTrigger)).to.be.equal(attrValue);
-        expect(ability.updateConfig).calledWith(el).at.least(1);
+        $i.expect($i.$(el).attr(ability.attrTrigger)).to.be.equal(attrValue);
+        $i.expect(ability.updateConfig).calledWith(el).at.least(1);
       });
     });
 
     describe('#updateConfig', () => {
       it('should update the trigger if the trigger changes', () => {
-        let trigger = t.createFakeTrigger('triggerName');
-        let newTrigger = t.createFakeTrigger('new trigger');
+        let trigger = $i.t.createFakeTrigger('triggerName');
+        let newTrigger = $i.t.createFakeTrigger('new trigger');
 
-        let ability = new Ability('name', trigger);
-        Triggers.trigger = trigger;
+        let ability = new $i.Ability('name', trigger);
+        $i.Triggers.trigger = trigger;
         ability.init(el);
 
-        $(el).attr(ability.attrTrigger, newTrigger.toString());
+        $i.$(el).attr(ability.attrTrigger, newTrigger.toString());
 
-        Triggers.trigger = newTrigger;
+        $i.Triggers.trigger = newTrigger;
 
         ability.updateConfig(el);
 
-        expect(trigger.off).calledWith(el).at.least(1);
-        expect(Triggers.triggerStr).to.be.equal(newTrigger.toString());
-        expect(newTrigger.on).calledWith(el, ability).at.least(1);
-        expect(el[t.getSymbol(el, 'triggerMap')].get(ability)).to.be.equal(newTrigger);
+        $i.expect(trigger.off).calledWith(el).at.least(1);
+        $i.expect($i.Triggers.triggerStr).to.be.equal(newTrigger.toString());
+        $i.expect(newTrigger.on).calledWith(el, ability).at.least(1);
+        $i.expect(el[$i.t.getSymbol(el, 'triggerMap')].get(ability)).to.be.equal(newTrigger);
       });
       it('should be noop if the trigger does not change', () => {
-        let trigger = t.createFakeTrigger('triggerName');
-        let ability = new Ability('name', trigger);
-        $(el).attr(ability.attrTrigger, trigger.toString());
+        let trigger = $i.t.createFakeTrigger('triggerName');
+        let ability = new $i.Ability('name', trigger);
+        $i.$(el).attr(ability.attrTrigger, trigger.toString());
 
         ability.updateConfig(el);
 
-        expect(trigger.off).called().to.be.equal(0);
+        $i.expect(trigger.off).called().to.be.equal(0);
       });
     });
 
@@ -97,38 +106,37 @@
       it('should log the call', () => {
         let name = 'name';
         let id = 'elId';
-        let el = doc.createElement('div');
-        $(el).attr('pb-id', id);
+        let el = $i.doc.createElement('div');
+        $i.$(el).attr('pb-id', id);
 
-        _.spy(Log, 'log');
-        let ability = new Ability(name, null);
-        _.spy(ability, 'doTrigger').overrideReturn();
-        _.spy(ability, 'isEnabled').overrideReturn(true);
+        $i._.spy($i.Log, 'log');
+        let ability = new $i.Ability(name, null);
+        $i._.spy(ability, 'doTrigger').overrideReturn();
+        $i._.spy(ability, 'isEnabled').overrideReturn(true);
         ability.trigger(el);
 
-        expect(Log.log).calledWith(name, id).at.least(1);
-        expect(ability.isEnabled).calledWith(el).at.least(1);
-        expect(ability.doTrigger).calledWith(el).at.least(1);
+        $i.expect($i.Log.log).calledWith(name, id).at.least(1);
+        $i.expect(ability.isEnabled).calledWith(el).at.least(1);
+        $i.expect(ability.doTrigger).calledWith(el).at.least(1);
       });
 
       it('should not call doTrigger if not enabled', () => {
-        let el = doc.createElement('div');
-        let ability = new Ability(name, null);
-        _.spy(ability, 'doTrigger').overrideReturn();
-        _.spy(ability, 'isEnabled').overrideReturn(false);
+        let el = $i.doc.createElement('div');
+        let ability = new $i.Ability(name, null);
+        $i._.spy(ability, 'doTrigger').overrideReturn();
+        $i._.spy(ability, 'isEnabled').overrideReturn(false);
         ability.trigger(el);
 
-        expect(ability.isEnabled).calledWith(el).at.least(1);
-        expect(ability.doTrigger).called().to.equal(0);
-
+        $i.expect(ability.isEnabled).calledWith(el).at.least(1);
+        $i.expect(ability.doTrigger).called().to.equal(0);
       });
     });
 
     afterEach(done => {
-      _.reset();
+      $i._.reset();
       done();
     });
   });
-  }]);
+  });
   </script>
 </body>

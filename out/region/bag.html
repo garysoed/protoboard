@@ -65,11 +65,28 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template#main");
-}])["with"]("placeHolderTmp", ["=", function (doc) {
-  return doc.querySelector("template#placeholder");
-}]).bind("region.Bag", ["=", "/=", "trigger.=", "service.=", "ability.=", "ability.=", "trigger.=", "service.=", "ability.=", "region.=", "=", "=", "=", "=", function ($registry, Chance, Click, Config, Droppable, Helpable, Key, Move, Pickable, Region, Utils, doc, template, placeHolderTmp) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#main");
+})["with"]("placeHolderTmp", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#placeholder");
+}).bind("region.Bag", {
+  $: "/=",
+  $registry: "=",
+  doc: "=",
+  template: "=",
+  placeHolderTmp: "=",
+  Chance: "/=",
+  Click: "trigger.=",
+  Config: "service.=",
+  Droppable: "ability.=",
+  Helpable: "ability.=",
+  Key: "trigger.=",
+  Move: "service.=",
+  Pickable: "ability.=",
+  Region: "region.=",
+  Utils: "=",
+  TEST_MODE: "/=?"
+}, function ($i) {
 
   var EL_NAME = "pb-r-bag";
   var ATTR_PLACEHOLDER = "pb-placeholder";
@@ -77,10 +94,10 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
   var __placeHolderEl__ = Symbol("placeHolderEl");
 
-  var RandomPickable = (function (_Pickable) {
+  var RandomPickable = (function (_$i$Pickable) {
     function RandomPickable() {
       var name = arguments[0] === undefined ? "pb-pickable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, RandomPickable);
@@ -88,50 +105,50 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       _get(Object.getPrototypeOf(RandomPickable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
     }
 
-    _inherits(RandomPickable, _Pickable);
+    _inherits(RandomPickable, _$i$Pickable);
 
     _createClass(RandomPickable, {
       doTrigger: {
         value: function doTrigger(el) {
-          var candidates = Utils.toArray(el.children).filter(function (child) {
-            return $(child).attr(ATTR_PLACEHOLDER) === undefined;
+          var candidates = $i.Utils.toArray(el.children).filter(function (child) {
+            return $i.$(child).attr(ATTR_PLACEHOLDER) === undefined;
           });
           if (candidates.length > 0) {
-            Move.add(Chance.pick(candidates));
+            $i.Move.add($i.Chance.pick(candidates));
           }
         }
       }
     });
 
     return RandomPickable;
-  })(Pickable);
+  })($i.Pickable);
 
-  var Bag = (function (_Region) {
+  var Bag = (function (_$i$Region) {
     function Bag() {
       _classCallCheck(this, Bag);
 
-      if (_Region != null) {
-        _Region.apply(this, arguments);
+      if (_$i$Region != null) {
+        _$i$Region.apply(this, arguments);
       }
     }
 
-    _inherits(Bag, _Region);
+    _inherits(Bag, _$i$Region);
 
     _createClass(Bag, {
       createdCallback: {
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Bag.prototype), "createdCallback", this).call(this);
 
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
 
           this[__placeHolderEl__] = this.querySelector("[" + ATTR_PLACEHOLDER + "]");
 
           if (!this[__placeHolderEl__]) {
-            var placeHolderContent = this.querySelector("[" + ATTR_PLACEHOLDER_CONTENT + "]") || Utils.activateTemplate(placeHolderTmp, doc);
+            var placeHolderContent = this.querySelector("[" + ATTR_PLACEHOLDER_CONTENT + "]") || $i.Utils.activateTemplate($i.placeHolderTmp, $i.doc);
 
-            this[__placeHolderEl__] = doc.createElement("div");
+            this[__placeHolderEl__] = $i.doc.createElement("div");
             this[__placeHolderEl__].appendChild(placeHolderContent);
-            $(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, "");
+            $i.$(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, "");
             this.insertBefore(this[__placeHolderEl__], this.lastChild);
           }
 
@@ -141,18 +158,18 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     });
 
     return Bag;
-  })(Region);
+  })($i.Region);
 
   Bag.prototype[__placeHolderEl__] = null;
 
-  Config.add(EL_NAME, new Helpable("help"), new Droppable("drop", new Key("d")), new RandomPickable("pick", new Key("q")));
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Droppable("drop", new $i.Key("d")), new RandomPickable("pick", new $i.Key("q")));
 
-  $registry.add(EL_NAME, Bag.prototype);
+  $i.$registry.add(EL_NAME, Bag.prototype);
 
-  if (window.TEST_MODE) {
+  if ($i.TEST_MODE) {
     Bag.RandomPickable = RandomPickable;
   }
 
   return Bag;
-}]);</script>
+});</script>
 </head><body></body></html>

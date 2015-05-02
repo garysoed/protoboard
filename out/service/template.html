@@ -7,18 +7,18 @@
 
 <script>"use strict";
 
-DI.prefix("pb").bind("service.Template", ["/=", "=", "=", "/=", function ($, Check, Events, Handlebars) {
+DI.prefix("pb").bind("service.Template", { $: "/=", Check: "=", Events: "=", Handlebars: "/=" }, function ($i) {
 
   var promiseMap = new Map();
 
   var Service = {
     addPartial: function addPartial(name, element) {
-      Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
+      $i.Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
       return this;
     },
     addData: function addData(name, data) {
       if (promiseMap.has(name)) {
-        $(Service).trigger(name, data);
+        $i.$(Service).trigger(name, data);
       } else {
         promiseMap.set(name, Promise.resolve([name, data]));
       }
@@ -27,7 +27,7 @@ DI.prefix("pb").bind("service.Template", ["/=", "=", "=", "/=", function ($, Che
     get: function get(name) {
       if (!promiseMap.has(name)) {
         promiseMap.set(name, new Promise(function (resolve, reject) {
-          Events.of(Service, this).on("jquery", name, function (event, data) {
+          $i.Events.of(Service, this).on("jquery", name, function (event, data) {
             resolve([name, data]);
           });
         }));
@@ -37,14 +37,14 @@ DI.prefix("pb").bind("service.Template", ["/=", "=", "=", "/=", function ($, Che
     }
   };
 
-  Handlebars.registerHelper("pb-for", function (from, to, step, options) {
+  $i.Handlebars.registerHelper("pb-for", function (from, to, step, options) {
     if (options === undefined) {
       options = step;
       step = 1;
     }
     var rv = "";
-    for (var i = Check(from).isInt().orThrows(); i < Check(to).isInt().orThrows(); i += Check(step).isInt().orThrows()) {
-      var data = Handlebars.createFrame(options.data || {});
+    for (var i = $i.Check(from).isInt().orThrows(); i < $i.Check(to).isInt().orThrows(); i += $i.Check(step).isInt().orThrows()) {
+      var data = $i.Handlebars.createFrame(options.data || {});
       data.index = i;
       rv += options.fn(this, { data: data });
     }
@@ -52,4 +52,4 @@ DI.prefix("pb").bind("service.Template", ["/=", "=", "=", "/=", function ($, Che
   });
 
   return Service;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

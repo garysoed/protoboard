@@ -1,7 +1,6 @@
 <html><head><base href=".">
 
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="utils.html">
 
 <script>"use strict";
 
@@ -9,7 +8,7 @@ var _createComputedClass = (function () { function defineProperties(target, prop
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("Check", ["=", function (Utils) {
+DI.prefix("pb").bind("Check", {}, function ($i) {
   var __checked__ = Symbol();
   var __input__ = Symbol();
   var __value__ = Symbol();
@@ -118,4 +117,4 @@ DI.prefix("pb").bind("Check", ["=", function (Utils) {
   }
 
   return check;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

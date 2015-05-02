@@ -1,13 +1,12 @@
 <base href=".">
 
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="utils.html">
 
 <script>
 
 DI
     .prefix('pb')
-    .bind('Check', ['=', Utils => {
+    .bind('Check', {}, $i => {
 
   // Private symbols.
   const __checked__ = Symbol();
@@ -186,5 +185,5 @@ DI
   }
 
   return check;
-}]);
+});
 </script>

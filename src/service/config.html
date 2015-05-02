@@ -6,7 +6,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('service.Config', ['ability.=', (Abilities) => {
+    .bind('service.Config', { Abilities: 'ability.=' }, $i => {
   const configuration = {};
 
   const Config = {
@@ -21,7 +21,7 @@ DI
     },
 
     init(elName, proto) {
-      let builder = Abilities.of(proto);
+      let builder = $i.Abilities.of(proto);
       if (!configuration[elName]) {
         console.warn(`No configuration for ${elName}`);
         return;
@@ -33,5 +33,5 @@ DI
   };
 
   return Config;
-}]);
+});
 </script>

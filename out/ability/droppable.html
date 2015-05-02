@@ -1,6 +1,5 @@
 <html><head><base href="..">
 
-<link rel="import" href="check.html">
 <link rel="import" href="service/move.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
@@ -15,15 +14,19 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Droppable", ["ability.=", "=", "trigger.=", "service.=", function (Ability, Check, Click, Move) {
+DI.prefix("pb").bind("ability.Droppable", {
+  Ability: "ability.=",
+  Click: "trigger.=",
+  Move: "service.="
+}, function ($i) {
   var __defaultEnabled__ = Symbol();
 
   var __isEnabled__ = Symbol();
 
-  var Droppable = (function (_Ability) {
+  var Droppable = (function (_$i$Ability) {
     function Droppable() {
       var name = arguments[0] === undefined ? "pb-droppable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, Droppable);
@@ -33,7 +36,7 @@ DI.prefix("pb").bind("ability.Droppable", ["ability.=", "=", "trigger.=", "servi
       this[__defaultEnabled__] = defaultEnabled;
     }
 
-    _inherits(Droppable, _Ability);
+    _inherits(Droppable, _$i$Ability);
 
     _createClass(Droppable, {
       init: {
@@ -47,7 +50,7 @@ DI.prefix("pb").bind("ability.Droppable", ["ability.=", "=", "trigger.=", "servi
       },
       doTrigger: {
         value: function doTrigger(el) {
-          var movedElement = Move.movedElements.values().next().value;
+          var movedElement = $i.Move.movedElements.values().next().value;
           if (movedElement) {
             el.appendChild(movedElement);
           }
@@ -56,7 +59,7 @@ DI.prefix("pb").bind("ability.Droppable", ["ability.=", "=", "trigger.=", "servi
     });
 
     return Droppable;
-  })(Ability);
+  })($i.Ability);
 
   return Droppable;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

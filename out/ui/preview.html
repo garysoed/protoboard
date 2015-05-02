@@ -18,7 +18,14 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ui.Preview", ["service.=", "=", "=", "service.=", "=", "=", function (Config, Events, PbElement, Preview, $registry, Utils) {
+DI.prefix("pb").bind("ui.Preview", {
+  Config: "service.=",
+  Events: "=",
+  PbElement: "=",
+  Preview: "service.=",
+  $registry: "=",
+  Utils: "="
+}, function ($i) {
 
   var registered = false;
 
@@ -27,26 +34,26 @@ DI.prefix("pb").bind("ui.Preview", ["service.=", "=", "=", "service.=", "=", "="
   var __onMouseOver__ = Symbol();
   var __onMouseOut__ = Symbol();
 
-  var PreviewElement = (function (_PbElement) {
+  var PreviewElement = (function (_$i$PbElement) {
     function PreviewElement() {
       _classCallCheck(this, PreviewElement);
 
-      if (_PbElement != null) {
-        _PbElement.apply(this, arguments);
+      if (_$i$PbElement != null) {
+        _$i$PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(PreviewElement, _PbElement);
+    _inherits(PreviewElement, _$i$PbElement);
 
     _createComputedClass(PreviewElement, [{
       key: __onMouseOut__,
       value: function () {
-        Preview.previewedEl = null;
+        $i.Preview.previewedEl = null;
       }
     }, {
       key: __onMouseOver__,
       value: function () {
-        Preview.previewedEl = this;
+        $i.Preview.previewedEl = this;
       }
     }, {
       key: "createdCallback",
@@ -60,24 +67,25 @@ DI.prefix("pb").bind("ui.Preview", ["service.=", "=", "=", "service.=", "=", "="
       value: function attachedCallback() {
         _get(Object.getPrototypeOf(PreviewElement.prototype), "attachedCallback", this).call(this);
         if (this.parentElement) {
-          Events.of(this.parentElement, this).on("dom", "mouseenter", this[__onMouseOver__].bind(this)).on("dom", "mouseleave", this[__onMouseOut__].bind(this));
+          $i.Events.of(this.parentElement, this).on("dom", "mouseenter", this[__onMouseOver__].bind(this)).on("dom", "mouseleave", this[__onMouseOut__].bind(this));
         }
       }
     }, {
       key: "detachedCallback",
       value: function detachedCallback() {
         if (this.parentElement) {
-          Events.of(this.parentElement, this).off();
+          $i.Events.of(this.parentElement, this).off();
         }
         _get(Object.getPrototypeOf(PreviewElement.prototype), "detachedCallback", this).call(this);
       }
     }]);
 
     return PreviewElement;
-  })(PbElement);
+  })($i.PbElement);
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, PreviewElement.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, PreviewElement.prototype);
 
   return PreviewElement;
-}]);</script></head><body></body></html>
+});</script>
+</head><body></body></html>

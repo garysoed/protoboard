@@ -8,7 +8,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("service.Registry", [function () {
+DI.prefix("pb").bind("service.Registry", {}, function () {
 
   var __elements__ = Symbol();
   var __toRun__ = Symbol();
@@ -73,5 +73,5 @@ DI.prefix("pb").bind("service.Registry", [function () {
   })();
 
   return Registry;
-}]);</script>
+});</script>
 </head><body></body></html>

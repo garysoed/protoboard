@@ -10,7 +10,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb.trigger").bind("Triggers", ["=", "=", function (Click, Key) {
+DI.prefix("pb.trigger").bind("Triggers", { Click: "=", Key: "=" }, function ($i) {
   var __observer__ = Symbol();
   var __target__ = Symbol();
   var __triggers__ = Symbol();
@@ -41,7 +41,7 @@ DI.prefix("pb.trigger").bind("Triggers", ["=", "=", function (Click, Key) {
 
   var Triggers = {
     parse: function parse(str) {
-      var trigger = Click.parse(str) || Key.parse(str);
+      var trigger = $i.Click.parse(str) || $i.Key.parse(str);
 
       if (!trigger) {
         throw "Unparsable trigger string: " + str;
@@ -51,4 +51,4 @@ DI.prefix("pb.trigger").bind("Triggers", ["=", "=", function (Click, Key) {
   };
 
   return Triggers;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

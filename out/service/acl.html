@@ -1,9 +1,8 @@
 <html><head><base href="..">
 
-<link rel="import" href="ability/abilities.html">
 <link rel="import" href="check.html">
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="utils.html">
 
 <script>"use strict";
 
@@ -15,7 +14,11 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("service.Acl", ["/=", "ability.=", "=", "=", "/=?", function ($, Abilities, Check, Utils, TEST_MODE) {
+DI.prefix("pb").bind("service.Acl", {
+  Check: "=",
+  Utils: "=",
+  TEST_MODE: "/=?"
+}, function ($i) {
 
   var ATTR_PREFIX = "pb-acl-";
 
@@ -112,7 +115,7 @@ DI.prefix("pb").bind("service.Acl", ["/=", "ability.=", "=", "=", "/=?", functio
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = Utils.toMap(el.attributes)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        for (var _iterator = $i.Utils.toMap(el.attributes)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var _step$value;
 
           var _ret = (function () {
@@ -125,7 +128,7 @@ DI.prefix("pb").bind("service.Acl", ["/=", "ability.=", "=", "=", "/=?", functio
             }
 
             var name = attrName.substring(ATTR_PREFIX.length);
-            var allowedPlayers = Check(attr.value).isList().orUse(null);
+            var allowedPlayers = $i.Check(attr.value).isList().orUse(null);
             var enabled = allowedPlayers === null || allowedPlayers.length === 0 || allowedPlayers.some(function (player) {
               return GROUPS.has(player) ? GROUPS.get(player).contains(_this.currentPlayer) : player === _this.currentPlayer;
             });
@@ -317,10 +320,11 @@ DI.prefix("pb").bind("service.Acl", ["/=", "ability.=", "=", "=", "/=?", functio
     }
   });
 
-  if (TEST_MODE) {
+  if ($i.TEST_MODE) {
     Service.Group = Group;
     Service.GROUPS = GROUPS;
   }
 
   return Service;
-}]);</script></head><body></body></html>
+});</script>
+</head><body></body></html>

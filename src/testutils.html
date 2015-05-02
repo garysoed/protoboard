@@ -5,33 +5,33 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI.bind('pb.t', ['=', 'pb.=', (_, Utils) => {
+DI.bind('pb.t', { _: '=' }, $i => {
   let TestUtil = {
     createFakeAbility(name, trigger) {
       return {
         attrName: `attr${name}`,
         attrTrigger: `attr${name}Trigger`,
         getTrigger: () => trigger,
-        init: _.spiedFunction(),
-        isEnabled: _.spiedFunction(),
-        updateConfig: _.spiedFunction(),
-        trigger: _.spiedFunction()
+        init: $i._.spiedFunction(),
+        isEnabled: $i._.spiedFunction(),
+        updateConfig: $i._.spiedFunction(),
+        trigger: $i._.spiedFunction()
       };
     },
 
     createFakeEvents() {
       let fake = {};
-      fake.of = _.spiedFunction().overrideReturn(fake);
-      fake.on = _.spiedFunction().overrideReturn(fake);
-      fake.off = _.spiedFunction().overrideReturn(fake);
+      fake.of = $i._.spiedFunction().overrideReturn(fake);
+      fake.on = $i._.spiedFunction().overrideReturn(fake);
+      fake.off = $i._.spiedFunction().overrideReturn(fake);
       return fake;
     },
 
     createFakeTrigger(name) {
       return {
         toString() { return name; },
-        on: _.spiedFunction(),
-        off: _.spiedFunction()
+        on: $i._.spiedFunction(),
+        off: $i._.spiedFunction()
       };
     },
 
@@ -43,5 +43,5 @@ DI.bind('pb.t', ['=', 'pb.=', (_, Utils) => {
   };
 
   return TestUtil;
-}]);
+});
 </script>

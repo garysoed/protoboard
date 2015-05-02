@@ -13,44 +13,50 @@
   <script>
   DI
       .prefix('pb')
-      .with('$registry', ['service.=', Registry => new Registry()])
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/=', '/=', '/=', '=', 'ability.=', (expect, _, _M, doc, Toggleable) => {
+      .run(
+          {
+            expect: '/=',
+            doc: '=',
+            Toggleable: 'ability.='
+          },
+          $i => {
 
   describe('Toggleable', () => {
     let el;
 
     beforeEach(done => {
-      el = doc.createElement('div');
+      el = $i.doc.createElement('div');
       done();
     });
 
     describe('#init', () => {
       it('should set the default values', () => {
-        let toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+        let toggleable = new $i.Toggleable(undefined, undefined, { enabled: true, active: true });
         toggleable.init(el);
-        expect($(el).attr(toggleable.attrName)).to.equal('true');
-        expect($(el).attr(toggleable.attrActive)).to.be.equal('true');
+        $i.expect($(el).attr(toggleable.attrName)).to.equal('true');
+        $i.expect($(el).attr(toggleable.attrActive)).to.be.equal('true');
       });
       it('should do nothing if enabled is set', () => {
         let value = 'value';
-        let toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+        let toggleable = new $i.Toggleable(undefined, undefined, { enabled: true, active: true });
 
         $(el).attr(toggleable.attrName, value);
         toggleable.init(el);
 
-        expect($(el).attr(toggleable.attrName)).to.equal(value);
-        expect($(el).attr(toggleable.attrActive)).to.be.equal('true');
+        $i.expect($(el).attr(toggleable.attrName)).to.equal(value);
+        $i.expect($(el).attr(toggleable.attrActive)).to.be.equal('true');
       });
       it('should do nothing if state is set', () => {
         let value = 'value';
-        let toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+        let toggleable = new $i.Toggleable(undefined, undefined, { enabled: true, active: true });
 
         $(el).attr(toggleable.attrActive, value);
         toggleable.init(el);
 
-        expect($(el).attr(toggleable.attrName)).to.equal('true');
-        expect($(el).attr(toggleable.attrActive)).to.be.equal(value);
+        $i.expect($(el).attr(toggleable.attrName)).to.equal('true');
+        $i.expect($(el).attr(toggleable.attrActive)).to.be.equal(value);
       });
     });
 
@@ -58,7 +64,7 @@
       let toggleable;
 
       beforeEach(done => {
-        toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
+        toggleable = new $i.Toggleable(undefined, undefined, { enabled: true, active: true });
         done();
       });
 
@@ -67,22 +73,17 @@
         $(el).attr(toggleable.attrActive, 'true');
         toggleable.trigger(el);
 
-        expect($(el).attr(toggleable.attrActive)).to.equal('false');
+        $i.expect($(el).attr(toggleable.attrActive)).to.equal('false');
       });
       it('should do nothing if disabled', () => {
         $(el).attr(toggleable.attrName, 'false');
         $(el).attr(toggleable.attrActive, 'true');
         toggleable.trigger(el);
 
-        expect($(el).attr(toggleable.attrActive)).to.equal('true');
+        $i.expect($(el).attr(toggleable.attrActive)).to.equal('true');
       });
     });
-
-    afterEach(done => {
-      _.reset();
-      done();
-    });
   });
-  }]);
+  });
   </script>
 </body>

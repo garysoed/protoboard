@@ -1,13 +1,13 @@
 <base href=".">
 
+<link rel="import" href="ability/abilities.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/triggers.html">
-<link rel="import" href="utils.html">
 
 <script>
 DI
     .prefix('pb')
-    .bind('PbElement', ['/=', 'ability.=', '=', ($, Abilities, Utils) => {
+    .bind('PbElement', { $: '/=', Abilities: 'ability.=' }, $i => {
 
   // Private symbols.
   const __isCreated__ = Symbol();
@@ -29,11 +29,11 @@ DI
      * @method createdCallback
      */
     createdCallback() {
-      Abilities.init(this);
+      $i.Abilities.init(this);
       this[__isCreated__] = false;
 
       let nameParts = this.nodeName.toLowerCase().split('-');
-      let prefix = $(this).attr(ATTR_ID)
+      let prefix = $i.$(this).attr(ATTR_ID)
           || nameParts[nameParts.length - 1];
 
       if (IDS.has(prefix)) {
@@ -42,7 +42,7 @@ DI
         IDS.set(prefix, 0);
       }
 
-      $(this).attr(ATTR_ID, `${prefix}-${IDS.get(prefix)}`);
+      $i.$(this).attr(ATTR_ID, `${prefix}-${IDS.get(prefix)}`);
     }
 
     /**
@@ -74,5 +74,5 @@ DI
   }
 
   return PbElement;
-}]);
+});
 </script>

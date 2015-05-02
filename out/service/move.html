@@ -39,7 +39,7 @@
 
 var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
 
-DI.prefix("pb").bind("service.Move", ["=", "=", "=", function ($registry, Events, Utils) {
+DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }, function ($i) {
   var __container__ = Symbol("container");
   var __document__ = Symbol();
   var __mouseX__ = Symbol();
@@ -58,7 +58,7 @@ DI.prefix("pb").bind("service.Move", ["=", "=", "=", function ($registry, Events
     _defineProperty(_Object$defineProperties, __moveContainer__, function () {
       var width = 0;
       var height = 0;
-      Utils.toArray(this[__container__].children).forEach(function (child) {
+      $i.Utils.toArray(this[__container__].children).forEach(function (child) {
         var rect = child.getBoundingClientRect();
         width = Math.max(rect.width, width);
         height = Math.max(rect.height, height);
@@ -104,8 +104,8 @@ DI.prefix("pb").bind("service.Move", ["=", "=", "=", function ($registry, Events
     }
   });
 
-  $registry.runAtRegister(function (doc) {
-    Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
+  $i.$registry.runAtRegister(function (doc) {
+    $i.Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
     Move[__document__] = doc;
     Move[__container__] = doc.createElement("div");
     Move[__container__].classList.add("pb-move");
@@ -113,4 +113,4 @@ DI.prefix("pb").bind("service.Move", ["=", "=", "=", function ($registry, Events
   });
 
   return Move;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

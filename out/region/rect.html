@@ -42,18 +42,31 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template");
-}]).bind("region.Rect", ["=", "=", "trigger.=", "service.=", "ability.=", "ability.=", "trigger.=", "service.=", "region.=", "=", "=", "=", function ($registry, Check, Click, Config, Droppable, Helpable, Key, Move, Region, Utils, doc, template) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("region.Rect", {
+  $registry: "=",
+  doc: "=",
+  template: "=",
+  Check: "=",
+  Click: "trigger.=",
+  Config: "service.=",
+  Droppable: "ability.=",
+  Helpable: "ability.=",
+  Key: "trigger.=",
+  Move: "service.=",
+  Region: "region.=",
+  Utils: "="
+}, function ($i) {
   var EL_NAME = "pb-r-rect";
 
   var __mutationObserver__ = Symbol("mutationObserver");
   var __onDomMutation__ = Symbol("onDomMutation");
 
-  var FlexDroppable = (function (_Droppable) {
+  var FlexDroppable = (function (_$i$Droppable) {
     function FlexDroppable() {
       var name = arguments[0] === undefined ? "pb-droppable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, FlexDroppable);
@@ -62,13 +75,13 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
     }
 
-    _inherits(FlexDroppable, _Droppable);
+    _inherits(FlexDroppable, _$i$Droppable);
 
     _createComputedClass(FlexDroppable, [{
       key: __onDomMutation__,
       value: function (mutations) {
         mutations.forEach(function (mutation) {
-          Utils.toArray(mutation.removedNodes).forEach(function (removedNode) {
+          $i.Utils.toArray(mutation.removedNodes).forEach(function (removedNode) {
             removedNode.style.left = "";
             removedNode.style.top = "";
           });
@@ -84,14 +97,14 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     }, {
       key: "doTrigger",
       value: function doTrigger(el) {
-        var movedElement = Move.movedElements.values().next().value;
+        var movedElement = $i.Move.movedElements.values().next().value;
 
         if (movedElement) {
           el.appendChild(movedElement);
 
           var rect = movedElement.getBoundingClientRect();
-          var dLeft = Move.mouseX - rect.left - rect.width / 2;
-          var dTop = Move.mouseY - rect.top - rect.height / 2;
+          var dLeft = $i.Move.mouseX - rect.left - rect.width / 2;
+          var dTop = $i.Move.mouseY - rect.top - rect.height / 2;
           movedElement.style.left = "" + (movedElement.offsetLeft + dLeft) + "px";
           movedElement.style.top = "" + (movedElement.offsetTop + dTop) + "px";
         }
@@ -99,35 +112,35 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     }]);
 
     return FlexDroppable;
-  })(Droppable);
+  })($i.Droppable);
 
-  var Rect = (function (_Region) {
+  var Rect = (function (_$i$Region) {
     function Rect() {
       _classCallCheck(this, Rect);
 
-      if (_Region != null) {
-        _Region.apply(this, arguments);
+      if (_$i$Region != null) {
+        _$i$Region.apply(this, arguments);
       }
     }
 
-    _inherits(Rect, _Region);
+    _inherits(Rect, _$i$Region);
 
     _createClass(Rect, {
       createdCallback: {
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Rect.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
         }
       }
     });
 
     return Rect;
-  })(Region);
+  })($i.Region);
 
-  Config.add(EL_NAME, new Helpable("help"), new FlexDroppable("drop", new Key("d"), true));
-  $registry.add(EL_NAME, Rect.prototype);
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new FlexDroppable("drop", new $i.Key("d"), true));
+  $i.$registry.add(EL_NAME, Rect.prototype);
 
   Rect.FlexDroppable = FlexDroppable;
 
   return Rect;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

@@ -56,16 +56,30 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", ["=", function (doc) {
-  return doc.querySelector("template");
-}]).bind("region.Hand", ["=", "ability.=", "=", "service.=", "ability.=", "ability.=", "trigger.=", "service.=", "region.=", "=", "=", "=", function ($registry, Abilities, Check, Config, Droppable, Helpable, Key, Move, Region, Utils, doc, template) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("region.Hand", {
+  $registry: "=",
+  Abilities: "ability.=",
+  Check: "=",
+  Config: "service.=",
+  Droppable: "ability.=",
+  Helpable: "ability.=",
+  Key: "trigger.=",
+  Move: "service.=",
+  Region: "region.=",
+  Utils: "=",
+  doc: "=",
+  template: "=",
+  TEST_MODE: "/=?"
+}, function ($i) {
 
   var EL_NAME = "pb-r-hand";
 
-  var ReorderableDroppable = (function (_Droppable) {
+  var ReorderableDroppable = (function (_$i$Droppable) {
     function ReorderableDroppable() {
       var name = arguments[0] === undefined ? "pb-droppable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Key("d") : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Key("d") : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, ReorderableDroppable);
@@ -73,12 +87,12 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       _get(Object.getPrototypeOf(ReorderableDroppable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
     }
 
-    _inherits(ReorderableDroppable, _Droppable);
+    _inherits(ReorderableDroppable, _$i$Droppable);
 
     _createClass(ReorderableDroppable, {
       doTrigger: {
         value: function doTrigger(el) {
-          var movedElement = Move.movedElements.values().next().value;
+          var movedElement = $i.Move.movedElements.values().next().value;
           if (movedElement) {
             var dropped = false;
             var _iteratorNormalCompletion = true;
@@ -86,11 +100,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
             var _iteratorError = undefined;
 
             try {
-              for (var _iterator = Utils.toArray(el.children)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              for (var _iterator = $i.Utils.toArray(el.children)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var child = _step.value;
 
                 var rect = child.getBoundingClientRect();
-                if (!dropped && rect.left + rect.width / 2 > Move.mouseX) {
+                if (!dropped && rect.left + rect.width / 2 > $i.Move.mouseX) {
                   dropped = true;
                   el.insertBefore(movedElement, child);
                 }
@@ -119,24 +133,24 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     });
 
     return ReorderableDroppable;
-  })(Droppable);
+  })($i.Droppable);
 
-  var Hand = (function (_Region) {
+  var Hand = (function (_$i$Region) {
     function Hand() {
       _classCallCheck(this, Hand);
 
-      if (_Region != null) {
-        _Region.apply(this, arguments);
+      if (_$i$Region != null) {
+        _$i$Region.apply(this, arguments);
       }
     }
 
-    _inherits(Hand, _Region);
+    _inherits(Hand, _$i$Region);
 
     _createClass(Hand, {
       createdCallback: {
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Hand.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
 
           this.attachedCallback();
         }
@@ -154,14 +168,14 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     });
 
     return Hand;
-  })(Region);
+  })($i.Region);
 
-  Config.add(EL_NAME, new Helpable("help"), new ReorderableDroppable("drop", new Key("d"), true));
-  $registry.add(EL_NAME, Hand.prototype);
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new ReorderableDroppable("drop", new $i.Key("d"), true));
+  $i.$registry.add(EL_NAME, Hand.prototype);
 
-  if (window.TEST_MODE) {
+  if ($i.TEST_MODE) {
     Hand.ReorderableDroppable = ReorderableDroppable;
   }
 
   return Hand;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

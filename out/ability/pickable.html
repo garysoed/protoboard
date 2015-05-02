@@ -1,7 +1,8 @@
 <html><head><base href="..">
 
-<link rel="import" href="check.html">
+<link rel="import" href="ability/ability.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
 <link rel="import" href="service/move.html">
 
 <script>"use strict";
@@ -14,13 +15,17 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Pickable", ["ability.=", "=", "trigger.=", "service.=", "trigger.=", function (Ability, Check, Click, Move, Triggers) {
+DI.prefix("pb").bind("ability.Pickable", {
+  $: "/=",
+  Ability: "ability.=",
+  Click: "trigger.=",
+  Move: "service.=" }, function ($i) {
   var __defaultEnabled__ = Symbol();
 
-  var Pickable = (function (_Ability) {
+  var Pickable = (function (_$i$Ability) {
     function Pickable() {
       var name = arguments[0] === undefined ? "pb-pickable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, Pickable);
@@ -30,27 +35,27 @@ DI.prefix("pb").bind("ability.Pickable", ["ability.=", "=", "trigger.=", "servic
       this[__defaultEnabled__] = defaultEnabled;
     }
 
-    _inherits(Pickable, _Ability);
+    _inherits(Pickable, _$i$Ability);
 
     _createClass(Pickable, {
       init: {
         value: function init(el) {
           _get(Object.getPrototypeOf(Pickable.prototype), "init", this).call(this, el);
 
-          if ($(el).attr(this.attrName) === undefined) {
-            $(el).attr(this.attrName, this[__defaultEnabled__]);
+          if ($i.$(el).attr(this.attrName) === undefined) {
+            $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
           }
         }
       },
       doTrigger: {
         value: function doTrigger(el) {
-          Move.add(el);
+          $i.Move.add(el);
         }
       }
     });
 
     return Pickable;
-  })(Ability);
+  })($i.Ability);
 
   return Pickable;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

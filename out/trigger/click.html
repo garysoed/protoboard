@@ -12,27 +12,27 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("trigger.Click", ["=", "trigger.=", function (Events, Trigger) {
-  var Click = (function (_Trigger) {
+DI.prefix("pb").bind("trigger.Click", { Events: "=", Trigger: "trigger.=" }, function ($i) {
+  var Click = (function (_$i$Trigger) {
     function Click() {
       _classCallCheck(this, Click);
 
-      if (_Trigger != null) {
-        _Trigger.apply(this, arguments);
+      if (_$i$Trigger != null) {
+        _$i$Trigger.apply(this, arguments);
       }
     }
 
-    _inherits(Click, _Trigger);
+    _inherits(Click, _$i$Trigger);
 
     _createClass(Click, {
       on: {
         value: function on(element, ability) {
-          Events.of(element, this).on("hammer", "singletap", ability.trigger.bind(ability, element));
+          $i.Events.of(element, this).on("hammer", "singletap", ability.trigger.bind(ability, element));
         }
       },
       off: {
         value: function off(element) {
-          Events.of(element, this).off("hammer", "singletap");
+          $i.Events.of(element, this).off("hammer", "singletap");
         }
       },
       toString: {
@@ -48,11 +48,11 @@ DI.prefix("pb").bind("trigger.Click", ["=", "trigger.=", function (Events, Trigg
     });
 
     return Click;
-  })(Trigger);
+  })($i.Trigger);
 
   Click.parse = function (str) {
     return str === "pb-click" ? new Click() : undefined;
   };
 
   return Click;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

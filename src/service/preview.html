@@ -1,12 +1,12 @@
 <base href="..">
 
-<link rel="import" href="utils.html">
+<link rel="import" href="third_party/di.html">
 
 <script>
 
 DI
     .prefix('pb')
-    .bind('service.Preview', ['=', (Utils) => {
+    .bind('service.Preview', { }, $i => {
   /**
    * Service that lets the user preview an element on mouse hover.
    *
@@ -49,5 +49,5 @@ DI
   };
 
   return Preview;
-}]);
+});
 </script>

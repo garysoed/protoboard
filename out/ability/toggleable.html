@@ -16,17 +16,22 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Toggleable", ["ability.=", "=", "trigger.=", "=", function (Ability, Check, Key, Utils) {
+DI.prefix("pb").bind("ability.Toggleable", {
+  $: "/=",
+  Ability: "ability.=",
+  Check: "=",
+  Key: "trigger.="
+}, function ($i) {
   var __defaultEnabled__ = Symbol();
   var __defaultActive__ = Symbol();
 
   var __isEnabled__ = Symbol();
   var __isActive__ = Symbol();
 
-  var Toggleable = (function (_Ability) {
+  var Toggleable = (function (_$i$Ability) {
     function Toggleable() {
       var name = arguments[0] === undefined ? "pb-toggleable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Key("t") : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Key("t") : arguments[1];
       var defaultConfig = arguments[2] === undefined ? { enabled: true, active: false } : arguments[2];
 
       _classCallCheck(this, Toggleable);
@@ -42,34 +47,34 @@ DI.prefix("pb").bind("ability.Toggleable", ["ability.=", "=", "trigger.=", "=", 
       }
     }
 
-    _inherits(Toggleable, _Ability);
+    _inherits(Toggleable, _$i$Ability);
 
     _createComputedClass(Toggleable, [{
       key: __isEnabled__,
       value: function (el) {
-        return Check($(el).attr(this.attrName)).isBoolean().orThrows();
+        return $i.Check($i.$(el).attr(this.attrName)).isBoolean().orThrows();
       }
     }, {
       key: __isActive__,
       value: function (el) {
-        return Check($(el).attr(this.attrActive)).isBoolean().orThrows();
+        return $i.Check($i.$(el).attr(this.attrActive)).isBoolean().orThrows();
       }
     }, {
       key: "init",
       value: function init(el) {
         _get(Object.getPrototypeOf(Toggleable.prototype), "init", this).call(this, el);
-        if ($(el).attr(this.attrName) === undefined) {
-          $(el).attr(this.attrName, this[__defaultEnabled__]);
+        if ($i.$(el).attr(this.attrName) === undefined) {
+          $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
         }
 
-        if ($(el).attr(this.attrActive) === undefined) {
-          $(el).attr(this.attrActive, this[__defaultActive__]);
+        if ($i.$(el).attr(this.attrActive) === undefined) {
+          $i.$(el).attr(this.attrActive, this[__defaultActive__]);
         }
       }
     }, {
       key: "doTrigger",
       value: function doTrigger(el) {
-        $(el).attr(this.attrActive, !this[__isActive__](el));
+        $i.$(el).attr(this.attrActive, !this[__isActive__](el));
       }
     }, {
       key: "attrActive",
@@ -79,7 +84,7 @@ DI.prefix("pb").bind("ability.Toggleable", ["ability.=", "=", "trigger.=", "=", 
     }]);
 
     return Toggleable;
-  })(Ability);
+  })($i.Ability);
 
   return Toggleable;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

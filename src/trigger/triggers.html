@@ -7,7 +7,7 @@
 <script>
 DI
     .prefix('pb.trigger')
-    .bind('Triggers', ['=', '=', (Click, Key) => {
+    .bind('Triggers', { Click: '=', Key: '=' }, $i => {
 
   // Private symbols
   const __observer__ = Symbol();
@@ -32,7 +32,7 @@ DI
 
   let Triggers = {
     parse(str) {
-      let trigger = Click.parse(str) || Key.parse(str);
+      let trigger = $i.Click.parse(str) || $i.Key.parse(str);
 
       if (!trigger) {
         throw `Unparsable trigger string: ${str}`;
@@ -42,5 +42,5 @@ DI
   };
 
   return Triggers;
-}]);
+});
 </script>

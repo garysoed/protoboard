@@ -63,14 +63,23 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', ['=', doc => doc.querySelector('template')])
-    .bind('ability.Helpable', [
-        'ability.=', 'ability.=', '=', 'trigger.=', '=', '=', '=', '=',
-        (Abilities, Ability, Events, Key, Utils, doc, template, $registry) => {
+    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
+    .bind('ability.Helpable',
+        {
+          $registry: '=',
+          doc: '=',
+          template: '=',
+          Abilities: 'ability.=',
+          Ability: 'ability.=',
+          Events: '=',
+          Key: 'trigger.=',
+          Utils: '='
+        },
+        $i => {
 
   let displayEl = null;
 
-  class Helpable extends Ability {
+  class Helpable extends $i.Ability {
     /**
      * Displays the triggers for all registered abilities.
      *
@@ -81,7 +90,7 @@ DI
      *    key.
      * @extends ability.Ability
      */
-    constructor(name = 'pb-helpable', defaultTrigger = new Key('?')) {
+    constructor(name = 'pb-helpable', defaultTrigger = new $i.Key('?')) {
       super(name, defaultTrigger);
     }
 
@@ -92,7 +101,7 @@ DI
      * @param {Element} el The element whose abilities should be displayed.
      */
     doTrigger(el) {
-      let abilities = Abilities.of(el).getAll();
+      let abilities = $i.Abilities.of(el).getAll();
       displayEl.innerHTML = '';
 
       let doc = displayEl.ownerDocument;
@@ -125,16 +134,16 @@ DI
     }
   }
 
-  $registry.runAtRegister((document, config) => {
+  $i.$registry.runAtRegister((document, config) => {
     displayEl = document.createElement('div');
-    displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+    displayEl.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
     displayEl.style.display = 'none';
-    Events.of(displayEl).on('dom', 'click', () => {
+    $i.Events.of(displayEl).on('dom', 'click', () => {
       displayEl.style.display = 'none';
     });
     document.body.appendChild(displayEl);
   });
 
   return Helpable;
-}]);
+});
 </script>

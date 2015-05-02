@@ -16,13 +16,13 @@
   DI
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .run(['/=', '/=', '/=', '=', '=', (expect, _, _M, doc, Utils) => {
+      .run({ expect: '/=', _: '/=', _M: '/=', doc: '=', Utils: '=' }, $i => {
 
   describe('Utils', () => {
     describe('#extractTemplate', () => {
       it('should extract the correct template', () => {
-        let template = Utils.extractTemplate('#correctTemplate', doc);
-        expect(template.textContent).to.be.equal('Correct');
+        let template = $i.Utils.extractTemplate('#correctTemplate', $i.doc);
+        $i.expect(template.textContent).to.be.equal('Correct');
       });
     });
 
@@ -32,11 +32,11 @@
           f: () => 1
         };
 
-        expect(Utils.nonNullFn(o, 'f')).to.be.equal(o.f);
+        $i.expect($i.Utils.nonNullFn(o, 'f')).to.be.equal(o.f);
       });
 
       it('should return noop function if it does not exist', () => {
-        expect(Utils.nonNullFn({}, 'fn')()).to.be.undefined();
+        $i.expect($i.Utils.nonNullFn({}, 'fn')()).to.be.undefined();
       });
     });
 
@@ -44,12 +44,12 @@
       let o = { a: 1, b: 2 };
 
       it('should listen to a specific property when given the name', () => {
-        let handler = _.spiedFunction();
-        _.spy(Object, 'observe');
+        let handler = $i._.spiedFunction();
+        $i._.spy(Object, 'observe');
 
-        Utils.observe(o, 'a', handler);
-        let isAFunction = _M.isA(Function);
-        expect(Object.observe).calledWith(o, isAFunction).at.least(1);
+        $i.Utils.observe(o, 'a', handler);
+        let isAFunction = $i._M.isA(Function);
+        $i.expect(Object.observe).calledWith(o, isAFunction).at.least(1);
 
         // Emulate a change event on the listened property.
         let changeA = {
@@ -64,16 +64,16 @@
           oldValue: 'oldValue'
         };
         isAFunction.matchingArgs[0]([changeA, changeB]);
-        expect(handler).calledWith(changeA.name, changeA.type, changeA.oldValue).at.least(1);
-        expect(handler).calledWith(changeB.name, _M.any(), _M.any()).equal(0);
+        $i.expect(handler).calledWith(changeA.name, changeA.type, changeA.oldValue).at.least(1);
+        $i.expect(handler).calledWith(changeB.name, $i._M.any(), $i._M.any()).equal(0);
       });
       it('should listen to all properties when not given any names', () => {
-        let handler = _.spiedFunction();
-        _.spy(Object, 'observe');
+        let handler = $i._.spiedFunction();
+        $i._.spy(Object, 'observe');
 
-        Utils.observe(o, null /* property */, handler);
-        let isAFunction = _M.isA(Function);
-        expect(Object.observe).calledWith(o, isAFunction).at.least(1);
+        $i.Utils.observe(o, null /* property */, handler);
+        let isAFunction = $i._M.isA(Function);
+        $i.expect(Object.observe).calledWith(o, isAFunction).at.least(1);
 
         // Emulate a change event on the listened property.
         let changeA = {
@@ -88,8 +88,8 @@
           oldValue: 'oldValueB'
         };
         isAFunction.matchingArgs[0]([changeA, changeB]);
-        expect(handler).calledWith(changeA.name, changeA.type, changeA.oldValue).at.least(1);
-        expect(handler).calledWith(changeB.name, changeB.type, changeB.oldValue).at.least(1);
+        $i.expect(handler).calledWith(changeA.name, changeA.type, changeA.oldValue).at.least(1);
+        $i.expect(handler).calledWith(changeB.name, changeB.type, changeB.oldValue).at.least(1);
       });
     });
 
@@ -97,75 +97,75 @@
       it('should immediate resolve when the property matches', done => {
         let o = { a: true };
         let handler = () => done();
-        Utils.waitFor(o, 'a', true).then(handler);
+        $i.Utils.waitFor(o, 'a', true).then(handler);
       });
       it('should resolve when the property matches', done => {
         let o = { a: false };
         let handler = () => done();
-        Utils.waitFor(o, 'a', true).then(handler);
+        $i.Utils.waitFor(o, 'a', true).then(handler);
         o.a = true;
       });
       it('should resolve when given a function', done => {
         let o = { a: 'value' };
         let handler = () => done();
-        Utils.waitFor(o, 'a', v => v === 'value').then(handler);
+        $i.Utils.waitFor(o, 'a', v => v === 'value').then(handler);
       });
     });
 
     describe('#extendFn', () => {
       it('should call the original function before the new function by default', () => {
-        let oldFn = _.spiedFunction().overrideReturn(1);
-        let newFn = _.spiedFunction().overrideReturn(2);
+        let oldFn = $i._.spiedFunction().overrideReturn(1);
+        let newFn = $i._.spiedFunction().overrideReturn(2);
 
         let object = {
           fn: oldFn
         };
 
-        Utils.extendFn(object, 'fn', newFn);
-        expect(object.fn()).to.be.equal(2);
-        expect(oldFn).calledWith().before(newFn).calledWith();
+        $i.Utils.extendFn(object, 'fn', newFn);
+        $i.expect(object.fn()).to.be.equal(2);
+        $i.expect(oldFn).calledWith().before(newFn).calledWith();
       });
       it('should call the original function after the new function if specified', () => {
-        let oldFn = _.spiedFunction().overrideReturn(1);
-        let newFn = _.spiedFunction().overrideReturn(2);
+        let oldFn = $i._.spiedFunction().overrideReturn(1);
+        let newFn = $i._.spiedFunction().overrideReturn(2);
 
         let object = {
           fn: oldFn
         };
 
-        Utils.extendFn(object, 'fn', newFn, true /* callBefore */);
-        expect(object.fn()).to.be.equal(1);
-        expect(newFn).calledWith().before(oldFn).calledWith();
+        $i.Utils.extendFn(object, 'fn', newFn, true /* callBefore */);
+        $i.expect(object.fn()).to.be.equal(1);
+        $i.expect(newFn).calledWith().before(oldFn).calledWith();
       });
       it('should not crash if original function does not exist', () => {
         let object = {};
-        let fn = _.spiedFunction().overrideReturn(2);
+        let fn = $i._.spiedFunction().overrideReturn(2);
 
-        Utils.extendFn(object, 'fn', fn, true /** callBefore */);
-        expect(object.fn()).to.be.equal(2);
-        expect(fn).calledWith().at.least(1);
+        $i.Utils.extendFn(object, 'fn', fn, true /** callBefore */);
+        $i.expect(object.fn()).to.be.equal(2);
+        $i.expect(fn).calledWith().at.least(1);
       });
     });
 
     describe('#curry', () => {
       it('should work when called with one argument at a time', () => {
         let fn = (a, b) => a + b;
-        let curry = Utils.curry(fn);
-        expect(curry(1)).to.be.instanceof(Function);
-        expect(curry(1)(2)).to.be.equal(3);
+        let curry = $i.Utils.curry(fn);
+        $i.expect(curry(1)).to.be.instanceof(Function);
+        $i.expect(curry(1)(2)).to.be.equal(3);
       });
       it('should work when called with multiple arguments', () => {
         let fn = (a, b) => a + b;
-        let curry = Utils.curry(fn);
-        expect(curry(1, 2)).to.be.equal(3);
+        let curry = $i.Utils.curry(fn);
+        $i.expect(curry(1, 2)).to.be.equal(3);
       });
       it('should work for functions with no arguments', () => {
         let fn = () => 3;
-        expect(Utils.curry(fn)()).to.be.equal(3);
+        $i.expect($i.Utils.curry(fn)()).to.be.equal(3);
       });
     });
   });
-  }]);
+  });
   </script>
 </body>
 </html>

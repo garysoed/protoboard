@@ -8,7 +8,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('service.Template', ['/=', '=', '=', '/=', ($, Check, Events, Handlebars) => {
+    .bind('service.Template', { $: '/=', Check: '=', Events: '=', Handlebars: '/=' }, $i => {
 
   const promiseMap = new Map();
 
@@ -53,7 +53,7 @@ DI
      * @return {service.Template} This service for chaining.
      */
     addPartial(name, element) {
-      Handlebars.registerPartial(name, element.innerHTML.replace('&gt;', '>'));
+      $i.Handlebars.registerPartial(name, element.innerHTML.replace('&gt;', '>'));
       return this;
     },
 
@@ -67,7 +67,7 @@ DI
      */
     addData(name, data) {
       if (promiseMap.has(name)) {
-        $(Service).trigger(name, data);
+        $i.$(Service).trigger(name, data);
       } else {
         promiseMap.set(name, Promise.resolve([name, data]));
       }
@@ -87,7 +87,7 @@ DI
         promiseMap.set(
             name,
             new Promise(function(resolve, reject) {
-              Events.of(Service, this)
+              $i.Events.of(Service, this)
                   .on('jquery', name, (event, data) => {
                     resolve([name, data]);
                   });
@@ -100,17 +100,17 @@ DI
 
 
   // Use function since Handlebars changes the context of this.
-  Handlebars.registerHelper('pb-for', function(from, to, step, options) {
+  $i.Handlebars.registerHelper('pb-for', function(from, to, step, options) {
     if (options === undefined) {
       // Shift the args if step is not defined.
       options = step;
       step = 1;
     }
     let rv = '';
-    for (let i = Check(from).isInt().orThrows();
-        i < Check(to).isInt().orThrows();
-        i += Check(step).isInt().orThrows()) {
-      let data = Handlebars.createFrame(options.data || {});
+    for (let i = $i.Check(from).isInt().orThrows();
+        i < $i.Check(to).isInt().orThrows();
+        i += $i.Check(step).isInt().orThrows()) {
+      let data = $i.Handlebars.createFrame(options.data || {});
       data.index = i;
       rv += options.fn(this, { data: data });
     }
@@ -118,6 +118,6 @@ DI
   });
 
   return Service;
-}]);
+});
 
 </script>

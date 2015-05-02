@@ -11,8 +11,7 @@
   <script>
   DI
       .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(['/=', '/=', '=', 'service.=', (expect, _, doc, Log) => {
+      .run({ expect: '/=', _: '/=', Log: 'service.=' }, $i => {
 
   describe('service.Log', () => {
       let timestamp = 1234;
@@ -21,51 +20,51 @@
 
     describe('#log', () => {
       it('should use the default processor when no processors are specified', () => {
-        _.spy(Date, 'now').overrideReturn(timestamp);
-        expect(Log.log(category, value).entries)
-            .to.be.equal(Log.defaultProcessor(new Date(timestamp), category, value));
+        $i._.spy(Date, 'now').overrideReturn(timestamp);
+        $i.expect($i.Log.log(category, value).entries)
+            .to.be.equal($i.Log.defaultProcessor(new Date(timestamp), category, value));
       });
       it('should use the specified processor', () => {
         let entry = 'entry';
-        let processor = _.spiedFunction().overrideReturn(entry);
+        let processor = $i._.spiedFunction().overrideReturn(entry);
 
-        _.spy(Date, 'now').overrideReturn(timestamp);
+        $i._.spy(Date, 'now').overrideReturn(timestamp);
 
-        Log.addProcessor(processor);
-        expect(Log.log(category, value).entries).to.be.equal(entry);
-        expect(processor).calledWith(new Date(timestamp), category, value);
+        $i.Log.addProcessor(processor);
+        $i.expect($i.Log.log(category, value).entries).to.be.equal(entry);
+        $i.expect(processor).calledWith(new Date(timestamp), category, value);
       });
       it('should pick the first processor that returns a non empty string', () => {
         let entry = 'entry';
-        let processor = _.spiedFunction().overrideReturn(entry);
+        let processor = $i._.spiedFunction().overrideReturn(entry);
 
-        _.spy(Date, 'now').overrideReturn(timestamp);
+        $i._.spy(Date, 'now').overrideReturn(timestamp);
 
-        Log
+        $i.Log
             .addProcessor(() => null)
             .addProcessor(() => '')
             .addProcessor(processor)
             .addProcessor(() => 'not used');
-        expect(Log.log(category, value).entries).to.be.equal(entry);
-        expect(processor).calledWith(new Date(timestamp), category, value);
+        $i.expect($i.Log.log(category, value).entries).to.be.equal(entry);
+        $i.expect(processor).calledWith(new Date(timestamp), category, value);
       });
       it('should not add any entries if there are no processors that returns a non empty string', () => {
-        Log
+        $i.Log
             .addProcessor(() => null)
             .addProcessor(() => '');
-        expect(Log.log(category, value).entries).to.be.equal('');
+        $i.expect($i.Log.log(category, value).entries).to.be.equal('');
       });
     });
 
     describe('#blob', () => {
       it('should return a blob with the correct content and MIME type', done => {
-        _.spy(Date, 'now').overrideReturn(timestamp);
+        $i._.spy(Date, 'now').overrideReturn(timestamp);
 
-        let blob = Log.log(category, value).blob;
+        let blob = $i.Log.log(category, value).blob;
         let reader = new FileReader();
         reader.addEventListener('loadend', () => {
-          expect(reader.result)
-              .to.be.equal(Log.defaultProcessor(new Date(timestamp), category, value));
+          $i.expect(reader.result)
+              .to.be.equal($i.Log.defaultProcessor(new Date(timestamp), category, value));
           done();
         });
         reader.readAsText(blob);
@@ -73,13 +72,13 @@
     });
 
     afterEach(done => {
-      Log
+      $i.Log
           .clearProcessors()
           .clear();
-      _.reset();
+      $i._.reset();
       done();
     });
   });
-  }]);
+  });
   </script>
 </body>

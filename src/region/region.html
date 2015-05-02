@@ -6,7 +6,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('region.Region', ['=', PbElement => {
+    .bind('region.Region', { PbElement: '=' }, $i => {
 
   /**
    * Base class of all regions.
@@ -14,9 +14,8 @@ DI
    * @class region.Region
    * @extends PbElement
    */
-  class Region extends PbElement {
-  }
+  class Region extends $i.PbElement {}
 
   return Region;
-}]);
+});
 </script>

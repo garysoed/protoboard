@@ -2,7 +2,6 @@
 
 <link rel="import" href="ability/ability.html">
 <link rel="import" href="check.html">
-<link rel="import" href="third_party/chance.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="utils.html">
@@ -12,14 +11,20 @@
 <script>
 DI
     .prefix('pb')
-    .bind('ability.Shuffleable', [
-        '/=', 'ability.=', '/=', '=', 'trigger.=', '=',
-        ($, Ability, Chance, Check, Click, Utils) => {
+    .bind('ability.Shuffleable',
+        {
+          $: '/=',
+          Ability: 'ability.=',
+          Chance: '/=',
+          Click: 'trigger.=',
+          Utils: '='
+        },
+        $i => {
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
 
-  class Shuffleable extends Ability {
+  class Shuffleable extends $i.Ability {
 
     /**
      * Elements with this ability shuffles its children when triggered.
@@ -31,7 +36,7 @@ DI
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Ability
      */
-    constructor(name = 'pb-shuffleable', defaultTrigger = new Click(), defaultEnabled = true) {
+    constructor(name = 'pb-shuffleable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
       super(name, defaultTrigger);
 
       this[__defaultEnabled__] = defaultEnabled;
@@ -46,8 +51,8 @@ DI
     init(el) {
       super.init(el);
 
-      if ($(el).attr(this.attrName) === undefined) {
-        $(el).attr(this.attrName, this[__defaultEnabled__]);
+      if ($i.$(el).attr(this.attrName) === undefined) {
+        $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
       }
     }
 
@@ -58,7 +63,7 @@ DI
      * @param {Element} el Element whose children should be shuffled.
      */
     doTrigger(el) {
-      let shuffled = Chance.shuffle(Utils.toArray(el.children));
+      let shuffled = $i.Chance.shuffle($i.Utils.toArray(el.children));
       shuffled.forEach(shuffledEl => {
         el.appendChild(shuffledEl);
 
@@ -69,7 +74,7 @@ DI
       });
 
       // Animate the deck
-      $(el).one(
+      $i.$(el).one(
           'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
           () => {
             el.classList.remove('animated');
@@ -81,4 +86,4 @@ DI
   }
 
   return Shuffleable;
-}]);
+});

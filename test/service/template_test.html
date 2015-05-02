@@ -23,21 +23,29 @@
       })
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .run([
-          '/=', '/=', '/=', '=', '=', '/=', 'service.=',
-          (expect, _, _M, doc, Check, Handlebars, Template) => {
+      .run(
+          {
+            expect: '/=',
+            _: '/=',
+            _M: '/=',
+            doc: '=',
+            Check: '=',
+            Handlebars: '/=',
+            Template: 'service.='
+          },
+          $i => {
 
   describe('service.Template', () => {
     describe('#addPartial', () => {
       it('should register partial to Handlebars', () => {
         let name = 'partialName';
-        let el = doc.createElement('div');
+        let el = $i.doc.createElement('div');
         el.innerHTML = '{{&gt; abc}}';
 
-        _.spy(Handlebars, 'registerPartial');
+        $i._.spy($i.Handlebars, 'registerPartial');
 
-        Template.addPartial(name, el);
-        expect(Handlebars.registerPartial).calledWith(name, '{{> abc}}').at.least(1);
+        $i.Template.addPartial(name, el);
+        $i.expect($i.Handlebars.registerPartial).calledWith(name, '{{> abc}}').at.least(1);
       });
     });
 
@@ -45,22 +53,22 @@
       it('should handle adding data before retrieval', done => {
         let name = 'data';
         let data = {};
-        Template.addData(name, data);
-        Template.get(name)
+        $i.Template.addData(name, data);
+        $i.Template.get(name)
             .then(result => {
-              expect(result).to.be.eql([name, data]);
+              $i.expect(result).to.be.eql([name, data]);
               done();
             });
       });
       it('should handle adding data after retrieval', done => {
         let name = 'data';
         let data = {};
-        Template.get(name)
+        $i.Template.get(name)
             .then(result => {
-              expect(result).to.be.eql([name, data]);
+              $i.expect(result).to.be.eql([name, data]);
               done();
             });
-        Template.addData(name, data);
+        $i.Template.addData(name, data);
       });
     });
 
@@ -68,48 +76,48 @@
       let forHelper;
 
       beforeEach(done => {
-        forHelper = Handlebars.helpers['pb-for'];
-        Handlebars.createFrame = input => input;
+        forHelper = $i.Handlebars.helpers['pb-for'];
+        $i.Handlebars.createFrame = input => input;
         done();
       });
 
       it('should repeat the inner block a number of times', () => {
         let content = 'content';
         let options = {
-          fn: _.spiedFunction().overrideReturn(content)
+          fn: $i._.spiedFunction().overrideReturn(content)
         };
 
-        let result = forHelper.call(Handlebars, '0', '5', '2', options);
-        expect(result).to.be.equal(content + content + content);
+        let result = forHelper.call($i.Handlebars, '0', '5', '2', options);
+        $i.expect(result).to.be.equal(content + content + content);
 
-        let isAObject = _M.isA(Object);
-        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(3);
+        let isAObject = $i._M.isA(Object);
+        $i.expect(options.fn).calledWith($i.Handlebars, isAObject).to.be.equal(3);
 
         let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
-        expect(indexes).to.be.eql([0, 2, 4]);
+        $i.expect(indexes).to.be.eql([0, 2, 4]);
       });
       it('should default step to 1', () => {
         let content = 'content';
         let options = {
-          fn: _.spiedFunction().overrideReturn(content)
+          fn: $i._.spiedFunction().overrideReturn(content)
         };
 
-        let result = forHelper.call(Handlebars, '0', '2', options);
-        expect(result).to.be.equal(content + content);
+        let result = forHelper.call($i.Handlebars, '0', '2', options);
+        $i.expect(result).to.be.equal(content + content);
 
-        let isAObject = _M.isA(Object);
-        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(2);
+        let isAObject = $i._M.isA(Object);
+        $i.expect(options.fn).calledWith($i.Handlebars, isAObject).to.be.equal(2);
 
         let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
-        expect(indexes).to.be.eql([0, 1]);
+        $i.expect(indexes).to.be.eql([0, 1]);
       });
     });
 
     afterEach(done => {
-      _.reset();
+      $i._.reset();
       done();
     });
   });
-  }]);
+  });
   </script>
 </body>

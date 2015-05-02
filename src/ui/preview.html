@@ -11,9 +11,16 @@
 <script>
 DI
     .prefix('pb')
-    .bind('ui.Preview', [
-        'service.=', '=', '=', 'service.=', '=', '=',
-        (Config, Events, PbElement, Preview, $registry, Utils) => {
+    .bind('ui.Preview',
+        {
+          Config: 'service.=',
+          Events: '=',
+          PbElement: '=',
+          Preview: 'service.=',
+          $registry: '=',
+          Utils: '='
+        },
+        $i => {
 
   /**
    * Class that contains a preview if the mouse enters the parent element. This will display
@@ -40,7 +47,7 @@ DI
   const __onMouseOver__ = Symbol();
   const __onMouseOut__ = Symbol();
 
-  class PreviewElement extends PbElement {
+  class PreviewElement extends $i.PbElement {
 
     /**
      * Callback called when the mouse has left the parent element.
@@ -49,7 +56,7 @@ DI
      * @private
      */
     [__onMouseOut__]() {
-      Preview.previewedEl = null;
+      $i.Preview.previewedEl = null;
     }
 
     /**
@@ -59,7 +66,7 @@ DI
      * @private
      */
     [__onMouseOver__]() {
-      Preview.previewedEl = this;
+      $i.Preview.previewedEl = this;
     }
 
     /**
@@ -81,7 +88,7 @@ DI
     attachedCallback() {
       super.attachedCallback();
       if (this.parentElement) {
-        Events.of(this.parentElement, this)
+        $i.Events.of(this.parentElement, this)
             .on('dom', 'mouseenter', this[__onMouseOver__].bind(this))
             .on('dom', 'mouseleave', this[__onMouseOut__].bind(this));
       }
@@ -94,15 +101,15 @@ DI
      */
     detachedCallback() {
       if (this.parentElement) {
-        Events.of(this.parentElement, this).off();
+        $i.Events.of(this.parentElement, this).off();
       }
       super.detachedCallback();
     }
   }
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, PreviewElement.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, PreviewElement.prototype);
 
   return PreviewElement;
-}]);
+});
 </script>

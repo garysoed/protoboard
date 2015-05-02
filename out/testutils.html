@@ -6,7 +6,7 @@
 
 <script>"use strict";
 
-DI.bind("pb.t", ["=", "pb.=", function (_, Utils) {
+DI.bind("pb.t", { _: "=" }, function ($i) {
   var TestUtil = {
     createFakeAbility: function createFakeAbility(name, trigger) {
       return {
@@ -15,18 +15,18 @@ DI.bind("pb.t", ["=", "pb.=", function (_, Utils) {
         getTrigger: function () {
           return trigger;
         },
-        init: _.spiedFunction(),
-        isEnabled: _.spiedFunction(),
-        updateConfig: _.spiedFunction(),
-        trigger: _.spiedFunction()
+        init: $i._.spiedFunction(),
+        isEnabled: $i._.spiedFunction(),
+        updateConfig: $i._.spiedFunction(),
+        trigger: $i._.spiedFunction()
       };
     },
 
     createFakeEvents: function createFakeEvents() {
       var fake = {};
-      fake.of = _.spiedFunction().overrideReturn(fake);
-      fake.on = _.spiedFunction().overrideReturn(fake);
-      fake.off = _.spiedFunction().overrideReturn(fake);
+      fake.of = $i._.spiedFunction().overrideReturn(fake);
+      fake.on = $i._.spiedFunction().overrideReturn(fake);
+      fake.off = $i._.spiedFunction().overrideReturn(fake);
       return fake;
     },
 
@@ -35,8 +35,8 @@ DI.bind("pb.t", ["=", "pb.=", function (_, Utils) {
         toString: function toString() {
           return name;
         },
-        on: _.spiedFunction(),
-        off: _.spiedFunction()
+        on: $i._.spiedFunction(),
+        off: $i._.spiedFunction()
       };
     },
 
@@ -48,4 +48,4 @@ DI.bind("pb.t", ["=", "pb.=", function (_, Utils) {
   };
 
   return TestUtil;
-}]);</script></head><body></body></html>
+});</script></head><body></body></html>

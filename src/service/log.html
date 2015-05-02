@@ -5,7 +5,7 @@
 <script>
 DI
     .prefix('pb')
-    .bind('service.Log', [() => {
+    .bind('service.Log', {}, () => {
 
   // Private symbols
   const __entries__ = Symbol();
@@ -192,5 +192,5 @@ DI
   };
 
   return Log;
-}]);
+});
 </script>
