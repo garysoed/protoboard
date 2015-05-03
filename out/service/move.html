@@ -83,7 +83,7 @@ DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }
   })(), {
     movedElements: {
       get: function () {
-        return new Set(Utils.toArray(this[__container__].children));
+        return new Set($i.Utils.toArray(this[__container__].children));
       },
       configurable: true,
       enumerable: true
@@ -113,4 +113,5 @@ DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }
   });
 
   return Move;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>

@@ -57,12 +57,20 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('templateMain', ['=', doc => doc.querySelector('template#main')])
-    .with('templateRow', ['=', doc => doc.querySelector('template#row')])
-    .with('templateTile', ['=', doc => doc.querySelector('template#tile')])
-    .bind('surface.TriangleGrid', [
-        'service.=', 'surface.=', '=', '=', '=', '=',
-        (Config, Grid, $registry, templateMain, templateRow, templateTile) => {
+    .with('templateMain', { doc: '=' }, $i => $i.doc.querySelector('template#main'))
+    .with('templateRow', { doc: '=' }, $i => $i.doc.querySelector('template#row'))
+    .with('templateTile', { doc: '=' }, $i => $i.doc.querySelector('template#tile'))
+    .bind(
+        'surface.TriangleGrid',
+        {
+          $registry: '=',
+          templateMain: '=',
+          templateRow: '=',
+          templateTile: '=',
+          Config: 'service.=',
+          Grid: 'surface.=',
+        },
+        $i => {
 
   const EL_NAME = 'pb-s-trianglegrid';
 
@@ -90,7 +98,7 @@ DI
    * @since 0.2.0
    * @extends surface.Grid
    */
-  class TriangleGrid extends Grid {
+  class TriangleGrid extends $i.Grid {
 
     /**
      * The root element of the grid. All rows will be added as children to this element.
@@ -111,7 +119,7 @@ DI
      * @final
      */
     get mainTemplate() {
-      return templateMain;
+      return $i.templateMain;
     }
 
     /**
@@ -123,7 +131,7 @@ DI
      * @final
      */
     get rowTemplate() {
-      return templateRow;
+      return $i.templateRow;
     }
 
     /**
@@ -134,13 +142,13 @@ DI
      * @final
      */
     get tileTemplate() {
-      return templateTile;
+      return $i.templateTile;
     }
   }
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, TriangleGrid.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, TriangleGrid.prototype);
 
   return TriangleGrid;
-}]);
+});
 </script>

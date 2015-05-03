@@ -33,36 +33,39 @@
 <script>
 DI
     .prefix('pb')
-    .bind('$registry', ['service.=', Registry => new Registry()])
-    .bind('Bootstrap', [
-      '=',
-      'service.=',
-      '=',
-      'component.Card?',
-      'component.Dice?',
-      'component.Token?',
-      'region.Bag?',
-      'region.CubeTower?',
-      'region.Deck?',
-      'region.Hand?',
-      'region.Rect?',
-      'surface.HexGrid?',
-      'surface.RectGrid?',
-      'surface.TriangleGrid?',
-      'ui.Generate?',
-      'ui.Preview?',
-      'ui.Previewer?',
-      'ui.Shape?',
-      ($registry, Config, Utils) => {
+    .bind('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+    .bind(
+        'Bootstrap',
+        {
+          $registry: '=',
+          Bag: 'region.=?',
+          Card: 'component.=?',
+          Config: 'service.=',
+          CubeTower: 'region.=?',
+          Deck: 'region.=?',
+          Dice: 'component.=?',
+          Generate: 'ui.=?',
+          Hand: 'region.=?',
+          HexGrid: 'surface.=?',
+          Preview: 'ui.=?',
+          Previewer: 'ui.=?',
+          Rect: 'region.=?',
+          RectGrid: 'surface.=?',
+          Shape: 'ui.=?',
+          Token: 'component.=?',
+          TriangleGrid: 'surface.=?',
+          Utils: '=',
+        },
+        $i => {
 
   return {
     run(document) {
-      Utils
+      $i.Utils
           .watch(() => document.readyState === 'interactive' || document.readyState === 'complete')
           .then(() => {
-            $registry.register(document, Config);
+            $i.$registry.register(document, $i.Config);
 
-            let tags = Utils.
+            let tags = $i.Utils.
                 toArray(document.querySelectorAll(':unresolved')).
                 map(el => el.tagName.toLowerCase());
             let tagSet = new Set(tags);
@@ -72,5 +75,5 @@ DI
           });
       }
     };
-}]);
+});
 </script>

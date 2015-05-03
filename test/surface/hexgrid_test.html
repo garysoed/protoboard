@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>surface.HexGrid Unit Tests</title>
+
+  <link rel="import" href="surface/hexgrid.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .run({ HexGrid: 'surface.=' }, () => {
+    describe('surface.HexGrid', () => {
+      it('should not throw exception when injected', () => {});
+    });
+  });
+  </script>
+</body>

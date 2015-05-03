@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href=".">
+  <title>Bootstrap Unit Tests</title>
+
+  <link rel="import" href="bootstrap.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .constant('doc', document.currentScript.ownerDocument)
+      .run({ Bootstrap: '=', doc: '=' }, $i => {
+    describe('Bootstrap', () => {
+      describe('#run', () => {
+        it('should not throw any exceptions', () => {
+          $i.Bootstrap.run($i.doc);
+        });
+      });
+    });
+  });
+  </script>
+</body>

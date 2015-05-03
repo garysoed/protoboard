@@ -5,7 +5,7 @@
 
 <script>"use strict";
 
-DI.run(["pb.=", function (Bootstrap) {
-  return Bootstrap.run(document);
-}]);</script>
+DI.run({ Bootstrap: "pb.=" }, function ($i) {
+  return $i.Bootstrap.run(document);
+});</script>
 </head><body></body></html>

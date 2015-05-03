@@ -8,6 +8,7 @@
   <link rel="import" href="service/move.html">
   <link rel="import" href="service/registry.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="utils.html">
 </head>
 <body>
   <script>
@@ -20,9 +21,10 @@
               expect: '/=',
               _: '/=',
               $registry: '=',
-              Move: 'service.=',
               doc: '=',
-              t: '='
+              t: '=',
+              Move: 'service.=',
+              Utils: '=',
             },
             $i => {
 
@@ -34,6 +36,11 @@
   describe('service.Move', () => {
     before(done => {
       $i.$registry.register($i.doc);
+      done();
+    });
+
+    beforeEach(done => {
+      $i.Move[__container__].innerHTML = '';
       done();
     });
 
@@ -83,6 +90,19 @@
 
         $i.expect($i.Move[__moveContainer__]).calledWith().at.least(1);
         $i.expect($i.Move[__container__].contains(el)).to.be.true();
+      });
+    });
+
+    describe('get movedElements', () => {
+      it('should return a set containing the children', () => {
+        let child1 = $i.doc.createElement('div');
+        let child2 = $i.doc.createElement('div');
+
+        let container = $i.Move[__container__];
+        container.appendChild(child1);
+        container.appendChild(child2);
+
+        $i.expect($i.Utils.toArray($i.Move.movedElements)).to.eql([child1, child2]);
       });
     });
 

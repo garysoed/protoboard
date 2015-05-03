@@ -65,26 +65,32 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", ["=", function (doc) {
-  return doc.querySelector("template#main");
-}])["with"]("templateRow", ["=", function (doc) {
-  return doc.querySelector("template#row");
-}])["with"]("templateTile", ["=", function (doc) {
-  return doc.querySelector("template#tile");
-}]).bind("surface.TriangleGrid", ["service.=", "surface.=", "=", "=", "=", "=", function (Config, Grid, $registry, templateMain, templateRow, templateTile) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#main");
+})["with"]("templateRow", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#row");
+})["with"]("templateTile", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#tile");
+}).bind("surface.TriangleGrid", {
+  $registry: "=",
+  templateMain: "=",
+  templateRow: "=",
+  templateTile: "=",
+  Config: "service.=",
+  Grid: "surface.=" }, function ($i) {
 
   var EL_NAME = "pb-s-trianglegrid";
 
-  var TriangleGrid = (function (_Grid) {
+  var TriangleGrid = (function (_$i$Grid) {
     function TriangleGrid() {
       _classCallCheck(this, TriangleGrid);
 
-      if (_Grid != null) {
-        _Grid.apply(this, arguments);
+      if (_$i$Grid != null) {
+        _$i$Grid.apply(this, arguments);
       }
     }
 
-    _inherits(TriangleGrid, _Grid);
+    _inherits(TriangleGrid, _$i$Grid);
 
     _createClass(TriangleGrid, {
       rootEl: {
@@ -94,26 +100,27 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       },
       mainTemplate: {
         get: function () {
-          return templateMain;
+          return $i.templateMain;
         }
       },
       rowTemplate: {
         get: function () {
-          return templateRow;
+          return $i.templateRow;
         }
       },
       tileTemplate: {
         get: function () {
-          return templateTile;
+          return $i.templateTile;
         }
       }
     });
 
     return TriangleGrid;
-  })(Grid);
+  })($i.Grid);
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, TriangleGrid.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, TriangleGrid.prototype);
 
   return TriangleGrid;
-}]);</script></head><body></body></html>
+});</script>
+</head><body></body></html>

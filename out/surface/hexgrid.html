@@ -59,26 +59,32 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", ["=", function (doc) {
-  return doc.querySelector("template#main");
-}])["with"]("templateRow", ["=", function (doc) {
-  return doc.querySelector("template#row");
-}])["with"]("templateTile", ["=", function (doc) {
-  return doc.querySelector("template#tile");
-}]).bind("surface.HexGrid", ["service.=", "surface.=", "=", "=", "=", "=", function (Config, Grid, $registry, templateMain, templateRow, templateTile) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#main");
+})["with"]("templateRow", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#row");
+})["with"]("templateTile", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#tile");
+}).bind("surface.HexGrid", {
+  $registry: "=",
+  templateMain: "=",
+  templateRow: "=",
+  templateTile: "=",
+  Config: "service.=",
+  Grid: "surface.=" }, function ($i) {
 
   var EL_NAME = "pb-s-hexgrid";
 
-  var HexGrid = (function (_Grid) {
+  var HexGrid = (function (_$i$Grid) {
     function HexGrid() {
       _classCallCheck(this, HexGrid);
 
-      if (_Grid != null) {
-        _Grid.apply(this, arguments);
+      if (_$i$Grid != null) {
+        _$i$Grid.apply(this, arguments);
       }
     }
 
-    _inherits(HexGrid, _Grid);
+    _inherits(HexGrid, _$i$Grid);
 
     _createClass(HexGrid, {
       rootEl: {
@@ -88,26 +94,27 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       },
       mainTemplate: {
         get: function () {
-          return templateMain;
+          return $i.templateMain;
         }
       },
       rowTemplate: {
         get: function () {
-          return templateRow;
+          return $i.templateRow;
         }
       },
       tileTemplate: {
         get: function () {
-          return templateTile;
+          return $i.templateTile;
         }
       }
     });
 
     return HexGrid;
-  })(Grid);
+  })($i.Grid);
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, HexGrid.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, HexGrid.prototype);
 
   return HexGrid;
-}]);</script></head><body></body></html>
+});</script>
+</head><body></body></html>

@@ -244,7 +244,7 @@ DI
      */
     createdCallback() {
       super.createdCallback();
-      this.createShadowRoot().appendChild($i.Utils.activateTemplate(template, doc));
+      this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
     }
   }
 

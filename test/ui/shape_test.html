@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>ui.Shape Unit Tests</title>
+
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="ui/shape.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .run({ Shape: 'ui.=' }, () => {
+    describe('ui.Shape', () => {
+      it('should not throw exception when injected', () => {});
+    });
+  });
+  </script>
+</body>

@@ -51,22 +51,24 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('circleTemplate', ['=', doc => doc.querySelector('template#circle')])
-    .with('hexagonTemplate', ['=', doc => doc.querySelector('template#hexagon')])
-    .with('squareTemplate', ['=', doc => doc.querySelector('template#square')])
-    .with('triangleTemplate', ['=', doc => doc.querySelector('template#triangle')])
-    .bind('ui.Shape',
-        ['/=', 'service.=', '=', '=', '=', '=', '=', '=', '=',
-        (
-          $,
-          Config,
-          Utils,
-          circleTemplate,
-          hexagonTemplate,
-          squareTemplate,
-          triangleTemplate,
-          doc,
-          $registry) => {
+    .with('circleTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#circle'))
+    .with('hexagonTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#hexagon'))
+    .with('squareTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#square'))
+    .with('triangleTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#triangle'))
+    .bind(
+        'ui.Shape',
+        {
+          $: '/=',
+          $registry: '=',
+          circleTemplate: '=',
+          doc: '=',
+          hexagonTemplate: '=',
+          squareTemplate: '=',
+          triangleTemplate: '=',
+          Config: 'service.=',
+          Utils: '=',
+        },
+        $i => {
 
   const EL_NAME = 'pb-u-shape';
   const ATTR_NAME = 'shape';
@@ -98,32 +100,32 @@ DI
      * @method createdCallback
      */
     createdCallback() {
-      let shape = $(this).attr(ATTR_NAME);
+      let shape = $i.$(this).attr(ATTR_NAME);
       let template;
       switch (shape) {
         case 'circle':
-          template = circleTemplate;
+          template = $i.circleTemplate;
           break;
         case 'hexagon':
-          template = hexagonTemplate;
+          template = $i.hexagonTemplate;
           break;
         case 'square':
-          template = squareTemplate;
+          template = $i.squareTemplate;
           break;
         case 'triangle':
-          template = triangleTemplate;
+          template = $i.triangleTemplate;
           break;
         default:
           throw new Error(`Unrecognized shape: ${shape}`);
       }
       this.createShadowRoot()
-          .appendChild(Utils.activateTemplate(template, doc));
+          .appendChild($i.Utils.activateTemplate(template, $i.doc));
     }
   }
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, Shape.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, Shape.prototype);
 
   return Shape;
-}]);
+});
 </script>

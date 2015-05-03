@@ -130,7 +130,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       createdCallback: {
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Card.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
           this.attachedCallback();
         }
       }

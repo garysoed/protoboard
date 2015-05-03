@@ -35,15 +35,24 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("circleTemplate", ["=", function (doc) {
-  return doc.querySelector("template#circle");
-}])["with"]("hexagonTemplate", ["=", function (doc) {
-  return doc.querySelector("template#hexagon");
-}])["with"]("squareTemplate", ["=", function (doc) {
-  return doc.querySelector("template#square");
-}])["with"]("triangleTemplate", ["=", function (doc) {
-  return doc.querySelector("template#triangle");
-}]).bind("ui.Shape", ["/=", "service.=", "=", "=", "=", "=", "=", "=", "=", function ($, Config, Utils, circleTemplate, hexagonTemplate, squareTemplate, triangleTemplate, doc, $registry) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("circleTemplate", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#circle");
+})["with"]("hexagonTemplate", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#hexagon");
+})["with"]("squareTemplate", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#square");
+})["with"]("triangleTemplate", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#triangle");
+}).bind("ui.Shape", {
+  $: "/=",
+  $registry: "=",
+  circleTemplate: "=",
+  doc: "=",
+  hexagonTemplate: "=",
+  squareTemplate: "=",
+  triangleTemplate: "=",
+  Config: "service.=",
+  Utils: "=" }, function ($i) {
 
   var EL_NAME = "pb-u-shape";
   var ATTR_NAME = "shape";
@@ -62,25 +71,25 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("c
     _createClass(Shape, {
       createdCallback: {
         value: function createdCallback() {
-          var shape = $(this).attr(ATTR_NAME);
+          var shape = $i.$(this).attr(ATTR_NAME);
           var template = undefined;
           switch (shape) {
             case "circle":
-              template = circleTemplate;
+              template = $i.circleTemplate;
               break;
             case "hexagon":
-              template = hexagonTemplate;
+              template = $i.hexagonTemplate;
               break;
             case "square":
-              template = squareTemplate;
+              template = $i.squareTemplate;
               break;
             case "triangle":
-              template = triangleTemplate;
+              template = $i.triangleTemplate;
               break;
             default:
               throw new Error("Unrecognized shape: " + shape);
           }
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate(template, $i.doc));
         }
       }
     });
@@ -88,9 +97,9 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("c
     return Shape;
   })(HTMLElement);
 
-  Config.add(EL_NAME);
-  $registry.add(EL_NAME, Shape.prototype);
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, Shape.prototype);
 
   return Shape;
-}]);</script>
+});</script>
 </head><body></body></html>
