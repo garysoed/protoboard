@@ -190,6 +190,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
           _get(Object.getPrototypeOf(CubeTower.prototype), "createdCallback", this).call(this);
           this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
         }
+      },
+      pickableChildCount: {
+        get: function () {
+          return this.childElementCount - this.querySelectorAll("[" + ATTR_TOWER_LEVEL + "]").length;
+        }
       }
     });
 

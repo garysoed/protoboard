@@ -99,7 +99,17 @@ DI
     createdCallback() {
       super.createdCallback();
       this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
-      this.attachedCallback();
+    }
+
+    /**
+     * The number of elements that users can pick out from the deck.
+     *
+     * @property pickableChildCount
+     * @type number
+     * @readonly
+     */
+    get pickableChildCount() {
+      return this.childElementCount;
     }
   }
 

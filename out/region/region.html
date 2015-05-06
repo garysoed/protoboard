@@ -2,14 +2,47 @@
 
 <link rel="import" href="pbelement.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<style>.pb-show-child-count {
+  position: relative;
+}
+
+.pb-show-child-count:hover::after {
+  background-color: #CBC7E2;
+  content: attr(child-count);
+  position: absolute;
+  right: 0;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  line-height: 20px;
+  width: 20px;
+}</style>
 
 <script>"use strict";
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("region.Region", { PbElement: "=" }, function ($i) {
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template");
+}).bind("region.Region", {
+  $: "/=",
+  PbElement: "=",
+  Utils: "=" }, function ($i) {
+
+  var __onMutation__ = Symbol("onMutation");
+  var __mutationObserver__ = Symbol();
+
   var Region = (function (_$i$PbElement) {
     function Region() {
       _classCallCheck(this, Region);
@@ -21,8 +54,36 @@ DI.prefix("pb").bind("region.Region", { PbElement: "=" }, function ($i) {
 
     _inherits(Region, _$i$PbElement);
 
+    _createComputedClass(Region, [{
+      key: __onMutation__,
+      value: function (records) {
+        var childCountChanged = records.some(function (record) {
+          return record.addedNodes.length > 0 || record.removedNodes.length > 0;
+        });
+        if (childCountChanged) {
+          $(this).attr("child-count", this.pickableChildCount);
+        }
+      }
+    }, {
+      key: "createdCallback",
+      value: function createdCallback() {
+        _get(Object.getPrototypeOf(Region.prototype), "createdCallback", this).call(this);
+        this.classList.add("pb-show-child-count");
+
+        this[__mutationObserver__] = new MutationObserver(this[__onMutation__].bind(this));
+        this[__mutationObserver__].observe(this, { childList: true });
+        $(this).attr("child-count", this.pickableChildCount);
+      }
+    }, {
+      key: "pickableChildCount",
+      get: function () {
+        throw new Error("Unimplemented: pickableChildCount");
+      }
+    }]);
+
     return Region;
   })($i.PbElement);
 
   return Region;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>

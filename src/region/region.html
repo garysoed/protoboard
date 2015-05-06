@@ -2,11 +2,41 @@
 
 <link rel="import" href="pbelement.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<style>
+  .pb-show-child-count {
+    position: relative;
+  }
+
+  .pb-show-child-count:hover::after {
+    background-color: var(--color-background-accent);
+    content: attr(child-count);
+    position: absolute;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    line-height: 20px;
+    width: 20px;
+  }
+</style>
 
 <script>
 DI
     .prefix('pb')
-    .bind('region.Region', { PbElement: '=' }, $i => {
+    .constant('doc', document.currentScript.ownerDocument)
+    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
+    .bind(
+        'region.Region',
+        {
+          $: '/=',
+          PbElement: '=',
+          Utils: '=',
+        },
+        $i => {
+
+  const __onMutation__ = Symbol('onMutation');
+  const __mutationObserver__ = Symbol();
 
   /**
    * Base class of all regions.
@@ -14,7 +44,50 @@ DI
    * @class region.Region
    * @extends PbElement
    */
-  class Region extends $i.PbElement {}
+  class Region extends $i.PbElement {
+
+    /**
+     * Called when there is a mutation on the element.
+     *
+     * @method __onMutation__
+     * @param {Array} record Array of MutationRecords.
+     * @private
+     */
+    [__onMutation__](records) {
+      let childCountChanged = records.some(record => {
+        return record.addedNodes.length > 0 ||
+            record.removedNodes.length > 0;
+      });
+      if (childCountChanged) {
+        $(this).attr('child-count', this.pickableChildCount);
+      }
+    }
+
+    /**
+     * Method called when the element is created.
+     *
+     * @method createdCallback
+     */
+    createdCallback() {
+      super.createdCallback();
+      this.classList.add('pb-show-child-count');
+
+      this[__mutationObserver__] = new MutationObserver(this[__onMutation__].bind(this));
+      this[__mutationObserver__].observe(this, { childList: true });
+      $(this).attr('child-count', this.pickableChildCount);
+    }
+
+    /**
+     * The number of children this element has that the player can pick.
+     *
+     * @property pickableChildCount
+     * @type number
+     * @readonly
+     */
+    get pickableChildCount() {
+      throw new Error('Unimplemented: pickableChildCount');
+    }
+  }
 
   return Region;
 });

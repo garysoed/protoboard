@@ -147,26 +147,17 @@ DI
       super.createdCallback();
       this.createShadowRoot()
           .appendChild($i.Utils.activateTemplate($i.template, $i.doc));
-
-      this.attachedCallback();
     }
 
     /**
-     * Called when the element is attached to the document.
+     * The number of elements that users can pick out from the hand.
      *
-     * @method attachedCallback
+     * @property pickableChildCount
+     * @type number
+     * @readonly
      */
-    attachedCallback() {
-      super.attachedCallback();
-    }
-
-    /**
-     * Called when the element is detached from the document.
-     *
-     * @method detachedCallback
-     */
-    detachedCallback() {
-      super.detachedCallback();
+    get pickableChildCount() {
+      return this.childElementCount;
     }
   }
 

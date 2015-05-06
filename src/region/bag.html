@@ -168,8 +168,17 @@ DI
         $i.$(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, '');
         this.insertBefore(this[__placeHolderEl__], this.lastChild);
       }
+    }
 
-      this.attachedCallback();
+    /**
+     * The number of elements that users can pick out from the bag.
+     *
+     * @property pickableChildCount
+     * @type number
+     * @readonly
+     */
+    get pickableChildCount() {
+      return this.childElementCount - this.querySelectorAll(`[${ATTR_PLACEHOLDER}]`).length;
     }
   }
 

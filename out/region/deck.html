@@ -81,7 +81,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Deck.prototype), "createdCallback", this).call(this);
           this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
-          this.attachedCallback();
+        }
+      },
+      pickableChildCount: {
+        get: function () {
+          return this.childElementCount;
         }
       }
     });

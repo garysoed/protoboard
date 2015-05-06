@@ -148,6 +148,17 @@ DI
       super.createdCallback();
       this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
     }
+
+    /**
+     * The number of elements that users can pick out from the rectangle region.
+     *
+     * @property pickableChildCount
+     * @type number
+     * @readonly
+     */
+    get pickableChildCount() {
+      return this.childElementCount;
+    }
   }
 
   $i.Config.add(

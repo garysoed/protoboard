@@ -151,18 +151,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Hand.prototype), "createdCallback", this).call(this);
           this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
-
-          this.attachedCallback();
         }
       },
-      attachedCallback: {
-        value: function attachedCallback() {
-          _get(Object.getPrototypeOf(Hand.prototype), "attachedCallback", this).call(this);
-        }
-      },
-      detachedCallback: {
-        value: function detachedCallback() {
-          _get(Object.getPrototypeOf(Hand.prototype), "detachedCallback", this).call(this);
+      pickableChildCount: {
+        get: function () {
+          return this.childElementCount;
         }
       }
     });

@@ -81,6 +81,16 @@
       });
     });
 
+    describe('get pickableChildCount', () => {
+      it('should return the correct child count', () => {
+        let bag = $i.doc.createElement('pb-r-bag');
+        Object.setPrototypeOf(bag, $i.Bag.prototype);
+        bag.appendChild($i.doc.createElement('div'));
+        bag.appendChild($i.doc.createElement('div'));
+        $i.expect(bag.pickableChildCount).to.equal(2);
+      });
+    });
+
     describe('$RandomPickable', () => {
       describe('#trigger', () => {
         it('should randomly pick a child element with no pb-placeholder attribute', () => {

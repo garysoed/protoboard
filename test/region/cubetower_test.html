@@ -5,9 +5,12 @@
   <title>region.CubeTower Unit Tests</title>
 
   <link rel="import" href="region/cubetower.html">
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="service/move.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/chance.html">
   <link rel="import" href="third_party/di.html">
+  <link rel="import" href="utils.html">
 </head>
 <body>
   <script>
@@ -24,10 +27,12 @@
       .run(
           {
             $: '/=',
+            $registry: '=',
             _: '/=',
             doc: '=',
             expect: '/=',
             Chance: '/=',
+            Config: 'service.=',
             CubeTower: 'region.=',
             Move: 'service.=',
             Utils: '='
@@ -37,6 +42,10 @@
   const Droppable = $i.CubeTower.TowerDroppable;
 
   describe('region.CubeTower', () => {
+    before(() => {
+      $i.$registry.register($i.doc, $i.Config);
+    });
+
     describe('$TowerDroppable', () => {
       let el;
 
@@ -146,6 +155,21 @@
           $i.expect($i.$(level0Child).attr('pb-tower-level')).to.be.undefined();
           $i.expect($i.$(level1Child).attr('pb-tower-level')).to.equal('1');
         });
+      });
+    });
+
+    describe('get pickableChildCount', () => {
+      it('should return the correct number of child count', () => {
+        let tower = $i.doc.createElement('pb-r-cubetower');
+        Object.setPrototypeOf(tower, $i.CubeTower.prototype);
+
+        let stuckEl = $i.doc.createElement('div');
+        $i.$(stuckEl).attr('pb-tower-level', 1);
+        tower.appendChild(stuckEl);
+        tower.appendChild($i.doc.createElement('div'));
+        tower.appendChild($i.doc.createElement('div'));
+
+        $i.expect(tower.pickableChildCount).to.equal(2);
       });
     });
 

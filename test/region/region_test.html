@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>region.Region Unit Tests</title>
+
+  <link rel="import" href="region/region.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="third_party/jquery.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .constant('doc', document.currentScript.ownerDocument)
+      .run(
+          {
+            $: '/=',
+            expect: '/=',
+            doc: '=',
+            t: '=',
+            Region: 'region.=',
+          },
+          $i => {
+
+  const __onMutation__ = $i.t.getSymbol($i.Region.prototype, 'onMutation');
+
+  describe('region.Region', () => {
+    let el;
+
+    describe('__onMutation__', () => {
+      beforeEach(done => {
+        el = $i.doc.createElement('pb-region');
+        Object.setPrototypeOf(el, $i.Region.prototype);
+        done();
+      });
+
+      it('should update the child count if nodes are added', () => {
+        Object.defineProperty(el, 'pickableChildCount', { get: function() { return 3; } });
+
+        el[__onMutation__]([{ addedNodes: [{}, {}], removedNodes: [] }]);
+        $i.expect($i.$(el).attr('child-count')).to.equal('3');
+      });
+      it('should update the child count if nodes are removed', () => {
+        Object.defineProperty(el, 'pickableChildCount', { get: function() { return 3; } });
+
+        el[__onMutation__]([{ addedNodes: [], removedNodes: [{}, {}] }]);
+        $i.expect($i.$(el).attr('child-count')).to.equal('3');
+      });
+      it('should do nothing if no nodes are added or removed', () => {
+        el[__onMutation__]([]);
+        $i.expect($i.$(el).attr('child-count')).to.be.undefined();
+      });
+    });
+  });
+  });
+  </script>
+</body>

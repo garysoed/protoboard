@@ -151,8 +151,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
             $i.$(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, "");
             this.insertBefore(this[__placeHolderEl__], this.lastChild);
           }
-
-          this.attachedCallback();
+        }
+      },
+      pickableChildCount: {
+        get: function () {
+          return this.childElementCount - this.querySelectorAll("[" + ATTR_PLACEHOLDER + "]").length;
         }
       }
     });

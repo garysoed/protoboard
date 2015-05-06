@@ -42,6 +42,19 @@
   let __onDomMutation__ = $i.t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
 
   describe('Rect', () => {
+    describe('get pickableChildCount', () => {
+      it('should return the correct number of children', () => {
+        let rect = $i.doc.createElement('pb-r-rect');
+        Object.setPrototypeOf(rect, $i.Rect.prototype);
+
+        rect.appendChild($i.doc.createElement('div'));
+        rect.appendChild($i.doc.createElement('div'));
+        rect.appendChild($i.doc.createElement('div'));
+
+        $i.expect(rect.pickableChildCount).to.equal(3);
+      });
+    });
+
     describe('$FlexDroppable', () => {
       let el;
       let flexDroppable;

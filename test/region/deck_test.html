@@ -12,10 +12,28 @@
   <script>
   DI
       .prefix('pb')
+      .constant('doc', document.currentScript.ownerDocument)
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run({ Deck: 'region.=' }, () => {
+      .run(
+          {
+            doc: '=',
+            expect: '/=',
+            Deck: 'region.=',
+          },
+          $i => {
+
     describe('region.Deck', () => {
-      it('should not throw exception when injected', () => {});
+      describe('get pickableChildCount', () => {
+        it('should return the correct number of children', () => {
+          let deck = $i.doc.createElement('pb-r-deck');
+          Object.setPrototypeOf(deck, $i.Deck.prototype);
+          deck.appendChild($i.doc.createElement('div'));
+          deck.appendChild($i.doc.createElement('div'));
+          deck.appendChild($i.doc.createElement('div'));
+
+          $i.expect(deck.pickableChildCount).to.equal(3);
+        });
+      });
     });
   });
   </script>
