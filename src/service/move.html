@@ -39,7 +39,6 @@ DI
 
   // Private symbols.
   const __container__ = Symbol('container');
-  const __document__ = Symbol();
   const __mouseX__ = Symbol();
   const __mouseY__ = Symbol();
 
@@ -62,14 +61,6 @@ DI
    * @static
    */
   let Move = {
-    /**
-     * Reference to the document that the service operates in.
-     *
-     * @property __document__
-     * @type Document
-     * @private
-     */
-    [__document__]: undefined,
 
     /**
      * The container of all the moved elements.
@@ -160,7 +151,6 @@ DI
   $i.$registry.runAtRegister(doc => {
     $i.Events.of(doc.body, Move)
         .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
-    Move[__document__] = doc;
     Move[__container__] = doc.createElement('div');
     Move[__container__].classList.add('pb-move');
     doc.body.appendChild(Move[__container__]);

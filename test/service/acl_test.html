@@ -5,6 +5,8 @@
   <title>service.Acl Unit Tests</title>
 
   <link rel="import" href="service/acl.html">
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="service/registry.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="testutils.html">
   <link rel="import" href="third_party/di.html">
@@ -12,17 +14,20 @@
 <body>
   <script>
   DI
+      .prefix('pb')
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
-      .constant('pb')
       .run(
           {
             expect: '/=',
             _: '/=',
             doc: '=',
-            t: 'pb.=',
+            t: '=',
             $: '/=',
-            Acl: 'pb.service.=',
-            Utils: 'pb.='
+            $registry: '=',
+            Acl: 'service.=',
+            Config: 'service.=',
+            Utils: '='
           },
           $i => {
 
@@ -32,6 +37,11 @@
   const __update__ = $i.t.getSymbol($i.Acl, 'update');
 
   describe('service.Acl', () => {
+    before(done => {
+      $i.$registry.register($i.doc, $i.Config);
+      done();
+    });
+
     describe('$Group', () => {
       describe('contains', () => {
         it('should return true if the candidate is a player who is a member of the group', () => {

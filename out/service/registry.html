@@ -30,13 +30,20 @@ DI.prefix("pb").bind("service.Registry", {}, function () {
           this[__elements__].set(name, prototype);
           this.runAtRegister(function (doc, Config) {
             Config.init(name, prototype);
-            doc.registerElement(name, { prototype: prototype });
+
+            try {
+              doc.registerElement(name, { prototype: prototype });
+            } catch (e) {
+              console.warn(e);
+            }
           });
+          return this;
         }
       },
       runAtRegister: {
         value: function runAtRegister(fn) {
           this[__toRun__].push(fn);
+          return this;
         }
       },
       register: {
@@ -65,6 +72,8 @@ DI.prefix("pb").bind("service.Registry", {}, function () {
               }
             }
           }
+
+          return this;
         }
       }
     });

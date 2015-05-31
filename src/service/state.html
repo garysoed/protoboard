@@ -1,0 +1,97 @@
+<base href="..">
+
+<link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>
+DI
+    .prefix('pb')
+    .constant('doc', document.currentScript.ownerDocument)
+    .bind(
+        'service.State',
+        {
+          $: '/=',
+          $registry: '=',
+          doc: '=',
+          Config: 'service.='
+        },
+        $i => {
+
+  const EL_NAME = 'pb-state';
+
+  const __document__ = Symbol();
+  const __getElement__ = Symbol();
+  const __observer__ = Symbol();
+  const __onMutation__ = Symbol();
+
+  /**
+   * Service that manages runtime state of the game. This service uses `pb-state` element to store
+   * the state.
+   *
+   * You can set the runtime state by modifying the `pb-state` element attributes, or by using this
+   * service. Every attribute name of the `pb-state` element corresponds to the key, while its value
+   * is the associated value.
+   *
+   * @class service.State
+   * @static
+   * @since 0.3.0
+   */
+  let Service = {
+
+    [__document__]: null,
+
+    /**
+     * @method __getElement__
+     * @param {string} key The key that the `pb-state` element should contain.
+     * @return {!Element} The `pb-state` element with the given key.
+     * @private
+     */
+    [__getElement__](key) {
+      let el = this[__document__].querySelector(`${EL_NAME}[${key}]`);
+      if (!el) {
+        // Check if a pb-state element already exists.
+        el = this[__document__].querySelector(`${EL_NAME}`);
+        if (!el) {
+          el = this[__document__].createElement(`${EL_NAME}`);
+          this[__document__].body.appendChild(el);
+        }
+        $i.$(el).attr(key, '');
+      }
+      return el;
+    },
+
+    /**
+     * Sets the value of the given key.
+     *
+     * @method put
+     * @param {string} key The key corresponding to the value to be inserted.
+     * @param {string} value The value to set.
+     */
+    put(key, value) {
+      $i.$(this[__getElement__](key)).attr(key, value);
+    },
+
+    /**
+     * @method get
+     * @param {string} key The key to retrieve the value of.
+     * @return {string} The value corresponding to the key.
+     */
+    get(key) {
+      return $(this[__getElement__](key)).attr(key);
+    }
+  };
+
+  class Element extends HTMLElement { }
+
+  $i.$registry
+      .add(EL_NAME, Element.prototype)
+      .runAtRegister(doc => {
+        Service[__document__] = doc;
+      });
+  $i.Config.add(EL_NAME);
+
+  return Service;
+});
+
+</script>

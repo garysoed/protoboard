@@ -1,6 +1,7 @@
 <html><head><base href="..">
 
 <link rel="import" href="check.html">
+<link rel="import" href="service/state.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="utils.html">
 
@@ -17,12 +18,13 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 DI.prefix("pb").bind("service.Acl", {
   Check: "=",
   Utils: "=",
+  State: "service.=",
   TEST_MODE: "/=?"
 }, function ($i) {
 
   var ATTR_PREFIX = "pb-acl-";
+  var ATTR_CURRENT_PLAYER = "currentPlayer";
 
-  var __currentPlayer__ = Symbol();
   var __enabledMap__ = Symbol("enabledMap");
   var __members__ = Symbol();
   var __name__ = Symbol();
@@ -93,8 +95,6 @@ DI.prefix("pb").bind("service.Acl", {
 
   var Service = Object.defineProperties((function () {
     var _Object$defineProperties = {};
-
-    _defineProperty(_Object$defineProperties, __currentPlayer__, null);
 
     _defineProperty(_Object$defineProperties, __registeredEls__, new Set());
 
@@ -260,10 +260,10 @@ DI.prefix("pb").bind("service.Acl", {
   })(), {
     currentPlayer: {
       get: function () {
-        return this[__currentPlayer__];
+        return $i.State.get(ATTR_CURRENT_PLAYER);
       },
       set: function (player) {
-        this[__currentPlayer__] = player;
+        $i.State.put(ATTR_CURRENT_PLAYER, player);
 
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;

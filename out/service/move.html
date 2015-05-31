@@ -41,7 +41,6 @@ var _defineProperty = function (obj, key, value) { return Object.defineProperty(
 
 DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }, function ($i) {
   var __container__ = Symbol("container");
-  var __document__ = Symbol();
   var __mouseX__ = Symbol();
   var __mouseY__ = Symbol();
 
@@ -50,8 +49,6 @@ DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }
 
   var Move = Object.defineProperties((function () {
     var _Object$defineProperties = {};
-
-    _defineProperty(_Object$defineProperties, __document__, undefined);
 
     _defineProperty(_Object$defineProperties, __container__, null);
 
@@ -106,7 +103,6 @@ DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }
 
   $i.$registry.runAtRegister(function (doc) {
     $i.Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
-    Move[__document__] = doc;
     Move[__container__] = doc.createElement("div");
     Move[__container__].classList.add("pb-move");
     doc.body.appendChild(Move[__container__]);

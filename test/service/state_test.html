@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>service.State Unit Tests</title>
+
+  <link rel="import" href="service/config.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="service/state.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="third_party/jquery.html">
+  <link rel="import" href="utils.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .constant('doc', document.currentScript.ownerDocument)
+      .run(
+          {
+            $: '/=',
+            $registry: '=',
+            _: '/=',
+            expect: '/=',
+            doc: '=',
+            Config: 'service.=',
+            State: 'service.=',
+            Utils: '='
+          },
+          $i => {
+
+  describe('service.State', () => {
+    before(done => {
+      $i.$registry.register($i.doc, $i.Config);
+      done();
+    });
+
+    describe('#get', () => {
+      it('should use existing pb-state element', () => {
+        let key = 'key';
+        let value = 'value';
+        let el = $i.doc.createElement('pb-state');
+        $i.$(el).attr(key, value);
+        $i.doc.body.appendChild(el);
+
+        $i.expect($i.State.get(key)).to.equal(value);
+      });
+      it('should create pb-state element if it does not exist', () => {
+        let key = 'key';
+        $i.expect($i.State.get(key)).to.equal('');
+        $i.expect($i.doc.body.querySelector(`pb-state[${key}]`)).to.exist();
+      });
+      it('should add the key to an existing pb-state element if it does not exist', () => {
+        let key = 'key';
+        let el = $i.doc.createElement('pb-state');
+        $i.doc.body.appendChild(el);
+
+        $i.expect($i.State.get(key)).to.equal('');
+        $i.expect($i.$(el).attr(key)).to.equal('');
+      });
+    });
+    describe('#put', () => {
+      let key = 'key';
+      let value = 'value';
+
+      it('should use the existing pb-state element', () => {
+        let el = $i.doc.createElement('pb-state');
+        $i.$(el).attr(key, value);
+        $i.doc.body.appendChild(el);
+
+        $i.State.put(key, value);
+        $i.expect($i.$(el).attr(key)).to.equal(value);
+      });
+      it('should create pb-state element if it does not exist', () => {
+        $i.State.put(key, value);
+        $i.expect($i.doc.body.querySelector(`pb-state[${key}=${value}]`)).to.exist();
+      });
+      it('should add the key to an existing pb-state element if it does not exist', () => {
+        let key = 'key';
+        let value = 'value';
+        let el = $i.doc.createElement('pb-state');
+        $i.doc.body.appendChild(el);
+
+        $i.State.put(key, value);
+        $i.expect($i.$(el).attr(key)).to.equal(value);
+      });
+    });
+
+    afterEach(done => {
+      $i.Utils.toArray($i.doc.querySelectorAll('pb-state'))
+          .forEach(el => {
+            $i.doc.body.removeChild(el);
+          });
+      done();
+    });
+  });
+  });
+  </script>
+</body>

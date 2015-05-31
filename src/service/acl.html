@@ -1,6 +1,7 @@
 <base href="..">
 
 <link rel="import" href="check.html">
+<link rel="import" href="service/state.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="utils.html">
 
@@ -11,14 +12,15 @@ DI
         {
           Check: '=',
           Utils: '=',
+          State: 'service.=',
           TEST_MODE: '/=?'
         },
         $i => {
 
   const ATTR_PREFIX = 'pb-acl-';
+  const ATTR_CURRENT_PLAYER = 'currentPlayer';
 
   // Private symbols.
-  const __currentPlayer__ = Symbol();
   const __enabledMap__ = Symbol('enabledMap');
   const __members__ = Symbol();
   const __name__ = Symbol();
@@ -142,15 +144,6 @@ DI
    * @since 0.3.0
    */
   const Service = {
-
-    /**
-     * The current player.
-     *
-     * @property __currentPlayer__
-     * @type string
-     * @private
-     */
-    [__currentPlayer__]: null,
 
     /**
      * Set of registered elements.
@@ -295,10 +288,12 @@ DI
      * @type {string}
      */
     get currentPlayer() {
-      return this[__currentPlayer__];
+      return $i.State.get(ATTR_CURRENT_PLAYER);
     },
     set currentPlayer(player) {
-      this[__currentPlayer__] = player;
+      $i.State.put(ATTR_CURRENT_PLAYER, player);
+
+      // TODO(gs): Make service.State fire an event on attribute changes and react to that.
 
       // Resets all registered elements.
       for (let el of this[__registeredEls__]) {

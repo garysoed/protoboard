@@ -29,6 +29,7 @@ DI
      * @method add
      * @param {name} name Element name to register
      * @param {Object} prototype Prototype object of the custom element.
+     * @return {!service.Registry} This object for chaining.
      */
     add(name, prototype) {
       if (this[__elements__].has(name)) {
@@ -37,8 +38,15 @@ DI
       this[__elements__].set(name, prototype);
       this.runAtRegister((doc, Config) => {
         Config.init(name, prototype);
-        doc.registerElement(name, { prototype: prototype });
+
+        // TODO(gs): Handle this
+        try {
+          doc.registerElement(name, { prototype: prototype });
+        } catch (e) {
+          console.warn(e);
+        }
       });
+      return this;
     }
 
     /**
@@ -48,22 +56,28 @@ DI
      * @param {Function} fn The function to run. This function takes in a
      *    {{#crossLink "Document"}}{{/crossLink}} and a
      *    {{#crossLink "service.Config"}}{{/crossLink}}.
+     * @return {!service.Registry} This object for chaining.
      */
     runAtRegister(fn) {
       this[__toRun__].push(fn);
+      return this;
     }
 
     /**
      * Runs all the collected functions.
      *
+     * TODO(gs): Remove the Config service. Inject it instead.
+     *
      * @method register
      * @param {Document} doc Document object to run the functions in.
      * @param {service.Config} Config The configuration service to use.
+     * @return {!service.Registry} This object for chaining.
      */
     register(doc, Config) {
       for (let fn of this[__toRun__]) {
         fn(doc, Config);
       }
+      return this;
     }
   }
 
