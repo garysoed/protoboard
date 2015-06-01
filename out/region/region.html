@@ -4,11 +4,11 @@
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
 
-<style>.pb-show-child-count {
+<style>[show-child-count] {
   position: relative;
 }
 
-.pb-show-child-count:hover::after {
+[show-child-count]:hover::after {
   background-color: #CBC7E2;
   content: attr(child-count);
   position: absolute;
@@ -68,7 +68,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       key: "createdCallback",
       value: function createdCallback() {
         _get(Object.getPrototypeOf(Region.prototype), "createdCallback", this).call(this);
-        this.classList.add("pb-show-child-count");
+        $i.$(this).attr("show-child-count", "");
 
         this[__mutationObserver__] = new MutationObserver(this[__onMutation__].bind(this));
         this[__mutationObserver__].observe(this, { childList: true });

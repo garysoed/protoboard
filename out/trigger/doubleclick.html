@@ -36,7 +36,7 @@ DI.prefix("pb").bind("trigger.DoubleClick", { Events: "=", Trigger: "trigger.=" 
       },
       toString: {
         value: function toString() {
-          return "pb-dblclick";
+          return "dblclick";
         }
       },
       helpText: {
@@ -50,7 +50,7 @@ DI.prefix("pb").bind("trigger.DoubleClick", { Events: "=", Trigger: "trigger.=" 
   })($i.Trigger);
 
   DoubleClick.parse = function (str) {
-    return str === "pb-dblclick" ? new DoubleClick() : undefined;
+    return str === "dblclick" ? new DoubleClick() : undefined;
   };
 
   return DoubleClick;

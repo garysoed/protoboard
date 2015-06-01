@@ -40,10 +40,10 @@ DI
 
     /**
      * @method toString
-     * @return {string} String pb-dblclick
+     * @return {string} String dblclick
      */
     toString() {
-      return 'pb-dblclick';
+      return 'dblclick';
     }
 
     /**
@@ -68,7 +68,7 @@ DI
    * @static
    */
   DoubleClick.parse = function(str) {
-    return (str === 'pb-dblclick') ? new DoubleClick() : undefined;
+    return (str === 'dblclick') ? new DoubleClick() : undefined;
   };
 
   return DoubleClick;

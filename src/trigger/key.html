@@ -97,11 +97,11 @@ DI
 
     /**
      * @method toString
-     * @return {string} String `pb-key-<key>`, where `key` is the key that needs to be pressed to
+     * @return {string} String `key-<key>`, where `key` is the key that needs to be pressed to
      *    trigger this.
      */
     toString() {
-      return `pb-key-${this[__key__]}`;
+      return `key-${this[__key__]}`;
     }
 
     /**
@@ -126,8 +126,8 @@ DI
    * @static
    */
   Key.parse = function(str) {
-    if (str.substring(0, 'pb-key-'.length) === 'pb-key-') {
-      return new Key(str.substring('pb-key-'.length));
+    if (str.substring(0, 'key-'.length) === 'key-') {
+      return new Key(str.substring('key-'.length));
     }
     return undefined;
   };

@@ -68,7 +68,7 @@ DI.prefix("pb").bind("trigger.Key", {
     }, {
       key: "toString",
       value: function toString() {
-        return "pb-key-" + this[__key__];
+        return "key-" + this[__key__];
       }
     }, {
       key: "helpText",
@@ -81,8 +81,8 @@ DI.prefix("pb").bind("trigger.Key", {
   })($i.Trigger);
 
   Key.parse = function (str) {
-    if (str.substring(0, "pb-key-".length) === "pb-key-") {
-      return new Key(str.substring("pb-key-".length));
+    if (str.substring(0, "key-".length) === "key-") {
+      return new Key(str.substring("key-".length));
     }
     return undefined;
   };
@@ -208,4 +208,5 @@ DI.prefix("pb").bind("trigger.Key", {
   Key.Service = Service;
 
   return Key;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>

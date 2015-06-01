@@ -41,10 +41,10 @@ DI
 
     /**
      * @method toString
-     * @return {string} String pb-click
+     * @return {string} String click
      */
     toString() {
-      return 'pb-click';
+      return 'click';
     }
 
     /**
@@ -69,7 +69,7 @@ DI
    * @static
    */
   Click.parse = function(str) {
-    return (str === 'pb-click') ? new Click() : undefined;
+    return (str === 'click') ? new Click() : undefined;
   };
 
   return Click;

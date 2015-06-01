@@ -24,6 +24,9 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("surf
   var ATTR_ROW = "pb-row";
   var ATTR_COL = "pb-col";
 
+  var ATTR_ROW_COUNT = "row";
+  var ATTR_COL_COUNT = "col";
+
   var Grid = (function (_$i$PbElement) {
     function Grid() {
       _classCallCheck(this, Grid);
@@ -44,8 +47,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("surf
 
           this.createShadowRoot().appendChild($i.Utils.activateTemplate(this.mainTemplate, $i.doc));
 
-          var rowCount = $i.Check($(this).attr(ATTR_ROW)).isInt().orThrows();
-          var colCount = $i.Check($(this).attr(ATTR_COL)).isInt().orThrows();
+          var rowCount = $i.Check($(this).attr(ATTR_ROW_COUNT)).isInt().orThrows();
+          var colCount = $i.Check($(this).attr(ATTR_COL_COUNT)).isInt().orThrows();
           var rootEl = this.rootEl;
 
           for (var row = 0; row < rowCount; row++) {
@@ -94,4 +97,5 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("surf
   })($i.PbElement);
 
   return Grid;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>

@@ -45,18 +45,6 @@
   transform: rotateY(180deg);
 }
 
-:host([flip-active="true"].pb-dragged) .pb-front,
-:host(.pb-dragged):not([flip-active="true"]) .pb-back {
-  -webkit-filter: drop-shadow(0px 2px 5px rgba(#50468F, 1));
-  filter: drop-shadow(0px 2px 5px rgba(#50468F, 1));
-  z-index: 1;
-}
-
-:host([flip-active="true"].pb-dragged) .pb-back,
-:host(.pb-dragged):not([flip-active="true"]) .pb-front {
-  display: none;
-}
-
 ::content > div {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -65,13 +53,13 @@
   width: 75px;
 }
 
-::content .pb-back {
+::content [pb-back] {
   background-color: #ABA5CF;
   border: 1px solid #8982B8;
   box-sizing: border-box;
 }
 
-::content .pb-front {
+::content [pb-front] {
   background-color: #CBC7E2;
   position: absolute;
   -webkit-transform: rotateY(180deg);
@@ -82,8 +70,8 @@
 
   <div id="root">
     <div id="container">
-      <content select=".pb-front"></content>
-      <content select=".pb-back"></content>
+      <content select="[pb-front]"></content>
+      <content select="[pb-back]"></content>
     </div>
   </div>
 </template>

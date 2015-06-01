@@ -16,11 +16,11 @@
     "--color-font": "var(--color-foreground)",
     "--color-font-highlight": "var(--color-background)",
 
-    "--drop-shadow-layer-1": "0px 2px 5px rgba(var(--color-shadow), 1)",
-    "--drop-shadow-layer-2": "0px 4px 10px rgba(var(--color-shadow), .8)",
-    "--drop-shadow-layer-3": "0px 6px 15px rgba(var(--color-shadow), .8)",
-    "--drop-shadow-layer-4": "0px 8px 20px rgba(var(--color-shadow), .8)",
-    "--drop-shadow-layer-5": "0px 10px 25px rgba(var(--color-shadow), .8)",
+    "--drop-shadow-layer-1": "0px 2px 5px var(--color-shadow)",
+    "--drop-shadow-layer-2": "0px 4px 10px var(--color-shadow)",
+    "--drop-shadow-layer-3": "0px 6px 15px var(--color-shadow)",
+    "--drop-shadow-layer-4": "0px 8px 20px var(--color-shadow)",
+    "--drop-shadow-layer-5": "0px 10px 25px var(--color-shadow)",
 
     "--card-height": "100px",
     "--card-width": "75px",

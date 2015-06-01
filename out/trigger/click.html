@@ -37,7 +37,7 @@ DI.prefix("pb").bind("trigger.Click", { Events: "=", Trigger: "trigger.=" }, fun
       },
       toString: {
         value: function toString() {
-          return "pb-click";
+          return "click";
         }
       },
       helpText: {
@@ -51,8 +51,9 @@ DI.prefix("pb").bind("trigger.Click", { Events: "=", Trigger: "trigger.=" }, fun
   })($i.Trigger);
 
   Click.parse = function (str) {
-    return str === "pb-click" ? new Click() : undefined;
+    return str === "click" ? new Click() : undefined;
   };
 
   return Click;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>

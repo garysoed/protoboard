@@ -64,8 +64,8 @@
 
       grid = $i.doc.createElement('pb-s-grid');
       $i.$(grid)
-          .attr('pb-row', 2)
-          .attr('pb-col', 3);
+          .attr('row', 2)
+          .attr('col', 3);
       Object.setPrototypeOf(grid, $i.Grid.prototype);
 
       done();
@@ -90,8 +90,8 @@
         let div = $i.doc.createElement('pb-s-rectgrid');
         Object.setPrototypeOf(div, $i.Grid.prototype);
         $i.$(div)
-            .attr('pb-row', 'a')
-            .attr('pb-col', 1);
+            .attr('row', 'a')
+            .attr('col', 1);
 
         $i.expect(() => div.createdCallback()).to.throw('a');
       });
@@ -100,8 +100,8 @@
         let div = $i.doc.createElement('pb-s-rectgrid');
         Object.setPrototypeOf(div, $i.Grid.prototype);
         $i.$(div)
-            .attr('pb-row', 1)
-            .attr('pb-col', 'a');
+            .attr('row', 1)
+            .attr('col', 'a');
 
         $i.expect(() => div.createdCallback()).to.throw('a');
       });

@@ -21,6 +21,9 @@ DI
   const ATTR_ROW = 'pb-row';
   const ATTR_COL = 'pb-col';
 
+  const ATTR_ROW_COUNT = 'row';
+  const ATTR_COL_COUNT = 'col';
+
   /**
    * Base class of all grids.
    *
@@ -49,8 +52,8 @@ DI
           .appendChild($i.Utils.activateTemplate(this.mainTemplate, $i.doc));
 
       // Initializes the data.
-      let rowCount = $i.Check($(this).attr(ATTR_ROW)).isInt().orThrows();
-      let colCount = $i.Check($(this).attr(ATTR_COL)).isInt().orThrows();
+      let rowCount = $i.Check($(this).attr(ATTR_ROW_COUNT)).isInt().orThrows();
+      let colCount = $i.Check($(this).attr(ATTR_COL_COUNT)).isInt().orThrows();
       let rootEl = this.rootEl;
 
       // Add the rows.
