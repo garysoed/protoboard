@@ -17,16 +17,16 @@
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
       .run(
-            {
-              expect: '/=',
-              _: '/=',
-              $registry: '=',
-              doc: '=',
-              t: '=',
-              Move: 'service.=',
-              Utils: '=',
-            },
-            $i => {
+          {
+            _: '/=',
+            $registry: '=',
+            doc: '=',
+            expect: '/=',
+            t: '=',
+            Move: 'service.=',
+            Utils: '=',
+          },
+          $i => {
 
   // Private symbols.
   const __container__ = $i.t.getSymbol($i.Move, 'container');

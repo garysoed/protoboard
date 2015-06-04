@@ -1,5 +1,7 @@
 <html><head><base href="..">
 
+<link rel="import" href="ability/abilities.html">
+<link rel="import" href="service/config.html">
 <link rel="import" href="third_party/di.html">
 
 <script>"use strict";
@@ -8,7 +10,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("service.Registry", {}, function () {
+DI.prefix("pb").bind("service.Registry", { Abilities: "ability.=", Config: "service.=" }, function ($i) {
 
   var __elements__ = Symbol();
   var __toRun__ = Symbol();
@@ -29,7 +31,15 @@ DI.prefix("pb").bind("service.Registry", {}, function () {
           }
           this[__elements__].set(name, prototype);
           this.runAtRegister(function (doc, Config) {
-            Config.init(name, prototype);
+            var builder = $i.Abilities.of(prototype);
+
+            if (!Config.getAll(name)) {
+              console.warn("No configuration for " + name);
+              return;
+            }
+            Config.getAll(name).forEach(function (ability) {
+              builder.add(ability);
+            });
 
             try {
               doc.registerElement(name, { prototype: prototype });
@@ -47,7 +57,7 @@ DI.prefix("pb").bind("service.Registry", {}, function () {
         }
       },
       register: {
-        value: function register(doc, Config) {
+        value: function register(doc) {
           var _iteratorNormalCompletion = true;
           var _didIteratorError = false;
           var _iteratorError = undefined;
@@ -56,7 +66,7 @@ DI.prefix("pb").bind("service.Registry", {}, function () {
             for (var _iterator = this[__toRun__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
               var fn = _step.value;
 
-              fn(doc, Config);
+              fn(doc, $i.Config);
             }
           } catch (err) {
             _didIteratorError = true;

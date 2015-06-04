@@ -7,10 +7,11 @@
 <script>
 DI.bind('pb.t', { _: '=' }, $i => {
   let TestUtil = {
-    createFakeAbility(name, trigger) {
+    createFakeAbility(name, trigger = this.createFakeTrigger(`${name}-trigger`)) {
       return {
         attrName: `attr${name}`,
         attrTrigger: `attr${name}Trigger`,
+        defaultTrigger: trigger,
         getTrigger: () => trigger,
         init: $i._.spiedFunction(),
         isEnabled: $i._.spiedFunction(),

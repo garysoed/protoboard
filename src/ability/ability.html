@@ -150,6 +150,19 @@ DI
     get attrTrigger() {
       return `${this[__name__]}-on`;
     }
+
+    /**
+     * The default trigger of the ability.
+     *
+     * @property defaultTrigger
+     * @type trigger.Trigger
+     */
+    get defaultTrigger() {
+      return this[__defaultTrigger__];
+    }
+    set defaultTrigger(defaultTrigger) {
+      this[__defaultTrigger__] = defaultTrigger;
+    }
   }
 
   return Ability;

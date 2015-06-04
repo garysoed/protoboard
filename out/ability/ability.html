@@ -90,6 +90,14 @@ DI.prefix("pb").bind("ability.Ability", {
         get: function () {
           return "" + this[__name__] + "-on";
         }
+      },
+      defaultTrigger: {
+        get: function () {
+          return this[__defaultTrigger__];
+        },
+        set: function (defaultTrigger) {
+          this[__defaultTrigger__] = defaultTrigger;
+        }
       }
     });
 

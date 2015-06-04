@@ -1,12 +1,14 @@
 <base href="..">
 
+<link rel="import" href="ability/abilities.html">
+<link rel="import" href="service/config.html">
 <link rel="import" href="third_party/di.html">
 
 <script>
 
 DI
     .prefix('pb')
-    .bind('service.Registry', {}, () => {
+    .bind('service.Registry', { Abilities: 'ability.=', Config: 'service.=' }, $i => {
 
   const __elements__ = Symbol();
   const __toRun__ = Symbol();
@@ -37,7 +39,15 @@ DI
       }
       this[__elements__].set(name, prototype);
       this.runAtRegister((doc, Config) => {
-        Config.init(name, prototype);
+        let builder = $i.Abilities.of(prototype);
+
+        if (!Config.getAll(name)) {
+          console.warn(`No configuration for ${name}`);
+          return;
+        }
+        Config.getAll(name).forEach(ability => {
+          builder.add(ability);
+        });
 
         // TODO(gs): Handle this
         try {
@@ -66,16 +76,14 @@ DI
     /**
      * Runs all the collected functions.
      *
-     * TODO(gs): Remove the Config service. Inject it instead.
-     *
      * @method register
      * @param {Document} doc Document object to run the functions in.
      * @param {service.Config} Config The configuration service to use.
      * @return {!service.Registry} This object for chaining.
      */
-    register(doc, Config) {
+    register(doc) {
       for (let fn of this[__toRun__]) {
-        fn(doc, Config);
+        fn(doc, $i.Config);
       }
       return this;
     }

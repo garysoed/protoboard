@@ -8,18 +8,22 @@
 
 DI.bind("pb.t", { _: "=" }, function ($i) {
   var TestUtil = {
-    createFakeAbility: function createFakeAbility(name, trigger) {
-      return {
-        attrName: "attr" + name,
-        attrTrigger: "attr" + name + "Trigger",
-        getTrigger: function () {
-          return trigger;
-        },
-        init: $i._.spiedFunction(),
-        isEnabled: $i._.spiedFunction(),
-        updateConfig: $i._.spiedFunction(),
-        trigger: $i._.spiedFunction()
-      };
+    createFakeAbility: function createFakeAbility(name) {
+      var trigger = arguments[1] === undefined ? this.createFakeTrigger("" + name + "-trigger") : arguments[1];
+      return (function () {
+        return {
+          attrName: "attr" + name,
+          attrTrigger: "attr" + name + "Trigger",
+          defaultTrigger: trigger,
+          getTrigger: function () {
+            return trigger;
+          },
+          init: $i._.spiedFunction(),
+          isEnabled: $i._.spiedFunction(),
+          updateConfig: $i._.spiedFunction(),
+          trigger: $i._.spiedFunction()
+        };
+      })();
     },
 
     createFakeEvents: function createFakeEvents() {
@@ -48,4 +52,5 @@ DI.bind("pb.t", { _: "=" }, function ($i) {
   };
 
   return TestUtil;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>
