@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>service.Template - Protoboard</title>
+  <title>service.Config - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -351,7 +351,7 @@
           <li class="">
             <a href="../classes/service.Acl.Group.html">service.Acl.Group</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/service.Config.html">service.Config</a>
           </li>
           <li class="">
@@ -369,7 +369,7 @@
           <li class="">
             <a href="../classes/service.State.html">service.State</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/service.Template.html">service.Template</a>
           </li>
           <li class="">
@@ -424,32 +424,25 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code><span class="keyword">static</span> service.Template</code>
+        <code><span class="keyword">static</span> service.Config</code>
       </header>
-      <div class="since">
-        since 0.2.0
-      </div>
 
     <div class="content description">
-      <p>Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
-partials and data to the template. For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run(['pb.service.=', function(Template) {
-  // Registers a partial. The partial value must be contained in the element passed into the
-  // service.
-  Template.addPartial('card', document.querySelector('template'));
-
-  // Registers data to the template.
-  Template.addData('cards', [
-    { value: 'A', suit: 'Spade' },
-    { value: 'A', suit: 'Club' },
-    { value: 'A', suit: 'Heart' },
-    { value: 'A', suit: 'Diamond' },
-  ]);
-}]);
+      <p>Service that manages ability registration for elements. When you create your custom elements,
+use the Config service to register abilities to the element as follows:</p>
+<pre class="code prettyprint"><code class="language-javascript">Service.add('custom-element-name', new Droppable());
 </code></pre>
-<p>This class also registers a <code>{{#pb-for &lt;from&gt; &lt;to&gt; &lt;step&gt;}}</code> block helper. This is a simple for
-loop that copies the inner block several times. You can access the index of the loop using the
-<code>@index</code> variable.</p>
+<p>This will add the Droppable ability during the registry phase.</p>
+<p>Every <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> allows you to change its default trigger.
+The Config service lets you modify the default trigger for all abilities with the same name.
+For example:</p>
+<pre class="code prettyprint"><code class="language-javascript">Service.setDefaultTrigger(new Click(), 'flip');
+</code></pre>
+<p>The example above sets all <code>flip</code> abilities to be triggered by a Click by default.</p>
+<p>Alternatively, you can set the default trigger by element type:</p>
+<pre class="code prettyprint"><code class="language-javascript">Service.setDefaultTrigger(new Click(), 'flip', 'pb-card');
+</code></pre>
+<p>The example above sets all <code>pb-card</code> <code>flip</code> ability to be triggered by a click.</p>
 
     </div>
 
@@ -463,24 +456,24 @@ loop that copies the inner block several times. You can access the index of the 
       </header>
       <div>
           <section class="method">
-            <header id="method_addData">
-              <code class="method-signature">addData(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, Any data) => <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code>
+            <header id="method_add">
+              <code class="method-signature">add(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> elementName, <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> abilities) => <a href="../classes/service.Config.html" class="crosslink">service.Config</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Adds data to be inserted into the templates.</p>
+              <span class="description"><p>Adds the given abilities to the given element name.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>name</code></p>
+                      <p><code>elementName</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Name to add the data by.</p>
+                      <p>The name of the element to add the abilities to.</p>
           
                     </td>
                   </tr>
@@ -489,13 +482,13 @@ loop that copies the inner block several times. You can access the index of the 
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>data</code></p>
+                      <p><code>abilities</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code>Any</code></p>
+                      <p><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Data to be added.</p>
+                      <p>Abilities to be added to the element.</p>
           
                     </td>
                   </tr>
@@ -504,16 +497,16 @@ loop that copies the inner block several times. You can access the index of the 
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Name to add the data by.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>elementName</code></dt>
+                <dd><p>The name of the element to add the abilities to.</p>
           </dd>
-                <dt><code>Any</code> <code>data</code></dt>
-                <dd><p>Data to be added.</p>
+                <dt><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code> <code>abilities</code></dt>
+                <dd><p>Abilities to be added to the element.</p>
           </dd>
               </dl>
           
                 <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code><span class="description"><p>This service for chaining.</p>
+                  <code><span class="keyword">return</span> <a href="../classes/service.Config.html" class="crosslink">service.Config</a></code><span class="description"><p>This service for chaining.</p>
           </span>
                 </div>
           
@@ -523,42 +516,24 @@ loop that copies the inner block several times. You can access the index of the 
           </section>
           
           <section class="method">
-            <header id="method_addPartial">
-              <code class="method-signature">addPartial(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element) => <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code>
+            <header id="method_getAll">
+              <code class="method-signature">getAll(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> elementName) => <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set.html" class="crosslink external" target="_blank">Set</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Registers the given partial.</p>
-          </span>
+              <span class="description"></span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>name</code></p>
+                      <p><code>elementName</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Name to use for the partial.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>Element whose innerHTML contains the partial definition. Note that
-          while this class does not enforce it, this element's type should be
-          <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/HTML/Element/template.html" class="crosslink external" target="_blank">&lt;template&gt;</a>. This is to deal with handling "&gt;" to
-          allow you to use HTML tags in the partial and calling other partials.</p>
+                      <p>Name of the element whose registered abilities should be
+          returned.</p>
           
                     </td>
                   </tr>
@@ -567,19 +542,15 @@ loop that copies the inner block several times. You can access the index of the 
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Name to use for the partial.</p>
-          </dd>
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>Element whose innerHTML contains the partial definition. Note that
-          while this class does not enforce it, this element's type should be
-          <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/HTML/Element/template.html" class="crosslink external" target="_blank">&lt;template&gt;</a>. This is to deal with handling "&gt;" to
-          allow you to use HTML tags in the partial and calling other partials.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>elementName</code></dt>
+                <dd><p>Name of the element whose registered abilities should be
+          returned.</p>
           </dd>
               </dl>
           
                 <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code><span class="description"><p>This service for chaining.</p>
+                  <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set.html" class="crosslink external" target="_blank">Set</a></code><span class="description"><p>Set of abilities that have been registered to the given element or null if the
+          element has never been added to the service.</p>
           </span>
                 </div>
           
@@ -589,24 +560,69 @@ loop that copies the inner block several times. You can access the index of the 
           </section>
           
           <section class="method">
-            <header id="method_get">
-              <code class="method-signature">get(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name) => <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code>
+            <header id="method_reset">
+              <code class="method-signature">reset()</code>
             </header>
             <div class="content">
-              <span class="description"><p>Retrieves the data with the given key.</p>
+              <span class="description"><p>Removes all configurations that has been added to the service.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_setDefaultTrigger">
+              <code class="method-signature">setDefaultTrigger(<a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> trigger, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> abilityName, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> elementName)</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Sets the given trigger as the default trigger for abilities whose name matches the given
+          name. Optionally, if the element is specified, only match abilities for that element.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>name</code></p>
+                      <p><code>trigger</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The trigger to set.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>abilityName</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Key of the data to retrieve.</p>
+                      <p>Name of ability whose default trigger should be set.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>[elementName=null]</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Name of element to match. If not specified, this will
+          match all elements.</p>
           
                     </td>
                   </tr>
@@ -615,16 +631,18 @@ loop that copies the inner block several times. You can access the index of the 
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Key of the data to retrieve.</p>
+                <dt><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code> <code>trigger</code></dt>
+                <dd><p>The trigger to set.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>abilityName</code></dt>
+                <dd><p>Name of ability whose default trigger should be set.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>[elementName=null]</code></dt>
+                <dd><p>Name of element to match. If not specified, this will
+          match all elements.</p>
           </dd>
               </dl>
           
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code><span class="description"><p>Promise that will be resolved with an array consisting of they key and the
-          data requested.</p>
-          </span>
-                </div>
           
             </div>
           

@@ -2,7 +2,7 @@
     "project": {
         "name": "Protoboard",
         "description": "Check out the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
-        "version": "0.2.2",
+        "version": "0.3.0",
         "url": "https://github.com/garysoed/protoboard",
         "colorBackground": "white",
         "colorForeground": "black",
@@ -130,6 +130,16 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/region/cubetower.html": {
+            "name": "src/region/cubetower.html",
+            "modules": {},
+            "classes": {
+                "region.CubeTower.TowerDroppable": 1,
+                "region.CubeTower": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/region/deck.html": {
             "name": "src/region/deck.html",
             "modules": {},
@@ -168,6 +178,25 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/service/acl.html": {
+            "name": "src/service/acl.html",
+            "modules": {},
+            "classes": {
+                "service.Acl.Group": 1,
+                "service.Acl": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/service/config.html": {
+            "name": "src/service/config.html",
+            "modules": {},
+            "classes": {
+                "service.Config": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/service/log.html": {
             "name": "src/service/log.html",
             "modules": {},
@@ -200,6 +229,15 @@
             "modules": {},
             "classes": {
                 "service.Registry": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/service/state.html": {
+            "name": "src/service/state.html",
+            "modules": {},
+            "classes": {
+                "service.State": 1
             },
             "fors": {},
             "namespaces": {}
@@ -443,16 +481,22 @@
                 "component.Token": 1,
                 "region.Bag.RandomPickable": 1,
                 "region.Bag": 1,
+                "region.CubeTower.TowerDroppable": 1,
+                "region.CubeTower": 1,
                 "region.Deck": 1,
                 "region.Hand.ReorderableDroppable": 1,
                 "region.Hand": 1,
                 "region.Rect.FlexDroppable": 1,
                 "region.Rect": 1,
                 "region.Region": 1,
+                "service.Acl.Group": 1,
+                "service.Acl": 1,
+                "service.Config": 1,
                 "service.Log": 1,
                 "service.Move": 1,
                 "service.Preview": 1,
                 "service.Registry": 1,
+                "service.State": 1,
                 "service.Template": 1,
                 "surface.Grid": 1,
                 "surface.HexGrid": 1,
@@ -544,7 +588,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/ability.html",
-            "line": 28,
+            "line": 36,
             "description": "Base class for all abilities. Any abilities must extend this class and implement the methods\nin this class.",
             "is_constructor": 1,
             "params": [
@@ -570,7 +614,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/droppable.html",
-            "line": 22,
+            "line": 26,
             "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered.",
             "is_constructor": 1,
             "params": [
@@ -579,7 +623,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-droppable"
+                    "optdefault": "droppable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -608,7 +652,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/helpable.html",
-            "line": 74,
+            "line": 83,
             "description": "Displays the triggers for all registered abilities.",
             "is_constructor": 1,
             "params": [
@@ -617,7 +661,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-helpable"
+                    "optdefault": "helpable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -639,7 +683,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/pickable.html",
-            "line": 19,
+            "line": 25,
             "description": "Element with this ability can be picked and dragged around. The element can be dropped on\nelements with {{#crossLink \"ability.Droppable\"}}{{/crossLink}} ability.",
             "is_constructor": 1,
             "params": [
@@ -648,7 +692,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-pickable"
+                    "optdefault": "pickable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -677,7 +721,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/shuffleable.html",
-            "line": 24,
+            "line": 29,
             "description": "Elements with this ability shuffles its children when triggered.",
             "is_constructor": 1,
             "params": [
@@ -686,7 +730,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-shuffleable"
+                    "optdefault": "shuffleable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -715,7 +759,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/toggleable.html",
-            "line": 25,
+            "line": 30,
             "description": "Provides decorator to make an element toggleable between two states.",
             "is_constructor": 1,
             "params": [
@@ -724,7 +768,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-toggleable"
+                    "optdefault": "toggleable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -763,8 +807,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/card.html",
-            "line": 116,
-            "description": "A representation of a card. To use this, create a `pb-c-card` element with two child elements:\n- One must have a `pb-front` class. This is the front face of the card.\n- One must have a `pb-back` class. This is the back face of the card.\n\nBy default, the card starts by showing its back. If you want to make it start by showing the\nfront face, add `flippable-active=\"true\"` to the `pb-c-card`.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pick{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}flip{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}tap{{/crossLink}}\n\n```html\n<!-- Example: Create a card that starts by displaying its front side -->\n<pb-c-card flippable-active=\"true\">\n  <div class=\"pb-front\">Front side</div>\n  <div class=\"pb-back\">Back side</div>\n</pb-c-card>\n```",
+            "line": 97,
+            "description": "A representation of a card. To use this, create a `pb-c-card` element with two child elements:\n- One must have a `pb-front` attribute. This is the front face of the card.\n- One must have a `pb-back` attribute. This is the back face of the card.\n\nBy default, the card starts by showing its back. If you want to make it start by showing the\nfront face, add `flippable-active=\"true\"` to the `pb-c-card`.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pick{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}flip{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}tap{{/crossLink}}\n\n```html\n<!-- Example: Create a card that starts by displaying its front side -->\n<pb-c-card flippable-active=\"true\">\n  <div pb-front>Front side</div>\n  <div pb-back>Back side</div>\n</pb-c-card>\n```",
             "extends": "component.Component"
         },
         "component.Component": {
@@ -777,7 +821,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/component.html",
-            "line": 12,
+            "line": 11,
             "description": "Base class for all components.",
             "extends": "PbElement"
         },
@@ -791,7 +835,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/dice.html",
-            "line": 107,
+            "line": 91,
             "description": "Elements with this ability can shuffle their children. This is very specific to dice and\nshould not be used for other elements.",
             "since": "0.2.0",
             "is_constructor": 1,
@@ -801,7 +845,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-rollable"
+                    "optdefault": "rollable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -837,7 +881,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/dice.html",
-            "line": 162,
+            "line": 146,
             "description": "Dice with this ability can be flipped to the opposite side. This is very specific to dice and\nshould not be used for other elements.",
             "since": "0.2.0",
             "is_constructor": 1,
@@ -883,7 +927,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/dice.html",
-            "line": 214,
+            "line": 198,
             "description": "A representation of a dice. This element has three levels of customizations.\n\nThe most basic level of customization is to use premade dice. To use this, set the type\nattribute to a supported dice type. For example:\n```html\n<!-- Creates a d2, or a coin -->\n<pb-c-dice type=\"d2\"></pb-c-dice>\n\n<!-- Creates a d20 -->\n<pb-c-dice type=\"d20\"></pb-c-dice>\n```\nCustom types supported are: `d2`, `d4`, `d6`, `d8`, `d10`, `d12`, `d20`.\n\nIn the next level of customization, you can define all the dice faces by creating children for\neach face of the dice. For example, to make the dice used in\n[Mage Wars](https://www.boardgamegeek.com/boardgame/101721/mage-wars), do:\n```html\n<pb-c-dice>\n  <div>&nbsp;</div>\n  <div>1</div>\n  <div>2</div>\n  <div>&nbsp;</div>\n  <div>1!</div>\n  <div>2!</div>\n</pb-c-dice>\n```\n\nFor games that involve flipping dice to the opposite side, like\n[Flash Point: Fire Rescue](http://boardgamegeek.com/boardgame/100901/flash-point-fire-rescue),\nfurther customization is needed. The children in the previous example needs to be paired with a\nparent element with attribute `pb-dice-pair`. For example, to make a normal d6:\n```html\n<pb-c-dice>\n  <div pb-dice-pair>\n    <div>1</div>\n    <div>6</div>\n  </div>\n  <div pb-dice-pair>\n    <div>2</div>\n    <div>5</div>\n  </div>\n  <div pb-dice-pair>\n    <div>3</div>\n    <div>4</div>\n  </div>\n</pb-c-dice>\n```\nIf you do not explicitly specify the pairing, the dice will pair them for you automatically.\nThe first child will be paired with the last child, second child paired with second last, etc.\n\nNote that dice must have an even number of faces.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pick{{/crossLink}}\n- {{#crossLink \"component.Dice.Rollable\"}}roll{{/crossLink}}: This is similar to\n  {{#crossLink ability.Shuffleable}}{{/crossLink}}, except it is customized to handle the face\n  pairings.\n- {{#crossLink \"component.Dice.DiceFlippable\"}}flip{{/crossLink}}: Flips the dice to the other\n  side.",
             "since": "0.2.0",
             "extends": "component.Component"
@@ -898,7 +942,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/token.html",
-            "line": 35,
+            "line": 38,
             "description": "A simple movable component with only one state. Examples of token:\n- Chess piece\n- Cubes\n- Damage marker\n\nTo use this, create a `pb-c-token` element with one child element. This child element will be\ndisplayed as the token.\n\n```html\n<!-- Example: A square token -->\n<pb-c-token>\n  <div style=\"background: red; width: 50px; height: 50px;\"></div>\n<pb-c-token>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Pickable\"}}pickable{{/crossLink}}",
             "extends": "component.Component"
         },
@@ -912,7 +956,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/bag.html",
-            "line": 101,
+            "line": 95,
             "description": "Element with this ability has content that can be picked and dragged around. When triggered,\na random child of the element will be picked. The child element can be dropped on elements\nwith {{#crossLink \"ability.Droppable\"}}{{/crossLink}} ability.",
             "is_constructor": 1,
             "params": [
@@ -921,7 +965,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-pickable"
+                    "optdefault": "pickable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -950,9 +994,70 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/bag.html",
-            "line": 132,
+            "line": 126,
             "description": "A collection of components. You cannot see the component until you drag one out of it.\n\nTo make a bag, create a `pb-r-bag` element. You can override the content of the placeholder by\ncreating a child element with a `pb-placeholder-content` attribute. This element will be used for\nthe placeholder content.\n\n```html\n<!-- Example: Create a bag with a place holder token displaying \"SECRET!!\" -->\n<pb-r-bag>\n  <div pb-placeholder-content>SECRET!!</div>\n</pb-r-bag>\n```\n\nSupported abilitie:\n- {{#crossLink \"region.Bag.RandomPickable\"}}pickable{{/crossLink}}\n- {{#crossLink \"ability.Droppable\"}}droppable{{/crossLink}}",
             "extends": "region.Region"
+        },
+        "region.CubeTower.TowerDroppable": {
+            "name": "region.CubeTower.TowerDroppable",
+            "shortname": "region.CubeTower.TowerDroppable",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/region/cubetower.html",
+            "line": 80,
+            "description": "Ability that mimics a \"cube tower\". Elements dropped using this ability will have to go\nthrough various \"levels\" of the tower before they are shown. Passing through one level to the\nnext is done randomly.\n\nYou can set the number of tower levels and the probability to pass through the next level\nusing the `<ability name>-chances` attribute. For instance, if the ability's name is `drop`\nand we want a tower with 3 levels, each having a probability of 0.5, 0.2, 0.1 to go to the\nnext level, specify:\n```html\n<pb-r-cubetower drop-chances=\"0.5 0.2 0.1\"></pb-r-cubetower>\n```",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the ability.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "\"drop\""
+                },
+                {
+                    "name": "defaultTrigger",
+                    "description": "Default trigger of the ability.",
+                    "type": "trigger.Trigger",
+                    "optional": true,
+                    "optdefault": "trigger.Key"
+                },
+                {
+                    "name": "defaultEnabled",
+                    "description": "True iff the ability is enabled by default.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "true"
+                },
+                {
+                    "name": "defaultProbabilities",
+                    "description": "Default probabilities passing through each level.",
+                    "type": "Array",
+                    "optional": true,
+                    "optdefault": "[1]"
+                }
+            ],
+            "extends": "ability.Droppable",
+            "since": "0.3.0"
+        },
+        "region.CubeTower": {
+            "name": "region.CubeTower",
+            "shortname": "region.CubeTower",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/region/cubetower.html",
+            "line": 211,
+            "description": "Represents a Cube Tower. This uses\n{{#crossLink \"region.CubeTower.TowerDroppable\"}}{{/crossLink}} to simulate the different levels\nin a tower.\n\n```html\n<!--\n50% chance for items to drop to level 1, and 20% chance for items to exit the tower from\nlevel 1.\n-->\n<pb-r-cubetower drop-chances=\"0.5 0.2\">\n  <!-- Item in level 0 -->\n  <div pb-tower-level=\"0\"></div>\n  <!-- Item in level 1 -->\n  <div pb-tower-level=\"1\"></div>\n  <!-- Item outside the tower -->\n  <div></div>\n</pb-r-cubetower>\n```\n\nSupported abilities:\n- {{#crossLink \"region.CubeTower.TowerDroppable\"}}drop{{/crossLink}}",
+            "extends": "region.Region",
+            "since": "0.3.0"
         },
         "region.Deck": {
             "name": "region.Deck",
@@ -964,8 +1069,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/deck.html",
-            "line": 70,
-            "description": "Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.\nAny child elements of this class are considered to be in the deck.\n\n```html\n<!-- Example: Deck containing two cards -->\n<pb-r-deck>\n  <pb-c-card id=\"card1\">\n    <div class=\"pb-front\">Front</div>\n    <div class=\"pb-back\">Back</div>\n  </pb-c-card>\n  <pb-c-card id=\"card2\">\n    <div class=\"pb-front\">Front</div>\n    <div class=\"pb-back\">Back</div>\n  </pb-c-card>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Droppable\"}}drop{{/crossLink}}\n- {{#crossLink \"ability.Shuffleable\"}}shuffle{{/crossLink}}",
+            "line": 64,
+            "description": "Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.\nAny child elements of this class are considered to be in the deck.\n\n```html\n<!-- Example: Deck containing two cards -->\n<pb-r-deck>\n  <pb-c-card id=\"card1\">\n    <div pb-front>Front</div>\n    <div pb-back>Back</div>\n  </pb-c-card>\n  <pb-c-card id=\"card2\">\n    <div pb-front>Front</div>\n    <div pb-back>Back</div>\n  </pb-c-card>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Droppable\"}}drop{{/crossLink}}\n- {{#crossLink \"ability.Shuffleable\"}}shuffle{{/crossLink}}",
             "extends": "region.Region"
         },
         "region.Hand.ReorderableDroppable": {
@@ -978,7 +1083,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/hand.html",
-            "line": 78,
+            "line": 71,
             "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered.\nThe position of the dropped element depends on the mouse position when the trigger\noccured.",
             "is_constructor": 1,
             "params": [
@@ -987,7 +1092,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-droppable"
+                    "optdefault": "droppable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -1016,7 +1121,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/hand.html",
-            "line": 123,
+            "line": 116,
             "description": "Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children\nare considered to be in the hand. A hand allows the user to reorder the child elements,\ndepending on where a child element is dropped.\n\n```html\n<!-- Hand with two tokens -->\n<pb-r-deck>\n  <pb-c-token id=\"token1\">\n    <div>Token 1</div>\n  </pb-c-token>\n  <pb-c-token id=\"token2\">\n    <div>Token 2</div>\n  </pb-c-token>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"region.Hand.ReorderableDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
         },
@@ -1030,7 +1135,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/rect.html",
-            "line": 72,
+            "line": 65,
             "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered. The\ndropped element is positioned to be directly below the mouse cursor when the drop happened.",
             "is_constructor": 1,
             "params": [
@@ -1039,7 +1144,7 @@
                     "description": "Name of the ability.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "pb-droppable"
+                    "optdefault": "droppable"
                 },
                 {
                     "name": "defaultTrigger",
@@ -1068,7 +1173,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/rect.html",
-            "line": 138,
+            "line": 131,
             "description": "An arbitrary rectangular region. You can position elements anywhere in this region.\n\nSupported abilities:\n- {{#crossLink \"region.Rect.FlexDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
         },
@@ -1082,9 +1187,61 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/region.html",
-            "line": 11,
+            "line": 41,
             "description": "Base class of all regions.",
             "extends": "PbElement"
+        },
+        "service.Acl.Group": {
+            "name": "service.Acl.Group",
+            "shortname": "service.Acl.Group",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/service/acl.html",
+            "line": 39,
+            "description": "Represents a group of players. A group may also contain other groups.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the group.",
+                    "type": "String"
+                }
+            ],
+            "access": "private",
+            "tagname": ""
+        },
+        "service.Acl": {
+            "name": "service.Acl",
+            "shortname": "service.Acl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/service/acl.html",
+            "line": 84,
+            "description": "Service that manages ACLs in the app. This allows you to show element differently depending on\nthe current player. To use this, you first need to register the elements to the service. Then,\nyou need to define the ACL as follows:\n```html\n<div id=\"acl\" pb-acl-readable=\"player1 player2\"></div>\n```\n```javascript\n  DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {\n    AclService.registerElement(document.querySelector('#acl'));\n    Bootstrap.run(document);\n  }]);\n```\n\nIn the example above, the DIV element will be readable if and only if the current player is set\nto `player1` or `player2`. To set the current player, use the\n{{#crossLink \"service.Acl/currentPlayer:property\"}}{{/crossLink}} property. When the DIV is\nreadable, this service will add a `pb-acl-readable` class to the element. You can use CSS to\ndisplay the div differently depending on the current player.\n\nYou can specify any kind of action to the ACL, as long as you prepend it with `pb-acl-`.\n\nBeside player names, you can also specify group names. When you do this, you will need to\ndeclare the group's members. For instance:\n```html\n<div id=\"acl\" pb-acl-readable=\"corporation\"></div>\n```\n```javascript\n  DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {\n    AclService\n        .registerElement(document.querySelector('#acl'))\n        .addGroup('corporation', 'weyland', 'jinteki', 'nbn');\n\n    Bootstrap.run(document);\n  }]);\n```\nThe element above will be readable if the current player is a member of the corporation group.\nGroups can contain other groups as members.\n\nWhen a registered element is a child of another registered element, the child element's\nability will only be enabled if the parent element allows that ability. For instance:\n```html\n<div id=\"section\" pb-acl-readable=\"corporation\">\n  <div id=\"acl\" pb-acl-readable=\"megacorp\"></div>\n</div>\n```\n\nThe `section` div will be readable by all members of corporation group. However, the `acl` div\nwill only be readable by members of megacorp and corporation group.\n\nYou can control abilities of elements by using the same action as the ability's name. For\nexample:\n```html\n<pb-c-card pb-acl-flip=\"player1\"></pb-c-card>\n```\n\nonly allows player1 to flip the card.",
+            "static": 1,
+            "since": "0.3.0"
+        },
+        "service.Config": {
+            "name": "service.Config",
+            "shortname": "service.Config",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/service/config.html",
+            "line": 12,
+            "description": "Service that manages ability registration for elements. When you create your custom elements,\nuse the Config service to register abilities to the element as follows:\n```javascript\nService.add('custom-element-name', new Droppable());\n```\n\nThis will add the Droppable ability during the registry phase.\n\nEvery {{#crossLink \"ability.Ability\"}}{{/crossLink}} allows you to change its default trigger.\nThe Config service lets you modify the default trigger for all abilities with the same name.\nFor example:\n```javascript\nService.setDefaultTrigger(new Click(), 'flip');\n```\nThe example above sets all `flip` abilities to be triggered by a Click by default.\n\nAlternatively, you can set the default trigger by element type:\n```javascript\nService.setDefaultTrigger(new Click(), 'flip', 'pb-card');\n```\nThe example above sets all `pb-card` `flip` ability to be triggered by a click.",
+            "static": 1
         },
         "service.Log": {
             "name": "service.Log",
@@ -1111,7 +1268,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/service/move.html",
-            "line": 49,
+            "line": 48,
             "description": "Service that handles moving elements around. Used by\n{{#crossLink \"ability.Droppable\"}}{{/crossLink}} and\n{{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\n\n```javascript\nMove.add(element);  // Sets the element as moved.\n\n// The element will be moved to a special container. To remove the element, just append it\n// somewhere else.\n```",
             "static": 1
         },
@@ -1139,9 +1296,24 @@
             "extension_for": [],
             "module": "api",
             "file": "src/service/registry.html",
-            "line": 15,
+            "line": 17,
             "description": "A service that collects functions to be ran at bootstrap.",
             "is_constructor": 1
+        },
+        "service.State": {
+            "name": "service.State",
+            "shortname": "service.State",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/service/state.html",
+            "line": 28,
+            "description": "Service that manages runtime state of the game. This service uses `pb-state` element to store\nthe state.\n\nYou can set the runtime state by modifying the `pb-state` element attributes, or by using this\nservice. Every attribute name of the `pb-state` element corresponds to the key, while its value\nis the associated value.",
+            "static": 1,
+            "since": "0.3.0"
         },
         "service.Template": {
             "name": "service.Template",
@@ -1168,7 +1340,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/surface/grid.html",
-            "line": 17,
+            "line": 27,
             "description": "Base class of all grids.\n\nTo implement a custom grid, you will need to implement 4 getters:\n- {{#crossLink \"surface.Grid/rootEl:property\"}}{{/crossLink}}\n- {{#crossLink \"surface.Grid/mainTemplate:property\"}}{{/crossLink}}\n- {{#crossLink \"surface.Grid/rowTemplate:property\"}}{{/crossLink}}\n- {{#crossLink \"surface.Grid/tileTemplate:property\"}}{{/crossLink}}",
             "since": "0.2.0",
             "extends": "PbElement"
@@ -1183,8 +1355,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/surface/hexgrid.html",
-            "line": 67,
-            "description": "A surface that lays out its children in a hexagonal grid. To use this, add attributes\n`pb-row` and `pb-col` to the element `pb-s-hexgrid`. These are the number of rows and columns\nin the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-hexgrid pb-row=\"2\" pb-col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-s-hexgrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create hexagon shapes.",
+            "line": 75,
+            "description": "A surface that lays out its children in a hexagonal grid. To use this, add attributes\n`row` and `col` to the element\n`pb-s-hexgrid`. These are the number of rows and columns in the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-hexgrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-s-hexgrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create hexagon shapes.",
             "since": "0.2.0",
             "extends": "surface.Grid"
         },
@@ -1198,8 +1370,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/surface/rectgrid.html",
-            "line": 62,
-            "description": "A surface that lays out its children in a rectangular grid. To use this, add attributes\n`pb-row` and `pb-col` to the element `pb-s-rectgrid`. These are the number of rows and columns\nin the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-rectgrid pb-row=\"2\" pb-col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Right</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Right</div>\n</pb-s-rectgrid>\n```",
+            "line": 68,
+            "description": "A surface that lays out its children in a rectangular grid. To use this, add attributes\n`row` and `col` to the element `pb-s-rectgrid`. These are the number of rows and columns in the\ngrid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-rectgrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Right</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Right</div>\n</pb-s-rectgrid>\n```",
             "since": "0.2.0",
             "extends": "surface.Grid"
         },
@@ -1213,8 +1385,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/surface/trianglegrid.html",
-            "line": 69,
-            "description": "A surface that lays out its children in a triangular grid. To use this, add attributes\n`pb-row` and `pb-col` to the element `pb-s-trianglegrid`. These are the number of rows and\ncolumns in the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-trianglegrid pb-row=\"2\" pb-col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-s-trianglegrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create triangle shapes.",
+            "line": 77,
+            "description": "A surface that lays out its children in a triangular grid. To use this, add attributes\n`row` and `col` to the element `pb-s-trianglegrid`. These are the number of rows and columns in\nthe grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-trianglegrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-s-trianglegrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create triangle shapes.",
             "since": "0.2.0",
             "extends": "surface.Grid"
         },
@@ -1270,7 +1442,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/key.html",
-            "line": 30,
+            "line": 36,
             "description": "Triggers an ability when the given key is pressed while the mouse is over the registered\nelement.",
             "is_constructor": 1,
             "params": [
@@ -1292,7 +1464,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/key.html",
-            "line": 134,
+            "line": 140,
             "description": "Helper service for detecting key press.",
             "static": 1,
             "access": "private",
@@ -1321,7 +1493,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ui/generate.html",
-            "line": 18,
+            "line": 28,
             "description": "When this element is created, it will process a [Handlebars](http://handlebarsjs.com/) template\nwithin it and replace itself with the processed template.\n\nThe template must be enclosed within a {{#crossLink \"&lt;template&gt;\"}}{{/crossLink}} tag. For\nexample:\n```html\n<pb-u-generate>\n  <template>\n    Template's content.\n    \\{{#if hasCustom}}\n      You can call \\{{> customPartials}} too.\n    \\{{/if}}\n  </template>\n</pb-u-generate>\n```\n\nAll data in the template's scope must be declared in the `input` attribute. Specify a space\nseparated names of the variable names. These variables will be available in the template using\nthe same name. For example:\n```html\n<pb-u-generate input=\"cards game\">\n  <template>\n    Cards of game \"\\{{game.name}}\":\n    <ul>\n    \\{{#each cards}}\n      <li>{{name}}</li>\n    \\{{/each}}\n    </ul>\n  </template>\n</pb-u-generate>\n```\n\nAll data passed into the templates, or custom partials used must be registered using the\n{{#crossLink \"service.Template\"}}{{/crossLink}}. So in the example above, we can register the\ndata as follows:\n```javascript\nDI.run(['pb.service', 'pb', function(Template, Bootstrap) {\n  Template\n      .addData('cards', [\n        { name: 'Apprentice' },\n        { name: 'Jack of All Trades' },\n        { name: 'Baker' },\n        { name: 'Bishop' }\n      ])\n      .addData('game', {\n        name: 'Awesome deck building game'\n      });\n  Bootstrap.run(document);\n}]);\n```\n\nWith the above example, this will produce the following:\n```html\nCards of game \"Awesome deck building game\":\n<ul>\n  <li>Apprentice</li>\n  <li>Jack of All Trades</li>\n  <li>Baker</li>\n  <li>Bishop</li>\n</ul>\n```",
             "since": "0.2.0",
             "extends": "PbElement"
@@ -1336,7 +1508,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ui/preview.html",
-            "line": 18,
+            "line": 25,
             "description": "Class that contains a preview if the mouse enters the parent element. This will display\nthe children element as preview.\n\n```html\n<!-- Hover over the div to show \"DETAILS\" -->\n<div id=\"hover_over_me\">\n  <pb-u-preview>\n    <div>DETAILS</div>\n  </pb-u-preview>\n</div>\n```",
             "extends": "PbElement"
         },
@@ -1350,7 +1522,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ui/previewer.html",
-            "line": 25,
+            "line": 34,
             "description": "Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered\nover. This works in tandem with {{#crossLink ui.Preview}}{{/crossLink}} and\n{{#crossLink service.Preview}}{{/crossLink}}.",
             "extends": "PbElement"
         },
@@ -1364,7 +1536,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ui/shape.html",
-            "line": 74,
+            "line": 76,
             "description": "Creates a shape. To create a shape, use the `pb-u-shape` element and specify the attribute\n`shape`. Some supported shapes:\n- circle\n- hexagon\n- square\n\n```html\n<!-- Creates a circle -->\n<pb-u-shape shape=\"circle\"></pb-u-shape>\n```\n\nThe created shape is an embedded SVG. So you can customize it using CSS. Use\n`pb-u-shape::shadow .pb-shape` to select the shape.",
             "since": "0.2.0",
             "extends": "HTMLElement"
@@ -1379,7 +1551,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/check.html",
-            "line": 23,
+            "line": 22,
             "description": "Utility class to check string values and parse them to different types.\n\n```javascript\n// Check that the string is a number, or throw an error if it isn't.\nCheck('123')\n    .isInt()\n    .orThrows('not a number'); // returns 123 as a number\n\n// Check that the string is a number, or a boolean, or use a default value.\nCheck('abc')\n    .isInt()\n    .isBoolean()\n    .orUse(false); // returns false\n```",
             "is_constructor": 1,
             "params": [
@@ -1470,7 +1642,7 @@
             "namespace": "",
             "file": "tutorial/03_basic.js",
             "line": 1,
-            "description": "To use this library, you will need to write an HTML file. You will need to do the following:\n1. Add the following code to the `<head>` block of the document:\n   ```html\n   <link rel=\"import\" href=\"path/to/protoboard/out/main.html\">\n   ```\n2. Add custom elements in the body. Be sure to import the appropriate files in the `<head>`\n   block. For example, to add a token:\n   ```html\n   <head>\n     <!-- Required -->\n     <link rel=\"import\" href=\"path/to/out/di.html\">\n     <link rel=\"import\" href=\"path/to/out/bootstrap.html\">\n\n     <!-- Import token -->\n     <link rel=\"import\" href=\"path/to/out/component/token.html\">\n\n     <!-- This should always come last -->\n     <link rel=\"import\" href=\"path/to/protoboard/out/main.html\">\n   </head>\n\n   <body>\n     <pb-c-token>\n       <div>Token Content</div>\n     </pb-c-token>\n\n     <script>\n       // Required\n       DI.run(['pb.=', function(Bootstrap) { Bootstrap.run(document); }]);\n     </script>\n   </body>\n   ```\n   Make sure that all dependencies are ABOVE the `main.html` import.\n\nTo help with debugging for missing imports, you can open the developer tools (Alt + &#8984; for\nChrome on Mac) and check the Console tab. It should tell you elements which are missing imports.\nFor instance `Element pb-r-bag is resolved` indicates that the import for `bag.html` is missing.\n\nMore information on using the element is in the API pages. You can also see\n[all/index.html](https://github.com/garysoed/protoboard/blob/master/ex/all/index.html) for\nexamples on how to use every element. You can also play around with every element on that page.\n\nSome example projects:\n- [Chess](https://github.com/garysoed/protoboard-chess)"
+            "description": "To use this library, you will need to write an HTML file. You will need to do the following:\n1. Add the following code to the `<head>` block of the document:\n   ```html\n   <link rel=\"import\" href=\"path/to/protoboard/out/main.html\">\n   ```\n2. Add custom elements in the body. Be sure to import the appropriate files in the `<head>`\n   block. For example, to add a token:\n   ```html\n   <head>\n     <!-- Required -->\n     <link rel=\"import\" href=\"path/to/out/di.html\">\n     <link rel=\"import\" href=\"path/to/out/bootstrap.html\">\n\n     <!-- Import token -->\n     <link rel=\"import\" href=\"path/to/out/component/token.html\">\n\n     <!-- This should always come last -->\n     <link rel=\"import\" href=\"path/to/protoboard/out/main.html\">\n   </head>\n\n   <body>\n     <pb-c-token>\n       <div>Token Content</div>\n     </pb-c-token>\n   </body>\n   ```\n   Make sure that all dependencies are ABOVE the `main.html` import.\n\nTo help with debugging for missing imports, you can open the developer tools (Alt + &#8984; for\nChrome on Mac) and check the Console tab. It should tell you elements which are missing imports.\nFor instance `Element pb-r-bag is resolved` indicates that the import for `bag.html` is missing.\n\nMore information on using the element is in the API pages. You can also see\n[all/index.html](https://github.com/garysoed/protoboard/blob/master/ex/all/index.html) for\nexamples on how to use every element. You can also play around with every element on that page.\n\nSome example projects:\n- [Chess](https://github.com/garysoed/protoboard-chess)"
         },
         "4 Customizing Components": {
             "name": "4 Customizing Components",
@@ -1605,7 +1777,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 40,
+            "line": 48,
             "description": "Initializes the ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1620,7 +1792,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 54,
+            "line": 62,
             "description": "Updates the inner state of the ability based on changes to the element.",
             "itemtype": "method",
             "name": "updateConfig",
@@ -1635,7 +1807,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 77,
+            "line": 85,
             "description": "Triggers the effect of the ability on the given element.",
             "itemtype": "method",
             "name": "trigger",
@@ -1650,7 +1822,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 90,
+            "line": 98,
             "description": "Actually triggers the effect of the ability on the given element. All abilities must extend\nthis method.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -1665,7 +1837,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 101,
+            "line": 109,
             "description": "Returns the trigger for this ability on this element.",
             "itemtype": "method",
             "name": "getTrigger",
@@ -1684,7 +1856,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 113,
+            "line": 121,
             "itemtype": "method",
             "name": "isEnabled",
             "params": [
@@ -1702,7 +1874,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 122,
+            "line": 130,
             "description": "Name of the ability. This is also the name of the attribute on the element corresponding to\nthis ability.",
             "itemtype": "property",
             "name": "attrName",
@@ -1712,7 +1884,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 134,
+            "line": 142,
             "description": "The name of the attribute on the element corresponding to this ability that sets the trigger\nfor this ability. This is the name of the ability with a `-on` postfix.",
             "itemtype": "property",
             "name": "attrTrigger",
@@ -1721,8 +1893,17 @@
             "class": "ability.Ability"
         },
         {
+            "file": "src/ability/ability.html",
+            "line": 154,
+            "description": "The default trigger of the ability.",
+            "itemtype": "property",
+            "name": "defaultTrigger",
+            "type": "trigger.Trigger",
+            "class": "ability.Ability"
+        },
+        {
             "file": "src/ability/droppable.html",
-            "line": 39,
+            "line": 43,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1737,7 +1918,7 @@
         },
         {
             "file": "src/ability/droppable.html",
-            "line": 53,
+            "line": 57,
             "description": "Drops the next element added to {{#crossLink \"service.Move\"}}{{/crossLink}} as a child of the\ngiven element.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -1752,7 +1933,7 @@
         },
         {
             "file": "src/ability/helpable.html",
-            "line": 88,
+            "line": 97,
             "description": "Displays the triggers for all abilities registered to this element.",
             "itemtype": "method",
             "name": "doTriggexr",
@@ -1767,7 +1948,7 @@
         },
         {
             "file": "src/ability/helpable.html",
-            "line": 117,
+            "line": 126,
             "description": "Helpable is always enabled.",
             "itemtype": "method",
             "name": "isEnabled",
@@ -1779,7 +1960,7 @@
         },
         {
             "file": "src/ability/pickable.html",
-            "line": 36,
+            "line": 42,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1794,7 +1975,7 @@
         },
         {
             "file": "src/ability/pickable.html",
-            "line": 50,
+            "line": 56,
             "description": "Picks up the element and makes it follow the mouse cursor.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -1809,7 +1990,7 @@
         },
         {
             "file": "src/ability/shuffleable.html",
-            "line": 40,
+            "line": 45,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1824,7 +2005,7 @@
         },
         {
             "file": "src/ability/shuffleable.html",
-            "line": 54,
+            "line": 59,
             "description": "Shuffles the given element's children, if this ability is enabled on the element.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -1839,7 +2020,7 @@
         },
         {
             "file": "src/ability/toggleable.html",
-            "line": 53,
+            "line": 58,
             "itemtype": "method",
             "name": "__isEnabled__",
             "params": [
@@ -1859,7 +2040,7 @@
         },
         {
             "file": "src/ability/toggleable.html",
-            "line": 63,
+            "line": 68,
             "itemtype": "method",
             "name": "__isActive__",
             "params": [
@@ -1879,7 +2060,7 @@
         },
         {
             "file": "src/ability/toggleable.html",
-            "line": 73,
+            "line": 78,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1894,7 +2075,7 @@
         },
         {
             "file": "src/ability/toggleable.html",
-            "line": 90,
+            "line": 95,
             "description": "Toggles the state of the given element, if the ability is enabled on the element.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -1909,7 +2090,7 @@
         },
         {
             "file": "src/ability/toggleable.html",
-            "line": 100,
+            "line": 105,
             "description": "The name of the attribute on the element corresponding to this ability that indicates that\nthe element is in active state. This is the name of the ability with a `-active` postfix.",
             "itemtype": "property",
             "name": "attrActive",
@@ -1919,7 +2100,7 @@
         },
         {
             "file": "src/component/card.html",
-            "line": 141,
+            "line": 122,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -1927,7 +2108,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 131,
+            "line": 115,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1942,7 +2123,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 148,
+            "line": 132,
             "description": "Shuffles the children and randomly selects the side to show.",
             "itemtype": "method",
             "name": "trigger",
@@ -1957,7 +2138,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 186,
+            "line": 170,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1972,7 +2153,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 203,
+            "line": 187,
             "description": "Flips the dice to the opposite side.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -1987,7 +2168,7 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 281,
+            "line": 265,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -1995,7 +2176,7 @@
         },
         {
             "file": "src/component/token.html",
-            "line": 59,
+            "line": 62,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2003,7 +2184,7 @@
         },
         {
             "file": "src/region/bag.html",
-            "line": 117,
+            "line": 111,
             "description": "Picks up a random child element of the given element.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -2018,23 +2199,116 @@
         },
         {
             "file": "src/region/bag.html",
-            "line": 156,
+            "line": 150,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
             "class": "region.Bag"
         },
         {
+            "file": "src/region/bag.html",
+            "line": 173,
+            "description": "The number of elements that users can pick out from the bag.",
+            "itemtype": "property",
+            "name": "pickableChildCount",
+            "type": "number",
+            "readonly": "",
+            "class": "region.Bag"
+        },
+        {
+            "file": "src/region/cubetower.html",
+            "line": 111,
+            "description": "Sets the default configuration for this ability on the given element.",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to set the default configuration to.",
+                    "type": "Element"
+                }
+            ],
+            "class": "region.CubeTower.TowerDroppable"
+        },
+        {
+            "file": "src/region/cubetower.html",
+            "line": 125,
+            "description": "Updates the inner state of the ability based on changes to the element.",
+            "itemtype": "method",
+            "name": "updateConfig",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "Element whose attributes have changed.",
+                    "type": "Element"
+                }
+            ],
+            "class": "region.CubeTower.TowerDroppable"
+        },
+        {
+            "file": "src/region/cubetower.html",
+            "line": 157,
+            "description": "Drops the currently moved element into the given element. This also moves elements in every\nlevel of the tower.",
+            "itemtype": "method",
+            "name": "doTrigger",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "Element to drop the moved element into.",
+                    "type": "Element"
+                }
+            ],
+            "class": "region.CubeTower.TowerDroppable"
+        },
+        {
+            "file": "src/region/cubetower.html",
+            "line": 198,
+            "description": "Name of the attribute to set the probability of the elements to pass to the next level for\nevery level in the tower.",
+            "itemtype": "property",
+            "name": "attrChances",
+            "type": "string",
+            "final": 1,
+            "class": "region.CubeTower.TowerDroppable"
+        },
+        {
+            "file": "src/region/cubetower.html",
+            "line": 240,
+            "description": "Called when the element is created.",
+            "itemtype": "method",
+            "name": "createdCallback",
+            "class": "region.CubeTower"
+        },
+        {
+            "file": "src/region/cubetower.html",
+            "line": 250,
+            "description": "The number of elements that users can pick out from the cube tower.",
+            "itemtype": "property",
+            "name": "pickableChildCount",
+            "type": "number",
+            "readonly": "",
+            "class": "region.CubeTower"
+        },
+        {
             "file": "src/region/deck.html",
-            "line": 100,
+            "line": 94,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
             "class": "region.Deck"
         },
         {
+            "file": "src/region/deck.html",
+            "line": 104,
+            "description": "The number of elements that users can pick out from the deck.",
+            "itemtype": "property",
+            "name": "pickableChildCount",
+            "type": "number",
+            "readonly": "",
+            "class": "region.Deck"
+        },
+        {
             "file": "src/region/hand.html",
-            "line": 95,
+            "line": 88,
             "description": "Drops the element added to {{#crossLink \"service.Move\"}}{{/crossLink}} as a child of the\ngiven element. The position of the dropped child depends on the position of the mouse at the\ntrigger time relative to the other children.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -2049,7 +2323,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 148,
+            "line": 141,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2057,23 +2331,17 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 161,
-            "description": "Called when the element is attached to the document.",
-            "itemtype": "method",
-            "name": "attachedCallback",
-            "class": "region.Hand"
-        },
-        {
-            "file": "src/region/hand.html",
-            "line": 170,
-            "description": "Called when the element is detached from the document.",
-            "itemtype": "method",
-            "name": "detachedCallback",
+            "line": 152,
+            "description": "The number of elements that users can pick out from the hand.",
+            "itemtype": "property",
+            "name": "pickableChildCount",
+            "type": "number",
+            "readonly": "",
             "class": "region.Hand"
         },
         {
             "file": "src/region/rect.html",
-            "line": 89,
+            "line": 82,
             "description": "Handles event when the MutationObserver observes changes to the child list.",
             "itemtype": "method",
             "name": "__onDomMutation__",
@@ -2090,7 +2358,7 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 105,
+            "line": 98,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -2105,7 +2373,7 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 117,
+            "line": 110,
             "description": "Drop the last dragged element on the given element",
             "itemtype": "method",
             "name": "doTrigger",
@@ -2120,11 +2388,301 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 149,
+            "line": 142,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
             "class": "region.Rect"
+        },
+        {
+            "file": "src/region/rect.html",
+            "line": 152,
+            "description": "The number of elements that users can pick out from the rectangle region.",
+            "itemtype": "property",
+            "name": "pickableChildCount",
+            "type": "number",
+            "readonly": "",
+            "class": "region.Rect"
+        },
+        {
+            "file": "src/region/region.html",
+            "line": 49,
+            "description": "Called when there is a mutation on the element.",
+            "itemtype": "method",
+            "name": "__onMutation__",
+            "params": [
+                {
+                    "name": "record",
+                    "description": "Array of MutationRecords.",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "region.Region"
+        },
+        {
+            "file": "src/region/region.html",
+            "line": 66,
+            "description": "Method called when the element is created.",
+            "itemtype": "method",
+            "name": "createdCallback",
+            "class": "region.Region"
+        },
+        {
+            "file": "src/region/region.html",
+            "line": 80,
+            "description": "The number of children this element has that the player can pick.",
+            "itemtype": "property",
+            "name": "pickableChildCount",
+            "type": "number",
+            "readonly": "",
+            "class": "region.Region"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 52,
+            "itemtype": "method",
+            "name": "contains",
+            "params": [
+                {
+                    "name": "candidate",
+                    "description": "Name of group or player to check the membership.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "True iff the given group or player is a member of the current group.",
+                "type": "Boolean"
+            },
+            "class": "service.Acl.Group"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 72,
+            "description": "Adds the given member or group to the current group.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "member",
+                    "description": "The player or group to be added as a member of the\n   current group.",
+                    "type": "string|service.Acl.Group"
+                }
+            ],
+            "class": "service.Acl.Group"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 148,
+            "description": "Set of registered elements.",
+            "itemtype": "property",
+            "name": "__registeredEls__",
+            "type": "Set",
+            "access": "private",
+            "tagname": "",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 157,
+            "description": "Resets the cache in the given element.",
+            "itemtype": "method",
+            "name": "__reset__",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element whose cache should be reset.",
+                    "type": "Element"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 170,
+            "description": "Updates the cache for the given element.",
+            "itemtype": "method",
+            "name": "__update__",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to run the update on.",
+                    "type": "Element"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 204,
+            "description": "Handler called when attribute on an element has been changed.",
+            "itemtype": "method",
+            "name": "__onMutation__",
+            "params": [
+                {
+                    "name": "records",
+                    "description": "Array of {{#crossLink \"MutationRecord\"}}{{/crossLink}}s.",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 221,
+            "description": "Registers the given element to watch for ACL changes.",
+            "itemtype": "method",
+            "name": "registerElement",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to be registered.",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "This service for chaining.",
+                "type": "service.Acl"
+            },
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 238,
+            "itemtype": "method",
+            "name": "isActionEnabled",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to check if the action is enabled.",
+                    "type": "Element"
+                },
+                {
+                    "name": "actionName",
+                    "description": "The name of action to check.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will resolve to true iff the action is enabled on the given\n   element.",
+                "type": "Promise"
+            },
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 263,
+            "description": "Creates or updates a group to the service.",
+            "itemtype": "method",
+            "name": "addGroup",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the group to be created",
+                    "type": "String"
+                },
+                {
+                    "name": "members",
+                    "description": "Members of the group. This can be a group name, or a player's\n   name.",
+                    "type": "String",
+                    "multiple": true
+                }
+            ],
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/service/acl.html",
+            "line": 284,
+            "description": "The current player.",
+            "itemtype": "property",
+            "name": "currentPlayer",
+            "type": "{string}",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/service/config.html",
+            "line": 40,
+            "description": "Adds the given abilities to the given element name.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "elementName",
+                    "description": "The name of the element to add the abilities to.",
+                    "type": "String"
+                },
+                {
+                    "name": "abilities",
+                    "description": "Abilities to be added to the element.",
+                    "type": "ability.Ability",
+                    "multiple": true
+                }
+            ],
+            "return": {
+                "description": "This service for chaining.",
+                "type": "service.Config"
+            },
+            "class": "service.Config"
+        },
+        {
+            "file": "src/service/config.html",
+            "line": 60,
+            "itemtype": "method",
+            "name": "getAll",
+            "params": [
+                {
+                    "name": "elementName",
+                    "description": "Name of the element whose registered abilities should be\n   returned.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Set of abilities that have been registered to the given element or null if the\n   element has never been added to the service.",
+                "type": "Set"
+            },
+            "class": "service.Config"
+        },
+        {
+            "file": "src/service/config.html",
+            "line": 71,
+            "description": "Sets the given trigger as the default trigger for abilities whose name matches the given\nname. Optionally, if the element is specified, only match abilities for that element.",
+            "itemtype": "method",
+            "name": "setDefaultTrigger",
+            "params": [
+                {
+                    "name": "trigger",
+                    "description": "The trigger to set.",
+                    "type": "trigger.Trigger"
+                },
+                {
+                    "name": "abilityName",
+                    "description": "Name of ability whose default trigger should be set.",
+                    "type": "String"
+                },
+                {
+                    "name": "elementName",
+                    "description": "Name of element to match. If not specified, this will\n   match all elements.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "null"
+                }
+            ],
+            "class": "service.Config"
+        },
+        {
+            "file": "src/service/config.html",
+            "line": 93,
+            "description": "Removes all configurations that has been added to the service.",
+            "itemtype": "method",
+            "name": "reset",
+            "class": "service.Config"
         },
         {
             "file": "src/service/log.html",
@@ -2226,17 +2784,6 @@
         {
             "file": "src/service/move.html",
             "line": 65,
-            "description": "Reference to the document that the service operates in.",
-            "itemtype": "property",
-            "name": "__document__",
-            "type": "Document",
-            "access": "private",
-            "tagname": "",
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 74,
             "description": "The container of all the moved elements.",
             "itemtype": "property",
             "name": "__container__",
@@ -2247,7 +2794,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 83,
+            "line": 74,
             "description": "Moves the container element to the last known location of the mouse.",
             "itemtype": "method",
             "name": "__moveContainer__",
@@ -2257,7 +2804,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 102,
+            "line": 93,
             "description": "Handles event when the mouse is moved.",
             "itemtype": "method",
             "name": "__onMouseMove__",
@@ -2274,7 +2821,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 115,
+            "line": 106,
             "description": "Sets the given element as being moved.",
             "itemtype": "method",
             "name": "add",
@@ -2289,7 +2836,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 126,
+            "line": 117,
             "description": "The elements that are being moved.",
             "itemtype": "property",
             "name": "movedElements",
@@ -2299,7 +2846,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 137,
+            "line": 128,
             "description": "Last known X coordinate of the mouse in px.",
             "itemtype": "property",
             "name": "mouseX",
@@ -2309,7 +2856,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 148,
+            "line": 139,
             "description": "Last known Y coordinate of the mouse in px.",
             "itemtype": "property",
             "name": "mouseY",
@@ -2336,7 +2883,7 @@
         },
         {
             "file": "src/service/registry.html",
-            "line": 26,
+            "line": 28,
             "description": "Sets the given element name and prototype to be registered as custom element at bootstrap.",
             "itemtype": "method",
             "name": "add",
@@ -2352,11 +2899,15 @@
                     "type": "Object"
                 }
             ],
+            "return": {
+                "description": "This object for chaining.",
+                "type": "!service.Registry"
+            },
             "class": "service.Registry"
         },
         {
             "file": "src/service/registry.html",
-            "line": 44,
+            "line": 62,
             "description": "Runs the given function at bootstrap.",
             "itemtype": "method",
             "name": "runAtRegister",
@@ -2367,11 +2918,15 @@
                     "type": "Function"
                 }
             ],
+            "return": {
+                "description": "This object for chaining.",
+                "type": "!service.Registry"
+            },
             "class": "service.Registry"
         },
         {
             "file": "src/service/registry.html",
-            "line": 56,
+            "line": 76,
             "description": "Runs all the collected functions.",
             "itemtype": "method",
             "name": "register",
@@ -2387,7 +2942,69 @@
                     "type": "service.Config"
                 }
             ],
+            "return": {
+                "description": "This object for chaining.",
+                "type": "!service.Registry"
+            },
             "class": "service.Registry"
+        },
+        {
+            "file": "src/service/state.html",
+            "line": 44,
+            "itemtype": "method",
+            "name": "__getElement__",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "The key that the `pb-state` element should contain.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The `pb-state` element with the given key.",
+                "type": "!Element"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "service.State"
+        },
+        {
+            "file": "src/service/state.html",
+            "line": 64,
+            "description": "Sets the value of the given key.",
+            "itemtype": "method",
+            "name": "put",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "The key corresponding to the value to be inserted.",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The value to set.",
+                    "type": "String"
+                }
+            ],
+            "class": "service.State"
+        },
+        {
+            "file": "src/service/state.html",
+            "line": 75,
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "The key to retrieve the value of.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The value corresponding to the key.",
+                "type": "String"
+            },
+            "class": "service.State"
         },
         {
             "file": "src/service/template.html",
@@ -2458,7 +3075,7 @@
         },
         {
             "file": "src/surface/grid.html",
-            "line": 32,
+            "line": 42,
             "description": "Method called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2466,7 +3083,7 @@
         },
         {
             "file": "src/surface/grid.html",
-            "line": 68,
+            "line": 78,
             "description": "Returns the element at the given row and column, or null if not found.",
             "itemtype": "method",
             "name": "get",
@@ -2490,7 +3107,7 @@
         },
         {
             "file": "src/surface/grid.html",
-            "line": 82,
+            "line": 92,
             "description": "The root element of the grid. All rows will be added as children to this element.",
             "itemtype": "property",
             "name": "rootEl",
@@ -2500,7 +3117,7 @@
         },
         {
             "file": "src/surface/grid.html",
-            "line": 93,
+            "line": 103,
             "description": "Main template to render. This will be added as the shadow root of the element.",
             "itemtype": "property",
             "name": "mainTemplate",
@@ -2510,7 +3127,7 @@
         },
         {
             "file": "src/surface/grid.html",
-            "line": 104,
+            "line": 114,
             "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
             "itemtype": "property",
             "name": "rowTemplate",
@@ -2520,7 +3137,7 @@
         },
         {
             "file": "src/surface/grid.html",
-            "line": 116,
+            "line": 126,
             "description": "Template to render for every tile in the grid. This must have a content element.",
             "itemtype": "property",
             "name": "tileTemplate",
@@ -2530,7 +3147,7 @@
         },
         {
             "file": "src/surface/hexgrid.html",
-            "line": 93,
+            "line": 101,
             "description": "The root element of the grid. All rows will be added as children to this element.",
             "itemtype": "property",
             "name": "rootEl",
@@ -2540,7 +3157,7 @@
         },
         {
             "file": "src/surface/hexgrid.html",
-            "line": 104,
+            "line": 112,
             "description": "Main template to render. This will be added as the shadow root of the element.",
             "itemtype": "property",
             "name": "mainTemplate",
@@ -2550,7 +3167,7 @@
         },
         {
             "file": "src/surface/hexgrid.html",
-            "line": 115,
+            "line": 123,
             "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
             "itemtype": "property",
             "name": "rowTemplate",
@@ -2560,7 +3177,7 @@
         },
         {
             "file": "src/surface/hexgrid.html",
-            "line": 127,
+            "line": 135,
             "description": "Template to render for every tile in the grid.",
             "itemtype": "property",
             "name": "tileTemplate",
@@ -2570,7 +3187,7 @@
         },
         {
             "file": "src/surface/rectgrid.html",
-            "line": 86,
+            "line": 92,
             "description": "The root element of the grid. All rows will be added as children to this element.",
             "itemtype": "property",
             "name": "rootEl",
@@ -2580,7 +3197,7 @@
         },
         {
             "file": "src/surface/rectgrid.html",
-            "line": 97,
+            "line": 103,
             "description": "Main template to render. This will be added as the shadow root of the element.",
             "itemtype": "property",
             "name": "mainTemplate",
@@ -2590,7 +3207,7 @@
         },
         {
             "file": "src/surface/rectgrid.html",
-            "line": 108,
+            "line": 114,
             "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
             "itemtype": "property",
             "name": "rowTemplate",
@@ -2600,7 +3217,7 @@
         },
         {
             "file": "src/surface/rectgrid.html",
-            "line": 120,
+            "line": 126,
             "description": "Template to render for every tile in the grid.",
             "itemtype": "property",
             "name": "tileTemplate",
@@ -2610,7 +3227,7 @@
         },
         {
             "file": "src/surface/trianglegrid.html",
-            "line": 95,
+            "line": 103,
             "description": "The root element of the grid. All rows will be added as children to this element.",
             "itemtype": "property",
             "name": "rootEl",
@@ -2620,7 +3237,7 @@
         },
         {
             "file": "src/surface/trianglegrid.html",
-            "line": 106,
+            "line": 114,
             "description": "Main template to render. This will be added as the shadow root of the element.",
             "itemtype": "property",
             "name": "mainTemplate",
@@ -2630,7 +3247,7 @@
         },
         {
             "file": "src/surface/trianglegrid.html",
-            "line": 117,
+            "line": 125,
             "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
             "itemtype": "property",
             "name": "rowTemplate",
@@ -2640,7 +3257,7 @@
         },
         {
             "file": "src/surface/trianglegrid.html",
-            "line": 129,
+            "line": 137,
             "description": "Template to render for every tile in the grid.",
             "itemtype": "property",
             "name": "tileTemplate",
@@ -2760,7 +3377,7 @@
             "itemtype": "method",
             "name": "toString",
             "return": {
-                "description": "String pb-click",
+                "description": "String click",
                 "type": "String"
             },
             "class": "trigger.Click"
@@ -2836,7 +3453,7 @@
             "itemtype": "method",
             "name": "toString",
             "return": {
-                "description": "String pb-dblclick",
+                "description": "String dblclick",
                 "type": "String"
             },
             "class": "trigger.DoubleClick"
@@ -2873,7 +3490,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 43,
+            "line": 49,
             "description": "Handles event called when mouse has entered the element.",
             "itemtype": "method",
             "name": "__onMouseEnter__",
@@ -2895,7 +3512,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 55,
+            "line": 61,
             "description": "Handles event called when mouse has left the element.",
             "itemtype": "method",
             "name": "__onMouseLeave__",
@@ -2912,7 +3529,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 66,
+            "line": 72,
             "description": "Registers the given element to trigger the given ability when a key is pressed while the\nmouse is hovering over the element.",
             "itemtype": "method",
             "name": "on",
@@ -2932,7 +3549,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 81,
+            "line": 87,
             "description": "Unregisters the given element from any listeners registered in the on method.",
             "itemtype": "method",
             "name": "off",
@@ -2947,18 +3564,18 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 92,
+            "line": 98,
             "itemtype": "method",
             "name": "toString",
             "return": {
-                "description": "String `pb-key-<key>`, where `key` is the key that needs to be pressed to\n   trigger this.",
+                "description": "String `key-<key>`, where `key` is the key that needs to be pressed to\n   trigger this.",
                 "type": "String"
             },
             "class": "trigger.Key"
         },
         {
             "file": "src/trigger/key.html",
-            "line": 101,
+            "line": 107,
             "description": "The help text to be displayed by {{#crossLink \"ability.Helpable\"}}{{/crossLink}}.",
             "itemtype": "property",
             "name": "helpText",
@@ -2968,7 +3585,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 113,
+            "line": 119,
             "description": "Parses the input string",
             "itemtype": "method",
             "name": "parse",
@@ -2988,7 +3605,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 144,
+            "line": 150,
             "description": "Handles event when a key press is detected.",
             "itemtype": "method",
             "name": "__onKeyPress__",
@@ -3005,7 +3622,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 182,
+            "line": 188,
             "description": "Initializes the service.",
             "itemtype": "method",
             "name": "init",
@@ -3020,7 +3637,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 193,
+            "line": 199,
             "description": "Registers the given element to trigger the given ability when the given key is pressed.",
             "itemtype": "method",
             "name": "add",
@@ -3045,7 +3662,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 214,
+            "line": 220,
             "description": "Unregisters the given element.",
             "itemtype": "method",
             "name": "remove",
@@ -3060,7 +3677,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 224,
+            "line": 230,
             "description": "Clears all registered elements.",
             "itemtype": "method",
             "name": "clear",
@@ -3068,7 +3685,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 233,
+            "line": 239,
             "description": "Map of elements to trigger the ability on. The key is the element, the value is a map of key\nto a set of abilities.",
             "itemtype": "property",
             "name": "hoveredEls",
@@ -3124,7 +3741,7 @@
         },
         {
             "file": "src/ui/generate.html",
-            "line": 86,
+            "line": 96,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -3132,7 +3749,7 @@
         },
         {
             "file": "src/ui/preview.html",
-            "line": 45,
+            "line": 52,
             "description": "Callback called when the mouse has left the parent element.",
             "itemtype": "method",
             "name": "__onMouseOut__",
@@ -3142,7 +3759,7 @@
         },
         {
             "file": "src/ui/preview.html",
-            "line": 55,
+            "line": 62,
             "description": "Callback called when the mouse has entered the parent element.",
             "itemtype": "method",
             "name": "__onMouseOver__",
@@ -3152,7 +3769,7 @@
         },
         {
             "file": "src/ui/preview.html",
-            "line": 65,
+            "line": 72,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -3160,7 +3777,7 @@
         },
         {
             "file": "src/ui/preview.html",
-            "line": 76,
+            "line": 83,
             "description": "Called when the element is attached to the document.",
             "itemtype": "method",
             "name": "attachedCallback",
@@ -3168,7 +3785,7 @@
         },
         {
             "file": "src/ui/preview.html",
-            "line": 90,
+            "line": 97,
             "description": "Called when the element is detached from the document.",
             "itemtype": "method",
             "name": "detachedCallback",
@@ -3176,7 +3793,7 @@
         },
         {
             "file": "src/ui/previewer.html",
-            "line": 43,
+            "line": 52,
             "description": "Called when the preview element has changed.",
             "itemtype": "method",
             "name": "__onPreviewElChanged__",
@@ -3186,7 +3803,7 @@
         },
         {
             "file": "src/ui/previewer.html",
-            "line": 57,
+            "line": 66,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -3194,7 +3811,7 @@
         },
         {
             "file": "src/ui/previewer.html",
-            "line": 70,
+            "line": 79,
             "description": "Called when the element is attached to the document.",
             "itemtype": "method",
             "name": "attachedCallback",
@@ -3202,7 +3819,7 @@
         },
         {
             "file": "src/ui/previewer.html",
-            "line": 83,
+            "line": 92,
             "description": "Called when the element is detached from the document.",
             "itemtype": "method",
             "name": "detachedCallback",
@@ -3210,7 +3827,7 @@
         },
         {
             "file": "src/ui/shape.html",
-            "line": 95,
+            "line": 97,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -3218,7 +3835,7 @@
         },
         {
             "file": "src/check.html",
-            "line": 53,
+            "line": 52,
             "description": "Handles when a check has failed.",
             "itemtype": "method",
             "name": "__onFailure__",
@@ -3239,7 +3856,7 @@
         },
         {
             "file": "src/check.html",
-            "line": 68,
+            "line": 67,
             "description": "Handles when a parse has succeeded.",
             "itemtype": "method",
             "name": "__onSuccess__",
@@ -3260,7 +3877,7 @@
         },
         {
             "file": "src/check.html",
-            "line": 84,
+            "line": 83,
             "description": "Try to parse the input string as an int with the given radix.",
             "itemtype": "method",
             "name": "isInt",
@@ -3279,7 +3896,19 @@
         },
         {
             "file": "src/check.html",
-            "line": 100,
+            "line": 99,
+            "description": "Try to parse the input string as a float.",
+            "itemtype": "method",
+            "name": "isFloat",
+            "return": {
+                "description": "A new instance of the Check object used for chaining.",
+                "type": "Check"
+            },
+            "class": "Check"
+        },
+        {
+            "file": "src/check.html",
+            "line": 114,
             "description": "Try to parse the input string as a boolean.",
             "itemtype": "method",
             "name": "isBoolean",
@@ -3291,7 +3920,27 @@
         },
         {
             "file": "src/check.html",
-            "line": 129,
+            "line": 132,
+            "description": "Try to parse the input string as a list of string.",
+            "itemtype": "method",
+            "name": "isList",
+            "params": [
+                {
+                    "name": "separator",
+                    "description": "The separator used for the list. Defaults to space.",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "A new instance of the Check object used for chaining.",
+                "type": "Check"
+            },
+            "class": "Check"
+        },
+        {
+            "file": "src/check.html",
+            "line": 150,
             "description": "Throws an exception if no parse has been successful.",
             "itemtype": "method",
             "name": "orThrows",
@@ -3310,7 +3959,7 @@
         },
         {
             "file": "src/check.html",
-            "line": 149,
+            "line": 170,
             "description": "Use the given value if no parse attempts have been successful.",
             "itemtype": "method",
             "name": "orUse",
@@ -3543,7 +4192,7 @@
         },
         {
             "file": "src/utils.html",
-            "line": 189,
+            "line": 195,
             "description": "Replaces the specified function to call the given function before or after the original\nfunction. The given function will be called with the same arguments and scope as the original\nfunction.",
             "itemtype": "method",
             "name": "extendFn",
@@ -3574,7 +4223,7 @@
         },
         {
             "file": "src/utils.html",
-            "line": 224,
+            "line": 230,
             "description": "Makes the given function curried.",
             "itemtype": "method",
             "name": "curry",

@@ -228,7 +228,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 0.2.2</div>
+      <div class="since">v 0.3.0</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -322,6 +322,12 @@
             <a href="../classes/region.Bag.RandomPickable.html">region.Bag.RandomPickable</a>
           </li>
           <li class="">
+            <a href="../classes/region.CubeTower.html">region.CubeTower</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.CubeTower.TowerDroppable.html">region.CubeTower.TowerDroppable</a>
+          </li>
+          <li class="">
             <a href="../classes/region.Deck.html">region.Deck</a>
           </li>
           <li class="">
@@ -340,6 +346,15 @@
             <a href="../classes/region.Region.html">region.Region</a>
           </li>
           <li class="">
+            <a href="../classes/service.Acl.html">service.Acl</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Acl.Group.html">service.Acl.Group</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Config.html">service.Config</a>
+          </li>
+          <li class="">
             <a href="../classes/service.Log.html">service.Log</a>
           </li>
           <li class="">
@@ -350,6 +365,9 @@
           </li>
           <li class="sidebar-selected">
             <a href="../classes/service.Registry.html">service.Registry</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.State.html">service.State</a>
           </li>
           <li class="">
             <a href="../classes/service.Template.html">service.Template</a>
@@ -444,7 +462,7 @@
       <div>
           <section class="method">
             <header id="method_add">
-              <code class="method-signature">add(Name name, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> prototype)</code>
+              <code class="method-signature">add(Name name, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> prototype) => !service.Registry</code>
             </header>
             <div class="content">
               <span class="description"><p>Sets the given element name and prototype to be registered as custom element at bootstrap.</p>
@@ -492,6 +510,10 @@
           </dd>
               </dl>
           
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> !service.Registry</code><span class="description"><p>This object for chaining.</p>
+          </span>
+                </div>
           
             </div>
           
@@ -500,7 +522,7 @@
           
           <section class="method">
             <header id="method_register">
-              <code class="method-signature">register(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc, service.Config Config)</code>
+              <code class="method-signature">register(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc, <a href="../classes/service.Config.html" class="crosslink">service.Config</a> Config) => !service.Registry</code>
             </header>
             <div class="content">
               <span class="description"><p>Runs all the collected functions.</p>
@@ -528,7 +550,7 @@
                       <p><code>Config</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code>service.Config</code></p>
+                      <p><code><a href="../classes/service.Config.html" class="crosslink">service.Config</a></code></p>
                     </td>
                     <td class="description">
                       <p>The configuration service to use.</p>
@@ -543,11 +565,15 @@
                 <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>doc</code></dt>
                 <dd><p>Document object to run the functions in.</p>
           </dd>
-                <dt><code>service.Config</code> <code>Config</code></dt>
+                <dt><code><a href="../classes/service.Config.html" class="crosslink">service.Config</a></code> <code>Config</code></dt>
                 <dd><p>The configuration service to use.</p>
           </dd>
               </dl>
           
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> !service.Registry</code><span class="description"><p>This object for chaining.</p>
+          </span>
+                </div>
           
             </div>
           
@@ -556,7 +582,7 @@
           
           <section class="method">
             <header id="method_runAtRegister">
-              <code class="method-signature">runAtRegister(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> fn)</code>
+              <code class="method-signature">runAtRegister(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> fn) => !service.Registry</code>
             </header>
             <div class="content">
               <span class="description"><p>Runs the given function at bootstrap.</p>
@@ -574,7 +600,7 @@
                     <td class="description">
                       <p>The function to run. This function takes in a
           <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> and a
-          service.Config.</p>
+          <a href="../classes/service.Config.html" class="crosslink">service.Config</a>.</p>
           
                     </td>
                   </tr>
@@ -586,10 +612,14 @@
                 <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>fn</code></dt>
                 <dd><p>The function to run. This function takes in a
           <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> and a
-          service.Config.</p>
+          <a href="../classes/service.Config.html" class="crosslink">service.Config</a>.</p>
           </dd>
               </dl>
           
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> !service.Registry</code><span class="description"><p>This object for chaining.</p>
+          </span>
+                </div>
           
             </div>
           

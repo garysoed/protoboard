@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>service.Template - Protoboard</title>
+  <title>Hammer - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -309,7 +309,7 @@
           <li class="">
             <a href="../classes/component.Token.html">component.Token</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/Hammer.html">Hammer</a>
           </li>
           <li class="">
@@ -369,7 +369,7 @@
           <li class="">
             <a href="../classes/service.State.html">service.State</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/service.Template.html">service.Template</a>
           </li>
           <li class="">
@@ -424,32 +424,11 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code><span class="keyword">static</span> service.Template</code>
+        <code><span class="keyword">static</span> Hammer</code>
       </header>
-      <div class="since">
-        since 0.2.0
-      </div>
 
     <div class="content description">
-      <p>Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
-partials and data to the template. For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run(['pb.service.=', function(Template) {
-  // Registers a partial. The partial value must be contained in the element passed into the
-  // service.
-  Template.addPartial('card', document.querySelector('template'));
-
-  // Registers data to the template.
-  Template.addData('cards', [
-    { value: 'A', suit: 'Spade' },
-    { value: 'A', suit: 'Club' },
-    { value: 'A', suit: 'Heart' },
-    { value: 'A', suit: 'Diamond' },
-  ]);
-}]);
-</code></pre>
-<p>This class also registers a <code>{{#pb-for &lt;from&gt; &lt;to&gt; &lt;step&gt;}}</code> block helper. This is a simple for
-loop that copies the inner block several times. You can access the index of the loop using the
-<code>@index</code> variable.</p>
+      <p>Wrapper around <a href="http://hammerjs.github.io/">HammerJS</a>.</p>
 
     </div>
 
@@ -463,102 +442,54 @@ loop that copies the inner block several times. You can access the index of the 
       </header>
       <div>
           <section class="method">
-            <header id="method_addData">
-              <code class="method-signature">addData(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, Any data) => <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code>
+            <header id="method_off">
+              <code class="method-signature">off(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> gestureType, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> handler)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Adds data to be inserted into the templates.</p>
+              <span class="description"><p>Unregisters the given gesture from the given element and handler.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>name</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>Name to add the data by.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>data</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code>Any</code></p>
-                    </td>
-                    <td class="description">
-                      <p>Data to be added.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Name to add the data by.</p>
-          </dd>
-                <dt><code>Any</code> <code>data</code></dt>
-                <dd><p>Data to be added.</p>
-          </dd>
-              </dl>
-          
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code><span class="description"><p>This service for chaining.</p>
-          </span>
-                </div>
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method">
-            <header id="method_addPartial">
-              <code class="method-signature">addPartial(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element) => <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Registers the given partial.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>name</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>Name to use for the partial.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
+                      <p><code>el</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Element whose innerHTML contains the partial definition. Note that
-          while this class does not enforce it, this element's type should be
-          <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/HTML/Element/template.html" class="crosslink external" target="_blank">&lt;template&gt;</a>. This is to deal with handling "&gt;" to
-          allow you to use HTML tags in the partial and calling other partials.</p>
+                      <p>Element to unregister from.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>gestureType</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Type of Hammer JS gesture to register.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>handler</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The handler function to unregister.</p>
           
                     </td>
                   </tr>
@@ -567,21 +498,17 @@ loop that copies the inner block several times. You can access the index of the 
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Name to use for the partial.</p>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>Element to unregister from.</p>
           </dd>
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>Element whose innerHTML contains the partial definition. Note that
-          while this class does not enforce it, this element's type should be
-          <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/HTML/Element/template.html" class="crosslink external" target="_blank">&lt;template&gt;</a>. This is to deal with handling "&gt;" to
-          allow you to use HTML tags in the partial and calling other partials.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>gestureType</code></dt>
+                <dd><p>Type of Hammer JS gesture to register.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>handler</code></dt>
+                <dd><p>The handler function to unregister.</p>
           </dd>
               </dl>
           
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code><span class="description"><p>This service for chaining.</p>
-          </span>
-                </div>
           
             </div>
           
@@ -589,24 +516,54 @@ loop that copies the inner block several times. You can access the index of the 
           </section>
           
           <section class="method">
-            <header id="method_get">
-              <code class="method-signature">get(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name) => <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code>
+            <header id="method_on">
+              <code class="method-signature">on(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> gestureType, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> handler)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Retrieves the data with the given key.</p>
+              <span class="description"><p>Registers the given gesture to the given element and handler.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>name</code></p>
+                      <p><code>el</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The element to register.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>gestureType</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Key of the data to retrieve.</p>
+                      <p>The type of Hammer JS gesture to register.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>handler</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The handler function to register.</p>
           
                     </td>
                   </tr>
@@ -615,16 +572,17 @@ loop that copies the inner block several times. You can access the index of the 
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Key of the data to retrieve.</p>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>The element to register.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>gestureType</code></dt>
+                <dd><p>The type of Hammer JS gesture to register.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>handler</code></dt>
+                <dd><p>The handler function to register.</p>
           </dd>
               </dl>
           
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code><span class="description"><p>Promise that will be resolved with an array consisting of they key and the
-          data requested.</p>
-          </span>
-                </div>
           
             </div>
           

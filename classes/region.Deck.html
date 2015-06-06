@@ -228,7 +228,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 0.2.2</div>
+      <div class="since">v 0.3.0</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -321,6 +321,12 @@
           <li class="">
             <a href="../classes/region.Bag.RandomPickable.html">region.Bag.RandomPickable</a>
           </li>
+          <li class="">
+            <a href="../classes/region.CubeTower.html">region.CubeTower</a>
+          </li>
+          <li class="">
+            <a href="../classes/region.CubeTower.TowerDroppable.html">region.CubeTower.TowerDroppable</a>
+          </li>
           <li class="sidebar-selected">
             <a href="../classes/region.Deck.html">region.Deck</a>
           </li>
@@ -340,6 +346,15 @@
             <a href="../classes/region.Region.html">region.Region</a>
           </li>
           <li class="">
+            <a href="../classes/service.Acl.html">service.Acl</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Acl.Group.html">service.Acl.Group</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.Config.html">service.Config</a>
+          </li>
+          <li class="">
             <a href="../classes/service.Log.html">service.Log</a>
           </li>
           <li class="">
@@ -350,6 +365,9 @@
           </li>
           <li class="">
             <a href="../classes/service.Registry.html">service.Registry</a>
+          </li>
+          <li class="">
+            <a href="../classes/service.State.html">service.State</a>
           </li>
           <li class="">
             <a href="../classes/service.Template.html">service.Template</a>
@@ -415,12 +433,12 @@ Any child elements of this class are considered to be in the deck.</p>
 <pre class="code prettyprint"><code class="language-html">&lt;!-- Example: Deck containing two cards --&gt;
 &lt;pb-r-deck&gt;
   &lt;pb-c-card id="card1"&gt;
-    &lt;div class="pb-front"&gt;Front&lt;/div&gt;
-    &lt;div class="pb-back"&gt;Back&lt;/div&gt;
+    &lt;div pb-front&gt;Front&lt;/div&gt;
+    &lt;div pb-back&gt;Back&lt;/div&gt;
   &lt;/pb-c-card&gt;
   &lt;pb-c-card id="card2"&gt;
-    &lt;div class="pb-front"&gt;Front&lt;/div&gt;
-    &lt;div class="pb-back"&gt;Back&lt;/div&gt;
+    &lt;div pb-front&gt;Front&lt;/div&gt;
+    &lt;div pb-back&gt;Back&lt;/div&gt;
   &lt;/pb-c-card&gt;
 &lt;/pb-r-deck&gt;
 </code></pre>
@@ -445,11 +463,26 @@ Any child elements of this class are considered to be in the deck.</p>
               <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> isCreated</code>
             </header>
             <div class="content">
-              <span class="description"><p>True iff the element has been created.</p>
-          </span>
+              <span class="description">True iff the element has been created.</span>
           
                 <footer>
                   Defined in <code><a href="PbElement.html#method_isCreated">PbElement</a></code>
+                </footer>
+              
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props">
+            <header id="property_pickableChildCount">
+              <code class="method-signature"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a> pickableChildCount</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>The number of elements that users can pick out from the deck.</p>
+          </span>
+                <footer>
+                  Overrides <code><a href="region.Region.html#method_pickableChildCount">region.Region</a></code>
                 </footer>
               
             </div>
@@ -469,8 +502,7 @@ Any child elements of this class are considered to be in the deck.</p>
               <code class="method-signature">attachedCallback()</code>
             </header>
             <div class="content">
-              <span class="description"><p>Called when the element is attached to the document.</p>
-          </span>
+              <span class="description">Called when the element is attached to the document.</span>
           
                 <footer>
                   Defined in <code><a href="PbElement.html#method_attachedCallback">PbElement</a></code>
@@ -502,8 +534,7 @@ Any child elements of this class are considered to be in the deck.</p>
               <code class="method-signature">detachedCallback()</code>
             </header>
             <div class="content">
-              <span class="description"><p>Called when the element is detached from the document.</p>
-          </span>
+              <span class="description">Called when the element is detached from the document.</span>
           
                 <footer>
                   Defined in <code><a href="PbElement.html#method_detachedCallback">PbElement</a></code>

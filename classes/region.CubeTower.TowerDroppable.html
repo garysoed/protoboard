@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>component.Dice.DiceFlippable - Protoboard</title>
+  <title>region.CubeTower.TowerDroppable - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -300,7 +300,7 @@
           <li class="">
             <a href="../classes/component.Dice.html">component.Dice</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a>
           </li>
           <li class="">
@@ -324,7 +324,7 @@
           <li class="">
             <a href="../classes/region.CubeTower.html">region.CubeTower</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/region.CubeTower.TowerDroppable.html">region.CubeTower.TowerDroppable</a>
           </li>
           <li class="">
@@ -424,15 +424,22 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code>component.Dice.DiceFlippable <span class="keyword">extends</span> <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code>
+        <code>region.CubeTower.TowerDroppable <span class="keyword">extends</span> <a href="../classes/ability.Droppable.html" class="crosslink">ability.Droppable</a></code>
       </header>
       <div class="since">
-        since 0.2.0
+        since 0.3.0
       </div>
 
     <div class="content description">
-      <p>Dice with this ability can be flipped to the opposite side. This is very specific to dice and
-should not be used for other elements.</p>
+      <p>Ability that mimics a "cube tower". Elements dropped using this ability will have to go
+through various "levels" of the tower before they are shown. Passing through one level to the
+next is done randomly.</p>
+<p>You can set the number of tower levels and the probability to pass through the next level
+using the <code>&lt;ability name&gt;-chances</code> attribute. For instance, if the ability's name is <code>drop</code>
+and we want a tower with 3 levels, each having a probability of 0.5, 0.2, 0.1 to go to the
+next level, specify:</p>
+<pre class="code prettyprint"><code class="language-html">&lt;pb-r-cubetower drop-chances="0.5 0.2 0.1"&gt;&lt;/pb-r-cubetower&gt;
+</code></pre>
 
     </div>
 
@@ -444,11 +451,11 @@ should not be used for other elements.</p>
       </header>
       <div>
           <section class="method">
-            <header id="method_component.Dice.DiceFlippable">
-              <code class="method-signature">component.Dice.DiceFlippable(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultEnabled, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultShowA)</code>
+            <header id="method_region.CubeTower.TowerDroppable">
+              <code class="method-signature">region.CubeTower.TowerDroppable(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultEnabled, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a> defaultProbabilities)</code>
             </header>
               <div class="since">
-                since 0.2.0
+                since 0.3.0
               </div>
             <div class="content">
               <span class="description"></span>
@@ -457,7 +464,7 @@ should not be used for other elements.</p>
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>[name=pb-dice-flippable]</code></p>
+                      <p><code>[name=&amp;quot;drop&amp;quot;]</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
@@ -487,13 +494,13 @@ should not be used for other elements.</p>
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>[defaultEnabled=false]</code></p>
+                      <p><code>[defaultEnabled=true]</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code></p>
                     </td>
                     <td class="description">
-                      <p>True iff the ability should be enabled by default.</p>
+                      <p>True iff the ability is enabled by default.</p>
           
                     </td>
                   </tr>
@@ -502,13 +509,13 @@ should not be used for other elements.</p>
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>[defaultShowA=true]</code></p>
+                      <p><code>[defaultProbabilities=[1]]</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code></p>
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></code></p>
                     </td>
                     <td class="description">
-                      <p>True iff "Side A" should be shown by default.</p>
+                      <p>Default probabilities passing through each level.</p>
           
                     </td>
                   </tr>
@@ -517,17 +524,17 @@ should not be used for other elements.</p>
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>[name=pb-dice-flippable]</code></dt>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>[name=&amp;quot;drop&amp;quot;]</code></dt>
                 <dd><p>Name of the ability.</p>
           </dd>
                 <dt><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code> <code>[defaultTrigger=trigger.Key]</code></dt>
                 <dd><p>Default trigger of the ability.</p>
           </dd>
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code> <code>[defaultEnabled=false]</code></dt>
-                <dd><p>True iff the ability should be enabled by default.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code> <code>[defaultEnabled=true]</code></dt>
+                <dd><p>True iff the ability is enabled by default.</p>
           </dd>
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code> <code>[defaultShowA=true]</code></dt>
-                <dd><p>True iff "Side A" should be shown by default.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></code> <code>[defaultProbabilities=[1]]</code></dt>
+                <dd><p>Default probabilities passing through each level.</p>
           </dd>
               </dl>
           
@@ -545,6 +552,20 @@ should not be used for other elements.</p>
         <h2>Properties</h2>
       </header>
       <div>
+          <section class="props">
+            <header id="property_attrChances">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> attrChances</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Name of the attribute to set the probability of the elements to pass to the next level for
+          every level in the tower.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
           <section class="props">
             <header id="property_attrName">
               <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> attrName</code>
@@ -610,7 +631,8 @@ should not be used for other elements.</p>
               <code class="method-signature">doTrigger(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Flips the dice to the opposite side.</p>
+              <span class="description"><p>Drops the currently moved element into the given element. This also moves elements in every
+          level of the tower.</p>
           </span>
           
               <table class="method-params">
@@ -623,7 +645,7 @@ should not be used for other elements.</p>
                       <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The dice to flip.</p>
+                      <p>Element to drop the moved element into.</p>
           
                     </td>
                   </tr>
@@ -633,7 +655,7 @@ should not be used for other elements.</p>
           
               <dl class="method-params-small">
                 <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
-                <dd><p>The dice to flip.</p>
+                <dd><p>Element to drop the moved element into.</p>
           </dd>
               </dl>
           
@@ -853,9 +875,8 @@ should not be used for other elements.</p>
           </dd>
               </dl>
           
-          
                 <footer>
-                  Defined in <code><a href="ability.Ability.html#method_updateConfig">ability.Ability</a></code>
+                  Overrides <code><a href="ability.Ability.html#method_updateConfig">ability.Ability</a></code>
                 </footer>
               
             </div>

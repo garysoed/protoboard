@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>service.Template - Protoboard</title>
+  <title>service.Acl - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -345,7 +345,7 @@
           <li class="">
             <a href="../classes/region.Region.html">region.Region</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/service.Acl.html">service.Acl</a>
           </li>
           <li class="">
@@ -369,7 +369,7 @@
           <li class="">
             <a href="../classes/service.State.html">service.State</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/service.Template.html">service.Template</a>
           </li>
           <li class="">
@@ -424,38 +424,82 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code><span class="keyword">static</span> service.Template</code>
+        <code><span class="keyword">static</span> service.Acl</code>
       </header>
       <div class="since">
-        since 0.2.0
+        since 0.3.0
       </div>
 
     <div class="content description">
-      <p>Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
-partials and data to the template. For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run(['pb.service.=', function(Template) {
-  // Registers a partial. The partial value must be contained in the element passed into the
-  // service.
-  Template.addPartial('card', document.querySelector('template'));
-
-  // Registers data to the template.
-  Template.addData('cards', [
-    { value: 'A', suit: 'Spade' },
-    { value: 'A', suit: 'Club' },
-    { value: 'A', suit: 'Heart' },
-    { value: 'A', suit: 'Diamond' },
-  ]);
-}]);
+      <p>Service that manages ACLs in the app. This allows you to show element differently depending on
+the current player. To use this, you first need to register the elements to the service. Then,
+you need to define the ACL as follows:</p>
+<pre class="code prettyprint"><code class="language-html">&lt;div id="acl" pb-acl-readable="player1 player2"&gt;&lt;/div&gt;
 </code></pre>
-<p>This class also registers a <code>{{#pb-for &lt;from&gt; &lt;to&gt; &lt;step&gt;}}</code> block helper. This is a simple for
-loop that copies the inner block several times. You can access the index of the loop using the
-<code>@index</code> variable.</p>
+<pre class="code prettyprint"><code class="language-javascript">  DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
+    AclService.registerElement(document.querySelector('#acl'));
+    Bootstrap.run(document);
+  }]);
+</code></pre>
+<p>In the example above, the DIV element will be readable if and only if the current player is set
+to <code>player1</code> or <code>player2</code>. To set the current player, use the
+<a href="../classes/service.Acl.html#property_currentPlayer" class="crosslink">currentPlayer</a> property. When the DIV is
+readable, this service will add a <code>pb-acl-readable</code> class to the element. You can use CSS to
+display the div differently depending on the current player.</p>
+<p>You can specify any kind of action to the ACL, as long as you prepend it with <code>pb-acl-</code>.</p>
+<p>Beside player names, you can also specify group names. When you do this, you will need to
+declare the group's members. For instance:</p>
+<pre class="code prettyprint"><code class="language-html">&lt;div id="acl" pb-acl-readable="corporation"&gt;&lt;/div&gt;
+</code></pre>
+<pre class="code prettyprint"><code class="language-javascript">  DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
+    AclService
+        .registerElement(document.querySelector('#acl'))
+        .addGroup('corporation', 'weyland', 'jinteki', 'nbn');
+
+    Bootstrap.run(document);
+  }]);
+</code></pre>
+<p>The element above will be readable if the current player is a member of the corporation group.
+Groups can contain other groups as members.</p>
+<p>When a registered element is a child of another registered element, the child element's
+ability will only be enabled if the parent element allows that ability. For instance:</p>
+<pre class="code prettyprint"><code class="language-html">&lt;div id="section" pb-acl-readable="corporation"&gt;
+  &lt;div id="acl" pb-acl-readable="megacorp"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>The <code>section</code> div will be readable by all members of corporation group. However, the <code>acl</code> div
+will only be readable by members of megacorp and corporation group.</p>
+<p>You can control abilities of elements by using the same action as the ability's name. For
+example:</p>
+<pre class="code prettyprint"><code class="language-html">&lt;pb-c-card pb-acl-flip="player1"&gt;&lt;/pb-c-card&gt;
+</code></pre>
+<p>only allows player1 to flip the card.</p>
 
     </div>
 
   </section>
 
 
+    <section class="collapsible class-subsection">
+      <header>
+        <h2>Properties</h2>
+      </header>
+      <div>
+          
+          <section class="props">
+            <header id="property_currentPlayer">
+              <code class="method-signature"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> currentPlayer</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>The current player.</p>
+          </span>
+          
+            </div>
+          
+          </section>
+          
+      </div>
+    </section>
 
     <section class="collapsible class-subsection">
       <header>
@@ -463,11 +507,11 @@ loop that copies the inner block several times. You can access the index of the 
       </header>
       <div>
           <section class="method">
-            <header id="method_addData">
-              <code class="method-signature">addData(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, Any data) => <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code>
+            <header id="method_addGroup">
+              <code class="method-signature">addGroup(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> members)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Adds data to be inserted into the templates.</p>
+              <span class="description"><p>Creates or updates a group to the service.</p>
           </span>
           
               <table class="method-params">
@@ -480,7 +524,7 @@ loop that copies the inner block several times. You can access the index of the 
                       <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Name to add the data by.</p>
+                      <p>Name of the group to be created</p>
           
                     </td>
                   </tr>
@@ -489,13 +533,14 @@ loop that copies the inner block several times. You can access the index of the 
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>data</code></p>
+                      <p><code>members</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code>Any</code></p>
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Data to be added.</p>
+                      <p>Members of the group. This can be a group name, or a player's
+          name.</p>
           
                     </td>
                   </tr>
@@ -505,17 +550,14 @@ loop that copies the inner block several times. You can access the index of the 
           
               <dl class="method-params-small">
                 <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Name to add the data by.</p>
+                <dd><p>Name of the group to be created</p>
           </dd>
-                <dt><code>Any</code> <code>data</code></dt>
-                <dd><p>Data to be added.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>members</code></dt>
+                <dd><p>Members of the group. This can be a group name, or a player's
+          name.</p>
           </dd>
               </dl>
           
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code><span class="description"><p>This service for chaining.</p>
-          </span>
-                </div>
           
             </div>
           
@@ -523,42 +565,38 @@ loop that copies the inner block several times. You can access the index of the 
           </section>
           
           <section class="method">
-            <header id="method_addPartial">
-              <code class="method-signature">addPartial(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element) => <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code>
+            <header id="method_isActionEnabled">
+              <code class="method-signature">isActionEnabled(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> actionName) => <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Registers the given partial.</p>
-          </span>
+              <span class="description"></span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>name</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>Name to use for the partial.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
+                      <p><code>el</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Element whose innerHTML contains the partial definition. Note that
-          while this class does not enforce it, this element's type should be
-          <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/HTML/Element/template.html" class="crosslink external" target="_blank">&lt;template&gt;</a>. This is to deal with handling "&gt;" to
-          allow you to use HTML tags in the partial and calling other partials.</p>
+                      <p>The element to check if the action is enabled.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>actionName</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The name of action to check.</p>
           
                     </td>
                   </tr>
@@ -567,19 +605,17 @@ loop that copies the inner block several times. You can access the index of the 
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Name to use for the partial.</p>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>The element to check if the action is enabled.</p>
           </dd>
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>Element whose innerHTML contains the partial definition. Note that
-          while this class does not enforce it, this element's type should be
-          <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/HTML/Element/template.html" class="crosslink external" target="_blank">&lt;template&gt;</a>. This is to deal with handling "&gt;" to
-          allow you to use HTML tags in the partial and calling other partials.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>actionName</code></dt>
+                <dd><p>The name of action to check.</p>
           </dd>
               </dl>
           
                 <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/service.Template.html" class="crosslink">service.Template</a></code><span class="description"><p>This service for chaining.</p>
+                  <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code><span class="description"><p>Promise that will resolve to true iff the action is enabled on the given
+          element.</p>
           </span>
                 </div>
           
@@ -589,24 +625,24 @@ loop that copies the inner block several times. You can access the index of the 
           </section>
           
           <section class="method">
-            <header id="method_get">
-              <code class="method-signature">get(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name) => <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code>
+            <header id="method_registerElement">
+              <code class="method-signature">registerElement(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el) => <a href="../classes/service.Acl.html" class="crosslink">service.Acl</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Retrieves the data with the given key.</p>
+              <span class="description"><p>Registers the given element to watch for ACL changes.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>name</code></p>
+                      <p><code>el</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Key of the data to retrieve.</p>
+                      <p>The element to be registered.</p>
           
                     </td>
                   </tr>
@@ -615,14 +651,13 @@ loop that copies the inner block several times. You can access the index of the 
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Key of the data to retrieve.</p>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
+                <dd><p>The element to be registered.</p>
           </dd>
               </dl>
           
                 <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code><span class="description"><p>Promise that will be resolved with an array consisting of they key and the
-          data requested.</p>
+                  <code><span class="keyword">return</span> <a href="../classes/service.Acl.html" class="crosslink">service.Acl</a></code><span class="description"><p>This service for chaining.</p>
           </span>
                 </div>
           
