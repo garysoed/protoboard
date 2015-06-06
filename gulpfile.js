@@ -10,9 +10,10 @@ var subs   = require('gulp-html-subs');
 var zip    = require('gulp-zip');
 
 var chalk    = require('chalk');
+var combine  = require('stream-combiner');
 var karma    = require('karma').server;
 var minimist = require('minimist');
-var through  = require('through2');
+
 var loadtheme = require('./loadtheme');
 
 var options = minimist(process.argv.slice(2), {
@@ -22,68 +23,36 @@ var options = minimist(process.argv.slice(2), {
   }
 });
 
-function chain(fn) {
-  return through.obj(function(file, enc, callback) {
-    // TODO(gs): How to open a stream?
-    var stream = gulp.src('')
-        .pipe(plumber({
-          errorHandler: function(err) {
-            this.emit('error', err);
-          }.bind(this)
-        }))
-        .pipe(through.obj(function(f, enc, cb) {
-          cb(null, file);
-        }));
-    fn(stream)
-        .pipe(through.obj(function(f, enc, cb) {
-          this.push(f);
-          cb(null, f);
-        }.bind(this), function(cb) {
-          callback();
-          cb();
-        }));
-  });
-}
-
 function subJsHint() {
-  return chain(function(stream) {
-    return stream
-        .pipe(jshint.extract())
-        .pipe(jshint({
-          esnext: true,
-          laxbreak: true,
-          sub: true
-        }))
-        .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(jshint.reporter('fail'));
-  })
+  return combine(
+      jshint.extract(),
+      jshint({
+        esnext: true,
+        laxbreak: true,
+        sub: true
+      }),
+      jshint.reporter('jshint-stylish'),
+      jshint.reporter('fail'));
 }
 
 function subBabel() {
-  return chain(function(stream) {
-    var scriptSubs = subs('script');
-    return stream
-        .pipe(scriptSubs.extract)
-            .pipe(babel({modules: 'ignore', comments: false}))
-        .pipe(scriptSubs.inject);
-  });
+  var scriptSubs = subs('script');
+  return combine(
+      scriptSubs.extract,
+      babel({modules: 'ignore', comments: false}),
+      scriptSubs.inject);
 }
 
 function subMyth() {
-  return chain(function(stream) {
-    return stream
-        .pipe(myth({ 'variables': loadtheme(options.theme) }));
-  })
+  return combine(myth({ 'variables': loadtheme(options.theme) }));
 }
 
 function subMythHtml() {
-  return chain(function(stream) {
-    var styleSubs = subs('style');
-    return stream
-        .pipe(styleSubs.extract)
-            .pipe(subMyth())
-        .pipe(styleSubs.inject);
-  });
+  var styleSubs = subs('style');
+  return combine(
+      styleSubs.extract,
+      subMyth(),
+      styleSubs.inject);
 }
 
 gulp.task('copy', ['copy-babel-polyfill'], function() {
