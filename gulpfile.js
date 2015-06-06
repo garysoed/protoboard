@@ -86,6 +86,13 @@ function subMythHtml() {
   });
 }
 
+function runKarma(done, singleRun, browser) {
+  karma.start({
+    configFile: __dirname + '/karma/' + browser + '.conf.js',
+    singleRun: singleRun
+  }, done);
+}
+
 gulp.task('copy', ['copy-babel-polyfill'], function() {
   return gulp
       .src([
@@ -97,6 +104,7 @@ gulp.task('copy', ['copy-babel-polyfill'], function() {
           'bower_components/jquery/dist/jquery.js',
           'bower_components/Keypress/keypress.js',
           'bower_components/listener/out/bin.min.js',
+          'bower_components/webcomponentsjs/webcomponents.js'
         ],
         { base: 'bower_components' })
       .pipe(gulp.dest('out/third_party'));
@@ -140,18 +148,20 @@ gulp.task('test', ['jshint'], function() {
       .pipe(gulp.dest('out'));
 });
 
-gulp.task('karma', ['compile'], function(done) {
-  karma.start({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done);
+gulp.task('karma-chrome', ['compile'], function(done) {
+  runKarma(done, true, 'chrome');
 });
 
-gulp.task('karma-dev', ['compile'], function(done) {
-  karma.start({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: false
-  }, done);
+gulp.task('karma-firefox', ['compile'], function(done) {
+  runKarma(done, true, 'firefox');
+});
+
+gulp.task('karma-dev-chrome', ['compile'], function(done) {
+  runKarma(done, false, 'chrome')
+});
+
+gulp.task('karma-dev-firefox', ['compile'], function(done) {
+  runKarma(done, false, 'firefox')
 });
 
 gulp.task('watch', ['compile'], function() {
@@ -182,4 +192,4 @@ gulp.task('pack', ['src', 'check', 'doc'], function() {
       .pipe(zip('bin.zip'))
       .pipe(gulp.dest('dist'));
 });
-gulp.task('check', ['karma']);
+gulp.task('check', ['karma-chrome', 'karma-firefox']);

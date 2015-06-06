@@ -3,9 +3,8 @@
 
 module.exports = function(config) {
   config.set({
-
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '..',
 
 
     // frameworks to use
@@ -28,7 +27,7 @@ module.exports = function(config) {
       { pattern: 'node_modules/chai/chai.js', included: false },
       { pattern: 'node_modules/spies/**', included: false },
 
-      { pattern: 'out/testbase.html', included: false},
+      { pattern: 'out/testbase.html', included: false },
       { pattern: 'out/**/*_test.html', included: true }
     ],
 
@@ -74,7 +73,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'Firefox'],
 
 
     // Continuous Integration mode

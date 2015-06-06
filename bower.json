@@ -29,6 +29,7 @@
     "prototype"
   ],
   "dependencies": {
-    "listener": "garysoed/listener"
+    "listener": "garysoed/listener",
+    "webcomponentsjs": "~0.7.3"
   }
 }
