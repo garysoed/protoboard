@@ -146,7 +146,7 @@ gulp.task('watch', ['compile'], function() {
 });
 
 gulp.task('compile', ['src', 'test', 'copy']);
-gulp.task('pack', ['src', 'check', 'doc'], function() {
+gulp.task('pack', ['compile', 'doc'], function() {
   return gulp.src('out/**/*')
       .pipe(zip('bin.zip'))
       .pipe(gulp.dest('dist'));
