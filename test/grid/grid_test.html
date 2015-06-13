@@ -8,7 +8,7 @@
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="service/config.html">
   <link rel="import" href="service/registry.html">
-  <link rel="import" href="surface/grid.html">
+  <link rel="import" href="grid/grid.html">
 </head>
 <body>
   <template id="main">
@@ -42,7 +42,7 @@
             rowTemplate: '=',
             tileTemplate: '=',
             Config: 'service.=',
-            Grid: 'surface.='
+            Grid: 'grid.='
           },
           $i => {
 
@@ -62,7 +62,7 @@
       Object.defineProperty($i.Grid.prototype, 'rowTemplate', { get: () => $i.rowTemplate });
       Object.defineProperty($i.Grid.prototype, 'tileTemplate', { get: () => $i.tileTemplate });
 
-      grid = $i.doc.createElement('pb-s-grid');
+      grid = $i.doc.createElement('pb-g-grid');
       $i.$(grid)
           .attr('row', 2)
           .attr('col', 3);
@@ -87,7 +87,7 @@
       });
 
       it('should throw exception if row is not a number', () => {
-        let div = $i.doc.createElement('pb-s-rectgrid');
+        let div = $i.doc.createElement('pb-g-rectgrid');
         Object.setPrototypeOf(div, $i.Grid.prototype);
         $i.$(div)
             .attr('row', 'a')
@@ -97,7 +97,7 @@
       });
 
       it('should throw exception if col is not a number', () => {
-        let div = $i.doc.createElement('pb-s-rectgrid');
+        let div = $i.doc.createElement('pb-g-rectgrid');
         Object.setPrototypeOf(div, $i.Grid.prototype);
         $i.$(div)
             .attr('row', 1)

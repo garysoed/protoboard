@@ -2,9 +2,9 @@
 <html>
 <head>
   <base href="..">
-  <title>surface.RectGrid Unit Tests</title>
+  <title>grid.RectGrid Unit Tests</title>
 
-  <link rel="import" href="surface/rectgrid.html">
+  <link rel="import" href="grid/rectgrid.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
 </head>
@@ -13,8 +13,8 @@
   DI
       .prefix('pb')
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run({ RectGrid: 'surface.=' }, () => {
-    describe('surface.RectGrid', () => {
+      .run({ RectGrid: 'grid.=' }, () => {
+    describe('grid.RectGrid', () => {
       it('should not throw exception when injected', () => {});
     });
   });

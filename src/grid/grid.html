@@ -9,7 +9,7 @@
 DI
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .bind('surface.Grid',
+    .bind('grid.Grid',
         {
           doc: '=',
           Check: '=',
@@ -28,12 +28,12 @@ DI
    * Base class of all grids.
    *
    * To implement a custom grid, you will need to implement 4 getters:
-   * - {{#crossLink "surface.Grid/rootEl:property"}}{{/crossLink}}
-   * - {{#crossLink "surface.Grid/mainTemplate:property"}}{{/crossLink}}
-   * - {{#crossLink "surface.Grid/rowTemplate:property"}}{{/crossLink}}
-   * - {{#crossLink "surface.Grid/tileTemplate:property"}}{{/crossLink}}
+   * - {{#crossLink "grid.Grid/rootEl:property"}}{{/crossLink}}
+   * - {{#crossLink "grid.Grid/mainTemplate:property"}}{{/crossLink}}
+   * - {{#crossLink "grid.Grid/rowTemplate:property"}}{{/crossLink}}
+   * - {{#crossLink "grid.Grid/tileTemplate:property"}}{{/crossLink}}
    *
-   * @class surface.Grid
+   * @class grid.Grid
    * @since 0.2.0
    * @extends PbElement
    */

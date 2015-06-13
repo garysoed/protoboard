@@ -2,9 +2,9 @@
 <html>
 <head>
   <base href="..">
-  <title>surface.HexGrid Unit Tests</title>
+  <title>grid.HexGrid Unit Tests</title>
 
-  <link rel="import" href="surface/hexgrid.html">
+  <link rel="import" href="grid/hexgrid.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
 </head>
@@ -13,8 +13,8 @@
   DI
       .prefix('pb')
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run({ HexGrid: 'surface.=' }, () => {
-    describe('surface.HexGrid', () => {
+      .run({ HexGrid: 'grid.=' }, () => {
+    describe('grid.HexGrid', () => {
       it('should not throw exception when injected', () => {});
     });
   });

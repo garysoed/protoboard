@@ -2,10 +2,17 @@
 
 <link rel="import" href="third_party/di.html">
 
+<link rel="import" href="pbelement.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="grid/grid.html">
+<link rel="import" href="utils.html">
+
 <template id="main">
   <style>
     ::content > * {
       position: absolute;
+      top: 0;
+      bottom: 0;
       left: 0;
       right: 0;
       margin: auto;
@@ -15,26 +22,10 @@
       display: flex;
     }
 
-    .row:nth-child(2n) {
-      transform: scaleY(-1);
-    }
-
-    .row:not(:last-child) {
-      margin-bottom: -13.397px;
-    }
-
     .tile {
       width: 100px;
       height: 100px;
       position: relative;
-    }
-
-    .tile:nth-child(2n) {
-      transform: scaleY(-1);
-    }
-
-    .tile:not(:last-child) {
-      margin-right: -50px;
     }
   </style>
 
@@ -61,44 +52,42 @@ DI
     .with('templateRow', { doc: '=' }, $i => $i.doc.querySelector('template#row'))
     .with('templateTile', { doc: '=' }, $i => $i.doc.querySelector('template#tile'))
     .bind(
-        'surface.TriangleGrid',
+        'grid.RectGrid',
         {
           $registry: '=',
           templateMain: '=',
           templateRow: '=',
           templateTile: '=',
           Config: 'service.=',
-          Grid: 'surface.=',
+          Grid: 'grid.=',
         },
         $i => {
 
-  const EL_NAME = 'pb-s-trianglegrid';
+  const EL_NAME = 'pb-g-rectgrid';
 
   /**
-   * A surface that lays out its children in a triangular grid. To use this, add attributes
-   * `row` and `col` to the element `pb-s-trianglegrid`. These are the number of rows and columns in
-   * the grid.
+   * A grid that lays out its children in a rectangular grid. To use this, add attributes
+   * `row` and `col` to the element `pb-g-rectgrid`. These are the number of rows and columns in the
+   * grid.
    *
    * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes
    * on them to indicate their positions in the grid.
    *
    * ```html
-   * <pb-s-trianglegrid row="2" col="3">
+   * <pb-g-rectgrid row="2" col="3">
    *   <!-- Third column is empty -->
    *   <div pb-row="0" pb-col="0">Top Left</div>
-   *   <div pb-row="0" pb-col="1">Top Middle</div>
+   *   <div pb-row="0" pb-col="1">Top Right</div>
    *   <div pb-row="1" pb-col="0">Bottom Left</div>
-   *   <div pb-row="1" pb-col="1">Bottom Middle</div>
-   * </pb-s-trianglegrid>
+   *   <div pb-row="1" pb-col="1">Bottom Right</div>
+   * </pb-g-rectgrid>
    * ```
    *
-   * You can use {{#crossLink "ui.Shape"}}`<pb-u-shape>`{{/crossLink}} to create triangle shapes.
-   *
-   * @class surface.TriangleGrid
+   * @class grid.RectGrid
    * @since 0.2.0
-   * @extends surface.Grid
+   * @extends grid.Grid
    */
-  class TriangleGrid extends $i.Grid {
+  class RectGrid extends $i.Grid {
 
     /**
      * The root element of the grid. All rows will be added as children to this element.
@@ -147,8 +136,8 @@ DI
   }
 
   $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, TriangleGrid);
+  $i.$registry.add(EL_NAME, RectGrid);
 
-  return TriangleGrid;
+  return RectGrid;
 });
 </script>

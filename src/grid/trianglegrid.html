@@ -6,8 +6,6 @@
   <style>
     ::content > * {
       position: absolute;
-      top: 0;
-      bottom: 0;
       left: 0;
       right: 0;
       margin: auto;
@@ -17,12 +15,12 @@
       display: flex;
     }
 
-    .row:not(:last-child) {
-      margin-bottom: -56.8px;
+    .row:nth-child(2n) {
+      transform: scaleY(-1);
     }
 
-    .row:nth-child(2n) {
-      margin-left: 75px;
+    .row:not(:last-child) {
+      margin-bottom: -13.397px;
     }
 
     .tile {
@@ -31,8 +29,12 @@
       position: relative;
     }
 
+    .tile:nth-child(2n) {
+      transform: scaleY(-1);
+    }
+
     .tile:not(:last-child) {
-      margin-right: 50px;
+      margin-right: -50px;
     }
   </style>
 
@@ -59,44 +61,44 @@ DI
     .with('templateRow', { doc: '=' }, $i => $i.doc.querySelector('template#row'))
     .with('templateTile', { doc: '=' }, $i => $i.doc.querySelector('template#tile'))
     .bind(
-        'surface.HexGrid',
+        'grid.TriangleGrid',
         {
           $registry: '=',
           templateMain: '=',
           templateRow: '=',
           templateTile: '=',
           Config: 'service.=',
-          Grid: 'surface.=',
+          Grid: 'grid.=',
         },
         $i => {
 
-  const EL_NAME = 'pb-s-hexgrid';
+  const EL_NAME = 'pb-g-trianglegrid';
 
   /**
-   * A surface that lays out its children in a hexagonal grid. To use this, add attributes
-   * `row` and `col` to the element
-   * `pb-s-hexgrid`. These are the number of rows and columns in the grid.
+   * A grid that lays out its children in a triangular grid. To use this, add attributes
+   * `row` and `col` to the element `pb-g-trianglegrid`. These are the number of rows and columns in
+   * the grid.
    *
    * Add the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes
    * on them to indicate their positions in the grid.
    *
    * ```html
-   * <pb-s-hexgrid row="2" col="3">
+   * <pb-g-trianglegrid row="2" col="3">
    *   <!-- Third column is empty -->
    *   <div pb-row="0" pb-col="0">Top Left</div>
    *   <div pb-row="0" pb-col="1">Top Middle</div>
    *   <div pb-row="1" pb-col="0">Bottom Left</div>
    *   <div pb-row="1" pb-col="1">Bottom Middle</div>
-   * </pb-s-hexgrid>
+   * </pb-g-trianglegrid>
    * ```
    *
-   * You can use {{#crossLink "ui.Shape"}}`<pb-u-shape>`{{/crossLink}} to create hexagon shapes.
+   * You can use {{#crossLink "ui.Shape"}}`<pb-u-shape>`{{/crossLink}} to create triangle shapes.
    *
-   * @class surface.HexGrid
+   * @class grid.TriangleGrid
    * @since 0.2.0
-   * @extends surface.Grid
+   * @extends grid.Grid
    */
-  class HexGrid extends $i.Grid {
+  class TriangleGrid extends $i.Grid {
 
     /**
      * The root element of the grid. All rows will be added as children to this element.
@@ -145,8 +147,8 @@ DI
   }
 
   $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, HexGrid);
+  $i.$registry.add(EL_NAME, TriangleGrid);
 
-  return HexGrid;
+  return TriangleGrid;
 });
 </script>

@@ -2,9 +2,9 @@
 <html>
 <head>
   <base href="..">
-  <title>surface.TriangleGrid Unit Tests</title>
+  <title>grid.TriangleGrid Unit Tests</title>
 
-  <link rel="import" href="surface/trianglegrid.html">
+  <link rel="import" href="grid/trianglegrid.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
 </head>
@@ -13,8 +13,8 @@
   DI
       .prefix('pb')
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run({ TriangleGrid: 'surface.=' }, () => {
-    describe('surface.TriangleGrid', () => {
+      .run({ TriangleGrid: 'grid.=' }, () => {
+    describe('grid.TriangleGrid', () => {
       it('should not throw exception when injected', () => {});
     });
   });
