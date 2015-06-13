@@ -30,16 +30,16 @@ DI
      *
      * @method add
      * @param {name} name Element name to register
-     * @param {Object} prototype Prototype object of the custom element.
+     * @param {Object} ctor Constructor function of the custom element.
      * @return {!service.Registry} This object for chaining.
      */
-    add(name, prototype) {
+    add(name, ctor) {
       if (this[__elements__].has(name)) {
         throw `${name} is already registered`;
       }
-      this[__elements__].set(name, prototype);
+      this[__elements__].set(name, ctor.prototype);
       this.runAtRegister((doc, Config) => {
-        let builder = $i.Abilities.of(prototype);
+        let builder = $i.Abilities.of(ctor.prototype);
 
         if (!Config.getAll(name)) {
           console.warn(`No configuration for ${name}`);
@@ -51,7 +51,7 @@ DI
 
         // TODO(gs): Handle this
         try {
-          doc.registerElement(name, { prototype: prototype });
+          doc.registerElement(name, ctor);
         } catch (e) {
           console.warn(e);
         }

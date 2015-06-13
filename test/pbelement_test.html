@@ -63,6 +63,25 @@
         $i.expect($i.$(el).attr('pb-id')).to.be.equal('div-0');
       });
     });
+    describe('#whenCreated', () => {
+      function createElement() {
+        let el = $i.doc.createElement('div');
+        Object.setPrototypeOf(el, $i.PbElement.prototype);
+        el.createdCallback();
+        return el;
+      }
+
+      it('should be resolved when the element is attached', done => {
+        let el = createElement();
+        el.whenCreated.then(() => done());
+        el.attachedCallback();
+      });
+      it('should not be resolved when the element has not been attached', () => {
+        createElement().whenCreated.then(() => {
+          expect.to.fail();
+        });
+      });
+    });
   });
   });
   </script>

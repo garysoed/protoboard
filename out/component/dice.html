@@ -212,7 +212,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true), new Rollable("roll", new $i.Key("r"), true), new DiceFlippable("flip", new $i.Key("f")));
 
-  $i.$registry.add(EL_NAME, Dice.prototype);
+  $i.$registry.add(EL_NAME, Dice);
 
   Dice.DiceFlippable = DiceFlippable;
   Dice.Rollable = Rollable;

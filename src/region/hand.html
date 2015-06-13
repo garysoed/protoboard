@@ -166,7 +166,7 @@ DI
       EL_NAME,
       new $i.Helpable('help'),
       new ReorderableDroppable('drop', new $i.Key('d'), true));
-  $i.$registry.add(EL_NAME, Hand.prototype);
+  $i.$registry.add(EL_NAME, Hand);
 
   if ($i.TEST_MODE) {
     Hand.ReorderableDroppable = ReorderableDroppable;

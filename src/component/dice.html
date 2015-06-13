@@ -309,7 +309,7 @@ DI
       new Rollable('roll', new $i.Key('r'), true),
       new DiceFlippable('flip', new $i.Key('f')));
 
-  $i.$registry.add(EL_NAME, Dice.prototype);
+  $i.$registry.add(EL_NAME, Dice);
 
   Dice.DiceFlippable = DiceFlippable;
   Dice.Rollable = Rollable;

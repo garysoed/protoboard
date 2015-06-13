@@ -202,7 +202,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   })($i.Region);
 
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new TowerDroppable("drop", new $i.Key("d"), true));
-  $i.$registry.add(EL_NAME, CubeTower.prototype);
+  $i.$registry.add(EL_NAME, CubeTower);
 
   if ($i.TEST_MODE) {
     CubeTower.TowerDroppable = TowerDroppable;

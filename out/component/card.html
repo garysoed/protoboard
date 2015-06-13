@@ -129,7 +129,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true), new $i.Toggleable("flip", new $i.Click(), true), new $i.Toggleable("tap", new $i.Key("t"), true));
 
-  $i.$registry.add(EL_NAME, Card.prototype);
+  $i.$registry.add(EL_NAME, Card);
 
   return Card;
 });</script>

@@ -10,7 +10,8 @@ DI
     .bind('PbElement', { $: '/=', Abilities: 'ability.=' }, $i => {
 
   // Private symbols.
-  const __isCreated__ = Symbol();
+  const __createdPromise__ = Symbol();
+  const __createdResolve__ = Symbol();
 
   const ATTR_ID = 'pb-id';
   const IDS = new Map();
@@ -30,7 +31,9 @@ DI
      */
     createdCallback() {
       $i.Abilities.init(this);
-      this[__isCreated__] = false;
+      this[__createdPromise__] = new Promise(resolve => {
+        this[__createdResolve__] = resolve;
+      });
 
       let nameParts = this.nodeName.toLowerCase().split('-');
       let prefix = $i.$(this).attr(ATTR_ID)
@@ -51,7 +54,7 @@ DI
      * @method attachedCallback
      */
     attachedCallback() {
-      this[__isCreated__] = true;
+      this[__createdResolve__]();
     }
 
     /**
@@ -62,14 +65,14 @@ DI
     detachedCallback() { }
 
     /**
-     * True iff the element has been created.
+     * Promise that will be resolved when the element has been created
      *
-     * @type boolean
-     * @property isCreated
+     * @type Promise
+     * @property whenCreated
      * @final
      */
-    get isCreated() {
-      return this[__isCreated__];
+    get whenCreated() {
+      return this[__createdPromise__];
     }
   }
 

@@ -13,7 +13,8 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").bind("PbElement", { $: "/=", Abilities: "ability.=" }, function ($i) {
-  var __isCreated__ = Symbol();
+  var __createdPromise__ = Symbol();
+  var __createdResolve__ = Symbol();
 
   var ATTR_ID = "pb-id";
   var IDS = new Map();
@@ -32,8 +33,12 @@ DI.prefix("pb").bind("PbElement", { $: "/=", Abilities: "ability.=" }, function 
     _createClass(PbElement, {
       createdCallback: {
         value: function createdCallback() {
+          var _this = this;
+
           $i.Abilities.init(this);
-          this[__isCreated__] = false;
+          this[__createdPromise__] = new Promise(function (resolve) {
+            _this[__createdResolve__] = resolve;
+          });
 
           var nameParts = this.nodeName.toLowerCase().split("-");
           var prefix = $i.$(this).attr(ATTR_ID) || nameParts[nameParts.length - 1];
@@ -49,15 +54,15 @@ DI.prefix("pb").bind("PbElement", { $: "/=", Abilities: "ability.=" }, function 
       },
       attachedCallback: {
         value: function attachedCallback() {
-          this[__isCreated__] = true;
+          this[__createdResolve__]();
         }
       },
       detachedCallback: {
         value: function detachedCallback() {}
       },
-      isCreated: {
+      whenCreated: {
         get: function () {
-          return this[__isCreated__];
+          return this[__createdPromise__];
         }
       }
     });

@@ -29,8 +29,8 @@
 }
 
 ::content > *:hover {
-  -webkit-filter: drop-shadow(0px 2px 5px #50468F);
-  filter: drop-shadow(0px 2px 5px #50468F);
+  -webkit-filter: drop-shadow(0px 2px 5px rgba(#50468F, 1));
+  filter: drop-shadow(0px 2px 5px rgba(#50468F, 1));
 }
 
 ::content > *:last-child {
@@ -164,7 +164,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   })($i.Region);
 
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new ReorderableDroppable("drop", new $i.Key("d"), true));
-  $i.$registry.add(EL_NAME, Hand.prototype);
+  $i.$registry.add(EL_NAME, Hand);
 
   if ($i.TEST_MODE) {
     Hand.ReorderableDroppable = ReorderableDroppable;

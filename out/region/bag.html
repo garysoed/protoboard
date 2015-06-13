@@ -167,7 +167,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Droppable("drop", new $i.Key("d")), new RandomPickable("pick", new $i.Key("q")));
 
-  $i.$registry.add(EL_NAME, Bag.prototype);
+  $i.$registry.add(EL_NAME, Bag);
 
   if ($i.TEST_MODE) {
     Bag.RandomPickable = RandomPickable;
