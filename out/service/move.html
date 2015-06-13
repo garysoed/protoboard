@@ -4,8 +4,8 @@
 <link rel="import" href="third_party/di.html">
 
 <style>.pb-move {
-  -webkit-filter: drop-shadow(0px 2px 5px #50468F);
-  filter: drop-shadow(0px 2px 5px #50468F);
+  -webkit-filter: drop-shadow(0px 2px 5px rgba(#50468F, 1));
+  filter: drop-shadow(0px 2px 5px rgba(#50468F, 1));
   opacity: 0.75;
   position: fixed;
   pointer-events: none;
@@ -41,8 +41,10 @@ var _defineProperty = function (obj, key, value) { return Object.defineProperty(
 
 DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }, function ($i) {
   var __container__ = Symbol("container");
+  var __height__ = Symbol();
   var __mouseX__ = Symbol();
   var __mouseY__ = Symbol();
+  var __width__ = Symbol();
 
   var __moveContainer__ = Symbol("moveContainer");
   var __onMouseMove__ = Symbol("onMouseMove");
@@ -56,9 +58,13 @@ DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }
       var width = 0;
       var height = 0;
       $i.Utils.toArray(this[__container__].children).forEach(function (child) {
-        var rect = child.getBoundingClientRect();
-        width = Math.max(rect.width, width);
-        height = Math.max(rect.height, height);
+        if (!child[__width__] || !child[__height__]) {
+          var rect = child.getBoundingClientRect();
+          child[__height__] = Math.max(rect.height, height);
+          child[__width__] = Math.max(rect.width, width);
+        }
+        height = child[__height__];
+        width = child[__width__];
       });
 
       this[__container__].style.left = "" + (this[__mouseX__] - width / 2) + "px";
@@ -72,6 +78,8 @@ DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }
     });
 
     _defineProperty(_Object$defineProperties, "add", function add(el) {
+      el[__height__] = undefined;
+      el[__width__] = undefined;
       this[__container__].appendChild(el);
       this[__moveContainer__]();
     });

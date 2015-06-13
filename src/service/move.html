@@ -39,8 +39,10 @@ DI
 
   // Private symbols.
   const __container__ = Symbol('container');
+  const __height__ = Symbol();
   const __mouseX__ = Symbol();
   const __mouseY__ = Symbol();
+  const __width__ = Symbol();
 
   const __moveContainer__ = Symbol('moveContainer');
   const __onMouseMove__ = Symbol('onMouseMove');
@@ -81,9 +83,13 @@ DI
       let width = 0;
       let height = 0;
       $i.Utils.toArray(this[__container__].children).forEach(child => {
-        let rect = child.getBoundingClientRect();
-        width = Math.max(rect.width, width);
-        height = Math.max(rect.height, height);
+        if (!child[__width__] || !child[__height__]) {
+          let rect = child.getBoundingClientRect();
+          child[__height__] = Math.max(rect.height, height);
+          child[__width__] = Math.max(rect.width, width);
+        }
+        height = child[__height__];
+        width = child[__width__];
       });
 
       this[__container__].style.left = `${this[__mouseX__] - width / 2}px`;
@@ -110,6 +116,8 @@ DI
      * @param {Element} el Element to move.
      */
     add(el) {
+      el[__height__] = undefined;
+      el[__width__] = undefined;
       this[__container__].appendChild(el);
       this[__moveContainer__]();
     },
