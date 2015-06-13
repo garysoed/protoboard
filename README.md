@@ -1,3 +1,7 @@
+# protoboard
+
+[![Circle CI](https://img.shields.io/circleci/project/garysoed/protoboard/0.3.1.svg?style=flat-square)](https://img.shields.io/circleci/project/garysoed/protoboard/0.3.1.svg?style=flat-square)
+
 Library to easily prototype board games. Check [here](https://garysoed.github.com/protoboard) for
 full documentation, or [here](https://garysoed.github.com/protoboard-demo/index.html) for demo of
 supported components.
