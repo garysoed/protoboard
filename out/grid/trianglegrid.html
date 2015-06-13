@@ -1,0 +1,126 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<template id="main">
+  <style>::content > * {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.row {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.row:nth-child(2n) {
+  -webkit-transform: scaleY(-1);
+  -ms-transform: scaleY(-1);
+  transform: scaleY(-1);
+}
+
+.row:not(:last-child) {
+  margin-bottom: -13.397px;
+}
+
+.tile {
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+
+.tile:nth-child(2n) {
+  -webkit-transform: scaleY(-1);
+  -ms-transform: scaleY(-1);
+  transform: scaleY(-1);
+}
+
+.tile:not(:last-child) {
+  margin-right: -50px;
+}</style>
+
+  <div id="root">
+    <div id="content"></div>
+  </div>
+</template>
+
+<template id="row">
+  <div class="row"></div>
+</template>
+
+<template id="tile">
+  <div class="tile">
+    <content></content>
+  </div>
+</template>
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#main");
+})["with"]("templateRow", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#row");
+})["with"]("templateTile", { doc: "=" }, function ($i) {
+  return $i.doc.querySelector("template#tile");
+}).bind("grid.TriangleGrid", {
+  $registry: "=",
+  templateMain: "=",
+  templateRow: "=",
+  templateTile: "=",
+  Config: "service.=",
+  Grid: "grid.=" }, function ($i) {
+
+  var EL_NAME = "pb-g-trianglegrid";
+
+  var TriangleGrid = (function (_$i$Grid) {
+    function TriangleGrid() {
+      _classCallCheck(this, TriangleGrid);
+
+      if (_$i$Grid != null) {
+        _$i$Grid.apply(this, arguments);
+      }
+    }
+
+    _inherits(TriangleGrid, _$i$Grid);
+
+    _createClass(TriangleGrid, {
+      rootEl: {
+        get: function () {
+          return this.shadowRoot.querySelector("#content");
+        }
+      },
+      mainTemplate: {
+        get: function () {
+          return $i.templateMain;
+        }
+      },
+      rowTemplate: {
+        get: function () {
+          return $i.templateRow;
+        }
+      },
+      tileTemplate: {
+        get: function () {
+          return $i.templateTile;
+        }
+      }
+    });
+
+    return TriangleGrid;
+  })($i.Grid);
+
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, TriangleGrid);
+
+  return TriangleGrid;
+});</script>
+</head><body></body></html>

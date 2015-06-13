@@ -1,0 +1,101 @@
+<html><head><base href="..">
+
+<link rel="import" href="check.html">
+<link rel="import" href="pbelement.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="utils.html">
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("grid.Grid", {
+  doc: "=",
+  Check: "=",
+  PbElement: "=",
+  Utils: "=" }, function ($i) {
+
+  var ATTR_ROW = "pb-row";
+  var ATTR_COL = "pb-col";
+
+  var ATTR_ROW_COUNT = "row";
+  var ATTR_COL_COUNT = "col";
+
+  var Grid = (function (_$i$PbElement) {
+    function Grid() {
+      _classCallCheck(this, Grid);
+
+      if (_$i$PbElement != null) {
+        _$i$PbElement.apply(this, arguments);
+      }
+    }
+
+    _inherits(Grid, _$i$PbElement);
+
+    _createClass(Grid, {
+      createdCallback: {
+        value: function createdCallback() {
+          var _this = this;
+
+          _get(Object.getPrototypeOf(Grid.prototype), "createdCallback", this).call(this);
+
+          this.createShadowRoot().appendChild($i.Utils.activateTemplate(this.mainTemplate, $i.doc));
+
+          var rowCount = $i.Check($(this).attr(ATTR_ROW_COUNT)).isInt().orThrows();
+          var colCount = $i.Check($(this).attr(ATTR_COL_COUNT)).isInt().orThrows();
+          var rootEl = this.rootEl;
+
+          for (var row = 0; row < rowCount; row++) {
+            rootEl.appendChild($i.Utils.activateTemplate(this.rowTemplate, $i.doc));
+          }
+
+          $(rootEl.children).each(function (row, rowEl) {
+            for (var col = 0; col < colCount; col++) {
+              var tileEl = $i.Utils.activateTemplate(_this.tileTemplate, $i.doc);
+              $(tileEl.querySelector("content")).attr("select", "[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]");
+              $(tileEl.children[0]).attr(ATTR_ROW, row).attr(ATTR_COL, col);
+              rowEl.appendChild(tileEl);
+            }
+          });
+        }
+      },
+      get: {
+        value: function get(row, col) {
+          var contentEl = this.shadowRoot.querySelector("content[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]");
+          return contentEl ? contentEl.getDistributedNodes()[0] : null;
+        }
+      },
+      rootEl: {
+        get: function () {
+          throw new Error("unimplemented");
+        }
+      },
+      mainTemplate: {
+        get: function () {
+          throw new Error("unimplemented");
+        }
+      },
+      rowTemplate: {
+        get: function () {
+          throw new Error("unimplemented");
+        }
+      },
+      tileTemplate: {
+        get: function () {
+          throw new Error("unimplemented");
+        }
+      }
+    });
+
+    return Grid;
+  })($i.PbElement);
+
+  return Grid;
+});</script>
+</head><body></body></html>
