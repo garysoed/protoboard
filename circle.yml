@@ -1,0 +1,10 @@
+dependencies:
+  pre:
+    - sudo apt-get update
+    - sudo apt-get install google-chrome-stable
+  post:
+    - cd node_modules/spies; npm install; cd -
+
+test:
+  override:
+    - node_modules/.bin/gulp check
