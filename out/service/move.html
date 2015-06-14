@@ -1,9 +1,11 @@
 <html><head><base href="..">
 
+<link rel="import" href="pbelement.html">
+<link rel="import" href="service/config.html">
 <link rel="import" href="service/registry.html">
 <link rel="import" href="third_party/di.html">
 
-<style>.pb-move {
+<style>pb-s-move {
   -webkit-filter: drop-shadow(0px 2px 5px #50468F);
   filter: drop-shadow(0px 2px 5px #50468F);
   opacity: 0.75;
@@ -11,26 +13,26 @@
   pointer-events: none;
 }
 
-.pb-move > * {
+pb-s-move > * {
   position: absolute;
 }
 
-.pb-move > *:nth-child(2) {
+pb-s-move > *:nth-child(2) {
   -webkit-transform: rotateZ(-20deg);
   transform: rotateZ(-20deg);
 }
 
-.pb-move > *:nth-child(3) {
+pb-s-move > *:nth-child(3) {
   -webkit-transform: rotateZ(15deg);
   transform: rotateZ(15deg);
 }
 
-.pb-move > *:nth-child(4) {
+pb-s-move > *:nth-child(4) {
   -webkit-transform: rotateZ(-35deg);
   transform: rotateZ(-35deg);
 }
 
-.pb-move > *:nth-child(5) {
+pb-s-move > *:nth-child(5) {
   -webkit-transform: rotateZ(40deg);
   transform: rotateZ(40deg);
 }</style>
@@ -39,7 +41,20 @@
 
 var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
 
-DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }, function ($i) {
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").bind("service.Move", {
+  $registry: "=",
+  Config: "service.=",
+  Events: "=",
+  PbElement: "=",
+  Utils: "="
+}, function ($i) {
+
+  var EL_NAME = "pb-s-move";
+
   var __container__ = Symbol("container");
   var __height__ = Symbol();
   var __mouseX__ = Symbol();
@@ -109,10 +124,25 @@ DI.prefix("pb").bind("service.Move", { $registry: "=", Events: "=", Utils: "=" }
     }
   });
 
+  var MoveElement = (function (_$i$PbElement) {
+    function MoveElement() {
+      _classCallCheck(this, MoveElement);
+
+      if (_$i$PbElement != null) {
+        _$i$PbElement.apply(this, arguments);
+      }
+    }
+
+    _inherits(MoveElement, _$i$PbElement);
+
+    return MoveElement;
+  })($i.PbElement);
+
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, MoveElement);
   $i.$registry.runAtRegister(function (doc) {
     $i.Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
-    Move[__container__] = doc.createElement("div");
-    Move[__container__].classList.add("pb-move");
+    Move[__container__] = doc.createElement(EL_NAME);
     doc.body.appendChild(Move[__container__]);
   });
 

@@ -1,33 +1,35 @@
 <base href="..">
 
+<link rel="import" href="pbelement.html">
+<link rel="import" href="service/config.html">
 <link rel="import" href="service/registry.html">
 <link rel="import" href="third_party/di.html">
 
 <style>
-  .pb-move {
+  pb-s-move {
     filter: drop-shadow(var(--drop-shadow-layer-1));
     opacity: 0.75;
     position: fixed;
     pointer-events: none;
   }
 
-  .pb-move > * {
+  pb-s-move > * {
     position: absolute;
   }
 
-  .pb-move > *:nth-child(2) {
+  pb-s-move > *:nth-child(2) {
     transform: rotateZ(-20deg);
   }
 
-  .pb-move > *:nth-child(3) {
+  pb-s-move > *:nth-child(3) {
     transform: rotateZ(15deg);
   }
 
-  .pb-move > *:nth-child(4) {
+  pb-s-move > *:nth-child(4) {
     transform: rotateZ(-35deg);
   }
 
-  .pb-move > *:nth-child(5) {
+  pb-s-move > *:nth-child(5) {
     transform: rotateZ(40deg);
   }
 </style>
@@ -35,7 +37,18 @@
 <script>
 DI
     .prefix('pb')
-    .bind('service.Move', { $registry: '=', Events: '=', Utils: '=' }, $i => {
+    .bind(
+        'service.Move',
+        {
+          $registry: '=',
+          Config: 'service.=',
+          Events: '=',
+          PbElement: '=',
+          Utils: '='
+        },
+        $i => {
+
+  const EL_NAME = 'pb-s-move';
 
   // Private symbols.
   const __container__ = Symbol('container');
@@ -156,11 +169,14 @@ DI
     }
   };
 
+  class MoveElement extends $i.PbElement { }
+
+  $i.Config.add(EL_NAME);
+  $i.$registry.add(EL_NAME, MoveElement);
   $i.$registry.runAtRegister(doc => {
     $i.Events.of(doc.body, Move)
         .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
-    Move[__container__] = doc.createElement('div');
-    Move[__container__].classList.add('pb-move');
+    Move[__container__] = doc.createElement(EL_NAME);
     doc.body.appendChild(Move[__container__]);
   });
 
