@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>ability.SelectedPickable Unit Tests</title>
+
+  <link rel="import" href="ability/selectedpickable.html">
+  <link rel="import" href="service/move.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/chance.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="third_party/jquery.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .constant('doc', document.currentScript.ownerDocument)
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .run(
+          {
+            $: '/=',
+            _: '/=',
+            doc: '=',
+            expect: '/=',
+            Move: 'service.=',
+            SelectedPickable: 'ability.=',
+          },
+          $i => {
+    describe('ability.SelectedPickable', () => {
+      describe('#trigger', () => {
+        let pickable;
+        let selectFn;
+        let parent;
+
+        beforeEach(done => {
+          selectFn = $i._.spiedFunction();
+          pickable = new $i.SelectedPickable(selectFn);
+          parent = $i.doc.createElement('div');
+          pickable.init(parent);
+          done();
+        });
+
+        it('should add the element returned by the selection function to the move service', () => {
+          let el = $i.doc.createElement('div');
+          selectFn.overrideReturn(el);
+          $i._.spy($i.Move, 'add').overrideReturn();
+
+          pickable.trigger(parent);
+
+          $i.expect($i.Move.add).calledWith(el).at.least(1);
+          $i.expect(selectFn).calledWith(parent).at.least(1);
+        });
+        it('should do nothing if the selection function returned null', () => {
+          selectFn.overrideReturn(null);
+          $i._.spy($i.Move, 'add').overrideReturn();
+
+          pickable.trigger(parent);
+
+          $i.expect($i.Move.add).called().to.equal(0);
+          $i.expect(selectFn).calledWith(parent).at.least(1);
+        });
+      });
+    });
+  });
+  </script>
+</body>

@@ -2,12 +2,12 @@
 
 <link rel="import" href="ability/droppable.html">
 <link rel="import" href="ability/helpable.html">
-<link rel="import" href="ability/pickable.html">
+<link rel="import" href="ability/selectedpickable.html">
 <link rel="import" href="region/region.html">
 <link rel="import" href="service/config.html">
 <link rel="import" href="service/move.html">
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="trigger/click.html">
+<link rel="import" href="third_party/jquery.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
@@ -76,7 +76,7 @@ DI
           Helpable: 'ability.=',
           Key: 'trigger.=',
           Move: 'service.=',
-          Pickable: 'ability.=',
+          SelectedPickable: 'ability.=',
           Region: 'region.=',
           Utils: '=',
           TEST_MODE: '/=?'
@@ -89,39 +89,7 @@ DI
 
   // Private symbols
   const __placeHolderEl__ = Symbol('placeHolderEl');
-
-  class RandomPickable extends $i.Pickable {
-
-    /**
-     * Element with this ability has content that can be picked and dragged around. When triggered,
-     * a random child of the element will be picked. The child element can be dropped on elements
-     * with {{#crossLink "ability.Droppable"}}{{/crossLink}} ability.
-     *
-     * @constructor
-     * @class region.Bag.RandomPickable
-     * @param {string} [name=pickable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
-     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
-     * @extends ability.Pickable
-     */
-    constructor(name = 'pickable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
-      super(name, defaultTrigger, defaultEnabled);
-    }
-
-    /**
-     * Picks up a random child element of the given element.
-     *
-     * @method doTrigger
-     * @param {Element} el The element whose child element should be randomly picked.
-     */
-    doTrigger(el) {
-      let candidates = $i.Utils.toArray(el.children)
-          .filter(child => $i.$(child).attr(ATTR_PLACEHOLDER) === undefined);
-      if (candidates.length > 0) {
-        $i.Move.add($i.Chance.pick(candidates));
-      }
-    }
-  }
+  const __selectChild__ = Symbol('selectChild');
 
   /**
    * A collection of components. You cannot see the component until you drag one out of it.
@@ -138,7 +106,7 @@ DI
    * ```
    *
    * Supported abilitie:
-   * - {{#crossLink "region.Bag.RandomPickable"}}pickable{{/crossLink}}
+   * - {{#crossLink "ability.SelectedPickable"}}pickable{{/crossLink}}
    * - {{#crossLink "ability.Droppable"}}droppable{{/crossLink}}
    *
    * @class region.Bag
@@ -184,17 +152,29 @@ DI
 
   Bag.prototype[__placeHolderEl__] = null;
 
+  /**
+   * Randomly picks a child of the given element that is not placeholder element.
+   *
+   * @method __selectChild__
+   * @param {Element} el Element whose child should be picked randomly.
+   * @return {Element} Child of the given element that is not placeholder element that has been
+   *    picked randomly. Or null if no such child exists.
+   * @private
+   * @static
+   */
+  Bag[__selectChild__] = function(el) {
+    let filtered = $i.Utils.toArray(el.children).filter(
+        children => $i.$(child).attr(ATTR_PLACEHOLDER) === undefined);
+    return filtered.length > 0 ? $i.Chance.pick(filtered) : null;
+  };
+
   $i.Config.add(
       EL_NAME,
       new $i.Helpable('help'),
       new $i.Droppable('drop', new $i.Key('d')),
-      new RandomPickable('pick', new $i.Key('q')));
+      new $i.SelectedPickable(Bag[__selectChild__], 'pick', new $i.Key('q')));
 
   $i.$registry.add(EL_NAME, Bag);
-
-  if ($i.TEST_MODE) {
-    Bag.RandomPickable = RandomPickable;
-  }
 
   return Bag;
 });

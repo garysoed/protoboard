@@ -9,9 +9,10 @@
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="region/bag.html">
   <link rel="import" href="service/config.html">
-  <link rel="import" href="service/move.html">
   <link rel="import" href="service/registry.html">
   <link rel="import" href="testutils.html">
+  <link rel="import" href="third_party/chance.html">
+  <link rel="import" href="third_party/jquery.html">
 </head>
 <body>
   <pb-r-bag id="emptyChildren"></pb-r-bag>
@@ -28,24 +29,23 @@
       .constant('doc', document.currentScript.ownerDocument)
       .run(
           {
-            expect: '/=',
             _: '/=',
             _M: '/=',
-            doc: '=',
+            $: '/=',
             Bag: 'region.=',
             Chance: '/=',
             Config: 'service.=',
-            Move: 'service.=',
+            doc: '=',
+            expect: '/=',
             t: '=',
             $registry: '='
           },
           $i => {
 
-  let RandomPickable = $i.Bag.RandomPickable;
-
   // Private symbols
   let __draggable__ = $i.t.getSymbol($i.Bag.prototype, 'draggable');
   let __placeHolderEl__ = $i.t.getSymbol($i.Bag.prototype, 'placeHolderEl');
+  let __selectChild__ = $i.t.getSymbol($i.Bag, 'selectChild');
 
   describe('Bag', () => {
     before(done => {
@@ -91,49 +91,40 @@
       });
     });
 
-    describe('$RandomPickable', () => {
-      describe('#trigger', () => {
-        it('should randomly pick a child element with no pb-placeholder attribute', () => {
-          let el = $i.doc.createElement('div');
-          let selectedChild = $i.doc.createElement('div');
-          let placeHolderEl = $i.doc.createElement('div');
-          let child1 = $i.doc.createElement('div');
-          let child2 = $i.doc.createElement('div');
-          $(placeHolderEl).attr('pb-placeholder', '');
+    describe('#__selectChild__', () => {
+      function createPlaceHolder() {
+        let placeHolderEl = $i.doc.createElement('div');
+        $i.$(placeHolderEl).attr('pb-placeholder', '');
+        return placeHolderEl;
+      }
 
-          el.appendChild(placeHolderEl);
-          el.appendChild(child1);
-          el.appendChild(selectedChild);
-          el.appendChild(child2);
+      it('should randomly pick a child element with no pb-placeholder attribute', () => {
+        let el = $i.doc.createElement('div');
+        let selectedChild = $i.doc.createElement('div');
+        let placeHolderEl = createPlaceHolder();
+        let child1 = $i.doc.createElement('div');
+        let child2 = $i.doc.createElement('div');
 
-          let pickable = new RandomPickable();
+        el.appendChild(placeHolderEl);
+        el.appendChild(child1);
+        el.appendChild(selectedChild);
+        el.appendChild(child2);
 
-          $i._.spy($i.Chance, 'pick').overrideReturn(selectedChild);
-          $i._.spy($i.Move, 'add');
+        $i._.spy($i.Chance, 'pick').overrideReturn(selectedChild);
 
-          pickable.init(el);
-          pickable.trigger(el);
+        $i.Bag[__selectChild__](el);
 
-          let childrenCaptor = $i._M.isA(Array);
-          $i.expect($i.Chance.pick).calledWith(childrenCaptor).at.least(1);
-          $i.expect(childrenCaptor.matchingArgs[0]).to.be.eql([child1, selectedChild, child2]);
+        let childrenCaptor = $i._M.isA(Array);
+        $i.expect($i.Chance.pick).calledWith(childrenCaptor).at.least(1);
+        $i.expect(childrenCaptor.matchingArgs[0]).to.be.eql([child1, selectedChild, child2]);
+      });
+      it('should not crash if there are no children', () => {
+        let el = $i.doc.createElement('div');
+        let placeHolderEl = createPlaceHolder();
 
-          $i.expect($i.Move.add).calledWith(selectedChild).at.least(1);
-        });
-        it('should not crash if there are no children', () => {
-          let el = $i.doc.createElement('div');
-          let placeHolderEl = $i.doc.createElement('div');
-          $(placeHolderEl).attr('pb-placeholder', '');
+        el.appendChild(placeHolderEl);
 
-          $i._.spy($i.Move, 'add');
-
-          el.appendChild(placeHolderEl);
-
-          let pickable = new RandomPickable();
-          pickable.init(el);
-          pickable.trigger(el);
-          $i.expect($i.Move.add).called().to.equal(0);
-        });
+        $i.Bag[__selectChild__](el);
       });
     });
 

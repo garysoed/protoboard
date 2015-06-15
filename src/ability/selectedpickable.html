@@ -1,0 +1,67 @@
+<base href="..">
+
+<link rel="import" href="ability/pickable.html">
+<link rel="import" href="service/move.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="trigger/click.html">
+<link rel="import" href="utils.html">
+
+<script type="text/javascript">
+DI
+    .prefix('pb')
+    .bind('ability.SelectedPickable',
+        {
+          $: '/=',
+          Click: 'trigger.=',
+          Move: 'service.=',
+          Pickable: 'ability.=',
+          Utils: '='
+        },
+        $i => {
+
+  const __selectionFn__ = Symbol('selectionFn');
+
+  /**
+   * Element with this ability has content that can be picked and dragged around. When triggered,
+   * it calls a selection function specified in the constructor and picks up the element returned by
+   * that function. This child element can be dropped on elements with
+   * {{#crossLink "ability.Droppable"}}{{/crossLink}} ability.
+   *
+   * @constructor
+   * @class ability.SelectedPickable
+   * @param {Function} selectionFn Function that should return the element to be picked. This
+   *    function has one argument, which is the element that the ability is triggered on.
+   * @param {string} [name=pickable] Name of the ability.
+   * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
+   * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+   * @extends ability.Pickable
+   */
+  class SelectedPickable extends $i.Pickable {
+
+    constructor(
+        selectionFn,
+        name = 'pickable',
+        defaultTrigger = new $i.Click(),
+        defaultEnabled = true) {
+      super(name, defaultTrigger, defaultEnabled);
+      this[__selectionFn__] = selectionFn;
+    }
+
+    /**
+     * Picks up a random child element of the given element.
+     *
+     * @method doTrigger
+     * @param {Element} el The element whose child element should be randomly picked.
+     */
+    doTrigger(el) {
+      let child = this[__selectionFn__](el);
+      if (child) {
+        $i.Move.add(child);
+      }
+    }
+  }
+
+  return SelectedPickable;
+});
+</script>

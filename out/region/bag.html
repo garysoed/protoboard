@@ -2,12 +2,12 @@
 
 <link rel="import" href="ability/droppable.html">
 <link rel="import" href="ability/helpable.html">
-<link rel="import" href="ability/pickable.html">
+<link rel="import" href="ability/selectedpickable.html">
 <link rel="import" href="region/region.html">
 <link rel="import" href="service/config.html">
 <link rel="import" href="service/move.html">
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="trigger/click.html">
+<link rel="import" href="third_party/jquery.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
@@ -82,7 +82,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   Helpable: "ability.=",
   Key: "trigger.=",
   Move: "service.=",
-  Pickable: "ability.=",
+  SelectedPickable: "ability.=",
   Region: "region.=",
   Utils: "=",
   TEST_MODE: "/=?"
@@ -93,35 +93,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   var ATTR_PLACEHOLDER_CONTENT = "pb-placeholder-content";
 
   var __placeHolderEl__ = Symbol("placeHolderEl");
-
-  var RandomPickable = (function (_$i$Pickable) {
-    function RandomPickable() {
-      var name = arguments[0] === undefined ? "pickable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
-      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
-
-      _classCallCheck(this, RandomPickable);
-
-      _get(Object.getPrototypeOf(RandomPickable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
-    }
-
-    _inherits(RandomPickable, _$i$Pickable);
-
-    _createClass(RandomPickable, {
-      doTrigger: {
-        value: function doTrigger(el) {
-          var candidates = $i.Utils.toArray(el.children).filter(function (child) {
-            return $i.$(child).attr(ATTR_PLACEHOLDER) === undefined;
-          });
-          if (candidates.length > 0) {
-            $i.Move.add($i.Chance.pick(candidates));
-          }
-        }
-      }
-    });
-
-    return RandomPickable;
-  })($i.Pickable);
+  var __selectChild__ = Symbol("selectChild");
 
   var Bag = (function (_$i$Region) {
     function Bag() {
@@ -165,13 +137,16 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
   Bag.prototype[__placeHolderEl__] = null;
 
-  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Droppable("drop", new $i.Key("d")), new RandomPickable("pick", new $i.Key("q")));
+  Bag[__selectChild__] = function (el) {
+    var filtered = $i.Utils.toArray(el.children).filter(function (children) {
+      return $i.$(child).attr(ATTR_PLACEHOLDER) === undefined;
+    });
+    return filtered.length > 0 ? $i.Chance.pick(filtered) : null;
+  };
+
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Droppable("drop", new $i.Key("d")), new $i.SelectedPickable(Bag[__selectChild__], "pick", new $i.Key("q")));
 
   $i.$registry.add(EL_NAME, Bag);
-
-  if ($i.TEST_MODE) {
-    Bag.RandomPickable = RandomPickable;
-  }
 
   return Bag;
 });</script>

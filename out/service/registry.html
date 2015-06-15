@@ -85,6 +85,12 @@ DI.prefix("pb").bind("service.Registry", { Abilities: "ability.=", Config: "serv
 
           return this;
         }
+      },
+      reset: {
+        value: function reset() {
+          this[__elements__] = new Map();
+          this[__toRun__] = [];
+        }
       }
     });
 

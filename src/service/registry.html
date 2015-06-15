@@ -87,6 +87,11 @@ DI
       }
       return this;
     }
+
+    reset() {
+      this[__elements__] = new Map();
+      this[__toRun__] = [];
+    }
   }
 
   return Registry;
