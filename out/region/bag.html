@@ -138,7 +138,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   Bag.prototype[__placeHolderEl__] = null;
 
   Bag[__selectChild__] = function (el) {
-    var filtered = $i.Utils.toArray(el.children).filter(function (children) {
+    var filtered = $i.Utils.toArray(el.children).filter(function (child) {
       return $i.$(child).attr(ATTR_PLACEHOLDER) === undefined;
     });
     return filtered.length > 0 ? $i.Chance.pick(filtered) : null;

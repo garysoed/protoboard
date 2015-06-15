@@ -164,7 +164,7 @@ DI
    */
   Bag[__selectChild__] = function(el) {
     let filtered = $i.Utils.toArray(el.children).filter(
-        children => $i.$(child).attr(ATTR_PLACEHOLDER) === undefined);
+        child => $i.$(child).attr(ATTR_PLACEHOLDER) === undefined);
     return filtered.length > 0 ? $i.Chance.pick(filtered) : null;
   };
 
