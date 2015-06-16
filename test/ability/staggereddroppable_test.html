@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>ability.StaggeredDroppable Unit Tests</title>
+
+  <link rel="import" href="ability/staggereddroppable.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/chance.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="third_party/jquery.html">
+  <link rel="import" href="utils.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .constant('doc', document.currentScript.ownerDocument)
+      .constant('service.Move', {
+        movedElements: []
+      })
+      .run(
+          {
+            $: '/=',
+            Chance: '/=',
+            doc: '=',
+            expect: '/=',
+            Move: 'service.=',
+            StaggeredDroppable: 'ability.=',
+            Utils: '='
+          },
+          $i => {
+    describe('ability.StaggeredDroppable', () => {
+      let el;
+
+      beforeEach(done => {
+        el = $i.doc.createElement('div');
+        done();
+      });
+
+      describe('#init', () => {
+        it('should set the default probabilities if not specified on the element', () => {
+          const ability =
+              new $i.StaggeredDroppable(undefined, undefined, undefined, [0.3, 0.2, 0.6]);
+          ability.init(el);
+          $i.expect($i.$(el).attr(ability.attrChances)).to.equal('0.3 0.2 0.6');
+        });
+        it('should not set the default probabilities if specified on the element', () => {
+          const initValue = '0.1 0.2';
+
+          const ability = new $i.StaggeredDroppable(undefined, undefined, undefined, [0.3, 0.4]);
+          $i.$(el).attr(ability.attrChances, initValue);
+          $i.expect($i.$(el).attr(ability.attrChances)).to.equal(initValue);
+        });
+      });
+
+      describe('#updateConfig', () => {
+        let ability;
+
+        beforeEach(done => {
+          ability = new $i.StaggeredDroppable();
+          ability.init(el);
+          done();
+        });
+
+        it('should not throw exception if valid', () => {
+          $i.$(el).attr(ability.attrChances, '0.2 0.4 0.5');
+        });
+        it('should throw exception if the chances attribute is not a list', () => {
+          $i.$(el).removeAttr(ability.attrChances);
+          $i.expect(() => ability.updateConfig(el)).to.throw('list');
+        });
+        it('should throw exception if one of the chances attribute is not a float', () => {
+          $i.$(el).attr(ability.attrChances, 'notAFloat');
+          $i.expect(() => ability.updateConfig(el)).to.throw('float');
+        });
+        it('should throw exception if one of the chances attribute is < 0', () => {
+          $i.$(el).attr(ability.attrChances, '-1');
+          $i.expect(() => ability.updateConfig(el)).to.throw('probability');
+        });
+        it('should throw exception if one of the chances attribute is > 1', () => {
+          $i.$(el).attr(ability.attrChances, '3');
+          $i.expect(() => ability.updateConfig(el)).to.throw('probability');
+        });
+        it('should remove the pb-stagger-level attribute on child elements in levels that have been removed', () => {
+          const child = $i.doc.createElement('div');
+          $i.$(child).attr('pb-stagger-level', 1);
+          el.appendChild(child);
+
+          $i.$(el).attr(ability.attrChances, '0.5');
+          ability.updateConfig(el);
+          $i.expect($i.$(child).attr('pb-stagger-level')).to.be.undefined();
+        });
+      });
+
+      describe('#doTrigger', () => {
+        let ability;
+
+        beforeEach(done => {
+          ability = new $i.StaggeredDroppable();
+          ability.init(el);
+          done();
+        });
+
+        it('should add the moved element as a child element', () => {
+          const movedEl = $i.doc.createElement('div');
+          $i.Move.movedElements = [movedEl];
+          ability.trigger(el);
+          $i.expect($i.Utils.toArray(el.children)).to.eql([movedEl]);
+        });
+        it('should push the elements in the different levels', () => {
+          $i.$(el).attr(ability.attrChances, '0.2 0.6');
+          const level0Child = $i.doc.createElement('div');
+          $i.$(level0Child).attr('pb-stagger-level', 0);
+          el.appendChild(level0Child);
+
+          const level1Child = $i.doc.createElement('div');
+          $i.$(level1Child).attr('pb-stagger-level', 1);
+          el.appendChild(level1Child);
+
+          const movedEl = $i.doc.createElement('div');
+          movedEl.id = 'moved';
+          $i.Move.movedElements = [movedEl];
+
+          $i.Chance.binom = (coll, opt) => {
+            if (opt.likelihood === 80) {
+              // The movedEl is stuck at level 0.
+              return [movedEl];
+            } else if (opt.likelihood === 40) {
+              // Only level1Child is stuck at level 1
+              return [level1Child];
+            } else {
+              throw Error(`Unknown likelihood: ${likelihood}`);
+            }
+          };
+
+          ability.trigger(el);
+
+          $i.expect($i.$(movedEl).attr('pb-stagger-level')).to.equal('0');
+          $i.expect($i.$(level0Child).attr('pb-stagger-level')).to.be.undefined();
+          $i.expect($i.$(level1Child).attr('pb-stagger-level')).to.equal('1');
+        });
+      });
+
+      describe('#isInStaggerState', () => {
+        let droppable;
+        let el;
+
+        beforeEach(done => {
+          droppable = new $i.StaggeredDroppable();
+          el = $i.doc.createElement('div');
+          done();
+        });
+
+        it('should return true if the stagger level is non zero', () => {
+          $i.$(el).attr('pb-stagger-level', 1);
+          $i.expect(droppable.isInStaggerState(el)).to.be.true();
+        });
+        it('should return true if the stagger level is zero', () => {
+          $i.$(el).attr('pb-stagger-level', 0);
+          $i.expect(droppable.isInStaggerState(el)).to.be.true();
+        });
+        it('should return false if the stagger level does not exist', () => {
+          $i.expect(droppable.isInStaggerState(el)).to.be.false();
+        });
+      });
+    });
+  });
+  </script>
+</body>

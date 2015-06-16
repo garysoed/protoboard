@@ -46,125 +46,13 @@
       $i.$registry.register($i.doc, $i.Config);
     });
 
-    describe('$TowerDroppable', () => {
-      let el;
-
-      beforeEach(done => {
-        el = $i.doc.createElement('div');
-        done();
-      });
-
-      describe('#init', () => {
-        it('should set the default probabilities if not specified on the element', () => {
-          const ability = new Droppable(undefined, undefined, undefined, [0.3, 0.2, 0.6]);
-          ability.init(el);
-          $i.expect($i.$(el).attr(ability.attrChances)).to.equal('0.3 0.2 0.6');
-        });
-        it('should not set the default probabilities if specified on the element', () => {
-          const initValue = '0.1 0.2';
-
-          const ability = new Droppable(undefined, undefined, undefined, [0.3, 0.4]);
-          $i.$(el).attr(ability.attrChances, initValue);
-          $i.expect($i.$(el).attr(ability.attrChances)).to.equal(initValue);
-        });
-      });
-
-      describe('#updateConfig', () => {
-        let ability;
-
-        beforeEach(done => {
-          ability = new Droppable();
-          ability.init(el);
-          done();
-        });
-
-        it('should not throw exception if valid', () => {
-          $i.$(el).attr(ability.attrChances, '0.2 0.4 0.5');
-        });
-        it('should throw exception if the chances attribute is not a list', () => {
-          $i.$(el).removeAttr(ability.attrChances);
-          $i.expect(() => ability.updateConfig(el)).to.throw('list');
-        });
-        it('should throw exception if one of the chances attribute is not a float', () => {
-          $i.$(el).attr(ability.attrChances, 'notAFloat');
-          $i.expect(() => ability.updateConfig(el)).to.throw('float');
-        });
-        it('should throw exception if one of the chances attribute is < 0', () => {
-          $i.$(el).attr(ability.attrChances, '-1');
-          $i.expect(() => ability.updateConfig(el)).to.throw('probability');
-        });
-        it('should throw exception if one of the chances attribute is > 1', () => {
-          $i.$(el).attr(ability.attrChances, '3');
-          $i.expect(() => ability.updateConfig(el)).to.throw('probability');
-        });
-        it('should remove the pb-tower-level attribute on child elements in levels that have been removed', () => {
-          const child = $i.doc.createElement('div');
-          $i.$(child).attr('pb-tower-level', 1);
-          el.appendChild(child);
-
-          $i.$(el).attr(ability.attrChances, '0.5');
-          ability.updateConfig(el);
-          $i.expect($i.$(child).attr('pb-tower-level')).to.be.undefined();
-        });
-      });
-
-      describe('#doTrigger', () => {
-        let ability;
-
-        beforeEach(done => {
-          ability = new Droppable();
-          ability.init(el);
-          done();
-        });
-
-        it('should add the moved element as a child element', () => {
-          const movedEl = $i.doc.createElement('div');
-          $i.Move.movedElements = [movedEl];
-          ability.trigger(el);
-          $i.expect($i.Utils.toArray(el.children)).to.eql([movedEl]);
-        });
-        it('should push the elements in the different levels', () => {
-          $i.$(el).attr(ability.attrChances, '0.2 0.6');
-          const level0Child = $i.doc.createElement('div');
-          $i.$(level0Child).attr('pb-tower-level', 0);
-          el.appendChild(level0Child);
-
-          const level1Child = $i.doc.createElement('div');
-          $i.$(level1Child).attr('pb-tower-level', 1);
-          el.appendChild(level1Child);
-
-          const movedEl = $i.doc.createElement('div');
-          movedEl.id = 'moved';
-          $i.Move.movedElements = [movedEl];
-
-          $i.Chance.binom = (coll, opt) => {
-            if (opt.likelihood === 80) {
-              // The movedEl is stuck at level 0.
-              return [movedEl];
-            } else if (opt.likelihood === 40) {
-              // Only level1Child is stuck at level 1
-              return [level1Child];
-            } else {
-              throw Error(`Unknown likelihood: ${likelihood}`);
-            }
-          };
-
-          ability.trigger(el);
-
-          $i.expect($i.$(movedEl).attr('pb-tower-level')).to.equal('0');
-          $i.expect($i.$(level0Child).attr('pb-tower-level')).to.be.undefined();
-          $i.expect($i.$(level1Child).attr('pb-tower-level')).to.equal('1');
-        });
-      });
-    });
-
     describe('get pickableChildCount', () => {
       it('should return the correct number of child count', () => {
         let tower = $i.doc.createElement('pb-r-cubetower');
         Object.setPrototypeOf(tower, $i.CubeTower.prototype);
 
         let stuckEl = $i.doc.createElement('div');
-        $i.$(stuckEl).attr('pb-tower-level', 1);
+        $i.$(stuckEl).attr('pb-stagger-level', 1);
         tower.appendChild(stuckEl);
         tower.appendChild($i.doc.createElement('div'));
         tower.appendChild($i.doc.createElement('div'));

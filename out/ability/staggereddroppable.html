@@ -1,0 +1,136 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/droppable.html">
+<link rel="import" href="check.html">
+<link rel="import" href="service/move.html">
+<link rel="import" href="third_party/chance.html">
+<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<script type="text/javascript">"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").bind("ability.StaggeredDroppable", {
+  $: "/=",
+  Chance: "/=",
+  Check: "=",
+  Droppable: "ability.=",
+  Key: "trigger.=",
+  Move: "service.=",
+  Utils: "=" }, function ($i) {
+  var __defaultProbabilities__ = Symbol();
+
+  var ATTR_STAGGER_LEVEL = "pb-stagger-level";
+
+  var StaggeredDroppable = (function (_$i$Droppable) {
+    function StaggeredDroppable() {
+      var name = arguments[0] === undefined ? "drop" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Key("d") : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+      var defaultProbabilities = arguments[3] === undefined ? [1] : arguments[3];
+
+      _classCallCheck(this, StaggeredDroppable);
+
+      _get(Object.getPrototypeOf(StaggeredDroppable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
+      this[__defaultProbabilities__] = defaultProbabilities;
+    }
+
+    _inherits(StaggeredDroppable, _$i$Droppable);
+
+    _createClass(StaggeredDroppable, {
+      init: {
+        value: function init(el) {
+          if ($i.$(el).attr(this.attrChances) === undefined) {
+            $i.$(el).attr(this.attrChances, this[__defaultProbabilities__].join(" "));
+          }
+
+          _get(Object.getPrototypeOf(StaggeredDroppable.prototype), "init", this).call(this, el);
+        }
+      },
+      updateConfig: {
+        value: function updateConfig(el) {
+          _get(Object.getPrototypeOf(StaggeredDroppable.prototype), "updateConfig", this).call(this, el);
+
+          var probabilities = $i.Check($i.$(el).attr(this.attrChances)).isList().orThrows().map(function (i) {
+            return $i.Check(i).isFloat().orThrows();
+          });
+
+          probabilities.forEach(function (probability) {
+            if (probability < 0 || probability > 1) {
+              throw new Error("Invalid probability value: " + probability);
+            }
+          });
+
+          $i.Utils.toArray(el.querySelectorAll("[" + ATTR_STAGGER_LEVEL + "]")).forEach(function (child) {
+            var level = $i.Check($i.$(child).attr(ATTR_STAGGER_LEVEL)).isInt().orThrows();
+            if (level >= probabilities.length) {
+              $i.$(child).attr(ATTR_STAGGER_LEVEL, null);
+            }
+          });
+        }
+      },
+      doTrigger: {
+        value: function doTrigger(el) {
+          var _this = this;
+
+          var movedElement = $i.Move.movedElements.values().next().value;
+          if (movedElement) {
+            (function () {
+              el.appendChild(movedElement);
+
+              var droppingEls = new Set();
+              droppingEls.add(movedElement);
+
+              var probabilities = $i.Check($i.$(el).attr(_this.attrChances)).isList().orThrows().map(function (i) {
+                return $i.Check(i).isFloat().orThrows();
+              });
+
+              for (var level = 0; level < probabilities.length; level++) {
+                (function (level) {
+                  var passChance = probabilities[level] * 100;
+
+                  $i.Utils.toArray(el.querySelectorAll("[" + ATTR_STAGGER_LEVEL + "=\"" + level + "\"]")).forEach(function (child) {
+                    return droppingEls.add(child);
+                  });
+
+                  var stuckEls = $i.Chance.binom(droppingEls, { likelihood: 100 - passChance });
+                  stuckEls.forEach(function (stuckEl) {
+                    $i.$(stuckEl).attr(ATTR_STAGGER_LEVEL, level);
+                    droppingEls["delete"](stuckEl);
+                  });
+                })(level);
+              }
+
+              droppingEls.forEach(function (passEl) {
+                return $i.$(passEl).attr(ATTR_STAGGER_LEVEL, null);
+              });
+            })();
+          }
+        }
+      },
+      isInStaggerState: {
+        value: function isInStaggerState(child) {
+          return !Number.isNaN($i.Check($i.$(child).attr("" + ATTR_STAGGER_LEVEL)).isInt().orUse(NaN));
+        }
+      },
+      attrChances: {
+        get: function () {
+          return "" + this.attrName + "-chances";
+        }
+      }
+    });
+
+    return StaggeredDroppable;
+  })($i.Droppable);
+
+  return StaggeredDroppable;
+});</script>
+</head><body></body></html>

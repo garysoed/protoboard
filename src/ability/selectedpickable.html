@@ -30,15 +30,19 @@ DI
    *
    * @constructor
    * @class ability.SelectedPickable
-   * @param {Function} selectionFn Function that should return the element to be picked. This
-   *    function has one argument, which is the element that the ability is triggered on.
-   * @param {string} [name=pickable] Name of the ability.
-   * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
-   * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
    * @extends ability.Pickable
    */
   class SelectedPickable extends $i.Pickable {
 
+    /**
+     * @constructor
+     * @class ability.SelectedPickable
+     * @param {Function} selectionFn Function that should return the element to be picked. This
+     *    function has one argument, which is the element that the ability is triggered on.
+     * @param {string} [name=pickable] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
+     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     */
     constructor(
         selectionFn,
         name = 'pickable',
