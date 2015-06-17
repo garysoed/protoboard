@@ -1,0 +1,90 @@
+<base href="..">
+
+<link rel="import" href="ability/droppable.html">
+<link rel="import" href="service/move.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<script type="text/javascript">
+DI
+    .prefix('pb')
+    .bind('ability.OrderedDroppable',
+        {
+          Droppable: 'ability.=',
+          Key: 'trigger.=',
+          Move: 'service.=',
+          Utils: '='
+        },
+        $i => {
+
+  // Private constants
+  const __isVertical__ = Symbol();
+
+  /**
+   * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
+   * Elements with this ability adds the picked element as its child element when triggered.
+   * The position of the dropped element depends on the mouse position when the trigger
+   * occured.
+   *
+   * @class ability.OrderedDroppable
+   * @extends ability.Droppable
+   * @since 0.3.1
+   */
+  class OrderedDroppable extends $i.Droppable {
+
+    /**
+     * @constructor
+     * @class ability.OrderedDroppable
+     * @param {string} [name=droppable] Name of the ability.
+     * @param {trigger.Trigger} [defaultTrigger=trigger.Key] Default trigger for the ability.
+     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
+     * @param {boolean} [isVertical=false] True iff the children are arranged vertically.
+     */
+    constructor(
+        name = 'droppable',
+        defaultTrigger = new $i.Key('d'),
+        defaultEnabled = true,
+        isVertical = false) {
+      super(name, defaultTrigger, defaultEnabled);
+      this[__isVertical__] = isVertical;
+    }
+
+    /**
+     * Drops the element added to {{#crossLink "service.Move"}}{{/crossLink}} as a child of the
+     * given element. The position of the dropped child depends on the position of the mouse at the
+     * trigger time relative to the other children.
+     *
+     * @method doTrigger
+     * @param {Element} el The element to drop the picked element into.
+     */
+    doTrigger(el) {
+      let movedElement = $i.Move.movedElements.values().next().value;
+      if (movedElement) {
+        // Go through every children and find the index that the element should be.
+        let dropped = false;
+        for (let child of $i.Utils.toArray(el.children)) {
+          let rect = child.getBoundingClientRect();
+          if (this[__isVertical__]) {
+            if (!dropped && (rect.top + rect.height / 2 > $i.Move.mouseY)) {
+              dropped = true;
+              el.insertBefore(movedElement, child);
+            }
+          } else {
+            if (!dropped && (rect.left + rect.width / 2 > $i.Move.mouseX)) {
+              dropped = true;
+              el.insertBefore(movedElement, child);
+            }
+          }
+        }
+
+        if (!dropped) {
+          el.appendChild(movedElement);
+        }
+      }
+    }
+  }
+
+  return OrderedDroppable;
+});
+</script>

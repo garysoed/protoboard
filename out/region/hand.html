@@ -1,12 +1,9 @@
 <html><head><base href="..">
 
-<link rel="import" href="ability/abilities.html">
-<link rel="import" href="ability/droppable.html">
+<link rel="import" href="ability/ordereddroppable.html">
 <link rel="import" href="ability/helpable.html">
-<link rel="import" href="check.html">
 <link rel="import" href="region/region.html">
 <link rel="import" href="service/config.html">
-<link rel="import" href="service/move.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
@@ -60,80 +57,16 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   return $i.doc.querySelector("template");
 }).bind("region.Hand", {
   $registry: "=",
-  Abilities: "ability.=",
-  Check: "=",
   Config: "service.=",
-  Droppable: "ability.=",
+  doc: "=",
   Helpable: "ability.=",
   Key: "trigger.=",
-  Move: "service.=",
+  OrderedDroppable: "ability.=",
   Region: "region.=",
-  Utils: "=",
-  doc: "=",
   template: "=",
-  TEST_MODE: "/=?"
-}, function ($i) {
+  Utils: "=" }, function ($i) {
 
   var EL_NAME = "pb-r-hand";
-
-  var ReorderableDroppable = (function (_$i$Droppable) {
-    function ReorderableDroppable() {
-      var name = arguments[0] === undefined ? "droppable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new $i.Key("d") : arguments[1];
-      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
-
-      _classCallCheck(this, ReorderableDroppable);
-
-      _get(Object.getPrototypeOf(ReorderableDroppable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
-    }
-
-    _inherits(ReorderableDroppable, _$i$Droppable);
-
-    _createClass(ReorderableDroppable, {
-      doTrigger: {
-        value: function doTrigger(el) {
-          var movedElement = $i.Move.movedElements.values().next().value;
-          if (movedElement) {
-            var dropped = false;
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-              for (var _iterator = $i.Utils.toArray(el.children)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var child = _step.value;
-
-                var rect = child.getBoundingClientRect();
-                if (!dropped && rect.left + rect.width / 2 > $i.Move.mouseX) {
-                  dropped = true;
-                  el.insertBefore(movedElement, child);
-                }
-              }
-            } catch (err) {
-              _didIteratorError = true;
-              _iteratorError = err;
-            } finally {
-              try {
-                if (!_iteratorNormalCompletion && _iterator["return"]) {
-                  _iterator["return"]();
-                }
-              } finally {
-                if (_didIteratorError) {
-                  throw _iteratorError;
-                }
-              }
-            }
-
-            if (!dropped) {
-              el.appendChild(movedElement);
-            }
-          }
-        }
-      }
-    });
-
-    return ReorderableDroppable;
-  })($i.Droppable);
 
   var Hand = (function (_$i$Region) {
     function Hand() {
@@ -163,12 +96,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return Hand;
   })($i.Region);
 
-  $i.Config.add(EL_NAME, new $i.Helpable("help"), new ReorderableDroppable("drop", new $i.Key("d"), true));
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.OrderedDroppable("drop", new $i.Key("d"), true, false));
   $i.$registry.add(EL_NAME, Hand);
-
-  if ($i.TEST_MODE) {
-    Hand.ReorderableDroppable = ReorderableDroppable;
-  }
 
   return Hand;
 });</script>

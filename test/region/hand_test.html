@@ -16,10 +16,6 @@
   <script>
   DI
       .prefix('pb')
-      .constant('service.Move', {
-        movedElements: [],
-        mouseX: 0
-      })
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
       .run(
@@ -46,75 +42,6 @@
         hand.appendChild($i.doc.createElement('div'));
 
         $i.expect(hand.pickableChildCount).to.equal(3);
-      });
-    });
-
-    describe('$ReorderableDroppable', () => {
-      describe('#trigger', () => {
-        let el;
-        let droppable;
-
-        beforeEach(done => {
-          el = $i.doc.createElement('div');
-          droppable = new $i.Hand.ReorderableDroppable();
-          $i.$(el).attr(droppable.attrName, 'true');
-          done();
-        });
-
-        it('should insert before the correct child', () => {
-          let child1 = $i.doc.createElement('div');
-          $i._.spy(child1, 'getBoundingClientRect').overrideReturn({
-            left: 10,
-            width: 20
-          });
-
-          let child2 = $i.doc.createElement('div');
-          $i._.spy(child2, 'getBoundingClientRect').overrideReturn({
-            left: 35,
-            width: 20
-          });
-
-          el.appendChild(child1);
-          el.appendChild(child2);
-          el.classList.add('pb-over');
-
-          let dragged = $i.doc.createElement('div');
-
-          $i.Move.movedElements = [dragged];
-          $i.Move.mouseX = 40;
-
-          droppable.trigger(el);
-
-          $i.expect($i.Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
-        });
-        it('should insert as the last child if eventX is too far to the right', () => {
-          let child1 = $i.doc.createElement('div');
-          $i._.spy(child1, 'getBoundingClientRect').overrideReturn({
-            left: 10,
-            width: 20
-          });
-
-          let child2 = $i.doc.createElement('div');
-          $i._.spy(child2, 'getBoundingClientRect').overrideReturn({
-            left: 35,
-            width: 20
-          });
-
-          el.appendChild(child1);
-          el.appendChild(child2);
-
-          let dragged = $i.doc.createElement('div');
-          $i.Move.movedElements = [dragged];
-          $i.Move.mouseX = 50;
-
-          droppable.trigger(el);
-
-          $i.expect($i.Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
-        });
-        it('should not crash if there are no last dragged element', () => {
-          $i.Move.movedElements = [];
-          droppable.trigger(el);
-        });
       });
     });
 

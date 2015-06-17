@@ -1,0 +1,97 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/droppable.html">
+<link rel="import" href="service/move.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<script type="text/javascript">"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").bind("ability.OrderedDroppable", {
+  Droppable: "ability.=",
+  Key: "trigger.=",
+  Move: "service.=",
+  Utils: "="
+}, function ($i) {
+  var __isVertical__ = Symbol();
+
+  var OrderedDroppable = (function (_$i$Droppable) {
+    function OrderedDroppable() {
+      var name = arguments[0] === undefined ? "droppable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new $i.Key("d") : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+      var isVertical = arguments[3] === undefined ? false : arguments[3];
+
+      _classCallCheck(this, OrderedDroppable);
+
+      _get(Object.getPrototypeOf(OrderedDroppable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
+      this[__isVertical__] = isVertical;
+    }
+
+    _inherits(OrderedDroppable, _$i$Droppable);
+
+    _createClass(OrderedDroppable, {
+      doTrigger: {
+        value: function doTrigger(el) {
+          var movedElement = $i.Move.movedElements.values().next().value;
+          if (movedElement) {
+            var dropped = false;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = $i.Utils.toArray(el.children)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var child = _step.value;
+
+                var rect = child.getBoundingClientRect();
+                if (this[__isVertical__]) {
+                  if (!dropped && rect.top + rect.height / 2 > $i.Move.mouseY) {
+                    dropped = true;
+                    el.insertBefore(movedElement, child);
+                  }
+                } else {
+                  if (!dropped && rect.left + rect.width / 2 > $i.Move.mouseX) {
+                    dropped = true;
+                    el.insertBefore(movedElement, child);
+                  }
+                }
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator["return"]) {
+                  _iterator["return"]();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+
+            if (!dropped) {
+              el.appendChild(movedElement);
+            }
+          }
+        }
+      }
+    });
+
+    return OrderedDroppable;
+  })($i.Droppable);
+
+  return OrderedDroppable;
+});</script>
+</head><body></body></html>

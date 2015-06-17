@@ -1,12 +1,9 @@
 <base href="..">
 
-<link rel="import" href="ability/abilities.html">
-<link rel="import" href="ability/droppable.html">
+<link rel="import" href="ability/ordereddroppable.html">
 <link rel="import" href="ability/helpable.html">
-<link rel="import" href="check.html">
 <link rel="import" href="region/region.html">
 <link rel="import" href="service/config.html">
-<link rel="import" href="service/move.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
@@ -49,69 +46,20 @@ DI
     .bind('region.Hand',
         {
           $registry: '=',
-          Abilities: 'ability.=',
-          Check: '=',
           Config: 'service.=',
-          Droppable: 'ability.=',
+          doc: '=',
           Helpable: 'ability.=',
           Key: 'trigger.=',
-          Move: 'service.=',
+          OrderedDroppable: 'ability.=',
           Region: 'region.=',
-          Utils: '=',
-          doc: '=',
           template: '=',
-          TEST_MODE: '/=?'
+          Utils: '=',
         },
         $i => {
 
   const EL_NAME = 'pb-r-hand';
 
-  class ReorderableDroppable extends $i.Droppable {
 
-    /**
-     * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
-     * Elements with this ability adds the picked element as its child element when triggered.
-     * The position of the dropped element depends on the mouse position when the trigger
-     * occured.
-     *
-     * @constructor
-     * @class region.Hand.ReorderableDroppable
-     * @param {string} [name=droppable] Name of the ability.
-     * @param {trigger.Trigger} [defaultTrigger=trigger.Key] Default trigger for the ability.
-     * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
-     * @extends ability.Droppable
-     */
-    constructor(name = 'droppable', defaultTrigger = new $i.Key('d'), defaultEnabled = true) {
-      super(name, defaultTrigger, defaultEnabled);
-    }
-
-    /**
-     * Drops the element added to {{#crossLink "service.Move"}}{{/crossLink}} as a child of the
-     * given element. The position of the dropped child depends on the position of the mouse at the
-     * trigger time relative to the other children.
-     *
-     * @method doTrigger
-     * @param {Element} el The element to drop the picked element into.
-     */
-    doTrigger(el) {
-      let movedElement = $i.Move.movedElements.values().next().value;
-      if (movedElement) {
-        // Go through every children and find the index that the element should be.
-        let dropped = false;
-        for (let child of $i.Utils.toArray(el.children)) {
-          let rect = child.getBoundingClientRect();
-          if (!dropped && rect.left + rect.width / 2 > $i.Move.mouseX) {
-            dropped = true;
-            el.insertBefore(movedElement, child);
-          }
-        }
-
-        if (!dropped) {
-          el.appendChild(movedElement);
-        }
-      }
-    }
-  }
 
   /**
    * Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children
@@ -131,7 +79,7 @@ DI
    * ```
    *
    * Supported abilities:
-   * - {{#crossLink "region.Hand.ReorderableDroppable"}}drop{{/crossLink}}
+   * - {{#crossLink "ability.OrderedDroppable"}}drop{{/crossLink}}
    *
    * @class region.Hand
    * @extends region.Region
@@ -165,12 +113,8 @@ DI
   $i.Config.add(
       EL_NAME,
       new $i.Helpable('help'),
-      new ReorderableDroppable('drop', new $i.Key('d'), true));
+      new $i.OrderedDroppable('drop', new $i.Key('d'), true, false /* isVertical */));
   $i.$registry.add(EL_NAME, Hand);
-
-  if ($i.TEST_MODE) {
-    Hand.ReorderableDroppable = ReorderableDroppable;
-  }
 
   return Hand;
 });
