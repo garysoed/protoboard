@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>ability.FlexDroppable Unit Tests</title>
+
+  <link rel="import" href="ability/flexdroppable.html">
+  <link rel="import" href="service/registry.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="testutils.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="third_party/spies.html">
+  <link rel="import" href="utils.html">
+</head>
+<body>
+  <script>
+  DI
+      .prefix('pb')
+      .constant('doc', document.currentScript.ownerDocument)
+      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .constant('service.Move', {
+        movedElements: [],
+        remove: () => {},
+        mouseX: 0,
+        mouseY: 0
+      })
+      .run(
+          {
+            _: '/=',
+            doc: '=',
+            expect: '/=',
+            FlexDroppable: 'ability.=',
+            Move: 'service.=',
+            t: '=',
+            Utils: '='
+          },
+          $i => {
+
+    describe('ability.FlexDroppable', () => {
+      let el;
+      let flexDroppable;
+
+      let __mutationObserver__;
+      let __onDomMutation__ = $i.t.getSymbol($i.FlexDroppable.prototype, 'onDomMutation');
+
+      beforeEach(done => {
+        flexDroppable = new $i.FlexDroppable();
+        el = $i.doc.createElement('div');
+        flexDroppable.init(el);
+
+        __mutationObserver__ = $i.t.getSymbol(flexDroppable, 'mutationObserver');
+        done();
+      });
+
+      describe('#trigger', () => {
+        it('should append the last dragged element and position it correctly', () => {
+          let lastDraggedEl = $i.doc.createElement('div');
+          lastDraggedEl.attachedCallback = $i._.spiedFunction();
+          $i._.spy(lastDraggedEl, 'getBoundingClientRect').overrideReturn({
+            left: 56,
+            top: 78,
+            width: 24,
+            height: 68
+          });
+
+          $i.Move.movedElements = [lastDraggedEl];
+          $i.Move.mouseX = 90;
+          $i.Move.mouseY = 12;
+
+          flexDroppable.trigger(el);
+
+          $i.expect($i.Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
+          $i.expect(lastDraggedEl.style.left).to.be.equal('22px');
+          $i.expect(lastDraggedEl.style.top).to.be.equal('-100px');
+        });
+      });
+
+      describe('__onDomMutation__', () => {
+        it('should set the left and top of removed elements to 0, 0', () => {
+          let el1 = { style: {} };
+          let el2 = { style: {} };
+          let el3 = { style: {} };
+
+          flexDroppable[__onDomMutation__]([
+            { removedNodes: [ el1, el2 ] },
+            { removedNodes: [ el3 ] }
+          ]);
+
+          $i.expect(el1.style).to.be.eql({ left: '', top: '' });
+          $i.expect(el2.style).to.be.eql({ left: '', top: '' });
+          $i.expect(el3.style).to.be.eql({ left: '', top: '' });
+        });
+      });
+
+      afterEach(done => {
+        $i._.reset();
+        done();
+      });
+    });
+  });
+  </script>
+</body>

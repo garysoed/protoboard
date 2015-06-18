@@ -19,12 +19,6 @@
   DI
       .prefix('pb')
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .constant('service.Move', {
-        movedElements: [],
-        remove: () => {},
-        mouseX: 0,
-        mouseY: 0
-      })
       .constant('doc', document.currentScript.ownerDocument)
       .run(
           {
@@ -38,9 +32,6 @@
           },
           $i => {
 
-  let FlexDroppable = $i.Rect.FlexDroppable;
-  let __onDomMutation__ = $i.t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
-
   describe('Rect', () => {
     describe('get pickableChildCount', () => {
       it('should return the correct number of children', () => {
@@ -52,62 +43,6 @@
         rect.appendChild($i.doc.createElement('div'));
 
         $i.expect(rect.pickableChildCount).to.equal(3);
-      });
-    });
-
-    describe('$FlexDroppable', () => {
-      let el;
-      let flexDroppable;
-
-      let __mutationObserver__;
-
-      beforeEach(done => {
-        flexDroppable = new FlexDroppable();
-        el = $i.doc.createElement('div');
-        flexDroppable.init(el);
-
-        __mutationObserver__ = $i.t.getSymbol(flexDroppable, 'mutationObserver');
-        done();
-      });
-
-      describe('#trigger', () => {
-        it('should append the last dragged element and position it correctly', () => {
-          let lastDraggedEl = $i.doc.createElement('div');
-          lastDraggedEl.attachedCallback = $i._.spiedFunction();
-          $i._.spy(lastDraggedEl, 'getBoundingClientRect').overrideReturn({
-            left: 56,
-            top: 78,
-            width: 24,
-            height: 68
-          });
-
-          $i.Move.movedElements = [lastDraggedEl];
-          $i.Move.mouseX = 90;
-          $i.Move.mouseY = 12;
-
-          flexDroppable.trigger(el);
-
-          $i.expect($i.Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
-          $i.expect(lastDraggedEl.style.left).to.be.equal('22px');
-          $i.expect(lastDraggedEl.style.top).to.be.equal('-100px');
-        });
-      });
-
-      describe('__onDomMutation__', () => {
-        it('should set the left and top of removed elements to 0, 0', () => {
-          let el1 = { style: {} };
-          let el2 = { style: {} };
-          let el3 = { style: {} };
-
-          flexDroppable[__onDomMutation__]([
-            { removedNodes: [ el1, el2 ] },
-            { removedNodes: [ el3 ] }
-          ]);
-
-          $i.expect(el1.style).to.be.eql({ left: '', top: '' });
-          $i.expect(el2.style).to.be.eql({ left: '', top: '' });
-          $i.expect(el3.style).to.be.eql({ left: '', top: '' });
-        });
       });
     });
 

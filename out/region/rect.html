@@ -1,13 +1,11 @@
 <html><head><base href="..">
 
 <link rel="import" href="ability/abilities.html">
-<link rel="import" href="ability/droppable.html">
+<link rel="import" href="ability/flexdroppable.html">
 <link rel="import" href="ability/helpable.html">
-<link rel="import" href="check.html">
 <link rel="import" href="region/region.html">
 <link rel="import" href="service/config.html">
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="trigger/click.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
@@ -34,8 +32,6 @@
 
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
@@ -48,71 +44,14 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   $registry: "=",
   doc: "=",
   template: "=",
-  Check: "=",
-  Click: "trigger.=",
   Config: "service.=",
-  Droppable: "ability.=",
+  FlexDroppable: "ability.=",
   Helpable: "ability.=",
   Key: "trigger.=",
-  Move: "service.=",
   Region: "region.=",
   Utils: "="
 }, function ($i) {
   var EL_NAME = "pb-r-rect";
-
-  var __mutationObserver__ = Symbol("mutationObserver");
-  var __onDomMutation__ = Symbol("onDomMutation");
-
-  var FlexDroppable = (function (_$i$Droppable) {
-    function FlexDroppable() {
-      var name = arguments[0] === undefined ? "droppable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
-      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
-
-      _classCallCheck(this, FlexDroppable);
-
-      _get(Object.getPrototypeOf(FlexDroppable.prototype), "constructor", this).call(this, name, defaultTrigger, defaultEnabled);
-      this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
-    }
-
-    _inherits(FlexDroppable, _$i$Droppable);
-
-    _createComputedClass(FlexDroppable, [{
-      key: __onDomMutation__,
-      value: function (mutations) {
-        mutations.forEach(function (mutation) {
-          $i.Utils.toArray(mutation.removedNodes).forEach(function (removedNode) {
-            removedNode.style.left = "";
-            removedNode.style.top = "";
-          });
-        });
-      }
-    }, {
-      key: "init",
-      value: function init(el) {
-        _get(Object.getPrototypeOf(FlexDroppable.prototype), "init", this).call(this, el);
-
-        this[__mutationObserver__].observe(el, { childList: true });
-      }
-    }, {
-      key: "doTrigger",
-      value: function doTrigger(el) {
-        var movedElement = $i.Move.movedElements.values().next().value;
-
-        if (movedElement) {
-          el.appendChild(movedElement);
-
-          var rect = movedElement.getBoundingClientRect();
-          var dLeft = $i.Move.mouseX - rect.left - rect.width / 2;
-          var dTop = $i.Move.mouseY - rect.top - rect.height / 2;
-          movedElement.style.left = "" + (movedElement.offsetLeft + dLeft) + "px";
-          movedElement.style.top = "" + (movedElement.offsetTop + dTop) + "px";
-        }
-      }
-    }]);
-
-    return FlexDroppable;
-  })($i.Droppable);
 
   var Rect = (function (_$i$Region) {
     function Rect() {
@@ -142,10 +81,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return Rect;
   })($i.Region);
 
-  $i.Config.add(EL_NAME, new $i.Helpable("help"), new FlexDroppable("drop", new $i.Key("d"), true));
+  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.FlexDroppable("drop", new $i.Key("d"), true));
   $i.$registry.add(EL_NAME, Rect);
-
-  Rect.FlexDroppable = FlexDroppable;
 
   return Rect;
 });</script>
