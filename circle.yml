@@ -7,4 +7,4 @@ dependencies:
 
 test:
   override:
-    - node_modules/.bin/gulp check
+    - node_modules/.bin/gulp test
