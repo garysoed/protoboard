@@ -16,139 +16,135 @@ var minimist = require('minimist');
 
 var loadtheme = require('./loadtheme');
 
-var options = minimist(process.argv.slice(2), {
-  'string': 'theme',
-  'default': {
-    'theme': './themes/slateblue.json'
-  }
-});
+function runKarma(singleRun, callback) {
+  karma.start({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: singleRun
+  }, callback);
+};
 
-function subJsHint() {
-  return combine(
-      jshint.extract(),
-      jshint({
+function compileTheme() {
+  var options = minimist(process.argv.slice(2), {
+    'string': 'theme',
+    'default': {
+      'theme': './themes/slateblue.json'
+    }
+  });
+  return myth({ 'variables': loadtheme(options.theme) });
+}
+
+// Tasks
+gulp.task('copy-deps', gulp.parallel(
+    function _copyBower() {
+      return gulp
+          .src([
+              'bower_components/animate.css/animate.min.css',
+              'bower_components/chance/chance.js',
+              'bower_components/di-js/out/bin.min.js',
+              'bower_components/hammerjs/hammer.js',
+              'bower_components/handlebars/handlebars.js',
+              'bower_components/jquery/dist/jquery.js',
+              'bower_components/Keypress/keypress.js',
+              'bower_components/listener/out/bin.min.js',
+            ],
+            { base: 'bower_components' })
+          .pipe(gulp.dest('out/third_party'));
+    },
+    function _copyBabelPolyfill() {
+      return gulp
+          .src([
+              'node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js',
+            ],
+            { base: 'node_modules/gulp-babel/node_modules' })
+          .pipe(gulp.dest('out/third_party'));
+    }
+));
+
+gulp.task('js-hint', function() {
+  return gulp.src(['./src/**/*.html', './test/**/*.html'])
+      .pipe(jshint.extract())
+      .pipe(jshint({
         esnext: true,
         laxbreak: true,
         sub: true
-      }),
-      jshint.reporter('jshint-stylish'),
-      jshint.reporter('fail'));
-}
-
-function subBabel() {
-  var scriptSubs = subs('script');
-  return combine(
-      scriptSubs.extract,
-      babel({modules: 'ignore', comments: false}),
-      scriptSubs.inject);
-}
-
-function subMyth() {
-  return combine(myth({ 'variables': loadtheme(options.theme) }));
-}
-
-function subMythHtml() {
-  var styleSubs = subs('style');
-  return combine(
-      styleSubs.extract,
-      subMyth(),
-      styleSubs.inject);
-}
-
-gulp.task('copy', ['copy-babel-polyfill'], function() {
-  return gulp
-      .src([
-          'bower_components/animate.css/animate.min.css',
-          'bower_components/chance/chance.js',
-          'bower_components/di-js/out/bin.min.js',
-          'bower_components/hammerjs/hammer.js',
-          'bower_components/handlebars/handlebars.js',
-          'bower_components/jquery/dist/jquery.js',
-          'bower_components/Keypress/keypress.js',
-          'bower_components/listener/out/bin.min.js',
-        ],
-        { base: 'bower_components' })
-      .pipe(gulp.dest('out/third_party'));
+      }))
+      .pipe(jshint.reporter('jshint-stylish'))
+      .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('copy-babel-polyfill', function() {
-  return gulp
-      .src([
-          'node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js',
-        ],
-        { base: 'node_modules/gulp-babel/node_modules' })
-      .pipe(gulp.dest('out/third_party'));
+gulp.task('source', gulp.series(
+    gulp.parallel('js-hint', 'copy-deps'),
+    function _source() {
+      var styleSubs = subs('style');
+      var scriptSubs = subs('script');
 
+      return gulp.src(['./src/**/*.html'])
+          .pipe(scriptSubs.extract)
+              .pipe(babel({modules: 'ignore', comments: false}))
+          .pipe(scriptSubs.inject)
+          .pipe(styleSubs.extract)
+              .pipe(compileTheme())
+          .pipe(styleSubs.inject)
+          .pipe(gulp.dest('out'));
+    }
+));
+
+gulp.task('test-source', gulp.series(
+    'js-hint',
+    function _testSource() {
+      var scriptSubs = subs('script');
+
+      return gulp.src(['./test/**/*_test.html', './test/testbase.html'])
+          .pipe(scriptSubs.extract)
+              .pipe(babel({modules: 'ignore', comments: false}))
+          .pipe(scriptSubs.inject)
+          .pipe(gulp.dest('out'));
+    }
+));
+
+gulp.task('doc', gulp.series(
+    function _genDoc() {
+      shell.task('yuidoc --config yuidoc.json');
+    },
+    function _packDoc() {
+      return gulp.src(['doc/**'])
+          .pipe(gulp.dest('../protoboard-doc'));
+    }
+));
+gulp.task('clean', function() {
+  shell.task('rm -r out doc');
 });
 
-gulp.task('clean', shell.task('rm -r out doc'));
-
-gulp.task('doc-gen', shell.task('yuidoc --config yuidoc.json'));
-
-gulp.task('doc', ['doc-gen'], function() {
-  return gulp.src(['doc/**'])
-      .pipe(gulp.dest('../protoboard-doc'));
+gulp.task('compile', gulp.parallel('source', 'test-source', 'copy-deps'));
+gulp.task('test', gulp.series(
+    'compile',
+    function _test(done) {
+      runKarma(true /* singleRun */, done);
+    }
+));
+gulp.task('test-server', function(done) {
+  runKarma(false /* singleRun */, done);
 });
 
-gulp.task('jshint', function() {
-  return gulp.src(['./src/**/*.html', './test/**/*.html'])
-      .pipe(plumber())
-      .pipe(subJsHint());
-})
+gulp.task('watch', gulp.parallel(
+    gulp.series(
+        'source',
+        function _watchSources() {
+          gulp.watch('src/**/*.html', gulp.task('source'));
+        }),
+    gulp.series(
+        'test-source',
+        function _watchTestSources() {
+          gulp.watch('test/**/*.html', gulp.task('test-source'));
+        })
+    ));
 
-gulp.task('src', ['jshint', 'copy'], function() {
-  return gulp.src(['./src/**/*.html'])
-      .pipe(subBabel())
-      .pipe(subMythHtml())
-      .pipe(gulp.dest('out'));
-});
-
-gulp.task('test', ['jshint'], function() {
-  return gulp.src(['./test/**/*_test.html', './test/testbase.html'])
-      .pipe(subBabel())
-      .pipe(gulp.dest('out'));
-});
-
-gulp.task('karma', ['compile'], function(done) {
-  karma.start({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done);
-});
-
-gulp.task('karma-dev', ['compile'], function(done) {
-  karma.start({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: false
-  }, done);
-});
-
-gulp.task('watch', ['compile'], function() {
-  // src
-  gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
-    var base = event.path.substring(__dirname.length).split('/')[1];
-    gulp.src(event.path, {base: base})
-        .pipe(plumber())
-        .pipe(subBabel())
-        .pipe(subMythHtml())
-        .pipe(debug({title: chalk.green('src')}))
-        .pipe(gulp.dest('out'));
-  });
-
-  // JSHint
-  gulp.watch(['src/**/*.html', 'test/**/*.html'], function(event) {
-    var base = event.path.substring(__dirname.length).split('/')[1];
-    gulp.src(event.path, {base: base})
-        .pipe(plumber())
-        .pipe(subJsHint())
-        .pipe(debug({title: chalk.green('jshint')}));
-  });
-});
-
-gulp.task('compile', ['src', 'test', 'copy']);
-gulp.task('pack', ['compile', 'doc'], function() {
-  return gulp.src('out/**/*')
-      .pipe(zip('bin.zip'))
-      .pipe(gulp.dest('dist'));
-});
-gulp.task('check', ['karma']);
+gulp.task('pack', gulp.series(
+    'clean',
+    gulp.parallel('compile', 'doc'),
+    function _pack() {
+      return gulp.src('out/**/*')
+          .pipe(zip('bin.zip'))
+          .pipe(gulp.dest('dist'));
+    }
+))

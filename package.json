@@ -20,7 +20,7 @@
     "chai": "^1.9.2",
     "chalk": "^0.5.1",
     "doctheme": "git://github.com/garysoed/doctheme",
-    "gulp": "^3.8.10",
+    "gulp": "git://github.com/gulpjs/gulp#4.0",
     "gulp-babel": "^4.0.0",
     "gulp-debug": "^2.0.0",
     "gulp-html-subs": "git://github.com/garysoed/gulp-html-subs",
