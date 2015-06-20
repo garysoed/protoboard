@@ -1,0 +1,59 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/droppable.html">
+<link rel="import" href="ability/helpable.html">
+<link rel="import" href="ability/selectedpickable.html">
+<link rel="import" href="region/region.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="service/move.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<template id="main">
+  <style>:host {
+  height: 50px;
+  width: 50px;
+}
+
+#root {
+  outline: 1px solid #8982B8;
+  outline-offset: -1px;
+  width: 100%;
+  height: 100%;
+}
+
+/* The placeholder */
+
+::content > :not([pb-placeholder]) {
+  display: none;
+}
+
+::content > [pb-placeholder] {
+  position: absolute;
+  background-color: #CBC7E2;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  width: 50px;
+  outline: 1px solid #8982B8;
+  outline-offset: -1px;
+  z-index: -1;
+}
+
+::content > [pb-placeholder]:only-child {
+  display: none;
+}</style>
+
+  <div id="root">
+    <content></content>
+  </div>
+</template>
+
+<template id="placeholder">
+  <div class="pb-placeholder">???</div>
+</template>
+
+<script>"use strict";var _createClass=function(){function e(e,t){for(var r in t){var i=t[r];i.configurable=!0,i.value&&(i.writable=!0)}Object.defineProperties(e,t)}return function(t,r,i){return r&&e(t.prototype,r),i&&e(t,i),t}}(),_get=function e(t,r,i){var l=Object.getOwnPropertyDescriptor(t,r);if(void 0===l){var n=Object.getPrototypeOf(t);return null===n?void 0:e(n,r,i)}if("value"in l&&l.writable)return l.value;var o=l.get;return void 0===o?void 0:o.call(i)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").constant("doc",document.currentScript.ownerDocument)["with"]("template",{doc:"="},function(e){return e.doc.querySelector("template#main")})["with"]("placeHolderTmp",{doc:"="},function(e){return e.doc.querySelector("template#placeholder")}).bind("region.Bag",{$:"/=",$registry:"=",doc:"=",template:"=",placeHolderTmp:"=",Chance:"/=",Click:"trigger.=",Config:"service.=",Droppable:"ability.=",Helpable:"ability.=",Key:"trigger.=",Move:"service.=",SelectedPickable:"ability.=",Region:"region.=",Utils:"=",TEST_MODE:"/=?"},function(e){var t="pb-r-bag",r="pb-placeholder",i="pb-placeholder-content",l=Symbol("placeHolderEl"),n=Symbol("selectChild"),o=function(t){function n(){_classCallCheck(this,n),null!=t&&t.apply(this,arguments)}return _inherits(n,t),_createClass(n,{createdCallback:{value:function(){if(_get(Object.getPrototypeOf(n.prototype),"createdCallback",this).call(this),this.createShadowRoot().appendChild(e.Utils.activateTemplate(e.template,e.doc)),this[l]=this.querySelector("["+r+"]"),!this[l]){var t=this.querySelector("["+i+"]")||e.Utils.activateTemplate(e.placeHolderTmp,e.doc);this[l]=e.doc.createElement("div"),this[l].appendChild(t),e.$(this[l]).attr(r,""),this.insertBefore(this[l],this.lastChild)}}},pickableChildCount:{get:function(){return this.childElementCount-this.querySelectorAll("["+r+"]").length}}}),n}(e.Region);return o.prototype[l]=null,o[n]=function(t){var i=e.Utils.toArray(t.children).filter(function(t){return void 0===e.$(t).attr(r)});return i.length>0?e.Chance.pick(i):null},e.Config.add(t,new e.Helpable("help"),new e.Droppable("drop",new e.Key("d")),new e.SelectedPickable(o[n],"pick",new e.Key("q"))),e.$registry.add(t,o),o});</script>
+</head><body></body></html>

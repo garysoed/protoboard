@@ -1,0 +1,8 @@
+<html><head><base href="..">
+
+<link rel="import" href="check.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/handlebars.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>"use strict";DI.prefix("pb").bind("service.Template",{$:"/=",Check:"=",Events:"=",Handlebars:"/="},function(e){var r=new Map,t={addPartial:function(r,t){return e.Handlebars.registerPartial(r,t.innerHTML.replace("&gt;",">")),this},addData:function(n,a){return r.has(n)?e.$(t).trigger(n,a):r.set(n,Promise.resolve([n,a])),this},get:function(n){return r.has(n)||r.set(n,new Promise(function(r,a){e.Events.of(t,this).on("jquery",n,function(e,t){r([n,t])})})),r.get(n)}};return e.Handlebars.registerHelper("pb-for",function(r,t,n,a){void 0===a&&(a=n,n=1);for(var i="",s=e.Check(r).isInt().orThrows();s<e.Check(t).isInt().orThrows();s+=e.Check(n).isInt().orThrows()){var o=e.Handlebars.createFrame(a.data||{});o.index=s,i+=a.fn(this,{data:o})}return i}),t});</script></head><body></body></html>

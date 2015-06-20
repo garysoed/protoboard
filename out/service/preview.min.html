@@ -1,0 +1,6 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";var _defineProperty=function(e,r,n){return Object.defineProperty(e,r,{value:n,enumerable:!0,configurable:!0,writable:!0})};DI.prefix("pb").bind("service.Preview",{},function(e){var r=Symbol(),n=Object.defineProperties(function(){var e={};return _defineProperty(e,r,null),_defineProperty(e,"Events",{ELEMENT_CHANGED:"element-changed"}),e}(),{previewedEl:{get:function(){return this[r]},set:function(e){var t=this[r]!==e;this[r]=e,t&&$(this).trigger(n.Events.ELEMENT_CHANGED)},configurable:!0,enumerable:!0}});return n});</script>
+</head><body></body></html>

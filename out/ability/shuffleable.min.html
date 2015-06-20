@@ -1,0 +1,12 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/ability.html">
+<link rel="import" href="check.html">
+<link rel="import" href="third_party/chance.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="utils.html">
+
+<link rel="stylesheet" href="third_party/animate.css/animate.min.css">
+
+<script>"use strict";var _createClass=function(){function t(t,e){for(var i in e){var n=e[i];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(t,e)}return function(e,i,n){return i&&t(e.prototype,i),n&&t(e,n),e}}(),_get=function t(e,i,n){var a=Object.getOwnPropertyDescriptor(e,i);if(void 0===a){var r=Object.getPrototypeOf(e);return null===r?void 0:t(r,i,n)}if("value"in a&&a.writable)return a.value;var o=a.get;return void 0===o?void 0:o.call(n)},_inherits=function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(t.__proto__=e)},_classCallCheck=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").bind("ability.Shuffleable",{$:"/=",Ability:"ability.=",Chance:"/=",Click:"trigger.=",Utils:"="},function(t){var e=Symbol(),i=function(i){function n(){var i=void 0===arguments[0]?"shuffleable":arguments[0],a=void 0===arguments[1]?new t.Click:arguments[1],r=void 0===arguments[2]?!0:arguments[2];_classCallCheck(this,n),_get(Object.getPrototypeOf(n.prototype),"constructor",this).call(this,i,a),this[e]=r}return _inherits(n,i),_createClass(n,{init:{value:function(i){_get(Object.getPrototypeOf(n.prototype),"init",this).call(this,i),void 0===t.$(i).attr(this.attrName)&&t.$(i).attr(this.attrName,this[e])}},doTrigger:{value:function(e){var i=t.Chance.shuffle(t.Utils.toArray(e.children));i.forEach(function(t){e.appendChild(t),t.classList.contains("pb-shuffleable-animate")&&t.classList.remove("pb-shuffleable-animate"),t.classList.add("pb-shuffleable-animate")}),t.$(e).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",function(){e.classList.remove("animated"),e.classList.remove("wobble")}),e.classList.add("animated"),e.classList.add("wobble")}}}),n}(t.Ability);return i});</script></head><body></body></html>

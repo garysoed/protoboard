@@ -1,0 +1,12 @@
+<html><head><base href="..">
+
+<link rel="import" href="pbelement.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="service/preview.html">
+<link rel="import" href="service/registry.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
+<link rel="import" href="utils.html">
+
+<script>"use strict";var _createComputedClass=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_get=function e(t,r,n){var i=Object.getOwnPropertyDescriptor(t,r);if(void 0===i){var o=Object.getPrototypeOf(t);return null===o?void 0:e(o,r,n)}if("value"in i&&i.writable)return i.value;var a=i.get;return void 0===a?void 0:a.call(n)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").bind("ui.Preview",{Config:"service.=",Events:"=",PbElement:"=",Preview:"service.=",$registry:"=",Utils:"="},function(e){var t="pb-u-preview",r=Symbol(),n=Symbol(),i=function(t){function i(){_classCallCheck(this,i),null!=t&&t.apply(this,arguments)}return _inherits(i,t),_createComputedClass(i,[{key:n,value:function(){e.Preview.previewedEl=null}},{key:r,value:function(){e.Preview.previewedEl=this}},{key:"createdCallback",value:function(){_get(Object.getPrototypeOf(i.prototype),"createdCallback",this).call(this),this.createShadowRoot(),this.attachedCallback()}},{key:"attachedCallback",value:function(){_get(Object.getPrototypeOf(i.prototype),"attachedCallback",this).call(this),this.parentElement&&e.Events.of(this.parentElement,this).on("dom","mouseenter",this[r].bind(this)).on("dom","mouseleave",this[n].bind(this))}},{key:"detachedCallback",value:function(){this.parentElement&&e.Events.of(this.parentElement,this).off(),_get(Object.getPrototypeOf(i.prototype),"detachedCallback",this).call(this)}}]),i}(e.PbElement);return e.Config.add(t),e.$registry.add(t,i),i});</script>
+</head><body></body></html>

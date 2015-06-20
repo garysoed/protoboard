@@ -1,0 +1,12 @@
+<html><head><base href="..">
+
+<link rel="import" href="check.html">
+<link rel="import" href="pbelement.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="service/template.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/handlebars.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>"use strict";var _slicedToArray=function(e,t){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e)){for(var r,n=[],a=e[Symbol.iterator]();!(r=a.next()).done&&(n.push(r.value),!t||n.length!==t););return n}throw new TypeError("Invalid attempt to destructure non-iterable instance")},_createClass=function(){function e(e,t){for(var r in t){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,t)}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_get=function e(t,r,n){var a=Object.getOwnPropertyDescriptor(t,r);if(void 0===a){var i=Object.getPrototypeOf(t);return null===i?void 0:e(i,r,n)}if("value"in a&&a.writable)return a.value;var o=a.get;return void 0===o?void 0:o.call(n)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").bind("ui.Generate",{$:"/=",$registry:"=",Check:"=",Config:"service.=",Handlebars:"/=",PbElement:"=",Template:"service.="},function(e){var t="pb-u-generate",r=function(t){function r(){_classCallCheck(this,r),null!=t&&t.apply(this,arguments)}return _inherits(r,t),_createClass(r,{createdCallback:{value:function(){var t=this;_get(Object.getPrototypeOf(r.prototype),"createdCallback",this).call(this);var n=e.Check(e.$(this).attr("input")).isList().orUse([]).map(function(t){return e.Template.get(t)});Promise.all(n).then(function(r){var n={},a=!0,i=!1,o=void 0;try{for(var l,c=r[Symbol.iterator]();!(a=(l=c.next()).done);a=!0){var u=_slicedToArray(l.value,2),s=u[0],f=u[1];n[s]=f}}catch(p){i=!0,o=p}finally{try{!a&&c["return"]&&c["return"]()}finally{if(i)throw o}}var v=t.querySelector("template").innerHTML.replace("&gt;",">");e.$(t).replaceWith(e.Handlebars.compile(v)(n))})}}}),r}(e.PbElement);return e.Config.add(t),e.$registry.add(t,r),r});</script>
+</head><body></body></html>

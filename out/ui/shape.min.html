@@ -1,0 +1,31 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="utils.html">
+
+<template id="circle">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle class="pb-shape" cx="50" cy="50" r="50" fill="black"></circle>
+  </svg>
+</template>
+
+<template id="hexagon">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 115.47 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,50 28.867,0 86.603,0 115.47,50 86.603,100 28.867,100" fill="black"></polygon>
+  </svg>
+</template>
+
+<template id="square">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,0 100,0 100,100 0,100" fill="black"></polygon>
+  </svg>
+</template>
+
+<template id="triangle">
+  <svg id="root" version="1.1" baseProfile="full" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <polygon class="pb-shape" points="0,93.301 50,6.699 100,93.301" fill="black"></polygon>
+  </svg>
+</template>
+
+<script>"use strict";var _createClass=function(){function e(e,t){for(var r in t){var a=t[r];a.configurable=!0,a.value&&(a.writable=!0)}Object.defineProperties(e,t)}return function(t,r,a){return r&&e(t.prototype,r),a&&e(t,a),t}}(),_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").constant("doc",document.currentScript.ownerDocument)["with"]("circleTemplate",{doc:"="},function(e){return e.doc.querySelector("template#circle")})["with"]("hexagonTemplate",{doc:"="},function(e){return e.doc.querySelector("template#hexagon")})["with"]("squareTemplate",{doc:"="},function(e){return e.doc.querySelector("template#square")})["with"]("triangleTemplate",{doc:"="},function(e){return e.doc.querySelector("template#triangle")}).bind("ui.Shape",{$:"/=",$registry:"=",circleTemplate:"=",doc:"=",hexagonTemplate:"=",squareTemplate:"=",triangleTemplate:"=",Config:"service.=",Utils:"="},function(e){var t="pb-u-shape",r="shape",a=function(t){function a(){_classCallCheck(this,a),null!=t&&t.apply(this,arguments)}return _inherits(a,t),_createClass(a,{createdCallback:{value:function(){var t=e.$(this).attr(r),a=void 0;switch(t){case"circle":a=e.circleTemplate;break;case"hexagon":a=e.hexagonTemplate;break;case"square":a=e.squareTemplate;break;case"triangle":a=e.triangleTemplate;break;default:throw new Error("Unrecognized shape: "+t)}this.createShadowRoot().appendChild(e.Utils.activateTemplate(a,e.doc))}}}),a}(HTMLElement);return e.Config.add(t),e.$registry.add(t,a),a});</script>
+</head><body></body></html>

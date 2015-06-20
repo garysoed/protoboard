@@ -1,0 +1,8 @@
+<html><head><base href=".">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/click.html">
+<link rel="import" href="utils.html">
+
+<script>"use strict";DI.bind("pb.t",{_:"="},function(t){var n={createFakeAbility:function(n){var r=void 0===arguments[1]?this.createFakeTrigger(""+n+"-trigger"):arguments[1];return function(){return{attrName:"attr"+n,attrTrigger:"attr"+n+"Trigger",defaultTrigger:r,getTrigger:function(){return r},init:t._.spiedFunction(),isEnabled:t._.spiedFunction(),updateConfig:t._.spiedFunction(),trigger:t._.spiedFunction()}}()},createFakeEvents:function(){var n={};return n.of=t._.spiedFunction().overrideReturn(n),n.on=t._.spiedFunction().overrideReturn(n),n.off=t._.spiedFunction().overrideReturn(n),n},createFakeTrigger:function(n){return{toString:function(){return n},on:t._.spiedFunction(),off:t._.spiedFunction()}},getSymbol:function(t,n){return Object.getOwnPropertySymbols(t).find(function(t){return"Symbol("+n+")"===t.toString()})}};return n});</script>
+</head><body></body></html>

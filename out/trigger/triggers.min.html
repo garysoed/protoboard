@@ -1,0 +1,7 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/click.html">
+<link rel="import" href="trigger/key.html">
+
+<script>"use strict";var _createClass=function(){function r(r,t){for(var e in t){var n=t[e];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(r,t)}return function(t,e,n){return e&&r(t.prototype,e),n&&r(t,n),t}}(),_classCallCheck=function(r,t){if(!(r instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb.trigger").bind("Triggers",{Click:"=",Key:"="},function(r){var t=(Symbol(),Symbol()),e=Symbol(),n=(Symbol(),function(){function r(e){_classCallCheck(this,r),this[t]=e}return _createClass(r,{add:{value:function(r){return this[t][e]||(this[t][e]=new Map),this[t][e].set(r.attrName,r),this}}}),r}(),{parse:function(t){var e=r.Click.parse(t)||r.Key.parse(t);if(!e)throw"Unparsable trigger string: "+t;return e}});return n});</script></head><body></body></html>

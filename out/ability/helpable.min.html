@@ -1,0 +1,69 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/abilities.html">
+<link rel="import" href="ability/ability.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<template>
+  <style>#root {
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.8);
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+content::content div {
+  color: white;
+  font-size: 1rem;
+  line-height: 2em;
+  text-transform: capitalize;
+}
+
+content::content div.trigger {
+  display: inline-block;
+  font-weight: bold;
+  width: 60px;
+  text-align: right;
+  -webkit-margin-after: 6px;
+}
+
+content::content div.entry {
+  width: 120px;
+}
+
+footer {
+  margin-top: 75px;
+  font-size: 0.75rem;
+}</style>
+
+  <div id="root">
+    <header>
+      <content select="h1"></content>
+    </header>
+    <div>
+      <content select="div"></content>
+    </div>
+    <footer>Click anywhere to close this</footer>
+  </div>
+</template>
+
+<script>"use strict";var _slicedToArray=function(e,t){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e)){for(var r,n=[],i=e[Symbol.iterator]();!(r=i.next()).done&&(n.push(r.value),!t||n.length!==t););return n}throw new TypeError("Invalid attempt to destructure non-iterable instance")},_createClass=function(){function e(e,t){for(var r in t){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,t)}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_get=function e(t,r,n){var i=Object.getOwnPropertyDescriptor(t,r);if(void 0===i){var o=Object.getPrototypeOf(t);return null===o?void 0:e(o,r,n)}if("value"in i&&i.writable)return i.value;var a=i.get;return void 0===a?void 0:a.call(n)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").constant("doc",document.currentScript.ownerDocument)["with"]("template",{doc:"="},function(e){return e.doc.querySelector("template")}).bind("ability.Helpable",{$registry:"=",doc:"=",template:"=",Abilities:"ability.=",Ability:"ability.=",Events:"=",Key:"trigger.=",Utils:"="},function(e){var t=null,r=function(r){function n(){var t=void 0===arguments[0]?"helpable":arguments[0],r=void 0===arguments[1]?new e.Key("?"):arguments[1];_classCallCheck(this,n),_get(Object.getPrototypeOf(n.prototype),"constructor",this).call(this,t,r)}return _inherits(n,r),_createClass(n,{doTrigger:{value:function(r){var n=e.Abilities.of(r).getAll();t.innerHTML="";var i=t.ownerDocument,o=i.createElement("h1");o.innerText=r.nodeName,t.appendChild(o);var a=!0,l=!1,c=void 0;try{for(var u,s=n[Symbol.iterator]();!(a=(u=s.next()).done);a=!0){var d=_slicedToArray(u.value,2),p=d[0],f=d[1];if(f.isEnabled(r)){var y=i.createElement("div");y.classList.add("entry"),y.innerHTML='<div class="trigger">'+f.getTrigger(r).helpText+"</div>: "+p,t.appendChild(y)}}}catch(v){l=!0,c=v}finally{try{!a&&s["return"]&&s["return"]()}finally{if(l)throw c}}t.style.display=""}},isEnabled:{value:function(){return!0}}}),n}(e.Ability);return e.$registry.runAtRegister(function(r,n){t=r.createElement("div"),t.createShadowRoot().appendChild(e.Utils.activateTemplate(e.template,e.doc)),t.style.display="none",e.Events.of(t).on("dom","click",function(){t.style.display="none"}),r.body.appendChild(t)}),r});</script>
+</head><body></body></html>

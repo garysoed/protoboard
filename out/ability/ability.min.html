@@ -1,0 +1,11 @@
+<html><head><base href="..">
+
+<link rel="import" href="check.html">
+<link rel="import" href="service/log.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+<link rel="import" href="trigger/triggers.html">
+<link rel="import" href="utils.html">
+
+<script>"use strict";var _createClass=function(){function t(t,r){for(var i in r){var e=r[i];e.configurable=!0,e.value&&(e.writable=!0)}Object.defineProperties(t,r)}return function(r,i,e){return i&&t(r.prototype,i),e&&t(r,e),r}}(),_classCallCheck=function(t,r){if(!(t instanceof r))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").bind("ability.Ability",{$:"/=",Check:"=",Log:"service.=",Triggers:"trigger.="},function(t){var r=Symbol(),i=Symbol("defaultTrigger"),e=Symbol("triggerMap"),n=function(){function n(t,e){_classCallCheck(this,n),this[r]=t,this[i]=e}return _createClass(n,{init:{value:function(r){void 0===t.$(r).attr(this.attrTrigger)&&t.$(r).attr(this.attrTrigger,this[i].toString()),this.updateConfig(r)}},updateConfig:{value:function(r){r[e]||(r[e]=new Map);var i=t.$(r).attr(this.attrTrigger);if(!r[e].has(this)||i!==r[e].get(this).toString()){r[e].has(this)&&r[e].get(this).off(r);var n=t.Triggers.parse(t.$(r).attr(this.attrTrigger));n.on(r,this),r[e].set(this,n)}}},trigger:{value:function(r){t.Log.log(this.attrName,t.$(r).attr("pb-id")),this.isEnabled(r)&&this.doTrigger(r)}},doTrigger:{value:function(t){throw new Error("Unimplemented")}},getTrigger:{value:function(t){return t[e]?t[e].get(this):null}},isEnabled:{value:function(r){return t.Check(t.$(r).attr(this.attrName)).isBoolean().orUse(!1)}},attrName:{get:function(){return this[r]}},attrTrigger:{get:function(){return""+this[r]+"-on"}},defaultTrigger:{get:function(){return this[i]},set:function(t){this[i]=t}}}),n}();return n});</script>
+</head><body></body></html>

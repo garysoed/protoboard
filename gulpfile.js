@@ -3,14 +3,16 @@ var debug   = require('gulp-debug');
 var plumber = require('gulp-plumber');
 
 var babel  = require('gulp-babel');
+var ignore = require('gulp-ignore');
 var jshint = require('gulp-jshint');
 var myth   = require('gulp-myth');
 var shell  = require('gulp-shell');
 var subs   = require('gulp-html-subs');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
 var zip    = require('gulp-zip');
 
 var chalk    = require('chalk');
-var combine  = require('stream-combiner');
 var karma    = require('karma').server;
 var minimist = require('minimist');
 
@@ -144,9 +146,29 @@ gulp.task('watch', gulp.parallel(
 gulp.task('pack', gulp.series(
     'clean',
     gulp.parallel('compile', 'doc'),
-    function _pack() {
-      return gulp.src('out/**/*')
-          .pipe(zip('bin.zip'))
-          .pipe(gulp.dest('dist'));
-    }
+    function _minimize() {
+      var scriptSubs = subs('script');
+      return gulp.src(['./out/**/*.html'])
+          .pipe(ignore.exclude(/.*_test\.html$/))
+          .pipe(scriptSubs.extract)
+              .pipe(uglify())
+          .pipe(scriptSubs.inject)
+          .pipe(rename(function(path) {
+            path.basename += '.min';
+          }))
+          .pipe(gulp.dest('out'));
+    },
+    gulp.parallel(
+        function _packMin() {
+          return gulp.src(['./out/**/*.min.html', './out/**/*.js', './out/**/*.css'])
+              .pipe(zip('bin.min.zip'))
+              .pipe(gulp.dest('dist'));
+        },
+        function _pack() {
+          return gulp.src('out/**/*')
+              .pipe(ignore.exclude(/.*_test\.html$/))
+              .pipe(ignore.exclude(/.*\.min\.html$/))
+              .pipe(zip('bin.zip'))
+              .pipe(gulp.dest('dist'));
+        })
 ))

@@ -1,0 +1,8 @@
+<html><head><base href="..">
+
+<script src="third_party/listener/out/bin.min.js">"use strict";</script>
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/hammer.html">
+
+<script>"use strict";DI.prefix("pb").bind("Events",{Hammer:"="},function(n){var e=window.Events.Handlers;return e.add("dom",function(n,e,t){n.addEventListener(e,t)},function(n,e,t){n.removeEventListener(e,t)}).add("jquery",function(n,e,t){$(n).on(e,t)},function(n,e,t){$(n).off(e,t)}).add("hammer",function(e,t,o){n.Hammer.on(e,t,o)},function(e,t,o){n.Hammer.off(e,t,o)}),window.Events});</script></head><body></body></html>

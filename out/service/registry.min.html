@@ -1,0 +1,8 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/abilities.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";var _createClass=function(){function t(t,r){for(var e in r){var i=r[e];i.configurable=!0,i.value&&(i.writable=!0)}Object.defineProperties(t,r)}return function(r,e,i){return e&&t(r.prototype,e),i&&t(r,i),r}}(),_classCallCheck=function(t,r){if(!(t instanceof r))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").bind("service.Registry",{Abilities:"ability.=",Config:"service.="},function(t){var r=Symbol(),e=Symbol(),i=function(){function i(){_classCallCheck(this,i),this[r]=new Map,this[e]=[]}return _createClass(i,{add:{value:function(e,i){if(this[r].has(e))throw""+e+" is already registered";return this[r].set(e,i.prototype),this.runAtRegister(function(r,n){var o=t.Abilities.of(i.prototype);if(!n.getAll(e))return void console.warn("No configuration for "+e);n.getAll(e).forEach(function(t){o.add(t)});try{r.registerElement(e,i)}catch(a){console.warn(a)}}),this}},runAtRegister:{value:function(t){return this[e].push(t),this}},register:{value:function(r){var i=!0,n=!1,o=void 0;try{for(var a,s=this[e][Symbol.iterator]();!(i=(a=s.next()).done);i=!0){var l=a.value;l(r,t.Config)}}catch(c){n=!0,o=c}finally{try{!i&&s["return"]&&s["return"]()}finally{if(n)throw o}}return this}},reset:{value:function(){this[r]=new Map,this[e]=[]}}}),i}();return i});</script>
+</head><body></body></html>

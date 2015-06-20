@@ -1,0 +1,8 @@
+<html><head><base href="..">
+
+<link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>"use strict";var _defineProperty=function(e,t,r){return Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0})},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").constant("doc",document.currentScript.ownerDocument).bind("service.State",{$:"/=",$registry:"=",doc:"=",Config:"service.="},function(e){var t="pb-state",r=Symbol(),n=Symbol(),o=(Symbol(),Symbol(),function(){var o={};return _defineProperty(o,r,null),_defineProperty(o,n,function(n){var o=this[r].querySelector(""+t+"["+n+"]");return o||(o=this[r].querySelector(""+t),o||(o=this[r].createElement(""+t),this[r].body.appendChild(o)),e.$(o).attr(n,"")),o}),_defineProperty(o,"put",function(t,r){e.$(this[n](t)).attr(t,r)}),_defineProperty(o,"get",function(e){return $(this[n](e)).attr(e)}),o}()),i=function(e){function t(){_classCallCheck(this,t),null!=e&&e.apply(this,arguments)}return _inherits(t,e),t}(HTMLElement);return e.$registry.add(t,i.prototype).runAtRegister(function(e){o[r]=e}),e.Config.add(t),o});</script>
+</head><body></body></html>

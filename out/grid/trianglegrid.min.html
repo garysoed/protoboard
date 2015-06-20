@@ -1,0 +1,61 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<template id="main">
+  <style>::content > * {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.row {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.row:nth-child(2n) {
+  -webkit-transform: scaleY(-1);
+  -ms-transform: scaleY(-1);
+  transform: scaleY(-1);
+}
+
+.row:not(:last-child) {
+  margin-bottom: -13.397px;
+}
+
+.tile {
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+
+.tile:nth-child(2n) {
+  -webkit-transform: scaleY(-1);
+  -ms-transform: scaleY(-1);
+  transform: scaleY(-1);
+}
+
+.tile:not(:last-child) {
+  margin-right: -50px;
+}</style>
+
+  <div id="root">
+    <div id="content"></div>
+  </div>
+</template>
+
+<template id="row">
+  <div class="row"></div>
+</template>
+
+<template id="tile">
+  <div class="tile">
+    <content></content>
+  </div>
+</template>
+
+<script>"use strict";var _createClass=function(){function e(e,t){for(var r in t){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,t)}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").constant("doc",document.currentScript.ownerDocument)["with"]("templateMain",{doc:"="},function(e){return e.doc.querySelector("template#main")})["with"]("templateRow",{doc:"="},function(e){return e.doc.querySelector("template#row")})["with"]("templateTile",{doc:"="},function(e){return e.doc.querySelector("template#tile")}).bind("grid.TriangleGrid",{$registry:"=",templateMain:"=",templateRow:"=",templateTile:"=",Config:"service.=",Grid:"grid.="},function(e){var t="pb-g-trianglegrid",r=function(t){function r(){_classCallCheck(this,r),null!=t&&t.apply(this,arguments)}return _inherits(r,t),_createClass(r,{rootEl:{get:function(){return this.shadowRoot.querySelector("#content")}},mainTemplate:{get:function(){return e.templateMain}},rowTemplate:{get:function(){return e.templateRow}},tileTemplate:{get:function(){return e.templateTile}}}),r}(e.Grid);return e.Config.add(t),e.$registry.add(t,r),r});</script>
+</head><body></body></html>

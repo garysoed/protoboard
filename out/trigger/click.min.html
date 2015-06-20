@@ -1,0 +1,8 @@
+<html><head><base href="..">
+
+<link rel="import" href="trigger/trigger.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
+
+<script>"use strict";var _createClass=function(){function e(e,n){for(var t in n){var r=n[t];r.configurable=!0,r.value&&(r.writable=!0)}Object.defineProperties(e,n)}return function(n,t,r){return t&&e(n.prototype,t),r&&e(n,r),n}}(),_inherits=function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Super expression must either be null or a function, not "+typeof n);e.prototype=Object.create(n&&n.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),n&&(e.__proto__=n)},_classCallCheck=function(e,n){if(!(e instanceof n))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").bind("trigger.Click",{Events:"=",Trigger:"trigger.="},function(e){var n=function(n){function t(){_classCallCheck(this,t),null!=n&&n.apply(this,arguments)}return _inherits(t,n),_createClass(t,{on:{value:function(n,t){e.Events.of(n,this).on("hammer","singletap",t.trigger.bind(t,n))}},off:{value:function(n){e.Events.of(n,this).off("hammer","singletap")}},toString:{value:function(){return"click"}},helpText:{get:function(){return"Click"}}}),t}(e.Trigger);return n.parse=function(e){return"click"===e?new n:void 0},n});</script>
+</head><body></body></html>

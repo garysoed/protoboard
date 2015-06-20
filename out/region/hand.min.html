@@ -1,0 +1,47 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/ordereddroppable.html">
+<link rel="import" href="ability/helpable.html">
+<link rel="import" href="region/region.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/key.html">
+<link rel="import" href="utils.html">
+
+<template>
+  <style>#root {
+  outline: 1px solid #8982B8;
+  outline-offset: -1px;
+  position: relative;
+}
+
+#content {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+::content > *:hover {
+  -webkit-filter: drop-shadow(0px 2px 5px #50468F);
+  filter: drop-shadow(0px 2px 5px #50468F);
+}
+
+::content > *:last-child {
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}</style>
+
+  <div id="root">
+    <div id="content">
+      <content></content>
+    </div>
+  </div>
+</template>
+
+<script>"use strict";var _createClass=function(){function e(e,t){for(var r in t){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,t)}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_get=function e(t,r,n){var o=Object.getOwnPropertyDescriptor(t,r);if(void 0===o){var i=Object.getPrototypeOf(t);return null===i?void 0:e(i,r,n)}if("value"in o&&o.writable)return o.value;var a=o.get;return void 0===a?void 0:a.call(n)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").constant("doc",document.currentScript.ownerDocument)["with"]("template",{doc:"="},function(e){return e.doc.querySelector("template")}).bind("region.Hand",{$registry:"=",Config:"service.=",doc:"=",Helpable:"ability.=",Key:"trigger.=",OrderedDroppable:"ability.=",Region:"region.=",template:"=",Utils:"="},function(e){var t="pb-r-hand",r=function(t){function r(){_classCallCheck(this,r),null!=t&&t.apply(this,arguments)}return _inherits(r,t),_createClass(r,{createdCallback:{value:function(){_get(Object.getPrototypeOf(r.prototype),"createdCallback",this).call(this),this.createShadowRoot().appendChild(e.Utils.activateTemplate(e.template,e.doc))}},pickableChildCount:{get:function(){return this.childElementCount}}}),r}(e.Region);return e.Config.add(t,new e.Helpable("help"),new e.OrderedDroppable("drop",new e.Key("d"),!0,!1)),e.$registry.add(t,r),r});</script>
+</head><body></body></html>

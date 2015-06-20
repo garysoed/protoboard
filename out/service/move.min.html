@@ -1,0 +1,41 @@
+<html><head><base href="..">
+
+<link rel="import" href="pbelement.html">
+<link rel="import" href="service/config.html">
+<link rel="import" href="service/registry.html">
+<link rel="import" href="third_party/di.html">
+
+<style>pb-s-move {
+  -webkit-filter: drop-shadow(0px 2px 5px #50468F);
+  filter: drop-shadow(0px 2px 5px #50468F);
+  opacity: 0.75;
+  position: fixed;
+  pointer-events: none;
+}
+
+pb-s-move > * {
+  position: absolute;
+}
+
+pb-s-move > *:nth-child(2) {
+  -webkit-transform: rotateZ(-20deg);
+  transform: rotateZ(-20deg);
+}
+
+pb-s-move > *:nth-child(3) {
+  -webkit-transform: rotateZ(15deg);
+  transform: rotateZ(15deg);
+}
+
+pb-s-move > *:nth-child(4) {
+  -webkit-transform: rotateZ(-35deg);
+  transform: rotateZ(-35deg);
+}
+
+pb-s-move > *:nth-child(5) {
+  -webkit-transform: rotateZ(40deg);
+  transform: rotateZ(40deg);
+}</style>
+
+<script>"use strict";var _defineProperty=function(e,t,n){return Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0})},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DI.prefix("pb").bind("service.Move",{$registry:"=",Config:"service.=",Events:"=",PbElement:"=",Utils:"="},function(e){var t="pb-s-move",n=Symbol("container"),r=Symbol(),i=Symbol(),o=Symbol(),l=Symbol(),s=Symbol("moveContainer"),u=Symbol("onMouseMove"),a=Object.defineProperties(function(){var t={};return _defineProperty(t,n,null),_defineProperty(t,s,function(){var t=0,s=0;e.Utils.toArray(this[n].children).forEach(function(e){if(!e[l]||!e[r]){var n=e.getBoundingClientRect();e[r]=Math.max(n.height,s),e[l]=Math.max(n.width,t)}s=e[r],t=e[l]}),this[n].style.left=""+(this[i]-t/2)+"px",this[n].style.top=""+(this[o]-s/2)+"px"}),_defineProperty(t,u,function(e){this[s](),this[i]=e.clientX,this[o]=e.clientY}),_defineProperty(t,"add",function(e){e[r]=void 0,e[l]=void 0,this[n].appendChild(e),this[s]()}),t}(),{movedElements:{get:function(){return new Set(e.Utils.toArray(this[n].children))},configurable:!0,enumerable:!0},mouseX:{get:function(){return this[i]},configurable:!0,enumerable:!0},mouseY:{get:function(){return this[o]},configurable:!0,enumerable:!0}}),c=function(e){function t(){_classCallCheck(this,t),null!=e&&e.apply(this,arguments)}return _inherits(t,e),t}(e.PbElement);return e.Config.add(t),e.$registry.add(t,c),e.$registry.runAtRegister(function(r){e.Events.of(r.body,a).on("dom","mousemove",a[u].bind(a)),a[n]=r.createElement(t),r.body.appendChild(a[n])}),a});</script>
+</head><body></body></html>

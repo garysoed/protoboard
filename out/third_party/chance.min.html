@@ -1,0 +1,8 @@
+<html><head><base href="..">
+
+<script src="third_party/chance/chance.js">"use strict";</script>
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";DI.bind("pb.seed",{},function(){return(new Date).getTime()}).bind("Chance",{seed:"pb.=?"},function(n){var e=new Chance(n.seed);return e.binom=function(n,t){var r=[];return n.forEach(function(n){e.bool(t)&&r.push(n)}),r},e});</script>
+</head><body></body></html>
