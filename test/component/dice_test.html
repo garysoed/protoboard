@@ -136,29 +136,29 @@
           let rollable = new $i.Dice.Rollable(undefined, undefined, undefined, true);
           rollable.init(el);
 
-          $i.expect($i.$(el).attr('show-a')).to.be.equal('true');
+          $i.expect($i.$(el).attr('show-side-a')).to.be.equal('true');
         });
         it('should not set any default values if they are set', () => {
           let rollable = new $i.Dice.Rollable();
           $i.$(el)
               .attr(rollable.attrName, 'false')
-              .attr('show-a', 'false');
+              .attr('show-side-a', 'false');
           rollable.init(el);
 
           $i.expect($i.$(el).attr(rollable.attrName)).to.be.equal('false');
-          $i.expect($i.$(el).attr('show-a')).to.be.equal('false');
+          $i.expect($i.$(el).attr('show-side-a')).to.be.equal('false');
         });
       });
 
       describe('#trigger', () => {
-        it('should set the show-a attribute value', () => {
+        it('should set the show-side-a attribute value', () => {
           let rollable = new $i.Dice.Rollable();
           $i._.spy($i.Chance, 'bool').overrideReturn(false);
 
-          $i.$(el).attr('show-a', 'true');
+          $i.$(el).attr('show-side-a', 'true');
           rollable.init(el);
           rollable.trigger(el);
-          $i.expect($i.$(el).attr('show-a')).to.be.equal('false');
+          $i.expect($i.$(el).attr('show-side-a')).to.be.equal('false');
         });
       });
     });
@@ -181,17 +181,17 @@
           let flippable = new $i.Dice.DiceFlippable(undefined, undefined, undefined, true);
           flippable.init(el);
 
-          $i.expect($i.$(el).attr('show-a')).to.be.equal('true');
+          $i.expect($i.$(el).attr('show-side-a')).to.be.equal('true');
         });
         it('should not set any default values if they are set', () => {
           let flippable = new $i.Dice.DiceFlippable();
           $i.$(el)
               .attr(flippable.attrName, 'false')
-              .attr('show-a', 'false');
+              .attr('show-side-a', 'false');
           flippable.init(el);
 
           $i.expect($i.$(el).attr(flippable.attrName)).to.be.equal('false');
-          $i.expect($i.$(el).attr('show-a')).to.be.equal('false');
+          $i.expect($i.$(el).attr('show-side-a')).to.be.equal('false');
         });
       });
 
@@ -200,12 +200,12 @@
           let flippable = new $i.Dice.DiceFlippable();
           $i.$(el)
               .attr(flippable.attrName, 'true')
-              .attr('show-a', 'true');
+              .attr('show-side-a', 'true');
 
           flippable.init(el);
           flippable.trigger(el);
 
-          $i.expect($i.$(el).attr('show-a')).to.be.equal('false');
+          $i.expect($i.$(el).attr('show-side-a')).to.be.equal('false');
         });
       });
     });

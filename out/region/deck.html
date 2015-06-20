@@ -93,6 +93,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return Deck;
   })($i.Region);
 
+  Deck.NODE_NAME = EL_NAME;
+
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Shuffleable("shuffle", new $i.Key("s"), true), new $i.Droppable("drop", new $i.Key("d"), true));
 
   $i.$registry.add(EL_NAME, Deck);

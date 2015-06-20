@@ -144,6 +144,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return filtered.length > 0 ? $i.Chance.pick(filtered) : null;
   };
 
+  Bag.NODE_NAME = EL_NAME;
+
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Droppable("drop", new $i.Key("d")), new $i.SelectedPickable(Bag[__selectChild__], "pick", new $i.Key("q")));
 
   $i.$registry.add(EL_NAME, Bag);

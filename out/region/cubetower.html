@@ -104,6 +104,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return CubeTower;
   })($i.Region);
 
+  CubeTower.NODE_NAME = EL_NAME;
+
   $i.Config.add(EL_NAME, new $i.Helpable("help"), droppable);
   $i.$registry.add(EL_NAME, CubeTower);
 

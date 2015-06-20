@@ -96,6 +96,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return Hand;
   })($i.Region);
 
+  Hand.NODE_NAME = EL_NAME;
+
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.OrderedDroppable("drop", new $i.Key("d"), true, false));
   $i.$registry.add(EL_NAME, Hand);
 
