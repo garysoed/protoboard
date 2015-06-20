@@ -12,11 +12,6 @@ Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 ### 0.3.1
 New
 - Added [tutorial](http://garysoed.github.io/protoboard/classes/6%20Abilities.html) on Abilities.
-- Exposed a promise on every PbElement that will be resolved when an element has finished rendering.
-- Node names are now exposed as static property `NODE_NAME`. You can now refer to the node names
-from JavaScript.
-- Extracted abilities hidden in component and region classes. You can now use abilities used by
-`pb-r-bag`, `pb-r-dicetower`, `pb-r-hand`, and `pb-r-rect`.
 
 Breaking changes
 - Renamed surface to grid. All grid elements' prefix are renamed from `pb-s-` to `pb-g-`.
@@ -25,6 +20,11 @@ Improvements
 - Added Circle CI integration
 - Migrated to Gulp 4.0
 - Added minified HTML. These files have `.min.html` suffix.
+- Exposed a promise on every PbElement that will be resolved when an element has finished rendering.
+- Node names are now exposed as static property `NODE_NAME`. You can now refer to the node names
+from JavaScript.
+- Extracted abilities hidden in component and region classes. You can now use abilities used by
+`pb-r-bag`, `pb-r-dicetower`, `pb-r-hand`, and `pb-r-rect`.
 
 Bug Fixes
 - Improved performance when dragging element (#80)

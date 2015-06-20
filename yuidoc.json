@@ -5,13 +5,11 @@
   "url": "https://github.com/garysoed/protoboard",
   "colorBackground": "white",
   "colorForeground": "black",
-
   "colorSectionLightest": "#9AE08F",
   "colorSectionLight": "#6ECA5F",
   "colorSectionNormal": "#4AAE3B",
   "colorSectionDark": "#309620",
   "colorSectionDarkest": "#19760A",
-
   "colorCodeLightest": "#DAF49C",
   "colorCodeLight": "#C2E66D",
   "colorCodeNormal": "#9FC643",
@@ -42,7 +40,9 @@
       ]
     },
     "extension": ".html,.js",
-    "helpers": ["./node_modules/doctheme/helpers.js"],
+    "helpers": [
+      "./node_modules/doctheme/helpers.js"
+    ],
     "nocode": true
   }
 }
