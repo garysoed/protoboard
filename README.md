@@ -9,6 +9,28 @@ supported components.
 Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 
 ## Release notes
+### 0.3.1
+New
+- Added [tutorial](http://garysoed.github.io/protoboard/classes/6%20Abilities.html) on Abilities.
+- Exposed a promise on every PbElement that will be resolved when an element has finished rendering.
+- Node names are now exposed as static property `NODE_NAME`. You can now refer to the node names
+from JavaScript.
+- Extracted abilities hidden in component and region classes. You can now use abilities used by
+`pb-r-bag`, `pb-r-dicetower`, `pb-r-hand`, and `pb-r-rect`.
+
+Breaking changes
+- Renamed surface to grid. All grid elements' prefix are renamed from `pb-s-` to `pb-g-`.
+
+Improvements
+- Added Circle CI integration
+- Migrated to Gulp 4.0
+- Added minified HTML. These files have `.min.html` suffix.
+
+Bug Fixes
+- Improved performance when dragging element (#80)
+- Added missing dependency. (#78)
+- Fixed bug where the counter location for pb-r-rect is at the wrong location (#77)
+
 ### 0.3.0
 New
 - `pb-state` element to keep the runtime state of the game.
@@ -18,7 +40,7 @@ New
 
 Breaking changes
 - Removed `pb-` prefix from default ability names.
-- Changed `pb-card` faces to use `pb-front` and `pb-back` attributes instead of `pb-card` and
+- Changed `pb-c-card` faces to use `pb-front` and `pb-back` attributes instead of `pb-front` and
 `pb-back` classes.
 - Changed grids to use `row` and `col` attributes for the row and column counts, instead of `pb-row`
  and `pb-col`.
