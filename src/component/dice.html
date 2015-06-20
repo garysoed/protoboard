@@ -15,11 +15,11 @@
 
 <template>
   <style>
-    :host([show-a="true"]) ::content > [pb-dice-pair] > *:last-child {
+    :host([show-side-a="true"]) ::content > [pb-dice-pair] > *:last-child {
       display: none;
     }
 
-    :host([show-a="false"]) ::content > [pb-dice-pair] > *:first-child {
+    :host([show-side-a="false"]) ::content > [pb-dice-pair] > *:first-child {
       display: none;
     }
 
@@ -70,7 +70,7 @@ DI
 
   const EL_NAME = 'pb-c-dice';
   const ATTR_PAIR = 'pb-dice-pair';
-  const ATTR_SHOW_A = 'show-a';
+  const ATTR_SHOW_SIDE_A = 'show-side-a';
   const SUPPORTED_TYPES = [
     'd2',
     'd4',
@@ -124,8 +124,8 @@ DI
         $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
       }
 
-      if ($i.$(el).attr(ATTR_SHOW_A) === undefined) {
-        $i.$(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+      if ($i.$(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
+        $i.$(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
       }
     }
 
@@ -137,7 +137,7 @@ DI
      */
     doTrigger(el) {
       super.doTrigger(el);
-      $i.$(el).attr(ATTR_SHOW_A, $i.Chance.bool());
+      $i.$(el).attr(ATTR_SHOW_SIDE_A, $i.Chance.bool());
     }
   }
 
@@ -179,8 +179,8 @@ DI
         $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
       }
 
-      if ($i.$(el).attr(ATTR_SHOW_A) === undefined) {
-        $i.$(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+      if ($i.$(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
+        $i.$(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
       }
     }
 
@@ -191,7 +191,12 @@ DI
      * @param {Element} el The dice to flip.
      */
     doTrigger(el) {
-      $i.$(el).attr(ATTR_SHOW_A, !$i.Check($i.$(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
+      $i.$(el)
+          .attr(
+              ATTR_SHOW_SIDE_A,
+              !$i.Check($i.$(el).attr(ATTR_SHOW_SIDE_A))
+                  .isBoolean()
+                  .orThrows());
     }
   }
 
@@ -301,6 +306,15 @@ DI
       }
     }
   }
+
+  /**
+   * Node name of the dice.
+   * @property NODE_NAME
+   * @type string
+   * @final
+   * @static
+   */
+  Dice.NODE_NAME = EL_NAME;
 
   $i.Config.add(
       EL_NAME,

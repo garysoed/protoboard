@@ -118,6 +118,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return TriangleGrid;
   })($i.Grid);
 
+  TriangleGrid.NODE_NAME = EL_NAME;
+
   $i.Config.add(EL_NAME);
   $i.$registry.add(EL_NAME, TriangleGrid);
 

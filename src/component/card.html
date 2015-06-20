@@ -92,8 +92,6 @@ DI
         },
         $i => {
 
-  const EL_NAME = 'pb-c-card';
-
   /**
    * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
    * - One must have a `pb-front` attribute. This is the front face of the card.
@@ -132,14 +130,23 @@ DI
     }
   }
 
+  /**
+   * Node name of the card.
+   * @property NODE_NAME
+   * @type string
+   * @final
+   * @static
+   */
+  Card.NODE_NAME = 'pb-c-card';
+
   $i.Config.add(
-      EL_NAME,
+      Card.NODE_NAME,
       new $i.Helpable('help'),
       new $i.Pickable('pick', new $i.Key('q'), true),
       new $i.Toggleable('flip', new $i.Click(), true),
       new $i.Toggleable('tap', new $i.Key('t'), true));
 
-  $i.$registry.add(EL_NAME, Card);
+  $i.$registry.add(Card.NODE_NAME, Card);
 
   return Card;
 });

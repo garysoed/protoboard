@@ -14,11 +14,11 @@
 <link rel="import" href="utils.html">
 
 <template>
-  <style>:host([show-a="true"]) ::content > [pb-dice-pair] > *:last-child {
+  <style>:host([show-side-a="true"]) ::content > [pb-dice-pair] > *:last-child {
   display: none;
 }
 
-:host([show-a="false"]) ::content > [pb-dice-pair] > *:first-child {
+:host([show-side-a="false"]) ::content > [pb-dice-pair] > *:first-child {
   display: none;
 }
 
@@ -72,7 +72,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
   var EL_NAME = "pb-c-dice";
   var ATTR_PAIR = "pb-dice-pair";
-  var ATTR_SHOW_A = "show-a";
+  var ATTR_SHOW_SIDE_A = "show-side-a";
   var SUPPORTED_TYPES = ["d2", "d4", "d6", "d8", "d10", "d12", "d20"];
 
   var __defaultEnabled__ = Symbol();
@@ -104,15 +104,15 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
             $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
           }
 
-          if ($i.$(el).attr(ATTR_SHOW_A) === undefined) {
-            $i.$(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+          if ($i.$(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
+            $i.$(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
           }
         }
       },
       doTrigger: {
         value: function doTrigger(el) {
           _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
-          $i.$(el).attr(ATTR_SHOW_A, $i.Chance.bool());
+          $i.$(el).attr(ATTR_SHOW_SIDE_A, $i.Chance.bool());
         }
       }
     });
@@ -145,14 +145,14 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
             $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
           }
 
-          if ($i.$(el).attr(ATTR_SHOW_A) === undefined) {
-            $i.$(el).attr(ATTR_SHOW_A, this[__defaultShowA__]);
+          if ($i.$(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
+            $i.$(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
           }
         }
       },
       doTrigger: {
         value: function doTrigger(el) {
-          $i.$(el).attr(ATTR_SHOW_A, !$i.Check($i.$(el).attr(ATTR_SHOW_A)).isBoolean().orThrows());
+          $i.$(el).attr(ATTR_SHOW_SIDE_A, !$i.Check($i.$(el).attr(ATTR_SHOW_SIDE_A)).isBoolean().orThrows());
         }
       }
     });
@@ -209,6 +209,8 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
     return Dice;
   })($i.Component);
+
+  Dice.NODE_NAME = EL_NAME;
 
   $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true), new Rollable("roll", new $i.Key("r"), true), new DiceFlippable("flip", new $i.Key("f")));
 

@@ -33,8 +33,6 @@ DI
         },
         $i => {
 
-  const EL_NAME = 'pb-c-token';
-
   /**
    * A simple movable component with only one state. Examples of token:
    * - Chess piece
@@ -70,12 +68,21 @@ DI
     }
   }
 
+  /**
+   * Node name of the token.
+   * @property NODE_NAME
+   * @type string
+   * @final
+   * @static
+   */
+  Token.NODE_NAME = 'pb-c-token';
+
   $i.Config.add(
-      'pb-c-token',
+      Token.NODE_NAME,
       new $i.Helpable('help'),
       new $i.Pickable('pick', new $i.Key('q'), true));
 
-  $i.$registry.add(EL_NAME, Token);
+  $i.$registry.add(Token.NODE_NAME, Token);
 
   return Token;
 });

@@ -36,9 +36,6 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   Utils: "=",
   doc: "=",
   template: "=" }, function ($i) {
-
-  var EL_NAME = "pb-c-token";
-
   var Token = (function (_$i$Component) {
     function Token() {
       _classCallCheck(this, Token);
@@ -62,9 +59,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return Token;
   })($i.Component);
 
-  $i.Config.add("pb-c-token", new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true));
+  Token.NODE_NAME = "pb-c-token";
 
-  $i.$registry.add(EL_NAME, Token);
+  $i.Config.add(Token.NODE_NAME, new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true));
+
+  $i.$registry.add(Token.NODE_NAME, Token);
 
   return Token;
 });</script>

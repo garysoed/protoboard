@@ -168,6 +168,15 @@ DI
     return filtered.length > 0 ? $i.Chance.pick(filtered) : null;
   };
 
+  /**
+   * Node name of the bag.
+   * @property NODE_NAME
+   * @type string
+   * @final
+   * @static
+   */
+  Bag.NODE_NAME = EL_NAME;
+
   $i.Config.add(
       EL_NAME,
       new $i.Helpable('help'),

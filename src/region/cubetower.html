@@ -124,6 +124,15 @@ DI
     }
   }
 
+  /**
+   * Node name of the cube tower.
+   * @property NODE_NAME
+   * @type string
+   * @final
+   * @static
+   */
+  CubeTower.NODE_NAME = EL_NAME;
+
   $i.Config.add(EL_NAME, new $i.Helpable('help'), droppable);
   $i.$registry.add(EL_NAME, CubeTower);
 

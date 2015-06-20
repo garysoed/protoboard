@@ -100,9 +100,6 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
   Pickable: "ability.=",
   Toggleable: "ability.=",
   Utils: "=" }, function ($i) {
-
-  var EL_NAME = "pb-c-card";
-
   var Card = (function (_$i$Component) {
     function Card() {
       _classCallCheck(this, Card);
@@ -127,9 +124,11 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     return Card;
   })($i.Component);
 
-  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true), new $i.Toggleable("flip", new $i.Click(), true), new $i.Toggleable("tap", new $i.Key("t"), true));
+  Card.NODE_NAME = "pb-c-card";
 
-  $i.$registry.add(EL_NAME, Card);
+  $i.Config.add(Card.NODE_NAME, new $i.Helpable("help"), new $i.Pickable("pick", new $i.Key("q"), true), new $i.Toggleable("flip", new $i.Click(), true), new $i.Toggleable("tap", new $i.Key("t"), true));
+
+  $i.$registry.add(Card.NODE_NAME, Card);
 
   return Card;
 });</script>
