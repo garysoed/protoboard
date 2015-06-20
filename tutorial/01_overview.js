@@ -48,20 +48,3 @@
  * @class 1 Overview
  * @module tutorial
  */
-
-/**
- * Some examples of abilities include:
- *   <ul>
- *     <li>{{#crossLink "ability.Shuffleable"}}Shuffleable{{/crossLink}}: Shuffles the component's
- *     children when triggered.
- *     <li> {{#crossLink "ability.Pickable"}}Pickable{{/crossLink}}: Makes the component's move
- *     following the mouse, until dropped.
- *     <li>{{#crossLink "ability.Droppable"}}Droppable{{/crossLink}}: Adds the picked component as
- *     the current component's child.
- *   </ul>
- *
- *   Each Ability attached to a Component has its own name. This means that you can have two
- *   abilities of the same type, but different names. For example, {{#crossLink "component.Card"}}
- *   pb-c-card{{/crossLink}} has two abilities: `flippable` and `tappable`, both of which are of
- *   type {{#crossLink "ability.Toggleable"}}Toggleable{{/crossLink}}.
- */

@@ -104,7 +104,8 @@ gulp.task('test-source', gulp.series(
 
 gulp.task('doc', gulp.series(
     function _genDoc() {
-      shell.task('yuidoc --config yuidoc.json');
+      return gulp.src('')
+          .pipe(shell('yuidoc --config yuidoc.json'));
     },
     function _packDoc() {
       return gulp.src(['doc/**'])
@@ -112,7 +113,8 @@ gulp.task('doc', gulp.series(
     }
 ));
 gulp.task('clean', function() {
-  shell.task('rm -r out doc');
+  return gulp.src('')
+      .pipe(shell('rm -r out doc'));
 });
 
 gulp.task('compile', gulp.parallel('source', 'test-source', 'copy-deps'));
