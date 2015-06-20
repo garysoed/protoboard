@@ -3,6 +3,7 @@ var debug   = require('gulp-debug');
 var plumber = require('gulp-plumber');
 
 var babel  = require('gulp-babel');
+var bump   = require('gulp-bump');
 var ignore = require('gulp-ignore');
 var jshint = require('gulp-jshint');
 var myth   = require('gulp-myth');
@@ -18,6 +19,8 @@ var karma    = require('karma').server;
 var minimist = require('minimist');
 
 var loadtheme = require('./loadtheme');
+
+var VERSION = '0.3.1';
 
 function runKarma(singleRun, callback) {
   karma.start({
@@ -150,6 +153,11 @@ gulp.task('watch', gulp.parallel(
 gulp.task('pack', gulp.series(
     'clean',
     gulp.parallel('compile', 'doc'),
+    function _bump() {
+      return gulp.src(['./bower.json', './package.json', './yuidoc.json'])
+          .pipe(bump({version: VERSION}))
+          .pipe(gulp.dest('./'));
+    },
     function _minimize() {
       var scriptSubs = subs('script');
       return gulp.src(['./out/**/*.html'])
