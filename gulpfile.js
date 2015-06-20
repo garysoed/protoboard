@@ -6,6 +6,7 @@ var babel  = require('gulp-babel');
 var ignore = require('gulp-ignore');
 var jshint = require('gulp-jshint');
 var myth   = require('gulp-myth');
+var newer  = require('gulp-newer');
 var shell  = require('gulp-shell');
 var subs   = require('gulp-html-subs');
 var rename = require('gulp-rename');
@@ -64,6 +65,7 @@ gulp.task('copy-deps', gulp.parallel(
 
 gulp.task('js-hint', function() {
   return gulp.src(['./src/**/*.html', './test/**/*.html'])
+      .pipe(newer('out'))
       .pipe(jshint.extract())
       .pipe(jshint({
         esnext: true,
@@ -81,6 +83,7 @@ gulp.task('source', gulp.series(
       var scriptSubs = subs('script');
 
       return gulp.src(['./src/**/*.html'])
+          .pipe(newer('out'))
           .pipe(scriptSubs.extract)
               .pipe(babel({modules: 'ignore', comments: false}))
           .pipe(scriptSubs.inject)
@@ -97,6 +100,7 @@ gulp.task('test-source', gulp.series(
       var scriptSubs = subs('script');
 
       return gulp.src(['./test/**/*_test.html', './test/testbase.html'])
+          .pipe(newer('out'))
           .pipe(scriptSubs.extract)
               .pipe(babel({modules: 'ignore', comments: false}))
           .pipe(scriptSubs.inject)
