@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>region.Rect.FlexDroppable - Protoboard</title>
+  <title>ability.SelectedPickable - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -228,7 +228,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 0.3.0</div>
+      <div class="since">v 0.3.1</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -255,6 +255,9 @@
           <li class="">
             <a href="../classes/5 Theming.html">5 Theming</a>
           </li>
+          <li class="">
+            <a href="../classes/6 Abilities.html">6 Abilities</a>
+          </li>
         </ul>
       </div>
     </section>
@@ -277,13 +280,25 @@
             <a href="../classes/ability.Droppable.html">ability.Droppable</a>
           </li>
           <li class="">
+            <a href="../classes/ability.FlexDroppable.html">ability.FlexDroppable</a>
+          </li>
+          <li class="">
             <a href="../classes/ability.Helpable.html">ability.Helpable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.OrderedDroppable.html">ability.OrderedDroppable</a>
           </li>
           <li class="">
             <a href="../classes/ability.Pickable.html">ability.Pickable</a>
           </li>
+          <li class="sidebar-selected">
+            <a href="../classes/ability.SelectedPickable.html">ability.SelectedPickable</a>
+          </li>
           <li class="">
             <a href="../classes/ability.Shuffleable.html">ability.Shuffleable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.StaggeredDroppable.html">ability.StaggeredDroppable</a>
           </li>
           <li class="">
             <a href="../classes/ability.Toggleable.html">ability.Toggleable</a>
@@ -310,6 +325,18 @@
             <a href="../classes/component.Token.html">component.Token</a>
           </li>
           <li class="">
+            <a href="../classes/grid.Grid.html">grid.Grid</a>
+          </li>
+          <li class="">
+            <a href="../classes/grid.HexGrid.html">grid.HexGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/grid.RectGrid.html">grid.RectGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/grid.TriangleGrid.html">grid.TriangleGrid</a>
+          </li>
+          <li class="">
             <a href="../classes/Hammer.html">Hammer</a>
           </li>
           <li class="">
@@ -319,13 +346,7 @@
             <a href="../classes/region.Bag.html">region.Bag</a>
           </li>
           <li class="">
-            <a href="../classes/region.Bag.RandomPickable.html">region.Bag.RandomPickable</a>
-          </li>
-          <li class="">
             <a href="../classes/region.CubeTower.html">region.CubeTower</a>
-          </li>
-          <li class="">
-            <a href="../classes/region.CubeTower.TowerDroppable.html">region.CubeTower.TowerDroppable</a>
           </li>
           <li class="">
             <a href="../classes/region.Deck.html">region.Deck</a>
@@ -334,13 +355,7 @@
             <a href="../classes/region.Hand.html">region.Hand</a>
           </li>
           <li class="">
-            <a href="../classes/region.Hand.ReorderableDroppable.html">region.Hand.ReorderableDroppable</a>
-          </li>
-          <li class="">
             <a href="../classes/region.Rect.html">region.Rect</a>
-          </li>
-          <li class="sidebar-selected">
-            <a href="../classes/region.Rect.FlexDroppable.html">region.Rect.FlexDroppable</a>
           </li>
           <li class="">
             <a href="../classes/region.Region.html">region.Region</a>
@@ -371,18 +386,6 @@
           </li>
           <li class="">
             <a href="../classes/service.Template.html">service.Template</a>
-          </li>
-          <li class="">
-            <a href="../classes/surface.Grid.html">surface.Grid</a>
-          </li>
-          <li class="">
-            <a href="../classes/surface.HexGrid.html">surface.HexGrid</a>
-          </li>
-          <li class="">
-            <a href="../classes/surface.RectGrid.html">surface.RectGrid</a>
-          </li>
-          <li class="">
-            <a href="../classes/surface.TriangleGrid.html">surface.TriangleGrid</a>
           </li>
           <li class="">
             <a href="../classes/trigger.Click.html">trigger.Click</a>
@@ -424,13 +427,17 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code>region.Rect.FlexDroppable <span class="keyword">extends</span> <a href="../classes/ability.Droppable.html" class="crosslink">ability.Droppable</a></code>
+        <code>ability.SelectedPickable <span class="keyword">extends</span> <a href="../classes/ability.Pickable.html" class="crosslink">ability.Pickable</a></code>
       </header>
+      <div class="since">
+        since 0.3.1
+      </div>
 
     <div class="content description">
-      <p>This ability works with conjunction of <a href="../classes/ability.Pickable.html" class="crosslink">ability.Pickable</a>.
-Elements with this ability adds the picked element as its child element when triggered. The
-dropped element is positioned to be directly below the mouse cursor when the drop happened.</p>
+      <p>Element with this ability has content that can be picked and dragged around. When triggered,
+it calls a selection function specified in the constructor and picks up the element returned by
+that function. This child element can be dropped on elements with
+<a href="../classes/ability.Droppable.html" class="crosslink">ability.Droppable</a> ability.</p>
 
     </div>
 
@@ -442,9 +449,12 @@ dropped element is positioned to be directly below the mouse cursor when the dro
       </header>
       <div>
           <section class="method">
-            <header id="method_region.Rect.FlexDroppable">
-              <code class="method-signature">region.Rect.FlexDroppable(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultEnabled)</code>
+            <header id="method_ability.SelectedPickable">
+              <code class="method-signature">ability.SelectedPickable(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> selectionFn, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultEnabled)</code>
             </header>
+              <div class="since">
+                since 0.3.1
+              </div>
             <div class="content">
               <span class="description"></span>
           
@@ -452,7 +462,23 @@ dropped element is positioned to be directly below the mouse cursor when the dro
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>[name=droppable]</code></p>
+                      <p><code>selectionFn</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Function that should return the element to be picked. This
+          function has one argument, which is the element that the ability is triggered on.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>[name=pickable]</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
@@ -497,7 +523,11 @@ dropped element is positioned to be directly below the mouse cursor when the dro
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>[name=droppable]</code></dt>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>selectionFn</code></dt>
+                <dd><p>Function that should return the element to be picked. This
+          function has one argument, which is the element that the ability is triggered on.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>[name=pickable]</code></dt>
                 <dd><p>Name of the ability.</p>
           </dd>
                 <dt><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code> <code>[defaultTrigger=trigger.Click]</code></dt>
@@ -587,7 +617,7 @@ dropped element is positioned to be directly below the mouse cursor when the dro
               <code class="method-signature">doTrigger(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el)</code>
             </header>
             <div class="content">
-              <span class="description"><p>Drop the last dragged element on the given element</p>
+              <span class="description"><p>Picks up a random child element of the given element.</p>
           </span>
           
               <table class="method-params">
@@ -600,7 +630,7 @@ dropped element is positioned to be directly below the mouse cursor when the dro
                       <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The element to drop the dragged element into.</p>
+                      <p>The element whose child element should be randomly picked.</p>
           
                     </td>
                   </tr>
@@ -610,7 +640,7 @@ dropped element is positioned to be directly below the mouse cursor when the dro
           
               <dl class="method-params-small">
                 <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
-                <dd><p>The element to drop the dragged element into.</p>
+                <dd><p>The element whose child element should be randomly picked.</p>
           </dd>
               </dl>
           

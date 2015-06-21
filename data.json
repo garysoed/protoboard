@@ -2,7 +2,7 @@
     "project": {
         "name": "Protoboard",
         "description": "Check out the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
-        "version": "0.3.0",
+        "version": "0.3.1",
         "url": "https://github.com/garysoed/protoboard",
         "colorBackground": "white",
         "colorForeground": "black",
@@ -46,11 +46,29 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/ability/flexdroppable.html": {
+            "name": "src/ability/flexdroppable.html",
+            "modules": {},
+            "classes": {
+                "ability.FlexDroppable": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/ability/helpable.html": {
             "name": "src/ability/helpable.html",
             "modules": {},
             "classes": {
                 "ability.Helpable": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/ability/ordereddroppable.html": {
+            "name": "src/ability/ordereddroppable.html",
+            "modules": {},
+            "classes": {
+                "ability.OrderedDroppable": 1
             },
             "fors": {},
             "namespaces": {}
@@ -64,11 +82,29 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/ability/selectedpickable.html": {
+            "name": "src/ability/selectedpickable.html",
+            "modules": {},
+            "classes": {
+                "ability.SelectedPickable": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/ability/shuffleable.html": {
             "name": "src/ability/shuffleable.html",
             "modules": {},
             "classes": {
                 "ability.Shuffleable": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/ability/staggereddroppable.html": {
+            "name": "src/ability/staggereddroppable.html",
+            "modules": {},
+            "classes": {
+                "ability.StaggeredDroppable": 1
             },
             "fors": {},
             "namespaces": {}
@@ -120,11 +156,46 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/grid/grid.html": {
+            "name": "src/grid/grid.html",
+            "modules": {},
+            "classes": {
+                "grid.Grid": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/grid/hexgrid.html": {
+            "name": "src/grid/hexgrid.html",
+            "modules": {},
+            "classes": {
+                "grid.HexGrid": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/grid/rectgrid.html": {
+            "name": "src/grid/rectgrid.html",
+            "modules": {},
+            "classes": {
+                "grid.RectGrid": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/grid/trianglegrid.html": {
+            "name": "src/grid/trianglegrid.html",
+            "modules": {},
+            "classes": {
+                "grid.TriangleGrid": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/region/bag.html": {
             "name": "src/region/bag.html",
             "modules": {},
             "classes": {
-                "region.Bag.RandomPickable": 1,
                 "region.Bag": 1
             },
             "fors": {},
@@ -134,7 +205,6 @@
             "name": "src/region/cubetower.html",
             "modules": {},
             "classes": {
-                "region.CubeTower.TowerDroppable": 1,
                 "region.CubeTower": 1
             },
             "fors": {},
@@ -153,7 +223,6 @@
             "name": "src/region/hand.html",
             "modules": {},
             "classes": {
-                "region.Hand.ReorderableDroppable": 1,
                 "region.Hand": 1
             },
             "fors": {},
@@ -163,7 +232,6 @@
             "name": "src/region/rect.html",
             "modules": {},
             "classes": {
-                "region.Rect.FlexDroppable": 1,
                 "region.Rect": 1
             },
             "fors": {},
@@ -247,42 +315,6 @@
             "modules": {},
             "classes": {
                 "service.Template": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/surface/grid.html": {
-            "name": "src/surface/grid.html",
-            "modules": {},
-            "classes": {
-                "surface.Grid": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/surface/hexgrid.html": {
-            "name": "src/surface/hexgrid.html",
-            "modules": {},
-            "classes": {
-                "surface.HexGrid": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/surface/rectgrid.html": {
-            "name": "src/surface/rectgrid.html",
-            "modules": {},
-            "classes": {
-                "surface.RectGrid": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/surface/trianglegrid.html": {
-            "name": "src/surface/trianglegrid.html",
-            "modules": {},
-            "classes": {
-                "surface.TriangleGrid": 1
             },
             "fors": {},
             "namespaces": {}
@@ -452,6 +484,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "tutorial/06_abilities.js": {
+            "name": "tutorial/06_abilities.js",
+            "modules": {},
+            "classes": {
+                "6 Abilities": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "tutorial/module.js": {
             "name": "tutorial/module.js",
             "modules": {},
@@ -469,9 +510,13 @@
                 "ability.Abilities": 1,
                 "ability.Ability": 1,
                 "ability.Droppable": 1,
+                "ability.FlexDroppable": 1,
                 "ability.Helpable": 1,
+                "ability.OrderedDroppable": 1,
                 "ability.Pickable": 1,
+                "ability.SelectedPickable": 1,
                 "ability.Shuffleable": 1,
+                "ability.StaggeredDroppable": 1,
                 "ability.Toggleable": 1,
                 "component.Card": 1,
                 "component.Component": 1,
@@ -479,14 +524,14 @@
                 "component.Dice.DiceFlippable": 1,
                 "component.Dice": 1,
                 "component.Token": 1,
-                "region.Bag.RandomPickable": 1,
+                "grid.Grid": 1,
+                "grid.HexGrid": 1,
+                "grid.RectGrid": 1,
+                "grid.TriangleGrid": 1,
                 "region.Bag": 1,
-                "region.CubeTower.TowerDroppable": 1,
                 "region.CubeTower": 1,
                 "region.Deck": 1,
-                "region.Hand.ReorderableDroppable": 1,
                 "region.Hand": 1,
-                "region.Rect.FlexDroppable": 1,
                 "region.Rect": 1,
                 "region.Region": 1,
                 "service.Acl.Group": 1,
@@ -498,10 +543,6 @@
                 "service.Registry": 1,
                 "service.State": 1,
                 "service.Template": 1,
-                "surface.Grid": 1,
-                "surface.HexGrid": 1,
-                "surface.RectGrid": 1,
-                "surface.TriangleGrid": 1,
                 "Hammer": 1,
                 "trigger.Click": 1,
                 "trigger.DoubleClick": 1,
@@ -530,12 +571,13 @@
                 "2 Prerequisites": 1,
                 "3 Basic Usage": 1,
                 "4 Customizing Components": 1,
-                "5 Theming": 1
+                "5 Theming": 1,
+                "6 Abilities": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "tutorial/05_theme.js",
+            "file": "tutorial/06_abilities.js",
             "line": 1,
             "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. {{#crossLink \"5 Theming\"}}Theme{{/crossLink}}: This library comes with some existing themes. You\ncan customize the color themes, and if you use CSS, you can customize in greater details.\n\nSome glossary of terminologies for the API:\n{{#html 'dl'}}\n  {{#html 'dt'}}{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}{{/html}}\n  {{#html 'dd'}}These are where the main logic happens. A Component can have several abilities,\n  each triggered with a Trigger.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"component.Component\"}}Component{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Components are the basic entity of a board. They provide main interaction with\n  the players. Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"region.Region\"}}Region{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Regions can contain other components. They cannot be moved and can contain one or\n  more components. Examples include: deck, bag, and hand.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Triggers listen to events in the document and triggers the ability it is\n  associated with. The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.{{/html}}\n\n  {{#html 'dt'}}UI{{/html}}\n  {{#html 'dd'}}This library also comes with several basic UI elements for convenience. These\n  elements do not have a real life counterpart.{{/html}}\n{{/html}}\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n   - `pb-c-` indicates a component\n   - `pb-r-` indicates a region\n   - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
         }
@@ -642,6 +684,44 @@
             ],
             "extends": "ability.Ability"
         },
+        "ability.FlexDroppable": {
+            "name": "ability.FlexDroppable",
+            "shortname": "ability.FlexDroppable",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ability/flexdroppable.html",
+            "line": 37,
+            "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered. The\ndropped element is positioned to be directly below the mouse cursor when the drop happened,\nby setting the style.left and style.top.",
+            "extends": "ability.Droppable",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the ability.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "droppable"
+                },
+                {
+                    "name": "defaultTrigger",
+                    "description": "Default trigger for the ability.",
+                    "type": "trigger.Trigger",
+                    "optional": true,
+                    "optdefault": "trigger.Click"
+                },
+                {
+                    "name": "defaultEnabled",
+                    "description": "True iff the ability should be enabled by default.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "true"
+                }
+            ]
+        },
         "ability.Helpable": {
             "name": "ability.Helpable",
             "shortname": "ability.Helpable",
@@ -672,6 +752,52 @@
                 }
             ],
             "extends": "ability.Ability"
+        },
+        "ability.OrderedDroppable": {
+            "name": "ability.OrderedDroppable",
+            "shortname": "ability.OrderedDroppable",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ability/ordereddroppable.html",
+            "line": 36,
+            "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered.\nThe position of the dropped element depends on the mouse position when the trigger\noccured.",
+            "extends": "ability.Droppable",
+            "since": "0.3.1",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the ability.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "droppable"
+                },
+                {
+                    "name": "defaultTrigger",
+                    "description": "Default trigger for the ability.",
+                    "type": "trigger.Trigger",
+                    "optional": true,
+                    "optdefault": "trigger.Key"
+                },
+                {
+                    "name": "defaultEnabled",
+                    "description": "True iff the ability should be enabled by default.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "true"
+                },
+                {
+                    "name": "isVertical",
+                    "description": "True iff the children are arranged vertically.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ]
         },
         "ability.Pickable": {
             "name": "ability.Pickable",
@@ -711,6 +837,50 @@
             ],
             "extends": "ability.Ability"
         },
+        "ability.SelectedPickable": {
+            "name": "ability.SelectedPickable",
+            "shortname": "ability.SelectedPickable",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ability/selectedpickable.html",
+            "line": 38,
+            "description": "Element with this ability has content that can be picked and dragged around. When triggered,\nit calls a selection function specified in the constructor and picks up the element returned by\nthat function. This child element can be dropped on elements with\n{{#crossLink \"ability.Droppable\"}}{{/crossLink}} ability.",
+            "is_constructor": 1,
+            "extends": "ability.Pickable",
+            "since": "0.3.1",
+            "params": [
+                {
+                    "name": "selectionFn",
+                    "description": "Function that should return the element to be picked. This\n   function has one argument, which is the element that the ability is triggered on.",
+                    "type": "Function"
+                },
+                {
+                    "name": "name",
+                    "description": "Name of the ability.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "pickable"
+                },
+                {
+                    "name": "defaultTrigger",
+                    "description": "Default trigger for the ability.",
+                    "type": "trigger.Trigger",
+                    "optional": true,
+                    "optdefault": "trigger.Click"
+                },
+                {
+                    "name": "defaultEnabled",
+                    "description": "True iff the ability should be enabled by default.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "true"
+                }
+            ]
+        },
         "ability.Shuffleable": {
             "name": "ability.Shuffleable",
             "shortname": "ability.Shuffleable",
@@ -721,7 +891,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/shuffleable.html",
-            "line": 29,
+            "line": 30,
             "description": "Elements with this ability shuffles its children when triggered.",
             "is_constructor": 1,
             "params": [
@@ -748,6 +918,52 @@
                 }
             ],
             "extends": "ability.Ability"
+        },
+        "ability.StaggeredDroppable": {
+            "name": "ability.StaggeredDroppable",
+            "shortname": "ability.StaggeredDroppable",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ability/staggereddroppable.html",
+            "line": 50,
+            "description": "Ability that mimics a \"cube tower\". Elements dropped using this ability will have to go\nthrough various \"levels\" of the tower before they are shown. Passing through one level to the\nnext is done randomly.\n\nYou can set the number of tower levels and the probability to pass through the next level\nusing the `<ability name>-chances` attribute. For instance, if the ability's name is `drop`\nand we want a tower with 3 levels, each having a probability of 0.5, 0.2, 0.1 to go to the\nnext level, specify:\n```html\n<pb-r-cubetower drop-chances=\"0.5 0.2 0.1\"></pb-r-cubetower>\n```",
+            "extends": "ability.Droppable",
+            "since": "0.3.1",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the ability.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "\"drop\""
+                },
+                {
+                    "name": "defaultTrigger",
+                    "description": "Default trigger of the ability.",
+                    "type": "trigger.Trigger",
+                    "optional": true,
+                    "optdefault": "trigger.Key"
+                },
+                {
+                    "name": "defaultEnabled",
+                    "description": "True iff the ability is enabled by default.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "true"
+                },
+                {
+                    "name": "defaultProbabilities",
+                    "description": "Default probabilities passing through each level.",
+                    "type": "Array",
+                    "optional": true,
+                    "optdefault": "[1]"
+                }
+            ]
         },
         "ability.Toggleable": {
             "name": "ability.Toggleable",
@@ -807,7 +1023,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/card.html",
-            "line": 97,
+            "line": 95,
             "description": "A representation of a card. To use this, create a `pb-c-card` element with two child elements:\n- One must have a `pb-front` attribute. This is the front face of the card.\n- One must have a `pb-back` attribute. This is the back face of the card.\n\nBy default, the card starts by showing its back. If you want to make it start by showing the\nfront face, add `flippable-active=\"true\"` to the `pb-c-card`.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pick{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}flip{{/crossLink}}\n- {{#crossLink \"ability.Toggleable\"}}tap{{/crossLink}}\n\n```html\n<!-- Example: Create a card that starts by displaying its front side -->\n<pb-c-card flippable-active=\"true\">\n  <div pb-front>Front side</div>\n  <div pb-back>Back side</div>\n</pb-c-card>\n```",
             "extends": "component.Component"
         },
@@ -927,7 +1143,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/dice.html",
-            "line": 198,
+            "line": 203,
             "description": "A representation of a dice. This element has three levels of customizations.\n\nThe most basic level of customization is to use premade dice. To use this, set the type\nattribute to a supported dice type. For example:\n```html\n<!-- Creates a d2, or a coin -->\n<pb-c-dice type=\"d2\"></pb-c-dice>\n\n<!-- Creates a d20 -->\n<pb-c-dice type=\"d20\"></pb-c-dice>\n```\nCustom types supported are: `d2`, `d4`, `d6`, `d8`, `d10`, `d12`, `d20`.\n\nIn the next level of customization, you can define all the dice faces by creating children for\neach face of the dice. For example, to make the dice used in\n[Mage Wars](https://www.boardgamegeek.com/boardgame/101721/mage-wars), do:\n```html\n<pb-c-dice>\n  <div>&nbsp;</div>\n  <div>1</div>\n  <div>2</div>\n  <div>&nbsp;</div>\n  <div>1!</div>\n  <div>2!</div>\n</pb-c-dice>\n```\n\nFor games that involve flipping dice to the opposite side, like\n[Flash Point: Fire Rescue](http://boardgamegeek.com/boardgame/100901/flash-point-fire-rescue),\nfurther customization is needed. The children in the previous example needs to be paired with a\nparent element with attribute `pb-dice-pair`. For example, to make a normal d6:\n```html\n<pb-c-dice>\n  <div pb-dice-pair>\n    <div>1</div>\n    <div>6</div>\n  </div>\n  <div pb-dice-pair>\n    <div>2</div>\n    <div>5</div>\n  </div>\n  <div pb-dice-pair>\n    <div>3</div>\n    <div>4</div>\n  </div>\n</pb-c-dice>\n```\nIf you do not explicitly specify the pairing, the dice will pair them for you automatically.\nThe first child will be paired with the last child, second child paired with second last, etc.\n\nNote that dice must have an even number of faces.\n\nDefault supported abilities:\n- {{#crossLink \"ability.Pickable\"}}pick{{/crossLink}}\n- {{#crossLink \"component.Dice.Rollable\"}}roll{{/crossLink}}: This is similar to\n  {{#crossLink ability.Shuffleable}}{{/crossLink}}, except it is customized to handle the face\n  pairings.\n- {{#crossLink \"component.Dice.DiceFlippable\"}}flip{{/crossLink}}: Flips the dice to the other\n  side.",
             "since": "0.2.0",
             "extends": "component.Component"
@@ -942,47 +1158,69 @@
             "extension_for": [],
             "module": "api",
             "file": "src/component/token.html",
-            "line": 38,
+            "line": 36,
             "description": "A simple movable component with only one state. Examples of token:\n- Chess piece\n- Cubes\n- Damage marker\n\nTo use this, create a `pb-c-token` element with one child element. This child element will be\ndisplayed as the token.\n\n```html\n<!-- Example: A square token -->\n<pb-c-token>\n  <div style=\"background: red; width: 50px; height: 50px;\"></div>\n<pb-c-token>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Pickable\"}}pickable{{/crossLink}}",
             "extends": "component.Component"
         },
-        "region.Bag.RandomPickable": {
-            "name": "region.Bag.RandomPickable",
-            "shortname": "region.Bag.RandomPickable",
+        "grid.Grid": {
+            "name": "grid.Grid",
+            "shortname": "grid.Grid",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
             "module": "api",
-            "file": "src/region/bag.html",
-            "line": 95,
-            "description": "Element with this ability has content that can be picked and dragged around. When triggered,\na random child of the element will be picked. The child element can be dropped on elements\nwith {{#crossLink \"ability.Droppable\"}}{{/crossLink}} ability.",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Name of the ability.",
-                    "type": "String",
-                    "optional": true,
-                    "optdefault": "pickable"
-                },
-                {
-                    "name": "defaultTrigger",
-                    "description": "Default trigger for the ability.",
-                    "type": "trigger.Trigger",
-                    "optional": true,
-                    "optdefault": "trigger.Click"
-                },
-                {
-                    "name": "defaultEnabled",
-                    "description": "True iff the ability should be enabled by default.",
-                    "type": "Boolean",
-                    "optional": true,
-                    "optdefault": "true"
-                }
-            ],
-            "extends": "ability.Pickable"
+            "file": "src/grid/grid.html",
+            "line": 27,
+            "description": "Base class of all grids.\n\nTo implement a custom grid, you will need to implement 4 getters:\n- {{#crossLink \"grid.Grid/rootEl:property\"}}{{/crossLink}}\n- {{#crossLink \"grid.Grid/mainTemplate:property\"}}{{/crossLink}}\n- {{#crossLink \"grid.Grid/rowTemplate:property\"}}{{/crossLink}}\n- {{#crossLink \"grid.Grid/tileTemplate:property\"}}{{/crossLink}}",
+            "since": "0.2.0",
+            "extends": "PbElement"
+        },
+        "grid.HexGrid": {
+            "name": "grid.HexGrid",
+            "shortname": "grid.HexGrid",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/grid/hexgrid.html",
+            "line": 75,
+            "description": "A grid that lays out its children in a hexagonal grid. To use this, add attributes\n`row` and `col` to the element\n`pb-g-hexgrid`. These are the number of rows and columns in the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-g-hexgrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-g-hexgrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create hexagon shapes.",
+            "since": "0.2.0",
+            "extends": "grid.Grid"
+        },
+        "grid.RectGrid": {
+            "name": "grid.RectGrid",
+            "shortname": "grid.RectGrid",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/grid/rectgrid.html",
+            "line": 68,
+            "description": "A grid that lays out its children in a rectangular grid. To use this, add attributes\n`row` and `col` to the element `pb-g-rectgrid`. These are the number of rows and columns in the\ngrid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-g-rectgrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Right</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Right</div>\n</pb-g-rectgrid>\n```",
+            "since": "0.2.0",
+            "extends": "grid.Grid"
+        },
+        "grid.TriangleGrid": {
+            "name": "grid.TriangleGrid",
+            "shortname": "grid.TriangleGrid",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/grid/trianglegrid.html",
+            "line": 77,
+            "description": "A grid that lays out its children in a triangular grid. To use this, add attributes\n`row` and `col` to the element `pb-g-trianglegrid`. These are the number of rows and columns in\nthe grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-g-trianglegrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-g-trianglegrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create triangle shapes.",
+            "since": "0.2.0",
+            "extends": "grid.Grid"
         },
         "region.Bag": {
             "name": "region.Bag",
@@ -994,55 +1232,9 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/bag.html",
-            "line": 126,
-            "description": "A collection of components. You cannot see the component until you drag one out of it.\n\nTo make a bag, create a `pb-r-bag` element. You can override the content of the placeholder by\ncreating a child element with a `pb-placeholder-content` attribute. This element will be used for\nthe placeholder content.\n\n```html\n<!-- Example: Create a bag with a place holder token displaying \"SECRET!!\" -->\n<pb-r-bag>\n  <div pb-placeholder-content>SECRET!!</div>\n</pb-r-bag>\n```\n\nSupported abilitie:\n- {{#crossLink \"region.Bag.RandomPickable\"}}pickable{{/crossLink}}\n- {{#crossLink \"ability.Droppable\"}}droppable{{/crossLink}}",
+            "line": 94,
+            "description": "A collection of components. You cannot see the component until you drag one out of it.\n\nTo make a bag, create a `pb-r-bag` element. You can override the content of the placeholder by\ncreating a child element with a `pb-placeholder-content` attribute. This element will be used for\nthe placeholder content.\n\n```html\n<!-- Example: Create a bag with a place holder token displaying \"SECRET!!\" -->\n<pb-r-bag>\n  <div pb-placeholder-content>SECRET!!</div>\n</pb-r-bag>\n```\n\nSupported abilitie:\n- {{#crossLink \"ability.SelectedPickable\"}}pickable{{/crossLink}}\n- {{#crossLink \"ability.Droppable\"}}droppable{{/crossLink}}",
             "extends": "region.Region"
-        },
-        "region.CubeTower.TowerDroppable": {
-            "name": "region.CubeTower.TowerDroppable",
-            "shortname": "region.CubeTower.TowerDroppable",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/region/cubetower.html",
-            "line": 80,
-            "description": "Ability that mimics a \"cube tower\". Elements dropped using this ability will have to go\nthrough various \"levels\" of the tower before they are shown. Passing through one level to the\nnext is done randomly.\n\nYou can set the number of tower levels and the probability to pass through the next level\nusing the `<ability name>-chances` attribute. For instance, if the ability's name is `drop`\nand we want a tower with 3 levels, each having a probability of 0.5, 0.2, 0.1 to go to the\nnext level, specify:\n```html\n<pb-r-cubetower drop-chances=\"0.5 0.2 0.1\"></pb-r-cubetower>\n```",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Name of the ability.",
-                    "type": "String",
-                    "optional": true,
-                    "optdefault": "\"drop\""
-                },
-                {
-                    "name": "defaultTrigger",
-                    "description": "Default trigger of the ability.",
-                    "type": "trigger.Trigger",
-                    "optional": true,
-                    "optdefault": "trigger.Key"
-                },
-                {
-                    "name": "defaultEnabled",
-                    "description": "True iff the ability is enabled by default.",
-                    "type": "Boolean",
-                    "optional": true,
-                    "optdefault": "true"
-                },
-                {
-                    "name": "defaultProbabilities",
-                    "description": "Default probabilities passing through each level.",
-                    "type": "Array",
-                    "optional": true,
-                    "optdefault": "[1]"
-                }
-            ],
-            "extends": "ability.Droppable",
-            "since": "0.3.0"
         },
         "region.CubeTower": {
             "name": "region.CubeTower",
@@ -1054,8 +1246,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/cubetower.html",
-            "line": 211,
-            "description": "Represents a Cube Tower. This uses\n{{#crossLink \"region.CubeTower.TowerDroppable\"}}{{/crossLink}} to simulate the different levels\nin a tower.\n\n```html\n<!--\n50% chance for items to drop to level 1, and 20% chance for items to exit the tower from\nlevel 1.\n-->\n<pb-r-cubetower drop-chances=\"0.5 0.2\">\n  <!-- Item in level 0 -->\n  <div pb-tower-level=\"0\"></div>\n  <!-- Item in level 1 -->\n  <div pb-tower-level=\"1\"></div>\n  <!-- Item outside the tower -->\n  <div></div>\n</pb-r-cubetower>\n```\n\nSupported abilities:\n- {{#crossLink \"region.CubeTower.TowerDroppable\"}}drop{{/crossLink}}",
+            "line": 71,
+            "description": "Represents a Cube Tower. This uses {{#crossLink \"ability.StaggeredDroppable\"}}{{/crossLink}} to\nsimulate the different levels in a tower.\n\n```html\n<!--\n50% chance for items to drop to level 1, and 20% chance for items to exit the tower from\nlevel 1.\n-->\n<pb-r-cubetower drop-chances=\"0.5 0.2\">\n  <!-- Item in level 0 -->\n  <div pb-tower-level=\"0\"></div>\n  <!-- Item in level 1 -->\n  <div pb-tower-level=\"1\"></div>\n  <!-- Item outside the tower -->\n  <div></div>\n</pb-r-cubetower>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.StaggeredDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region",
             "since": "0.3.0"
         },
@@ -1073,44 +1265,6 @@
             "description": "Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.\nAny child elements of this class are considered to be in the deck.\n\n```html\n<!-- Example: Deck containing two cards -->\n<pb-r-deck>\n  <pb-c-card id=\"card1\">\n    <div pb-front>Front</div>\n    <div pb-back>Back</div>\n  </pb-c-card>\n  <pb-c-card id=\"card2\">\n    <div pb-front>Front</div>\n    <div pb-back>Back</div>\n  </pb-c-card>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Droppable\"}}drop{{/crossLink}}\n- {{#crossLink \"ability.Shuffleable\"}}shuffle{{/crossLink}}",
             "extends": "region.Region"
         },
-        "region.Hand.ReorderableDroppable": {
-            "name": "region.Hand.ReorderableDroppable",
-            "shortname": "region.Hand.ReorderableDroppable",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/region/hand.html",
-            "line": 71,
-            "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered.\nThe position of the dropped element depends on the mouse position when the trigger\noccured.",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Name of the ability.",
-                    "type": "String",
-                    "optional": true,
-                    "optdefault": "droppable"
-                },
-                {
-                    "name": "defaultTrigger",
-                    "description": "Default trigger for the ability.",
-                    "type": "trigger.Trigger",
-                    "optional": true,
-                    "optdefault": "trigger.Key"
-                },
-                {
-                    "name": "defaultEnabled",
-                    "description": "True iff the ability should be enabled by default.",
-                    "type": "Boolean",
-                    "optional": true,
-                    "optdefault": "true"
-                }
-            ],
-            "extends": "ability.Droppable"
-        },
         "region.Hand": {
             "name": "region.Hand",
             "shortname": "region.Hand",
@@ -1121,47 +1275,9 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/hand.html",
-            "line": 116,
-            "description": "Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children\nare considered to be in the hand. A hand allows the user to reorder the child elements,\ndepending on where a child element is dropped.\n\n```html\n<!-- Hand with two tokens -->\n<pb-r-deck>\n  <pb-c-token id=\"token1\">\n    <div>Token 1</div>\n  </pb-c-token>\n  <pb-c-token id=\"token2\">\n    <div>Token 2</div>\n  </pb-c-token>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"region.Hand.ReorderableDroppable\"}}drop{{/crossLink}}",
+            "line": 64,
+            "description": "Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children\nare considered to be in the hand. A hand allows the user to reorder the child elements,\ndepending on where a child element is dropped.\n\n```html\n<!-- Hand with two tokens -->\n<pb-r-deck>\n  <pb-c-token id=\"token1\">\n    <div>Token 1</div>\n  </pb-c-token>\n  <pb-c-token id=\"token2\">\n    <div>Token 2</div>\n  </pb-c-token>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.OrderedDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
-        },
-        "region.Rect.FlexDroppable": {
-            "name": "region.Rect.FlexDroppable",
-            "shortname": "region.Rect.FlexDroppable",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/region/rect.html",
-            "line": 65,
-            "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered. The\ndropped element is positioned to be directly below the mouse cursor when the drop happened.",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Name of the ability.",
-                    "type": "String",
-                    "optional": true,
-                    "optdefault": "droppable"
-                },
-                {
-                    "name": "defaultTrigger",
-                    "description": "Default trigger for the ability.",
-                    "type": "trigger.Trigger",
-                    "optional": true,
-                    "optdefault": "trigger.Click"
-                },
-                {
-                    "name": "defaultEnabled",
-                    "description": "True iff the ability should be enabled by default.",
-                    "type": "Boolean",
-                    "optional": true,
-                    "optdefault": "true"
-                }
-            ],
-            "extends": "ability.Droppable"
         },
         "region.Rect": {
             "name": "region.Rect",
@@ -1173,8 +1289,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/rect.html",
-            "line": 131,
-            "description": "An arbitrary rectangular region. You can position elements anywhere in this region.\n\nSupported abilities:\n- {{#crossLink \"region.Rect.FlexDroppable\"}}drop{{/crossLink}}",
+            "line": 55,
+            "description": "An arbitrary rectangular region. You can position elements anywhere in this region.\n\nSupported abilities:\n- {{#crossLink \"ability.FlexDroppable\"}}drop{{/crossLink}}",
             "extends": "region.Region"
         },
         "region.Region": {
@@ -1254,7 +1370,7 @@
             "module": "api",
             "file": "src/service/log.html",
             "line": 15,
-            "description": "A service to log events and happenings in a game. Use this service to collect statistics about\na game session.\n\nBy default, the service records all triggers to every\n{{#crossLink \"ability.Ability\"}}abilities{{/crossLink}} loaded. The format of a log entry is:\n`<timestamp>: <category> - <value>`. For abilities, `category` is the ability's name, and the\n`value` is the value of `pb-id` of the element the ability acts on.\n\nFor every Protoboard component, region, and surface, you can customize the prefix of the id by\nspecifying the `pb-id` attribute. When the element is activated, Protoboard will append a\nnumber to the attribute to make sure that they are unique. For instance:\n```html\n<pb-c-card pb-id=\"attack\"></pb-c-card>\n```\nwill have its `pb-id` set to `attack-0`. So when the card is `flip`ped, this service will log\n`3/28/2015, 6:01:48 PM: flip - attack-0`.\n\nFor entries not handled by Abilities, you can also add log entries manually. Use the\n{{#crossLink \"service.Log/log:method\"}}{{/crossLink}} method. For instance:\n```javascript\nDI.run(['service.=', function(Log) {\n  Log.log('player-count', 2);\n}]);\n```\nwill generate entry: `3/28/2015, 6:01:48 PM: player-count - 2`.\n\nYou can also customize the string output using the\n{{#crossLink \"service.Log/addProcessor:method\"}}{{/crossLink}} method. For example:\n```javascript\nDI.run(['service.=', function(Log) {\n  Log\n      .addProcessor(function(timestamp, category, value) {\n        if (category !== 'player-count') {\n          return timestamp.toLocaleString() + ': ' + category + ' on ' + value;\n        } else {\n          return null;\n        }\n      })\n     .addProcessor(Log.defaultProcessor)\n     .log('player-count', 2)\n     .log('rng-seed', 1234);\n}]);\n```\nA processor is a function that takes 3 arguments:\n1. `timestamp` of type {{#crossLink \"Date\"}}{{/crossLink}}.\n2. `category` {{#crossLink \"String\"}}{{/crossLink}}.\n3. `value`\nYou can specify more than one processors. The processors will be called in the other that they\nare added to the service. The value that will be used for the log entry is the value returned\nby the first processor that returns a non empty string.\n\nSo the example above will generate:\n```\n3/28/2015, 6:21:47 PM: player-count on 2\n3/28/2015, 6:21:53 PM: rng-seed - 1234\n```\nThe custom processor was used to generate the entry for `player-count`, while the default\nprocessor was used to generate the one for `rng-seed`.\n\nYou can retrieve the entries using {{#crossLink \"service.Log/blob:property\"}}{{/crossLink}} as\na blob, or {{#crossLink \"service.Log/entries:property\"}}{{/crossLink}} as a string.",
+            "description": "A service to log events and happenings in a game. Use this service to collect statistics about\na game session.\n\nBy default, the service records all triggers to every\n{{#crossLink \"ability.Ability\"}}abilities{{/crossLink}} loaded. The format of a log entry is:\n`<timestamp>: <category> - <value>`. For abilities, `category` is the ability's name, and the\n`value` is the value of `pb-id` of the element the ability acts on.\n\nFor every Protoboard component, region, and grid, you can customize the prefix of the id by\nspecifying the `pb-id` attribute. When the element is activated, Protoboard will append a\nnumber to the attribute to make sure that they are unique. For instance:\n```html\n<pb-c-card pb-id=\"attack\"></pb-c-card>\n```\nwill have its `pb-id` set to `attack-0`. So when the card is `flip`ped, this service will log\n`3/28/2015, 6:01:48 PM: flip - attack-0`.\n\nFor entries not handled by Abilities, you can also add log entries manually. Use the\n{{#crossLink \"service.Log/log:method\"}}{{/crossLink}} method. For instance:\n```javascript\nDI.run(['service.=', function(Log) {\n  Log.log('player-count', 2);\n}]);\n```\nwill generate entry: `3/28/2015, 6:01:48 PM: player-count - 2`.\n\nYou can also customize the string output using the\n{{#crossLink \"service.Log/addProcessor:method\"}}{{/crossLink}} method. For example:\n```javascript\nDI.run(['service.=', function(Log) {\n  Log\n      .addProcessor(function(timestamp, category, value) {\n        if (category !== 'player-count') {\n          return timestamp.toLocaleString() + ': ' + category + ' on ' + value;\n        } else {\n          return null;\n        }\n      })\n     .addProcessor(Log.defaultProcessor)\n     .log('player-count', 2)\n     .log('rng-seed', 1234);\n}]);\n```\nA processor is a function that takes 3 arguments:\n1. `timestamp` of type {{#crossLink \"Date\"}}{{/crossLink}}.\n2. `category` {{#crossLink \"String\"}}{{/crossLink}}.\n3. `value`\nYou can specify more than one processors. The processors will be called in the other that they\nare added to the service. The value that will be used for the log entry is the value returned\nby the first processor that returns a non empty string.\n\nSo the example above will generate:\n```\n3/28/2015, 6:21:47 PM: player-count on 2\n3/28/2015, 6:21:53 PM: rng-seed - 1234\n```\nThe custom processor was used to generate the entry for `player-count`, while the default\nprocessor was used to generate the one for `rng-seed`.\n\nYou can retrieve the entries using {{#crossLink \"service.Log/blob:property\"}}{{/crossLink}} as\na blob, or {{#crossLink \"service.Log/entries:property\"}}{{/crossLink}} as a string.",
             "static": 1,
             "since": "0.2.0"
         },
@@ -1268,7 +1384,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/service/move.html",
-            "line": 48,
+            "line": 63,
             "description": "Service that handles moving elements around. Used by\n{{#crossLink \"ability.Droppable\"}}{{/crossLink}} and\n{{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\n\n```javascript\nMove.add(element);  // Sets the element as moved.\n\n// The element will be moved to a special container. To remove the element, just append it\n// somewhere else.\n```",
             "static": 1
         },
@@ -1329,66 +1445,6 @@
             "description": "Service to manage templates in a ProtoBoard app. Use this service to register Handlebar\npartials and data to the template. For example:\n```javascript\nDI.run(['pb.service.=', function(Template) {\n  // Registers a partial. The partial value must be contained in the element passed into the\n  // service.\n  Template.addPartial('card', document.querySelector('template'));\n\n  // Registers data to the template.\n  Template.addData('cards', [\n    { value: 'A', suit: 'Spade' },\n    { value: 'A', suit: 'Club' },\n    { value: 'A', suit: 'Heart' },\n    { value: 'A', suit: 'Diamond' },\n  ]);\n}]);\n```\n\nThis class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for\nloop that copies the inner block several times. You can access the index of the loop using the\n`@index` variable.",
             "static": 1,
             "since": "0.2.0"
-        },
-        "surface.Grid": {
-            "name": "surface.Grid",
-            "shortname": "surface.Grid",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/surface/grid.html",
-            "line": 27,
-            "description": "Base class of all grids.\n\nTo implement a custom grid, you will need to implement 4 getters:\n- {{#crossLink \"surface.Grid/rootEl:property\"}}{{/crossLink}}\n- {{#crossLink \"surface.Grid/mainTemplate:property\"}}{{/crossLink}}\n- {{#crossLink \"surface.Grid/rowTemplate:property\"}}{{/crossLink}}\n- {{#crossLink \"surface.Grid/tileTemplate:property\"}}{{/crossLink}}",
-            "since": "0.2.0",
-            "extends": "PbElement"
-        },
-        "surface.HexGrid": {
-            "name": "surface.HexGrid",
-            "shortname": "surface.HexGrid",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/surface/hexgrid.html",
-            "line": 75,
-            "description": "A surface that lays out its children in a hexagonal grid. To use this, add attributes\n`row` and `col` to the element\n`pb-s-hexgrid`. These are the number of rows and columns in the grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-hexgrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-s-hexgrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create hexagon shapes.",
-            "since": "0.2.0",
-            "extends": "surface.Grid"
-        },
-        "surface.RectGrid": {
-            "name": "surface.RectGrid",
-            "shortname": "surface.RectGrid",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/surface/rectgrid.html",
-            "line": 68,
-            "description": "A surface that lays out its children in a rectangular grid. To use this, add attributes\n`row` and `col` to the element `pb-s-rectgrid`. These are the number of rows and columns in the\ngrid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-rectgrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Right</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Right</div>\n</pb-s-rectgrid>\n```",
-            "since": "0.2.0",
-            "extends": "surface.Grid"
-        },
-        "surface.TriangleGrid": {
-            "name": "surface.TriangleGrid",
-            "shortname": "surface.TriangleGrid",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/surface/trianglegrid.html",
-            "line": 77,
-            "description": "A surface that lays out its children in a triangular grid. To use this, add attributes\n`row` and `col` to the element `pb-s-trianglegrid`. These are the number of rows and columns in\nthe grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-s-trianglegrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-s-trianglegrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create triangle shapes.",
-            "since": "0.2.0",
-            "extends": "surface.Grid"
         },
         "Hammer": {
             "name": "Hammer",
@@ -1583,7 +1639,7 @@
             "module": "api",
             "namespace": "",
             "file": "src/pbelement.html",
-            "line": 18,
+            "line": 19,
             "description": "Base class of all ProtoBoard elements.",
             "extends": "HTMLElement"
         },
@@ -1672,6 +1728,21 @@
             "line": 1,
             "description": "Protoboard supports basic theming using\n[CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables). However,\nsince CSS variables is not widely supported, Protoboard relies on [Myth](http://www.myth.io/) to\ncompile the variables.\n\nYou will need the source code. If you installed protoboard as a bower package, you will find all\nthe files you need under `bower_components/protoboard`. Run `npm install` in the source\ndirectory's root, and you can compile the source code by running:\n```bash\ngulp src\n```\n\nThe script reads from JSON files in the `./themes` directory. By default, they use the\n`./themes/slateblue.json` theme. To change the colour theme to \"medium sea green\", you can run:\n```bash\ngulp ex --theme ./themes/mediumseagreen.json\n```\n\nThough Protoboard comes with several themes, you can make your own theme. Create a json file with\ntwo keys: `base` and `vars`:\n```json\n{\n  \"base\": \"./bower_components/protoboard/themes/base.json\"\n  \"vars\": {\n    \"--color-lighter\": \"#CBC7E2\",\n    \"--color-light\": \"#ABA5CF\",\n    \"--color-normal\": \"#8982B8\",\n    \"--color-dark\": \"#6B62A4\",\n    \"--color-darker\": \"#50468F\"\n  }\n}\n```\n\nThe `vars` entry defines the colors used throughout the framework. You can see\n`./themes/base.json` for additional variables to override. This include transition time, shadow\nsize, border size, etc.\n\nThe `base` is a reference to another theme file. The path is relative to the location of the\nJSON file and should always start with `.` or `..`. The base theme file will be used for\nvariables that the framework uses but are not defined in your theme file. You can chain the\ndependencies for multiple levels, but it is recommended to always depend on `./themes/base.json`\nin the dependency chain, since new variables might be introduced, and might break your themes if\nyou did not set it in your theme file.\n\nIf you want to use the theme in your own CSS file, require the `loadtheme` in your Node JS. This\nis a function that accepts the file name of the theme JSON file.",
             "since": "0.2.0"
+        },
+        "6 Abilities": {
+            "name": "6 Abilities",
+            "shortname": "6 Abilities",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "tutorial",
+            "namespace": "",
+            "file": "tutorial/06_abilities.js",
+            "line": 1,
+            "description": "Protoboard has a built in platform for triggering abilities. Every interaction with a Protoboard\ncomponent will trigger an ability.\n\nAll abilities can be found under the `ability` directory. Every ability extends from the\n{{#crossLink \"ability.Ability\"}}{{/crossLink}} class. Extending this class provides the following\nfeatures:\n- Reacts to changes to configuration attribute(s) of this ability.\n- Hook into the {{#crossLink \"service.Log\"}}Logging service{{/crossLink}}\n- Customizable trigger\n\nEvery instance of an ability has a default configuration. When an element created, the ability\nwill check for any configuration attributes it knows, and apply any default configuration to the\nelement. Note that since the same instance of an ability is shared across multiple elements, you\nshould never store element specific state in an ability. Instead, use\n{{#crossLink Symbol}}{{/crossLink}} to decorate the element with the state.\n\nEvery ability is associated with a {{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}. A\ntrigger listens to events in the browser, and, if the event happens, triggers the ability. To\nimplement your own ability, implement the {{#crossLink ability.Ability}}{{/crossLink}} class.\nNote that most of the time, you will only need to implement the\n{{#crossLink \"ability.Ability/doTrigger:method\"}}doTrigger{{/crossLink}} method.\n\nEvery ability on an element can be customized by changing an attribute related to that ability.\nThese attributes are prefixed with `name-`, where `name` is the name of the ability. For example,\nthe `drop-on` attribute specifies the trigger for the `drop` ability. Hence, the following sets\nthe `drop` ability to be triggered when the user clicks on the deck:\n```html\n<pb-r-deck drop-on=\"click\"></pb-r-deck>\n```\n\nThe `-on` configuration can be found on every ability, and they all sets the ability's trigger.\nIf you want to add a configuration, you will need to implement the\n{{#crossLink \"ability.Ability/init:method\"}}init{{/crossLink}} method to set the default value of\nthe configuration on the element.\n\nNow that you have your custom ability, you can add it to an element using the\n{{#crossLink \"service.Config\"}}{{/crossLink}}. For example:\n```javascript\nDI.run({ Config: 'service.=' }, function($i) {\n  $i.Config.add('pb-c-card', new CustomAbility());\n});\n```\nThe example above adds the CustomAbility to all `pb-c-card` elements.",
+            "since": "0.3.1"
         }
     },
     "classitems": [
@@ -1932,6 +2003,53 @@
             "class": "ability.Droppable"
         },
         {
+            "file": "src/ability/flexdroppable.html",
+            "line": 49,
+            "description": "Handles event when the MutationObserver observes changes to the child list.",
+            "itemtype": "method",
+            "name": "__onDomMutation__",
+            "params": [
+                {
+                    "name": "mutations",
+                    "description": "Array of MutationRecords.",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "ability.FlexDroppable"
+        },
+        {
+            "file": "src/ability/flexdroppable.html",
+            "line": 65,
+            "description": "Sets the default configuration for this ability on the given element.",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to set the default configuration to.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ability.FlexDroppable"
+        },
+        {
+            "file": "src/ability/flexdroppable.html",
+            "line": 77,
+            "description": "Drop the last dragged element on the given element",
+            "itemtype": "method",
+            "name": "doTrigger",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to drop the dragged element into.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ability.FlexDroppable"
+        },
+        {
             "file": "src/ability/helpable.html",
             "line": 97,
             "description": "Displays the triggers for all abilities registered to this element.",
@@ -1957,6 +2075,21 @@
                 "type": "Boolean"
             },
             "class": "ability.Helpable"
+        },
+        {
+            "file": "src/ability/ordereddroppable.html",
+            "line": 53,
+            "description": "Drops the element added to {{#crossLink \"service.Move\"}}{{/crossLink}} as a child of the\ngiven element. The position of the dropped child depends on the position of the mouse at the\ntrigger time relative to the other children.",
+            "itemtype": "method",
+            "name": "doTrigger",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to drop the picked element into.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ability.OrderedDroppable"
         },
         {
             "file": "src/ability/pickable.html",
@@ -1989,8 +2122,23 @@
             "class": "ability.Pickable"
         },
         {
+            "file": "src/ability/selectedpickable.html",
+            "line": 56,
+            "description": "Picks up a random child element of the given element.",
+            "itemtype": "method",
+            "name": "doTrigger",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element whose child element should be randomly picked.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ability.SelectedPickable"
+        },
+        {
             "file": "src/ability/shuffleable.html",
-            "line": 45,
+            "line": 46,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -2005,7 +2153,7 @@
         },
         {
             "file": "src/ability/shuffleable.html",
-            "line": 59,
+            "line": 60,
             "description": "Shuffles the given element's children, if this ability is enabled on the element.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -2017,6 +2165,79 @@
                 }
             ],
             "class": "ability.Shuffleable"
+        },
+        {
+            "file": "src/ability/staggereddroppable.html",
+            "line": 67,
+            "description": "Sets the default configuration for this ability on the given element.",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to set the default configuration to.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ability.StaggeredDroppable"
+        },
+        {
+            "file": "src/ability/staggereddroppable.html",
+            "line": 81,
+            "description": "Updates the inner state of the ability based on changes to the element.",
+            "itemtype": "method",
+            "name": "updateConfig",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "Element whose attributes have changed.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ability.StaggeredDroppable"
+        },
+        {
+            "file": "src/ability/staggereddroppable.html",
+            "line": 113,
+            "description": "Drops the currently moved element into the given element. This also moves elements in every\nlevel of the tower.",
+            "itemtype": "method",
+            "name": "doTrigger",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "Element to drop the moved element into.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ability.StaggeredDroppable"
+        },
+        {
+            "file": "src/ability/staggereddroppable.html",
+            "line": 154,
+            "itemtype": "method",
+            "name": "isInStaggerState",
+            "params": [
+                {
+                    "name": "child",
+                    "description": "The element to check.",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "True iff the given element is in stagger state.",
+                "type": "Boolean"
+            },
+            "class": "ability.StaggeredDroppable"
+        },
+        {
+            "file": "src/ability/staggereddroppable.html",
+            "line": 163,
+            "description": "Name of the attribute to set the probability of the elements to pass to the next level for\nevery level in the tower.",
+            "itemtype": "property",
+            "name": "attrChances",
+            "type": "string",
+            "final": 1,
+            "class": "ability.StaggeredDroppable"
         },
         {
             "file": "src/ability/toggleable.html",
@@ -2100,10 +2321,21 @@
         },
         {
             "file": "src/component/card.html",
-            "line": 122,
+            "line": 120,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
+            "class": "component.Card"
+        },
+        {
+            "file": "src/component/card.html",
+            "line": 133,
+            "description": "Node name of the card.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
             "class": "component.Card"
         },
         {
@@ -2168,38 +2400,270 @@
         },
         {
             "file": "src/component/dice.html",
-            "line": 265,
+            "line": 270,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
             "class": "component.Dice"
         },
         {
+            "file": "src/component/dice.html",
+            "line": 310,
+            "description": "Node name of the dice.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
+            "class": "component.Dice"
+        },
+        {
             "file": "src/component/token.html",
-            "line": 62,
+            "line": 60,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
             "class": "component.Token"
         },
         {
-            "file": "src/region/bag.html",
-            "line": 111,
-            "description": "Picks up a random child element of the given element.",
+            "file": "src/component/token.html",
+            "line": 71,
+            "description": "Node name of the token.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
+            "class": "component.Token"
+        },
+        {
+            "file": "src/grid/grid.html",
+            "line": 42,
+            "description": "Method called when the element is created.",
             "itemtype": "method",
-            "name": "doTrigger",
+            "name": "createdCallback",
+            "class": "grid.Grid"
+        },
+        {
+            "file": "src/grid/grid.html",
+            "line": 78,
+            "description": "Returns the element at the given row and column, or null if not found.",
+            "itemtype": "method",
+            "name": "get",
             "params": [
                 {
-                    "name": "el",
-                    "description": "The element whose child element should be randomly picked.",
-                    "type": "Element"
+                    "name": "row",
+                    "description": "The row index of the element to be returned.",
+                    "type": "Number"
+                },
+                {
+                    "name": "col",
+                    "description": "The col index of the element to be returned.",
+                    "type": "Number"
                 }
             ],
-            "class": "region.Bag.RandomPickable"
+            "return": {
+                "description": "The HTML element at the given row and col, or null if not found.",
+                "type": "HTMLElement|null"
+            },
+            "class": "grid.Grid"
+        },
+        {
+            "file": "src/grid/grid.html",
+            "line": 92,
+            "description": "The root element of the grid. All rows will be added as children to this element.",
+            "itemtype": "property",
+            "name": "rootEl",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.Grid"
+        },
+        {
+            "file": "src/grid/grid.html",
+            "line": 103,
+            "description": "Main template to render. This will be added as the shadow root of the element.",
+            "itemtype": "property",
+            "name": "mainTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.Grid"
+        },
+        {
+            "file": "src/grid/grid.html",
+            "line": 114,
+            "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
+            "itemtype": "property",
+            "name": "rowTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.Grid"
+        },
+        {
+            "file": "src/grid/grid.html",
+            "line": 126,
+            "description": "Template to render for every tile in the grid. This must have a content element.",
+            "itemtype": "property",
+            "name": "tileTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.Grid"
+        },
+        {
+            "file": "src/grid/hexgrid.html",
+            "line": 101,
+            "description": "The root element of the grid. All rows will be added as children to this element.",
+            "itemtype": "property",
+            "name": "rootEl",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.HexGrid"
+        },
+        {
+            "file": "src/grid/hexgrid.html",
+            "line": 112,
+            "description": "Main template to render. This will be added as the shadow root of the element.",
+            "itemtype": "property",
+            "name": "mainTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.HexGrid"
+        },
+        {
+            "file": "src/grid/hexgrid.html",
+            "line": 123,
+            "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
+            "itemtype": "property",
+            "name": "rowTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.HexGrid"
+        },
+        {
+            "file": "src/grid/hexgrid.html",
+            "line": 135,
+            "description": "Template to render for every tile in the grid.",
+            "itemtype": "property",
+            "name": "tileTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.HexGrid"
+        },
+        {
+            "file": "src/grid/hexgrid.html",
+            "line": 147,
+            "description": "Node name of the hex grid.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
+            "class": "grid.HexGrid"
+        },
+        {
+            "file": "src/grid/rectgrid.html",
+            "line": 92,
+            "description": "The root element of the grid. All rows will be added as children to this element.",
+            "itemtype": "property",
+            "name": "rootEl",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.RectGrid"
+        },
+        {
+            "file": "src/grid/rectgrid.html",
+            "line": 103,
+            "description": "Main template to render. This will be added as the shadow root of the element.",
+            "itemtype": "property",
+            "name": "mainTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.RectGrid"
+        },
+        {
+            "file": "src/grid/rectgrid.html",
+            "line": 114,
+            "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
+            "itemtype": "property",
+            "name": "rowTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.RectGrid"
+        },
+        {
+            "file": "src/grid/rectgrid.html",
+            "line": 126,
+            "description": "Template to render for every tile in the grid.",
+            "itemtype": "property",
+            "name": "tileTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.RectGrid"
+        },
+        {
+            "file": "src/grid/rectgrid.html",
+            "line": 138,
+            "description": "Node name of the rect grid.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
+            "class": "grid.RectGrid"
+        },
+        {
+            "file": "src/grid/trianglegrid.html",
+            "line": 103,
+            "description": "The root element of the grid. All rows will be added as children to this element.",
+            "itemtype": "property",
+            "name": "rootEl",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.TriangleGrid"
+        },
+        {
+            "file": "src/grid/trianglegrid.html",
+            "line": 114,
+            "description": "Main template to render. This will be added as the shadow root of the element.",
+            "itemtype": "property",
+            "name": "mainTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.TriangleGrid"
+        },
+        {
+            "file": "src/grid/trianglegrid.html",
+            "line": 125,
+            "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
+            "itemtype": "property",
+            "name": "rowTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.TriangleGrid"
+        },
+        {
+            "file": "src/grid/trianglegrid.html",
+            "line": 137,
+            "description": "Template to render for every tile in the grid.",
+            "itemtype": "property",
+            "name": "tileTemplate",
+            "type": "Element",
+            "final": 1,
+            "class": "grid.TriangleGrid"
+        },
+        {
+            "file": "src/grid/trianglegrid.html",
+            "line": 149,
+            "description": "Node name of the triangle grid.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
+            "class": "grid.TriangleGrid"
         },
         {
             "file": "src/region/bag.html",
-            "line": 150,
+            "line": 118,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2207,7 +2671,7 @@
         },
         {
             "file": "src/region/bag.html",
-            "line": 173,
+            "line": 141,
             "description": "The number of elements that users can pick out from the bag.",
             "itemtype": "property",
             "name": "pickableChildCount",
@@ -2216,63 +2680,41 @@
             "class": "region.Bag"
         },
         {
-            "file": "src/region/cubetower.html",
-            "line": 111,
-            "description": "Sets the default configuration for this ability on the given element.",
+            "file": "src/region/bag.html",
+            "line": 155,
+            "description": "Randomly picks a child of the given element that is not placeholder element.",
             "itemtype": "method",
-            "name": "init",
+            "name": "__selectChild__",
             "params": [
                 {
                     "name": "el",
-                    "description": "The element to set the default configuration to.",
+                    "description": "Element whose child should be picked randomly.",
                     "type": "Element"
                 }
             ],
-            "class": "region.CubeTower.TowerDroppable"
+            "return": {
+                "description": "Child of the given element that is not placeholder element that has been\n   picked randomly. Or null if no such child exists.",
+                "type": "Element"
+            },
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "region.Bag"
         },
         {
-            "file": "src/region/cubetower.html",
-            "line": 125,
-            "description": "Updates the inner state of the ability based on changes to the element.",
-            "itemtype": "method",
-            "name": "updateConfig",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "Element whose attributes have changed.",
-                    "type": "Element"
-                }
-            ],
-            "class": "region.CubeTower.TowerDroppable"
-        },
-        {
-            "file": "src/region/cubetower.html",
-            "line": 157,
-            "description": "Drops the currently moved element into the given element. This also moves elements in every\nlevel of the tower.",
-            "itemtype": "method",
-            "name": "doTrigger",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "Element to drop the moved element into.",
-                    "type": "Element"
-                }
-            ],
-            "class": "region.CubeTower.TowerDroppable"
-        },
-        {
-            "file": "src/region/cubetower.html",
-            "line": 198,
-            "description": "Name of the attribute to set the probability of the elements to pass to the next level for\nevery level in the tower.",
+            "file": "src/region/bag.html",
+            "line": 171,
+            "description": "Node name of the bag.",
             "itemtype": "property",
-            "name": "attrChances",
+            "name": "NODE_NAME",
             "type": "string",
             "final": 1,
-            "class": "region.CubeTower.TowerDroppable"
+            "static": 1,
+            "class": "region.Bag"
         },
         {
             "file": "src/region/cubetower.html",
-            "line": 240,
+            "line": 99,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2280,12 +2722,23 @@
         },
         {
             "file": "src/region/cubetower.html",
-            "line": 250,
+            "line": 109,
             "description": "The number of elements that users can pick out from the cube tower.",
             "itemtype": "property",
             "name": "pickableChildCount",
             "type": "number",
             "readonly": "",
+            "class": "region.CubeTower"
+        },
+        {
+            "file": "src/region/cubetower.html",
+            "line": 127,
+            "description": "Node name of the cube tower.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
             "class": "region.CubeTower"
         },
         {
@@ -2307,23 +2760,19 @@
             "class": "region.Deck"
         },
         {
-            "file": "src/region/hand.html",
-            "line": 88,
-            "description": "Drops the element added to {{#crossLink \"service.Move\"}}{{/crossLink}} as a child of the\ngiven element. The position of the dropped child depends on the position of the mouse at the\ntrigger time relative to the other children.",
-            "itemtype": "method",
-            "name": "doTrigger",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element to drop the picked element into.",
-                    "type": "Element"
-                }
-            ],
-            "class": "region.Hand.ReorderableDroppable"
+            "file": "src/region/deck.html",
+            "line": 116,
+            "description": "Node name of the deck.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
+            "class": "region.Deck"
         },
         {
             "file": "src/region/hand.html",
-            "line": 141,
+            "line": 89,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2331,7 +2780,7 @@
         },
         {
             "file": "src/region/hand.html",
-            "line": 152,
+            "line": 100,
             "description": "The number of elements that users can pick out from the hand.",
             "itemtype": "property",
             "name": "pickableChildCount",
@@ -2340,55 +2789,19 @@
             "class": "region.Hand"
         },
         {
-            "file": "src/region/rect.html",
-            "line": 82,
-            "description": "Handles event when the MutationObserver observes changes to the child list.",
-            "itemtype": "method",
-            "name": "__onDomMutation__",
-            "params": [
-                {
-                    "name": "mutations",
-                    "description": "Array of MutationRecords.",
-                    "type": "Array"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "region.Rect.FlexDroppable"
+            "file": "src/region/hand.html",
+            "line": 112,
+            "description": "Node name of the hand.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
+            "class": "region.Hand"
         },
         {
             "file": "src/region/rect.html",
-            "line": 98,
-            "description": "Sets the default configuration for this ability on the given element.",
-            "itemtype": "method",
-            "name": "init",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element to set the default configuration to.",
-                    "type": "Element"
-                }
-            ],
-            "class": "region.Rect.FlexDroppable"
-        },
-        {
-            "file": "src/region/rect.html",
-            "line": 110,
-            "description": "Drop the last dragged element on the given element",
-            "itemtype": "method",
-            "name": "doTrigger",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element to drop the dragged element into.",
-                    "type": "Element"
-                }
-            ],
-            "class": "region.Rect.FlexDroppable"
-        },
-        {
-            "file": "src/region/rect.html",
-            "line": 142,
+            "line": 66,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2396,12 +2809,23 @@
         },
         {
             "file": "src/region/rect.html",
-            "line": 152,
+            "line": 76,
             "description": "The number of elements that users can pick out from the rectangle region.",
             "itemtype": "property",
             "name": "pickableChildCount",
             "type": "number",
             "readonly": "",
+            "class": "region.Rect"
+        },
+        {
+            "file": "src/region/rect.html",
+            "line": 88,
+            "description": "Node name of the rectangular region.",
+            "itemtype": "property",
+            "name": "NODE_NAME",
+            "type": "string",
+            "final": 1,
+            "static": 1,
             "class": "region.Rect"
         },
         {
@@ -2783,7 +3207,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 65,
+            "line": 80,
             "description": "The container of all the moved elements.",
             "itemtype": "property",
             "name": "__container__",
@@ -2794,7 +3218,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 74,
+            "line": 89,
             "description": "Moves the container element to the last known location of the mouse.",
             "itemtype": "method",
             "name": "__moveContainer__",
@@ -2804,7 +3228,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 93,
+            "line": 112,
             "description": "Handles event when the mouse is moved.",
             "itemtype": "method",
             "name": "__onMouseMove__",
@@ -2821,7 +3245,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 106,
+            "line": 125,
             "description": "Sets the given element as being moved.",
             "itemtype": "method",
             "name": "add",
@@ -2836,7 +3260,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 117,
+            "line": 138,
             "description": "The elements that are being moved.",
             "itemtype": "property",
             "name": "movedElements",
@@ -2846,7 +3270,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 128,
+            "line": 149,
             "description": "Last known X coordinate of the mouse in px.",
             "itemtype": "property",
             "name": "mouseX",
@@ -2856,7 +3280,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 139,
+            "line": 160,
             "description": "Last known Y coordinate of the mouse in px.",
             "itemtype": "property",
             "name": "mouseY",
@@ -2894,8 +3318,8 @@
                     "type": "Name"
                 },
                 {
-                    "name": "prototype",
-                    "description": "Prototype object of the custom element.",
+                    "name": "ctor",
+                    "description": "Constructor function of the custom element.",
                     "type": "Object"
                 }
             ],
@@ -3072,198 +3496,6 @@
                 "type": "Promise"
             },
             "class": "service.Template"
-        },
-        {
-            "file": "src/surface/grid.html",
-            "line": 42,
-            "description": "Method called when the element is created.",
-            "itemtype": "method",
-            "name": "createdCallback",
-            "class": "surface.Grid"
-        },
-        {
-            "file": "src/surface/grid.html",
-            "line": 78,
-            "description": "Returns the element at the given row and column, or null if not found.",
-            "itemtype": "method",
-            "name": "get",
-            "params": [
-                {
-                    "name": "row",
-                    "description": "The row index of the element to be returned.",
-                    "type": "Number"
-                },
-                {
-                    "name": "col",
-                    "description": "The col index of the element to be returned.",
-                    "type": "Number"
-                }
-            ],
-            "return": {
-                "description": "The HTML element at the given row and col, or null if not found.",
-                "type": "HTMLElement|null"
-            },
-            "class": "surface.Grid"
-        },
-        {
-            "file": "src/surface/grid.html",
-            "line": 92,
-            "description": "The root element of the grid. All rows will be added as children to this element.",
-            "itemtype": "property",
-            "name": "rootEl",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.Grid"
-        },
-        {
-            "file": "src/surface/grid.html",
-            "line": 103,
-            "description": "Main template to render. This will be added as the shadow root of the element.",
-            "itemtype": "property",
-            "name": "mainTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.Grid"
-        },
-        {
-            "file": "src/surface/grid.html",
-            "line": 114,
-            "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
-            "itemtype": "property",
-            "name": "rowTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.Grid"
-        },
-        {
-            "file": "src/surface/grid.html",
-            "line": 126,
-            "description": "Template to render for every tile in the grid. This must have a content element.",
-            "itemtype": "property",
-            "name": "tileTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.Grid"
-        },
-        {
-            "file": "src/surface/hexgrid.html",
-            "line": 101,
-            "description": "The root element of the grid. All rows will be added as children to this element.",
-            "itemtype": "property",
-            "name": "rootEl",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.HexGrid"
-        },
-        {
-            "file": "src/surface/hexgrid.html",
-            "line": 112,
-            "description": "Main template to render. This will be added as the shadow root of the element.",
-            "itemtype": "property",
-            "name": "mainTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.HexGrid"
-        },
-        {
-            "file": "src/surface/hexgrid.html",
-            "line": 123,
-            "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
-            "itemtype": "property",
-            "name": "rowTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.HexGrid"
-        },
-        {
-            "file": "src/surface/hexgrid.html",
-            "line": 135,
-            "description": "Template to render for every tile in the grid.",
-            "itemtype": "property",
-            "name": "tileTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.HexGrid"
-        },
-        {
-            "file": "src/surface/rectgrid.html",
-            "line": 92,
-            "description": "The root element of the grid. All rows will be added as children to this element.",
-            "itemtype": "property",
-            "name": "rootEl",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.RectGrid"
-        },
-        {
-            "file": "src/surface/rectgrid.html",
-            "line": 103,
-            "description": "Main template to render. This will be added as the shadow root of the element.",
-            "itemtype": "property",
-            "name": "mainTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.RectGrid"
-        },
-        {
-            "file": "src/surface/rectgrid.html",
-            "line": 114,
-            "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
-            "itemtype": "property",
-            "name": "rowTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.RectGrid"
-        },
-        {
-            "file": "src/surface/rectgrid.html",
-            "line": 126,
-            "description": "Template to render for every tile in the grid.",
-            "itemtype": "property",
-            "name": "tileTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.RectGrid"
-        },
-        {
-            "file": "src/surface/trianglegrid.html",
-            "line": 103,
-            "description": "The root element of the grid. All rows will be added as children to this element.",
-            "itemtype": "property",
-            "name": "rootEl",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.TriangleGrid"
-        },
-        {
-            "file": "src/surface/trianglegrid.html",
-            "line": 114,
-            "description": "Main template to render. This will be added as the shadow root of the element.",
-            "itemtype": "property",
-            "name": "mainTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.TriangleGrid"
-        },
-        {
-            "file": "src/surface/trianglegrid.html",
-            "line": 125,
-            "description": "Template to render for every row in the grid. Tiles will be added as children to this\nelement.",
-            "itemtype": "property",
-            "name": "rowTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.TriangleGrid"
-        },
-        {
-            "file": "src/surface/trianglegrid.html",
-            "line": 137,
-            "description": "Template to render for every tile in the grid.",
-            "itemtype": "property",
-            "name": "tileTemplate",
-            "type": "Element",
-            "final": 1,
-            "class": "surface.TriangleGrid"
         },
         {
             "file": "src/third_party/hammer.html",
@@ -3978,7 +4210,7 @@
         },
         {
             "file": "src/pbelement.html",
-            "line": 26,
+            "line": 27,
             "description": "Called when the element is created",
             "itemtype": "method",
             "name": "createdCallback",
@@ -3987,7 +4219,7 @@
         },
         {
             "file": "src/pbelement.html",
-            "line": 48,
+            "line": 51,
             "description": "Called when the element is attached to the document.",
             "itemtype": "method",
             "name": "attachedCallback",
@@ -3996,7 +4228,7 @@
         },
         {
             "file": "src/pbelement.html",
-            "line": 57,
+            "line": 60,
             "description": "Called when the element is detached from the document.",
             "itemtype": "method",
             "name": "detachedCallback",
@@ -4005,11 +4237,11 @@
         },
         {
             "file": "src/pbelement.html",
-            "line": 64,
-            "description": "True iff the element has been created.",
-            "type": "boolean",
+            "line": 67,
+            "description": "Promise that will be resolved when the element has been created",
+            "type": "Promise",
             "itemtype": "property",
-            "name": "isCreated",
+            "name": "whenCreated",
             "final": 1,
             "class": "PbElement",
             "module": "api"
@@ -4240,19 +4472,7 @@
             },
             "class": "Utils",
             "module": "api"
-        },
-        {
-            "file": "tutorial/01_overview.js",
-            "line": 52,
-            "description": "Some examples of abilities include:\n  <ul>\n    <li>{{#crossLink \"ability.Shuffleable\"}}Shuffleable{{/crossLink}}: Shuffles the component's\n    children when triggered.\n    <li> {{#crossLink \"ability.Pickable\"}}Pickable{{/crossLink}}: Makes the component's move\n    following the mouse, until dropped.\n    <li>{{#crossLink \"ability.Droppable\"}}Droppable{{/crossLink}}: Adds the picked component as\n    the current component's child.\n  </ul>\n\n  Each Ability attached to a Component has its own name. This means that you can have two\n  abilities of the same type, but different names. For example, {{#crossLink \"component.Card\"}}\n  pb-c-card{{/crossLink}} has two abilities: `flippable` and `tappable`, both of which are of\n  type {{#crossLink \"ability.Toggleable\"}}Toggleable{{/crossLink}}.",
-            "class": "1 Overview",
-            "module": "tutorial"
         }
     ],
-    "warnings": [
-        {
-            "message": "Missing item type\nSome examples of abilities include:\n  <ul>\n    <li>{{#crossLink \"ability.Shuffleable\"}}Shuffleable{{/crossLink}}: Shuffles the component's\n    children when triggered.\n    <li> {{#crossLink \"ability.Pickable\"}}Pickable{{/crossLink}}: Makes the component's move\n    following the mouse, until dropped.\n    <li>{{#crossLink \"ability.Droppable\"}}Droppable{{/crossLink}}: Adds the picked component as\n    the current component's child.\n  </ul>\n\n  Each Ability attached to a Component has its own name. This means that you can have two\n  abilities of the same type, but different names. For example, {{#crossLink \"component.Card\"}}\n  pb-c-card{{/crossLink}} has two abilities: `flippable` and `tappable`, both of which are of\n  type {{#crossLink \"ability.Toggleable\"}}Toggleable{{/crossLink}}.",
-            "line": " tutorial/01_overview.js:52"
-        }
-    ]
+    "warnings": []
 }

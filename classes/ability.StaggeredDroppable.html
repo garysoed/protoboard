@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>region.CubeTower.TowerDroppable - Protoboard</title>
+  <title>ability.StaggeredDroppable - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -228,7 +228,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 0.3.0</div>
+      <div class="since">v 0.3.1</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -255,6 +255,9 @@
           <li class="">
             <a href="../classes/5 Theming.html">5 Theming</a>
           </li>
+          <li class="">
+            <a href="../classes/6 Abilities.html">6 Abilities</a>
+          </li>
         </ul>
       </div>
     </section>
@@ -277,13 +280,25 @@
             <a href="../classes/ability.Droppable.html">ability.Droppable</a>
           </li>
           <li class="">
+            <a href="../classes/ability.FlexDroppable.html">ability.FlexDroppable</a>
+          </li>
+          <li class="">
             <a href="../classes/ability.Helpable.html">ability.Helpable</a>
+          </li>
+          <li class="">
+            <a href="../classes/ability.OrderedDroppable.html">ability.OrderedDroppable</a>
           </li>
           <li class="">
             <a href="../classes/ability.Pickable.html">ability.Pickable</a>
           </li>
           <li class="">
+            <a href="../classes/ability.SelectedPickable.html">ability.SelectedPickable</a>
+          </li>
+          <li class="">
             <a href="../classes/ability.Shuffleable.html">ability.Shuffleable</a>
+          </li>
+          <li class="sidebar-selected">
+            <a href="../classes/ability.StaggeredDroppable.html">ability.StaggeredDroppable</a>
           </li>
           <li class="">
             <a href="../classes/ability.Toggleable.html">ability.Toggleable</a>
@@ -310,6 +325,18 @@
             <a href="../classes/component.Token.html">component.Token</a>
           </li>
           <li class="">
+            <a href="../classes/grid.Grid.html">grid.Grid</a>
+          </li>
+          <li class="">
+            <a href="../classes/grid.HexGrid.html">grid.HexGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/grid.RectGrid.html">grid.RectGrid</a>
+          </li>
+          <li class="">
+            <a href="../classes/grid.TriangleGrid.html">grid.TriangleGrid</a>
+          </li>
+          <li class="">
             <a href="../classes/Hammer.html">Hammer</a>
           </li>
           <li class="">
@@ -319,13 +346,7 @@
             <a href="../classes/region.Bag.html">region.Bag</a>
           </li>
           <li class="">
-            <a href="../classes/region.Bag.RandomPickable.html">region.Bag.RandomPickable</a>
-          </li>
-          <li class="">
             <a href="../classes/region.CubeTower.html">region.CubeTower</a>
-          </li>
-          <li class="sidebar-selected">
-            <a href="../classes/region.CubeTower.TowerDroppable.html">region.CubeTower.TowerDroppable</a>
           </li>
           <li class="">
             <a href="../classes/region.Deck.html">region.Deck</a>
@@ -334,13 +355,7 @@
             <a href="../classes/region.Hand.html">region.Hand</a>
           </li>
           <li class="">
-            <a href="../classes/region.Hand.ReorderableDroppable.html">region.Hand.ReorderableDroppable</a>
-          </li>
-          <li class="">
             <a href="../classes/region.Rect.html">region.Rect</a>
-          </li>
-          <li class="">
-            <a href="../classes/region.Rect.FlexDroppable.html">region.Rect.FlexDroppable</a>
           </li>
           <li class="">
             <a href="../classes/region.Region.html">region.Region</a>
@@ -371,18 +386,6 @@
           </li>
           <li class="">
             <a href="../classes/service.Template.html">service.Template</a>
-          </li>
-          <li class="">
-            <a href="../classes/surface.Grid.html">surface.Grid</a>
-          </li>
-          <li class="">
-            <a href="../classes/surface.HexGrid.html">surface.HexGrid</a>
-          </li>
-          <li class="">
-            <a href="../classes/surface.RectGrid.html">surface.RectGrid</a>
-          </li>
-          <li class="">
-            <a href="../classes/surface.TriangleGrid.html">surface.TriangleGrid</a>
           </li>
           <li class="">
             <a href="../classes/trigger.Click.html">trigger.Click</a>
@@ -424,10 +427,10 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code>region.CubeTower.TowerDroppable <span class="keyword">extends</span> <a href="../classes/ability.Droppable.html" class="crosslink">ability.Droppable</a></code>
+        <code>ability.StaggeredDroppable <span class="keyword">extends</span> <a href="../classes/ability.Droppable.html" class="crosslink">ability.Droppable</a></code>
       </header>
       <div class="since">
-        since 0.3.0
+        since 0.3.1
       </div>
 
     <div class="content description">
@@ -451,11 +454,11 @@ next level, specify:</p>
       </header>
       <div>
           <section class="method">
-            <header id="method_region.CubeTower.TowerDroppable">
-              <code class="method-signature">region.CubeTower.TowerDroppable(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultEnabled, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a> defaultProbabilities)</code>
+            <header id="method_ability.StaggeredDroppable">
+              <code class="method-signature">ability.StaggeredDroppable(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name, <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a> defaultEnabled, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a> defaultProbabilities)</code>
             </header>
               <div class="since">
-                since 0.3.0
+                since 0.3.1
               </div>
             <div class="content">
               <span class="description"></span>
@@ -796,6 +799,47 @@ next level, specify:</p>
                   Defined in <code><a href="ability.Ability.html#method_isEnabled">ability.Ability</a></code>
                 </footer>
               
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method">
+            <header id="method_isInStaggerState">
+              <code class="method-signature">isInStaggerState(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> child) => <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code>
+            </header>
+            <div class="content">
+              <span class="description"></span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>child</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The element to check.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>child</code></dt>
+                <dd><p>The element to check.</p>
+          </dd>
+              </dl>
+          
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></code><span class="description"><p>True iff the given element is in stagger state.</p>
+          </span>
+                </div>
+          
             </div>
           
             <div class="divider"></div>
