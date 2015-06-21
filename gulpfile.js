@@ -29,8 +29,6 @@ var DOC_DIR  = 'doc';
 var OUT_DIR  = 'out';
 var MIN_DIR  = 'min';
 
-var SRC_GLOB =
-
 function runKarma(singleRun, callback) {
   karma.start({
     configFile: __dirname + '/karma.conf.js',
