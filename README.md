@@ -9,6 +9,11 @@ supported components.
 Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 
 ## Release notes
+### 0.3.2
+- Fixed bug where minimized files do not depend on minimized dependencies.
+- Minimized files have been moved from `out/` to `min/`. Their names no longer have the `.min.html`
+suffix.
+
 ### 0.3.1
 New
 - Added [tutorial](http://garysoed.github.io/protoboard/classes/6%20Abilities.html) on Abilities.
