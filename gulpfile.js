@@ -123,7 +123,8 @@ gulp.task('doc', gulp.series(
 ));
 gulp.task('clean', function() {
   return gulp.src('')
-      .pipe(shell('rm -r out doc'));
+      .pipe(shell('rm -r out doc'))
+      .pipe(shell('rm -r ../protoboard-doc/classes'));
 });
 
 gulp.task('compile', gulp.parallel('source', 'test-source', 'copy-deps'));
