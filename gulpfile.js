@@ -21,7 +21,7 @@ var path = require('path');
 
 var loadtheme = require('./loadtheme');
 
-var VERSION = '0.3.2';
+var VERSION = '0.3.3';
 
 var SRC_DIR  = 'src';
 var TEST_DIR = 'test';

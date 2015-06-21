@@ -9,6 +9,9 @@ supported components.
 Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 
 ## Release notes
+### 0.3.3
+- Fixed gulp script.
+
 ### 0.3.2
 - Fixed bug where minimized files do not depend on minimized dependencies.
 - Minimized files have been moved from `out/` to `min/`. Their names no longer have the `.min.html`
