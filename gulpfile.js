@@ -203,8 +203,10 @@ gulp.task('test-slow', function(done) {
   });
 
   var files = glob.sync(options.glob);
+  console.log('Found ' + files.length + ' tests');
+
   var fileGroups = [];
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 1; i++) {
     fileGroups.push([]);
   }
 
