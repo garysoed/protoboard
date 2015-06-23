@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/garysoed/protoboard",
   "devDependencies": {
-    "bower": "^1.4.1",
     "chai": "^1.9.2",
     "chalk": "^0.5.1",
     "doctheme": "git://github.com/garysoed/doctheme",
