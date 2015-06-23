@@ -194,44 +194,47 @@ function karmaRunner(files, callback, opt_errors) {
     karmaRunner(files, callback, errors);
   });
 }
-gulp.task('test-slow', function(done) {
-  var options = minimist(process.argv.slice(2), {
-    'string': 'glob',
-    'default': {
-      'glob': 'out/**/*_test.html'
+gulp.task('test-slow', gulp.series(
+    'compile',
+    function _testSlow(done) {
+      var options = minimist(process.argv.slice(2), {
+        'string': 'glob',
+        'default': {
+          'glob': 'out/**/*_test.html'
+        }
+      });
+
+      var files = glob.sync(options.glob);
+      console.log('Found ' + files.length + ' tests');
+
+      var fileGroups = [];
+      for (var i = 0; i < 5; i++) {
+        fileGroups.push([]);
+      }
+
+      var groupIdx = 0;
+      while (files.length > 0) {
+        fileGroups[groupIdx].push(files.pop());
+        groupIdx = (groupIdx + 1) % fileGroups.length;
+      }
+
+      console.log('Running ' + fileGroups.length + ' tests in parallel');
+      var promises = fileGroups.map(function(fileGroup) {
+        return new Promise(function(resolve, reject) {
+          karmaRunner(fileGroup, resolve);
+        });
+      });
+
+      Promise.all(promises).then(function(errorsArray) {
+        var errors = errorsArray.reduce(Array.prototype.concat);
+        if (errors.length > 0) {
+          callback(new Error(errors.join('\n')));
+        } else {
+          callback();
+        }
+      });
     }
-  });
-
-  var files = glob.sync(options.glob);
-  console.log('Found ' + files.length + ' tests');
-
-  var fileGroups = [];
-  for (var i = 0; i < 1; i++) {
-    fileGroups.push([]);
-  }
-
-  var groupIdx = 0;
-  while (files.length > 0) {
-    fileGroups[groupIdx].push(files.pop());
-    groupIdx = (groupIdx + 1) % fileGroups.length;
-  }
-
-  console.log('Running ' + fileGroups.length + ' tests in parallel');
-  var promises = fileGroups.map(function(fileGroup) {
-    return new Promise(function(resolve, reject) {
-      karmaRunner(fileGroup, resolve);
-    });
-  });
-
-  Promise.all(promises).then(function(errorsArray) {
-    var errors = errorsArray.reduce(Array.prototype.concat);
-    if (errors.length > 0) {
-      callback(new Error(errors.join('\n')));
-    } else {
-      callback();
-    }
-  });
-});
+));
 
 gulp.task('watch', gulp.parallel(
     gulp.series(
