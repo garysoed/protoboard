@@ -37,13 +37,11 @@
   describe('ability.Helpable', () => {
     let displayEl;
 
-    beforeEach(done => {
+    before(() => {
       displayEl = $i.doc.createElement('div');
-
       $i._.spy($i.doc, 'createElement').overrideReturn(displayEl);
       $i.$registry.register($i.doc, $i.Config);
       $i._.reset($i.doc.createElement);
-      done();
     });
 
     describe('#trigger', () => {
