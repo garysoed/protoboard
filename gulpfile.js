@@ -26,6 +26,8 @@ var loadtheme = require('./loadtheme');
 
 var VERSION = '0.3.3';
 
+var PARALLEL_TEST_COUNT = 2;
+
 var SRC_DIR  = 'src';
 var TEST_DIR = 'test';
 var DOC_DIR  = 'doc';
@@ -208,7 +210,7 @@ gulp.task('test-slow', gulp.series(
       console.log('Found ' + files.length + ' tests');
 
       var fileGroups = [];
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < PARALLEL_TEST_COUNT; i++) {
         fileGroups.push([]);
       }
 
