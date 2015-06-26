@@ -1,13 +1,14 @@
 <base href="..">
 
 <link rel="import" href="trigger/trigger.html">
+<link rel="import" href="trigger/triggers.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 
 <script>
 DI
     .prefix('pb')
-    .bind('trigger.Click', { Events: '=', Trigger: 'trigger.=' }, $i => {
+    .bind('trigger.Click', { Events: '=', Trigger: 'trigger.=', Triggers: 'trigger.=' }, $i => {
 
   /**
    * Triggers an ability when the element is clicked.
@@ -59,18 +60,9 @@ DI
     }
   }
 
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Click|undefined} The Click trigger if parse is successful, or `undefined`
-   *    otherwise.
-   * @static
-   */
-  Click.parse = function(str) {
+  $i.Triggers.register(str => {
     return (str === 'click') ? new Click() : undefined;
-  };
+  });
 
   return Click;
 });

@@ -2,11 +2,19 @@
 
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/trigger.html">
+<link rel="import" href="trigger/triggers.html">
 
 <script>
 DI
     .prefix('pb')
-    .bind('trigger.DoubleClick', { Events: '=', Trigger: 'trigger.=' }, $i => {
+    .bind(
+        'trigger.DoubleClick',
+        {
+          Events: '=',
+          Trigger: 'trigger.=',
+          Triggers: 'trigger.='
+        },
+        $i => {
 
   /**
    * Triggers an ability when the element is double clicked.
@@ -58,18 +66,9 @@ DI
     }
   }
 
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.DoubleClick|undefined} The DoubleClick trigger if parse is successful, or
-   *    `undefined` otherwise.
-   * @static
-   */
-  DoubleClick.parse = function(str) {
+  $i.Triggers.register(str => {
     return (str === 'dblclick') ? new DoubleClick() : undefined;
-  };
+  });
 
   return DoubleClick;
 });

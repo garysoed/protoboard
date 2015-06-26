@@ -1,13 +1,13 @@
 <base href="..">
 
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="trigger/click.html">
-<link rel="import" href="trigger/key.html">
 
 <script>
 DI
     .prefix('pb.trigger')
-    .bind('Triggers', { Click: '=', Key: '=' }, $i => {
+    .bind('Triggers', { }, $i => {
+
+  const PARSE_FNS = new Set();
 
   // Private symbols
   const __observer__ = Symbol();
@@ -16,28 +16,57 @@ DI
 
   const __onMutation__ = Symbol();
 
-  class Registrar {
-    constructor(target) {
-      this[__target__] = target;
-    }
-
-    add(trigger) {
-      if (!this[__target__][__triggers__]) {
-        this[__target__][__triggers__] = new Map();
-      }
-      this[__target__][__triggers__].set(trigger.attrName, trigger);
-      return this;
-    }
-  }
-
+  /**
+   * Utility class to manage triggers. Use this class to register your custom trigger by calling
+   * the {{#crossLink "trigger.Trigger/register:method"}}{{/crossLink}} method.
+   *
+   * @class trigger.Triggers
+   * @since 1.0.0
+   * @static
+   */
   let Triggers = {
-    parse(str) {
-      let trigger = $i.Click.parse(str) || $i.Key.parse(str);
+
+    /**
+     * Parses the given string using the registered parse functions and returns the first matching
+     * trigger. If no parse can match the string, this will throw an error.
+     *
+     * @method parse
+     * @param {string} triggerString The string to be parsed.
+     * @return {trigger.Trigger} The parsed trigger.
+     */
+    parse(triggerString) {
+      let trigger = null;
+      for (let parseFn of PARSE_FNS) {
+        trigger = parseFn(triggerString);
+        if (trigger) {
+          break;
+        }
+      }
 
       if (!trigger) {
-        throw `Unparsable trigger string: ${str}`;
+        throw new Error(`Unparsable trigger string: ${triggerString}`);
       }
       return trigger;
+    },
+
+    /**
+     * Registers a parsing function.
+     *
+     * @method register
+     * @param {function} parseFn The parsing function. This should take a string and return the
+     *    parsed trigger if the input string is valid, or `undefined` otherwise.
+     */
+    register(parseFn) {
+      PARSE_FNS.add(parseFn);
+    },
+
+    /**
+     * Clears any registered functions.
+     *
+     * @method clear
+     */
+    clear() {
+      PARSE_FNS.clear();
     }
   };
 

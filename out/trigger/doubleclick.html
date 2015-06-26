@@ -2,6 +2,7 @@
 
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/trigger.html">
+<link rel="import" href="trigger/triggers.html">
 
 <script>"use strict";
 
@@ -11,7 +12,11 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("trigger.DoubleClick", { Events: "=", Trigger: "trigger.=" }, function ($i) {
+DI.prefix("pb").bind("trigger.DoubleClick", {
+  Events: "=",
+  Trigger: "trigger.=",
+  Triggers: "trigger.="
+}, function ($i) {
   var DoubleClick = (function (_$i$Trigger) {
     function DoubleClick() {
       _classCallCheck(this, DoubleClick);
@@ -49,9 +54,9 @@ DI.prefix("pb").bind("trigger.DoubleClick", { Events: "=", Trigger: "trigger.=" 
     return DoubleClick;
   })($i.Trigger);
 
-  DoubleClick.parse = function (str) {
+  $i.Triggers.register(function (str) {
     return str === "dblclick" ? new DoubleClick() : undefined;
-  };
+  });
 
   return DoubleClick;
 });</script>

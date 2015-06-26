@@ -1,6 +1,7 @@
 <html><head><base href="..">
 
 <link rel="import" href="trigger/trigger.html">
+<link rel="import" href="trigger/triggers.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 
@@ -12,7 +13,7 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("trigger.Click", { Events: "=", Trigger: "trigger.=" }, function ($i) {
+DI.prefix("pb").bind("trigger.Click", { Events: "=", Trigger: "trigger.=", Triggers: "trigger.=" }, function ($i) {
   var Click = (function (_$i$Trigger) {
     function Click() {
       _classCallCheck(this, Click);
@@ -50,9 +51,9 @@ DI.prefix("pb").bind("trigger.Click", { Events: "=", Trigger: "trigger.=" }, fun
     return Click;
   })($i.Trigger);
 
-  Click.parse = function (str) {
+  $i.Triggers.register(function (str) {
     return str === "click" ? new Click() : undefined;
-  };
+  });
 
   return Click;
 });</script>

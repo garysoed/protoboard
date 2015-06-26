@@ -4,6 +4,7 @@
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 <link rel="import" href="trigger/trigger.html">
+<link rel="import" href="trigger/triggers.html">
 
 <style>
   .pb-key:hover::shadow #root {
@@ -21,6 +22,7 @@ DI
           Events: '=',
           Move: 'service.=',
           Trigger: 'trigger.=',
+          Triggers: 'trigger.=',
           $registry: '='
         },
         $i => {
@@ -116,21 +118,12 @@ DI
     }
   }
 
-  /**
-   * Parses the input string
-   *
-   * @method parse
-   * @param {string} str The string to parse
-   * @return {trigger.Key|undefined} The Key trigger if parse is successful, or `undefined`
-   *    otherwise.
-   * @static
-   */
-  Key.parse = function(str) {
+  $i.Triggers.register(str => {
     if (str.substring(0, 'key-'.length) === 'key-') {
       return new Key(str.substring('key-'.length));
     }
     return undefined;
-  };
+  });
 
   // Element > key > [ability]
   const __hoveredEls__ = Symbol('hoveredEls');

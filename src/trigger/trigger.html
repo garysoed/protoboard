@@ -35,7 +35,8 @@ DI.bind('pb.trigger.Trigger', {}, () => {
     /**
      * @method toString
      * @return {string} String representation of the trigger. This can be used to set the trigger of
-     *    an ability.
+     *    an ability. If this is passed to the parser for the trigger, it must return the same
+     *    trigger.
      */
     toString() {
       throw new Error('unimplemented');

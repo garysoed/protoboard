@@ -4,6 +4,7 @@
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 <link rel="import" href="trigger/trigger.html">
+<link rel="import" href="trigger/triggers.html">
 
 <style>.pb-key:hover::shadow #root {
   outline: 6px dashed #6B62A4;
@@ -26,6 +27,7 @@ DI.prefix("pb").bind("trigger.Key", {
   Events: "=",
   Move: "service.=",
   Trigger: "trigger.=",
+  Triggers: "trigger.=",
   $registry: "="
 }, function ($i) {
   var __active__ = Symbol();
@@ -80,12 +82,12 @@ DI.prefix("pb").bind("trigger.Key", {
     return Key;
   })($i.Trigger);
 
-  Key.parse = function (str) {
+  $i.Triggers.register(function (str) {
     if (str.substring(0, "key-".length) === "key-") {
       return new Key(str.substring("key-".length));
     }
     return undefined;
-  };
+  });
 
   var __hoveredEls__ = Symbol("hoveredEls");
 

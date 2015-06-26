@@ -1,54 +1,63 @@
 <html><head><base href="..">
 
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="trigger/click.html">
-<link rel="import" href="trigger/key.html">
 
 <script>"use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+DI.prefix("pb.trigger").bind("Triggers", {}, function ($i) {
 
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+  var PARSE_FNS = new Set();
 
-DI.prefix("pb.trigger").bind("Triggers", { Click: "=", Key: "=" }, function ($i) {
   var __observer__ = Symbol();
   var __target__ = Symbol();
   var __triggers__ = Symbol();
 
   var __onMutation__ = Symbol();
 
-  var Registrar = (function () {
-    function Registrar(target) {
-      _classCallCheck(this, Registrar);
+  var Triggers = {
+    parse: function parse(triggerString) {
+      var trigger = null;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-      this[__target__] = target;
-    }
+      try {
+        for (var _iterator = PARSE_FNS[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var parseFn = _step.value;
 
-    _createClass(Registrar, {
-      add: {
-        value: function add(trigger) {
-          if (!this[__target__][__triggers__]) {
-            this[__target__][__triggers__] = new Map();
+          trigger = parseFn(triggerString);
+          if (trigger) {
+            break;
           }
-          this[__target__][__triggers__].set(trigger.attrName, trigger);
-          return this;
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
         }
       }
-    });
-
-    return Registrar;
-  })();
-
-  var Triggers = {
-    parse: function parse(str) {
-      var trigger = $i.Click.parse(str) || $i.Key.parse(str);
 
       if (!trigger) {
-        throw "Unparsable trigger string: " + str;
+        throw new Error("Unparsable trigger string: " + triggerString);
       }
       return trigger;
+    },
+    register: function register(parseFn) {
+      PARSE_FNS.add(parseFn);
+    },
+    clear: function clear() {
+      PARSE_FNS.clear();
     }
   };
 
   return Triggers;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>
