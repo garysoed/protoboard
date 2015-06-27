@@ -51,8 +51,7 @@ DI.prefix("pb").bind("$registry", { Registry: "service.=" }, function ($i) {
   Token: "component.=?",
   TriangleGrid: "grid.=?",
   Utils: "=" }, function ($i) {
-
-  return {
+  var BOOTSTRAP = {
     run: function run(document) {
       $i.Utils.watch(function () {
         return document.readyState === "interactive" || document.readyState === "complete";
@@ -90,5 +89,6 @@ DI.prefix("pb").bind("$registry", { Registry: "service.=" }, function ($i) {
       });
     }
   };
+  return BOOTSTRAP;
 });</script>
 </head><body></body></html>

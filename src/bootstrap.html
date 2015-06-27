@@ -58,7 +58,21 @@ DI
         },
         $i => {
 
-  return {
+  /**
+   * Class responsible for bootstrapping the entire app. Call the
+   * {{#crossLink "Bootstrap/run:method"}}run{{/crossLink}} after doing all setting up logic.
+   *
+   * @class Bootstrap
+   * @static
+   */
+  const BOOTSTRAP = {
+
+    /**
+     * Runs the bootstrapping logic. All setup logic should occur before calling this.
+     *
+     * @method run
+     * @param {Document} document The DOM document to run the app in.
+     */
     run(document) {
       $i.Utils
           .watch(() => document.readyState === 'interactive' || document.readyState === 'complete')
@@ -74,6 +88,7 @@ DI
             }
           });
       }
-    };
+  };
+  return BOOTSTRAP;
 });
 </script>
