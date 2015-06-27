@@ -9,6 +9,21 @@ supported components.
 Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 
 ## Release notes
+### 1.0.0
+First stable release
+
+New
+- Added support for adding custom triggers
+- Added tutorials on JavaScript and Trigger
+
+Improvements
+- Added gulp task to test each test in individual browser
+- Reduced the wait interval for Utils.watch.
+
+Bug Fixes
+- Fixed bug where Helpable service test registers Move service twice (#88)
+- Added missing Ability dependency to Droppable (#87)
+
 ### 0.3.3
 - Fixed gulp script.
 
