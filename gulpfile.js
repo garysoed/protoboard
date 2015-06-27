@@ -24,7 +24,7 @@ var Promise = require('promise');
 
 var loadtheme = require('./loadtheme');
 
-var VERSION = '0.3.3';
+var VERSION = '1.0.0';
 
 var PARALLEL_TEST_COUNT = 2;
 
