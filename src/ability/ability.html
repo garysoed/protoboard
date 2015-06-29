@@ -9,12 +9,14 @@
 
 <script>
 DI
+    .bind('CustomEvent', {}, () => CustomEvent)
     .prefix('pb')
     .bind(
         'ability.Ability',
         {
           $: '/=',
           Check: '=',
+          CustomEvent: '/=',
           Log: 'service.=',
           Triggers: 'trigger.='
         },
@@ -28,6 +30,10 @@ DI
   /**
    * Base class for all abilities. Any abilities must extend this class and implement the methods
    * in this class.
+   *
+   * Since `v1.1.0`, all abilities extending this class will trigger an event with the same name as
+   * this ability's name when trigger. This event's detail will have one field, called ability,
+   * which is a reference to this ability.
    *
    * @class ability.Ability
    */
@@ -91,6 +97,13 @@ DI
     trigger(el) {
       $i.Log.log(this.attrName, $i.$(el).attr('pb-id'));
       if (this.isEnabled(el)) {
+        el.dispatchEvent(new $i.CustomEvent(
+            this.attrName,
+            {
+              detail: {
+                ability: this
+              }
+            }));
         this.doTrigger(el);
       }
     }

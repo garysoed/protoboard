@@ -13,9 +13,12 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Ability", {
+DI.bind("CustomEvent", {}, function () {
+  return CustomEvent;
+}).prefix("pb").bind("ability.Ability", {
   $: "/=",
   Check: "=",
+  CustomEvent: "/=",
   Log: "service.=",
   Triggers: "trigger.="
 }, function ($i) {
@@ -62,6 +65,11 @@ DI.prefix("pb").bind("ability.Ability", {
         value: function trigger(el) {
           $i.Log.log(this.attrName, $i.$(el).attr("pb-id"));
           if (this.isEnabled(el)) {
+            el.dispatchEvent(new $i.CustomEvent(this.attrName, {
+              detail: {
+                ability: this
+              }
+            }));
             this.doTrigger(el);
           }
         }

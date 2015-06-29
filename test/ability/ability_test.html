@@ -28,6 +28,7 @@
           {
             expect: '/=',
             _: '/=',
+            _M: '/=',
             $: '/=',
             doc: '=',
             Ability: 'ability.=',
@@ -107,28 +108,40 @@
         let name = 'name';
         let id = 'elId';
         let el = $i.doc.createElement('div');
+        let handler = $i._.spiedFunction();
         $i.$(el).attr('pb-id', id);
 
         $i._.spy($i.Log, 'log');
+
         let ability = new $i.Ability(name, null);
         $i._.spy(ability, 'doTrigger').overrideReturn();
         $i._.spy(ability, 'isEnabled').overrideReturn(true);
+        el.addEventListener(name, handler);
+
         ability.trigger(el);
 
         $i.expect($i.Log.log).calledWith(name, id).at.least(1);
         $i.expect(ability.isEnabled).calledWith(el).at.least(1);
         $i.expect(ability.doTrigger).calledWith(el).at.least(1);
+
+        let objectCaptor = $i._M.isA(Object);
+        $i.expect(handler).calledWith(objectCaptor).at.least(1);
+        $i.expect(objectCaptor.matchingArgs[0].detail.ability).to.equal(ability);
       });
 
       it('should not call doTrigger if not enabled', () => {
         let el = $i.doc.createElement('div');
         let ability = new $i.Ability(name, null);
+        let handler = $i._.spiedFunction();
         $i._.spy(ability, 'doTrigger').overrideReturn();
         $i._.spy(ability, 'isEnabled').overrideReturn(false);
+        el.addEventListener(name, handler);
+
         ability.trigger(el);
 
         $i.expect(ability.isEnabled).calledWith(el).at.least(1);
         $i.expect(ability.doTrigger).called().to.equal(0);
+        $i.expect(handler).called().to.equal(0);
       });
     });
 
