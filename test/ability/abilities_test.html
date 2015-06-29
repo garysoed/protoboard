@@ -106,25 +106,6 @@
           $i.expect(builder.getAll().size).to.be.equal(0);
         });
       });
-
-      describe('#trigger', () => {
-        it('should trigger the ability', () => {
-          let ability = $i.t.createFakeAbility('ability');
-          builder.add(ability);
-
-          $i._.spy(ability, 'trigger');
-          builder.trigger(ability.attrName);
-          $i.expect(ability.trigger).calledWith(el).at.least(1);
-        });
-        it('should throw error if the element has no abilities', () => {
-          $i.expect(() => builder.trigger('ability')).to.throw(Error);
-        });
-        it('should throw error if the element does not have the specified ability', () => {
-          let ability = $i.t.createFakeAbility('ability');
-          builder.add(ability);
-          $i.expect(() => builder.trigger('other ability')).to.throw(Error);
-        });
-      });
     });
 
     describe('#__onMutation__', () => {
@@ -171,7 +152,6 @@
     });
 
     describe('#init', () => {
-
       let el;
 
       beforeEach(done => {
@@ -229,6 +209,37 @@
       it('should throw exception if the element has been initialized', () => {
         $i.Abilities.init(el);
         $i.expect(() => $i.Abilities.init(el)).to.throw('already initialized');
+      });
+    });
+
+    describe.only('#trigger', () => {
+      let el;
+
+      beforeEach(done => {
+        el = $i.doc.createElement('div');
+        done();
+      });
+
+      it('should trigger the ability', () => {
+        let ability = $i.t.createFakeAbility('ability');
+        $i.Abilities.of(el.constructor.prototype).add(ability);
+
+        $i._.spy(ability, 'trigger');
+        $i.Abilities.trigger(el, ability.attrName);
+        $i.expect(ability.trigger).calledWith(el).at.least(1);
+      });
+      it('should throw error if the element has no abilities', () => {
+        $i.expect(() => $i.Abilities.trigger(el, 'ability')).to.throw(Error);
+      });
+      it('should throw error if the element does not have the specified ability', () => {
+        let ability = $i.t.createFakeAbility('ability');
+        $i.Abilities.of(el.constructor.prototype).add(ability);
+        $i.expect(() => $i.Abilities.trigger(el, 'other ability')).to.throw(Error);
+      });
+
+      afterEach(done => {
+        $i.Abilities.of(el.constructor.prototype).reset();
+        done();
       });
     });
 

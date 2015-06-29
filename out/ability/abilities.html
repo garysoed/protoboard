@@ -14,46 +14,46 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 DI.prefix("pb").bind("ability.Abilities", { Utils: "=" }, function ($i) {
   var __abilities__ = Symbol("abilities");
-  var __element__ = Symbol();
+  var __elProto__ = Symbol();
   var __observer__ = Symbol("observer");
 
   var __onMutation__ = Symbol("onMutation");
 
   var Builder = (function () {
-    function Builder(el) {
+    function Builder(proto) {
       _classCallCheck(this, Builder);
 
-      this[__element__] = el;
+      this[__elProto__] = proto;
     }
 
     _createClass(Builder, {
       add: {
         value: function add(ability) {
           var key = ability.attrName;
-          if (!this[__element__][__abilities__]) {
-            this[__element__][__abilities__] = new Map();
+          if (!this[__elProto__][__abilities__]) {
+            this[__elProto__][__abilities__] = new Map();
           }
 
-          if (this[__element__][__abilities__].has(ability.attrName)) {
+          if (this[__elProto__][__abilities__].has(ability.attrName)) {
             throw "Ability with key " + ability.attrName + " is already registered";
           }
-          this[__element__][__abilities__].set(ability.attrName, ability);
+          this[__elProto__][__abilities__].set(ability.attrName, ability);
 
-          if (this[__element__][__abilities__].has(ability.attrTrigger)) {
+          if (this[__elProto__][__abilities__].has(ability.attrTrigger)) {
             throw "Ability with key " + ability.attrTrigger + " is already registered";
           }
-          this[__element__][__abilities__].set(ability.attrTrigger, ability);
+          this[__elProto__][__abilities__].set(ability.attrTrigger, ability);
 
           return this;
         }
       },
       getAll: {
         value: function getAll() {
-          if (!this[__element__][__abilities__]) {
+          if (!this[__elProto__][__abilities__]) {
             return new Map();
           }
 
-          var abilities = new Set(this[__element__][__abilities__].values());
+          var abilities = new Set(this[__elProto__][__abilities__].values());
           var map = new Map();
           var _iteratorNormalCompletion = true;
           var _didIteratorError = false;
@@ -83,21 +83,14 @@ DI.prefix("pb").bind("ability.Abilities", { Utils: "=" }, function ($i) {
           return map;
         }
       },
+      reset: {
+        value: function reset() {
+          this[__elProto__][__abilities__].clear();
+        }
+      },
       trigger: {
         value: function trigger(name) {
-          var el = this[__element__];
-          var ability = null;
-          if (el[__abilities__]) {
-            ability = el[__abilities__].get(name);
-          }
-
-          if (!ability) {
-            throw new Error("Ability " + name + " is not registered with element " + el);
-          }
-
-          ability.trigger(el);
-
-          return this;
+          Abilities.trigger(this[__elProto__], name);
         }
       }
     });
@@ -139,8 +132,8 @@ DI.prefix("pb").bind("ability.Abilities", { Utils: "=" }, function ($i) {
       }
     });
 
-    _defineProperty(_Abilities, "of", function of(el) {
-      return new Builder(el);
+    _defineProperty(_Abilities, "of", function of(proto) {
+      return new Builder(proto);
     });
 
     _defineProperty(_Abilities, "init", function init(el) {
@@ -168,6 +161,19 @@ DI.prefix("pb").bind("ability.Abilities", { Utils: "=" }, function ($i) {
       abilities.forEach(function (ability) {
         ability.init(el);
       });
+    });
+
+    _defineProperty(_Abilities, "trigger", function trigger(el, name) {
+      var ability = null;
+      if (el[__abilities__]) {
+        ability = el[__abilities__].get(name);
+      }
+
+      if (!ability) {
+        throw new Error("Ability " + name + " is not registered with element " + el);
+      }
+
+      ability.trigger(el);
     });
 
     return _Abilities;

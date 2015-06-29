@@ -11,7 +11,7 @@ DI
 
   // Private symbols.
   const __abilities__ = Symbol('abilities');
-  const __element__ = Symbol();
+  const __elProto__ = Symbol();
   const __observer__ = Symbol('observer');
 
   const __onMutation__ = Symbol('onMutation');
@@ -23,15 +23,15 @@ DI
      *
      * @constructor
      * @class ability.Abilities.Builder
-     * @param {Element} el Element to add abilities to.
+     * @param {function} proto Prototype of element to add abilities to.
      * @private
      */
-    constructor(el) {
-      this[__element__] = el;
+    constructor(proto) {
+      this[__elProto__] = proto;
     }
 
     /**
-     * Adds the given ability to the element specified in the builder.
+     * Adds the given ability to the element prototype specified in the builder.
      *
      * @method add
      * @param {ability.Ability} ability The ability to add.
@@ -39,34 +39,34 @@ DI
      */
     add(ability) {
       let key = ability.attrName;
-      if (!this[__element__][__abilities__]) {
-        this[__element__][__abilities__] = new Map();
+      if (!this[__elProto__][__abilities__]) {
+        this[__elProto__][__abilities__] = new Map();
       }
 
-      if (this[__element__][__abilities__].has(ability.attrName)) {
+      if (this[__elProto__][__abilities__].has(ability.attrName)) {
         throw `Ability with key ${ability.attrName} is already registered`;
       }
-      this[__element__][__abilities__].set(ability.attrName, ability);
+      this[__elProto__][__abilities__].set(ability.attrName, ability);
 
-      if (this[__element__][__abilities__].has(ability.attrTrigger)) {
+      if (this[__elProto__][__abilities__].has(ability.attrTrigger)) {
         throw `Ability with key ${ability.attrTrigger} is already registered`;
       }
-      this[__element__][__abilities__].set(ability.attrTrigger, ability);
+      this[__elProto__][__abilities__].set(ability.attrTrigger, ability);
 
       return this;
     }
 
     /**
      * @method getAll
-     * @return {Map} Map of ability name to ability of the element in context. This excludes the
-     *    trigger attribute of the abilities.
+     * @return {Map} Map of ability name to ability of the element prototype in context. This
+     *    excludes the trigger attribute of the abilities.
      */
     getAll() {
-      if (!this[__element__][__abilities__]) {
+      if (!this[__elProto__][__abilities__]) {
         return new Map();
       }
 
-      let abilities = new Set(this[__element__][__abilities__].values());
+      let abilities = new Set(this[__elProto__][__abilities__].values());
       let map = new Map();
       for (let ability of abilities) {
         map.set(ability.attrName, ability);
@@ -75,27 +75,23 @@ DI
     }
 
     /**
+     * Removes all registered abilities from the specified element prototype.
+     * @method reset
+     */
+    reset() {
+      this[__elProto__][__abilities__].clear();
+    }
+
+    /**
      * Triggers the ability corresponding to the given name.
      *
+     * DEPRECATED: Use {{#crossLink "ability.Abilities/trigger:method"}}{{/crossLink}} instead.
+     *
      * @method trigger
-     * @param {string} name Name of the ability to trigger. Refer to the element's API for the
-     *    names.
-     * @return {ability.Abilities.Builder} This builder object for chaining.
+     * @deprecated
      */
     trigger(name) {
-      let el = this[__element__];
-      let ability = null;
-      if (el[__abilities__]) {
-        ability = el[__abilities__].get(name);
-      }
-
-      if (!ability) {
-        throw new Error(`Ability ${name} is not registered with element ${el}`);
-      }
-
-      ability.trigger(el);
-
-      return this;
+      Abilities.trigger(this[__elProto__], name);
     }
   }
 
@@ -137,11 +133,11 @@ DI
      * the given element.
      *
      * @method of
-     * @param {Element} el Element that the Builder should operate on.
+     * @param {function} proto Prototype of element that the Builder should operate on.
      * @return {ability.Abilities.Builder} The builder object.
      */
-    of(el) {
-      return new Builder(el);
+    of(proto) {
+      return new Builder(proto);
     },
 
     /**
@@ -177,6 +173,27 @@ DI
       abilities.forEach(ability => {
         ability.init(el);
       });
+    },
+
+    /**
+     * Triggers the ability corresponding to the given name.
+     *
+     * @method trigger
+     * @param {Element} el Element to trigger the ability on.
+     * @param {string} name Name of the ability to trigger. Refer to the element's API for the
+     *    names.
+     */
+    trigger(el, name) {
+      let ability = null;
+      if (el[__abilities__]) {
+        ability = el[__abilities__].get(name);
+      }
+
+      if (!ability) {
+        throw new Error(`Ability ${name} is not registered with element ${el}`);
+      }
+
+      ability.trigger(el);
     }
   };
 
