@@ -44,11 +44,12 @@ DI
      * @class ability.Ability
      * @param {string} name Name of the ability. This is used to identify an ability that has been
      *    added to an element. It therefore must be unique for the element.
-     * @param {trigger.Trigger} defaultTrigger The default trigger to trigger this ability.
+     * @param {trigger.Trigger} [defaultTrigger] The default trigger to trigger this ability, or
+     *    null if there are no default triggers.
      */
     constructor(name, defaultTrigger) {
       this[__name__] = name;
-      this[__defaultTrigger__] = defaultTrigger;
+      this[__defaultTrigger__] = defaultTrigger || null;
     }
 
     /**
@@ -58,7 +59,7 @@ DI
      * @param {Element} el The element to set the default values to.
      */
     init(el) {
-      if ($i.$(el).attr(this.attrTrigger) === undefined) {
+      if ($i.$(el).attr(this.attrTrigger) === undefined && this[__defaultTrigger__]) {
         $i.$(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
       }
 
@@ -83,7 +84,10 @@ DI
           el[__triggerMap__].get(this).off(el);
         }
         let trigger = $i.Triggers.parse($i.$(el).attr(this.attrTrigger));
-        trigger.on(el, this);
+
+        if (trigger) {
+          trigger.on(el, this);
+        }
         el[__triggerMap__].set(this, trigger);
       }
     }

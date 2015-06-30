@@ -58,6 +58,11 @@
         $i.expect($i.$(el).attr(ability.attrTrigger)).to.be.equal(triggerStr);
         $i.expect(ability.updateConfig).calledWith(el).at.least(1);
       });
+      it('should do nothing if the default trigger is not provided', () => {
+        let ability = new $i.Ability('name');
+        ability.init(el);
+        $i.expect($i.$(el).attr(ability.attrTrigger)).to.not.exist();
+      });
       it('should not override the trigger value if it is already set', () => {
         let attrValue = 'value';
         let trigger = $i.t.createFakeTrigger('triggerName');
@@ -100,6 +105,10 @@
         ability.updateConfig(el);
 
         $i.expect(trigger.off).called().to.be.equal(0);
+      });
+      it('should not throw error if there are no triggers set', () => {
+        let ability = new $i.Ability('name');
+        ability.updateConfig(el);
       });
     });
 

@@ -31,13 +31,13 @@ DI.bind("CustomEvent", {}, function () {
       _classCallCheck(this, Ability);
 
       this[__name__] = name;
-      this[__defaultTrigger__] = defaultTrigger;
+      this[__defaultTrigger__] = defaultTrigger || null;
     }
 
     _createClass(Ability, {
       init: {
         value: function init(el) {
-          if ($i.$(el).attr(this.attrTrigger) === undefined) {
+          if ($i.$(el).attr(this.attrTrigger) === undefined && this[__defaultTrigger__]) {
             $i.$(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
           }
 
@@ -56,8 +56,11 @@ DI.bind("CustomEvent", {}, function () {
               el[__triggerMap__].get(this).off(el);
             }
             var trigger = $i.Triggers.parse($i.$(el).attr(this.attrTrigger));
-            trigger.on(el, this);
-            el[__triggerMap__].set(this, trigger);
+
+            if (trigger) {
+              trigger.on(el, this);
+              el[__triggerMap__].set(this, trigger);
+            }
           }
         }
       },
