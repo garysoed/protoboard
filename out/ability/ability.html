@@ -59,8 +59,8 @@ DI.bind("CustomEvent", {}, function () {
 
             if (trigger) {
               trigger.on(el, this);
-              el[__triggerMap__].set(this, trigger);
             }
+            el[__triggerMap__].set(this, trigger);
           }
         }
       },
