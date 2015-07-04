@@ -2,7 +2,7 @@
     "project": {
         "name": "Protoboard",
         "description": "Check out the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
-        "version": "0.3.1",
+        "version": "1.0.0",
         "url": "https://github.com/garysoed/protoboard",
         "colorBackground": "white",
         "colorForeground": "black",
@@ -365,6 +365,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/trigger/triggers.html": {
+            "name": "src/trigger/triggers.html",
+            "modules": {},
+            "classes": {
+                "trigger.Triggers": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/ui/generate.html": {
             "name": "src/ui/generate.html",
             "modules": {},
@@ -397,6 +406,15 @@
             "modules": {},
             "classes": {
                 "ui.Shape": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/bootstrap.html": {
+            "name": "src/bootstrap.html",
+            "modules": {},
+            "classes": {
+                "Bootstrap": 1
             },
             "fors": {},
             "namespaces": {}
@@ -484,11 +502,29 @@
             "fors": {},
             "namespaces": {}
         },
-        "tutorial/06_abilities.js": {
-            "name": "tutorial/06_abilities.js",
+        "tutorial/06_javascript.js": {
+            "name": "tutorial/06_javascript.js",
             "modules": {},
             "classes": {
-                "6 Abilities": 1
+                "6 JavaScript": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "tutorial/07_abilities.js": {
+            "name": "tutorial/07_abilities.js",
+            "modules": {},
+            "classes": {
+                "7 Abilities": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "tutorial/08_triggers.js": {
+            "name": "tutorial/08_triggers.js",
+            "modules": {},
+            "classes": {
+                "8 Triggers": 1
             },
             "fors": {},
             "namespaces": {}
@@ -549,10 +585,12 @@
                 "trigger.Key": 1,
                 "trigger.Key.Service": 1,
                 "trigger.Trigger": 1,
+                "trigger.Triggers": 1,
                 "ui.Generate": 1,
                 "ui.Preview": 1,
                 "ui.Previewer": 1,
                 "ui.Shape": 1,
+                "Bootstrap": 1,
                 "Check": 1,
                 "PbElement": 1,
                 "Utils": 1
@@ -572,12 +610,14 @@
                 "3 Basic Usage": 1,
                 "4 Customizing Components": 1,
                 "5 Theming": 1,
-                "6 Abilities": 1
+                "6 JavaScript": 1,
+                "7 Abilities": 1,
+                "8 Triggers": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "tutorial/06_abilities.js",
+            "file": "tutorial/08_triggers.js",
             "line": 1,
             "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. {{#crossLink \"5 Theming\"}}Theme{{/crossLink}}: This library comes with some existing themes. You\ncan customize the color themes, and if you use CSS, you can customize in greater details.\n\nSome glossary of terminologies for the API:\n{{#html 'dl'}}\n  {{#html 'dt'}}{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}{{/html}}\n  {{#html 'dd'}}These are where the main logic happens. A Component can have several abilities,\n  each triggered with a Trigger.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"component.Component\"}}Component{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Components are the basic entity of a board. They provide main interaction with\n  the players. Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"region.Region\"}}Region{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Regions can contain other components. They cannot be moved and can contain one or\n  more components. Examples include: deck, bag, and hand.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Triggers listen to events in the document and triggers the ability it is\n  associated with. The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.{{/html}}\n\n  {{#html 'dt'}}UI{{/html}}\n  {{#html 'dd'}}This library also comes with several basic UI elements for convenience. These\n  elements do not have a real life counterpart.{{/html}}\n{{/html}}\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n   - `pb-c-` indicates a component\n   - `pb-r-` indicates a region\n   - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
         }
@@ -656,7 +696,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/droppable.html",
-            "line": 26,
+            "line": 27,
             "description": "This ability works with conjunction of {{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\nElements with this ability adds the picked element as its child element when triggered.",
             "is_constructor": 1,
             "params": [
@@ -1470,7 +1510,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/click.html",
-            "line": 12,
+            "line": 13,
             "description": "Triggers an ability when the element is clicked.",
             "extends": "trigger.Trigger"
         },
@@ -1484,7 +1524,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/doubleclick.html",
-            "line": 11,
+            "line": 19,
             "description": "Triggers an ability when the element is double clicked.",
             "extends": "trigger.Trigger"
         },
@@ -1498,7 +1538,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/key.html",
-            "line": 36,
+            "line": 38,
             "description": "Triggers an ability when the given key is pressed while the mouse is over the registered\nelement.",
             "is_constructor": 1,
             "params": [
@@ -1520,7 +1560,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/key.html",
-            "line": 140,
+            "line": 133,
             "description": "Helper service for detecting key press.",
             "static": 1,
             "access": "private",
@@ -1538,6 +1578,21 @@
             "file": "src/trigger/trigger.html",
             "line": 8,
             "description": "Base class of all triggers. Triggers should be stateless and immutable."
+        },
+        "trigger.Triggers": {
+            "name": "trigger.Triggers",
+            "shortname": "trigger.Triggers",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/trigger/triggers.html",
+            "line": 19,
+            "description": "Utility class to manage triggers. Use this class to register your custom trigger by calling\nthe {{#crossLink \"trigger.Trigger/register:method\"}}{{/crossLink}} method.",
+            "since": "1.0.0",
+            "static": 1
         },
         "ui.Generate": {
             "name": "ui.Generate",
@@ -1596,6 +1651,20 @@
             "description": "Creates a shape. To create a shape, use the `pb-u-shape` element and specify the attribute\n`shape`. Some supported shapes:\n- circle\n- hexagon\n- square\n\n```html\n<!-- Creates a circle -->\n<pb-u-shape shape=\"circle\"></pb-u-shape>\n```\n\nThe created shape is an embedded SVG. So you can customize it using CSS. Use\n`pb-u-shape::shadow .pb-shape` to select the shape.",
             "since": "0.2.0",
             "extends": "HTMLElement"
+        },
+        "Bootstrap": {
+            "name": "Bootstrap",
+            "shortname": "Bootstrap",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/bootstrap.html",
+            "line": 61,
+            "description": "Class responsible for bootstrapping the entire app. Call the\n{{#crossLink \"Bootstrap/run:method\"}}run{{/crossLink}} after doing all setting up logic.",
+            "static": 1
         },
         "Check": {
             "name": "Check",
@@ -1729,9 +1798,9 @@
             "description": "Protoboard supports basic theming using\n[CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables). However,\nsince CSS variables is not widely supported, Protoboard relies on [Myth](http://www.myth.io/) to\ncompile the variables.\n\nYou will need the source code. If you installed protoboard as a bower package, you will find all\nthe files you need under `bower_components/protoboard`. Run `npm install` in the source\ndirectory's root, and you can compile the source code by running:\n```bash\ngulp src\n```\n\nThe script reads from JSON files in the `./themes` directory. By default, they use the\n`./themes/slateblue.json` theme. To change the colour theme to \"medium sea green\", you can run:\n```bash\ngulp ex --theme ./themes/mediumseagreen.json\n```\n\nThough Protoboard comes with several themes, you can make your own theme. Create a json file with\ntwo keys: `base` and `vars`:\n```json\n{\n  \"base\": \"./bower_components/protoboard/themes/base.json\"\n  \"vars\": {\n    \"--color-lighter\": \"#CBC7E2\",\n    \"--color-light\": \"#ABA5CF\",\n    \"--color-normal\": \"#8982B8\",\n    \"--color-dark\": \"#6B62A4\",\n    \"--color-darker\": \"#50468F\"\n  }\n}\n```\n\nThe `vars` entry defines the colors used throughout the framework. You can see\n`./themes/base.json` for additional variables to override. This include transition time, shadow\nsize, border size, etc.\n\nThe `base` is a reference to another theme file. The path is relative to the location of the\nJSON file and should always start with `.` or `..`. The base theme file will be used for\nvariables that the framework uses but are not defined in your theme file. You can chain the\ndependencies for multiple levels, but it is recommended to always depend on `./themes/base.json`\nin the dependency chain, since new variables might be introduced, and might break your themes if\nyou did not set it in your theme file.\n\nIf you want to use the theme in your own CSS file, require the `loadtheme` in your Node JS. This\nis a function that accepts the file name of the theme JSON file.",
             "since": "0.2.0"
         },
-        "6 Abilities": {
-            "name": "6 Abilities",
-            "shortname": "6 Abilities",
+        "6 JavaScript": {
+            "name": "6 JavaScript",
+            "shortname": "6 JavaScript",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1739,10 +1808,39 @@
             "extension_for": [],
             "module": "tutorial",
             "namespace": "",
-            "file": "tutorial/06_abilities.js",
+            "file": "tutorial/06_javascript.js",
+            "line": 1,
+            "description": "Protoboard exposes JavaScript API that you can use to customize your board game prototype. Some\nservices, such as the {{#crossLink \"service.Log\"}}Log Service{{/crossLink}}, requires you to call\nthe JavaScript API.\n\nIn order to access the API, you will to import the file containing the JavaScript you want to\nuse.\n\nSince all the JavaScript API is exposed within the [DI-JS](https://github.com/garysoed/di)\nenvironment, you will need to import the `third_party/di.html` file. Accessing the DI-JS\nenvironment can be done by calling its run method:\n```javascript\nDI.run({ Log: 'pb.service.Log' }, function($i) {\n  $i.Log.log('category', 'value');\n});\n```\n\nDI-JS, however, only allows one call of `DI.run` to be called. Since `main.html` already does\nthis, you cannot import this file. `main.html` is responsible for bootstraping the app, and you\nwill need to do this yourself. Bootstrapping the app is done using the\n{{#crossLink \"Bootstrap\"}}{{/crossLink}} class. For example:\n```javascript\nDI.run({ Bootstrap: 'pb.Bootstrap' }, function($i) {\n  // Setup logic goes here\n\n  // Build the app\n  $i.Bootstrap.run(document);\n});\n```\n\nAll logic that requires the Protoboard elements, such as listening to event emitted by the\ncomponents, shuffling a deck, and getting references to DOM elements, should happen after the\nbootstrap. Any other logic should happen before the bootstrap logic."
+        },
+        "7 Abilities": {
+            "name": "7 Abilities",
+            "shortname": "7 Abilities",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "tutorial",
+            "namespace": "",
+            "file": "tutorial/07_abilities.js",
             "line": 1,
             "description": "Protoboard has a built in platform for triggering abilities. Every interaction with a Protoboard\ncomponent will trigger an ability.\n\nAll abilities can be found under the `ability` directory. Every ability extends from the\n{{#crossLink \"ability.Ability\"}}{{/crossLink}} class. Extending this class provides the following\nfeatures:\n- Reacts to changes to configuration attribute(s) of this ability.\n- Hook into the {{#crossLink \"service.Log\"}}Logging service{{/crossLink}}\n- Customizable trigger\n\nEvery instance of an ability has a default configuration. When an element created, the ability\nwill check for any configuration attributes it knows, and apply any default configuration to the\nelement. Note that since the same instance of an ability is shared across multiple elements, you\nshould never store element specific state in an ability. Instead, use\n{{#crossLink Symbol}}{{/crossLink}} to decorate the element with the state.\n\nEvery ability is associated with a {{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}. A\ntrigger listens to events in the browser, and, if the event happens, triggers the ability. To\nimplement your own ability, implement the {{#crossLink ability.Ability}}{{/crossLink}} class.\nNote that most of the time, you will only need to implement the\n{{#crossLink \"ability.Ability/doTrigger:method\"}}doTrigger{{/crossLink}} method.\n\nEvery ability on an element can be customized by changing an attribute related to that ability.\nThese attributes are prefixed with `name-`, where `name` is the name of the ability. For example,\nthe `drop-on` attribute specifies the trigger for the `drop` ability. Hence, the following sets\nthe `drop` ability to be triggered when the user clicks on the deck:\n```html\n<pb-r-deck drop-on=\"click\"></pb-r-deck>\n```\n\nThe `-on` configuration can be found on every ability, and they all sets the ability's trigger.\nIf you want to add a configuration, you will need to implement the\n{{#crossLink \"ability.Ability/init:method\"}}init{{/crossLink}} method to set the default value of\nthe configuration on the element.\n\nNow that you have your custom ability, you can add it to an element using the\n{{#crossLink \"service.Config\"}}{{/crossLink}}. For example:\n```javascript\nDI.run({ Config: 'service.=' }, function($i) {\n  $i.Config.add('pb-c-card', new CustomAbility());\n});\n```\nThe example above adds the CustomAbility to all `pb-c-card` elements.",
             "since": "0.3.1"
+        },
+        "8 Triggers": {
+            "name": "8 Triggers",
+            "shortname": "8 Triggers",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "tutorial",
+            "namespace": "",
+            "file": "tutorial/08_triggers.js",
+            "line": 1,
+            "description": "Beside abilities, Protoboard also allows you to create your own Triggers. Triggers are the main\nway for Abilities to be executed. Examples of Triggers include the\n{{#crossLink \"trigger.Click\"}}Click{{/crossLink}} trigger, which triggers an ability on an\nelement when the user clicks that element.\n\nTo create a trigger, you need to implement the {{#crossLink \"trigger.Trigger\"}}{{/crossLink}}\nclass. You will then need to register a parser with the\n{{#crossLink \"trigger.Triggers\"}}{{/crossLink}} service, by calling the\n{{#crossLink \"trigger.Triggers/register:method\"}}register{{/crossLink}} method. For example:\n```javascript\nDI.run({ Events: '=', Trigger: 'trigger.=', Triggers: 'trigger.=' }, function($i) {\n  var OnMouseUpTrigger = function() {};\n  OnMouseUpTrigger.prototype = Object.create($i.Trigger.prototype);\n\n  OnMouseUpTrigger.prototype.on = function(element, ability) {\n    $i.Events.of(element, this)\n        .on('dom', 'mouseup', ability.trigger.bind(ability, element));\n  };\n\n  OnMouseUpTrigger.prototype.off = function(element) {\n  \t $i.Events.of(element, this).off('dom', 'mouseup');\n  };\n\n  OnMouseUpTrigger.prototype.toString = function() {\n    return 'mouseup';\n  };\n\n  OnMouseUpTrigger.prototype.helpText = 'Triggers when mouse is unpressed on the element';\n\n  $i.Triggers.register(function(string) {\n    return (string === 'mouseup') ? new OnMouseUpTrigger() : undefined;\n  });\n});\n```\n\nThe {{#crossLink \"Events\"}}{{/crossLink}} class is a utility class to make event registering and\nunregistering easier to manage.",
+            "since": "1.0.0"
         }
     },
     "classitems": [
@@ -1974,7 +2072,7 @@
         },
         {
             "file": "src/ability/droppable.html",
-            "line": 43,
+            "line": 44,
             "description": "Sets the default configuration for this ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1989,7 +2087,7 @@
         },
         {
             "file": "src/ability/droppable.html",
-            "line": 57,
+            "line": 58,
             "description": "Drops the next element added to {{#crossLink \"service.Move\"}}{{/crossLink}} as a child of the\ngiven element.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -3570,7 +3668,7 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 20,
+            "line": 21,
             "description": "Registers the given element to trigger the given ability when clicked.",
             "itemtype": "method",
             "name": "on",
@@ -3590,7 +3688,7 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 32,
+            "line": 33,
             "description": "Unregisters the given element from triggering the registered ability when clicked.",
             "itemtype": "method",
             "name": "off",
@@ -3605,7 +3703,7 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 42,
+            "line": 43,
             "itemtype": "method",
             "name": "toString",
             "return": {
@@ -3616,7 +3714,7 @@
         },
         {
             "file": "src/trigger/click.html",
-            "line": 50,
+            "line": 51,
             "description": "The help text to be displayed by {{#crossLink \"ability.Helpable\"}}{{/crossLink}}.",
             "itemtype": "property",
             "name": "helpText",
@@ -3625,28 +3723,8 @@
             "class": "trigger.Click"
         },
         {
-            "file": "src/trigger/click.html",
-            "line": 62,
-            "description": "Parses the input string",
-            "itemtype": "method",
-            "name": "parse",
-            "params": [
-                {
-                    "name": "str",
-                    "description": "The string to parse",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "The Click trigger if parse is successful, or `undefined`\n   otherwise.",
-                "type": "trigger.Click|undefined"
-            },
-            "static": 1,
-            "class": "trigger.Click"
-        },
-        {
             "file": "src/trigger/doubleclick.html",
-            "line": 19,
+            "line": 27,
             "description": "Registers the given element to trigger the given ability when double clicked.",
             "itemtype": "method",
             "name": "on",
@@ -3666,7 +3744,7 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 31,
+            "line": 39,
             "description": "Unregisters the given element from triggering the registered ability when double clicked.",
             "itemtype": "method",
             "name": "off",
@@ -3681,7 +3759,7 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 41,
+            "line": 49,
             "itemtype": "method",
             "name": "toString",
             "return": {
@@ -3692,7 +3770,7 @@
         },
         {
             "file": "src/trigger/doubleclick.html",
-            "line": 49,
+            "line": 57,
             "description": "The help text to be displayed by {{#crossLink \"ability.Helpable\"}}{{/crossLink}}.",
             "itemtype": "property",
             "name": "helpText",
@@ -3701,28 +3779,8 @@
             "class": "trigger.DoubleClick"
         },
         {
-            "file": "src/trigger/doubleclick.html",
-            "line": 61,
-            "description": "Parses the input string",
-            "itemtype": "method",
-            "name": "parse",
-            "params": [
-                {
-                    "name": "str",
-                    "description": "The string to parse",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "The DoubleClick trigger if parse is successful, or\n   `undefined` otherwise.",
-                "type": "trigger.DoubleClick|undefined"
-            },
-            "static": 1,
-            "class": "trigger.DoubleClick"
-        },
-        {
             "file": "src/trigger/key.html",
-            "line": 49,
+            "line": 51,
             "description": "Handles event called when mouse has entered the element.",
             "itemtype": "method",
             "name": "__onMouseEnter__",
@@ -3744,7 +3802,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 61,
+            "line": 63,
             "description": "Handles event called when mouse has left the element.",
             "itemtype": "method",
             "name": "__onMouseLeave__",
@@ -3761,7 +3819,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 72,
+            "line": 74,
             "description": "Registers the given element to trigger the given ability when a key is pressed while the\nmouse is hovering over the element.",
             "itemtype": "method",
             "name": "on",
@@ -3781,7 +3839,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 87,
+            "line": 89,
             "description": "Unregisters the given element from any listeners registered in the on method.",
             "itemtype": "method",
             "name": "off",
@@ -3796,7 +3854,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 98,
+            "line": 100,
             "itemtype": "method",
             "name": "toString",
             "return": {
@@ -3807,7 +3865,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 107,
+            "line": 109,
             "description": "The help text to be displayed by {{#crossLink \"ability.Helpable\"}}{{/crossLink}}.",
             "itemtype": "property",
             "name": "helpText",
@@ -3817,27 +3875,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 119,
-            "description": "Parses the input string",
-            "itemtype": "method",
-            "name": "parse",
-            "params": [
-                {
-                    "name": "str",
-                    "description": "The string to parse",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "The Key trigger if parse is successful, or `undefined`\n   otherwise.",
-                "type": "trigger.Key|undefined"
-            },
-            "static": 1,
-            "class": "trigger.Key"
-        },
-        {
-            "file": "src/trigger/key.html",
-            "line": 150,
+            "line": 143,
             "description": "Handles event when a key press is detected.",
             "itemtype": "method",
             "name": "__onKeyPress__",
@@ -3854,7 +3892,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 188,
+            "line": 181,
             "description": "Initializes the service.",
             "itemtype": "method",
             "name": "init",
@@ -3869,7 +3907,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 199,
+            "line": 192,
             "description": "Registers the given element to trigger the given ability when the given key is pressed.",
             "itemtype": "method",
             "name": "add",
@@ -3894,7 +3932,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 220,
+            "line": 213,
             "description": "Unregisters the given element.",
             "itemtype": "method",
             "name": "remove",
@@ -3909,7 +3947,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 230,
+            "line": 223,
             "description": "Clears all registered elements.",
             "itemtype": "method",
             "name": "clear",
@@ -3917,7 +3955,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 239,
+            "line": 232,
             "description": "Map of elements to trigger the ability on. The key is the element, the value is a map of key\nto a set of abilities.",
             "itemtype": "property",
             "name": "hoveredEls",
@@ -3966,10 +4004,52 @@
             "itemtype": "method",
             "name": "toString",
             "return": {
-                "description": "String representation of the trigger. This can be used to set the trigger of\n   an ability.",
+                "description": "String representation of the trigger. This can be used to set the trigger of\n   an ability. If this is passed to the parser for the trigger, it must return the same\n   trigger.",
                 "type": "String"
             },
             "class": "trigger.Trigger"
+        },
+        {
+            "file": "src/trigger/triggers.html",
+            "line": 29,
+            "description": "Parses the given string using the registered parse functions and returns the first matching\ntrigger. If no parse can match the string, this will throw an error.",
+            "itemtype": "method",
+            "name": "parse",
+            "params": [
+                {
+                    "name": "triggerString",
+                    "description": "The string to be parsed.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The parsed trigger.",
+                "type": "trigger.Trigger"
+            },
+            "class": "trigger.Triggers"
+        },
+        {
+            "file": "src/trigger/triggers.html",
+            "line": 52,
+            "description": "Registers a parsing function.",
+            "itemtype": "method",
+            "name": "register",
+            "params": [
+                {
+                    "name": "parseFn",
+                    "description": "The parsing function. This should take a string and return the\n   parsed trigger if the input string is valid, or `undefined` otherwise.",
+                    "type": "Function"
+                }
+            ],
+            "class": "trigger.Triggers"
+        },
+        {
+            "file": "src/trigger/triggers.html",
+            "line": 63,
+            "description": "Clears any registered functions.",
+            "itemtype": "method",
+            "name": "clear",
+            "class": "trigger.Triggers"
         },
         {
             "file": "src/ui/generate.html",
@@ -4064,6 +4144,21 @@
             "itemtype": "method",
             "name": "createdCallback",
             "class": "ui.Shape"
+        },
+        {
+            "file": "src/bootstrap.html",
+            "line": 70,
+            "description": "Runs the bootstrapping logic. All setup logic should occur before calling this.",
+            "itemtype": "method",
+            "name": "run",
+            "params": [
+                {
+                    "name": "document",
+                    "description": "The DOM document to run the app in.",
+                    "type": "Document"
+                }
+            ],
+            "class": "Bootstrap"
         },
         {
             "file": "src/check.html",

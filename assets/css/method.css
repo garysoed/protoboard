@@ -71,3 +71,7 @@
 .method:last-child .divider {
   border: none;
 }
+
+.method.deprecated .method-signature {
+  text-decoration: line-through;
+}

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>trigger.Click - Protoboard</title>
+  <title>8 Triggers - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -234,7 +234,7 @@
   </header>
   <section class="main-content">
     <section class="main-sidebar reverse"><div class="sidebar">
-    <section class="collapsible ">
+    <section class="collapsible selected">
       <header>
         <h2>tutorial</h2>
       </header>
@@ -261,13 +261,13 @@
           <li class="">
             <a href="../classes/7 Abilities.html">7 Abilities</a>
           </li>
-          <li class="">
+          <li class="sidebar-selected">
             <a href="../classes/8 Triggers.html">8 Triggers</a>
           </li>
         </ul>
       </div>
     </section>
-    <section class="collapsible selected">
+    <section class="collapsible ">
       <header>
         <h2>api</h2>
       </header>
@@ -396,7 +396,7 @@
           <li class="">
             <a href="../classes/service.Template.html">service.Template</a>
           </li>
-          <li class="sidebar-selected">
+          <li class="">
             <a href="../classes/trigger.Click.html">trigger.Click</a>
           </li>
           <li class="">
@@ -438,164 +438,55 @@
 </section>
     <section class="main-main"><div class="class">
   <section class="class-summary">
-      <header>
-        <code>trigger.Click <span class="keyword">extends</span> <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code>
+      <header class="tutorial">
+        <h2>8 Triggers</h2>
       </header>
+      <div class="since">
+        since 1.0.0
+      </div>
 
     <div class="content description">
-      <p>Triggers an ability when the element is clicked.</p>
+      <p>Beside abilities, Protoboard also allows you to create your own Triggers. Triggers are the main
+way for Abilities to be executed. Examples of Triggers include the
+<a href="../classes/trigger.Click.html" class="crosslink">Click</a> trigger, which triggers an ability on an
+element when the user clicks that element.</p>
+<p>To create a trigger, you need to implement the <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a>
+class. You will then need to register a parser with the
+<a href="../classes/trigger.Triggers.html" class="crosslink">trigger.Triggers</a> service, by calling the
+<a href="../classes/trigger.Triggers.html#method_register" class="crosslink">register</a> method. For example:</p>
+<pre class="code prettyprint"><code class="language-javascript">DI.run({ Events: '=', Trigger: 'trigger.=', Triggers: 'trigger.=' }, function($i) {
+  var OnMouseUpTrigger = function() {};
+  OnMouseUpTrigger.prototype = Object.create($i.Trigger.prototype);
+
+  OnMouseUpTrigger.prototype.on = function(element, ability) {
+    $i.Events.of(element, this)
+        .on('dom', 'mouseup', ability.trigger.bind(ability, element));
+  };
+
+  OnMouseUpTrigger.prototype.off = function(element) {
+     $i.Events.of(element, this).off('dom', 'mouseup');
+  };
+
+  OnMouseUpTrigger.prototype.toString = function() {
+    return 'mouseup';
+  };
+
+  OnMouseUpTrigger.prototype.helpText = 'Triggers when mouse is unpressed on the element';
+
+  $i.Triggers.register(function(string) {
+    return (string === 'mouseup') ? new OnMouseUpTrigger() : undefined;
+  });
+});
+</code></pre>
+<p>The Events class is a utility class to make event registering and
+unregistering easier to manage.</p>
 
     </div>
 
   </section>
 
 
-    <section class="collapsible class-subsection">
-      <header>
-        <h2>Properties</h2>
-      </header>
-      <div>
-          <section class="props ">
-            <header id="property_helpText">
-              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> helpText</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>The help text to be displayed by <a href="../classes/ability.Helpable.html" class="crosslink">ability.Helpable</a>.</p>
-          </span>
-          
-            </div>
-          
-          </section>
-          
-      </div>
-    </section>
 
-    <section class="collapsible class-subsection">
-      <header>
-        <h2>Methods</h2>
-      </header>
-      <div>
-          <section class="method ">
-            <header id="method_off">
-              <code class="method-signature">off(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Unregisters the given element from triggering the registered ability when clicked.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>Element to unregister.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>Element to unregister.</p>
-          </dd>
-              </dl>
-          
-                <footer>
-                  Overrides <code><a href="trigger.Trigger.html#method_off">trigger.Trigger</a></code>
-                </footer>
-              
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method ">
-            <header id="method_on">
-              <code class="method-signature">on(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element, <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> ability)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Registers the given element to trigger the given ability when clicked.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>element</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>Element to register.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>ability</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The ability to trigger.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>Element to register.</p>
-          </dd>
-                <dt><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code> <code>ability</code></dt>
-                <dd><p>The ability to trigger.</p>
-          </dd>
-              </dl>
-          
-                <footer>
-                  Overrides <code><a href="trigger.Trigger.html#method_on">trigger.Trigger</a></code>
-                </footer>
-              
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method ">
-            <header id="method_toString">
-              <code class="method-signature">toString() => <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code>
-            </header>
-            <div class="content">
-              <span class="description"></span>
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code><span class="description"><p>String click</p>
-          </span>
-                </div>
-                <footer>
-                  Overrides <code><a href="trigger.Trigger.html#method_toString">trigger.Trigger</a></code>
-                </footer>
-              
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-      </div>
-    </section>
 
 </div>
 

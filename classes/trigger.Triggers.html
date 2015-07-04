@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>6 Abilities - Protoboard</title>
+  <title>trigger.Triggers - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -228,13 +228,13 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 0.3.1</div>
+      <div class="since">v 1.0.0</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
   <section class="main-content">
     <section class="main-sidebar reverse"><div class="sidebar">
-    <section class="collapsible selected">
+    <section class="collapsible ">
       <header>
         <h2>tutorial</h2>
       </header>
@@ -255,13 +255,19 @@
           <li class="">
             <a href="../classes/5 Theming.html">5 Theming</a>
           </li>
-          <li class="sidebar-selected">
-            <a href="../classes/6 Abilities.html">6 Abilities</a>
+          <li class="">
+            <a href="../classes/6 JavaScript.html">6 JavaScript</a>
+          </li>
+          <li class="">
+            <a href="../classes/7 Abilities.html">7 Abilities</a>
+          </li>
+          <li class="">
+            <a href="../classes/8 Triggers.html">8 Triggers</a>
           </li>
         </ul>
       </div>
     </section>
-    <section class="collapsible ">
+    <section class="collapsible selected">
       <header>
         <h2>api</h2>
       </header>
@@ -302,6 +308,9 @@
           </li>
           <li class="">
             <a href="../classes/ability.Toggleable.html">ability.Toggleable</a>
+          </li>
+          <li class="">
+            <a href="../classes/Bootstrap.html">Bootstrap</a>
           </li>
           <li class="">
             <a href="../classes/Check.html">Check</a>
@@ -402,6 +411,9 @@
           <li class="">
             <a href="../classes/trigger.Trigger.html">trigger.Trigger</a>
           </li>
+          <li class="sidebar-selected">
+            <a href="../classes/trigger.Triggers.html">trigger.Triggers</a>
+          </li>
           <li class="">
             <a href="../classes/ui.Generate.html">ui.Generate</a>
           </li>
@@ -426,51 +438,16 @@
 </section>
     <section class="main-main"><div class="class">
   <section class="class-summary">
-      <header class="tutorial">
-        <h2>6 Abilities</h2>
+      <header>
+        <code><span class="keyword">static</span> trigger.Triggers</code>
       </header>
       <div class="since">
-        since 0.3.1
+        since 1.0.0
       </div>
 
     <div class="content description">
-      <p>Protoboard has a built in platform for triggering abilities. Every interaction with a Protoboard
-component will trigger an ability.</p>
-<p>All abilities can be found under the <code>ability</code> directory. Every ability extends from the
-<a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> class. Extending this class provides the following
-features:</p>
-<ul>
-<li>Reacts to changes to configuration attribute(s) of this ability.</li>
-<li>Hook into the <a href="../classes/service.Log.html" class="crosslink">Logging service</a></li>
-<li>Customizable trigger</li>
-</ul>
-<p>Every instance of an ability has a default configuration. When an element created, the ability
-will check for any configuration attributes it knows, and apply any default configuration to the
-element. Note that since the same instance of an ability is shared across multiple elements, you
-should never store element specific state in an ability. Instead, use
- to decorate the element with the state.</p>
-<p>Every ability is associated with a <a href="../classes/trigger.Trigger.html" class="crosslink">Trigger</a>. A
-trigger listens to events in the browser, and, if the event happens, triggers the ability. To
-implement your own ability, implement the  class.
-Note that most of the time, you will only need to implement the
-<a href="../classes/ability.Ability.html#method_doTrigger" class="crosslink">doTrigger</a> method.</p>
-<p>Every ability on an element can be customized by changing an attribute related to that ability.
-These attributes are prefixed with <code>name-</code>, where <code>name</code> is the name of the ability. For example,
-the <code>drop-on</code> attribute specifies the trigger for the <code>drop</code> ability. Hence, the following sets
-the <code>drop</code> ability to be triggered when the user clicks on the deck:</p>
-<pre class="code prettyprint"><code class="language-html">&lt;pb-r-deck drop-on="click"&gt;&lt;/pb-r-deck&gt;
-</code></pre>
-<p>The <code>-on</code> configuration can be found on every ability, and they all sets the ability's trigger.
-If you want to add a configuration, you will need to implement the
-<a href="../classes/ability.Ability.html#method_init" class="crosslink">init</a> method to set the default value of
-the configuration on the element.</p>
-<p>Now that you have your custom ability, you can add it to an element using the
-<a href="../classes/service.Config.html" class="crosslink">service.Config</a>. For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run({ Config: 'service.=' }, function($i) {
-  $i.Config.add('pb-c-card', new CustomAbility());
-});
-</code></pre>
-<p>The example above adds the CustomAbility to all <code>pb-c-card</code> elements.</p>
+      <p>Utility class to manage triggers. Use this class to register your custom trigger by calling
+the trigger.Trigger/register:method method.</p>
 
     </div>
 
@@ -478,6 +455,109 @@ the configuration on the element.</p>
 
 
 
+    <section class="collapsible class-subsection">
+      <header>
+        <h2>Methods</h2>
+      </header>
+      <div>
+          <section class="method ">
+            <header id="method_clear">
+              <code class="method-signature">clear()</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Clears any registered functions.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method ">
+            <header id="method_parse">
+              <code class="method-signature">parse(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> triggerString) => <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Parses the given string using the registered parse functions and returns the first matching
+          trigger. If no parse can match the string, this will throw an error.</p>
+          </span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>triggerString</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The string to be parsed.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>triggerString</code></dt>
+                <dd><p>The string to be parsed.</p>
+          </dd>
+              </dl>
+          
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code><span class="description"><p>The parsed trigger.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method ">
+            <header id="method_register">
+              <code class="method-signature">register(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> parseFn)</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Registers a parsing function.</p>
+          </span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>parseFn</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The parsing function. This should take a string and return the
+          parsed trigger if the input string is valid, or <code>undefined</code> otherwise.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>parseFn</code></dt>
+                <dd><p>The parsing function. This should take a string and return the
+          parsed trigger if the input string is valid, or <code>undefined</code> otherwise.</p>
+          </dd>
+              </dl>
+          
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+      </div>
+    </section>
 
 </div>
 
