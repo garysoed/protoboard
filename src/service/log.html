@@ -5,12 +5,36 @@
 <script>
 DI
     .prefix('pb')
-    .bind('service.Log', {}, () => {
+    .bind('service.Log', { TEST_MODE: '/=?' }, $i => {
 
   // Private symbols
   const __entries__ = Symbol();
-  const __meta__ = Symbol();
-  const __processors__ = Symbol();
+  const __preprocessors__ = Symbol();
+  const __printers__ = Symbol();
+
+  /**
+   * An object that contains log entry. You can add properties by using the
+   * {{#crossLink "service.Log.Entry/set:method"}}set{{/crossLink}} method. To retrieve properties,
+   * just treat this as a JSON. Note that you cannot override existing properties.
+   *
+   * @class service.Log.Entry
+   * @since 1.1.0
+   */
+  class Entry {
+
+    /**
+     * Adds a property to the entry.
+     *
+     * @method set
+     * @param {string} key Key of the property to add.
+     * @param {any} value Value associated with the property
+     */
+    set(key, value) {
+      Object.defineProperty(this, key, {
+        get: () => value
+      });
+    }
+  }
 
   /**
    * A service to log events and happenings in a game. Use this service to collect statistics about
@@ -40,49 +64,64 @@ DI
    * will generate entry: `3/28/2015, 6:01:48 PM: player-count - 2`.
    *
    * You can also customize the string output using the
-   * {{#crossLink "service.Log/addProcessor:method"}}{{/crossLink}} method. For example:
+   * {{#crossLink "service.Log/addPrinter:method"}}{{/crossLink}} and the
+   * {{#crossLink "service.Log/addPreprocessor:method"}}{{/crossLink}} method. When a log entry is
+   * added, it undergoes two phases:
+   * 1. Preprocess: The entry goes through all preprocessors that have been registered to the
+   *    service. These preprocessors are used to add custom properties to the entry. Note that
+   *    properties cannot be deleted or modified.
+   * 2. Printing: The entry then goes through all registered printers. The service will use the
+   *    non null value returned by the first printer.
+   *
+   * For example:
    * ```javascript
    * DI.run(['service.=', function(Log) {
    *   Log
-   *       .addProcessor(function(timestamp, category, value) {
-   *         if (category !== 'player-count') {
-   *           return timestamp.toLocaleString() + ': ' + category + ' on ' + value;
+   *   	   .addPreprocessor(function(entry) {
+   *   	     if (entry.category === 'player-count') {
+   *   	       entry.set('count', entry.value);
+   *   	     }
+   *   	   })
+   *       .addPrinter(function(entry) {
+   *         if (entry.category === 'player-count') {
+   *           return entry.timestamp.toLocaleString()
+   *           	   + ': ' + entry.category + ' on ' + entry.count;
    *         } else {
    *           return null;
    *         }
    *       })
-   *      .addProcessor(Log.defaultProcessor)
+   *      .addPrinter(Log.defaultPrinter)
    *      .log('player-count', 2)
    *      .log('rng-seed', 1234);
    * }]);
    * ```
-   * A processor is a function that takes 3 arguments:
-   * 1. `timestamp` of type {{#crossLink "Date"}}{{/crossLink}}.
-   * 2. `category` {{#crossLink "String"}}{{/crossLink}}.
-   * 3. `value`
-   * You can specify more than one processors. The processors will be called in the other that they
-   * are added to the service. The value that will be used for the log entry is the value returned
-   * by the first processor that returns a non empty string.
+   * A preprocessor and printer are functions that takes a log
+   * {{#crossLink "service.Log.Entry"}}Entry{{/crossLink}}. While a preprocessor only adds values
+   * to the Entry, a printer is expected to return a string, or a null.
+   *
+   * You can specify more than one printer and preprocessors. These functions will be called in the
+   * order that they are added to the service.
    *
    * So the example above will generate:
    * ```
    * 3/28/2015, 6:21:47 PM: player-count on 2
    * 3/28/2015, 6:21:53 PM: rng-seed - 1234
    * ```
-   * The custom processor was used to generate the entry for `player-count`, while the default
-   * processor was used to generate the one for `rng-seed`.
+   * The custom preprocessor added the new `count` property to the entry, which was used by the
+   * custom printer to generate the entry for `player-count`. The default printer was used to
+   * generate the one for `rng-seed`.
    *
    * You can retrieve the entries using {{#crossLink "service.Log/blob:property"}}{{/crossLink}} as
    * a blob, or {{#crossLink "service.Log/entries:property"}}{{/crossLink}} as a string.
    *
    * @class service.Log
    * @static
-   * @since 0.2.0
+   * @since 1.1.0
    */
   let Log = {
     [__entries__]: [],
-    [__meta__]: {},
-    [__processors__]: [],
+    [__preprocessors__]: [],
+    [__printers__]: [],
 
     /**
      * Adds an entry to the log.
@@ -94,20 +133,28 @@ DI
      * @return {service.Log} This service, for chaining.
      */
     log(category, value) {
-      let newEntry;
-      let timestamp = new Date(Date.now());
-      if (this[__processors__].length > 0) {
-        newEntry = this[__processors__].reduce(
-            (prevEntry, processor) => {
-              return prevEntry || processor(timestamp, category, value, this[__meta__]);
+      let entry = new Entry();
+      entry.set('category', category);
+      entry.set('value', value);
+      entry.set('timestamp', new Date(Date.now()));
+
+      for (let preprocessor of this[__preprocessors__]) {
+        preprocessor(entry);
+      }
+
+      let stringEntry = null;
+      if (this[__printers__].length > 0) {
+        stringEntry = this[__printers__].reduce(
+            (prevEntry, printer) => {
+              return prevEntry || printer(entry);
             },
             null);
       } else {
-        newEntry = this.defaultProcessor(timestamp, category, value);
+        stringEntry = this.defaultPrinter(entry);
       }
 
-      if (newEntry) {
-        this[__entries__].push(newEntry);
+      if (stringEntry) {
+        this[__entries__].push(stringEntry);
       }
 
       return this;
@@ -123,23 +170,59 @@ DI
      * they are added to the service. The value that will be used for the log entry is the value
      * returned by the first processor that returns a non empty string.
      *
+     * DEPRECATED: Use {{#crossLink "service.Log/addPreprocessor:method"}}{{/crossLink}} or
+     * {{#crossLink "service.Log/addPrinter:method"}}{{/crossLink}} instead.
+     *
      * @method addProcessor
      * @param {Function} processor The processor to add.
      * @return {service.Log} This service, for chaining.
+     * @deprecated
      */
     addProcessor(processor) {
-      this[__processors__].push(processor);
+      console.warn('service.Log#addProcessor is deprecated');
+      this.addPrinter(entry => {
+        return processor(entry.timestamp, entry.category, entry.value);
+      });
       return this;
     },
 
     /**
-     * Removes all processors that have been added to this service.
+     * Adds a preprocessor to preprocess a log entry. A preprocessor is a function that takes an
+     * {{#crossLink "service.Log.Entry"}}Entry{{/crossLink}}.
+     *
+     * @method addPreprocessor
+     * @param {Function} preprocessor The preprocessor to be added.
+     * @return {service.Log} This service, for chaining.
+     */
+    addPreprocessor(preprocessor) {
+      this[__preprocessors__].push(preprocessor);
+      return this;
+    },
+
+    /**
+     * Adds a printer to preprocess a log entry. A printer is a function that takes an
+     * {{#crossLink "service.Log.Entry"}}Entry{{/crossLink}} and returns a string, or a null, if the
+     * printer is not applicable to the entry.
+     *
+     * @method addPrinter
+     * @param {Function} printer The printer to be added.
+     * @return {service.Log} This service, for chaining.
+     */
+    addPrinter(printer) {
+      this[__printers__].push(printer);
+      return this;
+    },
+
+    /**
+     * Removes all preprocessors and printers that have been added to this service.
      *
      * @method clearProcessors
      * @return {service.Log} This service, for chaining.
+     * @since 1.1.0
      */
     clearProcessors() {
-      this[__processors__].splice(0, this[__processors__].length);
+      this[__preprocessors__].splice(0, this[__preprocessors__].length);
+      this[__printers__].splice(0, this[__printers__].length);
       return this;
     },
 
@@ -180,16 +263,41 @@ DI
      * Default processor of the service. This processor is also used if no custom processors are
      * added.
      *
+     * DEPRECATED: Use {{#crossLink "service.Log/defaultPrinter:property"}}{{/crossLink}} isntead.
+     *
      * @property defaultProcessor
      * @type Function
      * @final
+     * @deprecated
      */
     get defaultProcessor() {
+      console.warn('service.Log#defaultProcessor is deprecated');
       return (timestamp, category, value) => {
-        return `${timestamp.toLocaleString()}: ${category} - ${value}`;
+        let entry = new Entry();
+        entry.set('timestamp', timestamp);
+        entry.set('category', category);
+        entry.set('value', value);
+        return this.defaultPrinter(entry);
+      };
+    },
+
+    /**
+     * Default printer of the service. This printer is also used if no custom printers are  added.
+     *
+     * @property defaultPrinter
+     * @type Function
+     * @final
+     */
+    get defaultPrinter() {
+      return entry => {
+        return `${entry.timestamp.toLocaleString()} ${entry.category} - ${entry.value}`;
       };
     }
   };
+
+  if ($i.TEST_MODE) {
+    Log.Entry = Entry;
+  }
 
   return Log;
 });

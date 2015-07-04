@@ -6,47 +6,112 @@
 
 var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
 
-DI.prefix("pb").bind("service.Log", {}, function () {
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DI.prefix("pb").bind("service.Log", { TEST_MODE: "/=?" }, function ($i) {
   var __entries__ = Symbol();
-  var __meta__ = Symbol();
-  var __processors__ = Symbol();
+  var __preprocessors__ = Symbol();
+  var __printers__ = Symbol();
+
+  var Entry = (function () {
+    function Entry() {
+      _classCallCheck(this, Entry);
+    }
+
+    _createClass(Entry, {
+      set: {
+        value: function set(key, value) {
+          Object.defineProperty(this, key, {
+            get: function () {
+              return value;
+            }
+          });
+        }
+      }
+    });
+
+    return Entry;
+  })();
 
   var Log = Object.defineProperties((function () {
     var _Object$defineProperties = {};
 
     _defineProperty(_Object$defineProperties, __entries__, []);
 
-    _defineProperty(_Object$defineProperties, __meta__, {});
+    _defineProperty(_Object$defineProperties, __preprocessors__, []);
 
-    _defineProperty(_Object$defineProperties, __processors__, []);
+    _defineProperty(_Object$defineProperties, __printers__, []);
 
     _defineProperty(_Object$defineProperties, "log", function log(category, value) {
-      var _this = this;
+      var entry = new Entry();
+      entry.set("category", category);
+      entry.set("value", value);
+      entry.set("timestamp", new Date(Date.now()));
 
-      var newEntry = undefined;
-      var timestamp = new Date(Date.now());
-      if (this[__processors__].length > 0) {
-        newEntry = this[__processors__].reduce(function (prevEntry, processor) {
-          return prevEntry || processor(timestamp, category, value, _this[__meta__]);
-        }, null);
-      } else {
-        newEntry = this.defaultProcessor(timestamp, category, value);
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this[__preprocessors__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var preprocessor = _step.value;
+
+          preprocessor(entry);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
 
-      if (newEntry) {
-        this[__entries__].push(newEntry);
+      var stringEntry = null;
+      if (this[__printers__].length > 0) {
+        stringEntry = this[__printers__].reduce(function (prevEntry, printer) {
+          return prevEntry || printer(entry);
+        }, null);
+      } else {
+        stringEntry = this.defaultPrinter(entry);
+      }
+
+      if (stringEntry) {
+        this[__entries__].push(stringEntry);
       }
 
       return this;
     });
 
     _defineProperty(_Object$defineProperties, "addProcessor", function addProcessor(processor) {
-      this[__processors__].push(processor);
+      console.warn("service.Log#addProcessor is deprecated");
+      this.addPrinter(function (entry) {
+        return processor(entry.timestamp, entry.category, entry.value);
+      });
+      return this;
+    });
+
+    _defineProperty(_Object$defineProperties, "addPreprocessor", function addPreprocessor(preprocessor) {
+      this[__preprocessors__].push(preprocessor);
+      return this;
+    });
+
+    _defineProperty(_Object$defineProperties, "addPrinter", function addPrinter(printer) {
+      this[__printers__].push(printer);
       return this;
     });
 
     _defineProperty(_Object$defineProperties, "clearProcessors", function clearProcessors() {
-      this[__processors__].splice(0, this[__processors__].length);
+      this[__preprocessors__].splice(0, this[__preprocessors__].length);
+      this[__printers__].splice(0, this[__printers__].length);
       return this;
     });
 
@@ -73,8 +138,24 @@ DI.prefix("pb").bind("service.Log", {}, function () {
     },
     defaultProcessor: {
       get: function () {
+        var _this = this;
+
+        console.warn("service.Log#defaultProcessor is deprecated");
         return function (timestamp, category, value) {
-          return "" + timestamp.toLocaleString() + ": " + category + " - " + value;
+          var entry = new Entry();
+          entry.set("timestamp", timestamp);
+          entry.set("category", category);
+          entry.set("value", value);
+          return _this.defaultPrinter(entry);
+        };
+      },
+      configurable: true,
+      enumerable: true
+    },
+    defaultPrinter: {
+      get: function () {
+        return function (entry) {
+          return "" + entry.timestamp.toLocaleString() + " " + entry.category + " - " + entry.value;
         };
       },
       configurable: true,
@@ -82,5 +163,10 @@ DI.prefix("pb").bind("service.Log", {}, function () {
     }
   });
 
+  if ($i.TEST_MODE) {
+    Log.Entry = Entry;
+  }
+
   return Log;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>
