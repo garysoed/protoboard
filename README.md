@@ -9,6 +9,18 @@ supported components.
 Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 
 ## Release notes
+### 1.1.0
+Improvements
+- Abilities now emit DOM events when triggered
+- Deprecated service.Log#addProcessor. Processing log has been split to two stages: preprocessing
+and printing.
+- Fixed documentation of [Abilities](http://garysoed.github.io/protoboard/classes/ability.Abilities.html)
+- Ability's default trigger is now optional.
+
+Breaking changes
+- Moved ability.Abilities API to invoke trigger. Instead of calling
+`Abilities.of(el).trigger('abilityName')`, call `Abilities.trigger(el, 'abilityName')`.
+
 ### 1.0.0
 First stable release
 
