@@ -382,6 +382,9 @@
             <a href="../classes/service.Log.html">service.Log</a>
           </li>
           <li class="">
+            <a href="../classes/service.Log.Entry.html">service.Log.Entry</a>
+          </li>
+          <li class="">
             <a href="../classes/service.Move.html">service.Move</a>
           </li>
           <li class="">
@@ -442,7 +445,7 @@
         <code><span class="keyword">static</span> service.Log</code>
       </header>
       <div class="since">
-        since 0.2.0
+        since 1.1.0
       </div>
 
     <div class="content description">
@@ -467,36 +470,49 @@ number to the attribute to make sure that they are unique. For instance:</p>
 </code></pre>
 <p>will generate entry: <code>3/28/2015, 6:01:48 PM: player-count - 2</code>.</p>
 <p>You can also customize the string output using the
-<a href="../classes/service.Log.html#method_addProcessor" class="crosslink">addProcessor</a> method. For example:</p>
+<a href="../classes/service.Log.html#method_addPrinter" class="crosslink">addPrinter</a> and the
+<a href="../classes/service.Log.html#method_addPreprocessor" class="crosslink">addPreprocessor</a> method. When a log entry is
+added, it undergoes two phases:</p>
+<ol>
+<li>Preprocess: The entry goes through all preprocessors that have been registered to the
+service. These preprocessors are used to add custom properties to the entry. Note that
+properties cannot be deleted or modified.</li>
+<li>Printing: The entry then goes through all registered printers. The service will use the
+non null value returned by the first printer.</li>
+</ol>
+<p>For example:</p>
 <pre class="code prettyprint"><code class="language-javascript">DI.run(['service.=', function(Log) {
   Log
-      .addProcessor(function(timestamp, category, value) {
-        if (category !== 'player-count') {
-          return timestamp.toLocaleString() + ': ' + category + ' on ' + value;
+       .addPreprocessor(function(entry) {
+         if (entry.category === 'player-count') {
+           entry.set('count', entry.value);
+         }
+       })
+      .addPrinter(function(entry) {
+        if (entry.category === 'player-count') {
+          return entry.timestamp.toLocaleString()
+               + ': ' + entry.category + ' on ' + entry.count;
         } else {
           return null;
         }
       })
-     .addProcessor(Log.defaultProcessor)
+     .addPrinter(Log.defaultPrinter)
      .log('player-count', 2)
      .log('rng-seed', 1234);
 }]);
 </code></pre>
-<p>A processor is a function that takes 3 arguments:</p>
-<ol>
-<li><code>timestamp</code> of type <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a>.</li>
-<li><code>category</code> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>.</li>
-<li><code>value</code>
-You can specify more than one processors. The processors will be called in the other that they
-are added to the service. The value that will be used for the log entry is the value returned
-by the first processor that returns a non empty string.</li>
-</ol>
+<p>A preprocessor and printer are functions that takes a log
+<a href="../classes/service.Log.Entry.html" class="crosslink">Entry</a>. While a preprocessor only adds values
+to the Entry, a printer is expected to return a string, or a null.</p>
+<p>You can specify more than one printer and preprocessors. These functions will be called in the
+order that they are added to the service.</p>
 <p>So the example above will generate:</p>
 <pre class="code prettyprint"><code>3/28/2015, 6:21:47 PM: player-count on 2
 3/28/2015, 6:21:53 PM: rng-seed - 1234
 </code></pre>
-<p>The custom processor was used to generate the entry for <code>player-count</code>, while the default
-processor was used to generate the one for <code>rng-seed</code>.</p>
+<p>The custom preprocessor added the new <code>count</code> property to the entry, which was used by the
+custom printer to generate the entry for <code>player-count</code>. The default printer was used to
+generate the one for <code>rng-seed</code>.</p>
 <p>You can retrieve the entries using <a href="../classes/service.Log.html#property_blob" class="crosslink">blob</a> as
 a blob, or <a href="../classes/service.Log.html#property_entries" class="crosslink">entries</a> as a string.</p>
 
@@ -524,12 +540,26 @@ a blob, or <a href="../classes/service.Log.html#property_entries" class="crossli
           </section>
           
           <section class="props ">
+            <header id="property_defaultPrinter">
+              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> defaultPrinter</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Default printer of the service. This printer is also used if no custom printers are  added.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="props deprecated">
             <header id="property_defaultProcessor">
               <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> defaultProcessor</code>
             </header>
             <div class="content">
               <span class="description"><p>Default processor of the service. This processor is also used if no custom processors are
           added.</p>
+          <p>DEPRECATED: Use <a href="../classes/service.Log.html#property_defaultPrinter" class="crosslink">defaultPrinter</a> isntead.</p>
           </span>
           
             </div>
@@ -558,6 +588,93 @@ a blob, or <a href="../classes/service.Log.html#property_entries" class="crossli
       </header>
       <div>
           <section class="method ">
+            <header id="method_addPreprocessor">
+              <code class="method-signature">addPreprocessor(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> preprocessor) => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Adds a preprocessor to preprocess a log entry. A preprocessor is a function that takes an
+          <a href="../classes/service.Log.Entry.html" class="crosslink">Entry</a>.</p>
+          </span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>preprocessor</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The preprocessor to be added.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>preprocessor</code></dt>
+                <dd><p>The preprocessor to be added.</p>
+          </dd>
+              </dl>
+          
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method ">
+            <header id="method_addPrinter">
+              <code class="method-signature">addPrinter(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> printer) => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Adds a printer to preprocess a log entry. A printer is a function that takes an
+          <a href="../classes/service.Log.Entry.html" class="crosslink">Entry</a> and returns a string, or a null, if the
+          printer is not applicable to the entry.</p>
+          </span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>printer</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>The printer to be added.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>printer</code></dt>
+                <dd><p>The printer to be added.</p>
+          </dd>
+              </dl>
+          
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method deprecated">
             <header id="method_addProcessor">
               <code class="method-signature">addProcessor(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> processor) => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
             </header>
@@ -572,6 +689,8 @@ a blob, or <a href="../classes/service.Log.html#property_entries" class="crossli
           they are added to the service. The value that will be used for the log entry is the value
           returned by the first processor that returns a non empty string.</li>
           </ol>
+          <p>DEPRECATED: Use <a href="../classes/service.Log.html#method_addPreprocessor" class="crosslink">addPreprocessor</a> or
+          <a href="../classes/service.Log.html#method_addPrinter" class="crosslink">addPrinter</a> instead.</p>
           </span>
           
               <table class="method-params">
@@ -629,8 +748,11 @@ a blob, or <a href="../classes/service.Log.html#property_entries" class="crossli
             <header id="method_clearProcessors">
               <code class="method-signature">clearProcessors() => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
             </header>
+              <div class="since">
+                since 1.1.0
+              </div>
             <div class="content">
-              <span class="description"><p>Removes all processors that have been added to this service.</p>
+              <span class="description"><p>Removes all preprocessors and printers that have been added to this service.</p>
           </span>
                 <div class="method-returns">
                   <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>

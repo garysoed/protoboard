@@ -382,6 +382,9 @@
             <a href="../classes/service.Log.html">service.Log</a>
           </li>
           <li class="">
+            <a href="../classes/service.Log.Entry.html">service.Log.Entry</a>
+          </li>
+          <li class="">
             <a href="../classes/service.Move.html">service.Move</a>
           </li>
           <li class="">
@@ -502,11 +505,53 @@ Abilities.of(el)
           
           <section class="method ">
             <header id="method_of">
-              <code class="method-signature">of(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el) => <a href="../classes/ability.Abilities.Builder.html" class="crosslink">ability.Abilities.Builder</a></code>
+              <code class="method-signature">of(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> proto) => <a href="../classes/ability.Abilities.Builder.html" class="crosslink">ability.Abilities.Builder</a></code>
             </header>
             <div class="content">
               <span class="description"><p>Creates a new <a href="../classes/ability.Abilities.Builder.html" class="crosslink">Builder</a> to operate on
           the given element.</p>
+          </span>
+          
+              <table class="method-params">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>proto</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Prototype of element that the Builder should operate on.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+              </table>
+          
+              <dl class="method-params-small">
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>proto</code></dt>
+                <dd><p>Prototype of element that the Builder should operate on.</p>
+          </dd>
+              </dl>
+          
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/ability.Abilities.Builder.html" class="crosslink">ability.Abilities.Builder</a></code><span class="description"><p>The builder object.</p>
+          </span>
+                </div>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method ">
+            <header id="method_trigger">
+              <code class="method-signature">trigger(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> el, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name)</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Triggers the ability corresponding to the given name.</p>
           </span>
           
               <table class="method-params">
@@ -519,7 +564,23 @@ Abilities.of(el)
                       <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
                     </td>
                     <td class="description">
-                      <p>Element that the Builder should operate on.</p>
+                      <p>Element to trigger the ability on.</p>
+          
+                    </td>
+                  </tr>
+          
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <p><code>name</code></p>
+                    </td>
+                    <td class="method-type">
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
+                    </td>
+                    <td class="description">
+                      <p>Name of the ability to trigger. Refer to the element's API for the
+          names.</p>
           
                     </td>
                   </tr>
@@ -529,14 +590,14 @@ Abilities.of(el)
           
               <dl class="method-params-small">
                 <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>el</code></dt>
-                <dd><p>Element that the Builder should operate on.</p>
+                <dd><p>Element to trigger the ability on.</p>
+          </dd>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
+                <dd><p>Name of the ability to trigger. Refer to the element's API for the
+          names.</p>
           </dd>
               </dl>
           
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/ability.Abilities.Builder.html" class="crosslink">ability.Abilities.Builder</a></code><span class="description"><p>The builder object.</p>
-          </span>
-                </div>
           
             </div>
           

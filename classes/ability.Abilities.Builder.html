@@ -382,6 +382,9 @@
             <a href="../classes/service.Log.html">service.Log</a>
           </li>
           <li class="">
+            <a href="../classes/service.Log.Entry.html">service.Log.Entry</a>
+          </li>
+          <li class="">
             <a href="../classes/service.Move.html">service.Move</a>
           </li>
           <li class="">
@@ -461,7 +464,7 @@
               <code class="method-signature">add(<a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> ability) => <a href="../classes/ability.Abilities.Builder.html" class="crosslink">ability.Abilities.Builder</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Adds the given ability to the element specified in the builder.</p>
+              <span class="description"><p>Adds the given ability to the element prototype specified in the builder.</p>
           </span>
           
               <table class="method-params">
@@ -505,8 +508,8 @@
             <div class="content">
               <span class="description"></span>
                 <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map.html" class="crosslink external" target="_blank">Map</a></code><span class="description"><p>Map of ability name to ability of the element in context. This excludes the
-          trigger attribute of the abilities.</p>
+                  <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map.html" class="crosslink external" target="_blank">Map</a></code><span class="description"><p>Map of ability name to ability of the element prototype in context. This
+          excludes the trigger attribute of the abilities.</p>
           </span>
                 </div>
           
@@ -516,43 +519,26 @@
           </section>
           
           <section class="method ">
+            <header id="method_reset">
+              <code class="method-signature">reset()</code>
+            </header>
+            <div class="content">
+              <span class="description"><p>Removes all registered abilities from the specified element prototype.</p>
+          </span>
+          
+            </div>
+          
+            <div class="divider"></div>
+          </section>
+          
+          <section class="method deprecated">
             <header id="method_trigger">
-              <code class="method-signature">trigger(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> name) => <a href="../classes/ability.Abilities.Builder.html" class="crosslink">ability.Abilities.Builder</a></code>
+              <code class="method-signature">trigger()</code>
             </header>
             <div class="content">
               <span class="description"><p>Triggers the ability corresponding to the given name.</p>
+          <p>DEPRECATED: Use <a href="../classes/ability.Abilities.html#method_trigger" class="crosslink">trigger</a> instead.</p>
           </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>name</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>Name of the ability to trigger. Refer to the element's API for the
-          names.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>name</code></dt>
-                <dd><p>Name of the ability to trigger. Refer to the element's API for the
-          names.</p>
-          </dd>
-              </dl>
-          
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/ability.Abilities.Builder.html" class="crosslink">ability.Abilities.Builder</a></code><span class="description"><p>This builder object for chaining.</p>
-          </span>
-                </div>
           
             </div>
           

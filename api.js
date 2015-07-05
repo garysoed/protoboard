@@ -46,6 +46,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "service.Acl.Group",
         "service.Config",
         "service.Log",
+        "service.Log.Entry",
         "service.Move",
         "service.Preview",
         "service.Registry",

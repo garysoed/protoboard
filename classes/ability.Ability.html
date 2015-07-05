@@ -382,6 +382,9 @@
             <a href="../classes/service.Log.html">service.Log</a>
           </li>
           <li class="">
+            <a href="../classes/service.Log.Entry.html">service.Log.Entry</a>
+          </li>
+          <li class="">
             <a href="../classes/service.Move.html">service.Move</a>
           </li>
           <li class="">
@@ -445,6 +448,9 @@
     <div class="content description">
       <p>Base class for all abilities. Any abilities must extend this class and implement the methods
 in this class.</p>
+<p>Since <code>v1.1.0</code>, all abilities extending this class will trigger an event with the same name as
+this ability's name when trigger. This event's detail will have one field, called ability,
+which is a reference to this ability.</p>
 
     </div>
 
@@ -482,13 +488,14 @@ in this class.</p>
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>defaultTrigger</code></p>
+                      <p><code>[defaultTrigger]</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The default trigger to trigger this ability.</p>
+                      <p>The default trigger to trigger this ability, or
+          null if there are no default triggers.</p>
           
                     </td>
                   </tr>
@@ -501,8 +508,9 @@ in this class.</p>
                 <dd><p>Name of the ability. This is used to identify an ability that has been
           added to an element. It therefore must be unique for the element.</p>
           </dd>
-                <dt><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code> <code>defaultTrigger</code></dt>
-                <dd><p>The default trigger to trigger this ability.</p>
+                <dt><code><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a></code> <code>[defaultTrigger]</code></dt>
+                <dd><p>The default trigger to trigger this ability, or
+          null if there are no default triggers.</p>
           </dd>
               </dl>
           
@@ -553,7 +561,7 @@ in this class.</p>
               <code class="method-signature"><a href="../classes/trigger.Trigger.html" class="crosslink">trigger.Trigger</a> defaultTrigger</code>
             </header>
             <div class="content">
-              <span class="description"><p>The default trigger of the ability.</p>
+              <span class="description"><p>The default trigger of the ability, or null if none exists.</p>
           </span>
           
             </div>
