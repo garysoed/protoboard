@@ -53,7 +53,7 @@ DI.prefix("pb").bind("$registry", { Registry: "service.=" }, function ($i) {
   Utils: "=" }, function ($i) {
   var BOOTSTRAP = {
     run: function run(document) {
-      $i.Utils.watch(function () {
+      return $i.Utils.watch(function () {
         return document.readyState === "interactive" || document.readyState === "complete";
       }).then(function () {
         $i.$registry.register(document, $i.Config);

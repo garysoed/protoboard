@@ -72,9 +72,11 @@ DI
      *
      * @method run
      * @param {Document} document The DOM document to run the app in.
+     * @return {Promise} Promise that will be resolved once all the bootstrapping logic has finished
+     *    executing.
      */
     run(document) {
-      $i.Utils
+      return $i.Utils
           .watch(() => document.readyState === 'interactive' || document.readyState === 'complete')
           .then(() => {
             $i.$registry.register(document, $i.Config);
