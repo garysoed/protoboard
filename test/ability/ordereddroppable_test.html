@@ -17,7 +17,7 @@
       .prefix('pb')
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('service.Move', {
-        movedElements: [],
+        nextElement: null,
         mouseX: 0
       })
       .constant('doc', document.currentScript.ownerDocument)
@@ -74,7 +74,7 @@
 
             let dragged = $i.doc.createElement('div');
 
-            $i.Move.movedElements = [dragged];
+            $i.Move.nextElement = dragged;
             $i.Move.mouseX = 40;
 
             droppable.trigger(el);
@@ -98,7 +98,7 @@
             el.appendChild(child2);
 
             let dragged = $i.doc.createElement('div');
-            $i.Move.movedElements = [dragged];
+            $i.Move.nextElement = dragged;
             $i.Move.mouseX = 50;
 
             droppable.trigger(el);
@@ -106,7 +106,7 @@
             $i.expect($i.Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
           });
           it('should not crash if there are no last dragged element', () => {
-            $i.Move.movedElements = [];
+            $i.Move.nextElement = null;
             droppable.trigger(el);
           });
         });
@@ -144,7 +144,7 @@
 
             let dragged = $i.doc.createElement('div');
 
-            $i.Move.movedElements = [dragged];
+            $i.Move.nextElement = dragged;
             $i.Move.mouseY = 40;
 
             droppable.trigger(el);
@@ -168,7 +168,7 @@
             el.appendChild(child2);
 
             let dragged = $i.doc.createElement('div');
-            $i.Move.movedElements = [dragged];
+            $i.Move.nextElement = dragged;
             $i.Move.mouseY = 50;
 
             droppable.trigger(el);
@@ -176,7 +176,7 @@
             $i.expect($i.Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
           });
           it('should not crash if there are no last dragged element', () => {
-            $i.Move.movedElements = [];
+            $i.Move.nextElement = null;
             droppable.trigger(el);
           });
         });

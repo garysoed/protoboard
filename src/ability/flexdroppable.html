@@ -81,7 +81,7 @@ DI
      * @param {Element} el The element to drop the dragged element into.
      */
     doTrigger(el) {
-      let movedElement = $i.Move.movedElements.values().next().value;
+      let movedElement = $i.Move.nextElement;
 
       if (movedElement) {
         el.appendChild(movedElement);

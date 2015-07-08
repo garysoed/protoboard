@@ -118,7 +118,7 @@ DI
      * @param {Element} el Element to drop the moved element into.
      */
     doTrigger(el) {
-      let movedElement = $i.Move.movedElements.values().next().value;
+      let movedElement = $i.Move.nextElement;
       if (movedElement) {
         el.appendChild(movedElement);
 

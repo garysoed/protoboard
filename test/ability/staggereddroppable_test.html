@@ -19,7 +19,7 @@
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('doc', document.currentScript.ownerDocument)
       .constant('service.Move', {
-        movedElements: []
+        nextElement: null
       })
       .run(
           {
@@ -106,7 +106,7 @@
 
         it('should add the moved element as a child element', () => {
           const movedEl = $i.doc.createElement('div');
-          $i.Move.movedElements = [movedEl];
+          $i.Move.nextElement = movedEl;
           ability.trigger(el);
           $i.expect($i.Utils.toArray(el.children)).to.eql([movedEl]);
         });
@@ -122,7 +122,7 @@
 
           const movedEl = $i.doc.createElement('div');
           movedEl.id = 'moved';
-          $i.Move.movedElements = [movedEl];
+          $i.Move.nextElement = movedEl;
 
           $i.Chance.binom = (coll, opt) => {
             if (opt.likelihood === 80) {

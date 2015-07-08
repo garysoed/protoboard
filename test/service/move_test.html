@@ -106,6 +106,22 @@
       });
     });
 
+    describe('get nextElement', () => {
+      it('should return the last added child', () => {
+        let child1 = $i.doc.createElement('div');
+        let child2 = $i.doc.createElement('div');
+
+        let container = $i.Move[__container__];
+        container.appendChild(child1);
+        container.appendChild(child2);
+
+        $i.expect($i.Move.nextElement).to.eql(child2);
+      });
+      it('should return null if there are no children', () => {
+        $i.expect($i.Move.nextElement).to.equal(null);
+      });
+    });
+
     afterEach(done => {
       $i._.reset();
       done();

@@ -42,7 +42,7 @@ DI.prefix("pb").bind("ability.OrderedDroppable", {
     _createClass(OrderedDroppable, {
       doTrigger: {
         value: function doTrigger(el) {
-          var movedElement = $i.Move.movedElements.values().next().value;
+          var movedElement = $i.Move.nextElement;
           if (movedElement) {
             var dropped = false;
             var _iteratorNormalCompletion = true;

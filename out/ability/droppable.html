@@ -51,7 +51,7 @@ DI.prefix("pb").bind("ability.Droppable", {
       },
       doTrigger: {
         value: function doTrigger(el) {
-          var movedElement = $i.Move.movedElements.values().next().value;
+          var movedElement = $i.Move.nextElement;
           if (movedElement) {
             el.appendChild(movedElement);
           }

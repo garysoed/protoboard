@@ -59,7 +59,7 @@ DI
      * @param {Element} el The element to drop the picked element into.
      */
     doTrigger(el) {
-      let movedElement = $i.Move.movedElements.values().next().value;
+      let movedElement = $i.Move.nextElement;
       if (movedElement) {
         // Go through every children and find the index that the element should be.
         let dropped = false;

@@ -19,7 +19,7 @@
       .constant('doc', document.currentScript.ownerDocument)
       .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
       .constant('service.Move', {
-        movedElements: [],
+        nextElement: null,
         remove: () => {},
         mouseX: 0,
         mouseY: 0
@@ -63,7 +63,7 @@
             height: 68
           });
 
-          $i.Move.movedElements = [lastDraggedEl];
+          $i.Move.nextElement = lastDraggedEl;
           $i.Move.mouseX = 90;
           $i.Move.mouseY = 12;
 

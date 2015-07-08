@@ -19,7 +19,7 @@
     DI
         .prefix('pb')
         .constant('service.Move', {
-          movedElements: []
+          nextElement: null
         })
         .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
         .constant('doc', document.currentScript.ownerDocument)
@@ -62,12 +62,11 @@
 
           it('should add the moved elements if enabled', () => {
             let child1 = $i.doc.createElement('div');
-            let child2 = $i.doc.createElement('h1');
 
             droppable = new $i.Droppable(undefined, undefined, true);
             droppable.init(el);
 
-            $i.Move.movedElements = [child1, child2];
+            $i.Move.nextElement = child1;
 
             droppable.trigger(el);
 
@@ -75,12 +74,11 @@
           });
           it('should do nothing if not enabled', () => {
             let child1 = $i.doc.createElement('div');
-            let child2 = $i.doc.createElement('h1');
 
             droppable = new $i.Droppable(undefined, undefined, false);
             droppable.init(el);
 
-            $i.Move.movedElements = [child1, child2];
+            $i.Move.nextElement = child1;
 
             droppable.trigger(el);
 

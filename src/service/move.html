@@ -146,6 +146,10 @@ DI
       return new Set($i.Utils.toArray(this[__container__].children));
     },
 
+    get nextElement() {
+      return this[__container__].lastElementChild;
+    },
+
     /**
      * Last known X coordinate of the mouse in px.
      *

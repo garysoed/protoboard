@@ -81,7 +81,7 @@ DI.prefix("pb").bind("ability.StaggeredDroppable", {
         value: function doTrigger(el) {
           var _this = this;
 
-          var movedElement = $i.Move.movedElements.values().next().value;
+          var movedElement = $i.Move.nextElement;
           if (movedElement) {
             (function () {
               el.appendChild(movedElement);

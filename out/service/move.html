@@ -108,6 +108,13 @@ DI.prefix("pb").bind("service.Move", {
       configurable: true,
       enumerable: true
     },
+    nextElement: {
+      get: function () {
+        return this[__container__].lastElementChild;
+      },
+      configurable: true,
+      enumerable: true
+    },
     mouseX: {
       get: function () {
         return this[__mouseX__];
