@@ -32,8 +32,13 @@ DI
    * in this class.
    *
    * Since `v1.1.0`, all abilities extending this class will trigger an event with the same name as
-   * this ability's name when trigger. This event's detail will have one field, called ability,
+   * this ability's name when triggered. This event's detail will have one field, called ability,
    * which is a reference to this ability.
+   *
+   * Since `v1.2.0`, all abilities will log its triggering before and after it is triggered. In the
+   * entry passed into the preprocessor or the printer, you can examine the value of the `phase`
+   * entry. If it is `bubble`, the log is called before the trigger is ran. Otherwise, if it is
+   * `after`, the log is called after the trigger is ran.
    *
    * @class ability.Ability
    */
@@ -99,8 +104,9 @@ DI
      * @param {Element} el The element to trigger the ability on.
      */
     trigger(el) {
-      $i.Log.log(this.attrName, $i.$(el).attr('pb-id'));
       if (this.isEnabled(el)) {
+        $i.Log.log(this.attrName, $i.$(el).attr('pb-id'), { phase: 'before' });
+        this.doTrigger(el);
         el.dispatchEvent(new $i.CustomEvent(
             this.attrName,
             {
@@ -108,7 +114,7 @@ DI
                 ability: this
               }
             }));
-        this.doTrigger(el);
+        $i.Log.log(this.attrName, $i.$(el).attr('pb-id'), { phase: 'after' });
       }
     }
 

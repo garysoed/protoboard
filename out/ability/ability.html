@@ -66,14 +66,15 @@ DI.bind("CustomEvent", {}, function () {
       },
       trigger: {
         value: function trigger(el) {
-          $i.Log.log(this.attrName, $i.$(el).attr("pb-id"));
           if (this.isEnabled(el)) {
+            $i.Log.log(this.attrName, $i.$(el).attr("pb-id"), { phase: "before" });
+            this.doTrigger(el);
             el.dispatchEvent(new $i.CustomEvent(this.attrName, {
               detail: {
                 ability: this
               }
             }));
-            this.doTrigger(el);
+            $i.Log.log(this.attrName, $i.$(el).attr("pb-id"), { phase: "after" });
           }
         }
       },

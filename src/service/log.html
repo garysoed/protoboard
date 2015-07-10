@@ -130,13 +130,18 @@ DI
      * @param {string} category The category of the entry. Use this to identify the type of the log.
      *    For instance, "click", "flip".
      * @param {Any} value The value of the category for the entry.
+     * @param {Object} [extra] Extra data to be added to the entry. This defaults to empty object.
      * @return {service.Log} This service, for chaining.
      */
-    log(category, value) {
+    log(category, value, extra = {}) {
       let entry = new Entry();
       entry.set('category', category);
       entry.set('value', value);
       entry.set('timestamp', new Date(Date.now()));
+
+      for (let key of Object.keys(extra)) {
+        entry.set(key, extra[key]);
+      }
 
       for (let preprocessor of this[__preprocessors__]) {
         preprocessor(entry);

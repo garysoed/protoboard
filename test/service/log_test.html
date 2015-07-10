@@ -58,13 +58,17 @@
         let preprocessor1 = entry => entry.set('a', 1);
         let preprocessor2 = entry => entry.set('b', entry.a);
         let printer = $i._.spiedFunction();
+        let extras = {
+          c: 3,
+          d: 4
+        };
 
         $i.Log
             .addPreprocessor(preprocessor1)
             .addPreprocessor(preprocessor2)
             .addPrinter(printer);
 
-        $i.Log.log('category', 'value');
+        $i.Log.log('category', 'value', extras);
 
         let entryMatcher = $i._M.isA(Object);
         $i.expect(printer).calledWith(entryMatcher).at.least(1);
@@ -74,6 +78,8 @@
         $i.expect(matchingEntry.value).to.be.equal('value');
         $i.expect(matchingEntry.a).to.be.equal(1);
         $i.expect(matchingEntry.b).to.be.equal(1);
+        $i.expect(matchingEntry.c).to.be.equal(3);
+        $i.expect(matchingEntry.d).to.be.equal(4);
       });
       it('should use the specified printer', () => {
         let entry = 'entry';
