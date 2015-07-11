@@ -37,7 +37,7 @@
  * The {{#crossLink "Events"}}{{/crossLink}} class is a utility class to make event registering and
  * unregistering easier to manage.
  *
- * @class 8 Triggers
+ * @class 9 Triggers
  * @since 1.0.0
  * @module tutorial
  */

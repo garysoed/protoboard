@@ -43,7 +43,7 @@
  * ```
  * The example above adds the CustomAbility to all `pb-c-card` elements.
  *
- * @class 7 Abilities
+ * @class 8 Abilities
  * @since 0.3.1
  * @module tutorial
  */
