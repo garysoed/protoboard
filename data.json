@@ -2,7 +2,7 @@
     "project": {
         "name": "Protoboard",
         "description": "Check out the tutorials and the API on the side bar. Go <a href=\"ex/all/index.html\">here</a> for demo.",
-        "version": "1.0.0",
+        "version": "1.2.0",
         "url": "https://github.com/garysoed/protoboard",
         "colorBackground": "white",
         "colorForeground": "black",
@@ -512,20 +512,29 @@
             "fors": {},
             "namespaces": {}
         },
-        "tutorial/07_abilities.js": {
-            "name": "tutorial/07_abilities.js",
+        "tutorial/07_custom_elements.js": {
+            "name": "tutorial/07_custom_elements.js",
             "modules": {},
             "classes": {
-                "7 Abilities": 1
+                "7 Custom Elements": 1
             },
             "fors": {},
             "namespaces": {}
         },
-        "tutorial/08_triggers.js": {
-            "name": "tutorial/08_triggers.js",
+        "tutorial/08_abilities.js": {
+            "name": "tutorial/08_abilities.js",
             "modules": {},
             "classes": {
-                "8 Triggers": 1
+                "8 Abilities": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "tutorial/09_triggers.js": {
+            "name": "tutorial/09_triggers.js",
+            "modules": {},
+            "classes": {
+                "9 Triggers": 1
             },
             "fors": {},
             "namespaces": {}
@@ -613,13 +622,14 @@
                 "4 Customizing Components": 1,
                 "5 Theming": 1,
                 "6 JavaScript": 1,
-                "7 Abilities": 1,
-                "8 Triggers": 1
+                "7 Custom Elements": 1,
+                "8 Abilities": 1,
+                "9 Triggers": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "tutorial/08_triggers.js",
+            "file": "tutorial/09_triggers.js",
             "line": 1,
             "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. {{#crossLink \"5 Theming\"}}Theme{{/crossLink}}: This library comes with some existing themes. You\ncan customize the color themes, and if you use CSS, you can customize in greater details.\n\nSome glossary of terminologies for the API:\n{{#html 'dl'}}\n  {{#html 'dt'}}{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}{{/html}}\n  {{#html 'dd'}}These are where the main logic happens. A Component can have several abilities,\n  each triggered with a Trigger.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"component.Component\"}}Component{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Components are the basic entity of a board. They provide main interaction with\n  the players. Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"region.Region\"}}Region{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Regions can contain other components. They cannot be moved and can contain one or\n  more components. Examples include: deck, bag, and hand.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Triggers listen to events in the document and triggers the ability it is\n  associated with. The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.{{/html}}\n\n  {{#html 'dt'}}UI{{/html}}\n  {{#html 'dd'}}This library also comes with several basic UI elements for convenience. These\n  elements do not have a real life counterpart.{{/html}}\n{{/html}}\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n   - `pb-c-` indicates a component\n   - `pb-r-` indicates a region\n   - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
         }
@@ -672,8 +682,8 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ability/ability.html",
-            "line": 42,
-            "description": "Base class for all abilities. Any abilities must extend this class and implement the methods\nin this class.\n\nSince `v1.1.0`, all abilities extending this class will trigger an event with the same name as\nthis ability's name when trigger. This event's detail will have one field, called ability,\nwhich is a reference to this ability.",
+            "line": 47,
+            "description": "Base class for all abilities. Any abilities must extend this class and implement the methods\nin this class.\n\nSince `v1.1.0`, all abilities extending this class will trigger an event with the same name as\nthis ability's name when triggered. This event's detail will have one field, called ability,\nwhich is a reference to this ability.\n\nSince `v1.2.0`, all abilities will log its triggering before and after it is triggered. In the\nentry passed into the preprocessor or the printer, you can examine the value of the `phase`\nentry. If it is `bubble`, the log is called before the trigger is ran. Otherwise, if it is\n`after`, the log is called after the trigger is ran.",
             "is_constructor": 1,
             "params": [
                 {
@@ -1829,9 +1839,9 @@
             "line": 1,
             "description": "Protoboard exposes JavaScript API that you can use to customize your board game prototype. Some\nservices, such as the {{#crossLink \"service.Log\"}}Log Service{{/crossLink}}, requires you to call\nthe JavaScript API.\n\nIn order to access the API, you will to import the file containing the JavaScript you want to\nuse.\n\nSince all the JavaScript API is exposed within the [DI-JS](https://github.com/garysoed/di)\nenvironment, you will need to import the `third_party/di.html` file. Accessing the DI-JS\nenvironment can be done by calling its run method:\n```javascript\nDI.run({ Log: 'pb.service.Log' }, function($i) {\n  $i.Log.log('category', 'value');\n});\n```\n\nDI-JS, however, only allows one call of `DI.run` to be called. Since `main.html` already does\nthis, you cannot import this file. `main.html` is responsible for bootstraping the app, and you\nwill need to do this yourself. Bootstrapping the app is done using the\n{{#crossLink \"Bootstrap\"}}{{/crossLink}} class. For example:\n```javascript\nDI.run({ Bootstrap: 'pb.Bootstrap' }, function($i) {\n  // Setup logic goes here\n\n  // Build the app\n  $i.Bootstrap.run(document);\n});\n```\n\nAll logic that requires the Protoboard elements, such as listening to event emitted by the\ncomponents, shuffling a deck, and getting references to DOM elements, should happen after the\nbootstrap. Any other logic should happen before the bootstrap logic."
         },
-        "7 Abilities": {
-            "name": "7 Abilities",
-            "shortname": "7 Abilities",
+        "7 Custom Elements": {
+            "name": "7 Custom Elements",
+            "shortname": "7 Custom Elements",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1839,14 +1849,28 @@
             "extension_for": [],
             "module": "tutorial",
             "namespace": "",
-            "file": "tutorial/07_abilities.js",
+            "file": "tutorial/07_custom_elements.js",
+            "line": 1,
+            "description": "All elements in Protoboard are made out of\n[HTML Custom Element](http://www.html5rocks.com/en/tutorials/webcomponents/customelements/) with\nsome {{#crossLink \"ability.Ability\"}}Abilities{{/crossLink}} attached to them. The custom element\nhandles the rendering logic, while the abilities handles user interaction.\n\nAll custom elements should extend the {{#crossLink \"PbElement\"}}{{/crossLink}}. This class\nautomatically assigns a unique ID to the element, which will be used for logging and to uniquely\nidentify an element. If you are making a custom Component, you should extend\n{{#crossLink \"component.Component\"}}{{/crossLink}}. Likewise, if you are making a custom Region,\nyou should extend {{#crossLink \"region.Region\"}}{{/crossLink}}.\n\nAfter creating the custom element, you need to add abilities to it. To do this, use the Config\nservice's {{#crossLink \"service.Config/add:method\"}}add{{/crossLink}} method. For example:\n```javascript\nDI.run({ Config: 'pb.service.=', Pickable: 'pb.ability.=' }, function($i) {\n  $i.Config.add(\n      'custom-element'\n      new $i.Pickable());\n});\n```\n\nThis adds the {{#crossLink \"ability.Pickable\"}}{{/crossLink}} ability to the custom element with\nname `custom-element`.\n\nYou will also need to make Protoboard recognizes the new element. To do this, inject a\n`pb.$registry` instance and call its\n{{#crossLink \"service.Registry/add:method\"}}add{{/crossLink}} method:\n```javascript\nDI.run({ $registry: 'pb.=' }, function($i) {\n  $i.$registry.add('custom-element', CustomElement);\n});\n```\n\nNote that you need to do all of the above before calling\n{{#crossLink \"Bootstrap/run:method\"}}{{/crossLink}}."
+        },
+        "8 Abilities": {
+            "name": "8 Abilities",
+            "shortname": "8 Abilities",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "tutorial",
+            "namespace": "",
+            "file": "tutorial/08_abilities.js",
             "line": 1,
             "description": "Protoboard has a built in platform for triggering abilities. Every interaction with a Protoboard\ncomponent will trigger an ability.\n\nAll abilities can be found under the `ability` directory. Every ability extends from the\n{{#crossLink \"ability.Ability\"}}{{/crossLink}} class. Extending this class provides the following\nfeatures:\n- Reacts to changes to configuration attribute(s) of this ability.\n- Hook into the {{#crossLink \"service.Log\"}}Logging service{{/crossLink}}\n- Customizable trigger\n\nEvery instance of an ability has a default configuration. When an element created, the ability\nwill check for any configuration attributes it knows, and apply any default configuration to the\nelement. Note that since the same instance of an ability is shared across multiple elements, you\nshould never store element specific state in an ability. Instead, use\n{{#crossLink Symbol}}{{/crossLink}} to decorate the element with the state.\n\nEvery ability is associated with a {{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}. A\ntrigger listens to events in the browser, and, if the event happens, triggers the ability. To\nimplement your own ability, implement the {{#crossLink ability.Ability}}{{/crossLink}} class.\nNote that most of the time, you will only need to implement the\n{{#crossLink \"ability.Ability/doTrigger:method\"}}doTrigger{{/crossLink}} method.\n\nEvery ability on an element can be customized by changing an attribute related to that ability.\nThese attributes are prefixed with `name-`, where `name` is the name of the ability. For example,\nthe `drop-on` attribute specifies the trigger for the `drop` ability. Hence, the following sets\nthe `drop` ability to be triggered when the user clicks on the deck:\n```html\n<pb-r-deck drop-on=\"click\"></pb-r-deck>\n```\n\nThe `-on` configuration can be found on every ability, and they all sets the ability's trigger.\nIf you want to add a configuration, you will need to implement the\n{{#crossLink \"ability.Ability/init:method\"}}init{{/crossLink}} method to set the default value of\nthe configuration on the element.\n\nNow that you have your custom ability, you can add it to an element using the\n{{#crossLink \"service.Config\"}}{{/crossLink}}. For example:\n```javascript\nDI.run({ Config: 'service.=' }, function($i) {\n  $i.Config.add('pb-c-card', new CustomAbility());\n});\n```\nThe example above adds the CustomAbility to all `pb-c-card` elements.",
             "since": "0.3.1"
         },
-        "8 Triggers": {
-            "name": "8 Triggers",
-            "shortname": "8 Triggers",
+        "9 Triggers": {
+            "name": "9 Triggers",
+            "shortname": "9 Triggers",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1854,7 +1878,7 @@
             "extension_for": [],
             "module": "tutorial",
             "namespace": "",
-            "file": "tutorial/08_triggers.js",
+            "file": "tutorial/09_triggers.js",
             "line": 1,
             "description": "Beside abilities, Protoboard also allows you to create your own Triggers. Triggers are the main\nway for Abilities to be executed. Examples of Triggers include the\n{{#crossLink \"trigger.Click\"}}Click{{/crossLink}} trigger, which triggers an ability on an\nelement when the user clicks that element.\n\nTo create a trigger, you need to implement the {{#crossLink \"trigger.Trigger\"}}{{/crossLink}}\nclass. You will then need to register a parser with the\n{{#crossLink \"trigger.Triggers\"}}{{/crossLink}} service, by calling the\n{{#crossLink \"trigger.Triggers/register:method\"}}register{{/crossLink}} method. For example:\n```javascript\nDI.run({ Events: '=', Trigger: 'trigger.=', Triggers: 'trigger.=' }, function($i) {\n  var OnMouseUpTrigger = function() {};\n  OnMouseUpTrigger.prototype = Object.create($i.Trigger.prototype);\n\n  OnMouseUpTrigger.prototype.on = function(element, ability) {\n    $i.Events.of(element, this)\n        .on('dom', 'mouseup', ability.trigger.bind(ability, element));\n  };\n\n  OnMouseUpTrigger.prototype.off = function(element) {\n  \t $i.Events.of(element, this).off('dom', 'mouseup');\n  };\n\n  OnMouseUpTrigger.prototype.toString = function() {\n    return 'mouseup';\n  };\n\n  OnMouseUpTrigger.prototype.helpText = 'Triggers when mouse is unpressed on the element';\n\n  $i.Triggers.register(function(string) {\n    return (string === 'mouseup') ? new OnMouseUpTrigger() : undefined;\n  });\n});\n```\n\nThe {{#crossLink \"Events\"}}{{/crossLink}} class is a utility class to make event registering and\nunregistering easier to manage.",
             "since": "1.0.0"
@@ -1981,7 +2005,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 55,
+            "line": 60,
             "description": "Initializes the ability on the given element.",
             "itemtype": "method",
             "name": "init",
@@ -1996,7 +2020,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 69,
+            "line": 74,
             "description": "Updates the inner state of the ability based on changes to the element.",
             "itemtype": "method",
             "name": "updateConfig",
@@ -2011,7 +2035,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 95,
+            "line": 100,
             "description": "Triggers the effect of the ability on the given element.",
             "itemtype": "method",
             "name": "trigger",
@@ -2026,7 +2050,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 115,
+            "line": 121,
             "description": "Actually triggers the effect of the ability on the given element. All abilities must extend\nthis method.",
             "itemtype": "method",
             "name": "doTrigger",
@@ -2041,7 +2065,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 126,
+            "line": 132,
             "description": "Returns the trigger for this ability on this element.",
             "itemtype": "method",
             "name": "getTrigger",
@@ -2060,7 +2084,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 138,
+            "line": 144,
             "itemtype": "method",
             "name": "isEnabled",
             "params": [
@@ -2078,7 +2102,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 147,
+            "line": 153,
             "description": "Name of the ability. This is also the name of the attribute on the element corresponding to\nthis ability.",
             "itemtype": "property",
             "name": "attrName",
@@ -2088,7 +2112,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 159,
+            "line": 165,
             "description": "The name of the attribute on the element corresponding to this ability that sets the trigger\nfor this ability. This is the name of the ability with a `-on` postfix.",
             "itemtype": "property",
             "name": "attrTrigger",
@@ -2098,7 +2122,7 @@
         },
         {
             "file": "src/ability/ability.html",
-            "line": 171,
+            "line": 177,
             "description": "The default trigger of the ability, or null if none exists.",
             "itemtype": "property",
             "name": "defaultTrigger",
@@ -3277,6 +3301,12 @@
                     "name": "value",
                     "description": "The value of the category for the entry.",
                     "type": "Any"
+                },
+                {
+                    "name": "extra",
+                    "description": "Extra data to be added to the entry. This defaults to empty object.",
+                    "type": "Object",
+                    "optional": true
                 }
             ],
             "return": {
@@ -3287,7 +3317,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 163,
+            "line": 168,
             "description": "Adds a processor to process a log entry.\nA processor is a function that takes 3 arguments:\n1. `timestamp` of type {{#crossLink \"Date\"}}{{/crossLink}}.\n2. `category` {{#crossLink \"String\"}}{{/crossLink}}.\n3. `value`\nYou can specify more than one processors. The processors will be called in the other that\nthey are added to the service. The value that will be used for the log entry is the value\nreturned by the first processor that returns a non empty string.\n\nDEPRECATED: Use {{#crossLink \"service.Log/addPreprocessor:method\"}}{{/crossLink}} or\n{{#crossLink \"service.Log/addPrinter:method\"}}{{/crossLink}} instead.",
             "itemtype": "method",
             "name": "addProcessor",
@@ -3307,7 +3337,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 189,
+            "line": 194,
             "description": "Adds a preprocessor to preprocess a log entry. A preprocessor is a function that takes an\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}}.",
             "itemtype": "method",
             "name": "addPreprocessor",
@@ -3326,7 +3356,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 202,
+            "line": 207,
             "description": "Adds a printer to preprocess a log entry. A printer is a function that takes an\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}} and returns a string, or a null, if the\nprinter is not applicable to the entry.",
             "itemtype": "method",
             "name": "addPrinter",
@@ -3345,7 +3375,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 216,
+            "line": 221,
             "description": "Removes all preprocessors and printers that have been added to this service.",
             "itemtype": "method",
             "name": "clearProcessors",
@@ -3358,7 +3388,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 229,
+            "line": 234,
             "description": "Removes all entries that have been added to this service.",
             "itemtype": "method",
             "name": "clear",
@@ -3370,7 +3400,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 240,
+            "line": 245,
             "description": "The entries as a blob.",
             "itemtype": "property",
             "name": "blob",
@@ -3380,7 +3410,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 251,
+            "line": 256,
             "description": "The entries as a string.",
             "itemtype": "property",
             "name": "entries",
@@ -3390,7 +3420,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 262,
+            "line": 267,
             "description": "Default processor of the service. This processor is also used if no custom processors are\nadded.\n\nDEPRECATED: Use {{#crossLink \"service.Log/defaultPrinter:property\"}}{{/crossLink}} isntead.",
             "itemtype": "property",
             "name": "defaultProcessor",
@@ -3401,7 +3431,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 284,
+            "line": 289,
             "description": "Default printer of the service. This printer is also used if no custom printers are  added.",
             "itemtype": "property",
             "name": "defaultPrinter",
@@ -3474,7 +3504,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 149,
+            "line": 153,
             "description": "Last known X coordinate of the mouse in px.",
             "itemtype": "property",
             "name": "mouseX",
@@ -3484,7 +3514,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 160,
+            "line": 164,
             "description": "Last known Y coordinate of the mouse in px.",
             "itemtype": "property",
             "name": "mouseY",
@@ -4264,6 +4294,10 @@
                     "type": "Document"
                 }
             ],
+            "return": {
+                "description": "Promise that will be resolved once all the bootstrapping logic has finished\n   executing.",
+                "type": "Promise"
+            },
             "class": "Bootstrap"
         },
         {

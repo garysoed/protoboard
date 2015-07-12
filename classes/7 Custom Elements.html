@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#19760A">
 
-  <title>7 Abilities - Protoboard</title>
+  <title>7 Custom Elements - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -25,7 +25,7 @@
       flex-direction: column;
       font-family: 'Roboto', Helvetica, Arial, sans-serif;
       font-size: smaller;
-      line-height: 3.5ex;
+      line-height: 3ex;
       margin: 0;
       height: 100vh;
     }
@@ -81,7 +81,7 @@
     }
 
     section.collapsible > header {
-      padding: 5px 20px;
+      padding: 1em 2em;
       cursor: pointer;
       -webkit-user-select: none;
       transition: padding .2s;
@@ -112,7 +112,9 @@
     }
 
     dl {
-      padding: 15px;
+      margin-left: 2em;
+      margin-right: 2em;
+      padding: 1.5em 2em;
     }
 
     table, dl {
@@ -121,6 +123,16 @@
 
     header {
       font-weight: 700;
+    }
+
+    p {
+      margin-top: 2em;
+      margin-bottom: 2em;
+    }
+
+    dd p {
+      margin-top: 1em;
+      margin-bottom: 1em;
     }
   </style>
 
@@ -228,7 +240,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 1.0.0</div>
+      <div class="since">v 1.2.0</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -259,10 +271,13 @@
             <a href="../classes/6 JavaScript.html">6 JavaScript</a>
           </li>
           <li class="sidebar-selected">
-            <a href="../classes/7 Abilities.html">7 Abilities</a>
+            <a href="../classes/7 Custom Elements.html">7 Custom Elements</a>
           </li>
           <li class="">
-            <a href="../classes/8 Triggers.html">8 Triggers</a>
+            <a href="../classes/8 Abilities.html">8 Abilities</a>
+          </li>
+          <li class="">
+            <a href="../classes/9 Triggers.html">9 Triggers</a>
           </li>
         </ul>
       </div>
@@ -442,50 +457,38 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header class="tutorial">
-        <h2>7 Abilities</h2>
+        <h2>7 Custom Elements</h2>
       </header>
-      <div class="since">
-        since 0.3.1
-      </div>
 
     <div class="content description">
-      <p>Protoboard has a built in platform for triggering abilities. Every interaction with a Protoboard
-component will trigger an ability.</p>
-<p>All abilities can be found under the <code>ability</code> directory. Every ability extends from the
-<a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> class. Extending this class provides the following
-features:</p>
-<ul>
-<li>Reacts to changes to configuration attribute(s) of this ability.</li>
-<li>Hook into the <a href="../classes/service.Log.html" class="crosslink">Logging service</a></li>
-<li>Customizable trigger</li>
-</ul>
-<p>Every instance of an ability has a default configuration. When an element created, the ability
-will check for any configuration attributes it knows, and apply any default configuration to the
-element. Note that since the same instance of an ability is shared across multiple elements, you
-should never store element specific state in an ability. Instead, use
- to decorate the element with the state.</p>
-<p>Every ability is associated with a <a href="../classes/trigger.Trigger.html" class="crosslink">Trigger</a>. A
-trigger listens to events in the browser, and, if the event happens, triggers the ability. To
-implement your own ability, implement the  class.
-Note that most of the time, you will only need to implement the
-<a href="../classes/ability.Ability.html#method_doTrigger" class="crosslink">doTrigger</a> method.</p>
-<p>Every ability on an element can be customized by changing an attribute related to that ability.
-These attributes are prefixed with <code>name-</code>, where <code>name</code> is the name of the ability. For example,
-the <code>drop-on</code> attribute specifies the trigger for the <code>drop</code> ability. Hence, the following sets
-the <code>drop</code> ability to be triggered when the user clicks on the deck:</p>
-<pre class="code prettyprint"><code class="language-html">&lt;pb-r-deck drop-on="click"&gt;&lt;/pb-r-deck&gt;
-</code></pre>
-<p>The <code>-on</code> configuration can be found on every ability, and they all sets the ability's trigger.
-If you want to add a configuration, you will need to implement the
-<a href="../classes/ability.Ability.html#method_init" class="crosslink">init</a> method to set the default value of
-the configuration on the element.</p>
-<p>Now that you have your custom ability, you can add it to an element using the
-<a href="../classes/service.Config.html" class="crosslink">service.Config</a>. For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run({ Config: 'service.=' }, function($i) {
-  $i.Config.add('pb-c-card', new CustomAbility());
+      <p>All elements in Protoboard are made out of
+<a href="http://www.html5rocks.com/en/tutorials/webcomponents/customelements/">HTML Custom Element</a> with
+some <a href="../classes/ability.Ability.html" class="crosslink">Abilities</a> attached to them. The custom element
+handles the rendering logic, while the abilities handles user interaction.</p>
+<p>All custom elements should extend the <a href="../classes/PbElement.html" class="crosslink">PbElement</a>. This class
+automatically assigns a unique ID to the element, which will be used for logging and to uniquely
+identify an element. If you are making a custom Component, you should extend
+<a href="../classes/component.Component.html" class="crosslink">component.Component</a>. Likewise, if you are making a custom Region,
+you should extend <a href="../classes/region.Region.html" class="crosslink">region.Region</a>.</p>
+<p>After creating the custom element, you need to add abilities to it. To do this, use the Config
+service's <a href="../classes/service.Config.html#method_add" class="crosslink">add</a> method. For example:</p>
+<pre class="code prettyprint"><code class="language-javascript">DI.run({ Config: 'pb.service.=', Pickable: 'pb.ability.=' }, function($i) {
+  $i.Config.add(
+      'custom-element'
+      new $i.Pickable());
 });
 </code></pre>
-<p>The example above adds the CustomAbility to all <code>pb-c-card</code> elements.</p>
+<p>This adds the <a href="../classes/ability.Pickable.html" class="crosslink">ability.Pickable</a> ability to the custom element with
+name <code>custom-element</code>.</p>
+<p>You will also need to make Protoboard recognizes the new element. To do this, inject a
+<code>pb.$registry</code> instance and call its
+<a href="../classes/service.Registry.html#method_add" class="crosslink">add</a> method:</p>
+<pre class="code prettyprint"><code class="language-javascript">DI.run({ $registry: 'pb.=' }, function($i) {
+  $i.$registry.add('custom-element', CustomElement);
+});
+</code></pre>
+<p>Note that you need to do all of the above before calling
+<a href="../classes/Bootstrap.html#method_run" class="crosslink">run</a>.</p>
 
     </div>
 
@@ -539,13 +542,13 @@ the configuration on the element.</p>
       var ratio = Math.max(0, 1 - mainEl.scrollTop / maxScroll * 3);
       sinceEl.style.height = ratio * 25 + 'px';
 
-      var padding = (10 + 10 * ratio) + 'px';
+      var padding = (1 + 1 * ratio) + 'em';
       headerEl.style.paddingTop = padding;
       headerEl.style.paddingBottom = padding;
     });
 
     document.querySelector('.main-menu-button').addEventListener('click', function() {
-      document.querySelector('section.main-sidebar').classList.toggle('expand');
+      document.querySelector('section.main-content').classList.toggle('expand');
     });
   </script>
 </html>

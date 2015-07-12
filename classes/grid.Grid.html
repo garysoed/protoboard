@@ -25,7 +25,7 @@
       flex-direction: column;
       font-family: 'Roboto', Helvetica, Arial, sans-serif;
       font-size: smaller;
-      line-height: 3.5ex;
+      line-height: 3ex;
       margin: 0;
       height: 100vh;
     }
@@ -81,7 +81,7 @@
     }
 
     section.collapsible > header {
-      padding: 5px 20px;
+      padding: 1em 2em;
       cursor: pointer;
       -webkit-user-select: none;
       transition: padding .2s;
@@ -112,7 +112,9 @@
     }
 
     dl {
-      padding: 15px;
+      margin-left: 2em;
+      margin-right: 2em;
+      padding: 1.5em 2em;
     }
 
     table, dl {
@@ -121,6 +123,16 @@
 
     header {
       font-weight: 700;
+    }
+
+    p {
+      margin-top: 2em;
+      margin-bottom: 2em;
+    }
+
+    dd p {
+      margin-top: 1em;
+      margin-bottom: 1em;
     }
   </style>
 
@@ -228,7 +240,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 1.0.0</div>
+      <div class="since">v 1.2.0</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -259,10 +271,13 @@
             <a href="../classes/6 JavaScript.html">6 JavaScript</a>
           </li>
           <li class="">
-            <a href="../classes/7 Abilities.html">7 Abilities</a>
+            <a href="../classes/7 Custom Elements.html">7 Custom Elements</a>
           </li>
           <li class="">
-            <a href="../classes/8 Triggers.html">8 Triggers</a>
+            <a href="../classes/8 Abilities.html">8 Abilities</a>
+          </li>
+          <li class="">
+            <a href="../classes/9 Triggers.html">9 Triggers</a>
           </li>
         </ul>
       </div>
@@ -700,13 +715,13 @@
       var ratio = Math.max(0, 1 - mainEl.scrollTop / maxScroll * 3);
       sinceEl.style.height = ratio * 25 + 'px';
 
-      var padding = (10 + 10 * ratio) + 'px';
+      var padding = (1 + 1 * ratio) + 'em';
       headerEl.style.paddingTop = padding;
       headerEl.style.paddingBottom = padding;
     });
 
     document.querySelector('.main-menu-button').addEventListener('click', function() {
-      document.querySelector('section.main-sidebar').classList.toggle('expand');
+      document.querySelector('section.main-content').classList.toggle('expand');
     });
   </script>
 </html>

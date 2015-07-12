@@ -45,19 +45,25 @@ section.main-main {
 
 @media screen and (max-width: 900px) {
   section.main-sidebar {
+    opacity: 0.95;
     position: absolute;
     top: 0;
     bottom: 0;
   }
 
-  section.main-sidebar:not(.expand) {
+  section.main-content:not(.expand) section.main-sidebar {
     max-width: 0;
     transition: max-width .2s;
   }
 
-  section.main-sidebar.expand {
+  section.main-content.expand section.main-sidebar {
     max-width: 300px;
     transition: max-width .2s;
+  }
+
+  section.main-content.expand section.main-main {
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
   }
 
   .main-menu-button {

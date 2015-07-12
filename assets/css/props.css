@@ -1,10 +1,14 @@
 .props {
-  padding: 0 2em;
+  padding: 0 4em;
   -webkit-margin-after: 2em;
 }
 
 .props:first-child {
   padding-top: 2em;
+}
+
+.props:last-child {
+  padding-bottom: 2em;
 }
 
 .props > header {
