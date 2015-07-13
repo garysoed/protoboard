@@ -4,6 +4,7 @@
 <link rel="import" href="service/config.html">
 <link rel="import" href="service/registry.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
 
 <style>
   pb-s-move {
@@ -40,6 +41,7 @@ DI
     .bind(
         'service.Move',
         {
+          $: '/=',
           $registry: '=',
           Config: 'service.=',
           Events: '=',
@@ -48,6 +50,7 @@ DI
         },
         $i => {
 
+  const EVENT_MOVE = 'move';
   const EL_NAME = 'pb-s-move';
 
   // Private symbols.
@@ -59,6 +62,9 @@ DI
 
   const __moveContainer__ = Symbol('moveContainer');
   const __onMouseMove__ = Symbol('onMouseMove');
+  const __onContainerMutation__ = Symbol('onContainerMutation');
+
+  const __origin__ = Symbol();
 
   /**
    * Service that handles moving elements around. Used by
@@ -123,6 +129,29 @@ DI
     },
 
     /**
+     * Handles event when there is a mutation on the container element.
+     *
+     * @method __onContainerMutation__
+     * @param {Array} records Array of mutation records.
+     * @private
+     */
+    [__onContainerMutation__](records) {
+      for (let record of records) {
+        $i.Utils.toArray(record.removedNodes).forEach(removedNode => {
+          if (removedNode[__origin__] && removedNode[__origin__] !== removedNode.parentElement) {
+            $i.$(this).trigger(
+                this.Events.MOVE,
+                {
+                  moved: removedNode,
+                  from: removedNode[__origin__],
+                  to: removedNode.parentElement
+                });
+          }
+        });
+      }
+    },
+
+    /**
      * Sets the given element as being moved.
      *
      * @method add
@@ -131,6 +160,7 @@ DI
     add(el) {
       el[__height__] = undefined;
       el[__width__] = undefined;
+      el[__origin__] = el.parentElement;
       this[__container__].appendChild(el);
       this[__moveContainer__]();
     },
@@ -146,6 +176,13 @@ DI
       return new Set($i.Utils.toArray(this[__container__].children));
     },
 
+    /**
+     * The next element to be moved.
+     *
+     * @property nextElement
+     * @type Element
+     * @final
+     */
     get nextElement() {
       return this[__container__].lastElementChild;
     },
@@ -170,6 +207,20 @@ DI
      */
     get mouseY() {
       return this[__mouseY__];
+    },
+
+    /**
+     * Events that this class can trigger.
+     * - `MOVE`: Called when an element has been moved.
+     *
+     * @property Events
+     * @type Object
+     * @final
+     */
+    get Events() {
+      return {
+        get MOVE() { return 'move'; }
+      };
     }
   };
 
@@ -182,6 +233,9 @@ DI
         .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
     Move[__container__] = doc.createElement(EL_NAME);
     doc.body.appendChild(Move[__container__]);
+
+    let observer = new MutationObserver(Move[__onContainerMutation__].bind(Move));
+    observer.observe(Move[__container__], { childList: true });
   });
 
   return Move;

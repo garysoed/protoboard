@@ -4,10 +4,11 @@
   <base href="..">
   <title>service.Move Unit Tests</title>
 
-  <link rel="import" href="third_party/di.html">
   <link rel="import" href="service/move.html">
   <link rel="import" href="service/registry.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="third_party/jquery.html">
   <link rel="import" href="utils.html">
 </head>
 <body>
@@ -19,8 +20,10 @@
       .run(
           {
             _: '/=',
+            $: '/=',
             $registry: '=',
             doc: '=',
+            Events: '=',
             expect: '/=',
             t: '=',
             Move: 'service.=',
@@ -32,6 +35,7 @@
   const __container__ = $i.t.getSymbol($i.Move, 'container');
   const __moveContainer__ = $i.t.getSymbol($i.Move, 'moveContainer');
   const __onMouseMove__ = $i.t.getSymbol($i.Move, 'onMouseMove');
+  const __onContainerMutation__ = $i.t.getSymbol($i.Move, 'onContainerMutation');
 
   describe('service.Move', () => {
     before(done => {
@@ -40,7 +44,6 @@
     });
 
     beforeEach(done => {
-      $i.Move[__container__].innerHTML = '';
       done();
     });
 
@@ -77,6 +80,60 @@
         $i.expect($i.Move.mouseX).to.equal(event.clientX);
         $i.expect($i.Move.mouseY).to.equal(event.clientY);
         $i.expect($i.Move[__moveContainer__]).calledWith().at.least(1);
+      });
+    });
+
+    describe('__onContainerMutation__', () => {
+      it('should trigger an event if an element is moved out of the container', done => {
+        let el = $i.doc.createElement('div');
+        let parent = $i.doc.createElement('div');
+        let newParent = $i.doc.createElement('div');
+
+        parent.appendChild(el);
+        $i.Move.add(el);
+
+        newParent.appendChild(el);
+        $i.Events.of($i.Move).on('jquery', $i.Move.Events.MOVE, (event, data) => {
+          $i.expect(data.moved).to.equal(el);
+          $i.expect(data.from).to.equal(parent);
+          $i.expect(data.to).to.equal(newParent);
+          done();
+        });
+        $i.Move[__onContainerMutation__]([{ removedNodes: [el] }]);
+      });
+      it('should not trigger an event for an element that was not added to the container', function(done) {
+        const TIMEOUT = 500;
+
+        let el = $i.doc.createElement('div');
+        this.timeout(TIMEOUT);
+        setTimeout(done, TIMEOUT - 100);
+
+        $i.Events.of($i.Move).on('jquery', $i.Move.Events.MOVE, () => {
+          $i.expect(true).to.be.false();
+        });
+        $i.Move[__onContainerMutation__]([{ removedNodes: [el] }]);
+        $i.Events.of($i.Move).off();
+      });
+      it('should not trigger an event if the element is returned to the origin source', function(done) {
+        const TIMEOUT = 500;
+
+        let el = $i.doc.createElement('div');
+        let parent = $i.doc.createElement('div');
+
+        this.timeout(TIMEOUT);
+        setTimeout(done, TIMEOUT - 100);
+
+        parent.appendChild(el);
+        $i.Move.add(el);
+
+        $i.Events.of($i.Move).on('jquery', $i.Move.Events.MOVE, () => {
+          $i.expect(true).to.be.false();
+        });
+
+        // Add it back to the old parent.
+        parent.appendChild(el);
+        $i.Move[__onContainerMutation__]([{ removedNodes: [el] }]);
+        $i.Events.of($i.Move).off();
       });
     });
 
@@ -124,6 +181,8 @@
 
     afterEach(done => {
       $i._.reset();
+      $i.Events.of($i.Move).off();
+      $i.Move[__container__].innerHTML = '';
       done();
     });
   });

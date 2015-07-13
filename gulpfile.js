@@ -279,3 +279,5 @@ gulp.task('pack', gulp.series(
               .pipe(gulp.dest('dist'));
         })
     ));
+
+gulp.task('default', gulp.task('test'));

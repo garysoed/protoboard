@@ -4,6 +4,7 @@
 <link rel="import" href="service/config.html">
 <link rel="import" href="service/registry.html">
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
 
 <style>pb-s-move {
   -webkit-filter: drop-shadow(0px 2px 5px #50468F);
@@ -46,6 +47,7 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DI.prefix("pb").bind("service.Move", {
+  $: "/=",
   $registry: "=",
   Config: "service.=",
   Events: "=",
@@ -53,6 +55,7 @@ DI.prefix("pb").bind("service.Move", {
   Utils: "="
 }, function ($i) {
 
+  var EVENT_MOVE = "move";
   var EL_NAME = "pb-s-move";
 
   var __container__ = Symbol("container");
@@ -63,6 +66,9 @@ DI.prefix("pb").bind("service.Move", {
 
   var __moveContainer__ = Symbol("moveContainer");
   var __onMouseMove__ = Symbol("onMouseMove");
+  var __onContainerMutation__ = Symbol("onContainerMutation");
+
+  var __origin__ = Symbol();
 
   var Move = Object.defineProperties((function () {
     var _Object$defineProperties = {};
@@ -92,9 +98,47 @@ DI.prefix("pb").bind("service.Move", {
       this[__mouseY__] = event.clientY;
     });
 
+    _defineProperty(_Object$defineProperties, __onContainerMutation__, function (records) {
+      var _this = this;
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var record = _step.value;
+
+          $i.Utils.toArray(record.removedNodes).forEach(function (removedNode) {
+            if (removedNode[__origin__] && removedNode[__origin__] !== removedNode.parentElement) {
+              $i.$(_this).trigger(_this.Events.MOVE, {
+                moved: removedNode,
+                from: removedNode[__origin__],
+                to: removedNode.parentElement
+              });
+            }
+          });
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    });
+
     _defineProperty(_Object$defineProperties, "add", function add(el) {
       el[__height__] = undefined;
       el[__width__] = undefined;
+      el[__origin__] = el.parentElement;
       this[__container__].appendChild(el);
       this[__moveContainer__]();
     });
@@ -128,6 +172,21 @@ DI.prefix("pb").bind("service.Move", {
       },
       configurable: true,
       enumerable: true
+    },
+    Events: {
+      get: function () {
+        return Object.defineProperties({}, {
+          MOVE: {
+            get: function () {
+              return "move";
+            },
+            configurable: true,
+            enumerable: true
+          }
+        });
+      },
+      configurable: true,
+      enumerable: true
     }
   });
 
@@ -151,6 +210,9 @@ DI.prefix("pb").bind("service.Move", {
     $i.Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
     Move[__container__] = doc.createElement(EL_NAME);
     doc.body.appendChild(Move[__container__]);
+
+    var observer = new MutationObserver(Move[__onContainerMutation__].bind(Move));
+    observer.observe(Move[__container__], { childList: true });
   });
 
   return Move;
