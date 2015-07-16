@@ -12,6 +12,10 @@ Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 These are the release notes for the most current major version. For older release notes, go to the
 [Releases page](https://github.com/garysoed/protoboard/releases).
 
+### 1.2.1
+- Changed `service.Log.defaultPrinter` to not print anything if the phase is `before`.
+- `service.Move` now fires a `move` event. You can use JQuery to listen to the event.
+
 ### 1.2.0
 Improvements
 - Added `nextElement` to service.Move to return the last added element. All Droppable abilities now
