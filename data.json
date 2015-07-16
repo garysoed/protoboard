@@ -2,7 +2,7 @@
     "project": {
         "name": "Protoboard",
         "description": "Check out the tutorials and the API on the side bar. You can play around with the components at the <a href=\"http://garysoed.github.io/protoboard-demo\">demo site</a>.",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "url": "https://github.com/garysoed/protoboard",
         "colorBackground": "white",
         "colorForeground": "black",
@@ -1451,7 +1451,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/service/move.html",
-            "line": 63,
+            "line": 69,
             "description": "Service that handles moving elements around. Used by\n{{#crossLink \"ability.Droppable\"}}{{/crossLink}} and\n{{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\n\n```javascript\nMove.add(element);  // Sets the element as moved.\n\n// The element will be moved to a special container. To remove the element, just append it\n// somewhere else.\n```",
             "static": 1
         },
@@ -3441,7 +3441,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 80,
+            "line": 86,
             "description": "The container of all the moved elements.",
             "itemtype": "property",
             "name": "__container__",
@@ -3452,7 +3452,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 89,
+            "line": 95,
             "description": "Moves the container element to the last known location of the mouse.",
             "itemtype": "method",
             "name": "__moveContainer__",
@@ -3462,7 +3462,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 112,
+            "line": 118,
             "description": "Handles event when the mouse is moved.",
             "itemtype": "method",
             "name": "__onMouseMove__",
@@ -3479,7 +3479,24 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 125,
+            "line": 131,
+            "description": "Handles event when there is a mutation on the container element.",
+            "itemtype": "method",
+            "name": "__onContainerMutation__",
+            "params": [
+                {
+                    "name": "records",
+                    "description": "Array of mutation records.",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "service.Move"
+        },
+        {
+            "file": "src/service/move.html",
+            "line": 154,
             "description": "Sets the given element as being moved.",
             "itemtype": "method",
             "name": "add",
@@ -3494,7 +3511,7 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 138,
+            "line": 168,
             "description": "The elements that are being moved.",
             "itemtype": "property",
             "name": "movedElements",
@@ -3504,7 +3521,17 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 153,
+            "line": 179,
+            "description": "The next element to be moved.",
+            "itemtype": "property",
+            "name": "nextElement",
+            "type": "Element",
+            "final": 1,
+            "class": "service.Move"
+        },
+        {
+            "file": "src/service/move.html",
+            "line": 190,
             "description": "Last known X coordinate of the mouse in px.",
             "itemtype": "property",
             "name": "mouseX",
@@ -3514,11 +3541,21 @@
         },
         {
             "file": "src/service/move.html",
-            "line": 164,
+            "line": 201,
             "description": "Last known Y coordinate of the mouse in px.",
             "itemtype": "property",
             "name": "mouseY",
             "type": "number",
+            "final": 1,
+            "class": "service.Move"
+        },
+        {
+            "file": "src/service/move.html",
+            "line": 212,
+            "description": "Events that this class can trigger.\n- `MOVE`: Called when an element has been moved.",
+            "itemtype": "property",
+            "name": "Events",
+            "type": "Object",
             "final": 1,
             "class": "service.Move"
         },
