@@ -295,7 +295,9 @@ DI
      */
     get defaultPrinter() {
       return entry => {
-        return `${entry.timestamp.toLocaleString()} ${entry.category} - ${entry.value}`;
+        if (entry.phase !== 'before') {
+          return `${entry.timestamp.toLocaleString()} ${entry.category} - ${entry.value}`;
+        }
       };
     }
   };

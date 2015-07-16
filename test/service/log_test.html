@@ -136,6 +136,24 @@
       });
     });
 
+    describe('#defaultPrinter', () => {
+      it('should return undefined if the entry is in before phase', () => {
+        let entry = {
+          phase: 'before'
+        };
+        $i.expect($i.Log.defaultPrinter(entry)).to.be.undefined();
+      });
+      it('should print something if the entry is in a phase other than before', () => {
+        let entry = {
+          timestamp: new Date(),
+          phase: 'after',
+          category: 'category',
+          value: 'value'
+        };
+        $i.expect($i.Log.defaultPrinter(entry)).to.be.a('string');
+      });
+    });
+
     afterEach(done => {
       $i.Log
           .clearProcessors()

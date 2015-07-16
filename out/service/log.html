@@ -182,7 +182,9 @@ DI.prefix("pb").bind("service.Log", { TEST_MODE: "/=?" }, function ($i) {
     defaultPrinter: {
       get: function () {
         return function (entry) {
-          return "" + entry.timestamp.toLocaleString() + " " + entry.category + " - " + entry.value;
+          if (entry.phase !== "before") {
+            return "" + entry.timestamp.toLocaleString() + " " + entry.category + " - " + entry.value;
+          }
         };
       },
       configurable: true,
