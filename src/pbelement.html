@@ -74,6 +74,30 @@ DI
     get whenCreated() {
       return this[__createdPromise__];
     }
+
+    /**
+     * pb-id of the element.
+     *
+     * @type string
+     * @property pbId
+     * @final
+     * @since 1.3.0
+     */
+    get pbId() {
+      return $i.$(this).attr(ATTR_ID);
+    }
+
+    /**
+     * Prefix of the element's pb-id value.
+     *
+     * @type string
+     * @property pbIdPrefix
+     * @final
+     * @since 1.3.0
+     */
+    get pbIdPrefix() {
+      return this.pbId.split('-')[0];
+    }
   }
 
   return PbElement;

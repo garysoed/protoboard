@@ -40,6 +40,8 @@
         el.createdCallback();
 
         $i.expect($i.$(el).attr('pb-id')).to.be.equal(`${prefix}-0`);
+        $i.expect(el.pbId).to.be.equal(`${prefix}-0`);
+        $i.expect(el.pbIdPrefix).to.be.equal(prefix);
       });
       it('should increment the number for the second element', () => {
         let prefix = 'prefix2';
