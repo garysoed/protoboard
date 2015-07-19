@@ -64,6 +64,16 @@ DI.prefix("pb").bind("PbElement", { $: "/=", Abilities: "ability.=" }, function 
         get: function () {
           return this[__createdPromise__];
         }
+      },
+      pbId: {
+        get: function () {
+          return $i.$(this).attr(ATTR_ID);
+        }
+      },
+      pbIdPrefix: {
+        get: function () {
+          return this.pbId.split("-")[0];
+        }
       }
     });
 
