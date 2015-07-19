@@ -95,6 +95,16 @@
 
         expectEntryHas(entryMatcher.matchingArgs[0], timestamp, category, value);
       });
+      it('should print nothing if the printer returns empty string', () => {
+        let printer1 = $i._.spiedFunction().overrideReturn('');
+        let printer2 = $i._.spiedFunction().overrideReturn('blah');
+
+        $i.Log
+            .addPrinter(printer1)
+            .addPrinter(printer2);
+
+        $i.expect($i.Log.log('category', 'value').entries).to.be.equal('');
+      });
       it('should pick the first processor that returns a non empty string', () => {
         let entry = 'entry';
         let printer = $i._.spiedFunction().overrideReturn(entry);

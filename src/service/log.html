@@ -100,7 +100,8 @@ DI
    * to the Entry, a printer is expected to return a string, or a null.
    *
    * You can specify more than one printer and preprocessors. These functions will be called in the
-   * order that they are added to the service.
+   * order that they are added to the service. As soon as a printer returns a non null value, the
+   * values returned by the other printers in the chain will be ignored.
    *
    * So the example above will generate:
    * ```
@@ -151,7 +152,7 @@ DI
       if (this[__printers__].length > 0) {
         stringEntry = this[__printers__].reduce(
             (prevEntry, printer) => {
-              return prevEntry || printer(entry);
+              return (prevEntry === null) ? (printer(entry) || null) : prevEntry;
             },
             null);
       } else {
