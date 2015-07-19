@@ -105,7 +105,11 @@ DI.prefix("pb").bind("service.Log", { TEST_MODE: "/=?" }, function ($i) {
       var stringEntry = null;
       if (this[__printers__].length > 0) {
         stringEntry = this[__printers__].reduce(function (prevEntry, printer) {
-          return prevEntry === null ? printer(entry) || null : prevEntry;
+          if (prevEntry === null || prevEntry === undefined) {
+            return printer(entry);
+          } else {
+            return prevEntry;
+          }
         }, null);
       } else {
         stringEntry = this.defaultPrinter(entry);

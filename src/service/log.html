@@ -152,7 +152,11 @@ DI
       if (this[__printers__].length > 0) {
         stringEntry = this[__printers__].reduce(
             (prevEntry, printer) => {
-              return (prevEntry === null) ? (printer(entry) || null) : prevEntry;
+              if (prevEntry === null || prevEntry === undefined) {
+                return printer(entry);
+              } else {
+                return prevEntry;
+              }
             },
             null);
       } else {

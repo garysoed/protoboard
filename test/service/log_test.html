@@ -105,7 +105,7 @@
 
         $i.expect($i.Log.log('category', 'value').entries).to.be.equal('');
       });
-      it('should pick the first processor that returns a non empty string', () => {
+      it('should pick the first processor that returns a non null and non undefined', () => {
         let entry = 'entry';
         let printer = $i._.spiedFunction().overrideReturn(entry);
 
@@ -113,7 +113,7 @@
 
         $i.Log
             .addPrinter(() => null)
-            .addPrinter(() => '')
+            .addPrinter(() => undefined)
             .addPrinter(printer)
             .addPrinter(() => 'not used');
         $i.expect($i.Log.log(category, value).entries).to.be.equal(entry);
