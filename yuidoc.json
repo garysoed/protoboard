@@ -1,7 +1,7 @@
 {
   "name": "Protoboard",
   "description": "Check out the tutorials and the API on the side bar. You can play around with the components at the <a href=\"http://garysoed.github.io/protoboard-demo\">demo site</a>.",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "url": "https://github.com/garysoed/protoboard",
   "colorBackground": "white",
   "colorForeground": "black",
