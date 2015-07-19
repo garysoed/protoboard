@@ -57,7 +57,7 @@
       it('should create placeholder and its content if none is specified', () => {
         let el = $i.doc.querySelector('#emptyChildren');
         let placeholder = el.querySelector('[pb-placeholder]');
-        $i.expect(placeholder).to.exist();
+        $i.expect(placeholder).to.exist;
         $i.expect(placeholder.childElementCount).to.be.at.least(1);
       });
       it('should not create placeholder content if it is specified', () => {

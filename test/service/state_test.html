@@ -50,7 +50,7 @@
       it('should create pb-state element if it does not exist', () => {
         let key = 'key';
         $i.expect($i.State.get(key)).to.equal('');
-        $i.expect($i.doc.body.querySelector(`pb-state[${key}]`)).to.exist();
+        $i.expect($i.doc.body.querySelector(`pb-state[${key}]`)).to.exist;
       });
       it('should add the key to an existing pb-state element if it does not exist', () => {
         let key = 'key';
@@ -75,7 +75,7 @@
       });
       it('should create pb-state element if it does not exist', () => {
         $i.State.put(key, value);
-        $i.expect($i.doc.body.querySelector(`pb-state[${key}=${value}]`)).to.exist();
+        $i.expect($i.doc.body.querySelector(`pb-state[${key}=${value}]`)).to.exist;
       });
       it('should add the key to an existing pb-state element if it does not exist', () => {
         let key = 'key';

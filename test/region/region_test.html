@@ -50,7 +50,7 @@
       });
       it('should do nothing if no nodes are added or removed', () => {
         el[__onMutation__]([]);
-        $i.expect($i.$(el).attr('child-count')).to.be.undefined();
+        $i.expect($i.$(el).attr('child-count')).to.be.undefined;
       });
     });
   });

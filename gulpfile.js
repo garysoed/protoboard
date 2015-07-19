@@ -93,7 +93,8 @@ gulp.task('js-hint', function() {
       .pipe(jshint({
         esnext: true,
         laxbreak: true,
-        sub: true
+        sub: true,
+        expr: true,
       }))
       .pipe(jshint.reporter('jshint-stylish'))
       .pipe(jshint.reporter('fail'));

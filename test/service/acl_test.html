@@ -48,12 +48,12 @@
           let member = 'player';
           let group = new Group('group');
           group.add(member);
-          $i.expect(group.contains(member)).to.be.true();
+          $i.expect(group.contains(member)).to.be.true;
         });
         it('should return true if the candidate is a group with the same name of the current group', () => {
           let groupName = 'group';
           let group = new Group(groupName);
-          $i.expect(group.contains(groupName)).to.be.true();
+          $i.expect(group.contains(groupName)).to.be.true;
         });
         it('should return true if the candidate is a player who is a member of a subgroup', () => {
           let member = 'player';
@@ -62,7 +62,7 @@
           let group = new Group('group');
           group.add(subgroup);
 
-          $i.expect(group.contains(member)).to.be.true();
+          $i.expect(group.contains(member)).to.be.true;
         });
         it('should return false if the candidate is not a member of the group or its descendants', () => {
           let member = 'player';
@@ -70,7 +70,7 @@
           let group = new Group('group');
           group.add(subgroup);
 
-          $i.expect(group.contains(member)).to.be.false();
+          $i.expect(group.contains(member)).to.be.false;
         });
       });
     });
@@ -85,7 +85,7 @@
         $i.Acl.currentPlayer = player;
         $i.Acl[__update__](el);
 
-        $i.expect(el[$i.t.getSymbol(el, 'enabledMap')].get(action)).to.be.true();
+        $i.expect(el[$i.t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
         $i.Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
       });
       it('should check for group membership and add the CSS class', done => {
@@ -99,7 +99,7 @@
         $i.Acl.addGroup(group, player);
         $i.Acl[__update__](el);
 
-        $i.expect(el[$i.t.getSymbol(el, 'enabledMap')].get(action)).to.be.true();
+        $i.expect(el[$i.t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
         $i.Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
       });
       it('should set the CSS class to none if action is disabled', done => {
@@ -111,7 +111,7 @@
         $i.Acl.currentPlayer = player;
         $i.Acl[__update__](el);
 
-        $i.expect(el[$i.t.getSymbol(el, 'enabledMap')].get(action)).to.be.false();
+        $i.expect(el[$i.t.getSymbol(el, 'enabledMap')].get(action)).to.be.false;
         $i.Utils.watch(() => !el.classList.contains(`pb-acl-${action}`)).then(done);
       });
       it('should set the action as enabled if the attribute is set to empty string', done => {
@@ -122,7 +122,7 @@
         $i.Acl.currentPlayer = 'player';
         $i.Acl[__update__](el);
 
-        $i.expect(el[$i.t.getSymbol(el, 'enabledMap')].get(action)).to.be.true();
+        $i.expect(el[$i.t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
         $i.Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
       });
     });
@@ -170,7 +170,7 @@
             .registerElement(el)
             .isActionEnabled(el, action)
             .then(enabled => {
-              $i.expect(enabled).to.be.true();
+              $i.expect(enabled).to.be.true;
               done();
             })
             .catch(done);
@@ -189,7 +189,7 @@
             .registerElement(child)
             .isActionEnabled(child, action)
             .then(enabled => {
-              $i.expect(enabled).to.be.false();
+              $i.expect(enabled).to.be.false;
               done();
             })
             .catch(done);
@@ -204,7 +204,7 @@
         $i.Acl
             .isActionEnabled(el, action)
             .then(enabled => {
-              $i.expect(enabled).to.be.true();
+              $i.expect(enabled).to.be.true;
               done();
             })
             .catch(done);
@@ -219,7 +219,7 @@
             .registerElement(el)
             .isActionEnabled(el, action)
             .then(enabled => {
-              $i.expect(enabled).to.be.true();
+              $i.expect(enabled).to.be.true;
               done();
             })
             .catch(done);
@@ -233,8 +233,8 @@
         $i.Acl.addGroup(groupName, player1, player2);
 
         let group = $i.Acl.GROUPS.get(groupName);
-        $i.expect(group.contains(player1)).to.be.true();
-        $i.expect(group.contains(player2)).to.be.true();
+        $i.expect(group.contains(player1)).to.be.true;
+        $i.expect(group.contains(player2)).to.be.true;
       });
       it('should add a group if the member is a group', () => {
         let subgroupName = 'subgroupName';
@@ -245,7 +245,7 @@
             .addGroup(groupName, subgroupName);
 
         let group = $i.Acl.GROUPS.get(groupName);
-        $i.expect(group.contains(member)).to.be.true();
+        $i.expect(group.contains(member)).to.be.true;
       });
     });
     describe('set currentPlayer', () => {

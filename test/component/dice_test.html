@@ -77,13 +77,13 @@
         $i.expect(el.children.length).to.be.equal(2);
 
         let child1 = el.children.item(0);
-        $i.expect($i.$(child1).attr('pb-dice-pair')).to.not.be.undefined();
+        $i.expect($i.$(child1).attr('pb-dice-pair')).to.not.be.undefined;
         $i.expect(child1.children.length).to.be.equal(2);
         $i.expect(child1.children.item(0).innerHTML).to.be.equal('1');
         $i.expect(child1.children.item(1).innerHTML).to.be.equal('4');
 
         let child2 = el.children.item(1);
-        $i.expect($i.$(child2).attr('pb-dice-pair')).to.not.be.undefined();
+        $i.expect($i.$(child2).attr('pb-dice-pair')).to.not.be.undefined;
         $i.expect(child2.children.length).to.be.equal(2);
         $i.expect(child2.children.item(0).innerHTML).to.be.equal('2');
         $i.expect(child2.children.item(1).innerHTML).to.be.equal('3');

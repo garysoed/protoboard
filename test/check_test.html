@@ -51,16 +51,16 @@
 
     describe('#isBoolean', () => {
       it('should parse true', () => {
-        $i.expect($i.Check('true').isBoolean().orThrows()).to.true();
+        $i.expect($i.Check('true').isBoolean().orThrows()).to.be.true;
       });
       it('should parse false', () => {
-        $i.expect($i.Check('false').isBoolean().orThrows()).to.false();
+        $i.expect($i.Check('false').isBoolean().orThrows()).to.be.false;
       });
       it('should parse TRUE', () => {
-        $i.expect($i.Check('TRUE').isBoolean().orThrows()).to.true();
+        $i.expect($i.Check('TRUE').isBoolean().orThrows()).to.be.true;
       });
       it('should parse FALSE', () => {
-        $i.expect($i.Check('FALSE').isBoolean().orThrows()).to.false();
+        $i.expect($i.Check('FALSE').isBoolean().orThrows()).to.be.false;
       });
       it('should error on undefined', () => {
         $i.expect($i.Check(undefined).isBoolean().orUse('error')).to.equal('error');

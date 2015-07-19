@@ -91,7 +91,7 @@
 
           $i.$(el).attr(ability.attrChances, '0.5');
           ability.updateConfig(el);
-          $i.expect($i.$(child).attr('pb-stagger-level')).to.be.undefined();
+          $i.expect($i.$(child).attr('pb-stagger-level')).to.be.undefined;
         });
       });
 
@@ -139,7 +139,7 @@
           ability.trigger(el);
 
           $i.expect($i.$(movedEl).attr('pb-stagger-level')).to.equal('0');
-          $i.expect($i.$(level0Child).attr('pb-stagger-level')).to.be.undefined();
+          $i.expect($i.$(level0Child).attr('pb-stagger-level')).to.be.undefined;
           $i.expect($i.$(level1Child).attr('pb-stagger-level')).to.equal('1');
         });
       });
@@ -156,14 +156,14 @@
 
         it('should return true if the stagger level is non zero', () => {
           $i.$(el).attr('pb-stagger-level', 1);
-          $i.expect(droppable.isInStaggerState(el)).to.be.true();
+          $i.expect(droppable.isInStaggerState(el)).to.be.true;
         });
         it('should return true if the stagger level is zero', () => {
           $i.$(el).attr('pb-stagger-level', 0);
-          $i.expect(droppable.isInStaggerState(el)).to.be.true();
+          $i.expect(droppable.isInStaggerState(el)).to.be.true;
         });
         it('should return false if the stagger level does not exist', () => {
-          $i.expect(droppable.isInStaggerState(el)).to.be.false();
+          $i.expect(droppable.isInStaggerState(el)).to.be.false;
         });
       });
     });

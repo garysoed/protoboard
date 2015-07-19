@@ -61,7 +61,7 @@
       it('should do nothing if the default trigger is not provided', () => {
         let ability = new $i.Ability('name');
         ability.init(el);
-        $i.expect($i.$(el).attr(ability.attrTrigger)).to.not.exist();
+        $i.expect($i.$(el).attr(ability.attrTrigger)).to.not.exist;
       });
       it('should not override the trigger value if it is already set', () => {
         let attrValue = 'value';

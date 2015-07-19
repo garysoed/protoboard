@@ -127,7 +127,7 @@
             $i.expect(ability2.trigger).calledWith(el2).at.least(1);
 
             // Check that the ability is deleted.
-            $i.expect(Service[$i.t.getSymbol(Service, 'hoveredEls')].has(el2)).to.be.false();
+            $i.expect(Service[$i.t.getSymbol(Service, 'hoveredEls')].has(el2)).to.be.false;
           });
           it('should not crash if no element is hovered over', () => {
             handler({ keyCode: 97 });
@@ -149,7 +149,7 @@
 
             // Check that the ability is still there.
             const map = Service[$i.t.getSymbol(Service, 'hoveredEls')];
-            $i.expect(map.has(el)).to.be.true();
+            $i.expect(map.has(el)).to.be.true;
           });
           it('should unlisten to the element if it is being moved', () => {
             let el = $i.doc.createElement('div');
@@ -169,7 +169,7 @@
 
             // Check that the ability is still there.
             const map = Service[$i.t.getSymbol(Service, 'hoveredEls')];
-            $i.expect(map.has(el)).to.be.false();
+            $i.expect(map.has(el)).to.be.false;
           });
         });
 
@@ -194,9 +194,9 @@
             Service.add(el, key, ability);
 
             const map = Service[$i.t.getSymbol(Service, 'hoveredEls')];
-            $i.expect(map.has(el)).to.be.true();
-            $i.expect(map.get(el).has(key)).to.be.true();
-            $i.expect(map.get(el).get(key).has(ability)).to.be.true();
+            $i.expect(map.has(el)).to.be.true;
+            $i.expect(map.get(el).has(key)).to.be.true;
+            $i.expect(map.get(el).get(key).has(ability)).to.be.true;
           });
           it('should handle adding multiple abilities with the same element and key', () => {
             const ability1 = $i.t.createFakeAbility('ability1');
@@ -206,8 +206,8 @@
             Service.add(el, key, ability2);
 
             const abilitySet = Service[$i.t.getSymbol(Service, 'hoveredEls')].get(el).get(key);
-            $i.expect(abilitySet.has(ability1)).to.be.true();
-            $i.expect(abilitySet.has(ability2)).to.be.true();
+            $i.expect(abilitySet.has(ability1)).to.be.true;
+            $i.expect(abilitySet.has(ability2)).to.be.true;
           });
           it('should handle adding multiple keys to the same element', () => {
             const key1 = 'a';
@@ -218,10 +218,10 @@
             Service.add(el, key2, ability);
 
             const keyMap = Service[$i.t.getSymbol(Service, 'hoveredEls')].get(el);
-            $i.expect(keyMap.has(key1)).to.be.true();
-            $i.expect(keyMap.get(key1).has(ability)).to.be.true();
-            $i.expect(keyMap.has(key2)).to.be.true();
-            $i.expect(keyMap.get(key2).has(ability)).to.be.true();
+            $i.expect(keyMap.has(key1)).to.be.true;
+            $i.expect(keyMap.get(key1).has(ability)).to.be.true;
+            $i.expect(keyMap.has(key2)).to.be.true;
+            $i.expect(keyMap.get(key2).has(ability)).to.be.true;
           });
         });
 
@@ -232,7 +232,7 @@
             Service.add(el, 'a', $i.t.createFakeAbility('ability'));
 
             Service.remove(el);
-            $i.expect(Service[$i.t.getSymbol(Service, 'hoveredEls')].has(el)).to.be.false();
+            $i.expect(Service[$i.t.getSymbol(Service, 'hoveredEls')].has(el)).to.be.false;
           });
           it('should not crash if the element is not in the map', () => {
             Service.remove($i.doc.createElement('div'));

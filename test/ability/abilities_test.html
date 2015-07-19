@@ -190,7 +190,7 @@
         $i.expect(observer.observe).calledWith(el, configCaptor).at.least(1);
 
         let config = configCaptor.matchingArgs[0];
-        $i.expect(config.attributes).to.be.true();
+        $i.expect(config.attributes).to.be.true;
 
         // Check the detached callback.
         let detachedCallbackCaptor = $i._M.isA(Function);

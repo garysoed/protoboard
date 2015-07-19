@@ -141,7 +141,7 @@
         let entry = {
           phase: 'before'
         };
-        $i.expect($i.Log.defaultPrinter(entry)).to.be.undefined();
+        $i.expect($i.Log.defaultPrinter(entry)).to.be.undefined;
       });
       it('should print something if the entry is in a phase other than before', () => {
         let entry = {

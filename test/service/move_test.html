@@ -109,7 +109,7 @@
         setTimeout(done, TIMEOUT - 100);
 
         $i.Events.of($i.Move).on('jquery', $i.Move.Events.MOVE, () => {
-          $i.expect(true).to.be.false();
+          $i.expect.fail();
         });
         $i.Move[__onContainerMutation__]([{ removedNodes: [el] }]);
         $i.Events.of($i.Move).off();
@@ -127,7 +127,7 @@
         $i.Move.add(el);
 
         $i.Events.of($i.Move).on('jquery', $i.Move.Events.MOVE, () => {
-          $i.expect(true).to.be.false();
+          $i.expect.fail();
         });
 
         // Add it back to the old parent.
@@ -146,7 +146,7 @@
         $i.Move.add(el);
 
         $i.expect($i.Move[__moveContainer__]).calledWith().at.least(1);
-        $i.expect($i.Move[__container__].contains(el)).to.be.true();
+        $i.expect($i.Move[__container__].contains(el)).to.be.true;
       });
     });
 
