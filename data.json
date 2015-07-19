@@ -1437,7 +1437,7 @@
             "module": "api",
             "file": "src/service/log.html",
             "line": 39,
-            "description": "A service to log events and happenings in a game. Use this service to collect statistics about\na game session.\n\nBy default, the service records all triggers to every\n{{#crossLink \"ability.Ability\"}}abilities{{/crossLink}} loaded. The format of a log entry is:\n`<timestamp>: <category> - <value>`. For abilities, `category` is the ability's name, and the\n`value` is the value of `pb-id` of the element the ability acts on.\n\nFor every Protoboard component, region, and grid, you can customize the prefix of the id by\nspecifying the `pb-id` attribute. When the element is activated, Protoboard will append a\nnumber to the attribute to make sure that they are unique. For instance:\n```html\n<pb-c-card pb-id=\"attack\"></pb-c-card>\n```\nwill have its `pb-id` set to `attack-0`. So when the card is `flip`ped, this service will log\n`3/28/2015, 6:01:48 PM: flip - attack-0`.\n\nFor entries not handled by Abilities, you can also add log entries manually. Use the\n{{#crossLink \"service.Log/log:method\"}}{{/crossLink}} method. For instance:\n```javascript\nDI.run(['service.=', function(Log) {\n  Log.log('player-count', 2);\n}]);\n```\nwill generate entry: `3/28/2015, 6:01:48 PM: player-count - 2`.\n\nYou can also customize the string output using the\n{{#crossLink \"service.Log/addPrinter:method\"}}{{/crossLink}} and the\n{{#crossLink \"service.Log/addPreprocessor:method\"}}{{/crossLink}} method. When a log entry is\nadded, it undergoes two phases:\n1. Preprocess: The entry goes through all preprocessors that have been registered to the\n   service. These preprocessors are used to add custom properties to the entry. Note that\n   properties cannot be deleted or modified.\n2. Printing: The entry then goes through all registered printers. The service will use the\n   non null value returned by the first printer.\n\nFor example:\n```javascript\nDI.run(['service.=', function(Log) {\n  Log\n  \t   .addPreprocessor(function(entry) {\n  \t     if (entry.category === 'player-count') {\n  \t       entry.set('count', entry.value);\n  \t     }\n  \t   })\n      .addPrinter(function(entry) {\n        if (entry.category === 'player-count') {\n          return entry.timestamp.toLocaleString()\n          \t   + ': ' + entry.category + ' on ' + entry.count;\n        } else {\n          return null;\n        }\n      })\n     .addPrinter(Log.defaultPrinter)\n     .log('player-count', 2)\n     .log('rng-seed', 1234);\n}]);\n```\nA preprocessor and printer are functions that takes a log\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}}. While a preprocessor only adds values\nto the Entry, a printer is expected to return a string, or a null.\n\nYou can specify more than one printer and preprocessors. These functions will be called in the\norder that they are added to the service.\n\nSo the example above will generate:\n```\n3/28/2015, 6:21:47 PM: player-count on 2\n3/28/2015, 6:21:53 PM: rng-seed - 1234\n```\nThe custom preprocessor added the new `count` property to the entry, which was used by the\ncustom printer to generate the entry for `player-count`. The default printer was used to\ngenerate the one for `rng-seed`.\n\nYou can retrieve the entries using {{#crossLink \"service.Log/blob:property\"}}{{/crossLink}} as\na blob, or {{#crossLink \"service.Log/entries:property\"}}{{/crossLink}} as a string.",
+            "description": "A service to log events and happenings in a game. Use this service to collect statistics about\na game session.\n\nBy default, the service records all triggers to every\n{{#crossLink \"ability.Ability\"}}abilities{{/crossLink}} loaded. The format of a log entry is:\n`<timestamp>: <category> - <value>`. For abilities, `category` is the ability's name, and the\n`value` is the value of `pb-id` of the element the ability acts on.\n\nFor every Protoboard component, region, and grid, you can customize the prefix of the id by\nspecifying the `pb-id` attribute. When the element is activated, Protoboard will append a\nnumber to the attribute to make sure that they are unique. For instance:\n```html\n<pb-c-card pb-id=\"attack\"></pb-c-card>\n```\nwill have its `pb-id` set to `attack-0`. So when the card is `flip`ped, this service will log\n`3/28/2015, 6:01:48 PM: flip - attack-0`.\n\nFor entries not handled by Abilities, you can also add log entries manually. Use the\n{{#crossLink \"service.Log/log:method\"}}{{/crossLink}} method. For instance:\n```javascript\nDI.run(['service.=', function(Log) {\n  Log.log('player-count', 2);\n}]);\n```\nwill generate entry: `3/28/2015, 6:01:48 PM: player-count - 2`.\n\nYou can also customize the string output using the\n{{#crossLink \"service.Log/addPrinter:method\"}}{{/crossLink}} and the\n{{#crossLink \"service.Log/addPreprocessor:method\"}}{{/crossLink}} method. When a log entry is\nadded, it undergoes two phases:\n1. Preprocess: The entry goes through all preprocessors that have been registered to the\n   service. These preprocessors are used to add custom properties to the entry. Note that\n   properties cannot be deleted or modified.\n2. Printing: The entry then goes through all registered printers. The service will use the\n   non null value returned by the first printer.\n\nFor example:\n```javascript\nDI.run(['service.=', function(Log) {\n  Log\n  \t   .addPreprocessor(function(entry) {\n  \t     if (entry.category === 'player-count') {\n  \t       entry.set('count', entry.value);\n  \t     }\n  \t   })\n      .addPrinter(function(entry) {\n        if (entry.category === 'player-count') {\n          return entry.timestamp.toLocaleString()\n          \t   + ': ' + entry.category + ' on ' + entry.count;\n        } else {\n          return null;\n        }\n      })\n     .addPrinter(Log.defaultPrinter)\n     .log('player-count', 2)\n     .log('rng-seed', 1234);\n}]);\n```\nA preprocessor and printer are functions that takes a log\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}}. While a preprocessor only adds values\nto the Entry, a printer is expected to return a string, or a null.\n\nYou can specify more than one printer and preprocessors. These functions will be called in the\norder that they are added to the service. As soon as a printer returns a non null value, the\nvalues returned by the other printers in the chain will be ignored.\n\nSo the example above will generate:\n```\n3/28/2015, 6:21:47 PM: player-count on 2\n3/28/2015, 6:21:53 PM: rng-seed - 1234\n```\nThe custom preprocessor added the new `count` property to the entry, which was used by the\ncustom printer to generate the entry for `player-count`. The default printer was used to\ngenerate the one for `rng-seed`.\n\nYou can retrieve the entries using {{#crossLink \"service.Log/blob:property\"}}{{/crossLink}} as\na blob, or {{#crossLink \"service.Log/entries:property\"}}{{/crossLink}} as a string.",
             "static": 1,
             "since": "1.1.0"
         },
@@ -3287,7 +3287,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 126,
+            "line": 127,
             "description": "Adds an entry to the log.",
             "itemtype": "method",
             "name": "log",
@@ -3317,7 +3317,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 168,
+            "line": 173,
             "description": "Adds a processor to process a log entry.\nA processor is a function that takes 3 arguments:\n1. `timestamp` of type {{#crossLink \"Date\"}}{{/crossLink}}.\n2. `category` {{#crossLink \"String\"}}{{/crossLink}}.\n3. `value`\nYou can specify more than one processors. The processors will be called in the other that\nthey are added to the service. The value that will be used for the log entry is the value\nreturned by the first processor that returns a non empty string.\n\nDEPRECATED: Use {{#crossLink \"service.Log/addPreprocessor:method\"}}{{/crossLink}} or\n{{#crossLink \"service.Log/addPrinter:method\"}}{{/crossLink}} instead.",
             "itemtype": "method",
             "name": "addProcessor",
@@ -3337,7 +3337,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 194,
+            "line": 199,
             "description": "Adds a preprocessor to preprocess a log entry. A preprocessor is a function that takes an\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}}.",
             "itemtype": "method",
             "name": "addPreprocessor",
@@ -3356,7 +3356,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 207,
+            "line": 212,
             "description": "Adds a printer to preprocess a log entry. A printer is a function that takes an\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}} and returns a string, or a null, if the\nprinter is not applicable to the entry.",
             "itemtype": "method",
             "name": "addPrinter",
@@ -3375,7 +3375,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 221,
+            "line": 226,
             "description": "Removes all preprocessors and printers that have been added to this service.",
             "itemtype": "method",
             "name": "clearProcessors",
@@ -3388,7 +3388,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 234,
+            "line": 239,
             "description": "Removes all entries that have been added to this service.",
             "itemtype": "method",
             "name": "clear",
@@ -3400,7 +3400,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 245,
+            "line": 250,
             "description": "The entries as a blob.",
             "itemtype": "property",
             "name": "blob",
@@ -3410,7 +3410,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 256,
+            "line": 261,
             "description": "The entries as a string.",
             "itemtype": "property",
             "name": "entries",
@@ -3420,7 +3420,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 267,
+            "line": 272,
             "description": "Default processor of the service. This processor is also used if no custom processors are\nadded.\n\nDEPRECATED: Use {{#crossLink \"service.Log/defaultPrinter:property\"}}{{/crossLink}} isntead.",
             "itemtype": "property",
             "name": "defaultProcessor",
@@ -3431,7 +3431,7 @@
         },
         {
             "file": "src/service/log.html",
-            "line": 289,
+            "line": 294,
             "description": "Default printer of the service. This printer is also used if no custom printers are  added.",
             "itemtype": "property",
             "name": "defaultPrinter",
@@ -4515,6 +4515,30 @@
             "itemtype": "property",
             "name": "whenCreated",
             "final": 1,
+            "class": "PbElement",
+            "module": "api"
+        },
+        {
+            "file": "src/pbelement.html",
+            "line": 78,
+            "description": "pb-id of the element.",
+            "type": "string",
+            "itemtype": "property",
+            "name": "pbId",
+            "final": 1,
+            "since": "1.3.0",
+            "class": "PbElement",
+            "module": "api"
+        },
+        {
+            "file": "src/pbelement.html",
+            "line": 90,
+            "description": "Prefix of the element's pb-id value.",
+            "type": "string",
+            "itemtype": "property",
+            "name": "pbIdPrefix",
+            "final": 1,
+            "since": "1.3.0",
             "class": "PbElement",
             "module": "api"
         },

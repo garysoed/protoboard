@@ -520,7 +520,8 @@ non null value returned by the first printer.</li>
 <a href="../classes/service.Log.Entry.html" class="crosslink">Entry</a>. While a preprocessor only adds values
 to the Entry, a printer is expected to return a string, or a null.</p>
 <p>You can specify more than one printer and preprocessors. These functions will be called in the
-order that they are added to the service.</p>
+order that they are added to the service. As soon as a printer returns a non null value, the
+values returned by the other printers in the chain will be ignored.</p>
 <p>So the example above will generate:</p>
 <pre class="code prettyprint"><code>3/28/2015, 6:21:47 PM: player-count on 2
 3/28/2015, 6:21:53 PM: rng-seed - 1234
