@@ -57,31 +57,31 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template#main'))
-    .with('placeHolderTmp', { doc: '=' }, $i => $i.doc.querySelector('template#placeholder'))
-    .bind('region.Bag',
-        {
-          $: '/=',
-          $registry: '=',
-          doc: '=',
-          template: '=',
-          placeHolderTmp: '=',
-          Chance: '/=',
-          Click: 'trigger.=',
-          Config: 'service.=',
-          Droppable: 'ability.=',
-          Helpable: 'ability.=',
-          Key: 'trigger.=',
-          Move: 'service.=',
-          SelectedPickable: 'ability.=',
-          Region: 'region.=',
-          Utils: '=',
-          TEST_MODE: '/=?'
-        },
-        $i => {
+    .with('template', require => require('doc').querySelector('template#main'))
+    .with('placeHolderTmp', require => require('doc').querySelector('template#placeholder'))
+    .bind('region.Bag', (require, optional) => {
+
+  const $ = require('/$');
+  const $registry = require('$registry');
+
+  const Chance = require('/Chance');
+  const Click = require('trigger.Click');
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Droppable = require('ability.Droppable');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const Move = require('service.Move');
+  const placeHolderTmp = require('placeHolderTmp');
+  const Region = require('region.Region');
+  const SelectedPickable = require('ability.SelectedPickable');
+  const template = require('template');
+  const Utils = require('Utils');
+
+  const TEST_MODE = optional('/TEST_MODE');
 
   const EL_NAME = 'pb-r-bag';
   const ATTR_PLACEHOLDER = 'pb-placeholder';
@@ -113,7 +113,7 @@ DI
    * @extends region.Region
    */
 
-  class Bag extends $i.Region {
+  class Bag extends Region {
 
     /**
      * Called when the element is created.
@@ -123,17 +123,17 @@ DI
     createdCallback() {
       super.createdCallback();
 
-      this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
 
       this[__placeHolderEl__] = this.querySelector(`[${ATTR_PLACEHOLDER}]`);
 
       if (!this[__placeHolderEl__]) {
         let placeHolderContent = this.querySelector(`[${ATTR_PLACEHOLDER_CONTENT}]`) ||
-            $i.Utils.activateTemplate($i.placeHolderTmp, $i.doc);
+            Utils.activateTemplate(placeHolderTmp, doc);
 
-        this[__placeHolderEl__] = $i.doc.createElement('div');
+        this[__placeHolderEl__] = doc.createElement('div');
         this[__placeHolderEl__].appendChild(placeHolderContent);
-        $i.$(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, '');
+        $(this[__placeHolderEl__]).attr(ATTR_PLACEHOLDER, '');
         this.insertBefore(this[__placeHolderEl__], this.lastChild);
       }
     }
@@ -163,9 +163,9 @@ DI
    * @static
    */
   Bag[__selectChild__] = function(el) {
-    let filtered = $i.Utils.toArray(el.children).filter(
-        child => $i.$(child).attr(ATTR_PLACEHOLDER) === undefined);
-    return filtered.length > 0 ? $i.Chance.pick(filtered) : null;
+    let filtered = Utils.toArray(el.children).filter(
+        child => $(child).attr(ATTR_PLACEHOLDER) === undefined);
+    return filtered.length > 0 ? Chance.pick(filtered) : null;
   };
 
   /**
@@ -177,13 +177,13 @@ DI
    */
   Bag.NODE_NAME = EL_NAME;
 
-  $i.Config.add(
+  Config.add(
       EL_NAME,
-      new $i.Helpable('help'),
-      new $i.Droppable('drop', new $i.Key('d')),
-      new $i.SelectedPickable(Bag[__selectChild__], 'pick', new $i.Key('q')));
+      new Helpable('help'),
+      new Droppable('drop', new Key('d')),
+      new SelectedPickable(Bag[__selectChild__], 'pick', new Key('q')));
 
-  $i.$registry.add(EL_NAME, Bag);
+  $registry.add(EL_NAME, Bag);
 
   return Bag;
 });

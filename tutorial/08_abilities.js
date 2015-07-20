@@ -25,6 +25,7 @@
  * These attributes are prefixed with `name-`, where `name` is the name of the ability. For example,
  * the `drop-on` attribute specifies the trigger for the `drop` ability. Hence, the following sets
  * the `drop` ability to be triggered when the user clicks on the deck:
+ *
  * ```html
  * <pb-r-deck drop-on="click"></pb-r-deck>
  * ```
@@ -36,9 +37,11 @@
  *
  * Now that you have your custom ability, you can add it to an element using the
  * {{#crossLink "service.Config"}}{{/crossLink}}. For example:
+ *
  * ```javascript
- * DI.run({ Config: 'service.=' }, function($i) {
- *   $i.Config.add('pb-c-card', new CustomAbility());
+ * DIJS.run(function(require) {
+ *   var Config = require('service.Config');
+ *   Config.add('pb-c-card', new CustomAbility());
  * });
  * ```
  * The example above adds the CustomAbility to all `pb-c-card` elements.

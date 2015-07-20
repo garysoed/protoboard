@@ -15,12 +15,13 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("service.Acl", {
-  Check: "=",
-  Utils: "=",
-  State: "service.=",
-  TEST_MODE: "/=?"
-}, function ($i) {
+DIJS.prefix("pb").bind("service.Acl", function (require, optional) {
+
+  var Check = require("Check");
+  var State = require("service.State");
+  var Utils = require("Utils");
+
+  var TEST_MODE = optional("/TEST_MODE");
 
   var ATTR_PREFIX = "pb-acl-";
   var ATTR_CURRENT_PLAYER = "currentPlayer";
@@ -115,7 +116,7 @@ DI.prefix("pb").bind("service.Acl", {
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = $i.Utils.toMap(el.attributes)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        for (var _iterator = Utils.toMap(el.attributes)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var _step$value;
 
           var _ret = (function () {
@@ -128,7 +129,7 @@ DI.prefix("pb").bind("service.Acl", {
             }
 
             var name = attrName.substring(ATTR_PREFIX.length);
-            var allowedPlayers = $i.Check(attr.value).isList().orUse(null);
+            var allowedPlayers = Check(attr.value).isList().orUse(null);
             var enabled = allowedPlayers === null || allowedPlayers.length === 0 || allowedPlayers.some(function (player) {
               return GROUPS.has(player) ? GROUPS.get(player).contains(_this.currentPlayer) : player === _this.currentPlayer;
             });
@@ -260,10 +261,10 @@ DI.prefix("pb").bind("service.Acl", {
   })(), {
     currentPlayer: {
       get: function () {
-        return $i.State.get(ATTR_CURRENT_PLAYER);
+        return State.get(ATTR_CURRENT_PLAYER);
       },
       set: function (player) {
-        $i.State.put(ATTR_CURRENT_PLAYER, player);
+        State.put(ATTR_CURRENT_PLAYER, player);
 
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
@@ -320,7 +321,7 @@ DI.prefix("pb").bind("service.Acl", {
     }
   });
 
-  if ($i.TEST_MODE) {
+  if (TEST_MODE) {
     Service.Group = Group;
     Service.GROUPS = GROUPS;
   }

@@ -6,9 +6,12 @@
 
 <script>
 
-DI
+DIJS
     .prefix('pb')
-    .bind('service.Registry', { Abilities: 'ability.=', Config: 'service.=' }, $i => {
+    .bind('service.Registry', require => {
+
+  const Abilities = require('ability.Abilities');
+  const Config = require('service.Config');
 
   const __elements__ = Symbol();
   const __toRun__ = Symbol();
@@ -39,7 +42,7 @@ DI
       }
       this[__elements__].set(name, ctor.prototype);
       this.runAtRegister((doc, Config) => {
-        let builder = $i.Abilities.of(ctor.prototype);
+        let builder = Abilities.of(ctor.prototype);
 
         if (!Config.getAll(name)) {
           console.warn(`No configuration for ${name}`);
@@ -83,7 +86,7 @@ DI
      */
     register(doc) {
       for (let fn of this[__toRun__]) {
-        fn(doc, $i.Config);
+        fn(doc, Config);
       }
       return this;
     }

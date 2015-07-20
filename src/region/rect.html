@@ -31,26 +31,24 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
-    .bind(
-        'region.Rect',
-        {
-          $registry: '=',
-          doc: '=',
-          template: '=',
-          Config: 'service.=',
-          FlexDroppable: 'ability.=',
-          Helpable: 'ability.=',
-          Key: 'trigger.=',
-          Region: 'region.=',
-          Utils: '='
-        },
-        $i => {
-  const EL_NAME = 'pb-r-rect';
+    .with('template', require => require('doc').querySelector('template'))
+    .bind('region.Rect', require => {
 
+  const $registry = require('$registry');
+
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const FlexDroppable = require('ability.FlexDroppable');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const Region = require('region.Region');
+  const template = require('template');
+  const Utils = require('Utils');
+
+  const EL_NAME = 'pb-r-rect';
 
   /**
    * An arbitrary rectangular region. You can position elements anywhere in this region.
@@ -61,7 +59,7 @@ DI
    * @class region.Rect
    * @extends region.Region
    */
-  class Rect extends $i.Region {
+  class Rect extends Region {
 
     /**
      * Called when the element is created.
@@ -70,7 +68,7 @@ DI
      */
     createdCallback() {
       super.createdCallback();
-      this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     }
 
     /**
@@ -94,11 +92,11 @@ DI
    */
   Rect.NODE_NAME = EL_NAME;
 
-  $i.Config.add(
+  Config.add(
       EL_NAME,
-      new $i.Helpable('help'),
-      new $i.FlexDroppable('drop', new $i.Key('d'), true));
-  $i.$registry.add(EL_NAME, Rect);
+      new Helpable('help'),
+      new FlexDroppable('drop', new Key('d'), true));
+  $registry.add(EL_NAME, Rect);
 
   return Rect;
 });

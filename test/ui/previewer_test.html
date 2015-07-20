@@ -13,77 +13,76 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            _: '/=',
-            _M: '/=',
-            $registry: '=',
-            expect: '/=',
-            doc: '=',
-            t: '=',
-            Preview: 'service.=',
-            Utils: '=',
-            Config: 'service.=',
-            Events: '=',
-            Previewer: 'ui.=',
-          },
-          $i => {
+      .run(require => {
 
-  let __onPreviewElChanged__ = $i.t.getSymbol($i.Previewer.prototype, 'onPreviewElChanged');
+  const _ = require('/_');
+  const _M = require('/_M');
+  const $registry = require('$registry');
+
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Events = require('Events');
+  const expect = require('/expect');
+  const Preview = require('service.Preview');
+  const Previewer = require('ui.Previewer');
+  const t = require('t');
+  const Utils = require('Utils');
+
+  let __onPreviewElChanged__ = t.getSymbol(Previewer.prototype, 'onPreviewElChanged');
 
   describe('ui.Previewer', () => {
     before(done => {
-      $i.$registry.register($i.doc, $i.Config);
+      $registry.register(doc, Config);
       done();
     });
 
     describe('#attachedCallback', () => {
       it('should observe previewedEl in Preview', () => {
-        $i._.spy($i.Utils, 'observe');
-        $i.doc.createElement('pb-u-previewer').attachedCallback();
+        _.spy(Utils, 'observe');
+        doc.createElement('pb-u-previewer').attachedCallback();
 
-        $i.expect($i.Utils.observe).calledWith($i.Preview, 'previewedEl', $i._M.isA(Function));
+        expect(Utils.observe).calledWith(Preview, 'previewedEl', _M.isA(Function));
       });
     });
 
     describe('#detachedCallback', () => {
       it('should unobserve in Preview', () => {
-        let offFn = $i._.spiedFunction();
-        let previewer = $i.doc.createElement('pb-u-previewer');
+        let offFn = _.spiedFunction();
+        let previewer = doc.createElement('pb-u-previewer');
 
-        $i._.spy($i.Events, 'of').overrideReturn({ off: offFn });
+        _.spy(Events, 'of').overrideReturn({ off: offFn });
         previewer.detachedCallback();
 
-        $i.expect($i.Events.of).calledWith($i.Preview, previewer).at.least(1);
-        $i.expect(offFn).calledWith().at.least(1);
+        expect(Events.of).calledWith(Preview, previewer).at.least(1);
+        expect(offFn).calledWith().at.least(1);
       });
     });
 
     describe('#__onPreviewElChanged__', () => {
       it('should set the inner HTML of the previewEl', () => {
         let innerHTML = 'test inner HTML';
-        $i.Preview.previewedEl = { innerHTML: innerHTML };
+        Preview.previewedEl = { innerHTML: innerHTML };
 
-        let previewer = $i.doc.createElement('pb-u-previewer');
+        let previewer = doc.createElement('pb-u-previewer');
         previewer[__onPreviewElChanged__]();
-        $i.expect(previewer.innerHTML).to.be.equal(innerHTML);
+        expect(previewer.innerHTML).to.be.equal(innerHTML);
       });
       it('should clear the inner HTML if the previewEl is null', () => {
         let innerHTML = 'test inner HTML';
-        $i.Preview.previewedEl = null;
+        Preview.previewedEl = null;
 
-        let previewer = $i.doc.createElement('pb-u-previewer');
+        let previewer = doc.createElement('pb-u-previewer');
         previewer[__onPreviewElChanged__]();
-        $i.expect(previewer.innerHTML).to.be.equal('');
+        expect(previewer.innerHTML).to.be.equal('');
       });
     });
 
     afterEach(done => {
-      $i._.reset();
+      _.reset();
       done();
     });
   });

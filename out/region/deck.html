@@ -48,39 +48,41 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
-  return $i.doc.querySelector("template");
-}).bind("region.Deck", {
-  $registry: "=",
-  doc: "=",
-  template: "=",
-  Abilities: "ability.=",
-  Config: "service.=",
-  Droppable: "ability.=",
-  Helpable: "ability.=",
-  Key: "trigger.=",
-  Region: "region.=",
-  Shuffleable: "ability.=",
-  Utils: "=" }, function ($i) {
+DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
+  return require("doc").querySelector("template");
+}).bind("region.Deck", function (require) {
+
+  var $registry = require("$registry");
+
+  var Abilities = require("ability.Abilities");
+  var Config = require("service.Config");
+  var doc = require("doc");
+  var Droppable = require("ability.Droppable");
+  var Helpable = require("ability.Helpable");
+  var Key = require("trigger.Key");
+  var Region = require("region.Region");
+  var Shuffleable = require("ability.Shuffleable");
+  var template = require("template");
+  var Utils = require("Utils");
 
   var EL_NAME = "pb-r-deck";
 
-  var Deck = (function (_$i$Region) {
+  var Deck = (function (_Region) {
     function Deck() {
       _classCallCheck(this, Deck);
 
-      if (_$i$Region != null) {
-        _$i$Region.apply(this, arguments);
+      if (_Region != null) {
+        _Region.apply(this, arguments);
       }
     }
 
-    _inherits(Deck, _$i$Region);
+    _inherits(Deck, _Region);
 
     _createClass(Deck, {
       createdCallback: {
         value: function createdCallback() {
           _get(Object.getPrototypeOf(Deck.prototype), "createdCallback", this).call(this);
-          this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
         }
       },
       pickableChildCount: {
@@ -91,13 +93,13 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     });
 
     return Deck;
-  })($i.Region);
+  })(Region);
 
   Deck.NODE_NAME = EL_NAME;
 
-  $i.Config.add(EL_NAME, new $i.Helpable("help"), new $i.Shuffleable("shuffle", new $i.Key("s"), true), new $i.Droppable("drop", new $i.Key("d"), true));
+  Config.add(EL_NAME, new Helpable("help"), new Shuffleable("shuffle", new Key("s"), true), new Droppable("drop", new Key("d"), true));
 
-  $i.$registry.add(EL_NAME, Deck);
+  $registry.add(EL_NAME, Deck);
 
   return Deck;
 });</script>

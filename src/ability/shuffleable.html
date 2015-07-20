@@ -10,22 +10,20 @@
 <link rel="stylesheet" href="third_party/animate.css/animate.min.css">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('ability.Shuffleable',
-        {
-          $: '/=',
-          Ability: 'ability.=',
-          Chance: '/=',
-          Click: 'trigger.=',
-          Utils: '='
-        },
-        $i => {
+    .bind('ability.Shuffleable', require => {
+
+  const $ = require('/$');
+  const Ability = require('ability.Ability');
+  const Chance = require('/Chance');
+  const Click = require('trigger.Click');
+  const Utils = require('Utils');
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
 
-  class Shuffleable extends $i.Ability {
+  class Shuffleable extends Ability {
 
     /**
      * Elements with this ability shuffles its children when triggered.
@@ -37,7 +35,7 @@ DI
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Ability
      */
-    constructor(name = 'shuffleable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
+    constructor(name = 'shuffleable', defaultTrigger = new Click(), defaultEnabled = true) {
       super(name, defaultTrigger);
 
       this[__defaultEnabled__] = defaultEnabled;
@@ -52,8 +50,8 @@ DI
     init(el) {
       super.init(el);
 
-      if ($i.$(el).attr(this.attrName) === undefined) {
-        $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
       }
     }
 
@@ -64,7 +62,7 @@ DI
      * @param {Element} el Element whose children should be shuffled.
      */
     doTrigger(el) {
-      let shuffled = $i.Chance.shuffle($i.Utils.toArray(el.children));
+      let shuffled = Chance.shuffle(Utils.toArray(el.children));
       shuffled.forEach(shuffledEl => {
         el.appendChild(shuffledEl);
 
@@ -75,7 +73,7 @@ DI
       });
 
       // Animate the deck
-      $i.$(el).one(
+      $(el).one(
           'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
           () => {
             el.classList.remove('animated');

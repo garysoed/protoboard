@@ -15,80 +15,78 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            expect: '/=',
-            _: '/=',
-            Abilities: 'ability.=',
-            Click: 'trigger.=',
-            Config: 'service.=',
-            Helpable: 'ability.=',
-            Key: 'trigger.=',
-            doc: '=',
-            t: '=',
-            $registry: '='
-          },
-          $i => {
+      .run(require => {
+
+  const expect = require('/expect');
+  const _ = require('/_');
+  const $registry = require('$registry');
+  const Abilities = require('ability.Abilities');
+  const Click = require('trigger.Click');
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const t = require('t');
 
   describe('ability.Helpable', () => {
     let displayEl;
 
     before(() => {
-      displayEl = $i.doc.createElement('div');
-      $i._.spy($i.doc, 'createElement').overrideReturn(displayEl);
-      $i.$registry.register($i.doc, $i.Config);
-      $i._.reset($i.doc.createElement);
+      displayEl = doc.createElement('div');
+      _.spy(doc, 'createElement').overrideReturn(displayEl);
+      $registry.register(doc, Config);
+      _.reset(doc.createElement);
     });
 
     describe('#trigger', () => {
       it('should add the abilities as child of the display element and show the element', () => {
-        let ability1 = $i.t.createFakeAbility('ability', new $i.Click());
-        let ability2 = $i.t.createFakeAbility('ability2', new $i.Key('a'));
+        let ability1 = t.createFakeAbility('ability', new Click());
+        let ability2 = t.createFakeAbility('ability2', new Key('a'));
         ability1.isEnabled.overrideReturn(true);
         ability2.isEnabled.overrideReturn(true);
 
-        let helpable = new $i.Helpable();
-        let el = $i.doc.createElement('div');
-        $i.Abilities.of(el)
+        let helpable = new Helpable();
+        let el = doc.createElement('div');
+        Abilities.of(el)
             .add(helpable)
             .add(ability1)
             .add(ability2);
-        $i.Abilities.init(el);
+        Abilities.init(el);
 
         helpable.trigger(el);
         let children = displayEl.children;
-        $i.expect(children.length).to.be.equal(4);
+        expect(children.length).to.be.equal(4);
 
-        $i.expect(children.item(0).innerText).to.be.equal(el.nodeName);
-        $i.expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);
-        $i.expect(children.item(2).innerText).to.be.equal(`Click: ${ability1.attrName}`);
-        $i.expect(children.item(3).innerText).to.be.equal(`a: ${ability2.attrName}`);
+        expect(children.item(0).innerText).to.be.equal(el.nodeName);
+        expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);
+        expect(children.item(2).innerText).to.be.equal(`Click: ${ability1.attrName}`);
+        expect(children.item(3).innerText).to.be.equal(`a: ${ability2.attrName}`);
       });
 
       it('should not add disabled abilities', () => {
-        let ability = $i.t.createFakeAbility('disabled', new $i.Click());
-        let helpable = new $i.Helpable();
-        let el = $i.doc.createElement('div');
-        $i.Abilities.of(el)
+        let ability = t.createFakeAbility('disabled', new Click());
+        let helpable = new Helpable();
+        let el = doc.createElement('div');
+        Abilities.of(el)
             .add(helpable)
             .add(ability);
-        $i.Abilities.init(el);
+        Abilities.init(el);
 
         helpable.trigger(el);
         let children = displayEl.children;
-        $i.expect(children.length).to.be.equal(2);
+        expect(children.length).to.be.equal(2);
 
-        $i.expect(children.item(0).innerText).to.be.equal(el.nodeName);
-        $i.expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);
+        expect(children.item(0).innerText).to.be.equal(el.nodeName);
+        expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);
       });
     });
 
     afterEach(done => {
-      $i._.reset();
+      _.reset();
       done();
     });
   });

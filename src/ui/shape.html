@@ -48,27 +48,25 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('circleTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#circle'))
-    .with('hexagonTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#hexagon'))
-    .with('squareTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#square'))
-    .with('triangleTemplate', { doc: '=' }, $i => $i.doc.querySelector('template#triangle'))
-    .bind(
-        'ui.Shape',
-        {
-          $: '/=',
-          $registry: '=',
-          circleTemplate: '=',
-          doc: '=',
-          hexagonTemplate: '=',
-          squareTemplate: '=',
-          triangleTemplate: '=',
-          Config: 'service.=',
-          Utils: '=',
-        },
-        $i => {
+    .with('circleTemplate', require => require('doc').querySelector('template#circle'))
+    .with('hexagonTemplate', require => require('doc').querySelector('template#hexagon'))
+    .with('squareTemplate', require => require('doc').querySelector('template#square'))
+    .with('triangleTemplate', require => require('doc').querySelector('template#triangle'))
+    .bind('ui.Shape', require => {
+
+  const $ = require('/$');
+  const $registry = require('$registry');
+
+  const circleTemplate = require('circleTemplate');
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const hexagonTemplate = require('hexagonTemplate');
+  const squareTemplate = require('squareTemplate');
+  const triangleTemplate = require('triangleTemplate');
+  const Utils = require('Utils');
 
   const EL_NAME = 'pb-u-shape';
   const ATTR_NAME = 'shape';
@@ -100,31 +98,31 @@ DI
      * @method createdCallback
      */
     createdCallback() {
-      let shape = $i.$(this).attr(ATTR_NAME);
+      let shape = $(this).attr(ATTR_NAME);
       let template;
       switch (shape) {
         case 'circle':
-          template = $i.circleTemplate;
+          template = circleTemplate;
           break;
         case 'hexagon':
-          template = $i.hexagonTemplate;
+          template = hexagonTemplate;
           break;
         case 'square':
-          template = $i.squareTemplate;
+          template = squareTemplate;
           break;
         case 'triangle':
-          template = $i.triangleTemplate;
+          template = triangleTemplate;
           break;
         default:
           throw new Error(`Unrecognized shape: ${shape}`);
       }
       this.createShadowRoot()
-          .appendChild($i.Utils.activateTemplate(template, $i.doc));
+          .appendChild(Utils.activateTemplate(template, doc));
     }
   }
 
-  $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, Shape);
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Shape);
 
   return Shape;
 });

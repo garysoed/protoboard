@@ -7,16 +7,14 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('ability.Toggleable',
-        {
-          $: '/=',
-          Ability: 'ability.=',
-          Check: '=',
-          Key: 'trigger.='
-        },
-        $i => {
+    .bind('ability.Toggleable', require => {
+
+  const $ = require('/$');
+  const Ability = require('ability.Ability');
+  const Check = require('Check');
+  const Key = require('trigger.Key');
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
@@ -25,7 +23,7 @@ DI
   const __isEnabled__ = Symbol();
   const __isActive__ = Symbol();
 
-  class Toggleable extends $i.Ability {
+  class Toggleable extends Ability {
 
     /**
      * Provides decorator to make an element toggleable between two states.
@@ -42,7 +40,7 @@ DI
      */
     constructor(
         name = 'toggleable',
-        defaultTrigger = new $i.Key('t'),
+        defaultTrigger = new Key('t'),
         defaultConfig = { enabled: true, active: false }) {
       super(name, defaultTrigger);
 
@@ -62,7 +60,7 @@ DI
      * @private
      */
     [__isEnabled__](el) {
-      return $i.Check($i.$(el).attr(this.attrName)).isBoolean().orThrows();
+      return Check($(el).attr(this.attrName)).isBoolean().orThrows();
     }
 
     /**
@@ -72,7 +70,7 @@ DI
      * @private
      */
     [__isActive__](el) {
-      return $i.Check($i.$(el).attr(this.attrActive)).isBoolean().orThrows();
+      return Check($(el).attr(this.attrActive)).isBoolean().orThrows();
     }
 
     /**
@@ -83,12 +81,12 @@ DI
      */
     init(el) {
       super.init(el);
-      if ($i.$(el).attr(this.attrName) === undefined) {
-        $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
       }
 
-      if ($i.$(el).attr(this.attrActive) === undefined) {
-        $i.$(el).attr(this.attrActive, this[__defaultActive__]);
+      if ($(el).attr(this.attrActive) === undefined) {
+        $(el).attr(this.attrActive, this[__defaultActive__]);
       }
     }
 
@@ -99,7 +97,7 @@ DI
      * @param {Element} el Element that should be toggled.
      */
     doTrigger(el) {
-      $i.$(el).attr(this.attrActive, !this[__isActive__](el));
+      $(el).attr(this.attrActive, !this[__isActive__](el));
     }
 
     /**

@@ -52,23 +52,20 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('templateMain', { doc: '=' }, $i => $i.doc.querySelector('template#main'))
-    .with('templateRow', { doc: '=' }, $i => $i.doc.querySelector('template#row'))
-    .with('templateTile', { doc: '=' }, $i => $i.doc.querySelector('template#tile'))
-    .bind(
-        'grid.HexGrid',
-        {
-          $registry: '=',
-          templateMain: '=',
-          templateRow: '=',
-          templateTile: '=',
-          Config: 'service.=',
-          Grid: 'grid.=',
-        },
-        $i => {
+    .with('templateMain', require => require('doc').querySelector('template#main'))
+    .with('templateRow', require => require('doc').querySelector('template#row'))
+    .with('templateTile', require => require('doc').querySelector('template#tile'))
+    .bind('grid.HexGrid', require => {
+
+  const $registry = require('$registry');
+  const Config = require('service.Config');
+  const Grid = require('grid.Grid');
+  const templateMain = require('templateMain');
+  const templateRow = require('templateRow');
+  const templateTile = require('templateTile');
 
   const EL_NAME = 'pb-g-hexgrid';
 
@@ -96,7 +93,7 @@ DI
    * @since 0.2.0
    * @extends grid.Grid
    */
-  class HexGrid extends $i.Grid {
+  class HexGrid extends Grid {
 
     /**
      * The root element of the grid. All rows will be added as children to this element.
@@ -117,7 +114,7 @@ DI
      * @final
      */
     get mainTemplate() {
-      return $i.templateMain;
+      return templateMain;
     }
 
     /**
@@ -129,7 +126,7 @@ DI
      * @final
      */
     get rowTemplate() {
-      return $i.templateRow;
+      return templateRow;
     }
 
     /**
@@ -140,7 +137,7 @@ DI
      * @final
      */
     get tileTemplate() {
-      return $i.templateTile;
+      return templateTile;
     }
   }
 
@@ -153,8 +150,8 @@ DI
    */
   HexGrid.NODE_NAME = EL_NAME;
 
-  $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, HexGrid);
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, HexGrid);
 
   return HexGrid;
 });

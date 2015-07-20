@@ -6,17 +6,15 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .bind('grid.Grid',
-        {
-          doc: '=',
-          Check: '=',
-          PbElement: '=',
-          Utils: '=',
-        },
-        $i => {
+    .bind('grid.Grid', require => {
+
+  const doc = require('doc');
+  const Check = require('Check');
+  const PbElement = require('PbElement');
+  const Utils = require('Utils');
 
   const ATTR_ROW = 'pb-row';
   const ATTR_COL = 'pb-col';
@@ -37,7 +35,7 @@ DI
    * @since 0.2.0
    * @extends PbElement
    */
-  class Grid extends $i.PbElement {
+  class Grid extends PbElement {
 
     /**
      * Method called when the element is created.
@@ -49,22 +47,22 @@ DI
 
       // Create the shadow DOM.
       this.createShadowRoot()
-          .appendChild($i.Utils.activateTemplate(this.mainTemplate, $i.doc));
+          .appendChild(Utils.activateTemplate(this.mainTemplate, doc));
 
       // Initializes the data.
-      let rowCount = $i.Check($(this).attr(ATTR_ROW_COUNT)).isInt().orThrows();
-      let colCount = $i.Check($(this).attr(ATTR_COL_COUNT)).isInt().orThrows();
+      let rowCount = Check($(this).attr(ATTR_ROW_COUNT)).isInt().orThrows();
+      let colCount = Check($(this).attr(ATTR_COL_COUNT)).isInt().orThrows();
       let rootEl = this.rootEl;
 
       // Add the rows.
       for (let row = 0; row < rowCount; row++) {
-        rootEl.appendChild($i.Utils.activateTemplate(this.rowTemplate, $i.doc));
+        rootEl.appendChild(Utils.activateTemplate(this.rowTemplate, doc));
       }
 
       $(rootEl.children)
           .each((row, rowEl) => {
             for (let col = 0; col < colCount; col++) {
-              let tileEl = $i.Utils.activateTemplate(this.tileTemplate, $i.doc);
+              let tileEl = Utils.activateTemplate(this.tileTemplate, doc);
               $(tileEl.querySelector('content'))
                   .attr('select', `[${ATTR_ROW}="${row}"][${ATTR_COL}="${col}"]`);
               $(tileEl.children[0])

@@ -7,18 +7,23 @@
 
 <script>"use strict";
 
-DI.prefix("pb").bind("service.Template", { $: "/=", Check: "=", Events: "=", Handlebars: "/=" }, function ($i) {
+DIJS.prefix("pb").bind("service.Template", function (require) {
+
+  var $ = require("/$");
+  var Check = require("Check");
+  var Events = require("Events");
+  var Handlebars = require("/Handlebars");
 
   var promiseMap = new Map();
 
   var Service = {
     addPartial: function addPartial(name, element) {
-      $i.Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
+      Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
       return this;
     },
     addData: function addData(name, data) {
       if (promiseMap.has(name)) {
-        $i.$(Service).trigger(name, data);
+        $(Service).trigger(name, data);
       } else {
         promiseMap.set(name, Promise.resolve([name, data]));
       }
@@ -27,7 +32,7 @@ DI.prefix("pb").bind("service.Template", { $: "/=", Check: "=", Events: "=", Han
     get: function get(name) {
       if (!promiseMap.has(name)) {
         promiseMap.set(name, new Promise(function (resolve, reject) {
-          $i.Events.of(Service, this).on("jquery", name, function (event, data) {
+          Events.of(Service, this).on("jquery", name, function (event, data) {
             resolve([name, data]);
           });
         }));
@@ -37,14 +42,14 @@ DI.prefix("pb").bind("service.Template", { $: "/=", Check: "=", Events: "=", Han
     }
   };
 
-  $i.Handlebars.registerHelper("pb-for", function (from, to, step, options) {
+  Handlebars.registerHelper("pb-for", function (from, to, step, options) {
     if (options === undefined) {
       options = step;
       step = 1;
     }
     var rv = "";
-    for (var i = $i.Check(from).isInt().orThrows(); i < $i.Check(to).isInt().orThrows(); i += $i.Check(step).isInt().orThrows()) {
-      var data = $i.Handlebars.createFrame(options.data || {});
+    for (var i = Check(from).isInt().orThrows(); i < Check(to).isInt().orThrows(); i += Check(step).isInt().orThrows()) {
+      var data = Handlebars.createFrame(options.data || {});
       data.index = i;
       rv += options.fn(this, { data: data });
     }
@@ -52,4 +57,5 @@ DI.prefix("pb").bind("service.Template", { $: "/=", Check: "=", Events: "=", Han
   });
 
   return Service;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>

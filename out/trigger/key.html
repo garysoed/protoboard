@@ -23,27 +23,28 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("trigger.Key", {
-  Events: "=",
-  Move: "service.=",
-  Trigger: "trigger.=",
-  Triggers: "trigger.=",
-  $registry: "="
-}, function ($i) {
+DIJS.prefix("pb").bind("trigger.Key", function (require) {
+
+  var Events = require("Events");
+  var Move = require("service.Move");
+  var Trigger = require("trigger.Trigger");
+  var Triggers = require("trigger.Triggers");
+  var $registry = require("$registry");
+
   var __active__ = Symbol();
   var __key__ = Symbol("key");
 
   var __onMouseEnter__ = Symbol();
   var __onMouseLeave__ = Symbol("onMouseLeave");
 
-  var Key = (function (_$i$Trigger) {
+  var Key = (function (_Trigger) {
     function Key(key) {
       _classCallCheck(this, Key);
 
       this[__key__] = key;
     }
 
-    _inherits(Key, _$i$Trigger);
+    _inherits(Key, _Trigger);
 
     _createComputedClass(Key, [{
       key: __onMouseEnter__,
@@ -58,13 +59,13 @@ DI.prefix("pb").bind("trigger.Key", {
     }, {
       key: "on",
       value: function on(element, ability) {
-        $i.Events.of(element, this).on("dom", "mouseenter", this[__onMouseEnter__].bind(this, ability, element)).on("dom", "mouseleave", this[__onMouseLeave__].bind(this, element));
+        Events.of(element, this).on("dom", "mouseenter", this[__onMouseEnter__].bind(this, ability, element)).on("dom", "mouseleave", this[__onMouseLeave__].bind(this, element));
         element.classList.add("pb-key");
       }
     }, {
       key: "off",
       value: function off(element) {
-        $i.Events.of(element, this).off();
+        Events.of(element, this).off();
         element.classList.remove("pb-key");
       }
     }, {
@@ -80,9 +81,9 @@ DI.prefix("pb").bind("trigger.Key", {
     }]);
 
     return Key;
-  })($i.Trigger);
+  })(Trigger);
 
-  $i.Triggers.register(function (str) {
+  Triggers.register(function (str) {
     if (str.substring(0, "key-".length) === "key-") {
       return new Key(str.substring("key-".length));
     }
@@ -161,14 +162,14 @@ DI.prefix("pb").bind("trigger.Key", {
         }
 
         var rect = triggeredEl.getBoundingClientRect();
-        if ($i.Move.movedElements.has(triggeredEl) || rect.left > $i.Move.mouseX || rect.right < $i.Move.mouseX || rect.top > $i.Move.mouseY || rect.bottom < $i.Move.mouseY) {
+        if (Move.movedElements.has(triggeredEl) || rect.left > Move.mouseX || rect.right < Move.mouseX || rect.top > Move.mouseY || rect.bottom < Move.mouseY) {
           this[__hoveredEls__]["delete"](triggeredEl);
         }
       }
     });
 
     _defineProperty(_Object$defineProperties, "init", function init(doc) {
-      $i.Events.of(doc.body, Service).on("dom", "keypress", this[__onKeyPress__].bind(Service));
+      Events.of(doc.body, Service).on("dom", "keypress", this[__onKeyPress__].bind(Service));
     });
 
     _defineProperty(_Object$defineProperties, "add", function add(element, key, ability) {
@@ -203,7 +204,7 @@ DI.prefix("pb").bind("trigger.Key", {
     }
   });
 
-  $i.$registry.runAtRegister(function (doc) {
+  $registry.runAtRegister(function (doc) {
     Service.init(doc);
   });
 

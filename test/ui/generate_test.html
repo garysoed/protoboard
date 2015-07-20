@@ -23,26 +23,25 @@
     </pb-u-generate>
   </template>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            expect: '/=',
-            _: '/=',
-            $registry: '=',
-            doc: '=',
-            Config: 'service.=',
-            Generate: 'ui.=',
-            Template: 'service.=',
-            Utils: '=',
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const $registry = require('$registry');
+
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const expect = require('/expect');
+  const Generate = require('ui.Generate');
+  const Template = require('service.Template');
+  const Utils = require('Utils');
 
   describe('ui.Generate', () => {
     before(done => {
-      $i.$registry.register($i.doc, $i.Config);
+      $registry.register(doc, Config);
       done();
     });
 
@@ -51,23 +50,23 @@
         let dataA = 'a';
         let dataB = 'B';
 
-        let template = $i.doc.querySelector('#test');
-        let holderEl = $i.doc.querySelector('#testHolder');
-        let generateEl = $i.Utils.activateTemplate(template, $i.doc);
+        let template = doc.querySelector('#test');
+        let holderEl = doc.querySelector('#testHolder');
+        let generateEl = Utils.activateTemplate(template, doc);
         holderEl.appendChild(generateEl);
 
-        $i.Utils
+        Utils
             .watch(() => {
-              return $i.doc.querySelector('pb-u-generate') === null;
+              return doc.querySelector('pb-u-generate') === null;
             })
             .then(() => {
-              $i.expect(holderEl.children.length).to.be.equal(2);
-              $i.expect(holderEl.children.item(0).innerText).to.be.equal(`Data A: ${dataA}`);
-              $i.expect(holderEl.children.item(1).innerText).to.be.equal(`Data B: ${dataB}`);
+              expect(holderEl.children.length).to.be.equal(2);
+              expect(holderEl.children.item(0).innerText).to.be.equal(`Data A: ${dataA}`);
+              expect(holderEl.children.item(1).innerText).to.be.equal(`Data B: ${dataB}`);
               done();
             });
 
-        $i.Template
+        Template
             .addData('dataA', dataA)
             .addData('dataB', dataB);
       });

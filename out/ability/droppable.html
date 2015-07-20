@@ -15,19 +15,21 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Droppable", {
-  Ability: "ability.=",
-  Click: "trigger.=",
-  Move: "service.="
-}, function ($i) {
+DIJS.prefix("pb").bind("ability.Droppable", function (require) {
+
+  var $ = require("/$");
+  var Ability = require("ability.Ability");
+  var Click = require("trigger.Click");
+  var Move = require("service.Move");
+
   var __defaultEnabled__ = Symbol();
 
   var __isEnabled__ = Symbol();
 
-  var Droppable = (function (_$i$Ability) {
+  var Droppable = (function (_Ability) {
     function Droppable() {
       var name = arguments[0] === undefined ? "droppable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, Droppable);
@@ -37,7 +39,7 @@ DI.prefix("pb").bind("ability.Droppable", {
       this[__defaultEnabled__] = defaultEnabled;
     }
 
-    _inherits(Droppable, _$i$Ability);
+    _inherits(Droppable, _Ability);
 
     _createClass(Droppable, {
       init: {
@@ -51,7 +53,7 @@ DI.prefix("pb").bind("ability.Droppable", {
       },
       doTrigger: {
         value: function doTrigger(el) {
-          var movedElement = $i.Move.nextElement;
+          var movedElement = Move.nextElement;
           if (movedElement) {
             el.appendChild(movedElement);
           }
@@ -60,7 +62,7 @@ DI.prefix("pb").bind("ability.Droppable", {
     });
 
     return Droppable;
-  })($i.Ability);
+  })(Ability);
 
   return Droppable;
 });</script>

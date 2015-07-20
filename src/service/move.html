@@ -36,19 +36,16 @@
 </style>
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind(
-        'service.Move',
-        {
-          $: '/=',
-          $registry: '=',
-          Config: 'service.=',
-          Events: '=',
-          PbElement: '=',
-          Utils: '='
-        },
-        $i => {
+    .bind('service.Move', require => {
+
+  const $ = require('/$');
+  const $registry = require('$registry');
+  const Config = require('service.Config');
+  const Events = require('Events');
+  const PbElement = require('PbElement');
+  const Utils = require('Utils');
 
   const EVENT_MOVE = 'move';
   const EL_NAME = 'pb-s-move';
@@ -101,7 +98,7 @@ DI
     [__moveContainer__]() {
       let width = 0;
       let height = 0;
-      $i.Utils.toArray(this[__container__].children).forEach(child => {
+      Utils.toArray(this[__container__].children).forEach(child => {
         if (!child[__width__] || !child[__height__]) {
           let rect = child.getBoundingClientRect();
           child[__height__] = Math.max(rect.height, height);
@@ -137,9 +134,9 @@ DI
      */
     [__onContainerMutation__](records) {
       for (let record of records) {
-        $i.Utils.toArray(record.removedNodes).forEach(removedNode => {
+        Utils.toArray(record.removedNodes).forEach(removedNode => {
           if (removedNode[__origin__] && removedNode[__origin__] !== removedNode.parentElement) {
-            $i.$(this).trigger(
+            $(this).trigger(
                 this.Events.MOVE,
                 {
                   moved: removedNode,
@@ -173,7 +170,7 @@ DI
      * @final
      */
     get movedElements() {
-      return new Set($i.Utils.toArray(this[__container__].children));
+      return new Set(Utils.toArray(this[__container__].children));
     },
 
     /**
@@ -224,12 +221,12 @@ DI
     }
   };
 
-  class MoveElement extends $i.PbElement { }
+  class MoveElement extends PbElement { }
 
-  $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, MoveElement);
-  $i.$registry.runAtRegister(doc => {
-    $i.Events.of(doc.body, Move)
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, MoveElement);
+  $registry.runAtRegister(doc => {
+    Events.of(doc.body, Move)
         .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
     Move[__container__] = doc.createElement(EL_NAME);
     doc.body.appendChild(Move[__container__]);

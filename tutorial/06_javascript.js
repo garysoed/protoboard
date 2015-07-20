@@ -9,9 +9,10 @@
  * Since all the JavaScript API is exposed within the [DI-JS](https://github.com/garysoed/di)
  * environment, you will need to import the `third_party/di.html` file. Accessing the DI-JS
  * environment can be done by calling its run method:
+ *
  * ```javascript
- * DI.run({ Log: 'pb.service.Log' }, function($i) {
- *   $i.Log.log('category', 'value');
+ * DIJS.run(function(require) {
+ *   require('pb.service.Log').log('category', 'value');
  * });
  * ```
  *
@@ -19,12 +20,13 @@
  * this, you cannot import this file. `main.html` is responsible for bootstraping the app, and you
  * will need to do this yourself. Bootstrapping the app is done using the
  * {{#crossLink "Bootstrap"}}{{/crossLink}} class. For example:
+ *
  * ```javascript
- * DI.run({ Bootstrap: 'pb.Bootstrap' }, function($i) {
+ * DIJS.run(function(require) {
  *   // Setup logic goes here
  *
  *   // Build the app
- *   $i.Bootstrap.run(document);
+ *   require('pb.Bootstrap').run(document);
  * });
  * ```
  *

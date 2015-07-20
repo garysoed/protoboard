@@ -4,10 +4,14 @@
 
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/hammer.html">
+<link rel="import" href="third_party/jquery.html">
 
 <script>"use strict";
 
-DI.prefix("pb").bind("Events", { Hammer: "=" }, function ($i) {
+DIJS.prefix("pb").bind("Events", function (require) {
+
+  var $ = require("/$");
+  var Hammer = require("Hammer");
 
   var Handlers = window.Events.Handlers;
   Handlers.add("dom", function (element, eventName, handler) {
@@ -19,9 +23,10 @@ DI.prefix("pb").bind("Events", { Hammer: "=" }, function ($i) {
   }, function (element, eventName, handler) {
     $(element).off(eventName, handler);
   }).add("hammer", function (element, eventName, handler) {
-    $i.Hammer.on(element, eventName, handler);
+    Hammer.on(element, eventName, handler);
   }, function (element, eventName, handler) {
-    $i.Hammer.off(element, eventName, handler);
+    Hammer.off(element, eventName, handler);
   });
   return window.Events;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>

@@ -71,26 +71,23 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
-    .bind(
-        'component.Card',
-        {
-          $registry: '=',
-          doc: '=',
-          template: '=',
-          Click: 'trigger.=',
-          Component: 'component.=',
-          Config: 'service.=',
-          Helpable: 'ability.=',
-          Key: 'trigger.=',
-          Pickable: 'ability.=',
-          Toggleable: 'ability.=',
-          Utils: '=',
-        },
-        $i => {
+    .with('template', require => require('doc').querySelector('template'))
+    .bind('component.Card', require => {
+
+  const $registry = require('$registry');
+  const Click = require('trigger.Click');
+  const Component = require('component.Component');
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const Pickable = require('ability.Pickable');
+  const template = require('template');
+  const Toggleable = require('ability.Toggleable');
+  const Utils = require('Utils');
 
   /**
    * A representation of a card. To use this, create a `pb-c-card` element with two child elements:
@@ -115,7 +112,7 @@ DI
    * @class component.Card
    * @extends component.Component
    */
-  class Card extends $i.Component {
+  class Card extends Component {
 
     /**
      * Called when the element is created
@@ -125,7 +122,7 @@ DI
     createdCallback() {
       super.createdCallback();
       this.createShadowRoot()
-          .appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+          .appendChild(Utils.activateTemplate(template, doc));
       this.attachedCallback();
     }
   }
@@ -139,14 +136,14 @@ DI
    */
   Card.NODE_NAME = 'pb-c-card';
 
-  $i.Config.add(
+  Config.add(
       Card.NODE_NAME,
-      new $i.Helpable('help'),
-      new $i.Pickable('pick', new $i.Key('q'), true),
-      new $i.Toggleable('flip', new $i.Click(), true),
-      new $i.Toggleable('tap', new $i.Key('t'), true));
+      new Helpable('help'),
+      new Pickable('pick', new Key('q'), true),
+      new Toggleable('flip', new Click(), true),
+      new Toggleable('tap', new Key('t'), true));
 
-  $i.$registry.add(Card.NODE_NAME, Card);
+  $registry.add(Card.NODE_NAME, Card);
 
   return Card;
 });

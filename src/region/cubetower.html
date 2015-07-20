@@ -44,29 +44,27 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
-    .bind(
-        'region.CubeTower',
-        {
-          $registry: '=',
-          doc: '=',
-          template: '=',
-          Config: 'service.=',
-          Droppable: 'ability.=',
-          Helpable: 'ability.=',
-          Key: 'trigger.=',
-          Region: 'region.=',
-          StaggeredDroppable: 'ability.=',
-          Utils: '='
-        },
-        $i => {
+    .with('template', require => require('doc').querySelector('template'))
+    .bind('region.CubeTower', require => {
+
+  const $registry = require('$registry');
+
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Droppable = require('ability.Droppable');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const Region = require('region.Region');
+  const StaggeredDroppable = require('ability.StaggeredDroppable');
+  const template = require('template');
+  const Utils = require('Utils');
 
   const EL_NAME = 'pb-r-cubetower';
 
-  const droppable = new $i.StaggeredDroppable('drop', new $i.Key('d'), true);
+  const droppable = new StaggeredDroppable('drop', new Key('d'), true);
 
   /**
    * Represents a Cube Tower. This uses {{#crossLink "ability.StaggeredDroppable"}}{{/crossLink}} to
@@ -94,7 +92,7 @@ DI
    * @extends region.Region
    * @since 0.3.0
    */
-  class CubeTower extends $i.Region {
+  class CubeTower extends Region {
 
     /**
      * Called when the element is created.
@@ -103,7 +101,7 @@ DI
      */
     createdCallback() {
       super.createdCallback();
-      this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     }
 
     /**
@@ -115,7 +113,7 @@ DI
      */
     get pickableChildCount() {
       let count = 0;
-      $i.Utils.toArray(this.children).forEach(child => {
+      Utils.toArray(this.children).forEach(child => {
         if (!droppable.isInStaggerState(child)) {
           count++;
         }
@@ -133,8 +131,8 @@ DI
    */
   CubeTower.NODE_NAME = EL_NAME;
 
-  $i.Config.add(EL_NAME, new $i.Helpable('help'), droppable);
-  $i.$registry.add(EL_NAME, CubeTower);
+  Config.add(EL_NAME, new Helpable('help'), droppable);
+  $registry.add(EL_NAME, CubeTower);
 
   return CubeTower;
 });

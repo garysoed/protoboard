@@ -14,20 +14,19 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run(
-          {
-            $: '/=',
-            _: '/=',
-            doc: '=',
-            expect: '/=',
-            Move: 'service.=',
-            SelectedPickable: 'ability.=',
-          },
-          $i => {
+      .with('$registry', require => new (require('service.Registry'))())
+      .run(require => {
+
+    const $ = require('/$');
+    const _ = require('/_');
+    const doc = require('doc');
+    const expect = require('/expect');
+    const Move = require('service.Move');
+    const SelectedPickable = require('ability.SelectedPickable');
+
     describe('ability.SelectedPickable', () => {
       describe('#trigger', () => {
         let pickable;
@@ -35,31 +34,31 @@
         let parent;
 
         beforeEach(done => {
-          selectFn = $i._.spiedFunction();
-          pickable = new $i.SelectedPickable(selectFn);
-          parent = $i.doc.createElement('div');
+          selectFn = _.spiedFunction();
+          pickable = new SelectedPickable(selectFn);
+          parent = doc.createElement('div');
           pickable.init(parent);
           done();
         });
 
         it('should add the element returned by the selection function to the move service', () => {
-          let el = $i.doc.createElement('div');
+          let el = doc.createElement('div');
           selectFn.overrideReturn(el);
-          $i._.spy($i.Move, 'add').overrideReturn();
+          _.spy(Move, 'add').overrideReturn();
 
           pickable.trigger(parent);
 
-          $i.expect($i.Move.add).calledWith(el).at.least(1);
-          $i.expect(selectFn).calledWith(parent).at.least(1);
+          expect(Move.add).calledWith(el).at.least(1);
+          expect(selectFn).calledWith(parent).at.least(1);
         });
         it('should do nothing if the selection function returned null', () => {
           selectFn.overrideReturn(null);
-          $i._.spy($i.Move, 'add').overrideReturn();
+          _.spy(Move, 'add').overrideReturn();
 
           pickable.trigger(parent);
 
-          $i.expect($i.Move.add).called().to.equal(0);
-          $i.expect(selectFn).calledWith(parent).at.least(1);
+          expect(Move.add).called().to.equal(0);
+          expect(selectFn).calledWith(parent).at.least(1);
         });
       });
     });

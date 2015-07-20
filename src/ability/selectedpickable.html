@@ -8,17 +8,15 @@
 <link rel="import" href="utils.html">
 
 <script type="text/javascript">
-DI
+DIJS
     .prefix('pb')
-    .bind('ability.SelectedPickable',
-        {
-          $: '/=',
-          Click: 'trigger.=',
-          Move: 'service.=',
-          Pickable: 'ability.=',
-          Utils: '='
-        },
-        $i => {
+    .bind('ability.SelectedPickable', require => {
+
+  const $ = require('/$');
+  const Click = require('trigger.Click');
+  const Move = require('service.Move');
+  const Pickable = require('ability.Pickable');
+  const Utils = require('Utils');
 
   const __selectionFn__ = Symbol('selectionFn');
 
@@ -33,7 +31,7 @@ DI
    * @extends ability.Pickable
    * @since 0.3.1
    */
-  class SelectedPickable extends $i.Pickable {
+  class SelectedPickable extends Pickable {
 
     /**
      * @constructor
@@ -47,7 +45,7 @@ DI
     constructor(
         selectionFn,
         name = 'pickable',
-        defaultTrigger = new $i.Click(),
+        defaultTrigger = new Click(),
         defaultEnabled = true) {
       super(name, defaultTrigger, defaultEnabled);
       this[__selectionFn__] = selectionFn;
@@ -62,7 +60,7 @@ DI
     doTrigger(el) {
       let child = this[__selectionFn__](el);
       if (child) {
-        $i.Move.add(child);
+        Move.add(child);
       }
     }
   }

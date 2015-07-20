@@ -23,113 +23,112 @@
     <div pb-placeholder>Placeholder</div>
   </pb-r-bag>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            _: '/=',
-            _M: '/=',
-            $: '/=',
-            Bag: 'region.=',
-            Chance: '/=',
-            Config: 'service.=',
-            doc: '=',
-            expect: '/=',
-            t: '=',
-            $registry: '='
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const _M = require('/_M');
+  const $ = require('/$');
+  const $registry = require('$registry');
+
+  const Bag = require('region.Bag');
+  const Chance = require('/Chance');
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const expect = require('/expect');
+  const t = require('t');
 
   // Private symbols
-  let __draggable__ = $i.t.getSymbol($i.Bag.prototype, 'draggable');
-  let __placeHolderEl__ = $i.t.getSymbol($i.Bag.prototype, 'placeHolderEl');
-  let __selectChild__ = $i.t.getSymbol($i.Bag, 'selectChild');
+  let __draggable__ = t.getSymbol(Bag.prototype, 'draggable');
+  let __placeHolderEl__ = t.getSymbol(Bag.prototype, 'placeHolderEl');
+  let __selectChild__ = t.getSymbol(Bag, 'selectChild');
 
   describe('Bag', () => {
     before(done => {
-      $i.$registry.register($i.doc, $i.Config);
+      $registry.register(doc, Config);
       done();
     });
 
     describe('#createdCallback', () => {
       it('should create placeholder and its content if none is specified', () => {
-        let el = $i.doc.querySelector('#emptyChildren');
+        let el = doc.querySelector('#emptyChildren');
         let placeholder = el.querySelector('[pb-placeholder]');
-        $i.expect(placeholder).to.exist;
-        $i.expect(placeholder.childElementCount).to.be.at.least(1);
+        expect(placeholder).to.exist;
+        expect(placeholder.childElementCount).to.be.at.least(1);
       });
       it('should not create placeholder content if it is specified', () => {
-        let el = $i.doc.querySelector('#hasContent');
+        let el = doc.querySelector('#hasContent');
         let placeholders = el.querySelectorAll('[pb-placeholder]');
 
-        $i.expect(placeholders.length).to.equal(1);
+        expect(placeholders.length).to.equal(1);
 
         let placeholder = placeholders.item(0);
-        $i.expect(placeholder.querySelector('[pb-placeholder-content]').innerHTML)
+        expect(placeholder.querySelector('[pb-placeholder-content]').innerHTML)
             .to.equal('content');
       });
       it('should not create placeholder or its content if placeholder is specified', () => {
-        let el = $i.doc.querySelector('#hasPlaceholder');
+        let el = doc.querySelector('#hasPlaceholder');
         let placeholders = el.querySelectorAll('[pb-placeholder]');
 
-        $i.expect(placeholders.length).to.equal(1);
+        expect(placeholders.length).to.equal(1);
 
         let placeholder = placeholders.item(0);
-        $i.expect(placeholder.innerHTML).to.equal('Placeholder');
+        expect(placeholder.innerHTML).to.equal('Placeholder');
       });
     });
 
     describe('get pickableChildCount', () => {
       it('should return the correct child count', () => {
-        let bag = $i.doc.createElement('pb-r-bag');
-        Object.setPrototypeOf(bag, $i.Bag.prototype);
-        bag.appendChild($i.doc.createElement('div'));
-        bag.appendChild($i.doc.createElement('div'));
-        $i.expect(bag.pickableChildCount).to.equal(2);
+        let bag = doc.createElement('pb-r-bag');
+        Object.setPrototypeOf(bag, Bag.prototype);
+        bag.appendChild(doc.createElement('div'));
+        bag.appendChild(doc.createElement('div'));
+        expect(bag.pickableChildCount).to.equal(2);
       });
     });
 
     describe('#__selectChild__', () => {
       function createPlaceHolder() {
-        let placeHolderEl = $i.doc.createElement('div');
-        $i.$(placeHolderEl).attr('pb-placeholder', '');
+        let placeHolderEl = doc.createElement('div');
+        $(placeHolderEl).attr('pb-placeholder', '');
         return placeHolderEl;
       }
 
       it('should randomly pick a child element with no pb-placeholder attribute', () => {
-        let el = $i.doc.createElement('div');
-        let selectedChild = $i.doc.createElement('div');
+        let el = doc.createElement('div');
+        let selectedChild = doc.createElement('div');
         let placeHolderEl = createPlaceHolder();
-        let child1 = $i.doc.createElement('div');
-        let child2 = $i.doc.createElement('div');
+        let child1 = doc.createElement('div');
+        let child2 = doc.createElement('div');
 
         el.appendChild(placeHolderEl);
         el.appendChild(child1);
         el.appendChild(selectedChild);
         el.appendChild(child2);
 
-        $i._.spy($i.Chance, 'pick').overrideReturn(selectedChild);
+        _.spy(Chance, 'pick').overrideReturn(selectedChild);
 
-        $i.Bag[__selectChild__](el);
+        Bag[__selectChild__](el);
 
-        let childrenCaptor = $i._M.isA(Array);
-        $i.expect($i.Chance.pick).calledWith(childrenCaptor).at.least(1);
-        $i.expect(childrenCaptor.matchingArgs[0]).to.be.eql([child1, selectedChild, child2]);
+        let childrenCaptor = _M.isA(Array);
+        expect(Chance.pick).calledWith(childrenCaptor).at.least(1);
+        expect(childrenCaptor.matchingArgs[0]).to.be.eql([child1, selectedChild, child2]);
       });
       it('should not crash if there are no children', () => {
-        let el = $i.doc.createElement('div');
+        let el = doc.createElement('div');
         let placeHolderEl = createPlaceHolder();
 
         el.appendChild(placeHolderEl);
 
-        $i.Bag[__selectChild__](el);
+        Bag[__selectChild__](el);
       });
     });
 
     afterEach(done => {
-      $i._.reset();
+      _.reset();
       done();
     });
   });

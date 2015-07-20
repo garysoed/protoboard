@@ -7,17 +7,14 @@
 <link rel="import" href="utils.html">
 
 <script type="text/javascript">
-DI
+DIJS
     .prefix('pb')
-    .bind(
-        'ability.FlexDroppable',
-        {
-          Click: 'trigger.=',
-          Droppable: 'ability.=',
-          Move: 'service.=',
-          Utils: '=',
-        },
-        $i => {
+    .bind('ability.FlexDroppable', require => {
+
+  const Click = require('trigger.Click');
+  const Droppable = require('ability.Droppable');
+  const Move = require('service.Move');
+  const Utils = require('Utils');
 
   // Private symbols
   const __mutationObserver__ = Symbol('mutationObserver');
@@ -32,7 +29,7 @@ DI
    * @class ability.FlexDroppable
    * @extends ability.Droppable
    */
-  class FlexDroppable extends $i.Droppable {
+  class FlexDroppable extends Droppable {
 
     /**
      * @constructor
@@ -41,7 +38,7 @@ DI
      * @param {trigger.Trigger} [defaultTrigger=trigger.Click] Default trigger for the ability.
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      */
-    constructor(name = 'droppable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
+    constructor(name = 'droppable', defaultTrigger = new Click(), defaultEnabled = true) {
       super(name, defaultTrigger, defaultEnabled);
       this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
     }
@@ -55,7 +52,7 @@ DI
      */
     [__onDomMutation__](mutations) {
       mutations.forEach(mutation => {
-        $i.Utils.toArray(mutation.removedNodes).forEach(removedNode => {
+        Utils.toArray(mutation.removedNodes).forEach(removedNode => {
           removedNode.style.left = '';
           removedNode.style.top = '';
         });
@@ -81,14 +78,14 @@ DI
      * @param {Element} el The element to drop the dragged element into.
      */
     doTrigger(el) {
-      let movedElement = $i.Move.nextElement;
+      let movedElement = Move.nextElement;
 
       if (movedElement) {
         el.appendChild(movedElement);
 
         let rect = movedElement.getBoundingClientRect();
-        let dLeft = $i.Move.mouseX - rect.left - rect.width / 2;
-        let dTop = $i.Move.mouseY - rect.top - rect.height / 2;
+        let dLeft = Move.mouseX - rect.left - rect.width / 2;
+        let dTop = Move.mouseY - rect.top - rect.height / 2;
         movedElement.style.left = `${movedElement.offsetLeft + dLeft}px`;
         movedElement.style.top = `${movedElement.offsetTop + dTop}px`;
       }

@@ -8,18 +8,23 @@
  * class. You will then need to register a parser with the
  * {{#crossLink "trigger.Triggers"}}{{/crossLink}} service, by calling the
  * {{#crossLink "trigger.Triggers/register:method"}}register{{/crossLink}} method. For example:
+ *
  * ```javascript
- * DI.run({ Events: '=', Trigger: 'trigger.=', Triggers: 'trigger.=' }, function($i) {
+ * DIJS.run(function(require) {
+ *   var Events = require('Events');
+ *   var Trigger = require('trigger.Trigger');
+ *   var Triggers = require('trigger.Triggers');
+ *
  *   var OnMouseUpTrigger = function() {};
- *   OnMouseUpTrigger.prototype = Object.create($i.Trigger.prototype);
+ *   OnMouseUpTrigger.prototype = Object.create(Trigger.prototype);
  *
  *   OnMouseUpTrigger.prototype.on = function(element, ability) {
- *     $i.Events.of(element, this)
+ *     Events.of(element, this)
  *         .on('dom', 'mouseup', ability.trigger.bind(ability, element));
  *   };
  *
  *   OnMouseUpTrigger.prototype.off = function(element) {
- *   	 $i.Events.of(element, this).off('dom', 'mouseup');
+ *   	 Events.of(element, this).off('dom', 'mouseup');
  *   };
  *
  *   OnMouseUpTrigger.prototype.toString = function() {
@@ -28,7 +33,7 @@
  *
  *   OnMouseUpTrigger.prototype.helpText = 'Triggers when mouse is unpressed on the element';
  *
- *   $i.Triggers.register(function(string) {
+ *   Triggers.register(function(string) {
  *     return (string === 'mouseup') ? new OnMouseUpTrigger() : undefined;
  *   });
  * });

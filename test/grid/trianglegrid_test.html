@@ -10,10 +10,12 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run({ TriangleGrid: 'grid.=' }, () => {
+      .with('$registry', require => new (require('service.Registry'))())
+      .run(require => {
+    require('grid.TriangleGrid');
+
     describe('grid.TriangleGrid', () => {
       it('should not throw exception when injected', () => {});
     });

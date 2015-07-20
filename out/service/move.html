@@ -46,14 +46,14 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("service.Move", {
-  $: "/=",
-  $registry: "=",
-  Config: "service.=",
-  Events: "=",
-  PbElement: "=",
-  Utils: "="
-}, function ($i) {
+DIJS.prefix("pb").bind("service.Move", function (require) {
+
+  var $ = require("/$");
+  var $registry = require("$registry");
+  var Config = require("service.Config");
+  var Events = require("Events");
+  var PbElement = require("PbElement");
+  var Utils = require("Utils");
 
   var EVENT_MOVE = "move";
   var EL_NAME = "pb-s-move";
@@ -78,7 +78,7 @@ DI.prefix("pb").bind("service.Move", {
     _defineProperty(_Object$defineProperties, __moveContainer__, function () {
       var width = 0;
       var height = 0;
-      $i.Utils.toArray(this[__container__].children).forEach(function (child) {
+      Utils.toArray(this[__container__].children).forEach(function (child) {
         if (!child[__width__] || !child[__height__]) {
           var rect = child.getBoundingClientRect();
           child[__height__] = Math.max(rect.height, height);
@@ -109,9 +109,9 @@ DI.prefix("pb").bind("service.Move", {
         for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var record = _step.value;
 
-          $i.Utils.toArray(record.removedNodes).forEach(function (removedNode) {
+          Utils.toArray(record.removedNodes).forEach(function (removedNode) {
             if (removedNode[__origin__] && removedNode[__origin__] !== removedNode.parentElement) {
-              $i.$(_this).trigger(_this.Events.MOVE, {
+              $(_this).trigger(_this.Events.MOVE, {
                 moved: removedNode,
                 from: removedNode[__origin__],
                 to: removedNode.parentElement
@@ -147,7 +147,7 @@ DI.prefix("pb").bind("service.Move", {
   })(), {
     movedElements: {
       get: function () {
-        return new Set($i.Utils.toArray(this[__container__].children));
+        return new Set(Utils.toArray(this[__container__].children));
       },
       configurable: true,
       enumerable: true
@@ -190,24 +190,24 @@ DI.prefix("pb").bind("service.Move", {
     }
   });
 
-  var MoveElement = (function (_$i$PbElement) {
+  var MoveElement = (function (_PbElement) {
     function MoveElement() {
       _classCallCheck(this, MoveElement);
 
-      if (_$i$PbElement != null) {
-        _$i$PbElement.apply(this, arguments);
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(MoveElement, _$i$PbElement);
+    _inherits(MoveElement, _PbElement);
 
     return MoveElement;
-  })($i.PbElement);
+  })(PbElement);
 
-  $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, MoveElement);
-  $i.$registry.runAtRegister(function (doc) {
-    $i.Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, MoveElement);
+  $registry.runAtRegister(function (doc) {
+    Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
     Move[__container__] = doc.createElement(EL_NAME);
     doc.body.appendChild(Move[__container__]);
 

@@ -12,7 +12,11 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("PbElement", { $: "/=", Abilities: "ability.=" }, function ($i) {
+DIJS.prefix("pb").bind("PbElement", function (require) {
+
+  var $ = require("/$");
+  var Abilities = require("ability.Abilities");
+
   var __createdPromise__ = Symbol();
   var __createdResolve__ = Symbol();
 
@@ -35,13 +39,13 @@ DI.prefix("pb").bind("PbElement", { $: "/=", Abilities: "ability.=" }, function 
         value: function createdCallback() {
           var _this = this;
 
-          $i.Abilities.init(this);
+          Abilities.init(this);
           this[__createdPromise__] = new Promise(function (resolve) {
             _this[__createdResolve__] = resolve;
           });
 
           var nameParts = this.nodeName.toLowerCase().split("-");
-          var prefix = $i.$(this).attr(ATTR_ID) || nameParts[nameParts.length - 1];
+          var prefix = $(this).attr(ATTR_ID) || nameParts[nameParts.length - 1];
 
           if (IDS.has(prefix)) {
             IDS.set(prefix, IDS.get(prefix) + 1);
@@ -49,7 +53,7 @@ DI.prefix("pb").bind("PbElement", { $: "/=", Abilities: "ability.=" }, function 
             IDS.set(prefix, 0);
           }
 
-          $i.$(this).attr(ATTR_ID, "" + prefix + "-" + IDS.get(prefix));
+          $(this).attr(ATTR_ID, "" + prefix + "-" + IDS.get(prefix));
         }
       },
       attachedCallback: {
@@ -67,7 +71,7 @@ DI.prefix("pb").bind("PbElement", { $: "/=", Abilities: "ability.=" }, function 
       },
       pbId: {
         get: function () {
-          return $i.$(this).attr(ATTR_ID);
+          return $(this).attr(ATTR_ID);
         }
       },
       pbIdPrefix: {

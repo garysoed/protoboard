@@ -14,26 +14,25 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            $: '/=',
-            $registry: '=',
-            _: '/=',
-            expect: '/=',
-            doc: '=',
-            Config: 'service.=',
-            State: 'service.=',
-            Utils: '='
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const $ = require('/$');
+  const $registry = require('$registry');
+
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const expect = require('/expect');
+  const State = require('service.State');
+  const Utils = require('Utils');
 
   describe('service.State', () => {
     before(done => {
-      $i.$registry.register($i.doc, $i.Config);
+      $registry.register(doc, Config);
       done();
     });
 
@@ -41,24 +40,24 @@
       it('should use existing pb-state element', () => {
         let key = 'key';
         let value = 'value';
-        let el = $i.doc.createElement('pb-state');
-        $i.$(el).attr(key, value);
-        $i.doc.body.appendChild(el);
+        let el = doc.createElement('pb-state');
+        $(el).attr(key, value);
+        doc.body.appendChild(el);
 
-        $i.expect($i.State.get(key)).to.equal(value);
+        expect(State.get(key)).to.equal(value);
       });
       it('should create pb-state element if it does not exist', () => {
         let key = 'key';
-        $i.expect($i.State.get(key)).to.equal('');
-        $i.expect($i.doc.body.querySelector(`pb-state[${key}]`)).to.exist;
+        expect(State.get(key)).to.equal('');
+        expect(doc.body.querySelector(`pb-state[${key}]`)).to.exist;
       });
       it('should add the key to an existing pb-state element if it does not exist', () => {
         let key = 'key';
-        let el = $i.doc.createElement('pb-state');
-        $i.doc.body.appendChild(el);
+        let el = doc.createElement('pb-state');
+        doc.body.appendChild(el);
 
-        $i.expect($i.State.get(key)).to.equal('');
-        $i.expect($i.$(el).attr(key)).to.equal('');
+        expect(State.get(key)).to.equal('');
+        expect($(el).attr(key)).to.equal('');
       });
     });
     describe('#put', () => {
@@ -66,32 +65,32 @@
       let value = 'value';
 
       it('should use the existing pb-state element', () => {
-        let el = $i.doc.createElement('pb-state');
-        $i.$(el).attr(key, value);
-        $i.doc.body.appendChild(el);
+        let el = doc.createElement('pb-state');
+        $(el).attr(key, value);
+        doc.body.appendChild(el);
 
-        $i.State.put(key, value);
-        $i.expect($i.$(el).attr(key)).to.equal(value);
+        State.put(key, value);
+        expect($(el).attr(key)).to.equal(value);
       });
       it('should create pb-state element if it does not exist', () => {
-        $i.State.put(key, value);
-        $i.expect($i.doc.body.querySelector(`pb-state[${key}=${value}]`)).to.exist;
+        State.put(key, value);
+        expect(doc.body.querySelector(`pb-state[${key}=${value}]`)).to.exist;
       });
       it('should add the key to an existing pb-state element if it does not exist', () => {
         let key = 'key';
         let value = 'value';
-        let el = $i.doc.createElement('pb-state');
-        $i.doc.body.appendChild(el);
+        let el = doc.createElement('pb-state');
+        doc.body.appendChild(el);
 
-        $i.State.put(key, value);
-        $i.expect($i.$(el).attr(key)).to.equal(value);
+        State.put(key, value);
+        expect($(el).attr(key)).to.equal(value);
       });
     });
 
     afterEach(done => {
-      $i.Utils.toArray($i.doc.querySelectorAll('pb-state'))
+      Utils.toArray(doc.querySelectorAll('pb-state'))
           .forEach(el => {
-            $i.doc.body.removeChild(el);
+            doc.body.removeChild(el);
           });
       done();
     });

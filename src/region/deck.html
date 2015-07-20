@@ -41,25 +41,24 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
-    .bind('region.Deck',
-        {
-          $registry: '=',
-          doc: '=',
-          template: '=',
-          Abilities: 'ability.=',
-          Config: 'service.=',
-          Droppable: 'ability.=',
-          Helpable: 'ability.=',
-          Key: 'trigger.=',
-          Region: 'region.=',
-          Shuffleable: 'ability.=',
-          Utils: '=',
-        },
-        $i => {
+    .with('template', require => require('doc').querySelector('template'))
+    .bind('region.Deck', require => {
+
+  const $registry = require('$registry');
+
+  const Abilities = require('ability.Abilities');
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Droppable = require('ability.Droppable');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const Region = require('region.Region');
+  const Shuffleable = require('ability.Shuffleable');
+  const template = require('template');
+  const Utils = require('Utils');
 
   /**
    * Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.
@@ -89,7 +88,7 @@ DI
 
   const EL_NAME = 'pb-r-deck';
 
-  class Deck extends $i.Region {
+  class Deck extends Region {
 
     /**
      * Called when the element is created.
@@ -98,7 +97,7 @@ DI
      */
     createdCallback() {
       super.createdCallback();
-      this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     }
 
     /**
@@ -122,13 +121,13 @@ DI
    */
   Deck.NODE_NAME = EL_NAME;
 
-  $i.Config.add(
+  Config.add(
       EL_NAME,
-      new $i.Helpable('help'),
-      new $i.Shuffleable('shuffle', new $i.Key('s'), true),
-      new $i.Droppable('drop', new $i.Key('d'), true));
+      new Helpable('help'),
+      new Shuffleable('shuffle', new Key('s'), true),
+      new Droppable('drop', new Key('d'), true));
 
-  $i.$registry.add(EL_NAME, Deck);
+  $registry.add(EL_NAME, Deck);
 
   return Deck;
 });

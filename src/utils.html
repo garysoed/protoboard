@@ -3,9 +3,9 @@
 <link rel="import" href="third_party/di.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('Utils', {}, () => {
+    .bind('Utils', () => {
 
   /**
    * Various miscellaneous utilities. They are not meant for general usage, but feel free to use
@@ -14,7 +14,7 @@ DI
    * @static
    */
 
-  var Utils = {
+  let Utils = {
     /**
      * Extracts the given template from the given document.
      *

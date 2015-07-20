@@ -10,16 +10,14 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            Config: 'service.=',
-            expect: '/=',
-            t: '='
-          },
-          $i => {
+      .run(require => {
+
+    const Config = require('service.Config');
+    const expect = require('/expect');
+    const t = require('t');
 
     describe('server.Config', () => {
       describe('setDefaultTrigger', () => {
@@ -32,12 +30,12 @@
 
         beforeEach(() => {
           elementA = 'element-A';
-          abilityA = $i.t.createFakeAbility('abilityA');
-          abilityB = $i.t.createFakeAbility('abilityB');
+          abilityA = t.createFakeAbility('abilityA');
+          abilityB = t.createFakeAbility('abilityB');
           elementC = 'element-C';
-          abilityA2 = $i.t.createFakeAbility('abilityA');
+          abilityA2 = t.createFakeAbility('abilityA');
 
-          $i.Config
+          Config
               .add(elementA, abilityA, abilityB)
               .add(elementC, abilityA2);
         });
@@ -46,25 +44,25 @@
           let triggerB = abilityB.defaultTrigger;
           let triggerA2 = abilityA2.defaultTrigger;
 
-          let newTrigger = $i.t.createFakeTrigger('newTrigger');
-          $i.Config.setDefaultTrigger(newTrigger, abilityA.attrName, elementA);
+          let newTrigger = t.createFakeTrigger('newTrigger');
+          Config.setDefaultTrigger(newTrigger, abilityA.attrName, elementA);
 
-          $i.expect(abilityA.defaultTrigger).to.equal(newTrigger);
-          $i.expect(abilityB.defaultTrigger).to.equal(triggerB);
-          $i.expect(abilityA2.defaultTrigger).to.equal(triggerA2);
+          expect(abilityA.defaultTrigger).to.equal(newTrigger);
+          expect(abilityB.defaultTrigger).to.equal(triggerB);
+          expect(abilityA2.defaultTrigger).to.equal(triggerA2);
         });
         it('should set trigger of abilities with the given name for all elements', () => {
-          let newTrigger = $i.t.createFakeTrigger('newTrigger');
+          let newTrigger = t.createFakeTrigger('newTrigger');
           let triggerB = abilityB.defaultTrigger;
 
-          $i.Config.setDefaultTrigger(newTrigger, abilityA.attrName);
-          $i.expect(abilityA.defaultTrigger).to.equal(newTrigger);
-          $i.expect(abilityB.defaultTrigger).to.equal(triggerB);
-          $i.expect(abilityA2.defaultTrigger).to.equal(newTrigger);
+          Config.setDefaultTrigger(newTrigger, abilityA.attrName);
+          expect(abilityA.defaultTrigger).to.equal(newTrigger);
+          expect(abilityB.defaultTrigger).to.equal(triggerB);
+          expect(abilityA2.defaultTrigger).to.equal(newTrigger);
         });
 
         afterEach(() => {
-          $i.Config.reset();
+          Config.reset();
         });
       });
     });

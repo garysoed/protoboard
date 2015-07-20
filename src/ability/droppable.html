@@ -6,23 +6,21 @@
 <link rel="import" href="trigger/click.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind(
-        'ability.Droppable',
-        {
-          Ability: 'ability.=',
-          Click: 'trigger.=',
-          Move: 'service.='
-        },
-        $i => {
+    .bind('ability.Droppable', require => {
+
+  const $ = require('/$');
+  const Ability = require('ability.Ability');
+  const Click = require('trigger.Click');
+  const Move = require('service.Move');
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
 
   const __isEnabled__ = Symbol();
 
-  class Droppable extends $i.Ability {
+  class Droppable extends Ability {
 
     /**
      * This ability works with conjunction of {{#crossLink "ability.Pickable"}}{{/crossLink}}.
@@ -35,7 +33,7 @@ DI
      * @param {boolean} [defaultEnabled=true] True iff the ability should be enabled by default.
      * @extends ability.Ability
      */
-    constructor(name = 'droppable', defaultTrigger = new $i.Click(), defaultEnabled = true) {
+    constructor(name = 'droppable', defaultTrigger = new Click(), defaultEnabled = true) {
       super(name, defaultTrigger);
 
       this[__defaultEnabled__] = defaultEnabled;
@@ -63,7 +61,7 @@ DI
      * @param {Element} el Element to drop the picked element into.
      */
     doTrigger(el) {
-      let movedElement = $i.Move.nextElement;
+      let movedElement = Move.nextElement;
       if (movedElement) {
         el.appendChild(movedElement);
       }

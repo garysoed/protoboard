@@ -33,26 +33,27 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
-  return $i.doc.querySelector("template");
-}).bind("region.Region", {
-  $: "/=",
-  PbElement: "=",
-  Utils: "=" }, function ($i) {
+DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
+  return require("doc").querySelector("template");
+}).bind("region.Region", function (require) {
+
+  var $ = require("/$");
+  var PbElement = require("PbElement");
+  var Utils = require("Utils");
 
   var __onMutation__ = Symbol("onMutation");
   var __mutationObserver__ = Symbol();
 
-  var Region = (function (_$i$PbElement) {
+  var Region = (function (_PbElement) {
     function Region() {
       _classCallCheck(this, Region);
 
-      if (_$i$PbElement != null) {
-        _$i$PbElement.apply(this, arguments);
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Region, _$i$PbElement);
+    _inherits(Region, _PbElement);
 
     _createComputedClass(Region, [{
       key: __onMutation__,
@@ -68,7 +69,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       key: "createdCallback",
       value: function createdCallback() {
         _get(Object.getPrototypeOf(Region.prototype), "createdCallback", this).call(this);
-        $i.$(this).attr("show-child-count", "");
+        $(this).attr("show-child-count", "");
 
         this[__mutationObserver__] = new MutationObserver(this[__onMutation__].bind(this));
         this[__mutationObserver__].observe(this, { childList: true });
@@ -82,7 +83,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
     }]);
 
     return Region;
-  })($i.PbElement);
+  })(PbElement);
 
   return Region;
 });</script>

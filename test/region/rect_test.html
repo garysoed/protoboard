@@ -16,38 +16,37 @@
   <pb-r-rect></pb-r-rect>
 
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            expect: '/=',
-            _: '/=',
-            doc: '=',
-            Move: 'service.=',
-            Rect: 'region.=',
-            Utils: '=',
-            t: '='
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+
+  const doc = require('doc');
+  const expect = require('/expect');
+  const Move = require('service.Move');
+  const Rect = require('region.Rect');
+  const t = require('t');
+  const Utils = require('Utils');
 
   describe('Rect', () => {
     describe('get pickableChildCount', () => {
       it('should return the correct number of children', () => {
-        let rect = $i.doc.createElement('pb-r-rect');
-        Object.setPrototypeOf(rect, $i.Rect.prototype);
+        let rect = doc.createElement('pb-r-rect');
+        Object.setPrototypeOf(rect, Rect.prototype);
 
-        rect.appendChild($i.doc.createElement('div'));
-        rect.appendChild($i.doc.createElement('div'));
-        rect.appendChild($i.doc.createElement('div'));
+        rect.appendChild(doc.createElement('div'));
+        rect.appendChild(doc.createElement('div'));
+        rect.appendChild(doc.createElement('div'));
 
-        $i.expect(rect.pickableChildCount).to.equal(3);
+        expect(rect.pickableChildCount).to.equal(3);
       });
     });
 
     afterEach(done => {
-      $i._.reset();
+      _.reset();
       done();
     });
   });

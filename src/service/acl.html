@@ -6,16 +6,15 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('service.Acl',
-        {
-          Check: '=',
-          Utils: '=',
-          State: 'service.=',
-          TEST_MODE: '/=?'
-        },
-        $i => {
+    .bind('service.Acl', (require, optional) => {
+
+  const Check = require('Check');
+  const State = require('service.State');
+  const Utils = require('Utils');
+
+  const TEST_MODE = optional('/TEST_MODE');
 
   const ATTR_PREFIX = 'pb-acl-';
   const ATTR_CURRENT_PLAYER = 'currentPlayer';
@@ -89,15 +88,15 @@ DI
    * <div id="acl" pb-acl-readable="player1 player2"></div>
    * ```
    * ```javascript
-   *   DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
+   *   DIJS.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
    *     AclService.registerElement(document.querySelector('#acl'));
    *     Bootstrap.run(document);
    *   }]);
    * ```
    *
-   * In the example above, the DIV element will be readable if and only if the current player is set
+   * In the example above, the DIJSV element will be readable if and only if the current player is set
    * to `player1` or `player2`. To set the current player, use the
-   * {{#crossLink "service.Acl/currentPlayer:property"}}{{/crossLink}} property. When the DIV is
+   * {{#crossLink "service.Acl/currentPlayer:property"}}{{/crossLink}} property. When the DIJSV is
    * readable, this service will add a `pb-acl-readable` class to the element. You can use CSS to
    * display the div differently depending on the current player.
    *
@@ -109,7 +108,7 @@ DI
    * <div id="acl" pb-acl-readable="corporation"></div>
    * ```
    * ```javascript
-   *   DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
+   *   DIJS.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
    *     AclService
    *         .registerElement(document.querySelector('#acl'))
    *         .addGroup('corporation', 'weyland', 'jinteki', 'nbn');
@@ -178,13 +177,13 @@ DI
       if (!el[__enabledMap__]) {
         el[__enabledMap__] = new Map();
       }
-      for (let [attrName, attr] of $i.Utils.toMap(el.attributes)) {
+      for (let [attrName, attr] of Utils.toMap(el.attributes)) {
         if (!attrName.startsWith(ATTR_PREFIX)) {
           continue;
         }
 
         let name = attrName.substring(ATTR_PREFIX.length);
-        let allowedPlayers = $i.Check(attr.value).isList().orUse(null);
+        let allowedPlayers = Check(attr.value).isList().orUse(null);
         let enabled = (allowedPlayers === null)
             || allowedPlayers.length === 0
             || allowedPlayers.some(player => {
@@ -288,10 +287,10 @@ DI
      * @type {string}
      */
     get currentPlayer() {
-      return $i.State.get(ATTR_CURRENT_PLAYER);
+      return State.get(ATTR_CURRENT_PLAYER);
     },
     set currentPlayer(player) {
-      $i.State.put(ATTR_CURRENT_PLAYER, player);
+      State.put(ATTR_CURRENT_PLAYER, player);
 
       // TODO(gs): Make service.State fire an event on attribute changes and react to that.
 
@@ -307,7 +306,7 @@ DI
     }
   };
 
-  if ($i.TEST_MODE) {
+  if (TEST_MODE) {
     Service.Group = Group;
     Service.GROUPS = GROUPS;
   }

@@ -15,23 +15,21 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
-    .bind('component.Token',
-        {
-          $registry: '=',
-          Component: 'component.=',
-          Config: 'service.=',
-          Helpable: 'ability.=',
-          Key: 'trigger.=',
-          Pickable: 'ability.=',
-          Utils: '=',
-          doc: '=',
-          template: '=',
-        },
-        $i => {
+    .with('template', require => require('doc').querySelector('template'))
+    .bind('component.Token', require => {
+
+  const $registry = require('$registry');
+  const Component = require('component.Component');
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const Pickable = require('ability.Pickable');
+  const template = require('template');
+  const Utils = require('Utils');
 
   /**
    * A simple movable component with only one state. Examples of token:
@@ -55,7 +53,7 @@ DI
    * @class component.Token
    * @extends component.Component
    */
-  class Token extends $i.Component {
+  class Token extends Component {
 
     /**
      * Called when the element is created.
@@ -64,7 +62,7 @@ DI
      */
     createdCallback() {
       super.createdCallback();
-      this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
     }
   }
 
@@ -77,12 +75,12 @@ DI
    */
   Token.NODE_NAME = 'pb-c-token';
 
-  $i.Config.add(
+  Config.add(
       Token.NODE_NAME,
-      new $i.Helpable('help'),
-      new $i.Pickable('pick', new $i.Key('q'), true));
+      new Helpable('help'),
+      new Pickable('pick', new Key('q'), true));
 
-  $i.$registry.add(Token.NODE_NAME, Token);
+  $registry.add(Token.NODE_NAME, Token);
 
   return Token;
 });

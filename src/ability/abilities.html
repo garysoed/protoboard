@@ -5,9 +5,11 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('ability.Abilities', { Utils: '=' }, $i => {
+    .bind('ability.Abilities', require => {
+
+  const Utils = require('Utils');
 
   // Private symbols.
   const __abilities__ = Symbol('abilities');
@@ -160,11 +162,11 @@ DI
         attributes: true
       };
 
-      $i.Utils.extendFn(
+      Utils.extendFn(
           el,
           'attachedCallback',
           () => el[__observer__].observe(el, observerConfig));
-      $i.Utils.extendFn(
+      Utils.extendFn(
           el,
           'detachedCallback',
           () => el[__observer__].disconnect());

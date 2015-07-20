@@ -14,9 +14,9 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
       .constant('service.Move', {
         movedElements: []
@@ -24,45 +24,44 @@
       .constant('Chance', {
         binom() { }
       })
-      .run(
-          {
-            $: '/=',
-            $registry: '=',
-            _: '/=',
-            doc: '=',
-            expect: '/=',
-            Chance: '/=',
-            Config: 'service.=',
-            CubeTower: 'region.=',
-            Move: 'service.=',
-            Utils: '='
-          },
-          $i => {
+      .run(require => {
 
-  const Droppable = $i.CubeTower.TowerDroppable;
+  const $ = require('/$');
+  const $registry = require('$registry');
+  const _ = require('/_');
+
+  const Chance = require('/Chance');
+  const Config = require('service.Config');
+  const CubeTower = require('region.CubeTower');
+  const doc = require('doc');
+  const expect = require('/expect');
+  const Move = require('service.Move');
+  const Utils = require('Utils');
+
+  const Droppable = CubeTower.TowerDroppable;
 
   describe('region.CubeTower', () => {
     before(() => {
-      $i.$registry.register($i.doc, $i.Config);
+      $registry.register(doc, Config);
     });
 
     describe('get pickableChildCount', () => {
       it('should return the correct number of child count', () => {
-        let tower = $i.doc.createElement('pb-r-cubetower');
-        Object.setPrototypeOf(tower, $i.CubeTower.prototype);
+        let tower = doc.createElement('pb-r-cubetower');
+        Object.setPrototypeOf(tower, CubeTower.prototype);
 
-        let stuckEl = $i.doc.createElement('div');
-        $i.$(stuckEl).attr('pb-stagger-level', 1);
+        let stuckEl = doc.createElement('div');
+        $(stuckEl).attr('pb-stagger-level', 1);
         tower.appendChild(stuckEl);
-        tower.appendChild($i.doc.createElement('div'));
-        tower.appendChild($i.doc.createElement('div'));
+        tower.appendChild(doc.createElement('div'));
+        tower.appendChild(doc.createElement('div'));
 
-        $i.expect(tower.pickableChildCount).to.equal(2);
+        expect(tower.pickableChildCount).to.equal(2);
       });
     });
 
     afterEach(done => {
-      $i.Move.movedElements.splice(0, $i.Move.movedElements.length);
+      Move.movedElements.splice(0, Move.movedElements.length);
       done();
     });
   });

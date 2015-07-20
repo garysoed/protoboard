@@ -13,15 +13,16 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.bind("CustomEvent", {}, function () {
+DIJS.bind("CustomEvent", function () {
   return CustomEvent;
-}).prefix("pb").bind("ability.Ability", {
-  $: "/=",
-  Check: "=",
-  CustomEvent: "/=",
-  Log: "service.=",
-  Triggers: "trigger.="
-}, function ($i) {
+}).prefix("pb").bind("ability.Ability", function (require) {
+
+  var $ = require("/$");
+  var Check = require("Check");
+  var CustomEvent = require("/CustomEvent");
+  var Log = require("service.Log");
+  var Triggers = require("trigger.Triggers");
+
   var __name__ = Symbol();
   var __defaultTrigger__ = Symbol("defaultTrigger");
   var __triggerMap__ = Symbol("triggerMap");
@@ -37,8 +38,8 @@ DI.bind("CustomEvent", {}, function () {
     _createClass(Ability, {
       init: {
         value: function init(el) {
-          if ($i.$(el).attr(this.attrTrigger) === undefined && this[__defaultTrigger__]) {
-            $i.$(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
+          if ($(el).attr(this.attrTrigger) === undefined && this[__defaultTrigger__]) {
+            $(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
           }
 
           this.updateConfig(el);
@@ -50,12 +51,12 @@ DI.bind("CustomEvent", {}, function () {
             el[__triggerMap__] = new Map();
           }
 
-          var newValue = $i.$(el).attr(this.attrTrigger);
+          var newValue = $(el).attr(this.attrTrigger);
           if (!el[__triggerMap__].has(this) || newValue !== el[__triggerMap__].get(this).toString()) {
             if (el[__triggerMap__].has(this)) {
               el[__triggerMap__].get(this).off(el);
             }
-            var trigger = $i.Triggers.parse($i.$(el).attr(this.attrTrigger));
+            var trigger = Triggers.parse($(el).attr(this.attrTrigger));
 
             if (trigger) {
               trigger.on(el, this);
@@ -67,14 +68,14 @@ DI.bind("CustomEvent", {}, function () {
       trigger: {
         value: function trigger(el) {
           if (this.isEnabled(el)) {
-            $i.Log.log(this.attrName, $i.$(el).attr("pb-id"), { phase: "before" });
+            Log.log(this.attrName, $(el).attr("pb-id"), { phase: "before" });
             this.doTrigger(el);
-            el.dispatchEvent(new $i.CustomEvent(this.attrName, {
+            el.dispatchEvent(new CustomEvent(this.attrName, {
               detail: {
                 ability: this
               }
             }));
-            $i.Log.log(this.attrName, $i.$(el).attr("pb-id"), { phase: "after" });
+            Log.log(this.attrName, $(el).attr("pb-id"), { phase: "after" });
           }
         }
       },
@@ -90,7 +91,7 @@ DI.bind("CustomEvent", {}, function () {
       },
       isEnabled: {
         value: function isEnabled(el) {
-          return $i.Check($i.$(el).attr(this.attrName)).isBoolean().orUse(false);
+          return Check($(el).attr(this.attrName)).isBoolean().orUse(false);
         }
       },
       attrName: {

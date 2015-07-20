@@ -11,103 +11,106 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .run({ expect: '/=', Check: '=' }, $i => {
+      .run(require => {
+
+  const expect = require('/expect');
+  const Check = require('Check');
 
   describe('Check', () => {
     describe('#isInt', () => {
       it('should parse defaulting radix to 10', () => {
-        $i.expect($i.Check('123').isInt().orThrows()).to.equal(123);
+        expect(Check('123').isInt().orThrows()).to.equal(123);
       });
       it('should handle radix other than 10', () => {
-        $i.expect($i.Check('12').isInt(5).orThrows()).to.equal(7);
+        expect(Check('12').isInt(5).orThrows()).to.equal(7);
       });
       it('should error when the input string is not a number', () => {
-        $i.expect($i.Check('abc').isInt().orUse('NaN')).to.equal('NaN');
+        expect(Check('abc').isInt().orUse('NaN')).to.equal('NaN');
       });
       it('should error on undefined', () => {
-        $i.expect($i.Check(undefined).isInt().orUse('error')).to.equal('error');
+        expect(Check(undefined).isInt().orUse('error')).to.equal('error');
       });
       it('should error on null', () => {
-        $i.expect($i.Check(null).isInt().orUse('error')).to.equal('error');
+        expect(Check(null).isInt().orUse('error')).to.equal('error');
       });
     });
 
     describe('#isFloat', () => {
       it('should parse integer', () => {
-        $i.expect($i.Check('1').isFloat().orThrows()).to.equal(1);
+        expect(Check('1').isFloat().orThrows()).to.equal(1);
       });
       it('should parse float', () => {
-        $i.expect($i.Check('1.3').isFloat().orThrows()).to.equal(1.3);
+        expect(Check('1.3').isFloat().orThrows()).to.equal(1.3);
       });
       it('should error when the input string is not a number', () => {
-        $i.expect($i.Check('abc').isFloat().orUse('error')).to.equal('error');
+        expect(Check('abc').isFloat().orUse('error')).to.equal('error');
       });
       it('should error on null', () => {
-        $i.expect($i.Check(null).isFloat().orUse('error')).to.equal('error');
+        expect(Check(null).isFloat().orUse('error')).to.equal('error');
       });
     });
 
     describe('#isBoolean', () => {
       it('should parse true', () => {
-        $i.expect($i.Check('true').isBoolean().orThrows()).to.be.true;
+        expect(Check('true').isBoolean().orThrows()).to.be.true;
       });
       it('should parse false', () => {
-        $i.expect($i.Check('false').isBoolean().orThrows()).to.be.false;
+        expect(Check('false').isBoolean().orThrows()).to.be.false;
       });
       it('should parse TRUE', () => {
-        $i.expect($i.Check('TRUE').isBoolean().orThrows()).to.be.true;
+        expect(Check('TRUE').isBoolean().orThrows()).to.be.true;
       });
       it('should parse FALSE', () => {
-        $i.expect($i.Check('FALSE').isBoolean().orThrows()).to.be.false;
+        expect(Check('FALSE').isBoolean().orThrows()).to.be.false;
       });
       it('should error on undefined', () => {
-        $i.expect($i.Check(undefined).isBoolean().orUse('error')).to.equal('error');
+        expect(Check(undefined).isBoolean().orUse('error')).to.equal('error');
       });
       it('should error on null', () => {
-        $i.expect($i.Check(null).isBoolean().orUse('error')).to.equal('error');
+        expect(Check(null).isBoolean().orUse('error')).to.equal('error');
       });
     });
 
     describe('#isList', () => {
       it('should default the separator to a space', () => {
-        $i.expect($i.Check('a b c').isList().orThrows()).to.eql(['a', 'b', 'c']);
+        expect(Check('a b c').isList().orThrows()).to.eql(['a', 'b', 'c']);
       });
       it('should parse the string by the given separator', () => {
-        $i.expect($i.Check('a,b,c').isList(',').orThrows()).to.eql(['a', 'b', 'c']);
+        expect(Check('a,b,c').isList(',').orThrows()).to.eql(['a', 'b', 'c']);
       });
       it('should error on null', () => {
-        $i.expect($i.Check(null).isList().orUse('error')).to.equal('error');
+        expect(Check(null).isList().orUse('error')).to.equal('error');
       });
     });
 
     describe('#orThrows', () => {
       it('should throw using an auto generated value', () => {
-        $i.expect(() => $i.Check(undefined).isInt().orThrows()).to.throw(/int/);
+        expect(() => Check(undefined).isInt().orThrows()).to.throw(/int/);
       });
       it('should throw using the specified message', () => {
         var message = 'Error message';
-        $i.expect(() => $i.Check(null).isInt().orThrows(message)).to.throw(message);
+        expect(() => Check(null).isInt().orThrows(message)).to.throw(message);
       });
       it('should handle multiple parse attempts', () => {
-        $i.expect($i.Check('12').isBoolean().isInt().orThrows()).to.equal(12);
+        expect(Check('12').isBoolean().isInt().orThrows()).to.equal(12);
       });
       it('should return the first successful parsed value', () => {
-        $i.expect($i.Check('12').isInt().isBoolean().orThrows()).to.equal(12);
+        expect(Check('12').isInt().isBoolean().orThrows()).to.equal(12);
       });
     });
 
     describe('#orUse', () => {
       it('should return the successful parse value', () => {
-        $i.expect($i.Check('12').isInt().orUse('234')).to.equal(12);
+        expect(Check('12').isInt().orUse('234')).to.equal(12);
       });
       it('should return the first successful parse value', () => {
-        $i.expect($i.Check('12').isInt().isBoolean().orUse('123')).to.equal(12);
+        expect(Check('12').isInt().isBoolean().orUse('123')).to.equal(12);
       });
       it('should return the given backup value if there were no successful parse', () => {
         var backup = 'backup value';
-        $i.expect($i.Check(null).isInt().orUse(backup)).to.equal(backup);
+        expect(Check(null).isInt().orUse(backup)).to.equal(backup);
       });
     });
   });

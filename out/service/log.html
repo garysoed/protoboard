@@ -10,7 +10,10 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("service.Log", { TEST_MODE: "/=?" }, function ($i) {
+DIJS.prefix("pb").bind("service.Log", function (required, optional) {
+
+  var TEST_MODE = optional("/TEST_MODE");
+
   var __entries__ = Symbol();
   var __preprocessors__ = Symbol();
   var __printers__ = Symbol();
@@ -196,7 +199,7 @@ DI.prefix("pb").bind("service.Log", { TEST_MODE: "/=?" }, function ($i) {
     }
   });
 
-  if ($i.TEST_MODE) {
+  if (TEST_MODE) {
     Log.Entry = Entry;
   }
 

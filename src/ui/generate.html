@@ -9,19 +9,18 @@
 <link rel="import" href="third_party/jquery.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('ui.Generate',
-        {
-          $: '/=',
-          $registry: '=',
-          Check: '=',
-          Config: 'service.=',
-          Handlebars: '/=',
-          PbElement: '=',
-          Template: 'service.=',
-        },
-        $i => {
+    .bind('ui.Generate', require => {
+
+  const $ = require('/$');
+  const $registry = require('$registry');
+
+  const Check = require('Check');
+  const Config = require('service.Config');
+  const Handlebars = require('/Handlebars');
+  const PbElement = require('PbElement');
+  const Template = require('service.Template');
 
   const EL_NAME = 'pb-u-generate';
 
@@ -62,7 +61,7 @@ DI
    * {{#crossLink "service.Template"}}{{/crossLink}}. So in the example above, we can register the
    * data as follows:
    * ```javascript
-   * DI.run(['pb.service', 'pb', function(Template, Bootstrap) {
+   * DIJS.run(['pb.service', 'pb', function(Template, Bootstrap) {
    *   Template
    *       .addData('cards', [
    *         { name: 'Apprentice' },
@@ -92,7 +91,7 @@ DI
    * @since 0.2.0
    * @extends PbElement
    */
-  class Generate extends $i.PbElement {
+  class Generate extends PbElement {
     /**
      * Called when the element is created
      *
@@ -102,10 +101,10 @@ DI
       super.createdCallback();
 
       // Gets the data.
-      let promises = $i.Check($i.$(this).attr('input'))
+      let promises = Check($(this).attr('input'))
           .isList()
           .orUse([])
-          .map(name => $i.Template.get(name));
+          .map(name => Template.get(name));
       Promise
           .all(promises)
           .then(dataList => {
@@ -116,13 +115,13 @@ DI
             let templateStr = this.querySelector('template')
                 .innerHTML
                 .replace('&gt;', '>');
-            $i.$(this).replaceWith($i.Handlebars.compile(templateStr)(dataObj));
+            $(this).replaceWith(Handlebars.compile(templateStr)(dataObj));
           });
     }
   }
 
-  $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, Generate);
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Generate);
 
   return Generate;
 });

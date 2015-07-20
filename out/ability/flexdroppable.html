@@ -16,18 +16,20 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.FlexDroppable", {
-  Click: "trigger.=",
-  Droppable: "ability.=",
-  Move: "service.=",
-  Utils: "=" }, function ($i) {
+DIJS.prefix("pb").bind("ability.FlexDroppable", function (require) {
+
+  var Click = require("trigger.Click");
+  var Droppable = require("ability.Droppable");
+  var Move = require("service.Move");
+  var Utils = require("Utils");
+
   var __mutationObserver__ = Symbol("mutationObserver");
   var __onDomMutation__ = Symbol("onDomMutation");
 
-  var FlexDroppable = (function (_$i$Droppable) {
+  var FlexDroppable = (function (_Droppable) {
     function FlexDroppable() {
       var name = arguments[0] === undefined ? "droppable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, FlexDroppable);
@@ -36,13 +38,13 @@ DI.prefix("pb").bind("ability.FlexDroppable", {
       this[__mutationObserver__] = new MutationObserver(this[__onDomMutation__].bind(this));
     }
 
-    _inherits(FlexDroppable, _$i$Droppable);
+    _inherits(FlexDroppable, _Droppable);
 
     _createComputedClass(FlexDroppable, [{
       key: __onDomMutation__,
       value: function (mutations) {
         mutations.forEach(function (mutation) {
-          $i.Utils.toArray(mutation.removedNodes).forEach(function (removedNode) {
+          Utils.toArray(mutation.removedNodes).forEach(function (removedNode) {
             removedNode.style.left = "";
             removedNode.style.top = "";
           });
@@ -58,14 +60,14 @@ DI.prefix("pb").bind("ability.FlexDroppable", {
     }, {
       key: "doTrigger",
       value: function doTrigger(el) {
-        var movedElement = $i.Move.nextElement;
+        var movedElement = Move.nextElement;
 
         if (movedElement) {
           el.appendChild(movedElement);
 
           var rect = movedElement.getBoundingClientRect();
-          var dLeft = $i.Move.mouseX - rect.left - rect.width / 2;
-          var dTop = $i.Move.mouseY - rect.top - rect.height / 2;
+          var dLeft = Move.mouseX - rect.left - rect.width / 2;
+          var dTop = Move.mouseY - rect.top - rect.height / 2;
           movedElement.style.left = "" + (movedElement.offsetLeft + dLeft) + "px";
           movedElement.style.top = "" + (movedElement.offsetTop + dTop) + "px";
         }
@@ -73,7 +75,7 @@ DI.prefix("pb").bind("ability.FlexDroppable", {
     }]);
 
     return FlexDroppable;
-  })($i.Droppable);
+  })(Droppable);
 
   return FlexDroppable;
 });</script>

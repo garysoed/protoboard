@@ -9,31 +9,31 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .run({
-        _: '/=',
-        _M: '/=',
-        expect: '/=',
-        Log: 'service.='
-      },
-      $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const _M = require('/_M');
+
+  const expect = require('/expect');
+  const Log = require('service.Log');
 
   describe('service.Log$Entry', () => {
     it('should return the set value', () => {
-      let entry = new $i.Log.Entry();
+      let entry = new Log.Entry();
       entry.set('key', 'value');
-      $i.expect(entry.key).to.be.equal('value');
+      expect(entry.key).to.be.equal('value');
     });
     it('should not allow values to be overridden by using set', () => {
-      let entry = new $i.Log.Entry();
+      let entry = new Log.Entry();
       entry.set('key', 'value');
-      $i.expect(() => entry.set('key', 'newValue')).to.throw();
+      expect(() => entry.set('key', 'newValue')).to.throw();
     });
     it('should not allow properties to be overridden by using direct override', () => {
-      let entry = new $i.Log.Entry();
+      let entry = new Log.Entry();
       entry.set('key', 'value');
-      $i.expect(() => entry.key = 'newValue').to.throw();
+      expect(() => entry.key = 'newValue').to.throw();
     });
   });
 
@@ -44,102 +44,102 @@
 
     describe('#log', () => {
       function expectEntryHas(entry, timestamp, category, value) {
-        $i.expect(entry.timestamp.getTime()).to.be.equal(timestamp.getTime());
-        $i.expect(entry.category).to.be.equal(category);
-        $i.expect(entry.value).to.be.equal(value);
+        expect(entry.timestamp.getTime()).to.be.equal(timestamp.getTime());
+        expect(entry.category).to.be.equal(category);
+        expect(entry.value).to.be.equal(value);
       }
 
       it('should use the default processor when no processors are specified', () => {
-        $i._.spy(Date, 'now').overrideReturn(timestamp);
-        $i.expect($i.Log.log(category, value).entries)
-            .to.be.equal($i.Log.defaultPrinter({ timestamp, category, value }));
+        _.spy(Date, 'now').overrideReturn(timestamp);
+        expect(Log.log(category, value).entries)
+            .to.be.equal(Log.defaultPrinter({ timestamp, category, value }));
       });
       it('should use the specified preprocessors and call them in order', () => {
         let preprocessor1 = entry => entry.set('a', 1);
         let preprocessor2 = entry => entry.set('b', entry.a);
-        let printer = $i._.spiedFunction();
+        let printer = _.spiedFunction();
         let extras = {
           c: 3,
           d: 4
         };
 
-        $i.Log
+        Log
             .addPreprocessor(preprocessor1)
             .addPreprocessor(preprocessor2)
             .addPrinter(printer);
 
-        $i.Log.log('category', 'value', extras);
+        Log.log('category', 'value', extras);
 
-        let entryMatcher = $i._M.isA(Object);
-        $i.expect(printer).calledWith(entryMatcher).at.least(1);
+        let entryMatcher = _M.isA(Object);
+        expect(printer).calledWith(entryMatcher).at.least(1);
 
         let matchingEntry = entryMatcher.matchingArgs[0];
-        $i.expect(matchingEntry.category).to.be.equal('category');
-        $i.expect(matchingEntry.value).to.be.equal('value');
-        $i.expect(matchingEntry.a).to.be.equal(1);
-        $i.expect(matchingEntry.b).to.be.equal(1);
-        $i.expect(matchingEntry.c).to.be.equal(3);
-        $i.expect(matchingEntry.d).to.be.equal(4);
+        expect(matchingEntry.category).to.be.equal('category');
+        expect(matchingEntry.value).to.be.equal('value');
+        expect(matchingEntry.a).to.be.equal(1);
+        expect(matchingEntry.b).to.be.equal(1);
+        expect(matchingEntry.c).to.be.equal(3);
+        expect(matchingEntry.d).to.be.equal(4);
       });
       it('should use the specified printer', () => {
         let entry = 'entry';
-        let printer = $i._.spiedFunction().overrideReturn(entry);
+        let printer = _.spiedFunction().overrideReturn(entry);
 
-        $i._.spy(Date, 'now').overrideReturn(timestamp);
+        _.spy(Date, 'now').overrideReturn(timestamp);
 
-        $i.Log.addPrinter(printer);
-        $i.expect($i.Log.log(category, value).entries).to.be.equal(entry);
+        Log.addPrinter(printer);
+        expect(Log.log(category, value).entries).to.be.equal(entry);
 
-        let entryMatcher = $i._M.isA(Object);
-        $i.expect(printer).calledWith(entryMatcher).at.least(1);
+        let entryMatcher = _M.isA(Object);
+        expect(printer).calledWith(entryMatcher).at.least(1);
 
         expectEntryHas(entryMatcher.matchingArgs[0], timestamp, category, value);
       });
       it('should print nothing if the printer returns empty string', () => {
-        let printer1 = $i._.spiedFunction().overrideReturn('');
-        let printer2 = $i._.spiedFunction().overrideReturn('blah');
+        let printer1 = _.spiedFunction().overrideReturn('');
+        let printer2 = _.spiedFunction().overrideReturn('blah');
 
-        $i.Log
+        Log
             .addPrinter(printer1)
             .addPrinter(printer2);
 
-        $i.expect($i.Log.log('category', 'value').entries).to.be.equal('');
+        expect(Log.log('category', 'value').entries).to.be.equal('');
       });
       it('should pick the first processor that returns a non null and non undefined', () => {
         let entry = 'entry';
-        let printer = $i._.spiedFunction().overrideReturn(entry);
+        let printer = _.spiedFunction().overrideReturn(entry);
 
-        $i._.spy(Date, 'now').overrideReturn(timestamp);
+        _.spy(Date, 'now').overrideReturn(timestamp);
 
-        $i.Log
+        Log
             .addPrinter(() => null)
             .addPrinter(() => undefined)
             .addPrinter(printer)
             .addPrinter(() => 'not used');
-        $i.expect($i.Log.log(category, value).entries).to.be.equal(entry);
+        expect(Log.log(category, value).entries).to.be.equal(entry);
 
-        let entryMatcher = $i._M.isA(Object);
-        $i.expect(printer).calledWith(entryMatcher).at.least(1);
+        let entryMatcher = _M.isA(Object);
+        expect(printer).calledWith(entryMatcher).at.least(1);
 
         expectEntryHas(entryMatcher.matchingArgs[0], timestamp, category, value);
       });
       it('should not add any entries if there are no processors that returns a non empty string', () => {
-        $i.Log
+        Log
             .addPrinter(() => null)
             .addPrinter(() => '');
-        $i.expect($i.Log.log(category, value).entries).to.be.equal('');
+        expect(Log.log(category, value).entries).to.be.equal('');
       });
     });
 
     describe('#blob', () => {
       it('should return a blob with the correct content and MIME type', done => {
-        $i._.spy(Date, 'now').overrideReturn(timestamp);
+        _.spy(Date, 'now').overrideReturn(timestamp);
 
-        let blob = $i.Log.log(category, value).blob;
+        let blob = Log.log(category, value).blob;
         let reader = new FileReader();
         reader.addEventListener('loadend', () => {
-          $i.expect(reader.result)
-              .to.be.equal($i.Log.defaultPrinter({ timestamp, category, value }));
+          expect(reader.result)
+              .to.be.equal(Log.defaultPrinter({ timestamp, category, value }));
           done();
         });
         reader.readAsText(blob);
@@ -151,7 +151,7 @@
         let entry = {
           phase: 'before'
         };
-        $i.expect($i.Log.defaultPrinter(entry)).to.be.undefined;
+        expect(Log.defaultPrinter(entry)).to.be.undefined;
       });
       it('should print something if the entry is in a phase other than before', () => {
         let entry = {
@@ -160,15 +160,15 @@
           category: 'category',
           value: 'value'
         };
-        $i.expect($i.Log.defaultPrinter(entry)).to.be.a('string');
+        expect(Log.defaultPrinter(entry)).to.be.a('string');
       });
     });
 
     afterEach(done => {
-      $i.Log
+      Log
           .clearProcessors()
           .clear();
-      $i._.reset();
+      _.reset();
       done();
     });
   });

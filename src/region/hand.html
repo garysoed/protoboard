@@ -39,27 +39,24 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
-    .bind('region.Hand',
-        {
-          $registry: '=',
-          Config: 'service.=',
-          doc: '=',
-          Helpable: 'ability.=',
-          Key: 'trigger.=',
-          OrderedDroppable: 'ability.=',
-          Region: 'region.=',
-          template: '=',
-          Utils: '=',
-        },
-        $i => {
+    .with('template', require => require('doc').querySelector('template'))
+    .bind('region.Hand', require => {
+
+  const $registry = require('$registry');
+
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const OrderedDroppable = require('ability.OrderedDroppable');
+  const Region = require('region.Region');
+  const template = require('template');
+  const Utils = require('Utils');
 
   const EL_NAME = 'pb-r-hand';
-
-
 
   /**
    * Represents a hand. Like other {{#crossLink region.Region}}{{/crossLink}} elements, the children
@@ -84,7 +81,7 @@ DI
    * @class region.Hand
    * @extends region.Region
    */
-  class Hand extends $i.Region {
+  class Hand extends Region {
 
     /**
      * Called when the element is created.
@@ -94,7 +91,7 @@ DI
     createdCallback() {
       super.createdCallback();
       this.createShadowRoot()
-          .appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+          .appendChild(Utils.activateTemplate(template, doc));
     }
 
     /**
@@ -118,11 +115,11 @@ DI
    */
   Hand.NODE_NAME = EL_NAME;
 
-  $i.Config.add(
+  Config.add(
       EL_NAME,
-      new $i.Helpable('help'),
-      new $i.OrderedDroppable('drop', new $i.Key('d'), true, false /* isVertical */));
-  $i.$registry.add(EL_NAME, Hand);
+      new Helpable('help'),
+      new OrderedDroppable('drop', new Key('d'), true, false /* isVertical */));
+  $registry.add(EL_NAME, Hand);
 
   return Hand;
 });

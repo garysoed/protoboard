@@ -18,14 +18,15 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ui.Preview", {
-  Config: "service.=",
-  Events: "=",
-  PbElement: "=",
-  Preview: "service.=",
-  $registry: "=",
-  Utils: "="
-}, function ($i) {
+DIJS.prefix("pb").bind("ui.Preview", function (require) {
+
+  var $registry = require("$registry");
+
+  var Config = require("service.Config");
+  var Events = require("Events");
+  var PbElement = require("PbElement");
+  var Preview = require("service.Preview");
+  var Utils = require("Utils");
 
   var registered = false;
 
@@ -34,26 +35,26 @@ DI.prefix("pb").bind("ui.Preview", {
   var __onMouseOver__ = Symbol();
   var __onMouseOut__ = Symbol();
 
-  var PreviewElement = (function (_$i$PbElement) {
+  var PreviewElement = (function (_PbElement) {
     function PreviewElement() {
       _classCallCheck(this, PreviewElement);
 
-      if (_$i$PbElement != null) {
-        _$i$PbElement.apply(this, arguments);
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(PreviewElement, _$i$PbElement);
+    _inherits(PreviewElement, _PbElement);
 
     _createComputedClass(PreviewElement, [{
       key: __onMouseOut__,
       value: function () {
-        $i.Preview.previewedEl = null;
+        Preview.previewedEl = null;
       }
     }, {
       key: __onMouseOver__,
       value: function () {
-        $i.Preview.previewedEl = this;
+        Preview.previewedEl = this;
       }
     }, {
       key: "createdCallback",
@@ -67,24 +68,24 @@ DI.prefix("pb").bind("ui.Preview", {
       value: function attachedCallback() {
         _get(Object.getPrototypeOf(PreviewElement.prototype), "attachedCallback", this).call(this);
         if (this.parentElement) {
-          $i.Events.of(this.parentElement, this).on("dom", "mouseenter", this[__onMouseOver__].bind(this)).on("dom", "mouseleave", this[__onMouseOut__].bind(this));
+          Events.of(this.parentElement, this).on("dom", "mouseenter", this[__onMouseOver__].bind(this)).on("dom", "mouseleave", this[__onMouseOut__].bind(this));
         }
       }
     }, {
       key: "detachedCallback",
       value: function detachedCallback() {
         if (this.parentElement) {
-          $i.Events.of(this.parentElement, this).off();
+          Events.of(this.parentElement, this).off();
         }
         _get(Object.getPrototypeOf(PreviewElement.prototype), "detachedCallback", this).call(this);
       }
     }]);
 
     return PreviewElement;
-  })($i.PbElement);
+  })(PbElement);
 
-  $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, PreviewElement);
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, PreviewElement);
 
   return PreviewElement;
 });</script>

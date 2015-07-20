@@ -4,9 +4,11 @@
 <link rel="import" href="third_party/di.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('component.Component', { PbElement: '=' }, $i => {
+    .bind('component.Component', require => {
+
+  const PbElement = require('PbElement');
 
   /**
    * Base class for all components.
@@ -14,7 +16,7 @@ DI
    * @class component.Component
    * @extends PbElement
    */
-  class Component extends $i.PbElement {
+  class Component extends PbElement {
 
     createdCallback() {
       super.createdCallback();

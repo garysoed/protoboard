@@ -10,28 +10,26 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run(
-          {
-            doc: '=',
-            expect: '/=',
-            Deck: 'region.=',
-          },
-          $i => {
+      .with('$registry', require => new (require('service.Registry'))())
+      .run(require => {
+
+    const Deck = require('region.Deck');
+    const doc = require('doc');
+    const expect = require('/expect');
 
     describe('region.Deck', () => {
       describe('get pickableChildCount', () => {
         it('should return the correct number of children', () => {
-          let deck = $i.doc.createElement('pb-r-deck');
-          Object.setPrototypeOf(deck, $i.Deck.prototype);
-          deck.appendChild($i.doc.createElement('div'));
-          deck.appendChild($i.doc.createElement('div'));
-          deck.appendChild($i.doc.createElement('div'));
+          let deck = doc.createElement('pb-r-deck');
+          Object.setPrototypeOf(deck, Deck.prototype);
+          deck.appendChild(doc.createElement('div'));
+          deck.appendChild(doc.createElement('div'));
+          deck.appendChild(doc.createElement('div'));
 
-          $i.expect(deck.pickableChildCount).to.equal(3);
+          expect(deck.pickableChildCount).to.equal(3);
         });
       });
     });

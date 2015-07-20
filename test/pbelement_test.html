@@ -9,18 +9,16 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            expect: '/=',
-            _: '/=',
-            $: '/=',
-            doc: '=',
-            PbElement: '='
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const $ = require('/$');
+  const doc = require('doc');
+  const expect = require('/expect');
+  const PbElement = require('PbElement');
 
   describe('PbElement', () => {
     describe('#createdCallback', () => {
@@ -28,47 +26,47 @@
       let pbElement;
 
       beforeEach(done => {
-        el = $i.doc.createElement('div');
+        el = doc.createElement('div');
         done();
       });
 
       it('should create id with the given prefix', () => {
         let prefix = 'prefix';
-        $i.$(el).attr('pb-id', prefix);
+        $(el).attr('pb-id', prefix);
 
-        Object.setPrototypeOf(el, $i.PbElement.prototype);
+        Object.setPrototypeOf(el, PbElement.prototype);
         el.createdCallback();
 
-        $i.expect($i.$(el).attr('pb-id')).to.be.equal(`${prefix}-0`);
-        $i.expect(el.pbId).to.be.equal(`${prefix}-0`);
-        $i.expect(el.pbIdPrefix).to.be.equal(prefix);
+        expect($(el).attr('pb-id')).to.be.equal(`${prefix}-0`);
+        expect(el.pbId).to.be.equal(`${prefix}-0`);
+        expect(el.pbIdPrefix).to.be.equal(prefix);
       });
       it('should increment the number for the second element', () => {
         let prefix = 'prefix2';
-        let el2 = $i.doc.createElement('div');
+        let el2 = doc.createElement('div');
 
-        $i.$(el).attr('pb-id', prefix);
-        $i.$(el2).attr('pb-id', prefix);
+        $(el).attr('pb-id', prefix);
+        $(el2).attr('pb-id', prefix);
 
-        Object.setPrototypeOf(el, $i.PbElement.prototype);
+        Object.setPrototypeOf(el, PbElement.prototype);
         el.createdCallback();
 
-        Object.setPrototypeOf(el2, $i.PbElement.prototype);
+        Object.setPrototypeOf(el2, PbElement.prototype);
         el2.createdCallback();
 
-        $i.expect($i.$(el2).attr('pb-id')).to.be.equal(`${prefix}-1`);
+        expect($(el2).attr('pb-id')).to.be.equal(`${prefix}-1`);
       });
       it('should default the prefix to the element\'s name', () => {
-        Object.setPrototypeOf(el, $i.PbElement.prototype);
+        Object.setPrototypeOf(el, PbElement.prototype);
         el.createdCallback();
 
-        $i.expect($i.$(el).attr('pb-id')).to.be.equal('div-0');
+        expect($(el).attr('pb-id')).to.be.equal('div-0');
       });
     });
     describe('#whenCreated', () => {
       function createElement() {
-        let el = $i.doc.createElement('div');
-        Object.setPrototypeOf(el, $i.PbElement.prototype);
+        let el = doc.createElement('div');
+        Object.setPrototypeOf(el, PbElement.prototype);
         el.createdCallback();
         return el;
       }

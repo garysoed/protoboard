@@ -10,7 +10,7 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
       .constant('service.Move', {
@@ -18,64 +18,63 @@
         mouseY: 0,
         movedElements: new Set()
       })
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .with('Events', { t: '=' }, $i => $i.t.createFakeEvents())
-      .run(
-          {
-            _: '/=',
-            _M: '/=',
-            doc: '=',
-            expect: '/=',
-            t: '=',
-            Events: '=',
-            Key: 'trigger.=',
-            Move: 'service.=',
-          },
-          $i => {
+      .with('$registry', require => new (require('service.Registry'))())
+      .with('Events', require => require('t').createFakeEvents())
+      .run(require => {
+
+    const _ = require('/_');
+    const _M = require('/_M');
+
+    const doc = require('doc');
+    const Events = require('Events');
+    const expect = require('/expect');
+    const Key = require('trigger.Key');
+    const Move = require('service.Move');
+    const t = require('t');
 
     describe('Key', () => {
       let key;
 
       beforeEach(done => {
-        key = new $i.Key('a');
+        key = new Key('a');
         done();
       });
 
       describe('#on', () => {
         it('should register mouseenter, mouseleave, and using keyboardjs', () => {
-          let element = $i.doc.createElement('div');
-          let ability = $i.t.createFakeAbility('test');
+          let element = doc.createElement('div');
+          let ability = t.createFakeAbility('test');
           let event = {};
 
           key.on(element, ability);
 
-          $i.expect($i.Events.of).calledWith(element, key).at.least(1);
+          expect(Events.of).calledWith(element, key).at.least(1);
 
-          let keyboardHandlerCaptor = $i._M.isA(Function);
-          let mouseEnterCaptor = $i._M.isA(Function);
-          let mouseLeaveCaptor = $i._M.isA(Function);
+          let keyboardHandlerCaptor = _M.isA(Function);
+          let mouseEnterCaptor = _M.isA(Function);
+          let mouseLeaveCaptor = _M.isA(Function);
 
-          $i._.spy($i.Key.Service, 'add');
-          $i._.spy($i.Key.Service, 'remove');
+          _.spy(Key.Service, 'add');
+          _.spy(Key.Service, 'remove');
 
-          $i.expect($i.Events.on).calledWith('dom', 'mouseenter', mouseEnterCaptor).at.least(1);
-          $i.expect($i.Events.on).calledWith('dom', 'mouseleave', mouseLeaveCaptor).at.least(1);
+          expect(Events.on).calledWith('dom', 'mouseenter', mouseEnterCaptor).at.least(1);
+          expect(Events.on).calledWith('dom', 'mouseleave', mouseLeaveCaptor).at.least(1);
 
           mouseEnterCaptor.matchingArgs[0]();
-          $i.expect($i.Key.Service.add).calledWith(element, 'a', ability).at.least(1);
+          expect(Key.Service.add).calledWith(element, 'a', ability).at.least(1);
 
           mouseLeaveCaptor.matchingArgs[0]();
-          $i.expect($i.Key.Service.remove).calledWith(element).at.least(1);
+          expect(Key.Service.remove).calledWith(element).at.least(1);
         });
       });
 
       describe('#off', () => {
         it('should unregister all listeners', () => {
-          let element = $i.doc.createElement('div');
+          let element = doc.createElement('div');
           key.off(element);
 
-          $i.expect($i.Events.of).calledWith(element, key).at.least(1);
-          $i.expect($i.Events.off).calledWith().at.least(1);
+          expect(Events.of).calledWith(element, key).at.least(1);
+          expect(Events.off).calledWith().at.least(1);
         });
       });
 
@@ -83,7 +82,7 @@
         let Service;
 
         beforeEach(done => {
-          Service = $i.Key.Service;
+          Service = Key.Service;
           done();
         });
 
@@ -91,30 +90,30 @@
           let handler;
 
           beforeEach(done => {
-            Service.init($i.doc);
-            let handlerCaptor = $i._M.isA(Function);
-            $i.expect($i.Events.on).calledWith('dom', 'keypress', handlerCaptor).at.least(1);
+            Service.init(doc);
+            let handlerCaptor = _M.isA(Function);
+            expect(Events.on).calledWith('dom', 'keypress', handlerCaptor).at.least(1);
             handler = handlerCaptor.matchingArgs[0];
             done();
           });
 
           it('should trigger only the deepest hovered element and unlisten to the element if the mouse is not on the element', () => {
-            let el1 = $i.doc.createElement('div');
-            let el2 = $i.doc.createElement('div');
+            let el1 = doc.createElement('div');
+            let el2 = doc.createElement('div');
             el1.appendChild(el2);
-            let ability1 = $i.t.createFakeAbility('ability1');
-            let ability2 = $i.t.createFakeAbility('ability2');
+            let ability1 = t.createFakeAbility('ability1');
+            let ability2 = t.createFakeAbility('ability2');
             Service.add(el1, 'a', ability1);
             Service.add(el2, 'a', ability2);
 
-            $i._.spy(el2, 'getBoundingClientRect').overrideReturn({
+            _.spy(el2, 'getBoundingClientRect').overrideReturn({
               left: 12,
               right: 34,
               top: 56,
               bottom: 78
             });
-            $i.Move.mouseX = 0;
-            $i.Move.mouseY = 0;
+            Move.mouseX = 0;
+            Move.mouseY = 0;
 
             let event = {
               keyCode: 'a'.charCodeAt(0)
@@ -123,127 +122,127 @@
             handler(event);
 
             // Check that the first ability is called.
-            $i.expect(ability1.trigger).called().to.be.equal(0);
-            $i.expect(ability2.trigger).calledWith(el2).at.least(1);
+            expect(ability1.trigger).called().to.be.equal(0);
+            expect(ability2.trigger).calledWith(el2).at.least(1);
 
             // Check that the ability is deleted.
-            $i.expect(Service[$i.t.getSymbol(Service, 'hoveredEls')].has(el2)).to.be.false;
+            expect(Service[t.getSymbol(Service, 'hoveredEls')].has(el2)).to.be.false;
           });
           it('should not crash if no element is hovered over', () => {
             handler({ keyCode: 97 });
           });
           it('should not unlisten the element if the mouse is still in the element', () => {
-            let el = $i.doc.createElement('div');
-            Service.add(el, 'a', $i.t.createFakeAbility('ability'));
+            let el = doc.createElement('div');
+            Service.add(el, 'a', t.createFakeAbility('ability'));
 
-            $i._.spy(el, 'getBoundingClientRect').overrideReturn({
+            _.spy(el, 'getBoundingClientRect').overrideReturn({
               left: 12,
               right: 34,
               top: 56,
               bottom: 78
             });
-            $i.Move.mouseX = 20;
-            $i.Move.mouseY = 60;
+            Move.mouseX = 20;
+            Move.mouseY = 60;
 
             handler({ keyCode: 97 });
 
             // Check that the ability is still there.
-            const map = Service[$i.t.getSymbol(Service, 'hoveredEls')];
-            $i.expect(map.has(el)).to.be.true;
+            const map = Service[t.getSymbol(Service, 'hoveredEls')];
+            expect(map.has(el)).to.be.true;
           });
           it('should unlisten to the element if it is being moved', () => {
-            let el = $i.doc.createElement('div');
-            Service.add(el, 'a', $i.t.createFakeAbility('ability'));
+            let el = doc.createElement('div');
+            Service.add(el, 'a', t.createFakeAbility('ability'));
 
-            $i._.spy(el, 'getBoundingClientRect').overrideReturn({
+            _.spy(el, 'getBoundingClientRect').overrideReturn({
               left: 10,
               right: 20,
               top: 10,
               bottom: 20
             });
-            $i.Move.mouseX = 15;
-            $i.Move.mouseY = 15;
-            $i.Move.movedElements.add(el);
+            Move.mouseX = 15;
+            Move.mouseY = 15;
+            Move.movedElements.add(el);
 
             handler({ keyCode: 97 });
 
             // Check that the ability is still there.
-            const map = Service[$i.t.getSymbol(Service, 'hoveredEls')];
-            $i.expect(map.has(el)).to.be.false;
+            const map = Service[t.getSymbol(Service, 'hoveredEls')];
+            expect(map.has(el)).to.be.false;
           });
         });
 
         describe('init', () => {
           it('should listen to keypress events', () => {
-            Service.init($i.doc);
-            $i.expect($i.Events.of).calledWith($i.doc.body, Service).at.least(1);
-            $i.expect($i.Events.on).calledWith('dom', 'keypress', $i._M.isA(Function)).at.least(1);
+            Service.init(doc);
+            expect(Events.of).calledWith(doc.body, Service).at.least(1);
+            expect(Events.on).calledWith('dom', 'keypress', _M.isA(Function)).at.least(1);
           });
         });
 
         describe('add', () => {
           let el = null;
           beforeEach(done => {
-            el = $i.doc.createElement('div');
+            el = doc.createElement('div');
             done();
           });
 
           it('should add the element to the service', () => {
-            const ability = $i.t.createFakeAbility('ability');
+            const ability = t.createFakeAbility('ability');
             const key = 'a';
             Service.add(el, key, ability);
 
-            const map = Service[$i.t.getSymbol(Service, 'hoveredEls')];
-            $i.expect(map.has(el)).to.be.true;
-            $i.expect(map.get(el).has(key)).to.be.true;
-            $i.expect(map.get(el).get(key).has(ability)).to.be.true;
+            const map = Service[t.getSymbol(Service, 'hoveredEls')];
+            expect(map.has(el)).to.be.true;
+            expect(map.get(el).has(key)).to.be.true;
+            expect(map.get(el).get(key).has(ability)).to.be.true;
           });
           it('should handle adding multiple abilities with the same element and key', () => {
-            const ability1 = $i.t.createFakeAbility('ability1');
-            const ability2 = $i.t.createFakeAbility('ability2');
+            const ability1 = t.createFakeAbility('ability1');
+            const ability2 = t.createFakeAbility('ability2');
             const key = 'a';
             Service.add(el, key, ability1);
             Service.add(el, key, ability2);
 
-            const abilitySet = Service[$i.t.getSymbol(Service, 'hoveredEls')].get(el).get(key);
-            $i.expect(abilitySet.has(ability1)).to.be.true;
-            $i.expect(abilitySet.has(ability2)).to.be.true;
+            const abilitySet = Service[t.getSymbol(Service, 'hoveredEls')].get(el).get(key);
+            expect(abilitySet.has(ability1)).to.be.true;
+            expect(abilitySet.has(ability2)).to.be.true;
           });
           it('should handle adding multiple keys to the same element', () => {
             const key1 = 'a';
             const key2 = 'b';
-            const ability = $i.t.createFakeAbility('ability');
+            const ability = t.createFakeAbility('ability');
 
             Service.add(el, key1, ability);
             Service.add(el, key2, ability);
 
-            const keyMap = Service[$i.t.getSymbol(Service, 'hoveredEls')].get(el);
-            $i.expect(keyMap.has(key1)).to.be.true;
-            $i.expect(keyMap.get(key1).has(ability)).to.be.true;
-            $i.expect(keyMap.has(key2)).to.be.true;
-            $i.expect(keyMap.get(key2).has(ability)).to.be.true;
+            const keyMap = Service[t.getSymbol(Service, 'hoveredEls')].get(el);
+            expect(keyMap.has(key1)).to.be.true;
+            expect(keyMap.get(key1).has(ability)).to.be.true;
+            expect(keyMap.has(key2)).to.be.true;
+            expect(keyMap.get(key2).has(ability)).to.be.true;
           });
         });
 
         describe('remove', () => {
           it('should remove the element from the map', () => {
-            const el = $i.doc.createElement('div');
+            const el = doc.createElement('div');
 
-            Service.add(el, 'a', $i.t.createFakeAbility('ability'));
+            Service.add(el, 'a', t.createFakeAbility('ability'));
 
             Service.remove(el);
-            $i.expect(Service[$i.t.getSymbol(Service, 'hoveredEls')].has(el)).to.be.false;
+            expect(Service[t.getSymbol(Service, 'hoveredEls')].has(el)).to.be.false;
           });
           it('should not crash if the element is not in the map', () => {
-            Service.remove($i.doc.createElement('div'));
+            Service.remove(doc.createElement('div'));
           });
         });
       });
 
       afterEach(done => {
-        $i._.reset();
-        $i.Key.Service.clear();
-        $i.Move.movedElements.clear();
+        _.reset();
+        Key.Service.clear();
+        Move.movedElements.clear();
         done();
       });
     });

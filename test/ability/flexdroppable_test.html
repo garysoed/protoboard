@@ -14,64 +14,62 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new require('service.Registry')())
       .constant('service.Move', {
         nextElement: null,
         remove: () => {},
         mouseX: 0,
         mouseY: 0
       })
-      .run(
-          {
-            _: '/=',
-            doc: '=',
-            expect: '/=',
-            FlexDroppable: 'ability.=',
-            Move: 'service.=',
-            t: '=',
-            Utils: '='
-          },
-          $i => {
+      .run(require => {
+
+    const _ = require('/_');
+    const doc = require('doc');
+    const expect = require('/expect');
+    const FlexDroppable = require('ability.FlexDroppable');
+    const Move = require('service.Move');
+    const t = require('t');
+    const Utils = require('Utils');
 
     describe('ability.FlexDroppable', () => {
       let el;
       let flexDroppable;
 
       let __mutationObserver__;
-      let __onDomMutation__ = $i.t.getSymbol($i.FlexDroppable.prototype, 'onDomMutation');
+      let __onDomMutation__ = t.getSymbol(FlexDroppable.prototype, 'onDomMutation');
 
       beforeEach(done => {
-        flexDroppable = new $i.FlexDroppable();
-        el = $i.doc.createElement('div');
+        flexDroppable = new FlexDroppable();
+        el = doc.createElement('div');
         flexDroppable.init(el);
 
-        __mutationObserver__ = $i.t.getSymbol(flexDroppable, 'mutationObserver');
+        __mutationObserver__ = t.getSymbol(flexDroppable, 'mutationObserver');
         done();
       });
 
       describe('#trigger', () => {
         it('should append the last dragged element and position it correctly', () => {
-          let lastDraggedEl = $i.doc.createElement('div');
-          lastDraggedEl.attachedCallback = $i._.spiedFunction();
-          $i._.spy(lastDraggedEl, 'getBoundingClientRect').overrideReturn({
+          let lastDraggedEl = doc.createElement('div');
+          lastDraggedEl.attachedCallback = _.spiedFunction();
+          _.spy(lastDraggedEl, 'getBoundingClientRect').overrideReturn({
             left: 56,
             top: 78,
             width: 24,
             height: 68
           });
 
-          $i.Move.nextElement = lastDraggedEl;
-          $i.Move.mouseX = 90;
-          $i.Move.mouseY = 12;
+          Move.nextElement = lastDraggedEl;
+          Move.mouseX = 90;
+          Move.mouseY = 12;
 
           flexDroppable.trigger(el);
 
-          $i.expect($i.Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
-          $i.expect(lastDraggedEl.style.left).to.be.equal('22px');
-          $i.expect(lastDraggedEl.style.top).to.be.equal('-100px');
+          expect(Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
+          expect(lastDraggedEl.style.left).to.be.equal('22px');
+          expect(lastDraggedEl.style.top).to.be.equal('-100px');
         });
       });
 
@@ -86,14 +84,14 @@
             { removedNodes: [ el3 ] }
           ]);
 
-          $i.expect(el1.style).to.be.eql({ left: '', top: '' });
-          $i.expect(el2.style).to.be.eql({ left: '', top: '' });
-          $i.expect(el3.style).to.be.eql({ left: '', top: '' });
+          expect(el1.style).to.be.eql({ left: '', top: '' });
+          expect(el2.style).to.be.eql({ left: '', top: '' });
+          expect(el3.style).to.be.eql({ left: '', top: '' });
         });
       });
 
       afterEach(done => {
-        $i._.reset();
+        _.reset();
         done();
       });
     });

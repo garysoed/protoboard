@@ -12,7 +12,10 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Abilities", { Utils: "=" }, function ($i) {
+DIJS.prefix("pb").bind("ability.Abilities", function (require) {
+
+  var Utils = require("Utils");
+
   var __abilities__ = Symbol("abilities");
   var __elProto__ = Symbol();
   var __observer__ = Symbol("observer");
@@ -150,10 +153,10 @@ DI.prefix("pb").bind("ability.Abilities", { Utils: "=" }, function ($i) {
         attributes: true
       };
 
-      $i.Utils.extendFn(el, "attachedCallback", function () {
+      Utils.extendFn(el, "attachedCallback", function () {
         return el[__observer__].observe(el, observerConfig);
       });
-      $i.Utils.extendFn(el, "detachedCallback", function () {
+      Utils.extendFn(el, "detachedCallback", function () {
         return el[__observer__].disconnect();
       });
 

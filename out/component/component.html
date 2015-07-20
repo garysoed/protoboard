@@ -13,17 +13,20 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("component.Component", { PbElement: "=" }, function ($i) {
-  var Component = (function (_$i$PbElement) {
+DIJS.prefix("pb").bind("component.Component", function (require) {
+
+  var PbElement = require("PbElement");
+
+  var Component = (function (_PbElement) {
     function Component() {
       _classCallCheck(this, Component);
 
-      if (_$i$PbElement != null) {
-        _$i$PbElement.apply(this, arguments);
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Component, _$i$PbElement);
+    _inherits(Component, _PbElement);
 
     _createClass(Component, {
       createdCallback: {
@@ -34,7 +37,8 @@ DI.prefix("pb").bind("component.Component", { PbElement: "=" }, function ($i) {
     });
 
     return Component;
-  })($i.PbElement);
+  })(PbElement);
 
   return Component;
-});</script></head><body></body></html>
+});</script>
+</head><body></body></html>

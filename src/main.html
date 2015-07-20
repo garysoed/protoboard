@@ -4,5 +4,5 @@
 <link rel="import" href="third_party/di.html">
 
 <script>
-  DI.run({ Bootstrap: 'pb.=' }, $i => $i.Bootstrap.run(document));
+  DIJS.run(require => require('pb.Bootstrap').run(document));
 </script>

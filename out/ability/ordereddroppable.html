@@ -16,18 +16,19 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.OrderedDroppable", {
-  Droppable: "ability.=",
-  Key: "trigger.=",
-  Move: "service.=",
-  Utils: "="
-}, function ($i) {
+DIJS.prefix("pb").bind("ability.OrderedDroppable", function (require) {
+
+  var Droppable = require("ability.Droppable");
+  var Key = require("trigger.Key");
+  var Move = require("service.Move");
+  var Utils = require("Utils");
+
   var __isVertical__ = Symbol();
 
-  var OrderedDroppable = (function (_$i$Droppable) {
+  var OrderedDroppable = (function (_Droppable) {
     function OrderedDroppable() {
       var name = arguments[0] === undefined ? "droppable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new $i.Key("d") : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new Key("d") : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
       var isVertical = arguments[3] === undefined ? false : arguments[3];
 
@@ -37,12 +38,12 @@ DI.prefix("pb").bind("ability.OrderedDroppable", {
       this[__isVertical__] = isVertical;
     }
 
-    _inherits(OrderedDroppable, _$i$Droppable);
+    _inherits(OrderedDroppable, _Droppable);
 
     _createClass(OrderedDroppable, {
       doTrigger: {
         value: function doTrigger(el) {
-          var movedElement = $i.Move.nextElement;
+          var movedElement = Move.nextElement;
           if (movedElement) {
             var dropped = false;
             var _iteratorNormalCompletion = true;
@@ -50,17 +51,17 @@ DI.prefix("pb").bind("ability.OrderedDroppable", {
             var _iteratorError = undefined;
 
             try {
-              for (var _iterator = $i.Utils.toArray(el.children)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              for (var _iterator = Utils.toArray(el.children)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var child = _step.value;
 
                 var rect = child.getBoundingClientRect();
                 if (this[__isVertical__]) {
-                  if (!dropped && rect.top + rect.height / 2 > $i.Move.mouseY) {
+                  if (!dropped && rect.top + rect.height / 2 > Move.mouseY) {
                     dropped = true;
                     el.insertBefore(movedElement, child);
                   }
                 } else {
-                  if (!dropped && rect.left + rect.width / 2 > $i.Move.mouseX) {
+                  if (!dropped && rect.left + rect.width / 2 > Move.mouseX) {
                     dropped = true;
                     el.insertBefore(movedElement, child);
                   }
@@ -90,7 +91,7 @@ DI.prefix("pb").bind("ability.OrderedDroppable", {
     });
 
     return OrderedDroppable;
-  })($i.Droppable);
+  })(Droppable);
 
   return OrderedDroppable;
 });</script>

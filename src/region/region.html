@@ -22,18 +22,15 @@
 </style>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
-    .bind(
-        'region.Region',
-        {
-          $: '/=',
-          PbElement: '=',
-          Utils: '=',
-        },
-        $i => {
+    .with('template', require => require('doc').querySelector('template'))
+    .bind('region.Region', require => {
+
+  const $ = require('/$');
+  const PbElement = require('PbElement');
+  const Utils = require('Utils');
 
   const __onMutation__ = Symbol('onMutation');
   const __mutationObserver__ = Symbol();
@@ -44,7 +41,7 @@ DI
    * @class region.Region
    * @extends PbElement
    */
-  class Region extends $i.PbElement {
+  class Region extends PbElement {
 
     /**
      * Called when there is a mutation on the element.
@@ -70,7 +67,7 @@ DI
      */
     createdCallback() {
       super.createdCallback();
-      $i.$(this).attr('show-child-count', '');
+      $(this).attr('show-child-count', '');
 
       this[__mutationObserver__] = new MutationObserver(this[__onMutation__].bind(this));
       this[__mutationObserver__].observe(this, { childList: true });

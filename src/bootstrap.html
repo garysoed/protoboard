@@ -30,33 +30,31 @@
 </style>
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-    .bind(
-        'Bootstrap',
-        {
-          $registry: '=',
-          Bag: 'region.=?',
-          Card: 'component.=?',
-          Config: 'service.=',
-          CubeTower: 'region.=?',
-          Deck: 'region.=?',
-          Dice: 'component.=?',
-          Generate: 'ui.=?',
-          Hand: 'region.=?',
-          HexGrid: 'grid.=?',
-          Preview: 'ui.=?',
-          Previewer: 'ui.=?',
-          Rect: 'region.=?',
-          RectGrid: 'grid.=?',
-          Shape: 'ui.=?',
-          State: 'service.=?',
-          Token: 'component.=?',
-          TriangleGrid: 'grid.=?',
-          Utils: '=',
-        },
-        $i => {
+    .bind('$registry', require => new (require('service.Registry'))())
+    .bind('Bootstrap', (require, optional) => {
+
+  const $registry = require('$registry');
+  const Config = require('service.Config');
+  const Utils = require('Utils');
+
+  optional('component.Card');
+  optional('component.Token');
+  optional('grid.HexGrid');
+  optional('grid.RectGrid');
+  optional('grid.TriangleGrid');
+  optional('region.Bag');
+  optional('region.CubeTower');
+  optional('region.Deck');
+  optional('region.Dice');
+  optional('region.Hand');
+  optional('region.Rect');
+  optional('service.State');
+  optional('ui.Generate');
+  optional('ui.Preview');
+  optional('ui.Previewer');
+  optional('ui.Shape');
 
   /**
    * Class responsible for bootstrapping the entire app. Call the
@@ -76,12 +74,12 @@ DI
      *    executing.
      */
     run(document) {
-      return $i.Utils
+      return Utils
           .watch(() => document.readyState === 'interactive' || document.readyState === 'complete')
           .then(() => {
-            $i.$registry.register(document, $i.Config);
+            $registry.register(document, Config);
 
-            let tags = $i.Utils.
+            let tags = Utils.
                 toArray(document.querySelectorAll(':unresolved')).
                 map(el => el.tagName.toLowerCase());
             let tagSet = new Set(tags);

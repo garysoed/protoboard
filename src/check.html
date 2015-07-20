@@ -4,9 +4,9 @@
 
 <script>
 
-DI
+DIJS
     .prefix('pb')
-    .bind('Check', {}, $i => {
+    .bind('Check', () => {
 
   // Private symbols.
   const __checked__ = Symbol();
@@ -15,7 +15,6 @@ DI
 
   const __onFailure__ = Symbol();
   const __onSuccess__ = Symbol();
-
 
   class Check {
 

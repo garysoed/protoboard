@@ -10,10 +10,13 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run({ Shape: 'ui.=' }, () => {
+      .with('$registry', require => new (require('service.Registry'))())
+      .run(require => {
+
+    require('ui.Shape');
+
     describe('ui.Shape', () => {
       it('should not throw exception when injected', () => {});
     });

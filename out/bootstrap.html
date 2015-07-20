@@ -29,36 +29,39 @@ p {
 
 <script>"use strict";
 
-DI.prefix("pb").bind("$registry", { Registry: "service.=" }, function ($i) {
-  return new $i.Registry();
-}).bind("Bootstrap", {
-  $registry: "=",
-  Bag: "region.=?",
-  Card: "component.=?",
-  Config: "service.=",
-  CubeTower: "region.=?",
-  Deck: "region.=?",
-  Dice: "component.=?",
-  Generate: "ui.=?",
-  Hand: "region.=?",
-  HexGrid: "grid.=?",
-  Preview: "ui.=?",
-  Previewer: "ui.=?",
-  Rect: "region.=?",
-  RectGrid: "grid.=?",
-  Shape: "ui.=?",
-  State: "service.=?",
-  Token: "component.=?",
-  TriangleGrid: "grid.=?",
-  Utils: "=" }, function ($i) {
+DIJS.prefix("pb").bind("$registry", function (require) {
+  return new (require("service.Registry"))();
+}).bind("Bootstrap", function (require, optional) {
+
+  var $registry = require("$registry");
+  var Config = require("service.Config");
+  var Utils = require("Utils");
+
+  optional("component.Card");
+  optional("component.Token");
+  optional("grid.HexGrid");
+  optional("grid.RectGrid");
+  optional("grid.TriangleGrid");
+  optional("region.Bag");
+  optional("region.CubeTower");
+  optional("region.Deck");
+  optional("region.Dice");
+  optional("region.Hand");
+  optional("region.Rect");
+  optional("service.State");
+  optional("ui.Generate");
+  optional("ui.Preview");
+  optional("ui.Previewer");
+  optional("ui.Shape");
+
   var BOOTSTRAP = {
     run: function run(document) {
-      return $i.Utils.watch(function () {
+      return Utils.watch(function () {
         return document.readyState === "interactive" || document.readyState === "complete";
       }).then(function () {
-        $i.$registry.register(document, $i.Config);
+        $registry.register(document, Config);
 
-        var tags = $i.Utils.toArray(document.querySelectorAll(":unresolved")).map(function (el) {
+        var tags = Utils.toArray(document.querySelectorAll(":unresolved")).map(function (el) {
           return el.tagName.toLowerCase();
         });
         var tagSet = new Set(tags);

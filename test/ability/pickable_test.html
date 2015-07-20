@@ -10,69 +10,67 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new require('service.Registry')())
       .constant('service.Move', { add() {} })
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            expect: '/=',
-            _: '/=',
-            doc: '=',
-            Move: 'service.=',
-            Pickable: 'ability.='
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const doc = require('doc');
+  const expect = require('/expect');
+  const Move = require('service.Move');
+  const Pickable = require('ability.Pickable');
 
   describe('ability.Pickable', () => {
     let el;
 
     beforeEach(done => {
-      el = $i.doc.createElement('div');
+      el = doc.createElement('div');
       done();
     });
 
     describe('#init', () => {
       it('should set the default value if the attribute is not set', () => {
-        let pickable = new $i.Pickable(undefined, undefined, true);
+        let pickable = new Pickable(undefined, undefined, true);
         pickable.init(el);
-        $i.expect($(el).attr(pickable.attrName)).to.be.equal('true');
+        expect($(el).attr(pickable.attrName)).to.be.equal('true');
       });
       it('should not set the default value if the attribute is set', () => {
         let value = 'value';
-        let pickable = new $i.Pickable(undefined, undefined, true);
+        let pickable = new Pickable(undefined, undefined, true);
         $(el).attr(pickable.attrName, value);
         pickable.init(el);
-        $i.expect($(el).attr(pickable.attrName)).to.equal(value);
+        expect($(el).attr(pickable.attrName)).to.equal(value);
       });
     });
 
     describe('#trigger', () => {
       it('should add the element to Move if enabled', () => {
-        let pickable = new $i.Pickable(undefined, undefined, true);
+        let pickable = new Pickable(undefined, undefined, true);
         pickable.init(el);
 
-        $i._.spy($i.Move, 'add');
+        _.spy(Move, 'add');
 
         pickable.trigger(el);
 
-        $i.expect($i.Move.add).calledWith(el).at.least(1);
+        expect(Move.add).calledWith(el).at.least(1);
       });
       it('should do nothing if not enabled', () => {
-        let pickable = new $i.Pickable(undefined, undefined, false);
+        let pickable = new Pickable(undefined, undefined, false);
         pickable.init(el);
 
-        $i._.spy($i.Move, 'add');
+        _.spy(Move, 'add');
 
         pickable.trigger(el, {});
 
-        $i.expect($i.Move.add).called().to.equal(0);
+        expect(Move.add).called().to.equal(0);
       });
     });
 
     afterEach(done => {
-      $i._.reset();
+      _.reset();
       done();
     });
   });

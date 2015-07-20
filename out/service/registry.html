@@ -10,7 +10,10 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("service.Registry", { Abilities: "ability.=", Config: "service.=" }, function ($i) {
+DIJS.prefix("pb").bind("service.Registry", function (require) {
+
+  var Abilities = require("ability.Abilities");
+  var Config = require("service.Config");
 
   var __elements__ = Symbol();
   var __toRun__ = Symbol();
@@ -31,7 +34,7 @@ DI.prefix("pb").bind("service.Registry", { Abilities: "ability.=", Config: "serv
           }
           this[__elements__].set(name, ctor.prototype);
           this.runAtRegister(function (doc, Config) {
-            var builder = $i.Abilities.of(ctor.prototype);
+            var builder = Abilities.of(ctor.prototype);
 
             if (!Config.getAll(name)) {
               console.warn("No configuration for " + name);
@@ -66,7 +69,7 @@ DI.prefix("pb").bind("service.Registry", { Abilities: "ability.=", Config: "serv
             for (var _iterator = this[__toRun__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
               var fn = _step.value;
 
-              fn(doc, $i.Config);
+              fn(doc, Config);
             }
           } catch (err) {
             _didIteratorError = true;

@@ -5,15 +5,18 @@
   <title>grid.HexGrid Unit Tests</title>
 
   <link rel="import" href="grid/hexgrid.html">
+  <link rel="import" href="service/registry.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run({ HexGrid: 'grid.=' }, () => {
+      .with('$registry', require => new (require('service.Registry'))())
+      .run(require => {
+    require('grid.HexGrid');
+
     describe('grid.HexGrid', () => {
       it('should not throw exception when injected', () => {});
     });

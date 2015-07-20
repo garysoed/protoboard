@@ -11,46 +11,45 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            _: '/=',
-            expect: '/=',
-            Triggers: 'trigger.=',
-          },
-          $i => {
+      .run(require => {
+
+    const _ = require('/_');
+    const expect = require('/expect');
+    const Triggers = require('trigger.Triggers');
+
     describe('trigger.Triggers', () => {
       describe('#parse', () => {
         it('should be able to parse a registered trigger', () => {
           let result = 5;
-          let parser = $i._.spiedFunction().overrideReturn(result);
+          let parser = _.spiedFunction().overrideReturn(result);
           let string = 'triggerString';
-          $i.Triggers.register(parser);
-          $i.expect($i.Triggers.parse(string)).to.equal(result);
-          $i.expect(parser).calledWith(string).at.least(1);
+          Triggers.register(parser);
+          expect(Triggers.parse(string)).to.equal(result);
+          expect(parser).calledWith(string).at.least(1);
         });
         it('should return the first registered matching trigger', () => {
           let result = 6;
-          let parser1 = $i._.spiedFunction().overrideReturn(result);
-          let parser2 = $i._.spiedFunction().overrideReturn(result);
+          let parser1 = _.spiedFunction().overrideReturn(result);
+          let parser2 = _.spiedFunction().overrideReturn(result);
           let string = 'triggerString';
-          $i.Triggers.register(parser1);
-          $i.Triggers.register(parser2);
-          $i.expect($i.Triggers.parse(string)).to.equal(result);
-          $i.expect(parser1).calledWith(string).at.least(1);
-          $i.expect(parser2).called().to.equal(0);
+          Triggers.register(parser1);
+          Triggers.register(parser2);
+          expect(Triggers.parse(string)).to.equal(result);
+          expect(parser1).calledWith(string).at.least(1);
+          expect(parser2).called().to.equal(0);
         });
         it('should throw an error if no trigger is found', () => {
           let string = 'triggerString';
-          $i.expect(() => $i.Triggers.parse(string)).to.throw(string);
+          expect(() => Triggers.parse(string)).to.throw(string);
         });
       });
 
       afterEach(done => {
-        $i.Triggers.clear();
-        $i._.reset();
+        Triggers.clear();
+        _.reset();
         done();
       });
     });

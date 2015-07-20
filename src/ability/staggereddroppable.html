@@ -9,20 +9,17 @@
 <link rel="import" href="utils.html">
 
 <script type="text/javascript">
-DI
+DIJS
     .prefix('pb')
-    .bind(
-        'ability.StaggeredDroppable',
-        {
-          $: '/=',
-          Chance: '/=',
-          Check: '=',
-          Droppable: 'ability.=',
-          Key: 'trigger.=',
-          Move: 'service.=',
-          Utils: '=',
-        },
-        $i => {
+    .bind('ability.StaggeredDroppable', require => {
+
+  const $ = require('/$');
+  const Chance = require('/Chance');
+  const Check = require('Check');
+  const Droppable = require('ability.Droppable');
+  const Key = require('trigger.Key');
+  const Move = require('service.Move');
+  const Utils = require('Utils');
 
   // Private constants
   const __defaultProbabilities__ = Symbol();
@@ -46,7 +43,7 @@ DI
    * @extends ability.Droppable
    * @since 0.3.1
    */
-  class StaggeredDroppable extends $i.Droppable {
+  class StaggeredDroppable extends Droppable {
     /**
      * @constructor
      * @class ability.StaggeredDroppable
@@ -57,7 +54,7 @@ DI
      */
     constructor(
         name = 'drop',
-        defaultTrigger = new $i.Key('d'),
+        defaultTrigger = new Key('d'),
         defaultEnabled = true,
         defaultProbabilities = [1]) {
       super(name, defaultTrigger, defaultEnabled);
@@ -71,8 +68,8 @@ DI
      * @param {Element} el The element to set the default configuration to.
      */
     init(el) {
-      if ($i.$(el).attr(this.attrChances) === undefined) {
-        $i.$(el).attr(this.attrChances, this[__defaultProbabilities__].join(' '));
+      if ($(el).attr(this.attrChances) === undefined) {
+        $(el).attr(this.attrChances, this[__defaultProbabilities__].join(' '));
       }
 
       super.init(el);
@@ -87,10 +84,10 @@ DI
     updateConfig(el) {
       super.updateConfig(el);
 
-      const probabilities = $i.Check($i.$(el).attr(this.attrChances))
+      const probabilities = Check($(el).attr(this.attrChances))
           .isList()
           .orThrows()
-          .map(i => $i.Check(i).isFloat().orThrows());
+          .map(i => Check(i).isFloat().orThrows());
 
       // Check that each probability is between 0 and 1.
       probabilities.forEach(probability => {
@@ -100,12 +97,12 @@ DI
       });
 
       // Go through every child and spit out the children that are no longer in the tower.
-      $i.Utils
+      Utils
           .toArray(el.querySelectorAll(`[${ATTR_STAGGER_LEVEL}]`))
           .forEach(child => {
-            let level = $i.Check($i.$(child).attr(ATTR_STAGGER_LEVEL)).isInt().orThrows();
+            let level = Check($(child).attr(ATTR_STAGGER_LEVEL)).isInt().orThrows();
             if (level >= probabilities.length) {
-              $i.$(child).attr(ATTR_STAGGER_LEVEL, null);
+              $(child).attr(ATTR_STAGGER_LEVEL, null);
             }
           });
     }
@@ -118,36 +115,36 @@ DI
      * @param {Element} el Element to drop the moved element into.
      */
     doTrigger(el) {
-      let movedElement = $i.Move.nextElement;
+      let movedElement = Move.nextElement;
       if (movedElement) {
         el.appendChild(movedElement);
 
         let droppingEls = new Set();
         droppingEls.add(movedElement);
 
-        const probabilities = $i.Check($i.$(el).attr(this.attrChances))
+        const probabilities = Check($(el).attr(this.attrChances))
             .isList()
             .orThrows()
-            .map(i => $i.Check(i).isFloat().orThrows());
+            .map(i => Check(i).isFloat().orThrows());
 
         for (let level = 0; level < probabilities.length; level++) {
           let passChance = probabilities[level] * 100;
 
           // All elements at this level will drop as well.
-          $i.Utils
+          Utils
               .toArray(el.querySelectorAll(`[${ATTR_STAGGER_LEVEL}="${level}"]`))
               .forEach(child => droppingEls.add(child));
 
           // Check if the elements that are dropping will stop at this level.
-          let stuckEls = $i.Chance.binom(droppingEls, { likelihood: 100 - passChance });
+          let stuckEls = Chance.binom(droppingEls, { likelihood: 100 - passChance });
           stuckEls.forEach(stuckEl => {
-            $i.$(stuckEl).attr(ATTR_STAGGER_LEVEL, level);
+            $(stuckEl).attr(ATTR_STAGGER_LEVEL, level);
             droppingEls.delete(stuckEl);
           });
         }
 
         // All elements in the droppingEls set have passed through all the levels.
-        droppingEls.forEach(passEl => $i.$(passEl).attr(ATTR_STAGGER_LEVEL, null));
+        droppingEls.forEach(passEl => $(passEl).attr(ATTR_STAGGER_LEVEL, null));
       }
     }
 
@@ -157,7 +154,7 @@ DI
      * @return {boolean} True iff the given element is in stagger state.
      */
     isInStaggerState(child) {
-      return !Number.isNaN($i.Check($i.$(child).attr(`${ATTR_STAGGER_LEVEL}`)).isInt().orUse(NaN));
+      return !Number.isNaN(Check($(child).attr(`${ATTR_STAGGER_LEVEL}`)).isInt().orUse(NaN));
     }
 
     /**

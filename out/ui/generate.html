@@ -20,27 +20,29 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ui.Generate", {
-  $: "/=",
-  $registry: "=",
-  Check: "=",
-  Config: "service.=",
-  Handlebars: "/=",
-  PbElement: "=",
-  Template: "service.=" }, function ($i) {
+DIJS.prefix("pb").bind("ui.Generate", function (require) {
+
+  var $ = require("/$");
+  var $registry = require("$registry");
+
+  var Check = require("Check");
+  var Config = require("service.Config");
+  var Handlebars = require("/Handlebars");
+  var PbElement = require("PbElement");
+  var Template = require("service.Template");
 
   var EL_NAME = "pb-u-generate";
 
-  var Generate = (function (_$i$PbElement) {
+  var Generate = (function (_PbElement) {
     function Generate() {
       _classCallCheck(this, Generate);
 
-      if (_$i$PbElement != null) {
-        _$i$PbElement.apply(this, arguments);
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Generate, _$i$PbElement);
+    _inherits(Generate, _PbElement);
 
     _createClass(Generate, {
       createdCallback: {
@@ -49,8 +51,8 @@ DI.prefix("pb").bind("ui.Generate", {
 
           _get(Object.getPrototypeOf(Generate.prototype), "createdCallback", this).call(this);
 
-          var promises = $i.Check($i.$(this).attr("input")).isList().orUse([]).map(function (name) {
-            return $i.Template.get(name);
+          var promises = Check($(this).attr("input")).isList().orUse([]).map(function (name) {
+            return Template.get(name);
           });
           Promise.all(promises).then(function (dataList) {
             var dataObj = {};
@@ -83,17 +85,17 @@ DI.prefix("pb").bind("ui.Generate", {
             }
 
             var templateStr = _this.querySelector("template").innerHTML.replace("&gt;", ">");
-            $i.$(_this).replaceWith($i.Handlebars.compile(templateStr)(dataObj));
+            $(_this).replaceWith(Handlebars.compile(templateStr)(dataObj));
           });
         }
       }
     });
 
     return Generate;
-  })($i.PbElement);
+  })(PbElement);
 
-  $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, Generate);
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Generate);
 
   return Generate;
 });</script>

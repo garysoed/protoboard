@@ -7,16 +7,14 @@
 <link rel="import" href="utils.html">
 
 <script type="text/javascript">
-DI
+DIJS
     .prefix('pb')
-    .bind('ability.OrderedDroppable',
-        {
-          Droppable: 'ability.=',
-          Key: 'trigger.=',
-          Move: 'service.=',
-          Utils: '='
-        },
-        $i => {
+    .bind('ability.OrderedDroppable', require => {
+
+  const Droppable = require('ability.Droppable');
+  const Key = require('trigger.Key');
+  const Move = require('service.Move');
+  const Utils = require('Utils');
 
   // Private constants
   const __isVertical__ = Symbol();
@@ -31,7 +29,7 @@ DI
    * @extends ability.Droppable
    * @since 0.3.1
    */
-  class OrderedDroppable extends $i.Droppable {
+  class OrderedDroppable extends Droppable {
 
     /**
      * @constructor
@@ -43,7 +41,7 @@ DI
      */
     constructor(
         name = 'droppable',
-        defaultTrigger = new $i.Key('d'),
+        defaultTrigger = new Key('d'),
         defaultEnabled = true,
         isVertical = false) {
       super(name, defaultTrigger, defaultEnabled);
@@ -59,19 +57,19 @@ DI
      * @param {Element} el The element to drop the picked element into.
      */
     doTrigger(el) {
-      let movedElement = $i.Move.nextElement;
+      let movedElement = Move.nextElement;
       if (movedElement) {
         // Go through every children and find the index that the element should be.
         let dropped = false;
-        for (let child of $i.Utils.toArray(el.children)) {
+        for (let child of Utils.toArray(el.children)) {
           let rect = child.getBoundingClientRect();
           if (this[__isVertical__]) {
-            if (!dropped && (rect.top + rect.height / 2 > $i.Move.mouseY)) {
+            if (!dropped && (rect.top + rect.height / 2 > Move.mouseY)) {
               dropped = true;
               el.insertBefore(movedElement, child);
             }
           } else {
-            if (!dropped && (rect.left + rect.width / 2 > $i.Move.mouseX)) {
+            if (!dropped && (rect.left + rect.width / 2 > Move.mouseX)) {
               dropped = true;
               el.insertBefore(movedElement, child);
             }

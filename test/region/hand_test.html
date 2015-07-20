@@ -14,39 +14,38 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            expect: '/=',
-            _: '/=',
-            $: '/=',
-            doc: '=',
-            Hand: 'region.=',
-            Move: 'service.=',
-            Utils: '='
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const $ = require('/$');
+
+  const doc = require('doc');
+  const expect = require('/expect');
+  const Hand = require('region.Hand');
+  const Move = require('service.Move');
+  const Utils = require('Utils');
 
   describe('region.Hand', () => {
 
     describe('get pickableChildCount', () => {
       it('should return the correct number of children', () => {
-        let hand = $i.doc.createElement('pb-r-hand');
-        Object.setPrototypeOf(hand, $i.Hand.prototype);
+        let hand = doc.createElement('pb-r-hand');
+        Object.setPrototypeOf(hand, Hand.prototype);
 
-        hand.appendChild($i.doc.createElement('div'));
-        hand.appendChild($i.doc.createElement('div'));
-        hand.appendChild($i.doc.createElement('div'));
+        hand.appendChild(doc.createElement('div'));
+        hand.appendChild(doc.createElement('div'));
+        hand.appendChild(doc.createElement('div'));
 
-        $i.expect(hand.pickableChildCount).to.equal(3);
+        expect(hand.pickableChildCount).to.equal(3);
       });
     });
 
     afterEach(done => {
-      $i._.reset();
+      _.reset();
       done();
     });
   });

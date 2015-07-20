@@ -5,7 +5,9 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI.bind('pb.t', { _: '=' }, $i => {
+DIJS.bind('pb.t', require => {
+  const _ = require('_');
+
   let TestUtil = {
     createFakeAbility(name, trigger = this.createFakeTrigger(`${name}-trigger`)) {
       return {
@@ -13,26 +15,26 @@ DI.bind('pb.t', { _: '=' }, $i => {
         attrTrigger: `attr${name}Trigger`,
         defaultTrigger: trigger,
         getTrigger: () => trigger,
-        init: $i._.spiedFunction(),
-        isEnabled: $i._.spiedFunction(),
-        updateConfig: $i._.spiedFunction(),
-        trigger: $i._.spiedFunction()
+        init: _.spiedFunction(),
+        isEnabled: _.spiedFunction(),
+        updateConfig: _.spiedFunction(),
+        trigger: _.spiedFunction()
       };
     },
 
     createFakeEvents() {
       let fake = {};
-      fake.of = $i._.spiedFunction().overrideReturn(fake);
-      fake.on = $i._.spiedFunction().overrideReturn(fake);
-      fake.off = $i._.spiedFunction().overrideReturn(fake);
+      fake.of = _.spiedFunction().overrideReturn(fake);
+      fake.on = _.spiedFunction().overrideReturn(fake);
+      fake.off = _.spiedFunction().overrideReturn(fake);
       return fake;
     },
 
     createFakeTrigger(name) {
       return {
         toString() { return name; },
-        on: $i._.spiedFunction(),
-        off: $i._.spiedFunction()
+        on: _.spiedFunction(),
+        off: _.spiedFunction()
       };
     },
 

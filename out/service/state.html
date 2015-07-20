@@ -12,12 +12,13 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("service.State", {
-  $: "/=",
-  $registry: "=",
-  doc: "=",
-  Config: "service.="
-}, function ($i) {
+DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("service.State", function (require) {
+
+  var $ = require("/$");
+  var $registry = require("$registry");
+
+  var Config = require("service.Config");
+  var doc = require("doc");
 
   var EL_NAME = "pb-state";
 
@@ -39,13 +40,13 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("serv
           el = this[__document__].createElement("" + EL_NAME);
           this[__document__].body.appendChild(el);
         }
-        $i.$(el).attr(key, "");
+        $(el).attr(key, "");
       }
       return el;
     });
 
     _defineProperty(_Service, "put", function put(key, value) {
-      $i.$(this[__getElement__](key)).attr(key, value);
+      $(this[__getElement__](key)).attr(key, value);
     });
 
     _defineProperty(_Service, "get", function get(key) {
@@ -69,10 +70,10 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("serv
     return Element;
   })(HTMLElement);
 
-  $i.$registry.add(EL_NAME, Element.prototype).runAtRegister(function (doc) {
+  $registry.add(EL_NAME, Element.prototype).runAtRegister(function (doc) {
     Service[__document__] = doc;
   });
-  $i.Config.add(EL_NAME);
+  Config.add(EL_NAME);
 
   return Service;
 });</script>

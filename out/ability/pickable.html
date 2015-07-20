@@ -15,17 +15,19 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.Pickable", {
-  $: "/=",
-  Ability: "ability.=",
-  Click: "trigger.=",
-  Move: "service.=" }, function ($i) {
+DIJS.prefix("pb").bind("ability.Pickable", function (require) {
+
+  var $ = require("/$");
+  var Ability = require("ability.Ability");
+  var Click = require("trigger.Click");
+  var Move = require("service.Move");
+
   var __defaultEnabled__ = Symbol();
 
-  var Pickable = (function (_$i$Ability) {
+  var Pickable = (function (_Ability) {
     function Pickable() {
       var name = arguments[0] === undefined ? "pickable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new $i.Click() : arguments[1];
+      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
       var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, Pickable);
@@ -35,27 +37,27 @@ DI.prefix("pb").bind("ability.Pickable", {
       this[__defaultEnabled__] = defaultEnabled;
     }
 
-    _inherits(Pickable, _$i$Ability);
+    _inherits(Pickable, _Ability);
 
     _createClass(Pickable, {
       init: {
         value: function init(el) {
           _get(Object.getPrototypeOf(Pickable.prototype), "init", this).call(this, el);
 
-          if ($i.$(el).attr(this.attrName) === undefined) {
-            $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
+          if ($(el).attr(this.attrName) === undefined) {
+            $(el).attr(this.attrName, this[__defaultEnabled__]);
           }
         }
       },
       doTrigger: {
         value: function doTrigger(el) {
-          $i.Move.add(el);
+          Move.add(el);
         }
       }
     });
 
     return Pickable;
-  })($i.Ability);
+  })(Ability);
 
   return Pickable;
 });</script>

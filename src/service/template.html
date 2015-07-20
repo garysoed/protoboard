@@ -6,9 +6,14 @@
 <link rel="import" href="third_party/jquery.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('service.Template', { $: '/=', Check: '=', Events: '=', Handlebars: '/=' }, $i => {
+    .bind('service.Template', require => {
+
+  const $ = require('/$');
+  const Check = require('Check');
+  const Events = require('Events');
+  const Handlebars = require('/Handlebars');
 
   const promiseMap = new Map();
 
@@ -16,7 +21,7 @@ DI
    * Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
    * partials and data to the template. For example:
    * ```javascript
-   * DI.run(['pb.service.=', function(Template) {
+   * DIJS.run(['pb.service.=', function(Template) {
    *   // Registers a partial. The partial value must be contained in the element passed into the
    *   // service.
    *   Template.addPartial('card', document.querySelector('template'));
@@ -53,7 +58,7 @@ DI
      * @return {service.Template} This service for chaining.
      */
     addPartial(name, element) {
-      $i.Handlebars.registerPartial(name, element.innerHTML.replace('&gt;', '>'));
+      Handlebars.registerPartial(name, element.innerHTML.replace('&gt;', '>'));
       return this;
     },
 
@@ -67,7 +72,7 @@ DI
      */
     addData(name, data) {
       if (promiseMap.has(name)) {
-        $i.$(Service).trigger(name, data);
+        $(Service).trigger(name, data);
       } else {
         promiseMap.set(name, Promise.resolve([name, data]));
       }
@@ -87,7 +92,7 @@ DI
         promiseMap.set(
             name,
             new Promise(function(resolve, reject) {
-              $i.Events.of(Service, this)
+              Events.of(Service, this)
                   .on('jquery', name, (event, data) => {
                     resolve([name, data]);
                   });
@@ -100,17 +105,17 @@ DI
 
 
   // Use function since Handlebars changes the context of this.
-  $i.Handlebars.registerHelper('pb-for', function(from, to, step, options) {
+  Handlebars.registerHelper('pb-for', function(from, to, step, options) {
     if (options === undefined) {
       // Shift the args if step is not defined.
       options = step;
       step = 1;
     }
     let rv = '';
-    for (let i = $i.Check(from).isInt().orThrows();
-        i < $i.Check(to).isInt().orThrows();
-        i += $i.Check(step).isInt().orThrows()) {
-      let data = $i.Handlebars.createFrame(options.data || {});
+    for (let i = Check(from).isInt().orThrows();
+        i < Check(to).isInt().orThrows();
+        i += Check(step).isInt().orThrows()) {
+      let data = Handlebars.createFrame(options.data || {});
       data.index = i;
       rv += options.fn(this, { data: data });
     }

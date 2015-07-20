@@ -13,31 +13,29 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('service.Move', {
         nextElement: null,
         mouseX: 0
       })
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            $: '/=',
-            _: '/=',
-            doc: '=',
-            expect: '/=',
-            Move: 'service.=',
-            OrderedDroppable: 'ability.=',
-            Utils: '='
-          },
-          $i => {
+      .run(require => {
+
+    const $ = require('/$');
+    const _ = require('/_');
+    const doc = require('doc');
+    const expect = require('/expect');
+    const Move = require('service.Move');
+    const OrderedDroppable = require('ability.OrderedDroppable');
+    const Utils = require('Utils');
 
     describe('ability.OrderedDroppable', () => {
       describe('#trigger', () => {
         let el;
         beforeEach(done => {
-          el = $i.doc.createElement('div');
+          el = doc.createElement('div');
           done();
         });
 
@@ -45,25 +43,25 @@
           let droppable;
 
           beforeEach(done => {
-            droppable = new $i.OrderedDroppable(
+            droppable = new OrderedDroppable(
                 undefined, // name
                 undefined, // defaultTrigger
                 undefined, // defaultEnabled
                 false      // isVertical
             );
-            $i.$(el).attr(droppable.attrName, 'true');
+            $(el).attr(droppable.attrName, 'true');
             done();
           });
 
           it('should insert before the correct child', () => {
-            let child1 = $i.doc.createElement('div');
-            $i._.spy(child1, 'getBoundingClientRect').overrideReturn({
+            let child1 = doc.createElement('div');
+            _.spy(child1, 'getBoundingClientRect').overrideReturn({
               left: 10,
               width: 20
             });
 
-            let child2 = $i.doc.createElement('div');
-            $i._.spy(child2, 'getBoundingClientRect').overrideReturn({
+            let child2 = doc.createElement('div');
+            _.spy(child2, 'getBoundingClientRect').overrideReturn({
               left: 35,
               width: 20
             });
@@ -72,24 +70,24 @@
             el.appendChild(child2);
             el.classList.add('pb-over');
 
-            let dragged = $i.doc.createElement('div');
+            let dragged = doc.createElement('div');
 
-            $i.Move.nextElement = dragged;
-            $i.Move.mouseX = 40;
+            Move.nextElement = dragged;
+            Move.mouseX = 40;
 
             droppable.trigger(el);
 
-            $i.expect($i.Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+            expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
           });
           it('should insert as the last child if eventX is too far to the right', () => {
-            let child1 = $i.doc.createElement('div');
-            $i._.spy(child1, 'getBoundingClientRect').overrideReturn({
+            let child1 = doc.createElement('div');
+            _.spy(child1, 'getBoundingClientRect').overrideReturn({
               left: 10,
               width: 20
             });
 
-            let child2 = $i.doc.createElement('div');
-            $i._.spy(child2, 'getBoundingClientRect').overrideReturn({
+            let child2 = doc.createElement('div');
+            _.spy(child2, 'getBoundingClientRect').overrideReturn({
               left: 35,
               width: 20
             });
@@ -97,16 +95,16 @@
             el.appendChild(child1);
             el.appendChild(child2);
 
-            let dragged = $i.doc.createElement('div');
-            $i.Move.nextElement = dragged;
-            $i.Move.mouseX = 50;
+            let dragged = doc.createElement('div');
+            Move.nextElement = dragged;
+            Move.mouseX = 50;
 
             droppable.trigger(el);
 
-            $i.expect($i.Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
+            expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
           });
           it('should not crash if there are no last dragged element', () => {
-            $i.Move.nextElement = null;
+            Move.nextElement = null;
             droppable.trigger(el);
           });
         });
@@ -115,25 +113,25 @@
           let droppable;
 
           beforeEach(done => {
-            droppable = new $i.OrderedDroppable(
+            droppable = new OrderedDroppable(
                 undefined, // name
                 undefined, // defaultTrigger
                 undefined, // defaultEnabled
                 true       // isVertical
             );
-            $i.$(el).attr(droppable.attrName, 'true');
+            $(el).attr(droppable.attrName, 'true');
             done();
           });
 
           it('should insert before the correct child for vertical mode', () => {
-            let child1 = $i.doc.createElement('div');
-            $i._.spy(child1, 'getBoundingClientRect').overrideReturn({
+            let child1 = doc.createElement('div');
+            _.spy(child1, 'getBoundingClientRect').overrideReturn({
               top: 10,
               height: 20
             });
 
-            let child2 = $i.doc.createElement('div');
-            $i._.spy(child2, 'getBoundingClientRect').overrideReturn({
+            let child2 = doc.createElement('div');
+            _.spy(child2, 'getBoundingClientRect').overrideReturn({
               top: 35,
               height: 20
             });
@@ -142,24 +140,24 @@
             el.appendChild(child2);
             el.classList.add('pb-over');
 
-            let dragged = $i.doc.createElement('div');
+            let dragged = doc.createElement('div');
 
-            $i.Move.nextElement = dragged;
-            $i.Move.mouseY = 40;
+            Move.nextElement = dragged;
+            Move.mouseY = 40;
 
             droppable.trigger(el);
 
-            $i.expect($i.Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+            expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
           });
           it('should insert as the last child if eventY is too far down for vertical mode', () => {
-            let child1 = $i.doc.createElement('div');
-            $i._.spy(child1, 'getBoundingClientRect').overrideReturn({
+            let child1 = doc.createElement('div');
+            _.spy(child1, 'getBoundingClientRect').overrideReturn({
               top: 10,
               height: 20
             });
 
-            let child2 = $i.doc.createElement('div');
-            $i._.spy(child2, 'getBoundingClientRect').overrideReturn({
+            let child2 = doc.createElement('div');
+            _.spy(child2, 'getBoundingClientRect').overrideReturn({
               top: 35,
               height: 20
             });
@@ -167,16 +165,16 @@
             el.appendChild(child1);
             el.appendChild(child2);
 
-            let dragged = $i.doc.createElement('div');
-            $i.Move.nextElement = dragged;
-            $i.Move.mouseY = 50;
+            let dragged = doc.createElement('div');
+            Move.nextElement = dragged;
+            Move.mouseY = 50;
 
             droppable.trigger(el);
 
-            $i.expect($i.Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
+            expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
           });
           it('should not crash if there are no last dragged element', () => {
-            $i.Move.nextElement = null;
+            Move.nextElement = null;
             droppable.trigger(el);
           });
         });

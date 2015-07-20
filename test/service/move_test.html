@@ -13,33 +13,32 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new (require('service.Registry'))())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            _: '/=',
-            $: '/=',
-            $registry: '=',
-            doc: '=',
-            Events: '=',
-            expect: '/=',
-            t: '=',
-            Move: 'service.=',
-            Utils: '=',
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const $ = require('/$');
+  const $registry = require('$registry');
+
+  const doc = require('doc');
+  const Events = require('Events');
+  const expect = require('/expect');
+  const t = require('t');
+  const Move = require('service.Move');
+  const Utils = require('Utils');
 
   // Private symbols.
-  const __container__ = $i.t.getSymbol($i.Move, 'container');
-  const __moveContainer__ = $i.t.getSymbol($i.Move, 'moveContainer');
-  const __onMouseMove__ = $i.t.getSymbol($i.Move, 'onMouseMove');
-  const __onContainerMutation__ = $i.t.getSymbol($i.Move, 'onContainerMutation');
+  const __container__ = t.getSymbol(Move, 'container');
+  const __moveContainer__ = t.getSymbol(Move, 'moveContainer');
+  const __onMouseMove__ = t.getSymbol(Move, 'onMouseMove');
+  const __onContainerMutation__ = t.getSymbol(Move, 'onContainerMutation');
 
   describe('service.Move', () => {
     before(done => {
-      $i.$registry.register($i.doc);
+      $registry.register(doc);
       done();
     });
 
@@ -49,23 +48,23 @@
 
     describe('__moveContainer__', () => {
       it('should set the left and top coordinates of the container correctly', () => {
-        let child1 = $i.doc.createElement('div');
-        $i._.spy(child1, 'getBoundingClientRect').overrideReturn({ width: 20, height: 30 });
-        let child2 = $i.doc.createElement('div');
-        $i._.spy(child2, 'getBoundingClientRect').overrideReturn({ width: 10, height: 40 });
+        let child1 = doc.createElement('div');
+        _.spy(child1, 'getBoundingClientRect').overrideReturn({ width: 20, height: 30 });
+        let child2 = doc.createElement('div');
+        _.spy(child2, 'getBoundingClientRect').overrideReturn({ width: 10, height: 40 });
 
-        let container = $i.Move[__container__];
+        let container = Move[__container__];
         container.appendChild(child1);
         container.appendChild(child2);
 
         let x = 55;
         let y = 77;
-        $i.Move[__onMouseMove__]({ clientX: x, clientY: y });
+        Move[__onMouseMove__]({ clientX: x, clientY: y });
 
-        $i.Move[__moveContainer__]();
+        Move[__moveContainer__]();
 
-        $i.expect(container.style.left).to.equal('45px');
-        $i.expect(container.style.top).to.equal('57px');
+        expect(container.style.left).to.equal('45px');
+        expect(container.style.top).to.equal('57px');
       });
     });
 
@@ -73,116 +72,116 @@
       it('should set the mouse coordinates correctly and move the container', () => {
         let event = { clientX: 12, clientY: 24};
 
-        $i._.spy($i.Move, __moveContainer__);
+        _.spy(Move, __moveContainer__);
 
-        $i.Move[__onMouseMove__](event);
+        Move[__onMouseMove__](event);
 
-        $i.expect($i.Move.mouseX).to.equal(event.clientX);
-        $i.expect($i.Move.mouseY).to.equal(event.clientY);
-        $i.expect($i.Move[__moveContainer__]).calledWith().at.least(1);
+        expect(Move.mouseX).to.equal(event.clientX);
+        expect(Move.mouseY).to.equal(event.clientY);
+        expect(Move[__moveContainer__]).calledWith().at.least(1);
       });
     });
 
     describe('__onContainerMutation__', () => {
       it('should trigger an event if an element is moved out of the container', done => {
-        let el = $i.doc.createElement('div');
-        let parent = $i.doc.createElement('div');
-        let newParent = $i.doc.createElement('div');
+        let el = doc.createElement('div');
+        let parent = doc.createElement('div');
+        let newParent = doc.createElement('div');
 
         parent.appendChild(el);
-        $i.Move.add(el);
+        Move.add(el);
 
         newParent.appendChild(el);
-        $i.Events.of($i.Move).on('jquery', $i.Move.Events.MOVE, (event, data) => {
-          $i.expect(data.moved).to.equal(el);
-          $i.expect(data.from).to.equal(parent);
-          $i.expect(data.to).to.equal(newParent);
+        Events.of(Move).on('jquery', Move.Events.MOVE, (event, data) => {
+          expect(data.moved).to.equal(el);
+          expect(data.from).to.equal(parent);
+          expect(data.to).to.equal(newParent);
           done();
         });
-        $i.Move[__onContainerMutation__]([{ removedNodes: [el] }]);
+        Move[__onContainerMutation__]([{ removedNodes: [el] }]);
       });
       it('should not trigger an event for an element that was not added to the container', function(done) {
         const TIMEOUT = 500;
 
-        let el = $i.doc.createElement('div');
+        let el = doc.createElement('div');
         this.timeout(TIMEOUT);
         setTimeout(done, TIMEOUT - 100);
 
-        $i.Events.of($i.Move).on('jquery', $i.Move.Events.MOVE, () => {
-          $i.expect.fail();
+        Events.of(Move).on('jquery', Move.Events.MOVE, () => {
+          expect.fail();
         });
-        $i.Move[__onContainerMutation__]([{ removedNodes: [el] }]);
-        $i.Events.of($i.Move).off();
+        Move[__onContainerMutation__]([{ removedNodes: [el] }]);
+        Events.of(Move).off();
       });
       it('should not trigger an event if the element is returned to the origin source', function(done) {
         const TIMEOUT = 500;
 
-        let el = $i.doc.createElement('div');
-        let parent = $i.doc.createElement('div');
+        let el = doc.createElement('div');
+        let parent = doc.createElement('div');
 
         this.timeout(TIMEOUT);
         setTimeout(done, TIMEOUT - 100);
 
         parent.appendChild(el);
-        $i.Move.add(el);
+        Move.add(el);
 
-        $i.Events.of($i.Move).on('jquery', $i.Move.Events.MOVE, () => {
-          $i.expect.fail();
+        Events.of(Move).on('jquery', Move.Events.MOVE, () => {
+          expect.fail();
         });
 
         // Add it back to the old parent.
         parent.appendChild(el);
-        $i.Move[__onContainerMutation__]([{ removedNodes: [el] }]);
-        $i.Events.of($i.Move).off();
+        Move[__onContainerMutation__]([{ removedNodes: [el] }]);
+        Events.of(Move).off();
       });
     });
 
     describe('add', () => {
       it('should add the element to the container and move the container', () => {
-        let el = $i.doc.createElement('div');
+        let el = doc.createElement('div');
 
-        $i._.spy($i.Move, __moveContainer__);
+        _.spy(Move, __moveContainer__);
 
-        $i.Move.add(el);
+        Move.add(el);
 
-        $i.expect($i.Move[__moveContainer__]).calledWith().at.least(1);
-        $i.expect($i.Move[__container__].contains(el)).to.be.true;
+        expect(Move[__moveContainer__]).calledWith().at.least(1);
+        expect(Move[__container__].contains(el)).to.be.true;
       });
     });
 
     describe('get movedElements', () => {
       it('should return a set containing the children', () => {
-        let child1 = $i.doc.createElement('div');
-        let child2 = $i.doc.createElement('div');
+        let child1 = doc.createElement('div');
+        let child2 = doc.createElement('div');
 
-        let container = $i.Move[__container__];
+        let container = Move[__container__];
         container.appendChild(child1);
         container.appendChild(child2);
 
-        $i.expect($i.Utils.toArray($i.Move.movedElements)).to.eql([child1, child2]);
+        expect(Utils.toArray(Move.movedElements)).to.eql([child1, child2]);
       });
     });
 
     describe('get nextElement', () => {
       it('should return the last added child', () => {
-        let child1 = $i.doc.createElement('div');
-        let child2 = $i.doc.createElement('div');
+        let child1 = doc.createElement('div');
+        let child2 = doc.createElement('div');
 
-        let container = $i.Move[__container__];
+        let container = Move[__container__];
         container.appendChild(child1);
         container.appendChild(child2);
 
-        $i.expect($i.Move.nextElement).to.eql(child2);
+        expect(Move.nextElement).to.eql(child2);
       });
       it('should return null if there are no children', () => {
-        $i.expect($i.Move.nextElement).to.equal(null);
+        expect(Move.nextElement).to.equal(null);
       });
     });
 
     afterEach(done => {
-      $i._.reset();
-      $i.Events.of($i.Move).off();
-      $i.Move[__container__].innerHTML = '';
+      _.reset();
+      Events.of(Move).off();
+      Move[__container__].innerHTML = '';
       done();
     });
   });

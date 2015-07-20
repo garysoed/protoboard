@@ -4,11 +4,15 @@
 
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/hammer.html">
+<link rel="import" href="third_party/jquery.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('Events', { Hammer: '=' }, $i => {
+    .bind('Events', require => {
+
+  const $ = require('/$');
+  const Hammer = require('Hammer');
 
   let Handlers = window['Events']['Handlers'];
   Handlers
@@ -31,10 +35,10 @@ DI
       .add(
           'hammer',
           (element, eventName, handler) => {
-            $i.Hammer.on(element, eventName, handler);
+            Hammer.on(element, eventName, handler);
           },
           (element, eventName, handler) => {
-            $i.Hammer.off(element, eventName, handler);
+            Hammer.off(element, eventName, handler);
           });
   return window['Events'];
 });

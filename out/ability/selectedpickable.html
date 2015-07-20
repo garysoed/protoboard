@@ -17,20 +17,20 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("ability.SelectedPickable", {
-  $: "/=",
-  Click: "trigger.=",
-  Move: "service.=",
-  Pickable: "ability.=",
-  Utils: "="
-}, function ($i) {
+DIJS.prefix("pb").bind("ability.SelectedPickable", function (require) {
+
+  var $ = require("/$");
+  var Click = require("trigger.Click");
+  var Move = require("service.Move");
+  var Pickable = require("ability.Pickable");
+  var Utils = require("Utils");
 
   var __selectionFn__ = Symbol("selectionFn");
 
-  var SelectedPickable = (function (_$i$Pickable) {
+  var SelectedPickable = (function (_Pickable) {
     function SelectedPickable(selectionFn) {
       var name = arguments[1] === undefined ? "pickable" : arguments[1];
-      var defaultTrigger = arguments[2] === undefined ? new $i.Click() : arguments[2];
+      var defaultTrigger = arguments[2] === undefined ? new Click() : arguments[2];
       var defaultEnabled = arguments[3] === undefined ? true : arguments[3];
 
       _classCallCheck(this, SelectedPickable);
@@ -39,21 +39,21 @@ DI.prefix("pb").bind("ability.SelectedPickable", {
       this[__selectionFn__] = selectionFn;
     }
 
-    _inherits(SelectedPickable, _$i$Pickable);
+    _inherits(SelectedPickable, _Pickable);
 
     _createClass(SelectedPickable, {
       doTrigger: {
         value: function doTrigger(el) {
           var child = this[__selectionFn__](el);
           if (child) {
-            $i.Move.add(child);
+            Move.add(child);
           }
         }
       }
     });
 
     return SelectedPickable;
-  })($i.Pickable);
+  })(Pickable);
 
   return SelectedPickable;
 });</script>

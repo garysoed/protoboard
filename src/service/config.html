@@ -3,9 +3,9 @@
 <link rel="import" href="third_party/di.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('service.Config', { Abilities: 'ability.=' }, $i => {
+    .bind('service.Config', require => {
 
   const configuration = new Map();
 

@@ -5,10 +5,12 @@
 <link rel="import" href="third_party/di.html">
 
 <script>
-DI
-    .bind('pb.seed', {}, () => (new Date()).getTime())
-    .bind('Chance', { seed: 'pb.=?' }, $i => {
-      let chance = new Chance($i.seed);
+DIJS
+    .bind('pb.seed', () => (new Date()).getTime())
+    .bind('Chance', (require, optional) => {
+      const seed = optional('pb.seed');
+
+      let chance = new Chance(seed);
       chance.binom = (coll, options) => {
         let picked = [];
         coll.forEach(item => {

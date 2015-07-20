@@ -23,17 +23,19 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", { doc: "=" }, function ($i) {
-  return $i.doc.querySelector("template");
-}).bind("ui.Previewer", {
-  $registry: "=",
-  doc: "=",
-  template: "=",
-  Config: "service.=",
-  Events: "=",
-  PbElement: "=",
-  Preview: "service.=",
-  Utils: "=" }, function ($i) {
+DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
+  return require("doc").querySelector("template");
+}).bind("ui.Previewer", function (require) {
+
+  var $registry = require("$registry");
+
+  var Config = require("service.Config");
+  var doc = require("doc");
+  var Events = require("Events");
+  var PbElement = require("PbElement");
+  var Preview = require("service.Preview");
+  var template = require("template");
+  var Utils = require("Utils");
 
   var EL_NAME = "pb-u-previewer";
 
@@ -41,22 +43,22 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
 
   var __onPreviewElChanged__ = Symbol("onPreviewElChanged");
 
-  var Previewer = (function (_$i$PbElement) {
+  var Previewer = (function (_PbElement) {
     function Previewer() {
       _classCallCheck(this, Previewer);
 
-      if (_$i$PbElement != null) {
-        _$i$PbElement.apply(this, arguments);
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Previewer, _$i$PbElement);
+    _inherits(Previewer, _PbElement);
 
     _createComputedClass(Previewer, [{
       key: __onPreviewElChanged__,
       value: function () {
-        if ($i.Preview.previewedEl) {
-          this.innerHTML = $i.Preview.previewedEl.innerHTML;
+        if (Preview.previewedEl) {
+          this.innerHTML = Preview.previewedEl.innerHTML;
         } else {
           this.innerHTML = "";
         }
@@ -65,7 +67,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       key: "createdCallback",
       value: function createdCallback() {
         _get(Object.getPrototypeOf(Previewer.prototype), "createdCallback", this).call(this);
-        this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+        this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
 
         this.attachedCallback();
       }
@@ -73,21 +75,21 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("t
       key: "attachedCallback",
       value: function attachedCallback() {
         _get(Object.getPrototypeOf(Previewer.prototype), "attachedCallback", this).call(this);
-        this[__previewElHandler__] = $i.Events.of($i.Preview, this).on("jquery", $i.Preview.Events.ELEMENT_CHANGED, this[__onPreviewElChanged__].bind(this));
+        this[__previewElHandler__] = Events.of(Preview, this).on("jquery", Preview.Events.ELEMENT_CHANGED, this[__onPreviewElChanged__].bind(this));
       }
     }, {
       key: "detachedCallback",
       value: function detachedCallback() {
-        $i.Events.of($i.Preview, this).off();
+        Events.of(Preview, this).off();
         _get(Object.getPrototypeOf(Previewer.prototype), "detachedCallback", this).call(this);
       }
     }]);
 
     return Previewer;
-  })($i.PbElement);
+  })(PbElement);
 
-  $i.Config.add(EL_NAME);
-  $i.$registry.add(EL_NAME, Previewer);
+  Config.add(EL_NAME);
+  $registry.add(EL_NAME, Previewer);
 
   return Previewer;
 });</script>

@@ -15,11 +15,12 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("grid.Grid", {
-  doc: "=",
-  Check: "=",
-  PbElement: "=",
-  Utils: "=" }, function ($i) {
+DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("grid.Grid", function (require) {
+
+  var doc = require("doc");
+  var Check = require("Check");
+  var PbElement = require("PbElement");
+  var Utils = require("Utils");
 
   var ATTR_ROW = "pb-row";
   var ATTR_COL = "pb-col";
@@ -27,16 +28,16 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("grid
   var ATTR_ROW_COUNT = "row";
   var ATTR_COL_COUNT = "col";
 
-  var Grid = (function (_$i$PbElement) {
+  var Grid = (function (_PbElement) {
     function Grid() {
       _classCallCheck(this, Grid);
 
-      if (_$i$PbElement != null) {
-        _$i$PbElement.apply(this, arguments);
+      if (_PbElement != null) {
+        _PbElement.apply(this, arguments);
       }
     }
 
-    _inherits(Grid, _$i$PbElement);
+    _inherits(Grid, _PbElement);
 
     _createClass(Grid, {
       createdCallback: {
@@ -45,19 +46,19 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("grid
 
           _get(Object.getPrototypeOf(Grid.prototype), "createdCallback", this).call(this);
 
-          this.createShadowRoot().appendChild($i.Utils.activateTemplate(this.mainTemplate, $i.doc));
+          this.createShadowRoot().appendChild(Utils.activateTemplate(this.mainTemplate, doc));
 
-          var rowCount = $i.Check($(this).attr(ATTR_ROW_COUNT)).isInt().orThrows();
-          var colCount = $i.Check($(this).attr(ATTR_COL_COUNT)).isInt().orThrows();
+          var rowCount = Check($(this).attr(ATTR_ROW_COUNT)).isInt().orThrows();
+          var colCount = Check($(this).attr(ATTR_COL_COUNT)).isInt().orThrows();
           var rootEl = this.rootEl;
 
           for (var row = 0; row < rowCount; row++) {
-            rootEl.appendChild($i.Utils.activateTemplate(this.rowTemplate, $i.doc));
+            rootEl.appendChild(Utils.activateTemplate(this.rowTemplate, doc));
           }
 
           $(rootEl.children).each(function (row, rowEl) {
             for (var col = 0; col < colCount; col++) {
-              var tileEl = $i.Utils.activateTemplate(_this.tileTemplate, $i.doc);
+              var tileEl = Utils.activateTemplate(_this.tileTemplate, doc);
               $(tileEl.querySelector("content")).attr("select", "[" + ATTR_ROW + "=\"" + row + "\"][" + ATTR_COL + "=\"" + col + "\"]");
               $(tileEl.children[0]).attr(ATTR_ROW, row).attr(ATTR_COL, col);
               rowEl.appendChild(tileEl);
@@ -94,7 +95,7 @@ DI.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("grid
     });
 
     return Grid;
-  })($i.PbElement);
+  })(PbElement);
 
   return Grid;
 });</script>

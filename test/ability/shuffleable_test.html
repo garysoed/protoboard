@@ -13,40 +13,38 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
+      .with('$registry', require => new require('service.Registry')())
       .constant('doc', document.currentScript.ownerDocument)
-      .run(
-          {
-            expect: '/=',
-            _: '/=',
-            doc: '=',
-            Chance: '/=',
-            Shuffleable: 'ability.=',
-            Utils: '='
-          },
-          $i => {
+      .run(require => {
+
+  const _ = require('/_');
+  const Chance = require('/Chance');
+  const doc = require('doc');
+  const expect = require('/expect');
+  const Shuffleable = require('ability.Shuffleable');
+  const Utils = require('Utils');
 
   describe('ability.Shuffleable', () => {
     let el;
     let shuffleable;
 
     beforeEach(done => {
-      el = $i.doc.createElement('div');
-      shuffleable = new $i.Shuffleable(undefined, undefined, true);
+      el = doc.createElement('div');
+      shuffleable = new Shuffleable(undefined, undefined, true);
       done();
     });
 
     describe('#init', () => {
       it('should set the default value if attribute is not set', () => {
         shuffleable.init(el);
-        $i.expect($(el).attr(shuffleable.attrName)).to.be.equal('true');
+        expect($(el).attr(shuffleable.attrName)).to.be.equal('true');
       });
       it('should be noop if the attribute is set', () => {
         $(el).attr(shuffleable.attrName, 'false');
         shuffleable.init(el);
-        $i.expect($(el).attr(shuffleable.attrName)).to.be.equal('false');
+        expect($(el).attr(shuffleable.attrName)).to.be.equal('false');
       });
     });
 
@@ -54,9 +52,9 @@
       let children = [];
 
       beforeEach(done => {
-        children.push($i.doc.createElement('div'));
-        children.push($i.doc.createElement('a'));
-        children.push($i.doc.createElement('p'));
+        children.push(doc.createElement('div'));
+        children.push(doc.createElement('a'));
+        children.push(doc.createElement('p'));
 
         children.forEach(function(child) {
           el.appendChild(child);
@@ -69,30 +67,30 @@
         $(el).attr(shuffleable.attrName, 'true');
         let shuffledChildren = [children[2], children[0], children[1]];
 
-        $i._.spy($i.Chance, 'shuffle').overrideReturn(shuffledChildren);
+        _.spy(Chance, 'shuffle').overrideReturn(shuffledChildren);
         shuffleable.trigger(el);
 
-        $i.expect($i.Chance.shuffle).calledWith(children).at.least(1);
-        $i.expect($i.Utils.toArray(el.children)).to.be.eql(shuffledChildren);
+        expect(Chance.shuffle).calledWith(children).at.least(1);
+        expect(Utils.toArray(el.children)).to.be.eql(shuffledChildren);
       });
       it('should be noop if disabled', () => {
         $(el).attr(shuffleable.attrName, 'false');
 
-        $i._.spy($i.Chance, 'shuffle');
+        _.spy(Chance, 'shuffle');
         shuffleable.trigger(el);
-        $i.expect($i.Chance.shuffle).called().to.be.equal(0);
+        expect(Chance.shuffle).called().to.be.equal(0);
       });
       it('should be noop if attribute value is bad', () => {
         $(el).attr(shuffleable.attrName, 'invalid');
 
-        $i._.spy($i.Chance, 'shuffle');
+        _.spy(Chance, 'shuffle');
         shuffleable.trigger(el);
-        $i.expect($i.Chance.shuffle).called().to.be.equal(0);
+        expect(Chance.shuffle).called().to.be.equal(0);
       });
     });
 
     afterEach(done => {
-      $i._.reset();
+      _.reset();
       done();
     });
   });

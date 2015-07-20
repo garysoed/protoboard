@@ -8,19 +8,16 @@
 <link rel="import" href="utils.html">
 
 <script>
-DI
-    .bind('CustomEvent', {}, () => CustomEvent)
+DIJS
+    .bind('CustomEvent', () => CustomEvent)
     .prefix('pb')
-    .bind(
-        'ability.Ability',
-        {
-          $: '/=',
-          Check: '=',
-          CustomEvent: '/=',
-          Log: 'service.=',
-          Triggers: 'trigger.='
-        },
-        $i => {
+    .bind('ability.Ability', require => {
+
+  const $ = require('/$');
+  const Check = require('Check');
+  const CustomEvent = require('/CustomEvent');
+  const Log = require('service.Log');
+  const Triggers = require('trigger.Triggers');
 
   // Private symbols.
   const __name__ = Symbol();
@@ -64,8 +61,8 @@ DI
      * @param {Element} el The element to set the default values to.
      */
     init(el) {
-      if ($i.$(el).attr(this.attrTrigger) === undefined && this[__defaultTrigger__]) {
-        $i.$(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
+      if ($(el).attr(this.attrTrigger) === undefined && this[__defaultTrigger__]) {
+        $(el).attr(this.attrTrigger, this[__defaultTrigger__].toString());
       }
 
       this.updateConfig(el);
@@ -82,13 +79,13 @@ DI
         el[__triggerMap__] = new Map();
       }
 
-      let newValue = $i.$(el).attr(this.attrTrigger);
+      let newValue = $(el).attr(this.attrTrigger);
       if (!el[__triggerMap__].has(this)
           || newValue !== el[__triggerMap__].get(this).toString()) {
         if (el[__triggerMap__].has(this)) {
           el[__triggerMap__].get(this).off(el);
         }
-        let trigger = $i.Triggers.parse($i.$(el).attr(this.attrTrigger));
+        let trigger = Triggers.parse($(el).attr(this.attrTrigger));
 
         if (trigger) {
           trigger.on(el, this);
@@ -105,16 +102,16 @@ DI
      */
     trigger(el) {
       if (this.isEnabled(el)) {
-        $i.Log.log(this.attrName, $i.$(el).attr('pb-id'), { phase: 'before' });
+        Log.log(this.attrName, $(el).attr('pb-id'), { phase: 'before' });
         this.doTrigger(el);
-        el.dispatchEvent(new $i.CustomEvent(
+        el.dispatchEvent(new CustomEvent(
             this.attrName,
             {
               detail: {
                 ability: this
               }
             }));
-        $i.Log.log(this.attrName, $i.$(el).attr('pb-id'), { phase: 'after' });
+        Log.log(this.attrName, $(el).attr('pb-id'), { phase: 'after' });
       }
     }
 
@@ -147,7 +144,7 @@ DI
      * @return {Boolean} True iff the ability is enabled on the given element.
      */
     isEnabled(el) {
-      return $i.Check($i.$(el).attr(this.attrName)).isBoolean().orUse(false);
+      return Check($(el).attr(this.attrName)).isBoolean().orUse(false);
     }
 
     /**

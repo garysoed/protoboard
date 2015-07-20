@@ -3,9 +3,11 @@
 <link rel="import" href="third_party/di.html">
 
 <script>
-DI
+DIJS
     .prefix('pb')
-    .bind('service.Log', { TEST_MODE: '/=?' }, $i => {
+    .bind('service.Log', (required, optional) => {
+
+  const TEST_MODE = optional('/TEST_MODE');
 
   // Private symbols
   const __entries__ = Symbol();
@@ -57,7 +59,7 @@ DI
    * For entries not handled by Abilities, you can also add log entries manually. Use the
    * {{#crossLink "service.Log/log:method"}}{{/crossLink}} method. For instance:
    * ```javascript
-   * DI.run(['service.=', function(Log) {
+   * DIJS.run(['service.=', function(Log) {
    *   Log.log('player-count', 2);
    * }]);
    * ```
@@ -75,7 +77,7 @@ DI
    *
    * For example:
    * ```javascript
-   * DI.run(['service.=', function(Log) {
+   * DIJS.run(['service.=', function(Log) {
    *   Log
    *   	   .addPreprocessor(function(entry) {
    *   	     if (entry.category === 'player-count') {
@@ -307,7 +309,7 @@ DI
     }
   };
 
-  if ($i.TEST_MODE) {
+  if (TEST_MODE) {
     Log.Entry = Entry;
   }
 

@@ -10,10 +10,13 @@
 </head>
 <body>
   <script>
-  DI
+  DIJS
       .prefix('pb')
-      .with('$registry', { Registry: 'service.=' }, $i => new $i.Registry())
-      .run({ Card: 'component.=' }, () => {
+      .with('$registry', require => new (require('service.Registry'))())
+      .run(require => {
+
+    require('component.Card');
+
     describe('component.Card', () => {
       it('should not throw exception when injected', () => {});
     });

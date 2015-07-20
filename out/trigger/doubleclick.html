@@ -12,31 +12,32 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DI.prefix("pb").bind("trigger.DoubleClick", {
-  Events: "=",
-  Trigger: "trigger.=",
-  Triggers: "trigger.="
-}, function ($i) {
-  var DoubleClick = (function (_$i$Trigger) {
+DIJS.prefix("pb").bind("trigger.DoubleClick", function (require) {
+
+  var Events = require("Events");
+  var Trigger = require("trigger.Trigger");
+  var Triggers = require("trigger.Triggers");
+
+  var DoubleClick = (function (_Trigger) {
     function DoubleClick() {
       _classCallCheck(this, DoubleClick);
 
-      if (_$i$Trigger != null) {
-        _$i$Trigger.apply(this, arguments);
+      if (_Trigger != null) {
+        _Trigger.apply(this, arguments);
       }
     }
 
-    _inherits(DoubleClick, _$i$Trigger);
+    _inherits(DoubleClick, _Trigger);
 
     _createClass(DoubleClick, {
       on: {
         value: function on(element, ability) {
-          $i.Events.of(element, this).on("hammer", "doubletap", ability.trigger.bind(ability, element));
+          Events.of(element, this).on("hammer", "doubletap", ability.trigger.bind(ability, element));
         }
       },
       off: {
         value: function off(element) {
-          $i.Events.of(element, this).off("hammer", "doubletap");
+          Events.of(element, this).off("hammer", "doubletap");
         }
       },
       toString: {
@@ -52,9 +53,9 @@ DI.prefix("pb").bind("trigger.DoubleClick", {
     });
 
     return DoubleClick;
-  })($i.Trigger);
+  })(Trigger);
 
-  $i.Triggers.register(function (str) {
+  Triggers.register(function (str) {
     return str === "dblclick" ? new DoubleClick() : undefined;
   });
 

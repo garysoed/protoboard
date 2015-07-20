@@ -44,29 +44,27 @@
 </template>
 
 <script>
-DI
+DIJS
     .prefix('pb')
     .constant('doc', document.currentScript.ownerDocument)
-    .with('template', { doc: '=' }, $i => $i.doc.querySelector('template'))
-    .bind('component.Dice',
-        {
-          $: '/=',
-          $registry: '=',
-          doc: '=',
-          template: '=',
-          Ability: 'ability.=',
-          Chance: '/=',
-          Check: '=',
-          Click: 'trigger.=',
-          Component: 'component.=',
-          Config: 'service.=',
-          Helpable: 'ability.=',
-          Key: 'trigger.=',
-          Pickable: 'ability.=',
-          Shuffleable: 'ability.=',
-          Utils: '=',
-        },
-        $i => {
+    .with('template', require => require('doc').querySelector('template'))
+    .bind('component.Dice', require => {
+
+  const $ = require('/$');
+  const $registry = require('$registry');
+  const Ability = require('ability.Ability');
+  const Chance = require('/Chance');
+  const Check = require('Check');
+  const Click = require('trigger.Click');
+  const Component = require('component.Component');
+  const Config = require('service.Config');
+  const doc = require('doc');
+  const Helpable = require('ability.Helpable');
+  const Key = require('trigger.Key');
+  const Pickable = require('ability.Pickable');
+  const Shuffleable = require('ability.Shuffleable');
+  const template = require('template');
+  const Utils = require('Utils');
 
   const EL_NAME = 'pb-c-dice';
   const ATTR_PAIR = 'pb-dice-pair';
@@ -86,7 +84,7 @@ DI
   const __defaultShowA__ = Symbol();
   const __isShowA__ = Symbol();
 
-  class Rollable extends $i.Shuffleable {
+  class Rollable extends Shuffleable {
 
     /**
      * Elements with this ability can shuffle their children. This is very specific to dice and
@@ -103,7 +101,7 @@ DI
      */
     constructor(
         name = 'rollable',
-        defaultTrigger = new $i.Click(),
+        defaultTrigger = new Click(),
         defaultEnabled = true,
         defaultShowA = true) {
       super(name, defaultTrigger);
@@ -120,12 +118,12 @@ DI
      */
     init(el) {
       super.init(el);
-      if ($i.$(el).attr(this.attrName) === undefined) {
-        $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
       }
 
-      if ($i.$(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
-        $i.$(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
+      if ($(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
+        $(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
       }
     }
 
@@ -137,11 +135,11 @@ DI
      */
     doTrigger(el) {
       super.doTrigger(el);
-      $i.$(el).attr(ATTR_SHOW_SIDE_A, $i.Chance.bool());
+      $(el).attr(ATTR_SHOW_SIDE_A, Chance.bool());
     }
   }
 
-  class DiceFlippable extends $i.Ability {
+  class DiceFlippable extends Ability {
 
     /**
      * Dice with this ability can be flipped to the opposite side. This is very specific to dice and
@@ -158,7 +156,7 @@ DI
      */
     constructor(
         name = 'pb-dice-flippable',
-        defaultTrigger = new $i.Key('f'),
+        defaultTrigger = new Key('f'),
         defaultEnabled = false,
         defaultShowA = true) {
       super(name, defaultTrigger);
@@ -175,12 +173,12 @@ DI
      */
     init(el) {
       super.init(el);
-      if ($i.$(el).attr(this.attrName) === undefined) {
-        $i.$(el).attr(this.attrName, this[__defaultEnabled__]);
+      if ($(el).attr(this.attrName) === undefined) {
+        $(el).attr(this.attrName, this[__defaultEnabled__]);
       }
 
-      if ($i.$(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
-        $i.$(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
+      if ($(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
+        $(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
       }
     }
 
@@ -191,10 +189,10 @@ DI
      * @param {Element} el The dice to flip.
      */
     doTrigger(el) {
-      $i.$(el)
+      $(el)
           .attr(
               ATTR_SHOW_SIDE_A,
-              !$i.Check($i.$(el).attr(ATTR_SHOW_SIDE_A))
+              !Check($(el).attr(ATTR_SHOW_SIDE_A))
                   .isBoolean()
                   .orThrows());
     }
@@ -265,7 +263,7 @@ DI
    * @since 0.2.0
    * @extends component.Component
    */
-  class Dice extends $i.Component {
+  class Dice extends Component {
 
     /**
      * Called when the element is created
@@ -274,15 +272,15 @@ DI
      */
     createdCallback() {
       super.createdCallback();
-      this.createShadowRoot().appendChild($i.Utils.activateTemplate($i.template, $i.doc));
+      this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
 
       // Check if the dice has any children.
       if (this.children.length <= 0) {
-        let type = $i.$(this).attr('type');
+        let type = $(this).attr('type');
         if (SUPPORTED_TYPES.indexOf(type) >= 0) {
           let faceCount = Number.parseInt(type.substring(1));
           for (let i = 0; i < faceCount; i += 1) {
-            let faceEl = $i.doc.createElement('div');
+            let faceEl = doc.createElement('div');
             faceEl.innerText = i + 1;
             this.appendChild(faceEl);
           }
@@ -291,14 +289,14 @@ DI
 
       // Checks if the children are paired.
       if (this.querySelectorAll(`[${ATTR_PAIR}]`).length <= 0) {
-        let children = $i.Utils.toArray(this.children);
+        let children = Utils.toArray(this.children);
         if (children.length % 2 !== 0) {
           throw new Error('Number of children of dice should be event');
         }
 
         for (let i = 0; i < children.length / 2; i++) {
-          let pairEl = $i.doc.createElement('div');
-          $i.$(pairEl).attr(ATTR_PAIR, '');
+          let pairEl = doc.createElement('div');
+          $(pairEl).attr(ATTR_PAIR, '');
           pairEl.appendChild(children[i]);
           pairEl.appendChild(children[children.length - 1 - i]);
           this.appendChild(pairEl);
@@ -316,14 +314,14 @@ DI
    */
   Dice.NODE_NAME = EL_NAME;
 
-  $i.Config.add(
+  Config.add(
       EL_NAME,
-      new $i.Helpable('help'),
-      new $i.Pickable('pick', new $i.Key('q'), true),
-      new Rollable('roll', new $i.Key('r'), true),
-      new DiceFlippable('flip', new $i.Key('f')));
+      new Helpable('help'),
+      new Pickable('pick', new Key('q'), true),
+      new Rollable('roll', new Key('r'), true),
+      new DiceFlippable('flip', new Key('f')));
 
-  $i.$registry.add(EL_NAME, Dice);
+  $registry.add(EL_NAME, Dice);
 
   Dice.DiceFlippable = DiceFlippable;
   Dice.Rollable = Rollable;

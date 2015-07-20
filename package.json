@@ -48,7 +48,7 @@
     "yuidocjs": "^0.7.0"
   },
   "dependencies": {
-    "di-js": "^1.0.2",
+    "di-js": "^3.0.0",
     "listener": "git://github.com/garysoed/listener"
   }
 }

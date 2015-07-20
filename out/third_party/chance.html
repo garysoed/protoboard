@@ -6,10 +6,12 @@
 
 <script>"use strict";
 
-DI.bind("pb.seed", {}, function () {
+DIJS.bind("pb.seed", function () {
   return new Date().getTime();
-}).bind("Chance", { seed: "pb.=?" }, function ($i) {
-  var chance = new Chance($i.seed);
+}).bind("Chance", function (require, optional) {
+  var seed = optional("pb.seed");
+
+  var chance = new Chance(seed);
   chance.binom = function (coll, options) {
     var picked = [];
     coll.forEach(function (item) {
