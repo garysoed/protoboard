@@ -173,32 +173,6 @@ DIJS
     },
 
     /**
-     * Adds a processor to process a log entry.
-     * A processor is a function that takes 3 arguments:
-     * 1. `timestamp` of type {{#crossLink "Date"}}{{/crossLink}}.
-     * 2. `category` {{#crossLink "String"}}{{/crossLink}}.
-     * 3. `value`
-     * You can specify more than one processors. The processors will be called in the other that
-     * they are added to the service. The value that will be used for the log entry is the value
-     * returned by the first processor that returns a non empty string.
-     *
-     * DEPRECATED: Use {{#crossLink "service.Log/addPreprocessor:method"}}{{/crossLink}} or
-     * {{#crossLink "service.Log/addPrinter:method"}}{{/crossLink}} instead.
-     *
-     * @method addProcessor
-     * @param {Function} processor The processor to add.
-     * @return {service.Log} This service, for chaining.
-     * @deprecated
-     */
-    addProcessor(processor) {
-      console.warn('service.Log#addProcessor is deprecated');
-      this.addPrinter(entry => {
-        return processor(entry.timestamp, entry.category, entry.value);
-      });
-      return this;
-    },
-
-    /**
      * Adds a preprocessor to preprocess a log entry. A preprocessor is a function that takes an
      * {{#crossLink "service.Log.Entry"}}Entry{{/crossLink}}.
      *
@@ -269,28 +243,6 @@ DIJS
      */
     get entries() {
       return this[__entries__].join('\n');
-    },
-
-    /**
-     * Default processor of the service. This processor is also used if no custom processors are
-     * added.
-     *
-     * DEPRECATED: Use {{#crossLink "service.Log/defaultPrinter:property"}}{{/crossLink}} isntead.
-     *
-     * @property defaultProcessor
-     * @type Function
-     * @final
-     * @deprecated
-     */
-    get defaultProcessor() {
-      console.warn('service.Log#defaultProcessor is deprecated');
-      return (timestamp, category, value) => {
-        let entry = new Entry();
-        entry.set('timestamp', timestamp);
-        entry.set('category', category);
-        entry.set('value', value);
-        return this.defaultPrinter(entry);
-      };
     },
 
     /**

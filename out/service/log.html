@@ -125,14 +125,6 @@ DIJS.prefix("pb").bind("service.Log", function (required, optional) {
       return this;
     });
 
-    _defineProperty(_Object$defineProperties, "addProcessor", function addProcessor(processor) {
-      console.warn("service.Log#addProcessor is deprecated");
-      this.addPrinter(function (entry) {
-        return processor(entry.timestamp, entry.category, entry.value);
-      });
-      return this;
-    });
-
     _defineProperty(_Object$defineProperties, "addPreprocessor", function addPreprocessor(preprocessor) {
       this[__preprocessors__].push(preprocessor);
       return this;
@@ -166,22 +158,6 @@ DIJS.prefix("pb").bind("service.Log", function (required, optional) {
     entries: {
       get: function () {
         return this[__entries__].join("\n");
-      },
-      configurable: true,
-      enumerable: true
-    },
-    defaultProcessor: {
-      get: function () {
-        var _this = this;
-
-        console.warn("service.Log#defaultProcessor is deprecated");
-        return function (timestamp, category, value) {
-          var entry = new Entry();
-          entry.set("timestamp", timestamp);
-          entry.set("category", category);
-          entry.set("value", value);
-          return _this.defaultPrinter(entry);
-        };
       },
       configurable: true,
       enumerable: true

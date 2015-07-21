@@ -83,18 +83,6 @@ DIJS
     reset() {
       this[__elProto__][__abilities__].clear();
     }
-
-    /**
-     * Triggers the ability corresponding to the given name.
-     *
-     * DEPRECATED: Use {{#crossLink "ability.Abilities/trigger:method"}}{{/crossLink}} instead.
-     *
-     * @method trigger
-     * @deprecated
-     */
-    trigger(name) {
-      Abilities.trigger(this[__elProto__], name);
-    }
   }
 
   /**
