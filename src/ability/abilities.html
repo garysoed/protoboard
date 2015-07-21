@@ -9,6 +9,7 @@ DIJS
     .prefix('pb')
     .bind('ability.Abilities', require => {
 
+  const TEST_MODE = require('/TEST_MODE');
   const Utils = require('Utils');
 
   // Private symbols.
@@ -187,7 +188,7 @@ DIJS
     }
   };
 
-  if (window['TEST_MODE']) {
+  if (TEST_MODE) {
     Abilities.Builder = Builder;
   }
 

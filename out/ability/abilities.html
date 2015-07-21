@@ -14,6 +14,7 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 DIJS.prefix("pb").bind("ability.Abilities", function (require) {
 
+  var TEST_MODE = require("/TEST_MODE");
   var Utils = require("Utils");
 
   var __abilities__ = Symbol("abilities");
@@ -177,7 +178,7 @@ DIJS.prefix("pb").bind("ability.Abilities", function (require) {
     return _Abilities;
   })();
 
-  if (window.TEST_MODE) {
+  if (TEST_MODE) {
     Abilities.Builder = Builder;
   }
 
