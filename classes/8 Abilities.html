@@ -240,7 +240,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 1.2.1</div>
+      <div class="since">v 2.0.1</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -496,8 +496,9 @@ If you want to add a configuration, you will need to implement the
 the configuration on the element.</p>
 <p>Now that you have your custom ability, you can add it to an element using the
 <a href="../classes/service.Config.html" class="crosslink">service.Config</a>. For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run({ Config: 'service.=' }, function($i) {
-  $i.Config.add('pb-c-card', new CustomAbility());
+<pre class="code prettyprint"><code class="language-javascript">DIJS.run(function(require) {
+  var Config = require('service.Config');
+  Config.add('pb-c-card', new CustomAbility());
 });
 </code></pre>
 <p>The example above adds the CustomAbility to all <code>pb-c-card</code> elements.</p>

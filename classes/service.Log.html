@@ -240,7 +240,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 1.2.1</div>
+      <div class="since">v 2.0.1</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -479,7 +479,7 @@ number to the attribute to make sure that they are unique. For instance:</p>
 <code>3/28/2015, 6:01:48 PM: flip - attack-0</code>.</p>
 <p>For entries not handled by Abilities, you can also add log entries manually. Use the
 <a href="../classes/service.Log.html#method_log" class="crosslink">log</a> method. For instance:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run(['service.=', function(Log) {
+<pre class="code prettyprint"><code class="language-javascript">DIJS.run(['service.=', function(Log) {
   Log.log('player-count', 2);
 }]);
 </code></pre>
@@ -496,7 +496,7 @@ properties cannot be deleted or modified.</li>
 non null value returned by the first printer.</li>
 </ol>
 <p>For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run(['service.=', function(Log) {
+<pre class="code prettyprint"><code class="language-javascript">DIJS.run(['service.=', function(Log) {
   Log
        .addPreprocessor(function(entry) {
          if (entry.category === 'player-count') {
@@ -561,21 +561,6 @@ a blob, or <a href="../classes/service.Log.html#property_entries" class="crossli
             </header>
             <div class="content">
               <span class="description"><p>Default printer of the service. This printer is also used if no custom printers are  added.</p>
-          </span>
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="props deprecated">
-            <header id="property_defaultProcessor">
-              <code class="method-signature"><span class="keyword">readonly</span> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> defaultProcessor</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Default processor of the service. This processor is also used if no custom processors are
-          added.</p>
-          <p>DEPRECATED: Use <a href="../classes/service.Log.html#property_defaultPrinter" class="crosslink">defaultPrinter</a> isntead.</p>
           </span>
           
             </div>
@@ -677,59 +662,6 @@ a blob, or <a href="../classes/service.Log.html#property_entries" class="crossli
               <dl class="method-params-small">
                 <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>printer</code></dt>
                 <dd><p>The printer to be added.</p>
-          </dd>
-              </dl>
-          
-                <div class="method-returns">
-                  <code><span class="keyword">return</span> <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code><span class="description"><p>This service, for chaining.</p>
-          </span>
-                </div>
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method deprecated">
-            <header id="method_addProcessor">
-              <code class="method-signature">addProcessor(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> processor) => <a href="../classes/service.Log.html" class="crosslink">service.Log</a></code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Adds a processor to process a log entry.
-          A processor is a function that takes 3 arguments:</p>
-          <ol>
-          <li><code>timestamp</code> of type <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a>.</li>
-          <li><code>category</code> <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>.</li>
-          <li><code>value</code>
-          You can specify more than one processors. The processors will be called in the other that
-          they are added to the service. The value that will be used for the log entry is the value
-          returned by the first processor that returns a non empty string.</li>
-          </ol>
-          <p>DEPRECATED: Use <a href="../classes/service.Log.html#method_addPreprocessor" class="crosslink">addPreprocessor</a> or
-          <a href="../classes/service.Log.html#method_addPrinter" class="crosslink">addPrinter</a> instead.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>processor</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The processor to add.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>processor</code></dt>
-                <dd><p>The processor to add.</p>
           </dd>
               </dl>
           

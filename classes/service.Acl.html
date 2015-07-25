@@ -240,7 +240,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 1.2.1</div>
+      <div class="since">v 2.0.1</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -469,14 +469,14 @@ the current player. To use this, you first need to register the elements to the 
 you need to define the ACL as follows:</p>
 <pre class="code prettyprint"><code class="language-html">&lt;div id="acl" pb-acl-readable="player1 player2"&gt;&lt;/div&gt;
 </code></pre>
-<pre class="code prettyprint"><code class="language-javascript">  DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
+<pre class="code prettyprint"><code class="language-javascript">  DIJS.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
     AclService.registerElement(document.querySelector('#acl'));
     Bootstrap.run(document);
   }]);
 </code></pre>
-<p>In the example above, the DIV element will be readable if and only if the current player is set
+<p>In the example above, the DIJSV element will be readable if and only if the current player is set
 to <code>player1</code> or <code>player2</code>. To set the current player, use the
-<a href="../classes/service.Acl.html#property_currentPlayer" class="crosslink">currentPlayer</a> property. When the DIV is
+<a href="../classes/service.Acl.html#property_currentPlayer" class="crosslink">currentPlayer</a> property. When the DIJSV is
 readable, this service will add a <code>pb-acl-readable</code> class to the element. You can use CSS to
 display the div differently depending on the current player.</p>
 <p>You can specify any kind of action to the ACL, as long as you prepend it with <code>pb-acl-</code>.</p>
@@ -484,7 +484,7 @@ display the div differently depending on the current player.</p>
 declare the group's members. For instance:</p>
 <pre class="code prettyprint"><code class="language-html">&lt;div id="acl" pb-acl-readable="corporation"&gt;&lt;/div&gt;
 </code></pre>
-<pre class="code prettyprint"><code class="language-javascript">  DI.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
+<pre class="code prettyprint"><code class="language-javascript">  DIJS.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
     AclService
         .registerElement(document.querySelector('#acl'))
         .addGroup('corporation', 'weyland', 'jinteki', 'nbn');

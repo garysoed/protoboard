@@ -240,7 +240,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 1.2.1</div>
+      <div class="since">v 2.0.1</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -472,10 +472,11 @@ identify an element. If you are making a custom Component, you should extend
 you should extend <a href="../classes/region.Region.html" class="crosslink">region.Region</a>.</p>
 <p>After creating the custom element, you need to add abilities to it. To do this, use the Config
 service's <a href="../classes/service.Config.html#method_add" class="crosslink">add</a> method. For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run({ Config: 'pb.service.=', Pickable: 'pb.ability.=' }, function($i) {
-  $i.Config.add(
-      'custom-element'
-      new $i.Pickable());
+<pre class="code prettyprint"><code class="language-javascript">DIJS.run(function(require) {
+  var Config = require('pb.service.Config');
+  var Pickable = require('pb.ability.Pickable');
+
+  Config.add('custom-element', new Pickable());
 });
 </code></pre>
 <p>This adds the <a href="../classes/ability.Pickable.html" class="crosslink">ability.Pickable</a> ability to the custom element with
@@ -483,8 +484,9 @@ name <code>custom-element</code>.</p>
 <p>You will also need to make Protoboard recognizes the new element. To do this, inject a
 <code>pb.$registry</code> instance and call its
 <a href="../classes/service.Registry.html#method_add" class="crosslink">add</a> method:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run({ $registry: 'pb.=' }, function($i) {
-  $i.$registry.add('custom-element', CustomElement);
+<pre class="code prettyprint"><code class="language-javascript">DIJS.run(function(require) {
+  var $registry = require('pb.$registry');
+  $registry.add('custom-element', CustomElement);
 });
 </code></pre>
 <p>Note that you need to do all of the above before calling

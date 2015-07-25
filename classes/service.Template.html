@@ -240,7 +240,7 @@
     <div class="main-menu-button">&#9776;</div>
     <div class="main-header-section">
       <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 1.2.1</div>
+      <div class="since">v 2.0.1</div>
     </div>
     <a href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
@@ -466,7 +466,7 @@
     <div class="content description">
       <p>Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
 partials and data to the template. For example:</p>
-<pre class="code prettyprint"><code class="language-javascript">DI.run(['pb.service.=', function(Template) {
+<pre class="code prettyprint"><code class="language-javascript">DIJS.run(['pb.service.=', function(Template) {
   // Registers a partial. The partial value must be contained in the element passed into the
   // service.
   Template.addPartial('card', document.querySelector('template'));
