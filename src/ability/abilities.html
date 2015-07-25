@@ -7,9 +7,9 @@
 <script>
 DIJS
     .prefix('pb')
-    .bind('ability.Abilities', require => {
+    .bind('ability.Abilities', (require, optional) => {
 
-  const TEST_MODE = require('/TEST_MODE');
+  const TEST_MODE = optional('/TEST_MODE');
   const Utils = require('Utils');
 
   // Private symbols.

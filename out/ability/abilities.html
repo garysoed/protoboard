@@ -12,9 +12,9 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("ability.Abilities", function (require) {
+DIJS.prefix("pb").bind("ability.Abilities", function (require, optional) {
 
-  var TEST_MODE = require("/TEST_MODE");
+  var TEST_MODE = optional("/TEST_MODE");
   var Utils = require("Utils");
 
   var __abilities__ = Symbol("abilities");
