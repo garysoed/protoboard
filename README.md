@@ -13,10 +13,15 @@ Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 These are the release notes for the most current major version. For older release notes, go to the
 [Releases page](https://github.com/garysoed/protoboard/releases).
 
+### 2.0.2
+
+Bug fixes
+-   Fixed bug where `pb-c-dice` isn't loaded by Bootstrap
+
 ### 2.0.1
 
 Bug fixes
--   Made `TEST_MODE` in `ability.Abilities` be optional.
+-   Made `TEST_MODE` in `ability.Abilities` be optional
 -   Updated `di-js` to `v3.0.1`, which contains bug fix
 
 ### 2.0.0
