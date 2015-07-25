@@ -4,5 +4,5 @@
 
 <link rel="import" href="third_party/di.html">
 
-<script>"use strict";DI.bind("pb.seed",{},function(){return(new Date).getTime()}).bind("Chance",{seed:"pb.=?"},function(n){var e=new Chance(n.seed);return e.binom=function(n,t){var r=[];return n.forEach(function(n){e.bool(t)&&r.push(n)}),r},e});</script>
+<script>"use strict";DIJS.bind("pb.seed",function(){return(new Date).getTime()}).bind("Chance",function(n,e){var t=e("pb.seed"),r=new Chance(t);return r.binom=function(n,e){var t=[];return n.forEach(function(n){r.bool(e)&&t.push(n)}),t},r});</script>
 </head><body></body></html>

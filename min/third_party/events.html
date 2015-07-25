@@ -4,5 +4,7 @@
 
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/hammer.html">
+<link rel="import" href="third_party/jquery.html">
 
-<script>"use strict";DI.prefix("pb").bind("Events",{Hammer:"="},function(n){var e=window.Events.Handlers;return e.add("dom",function(n,e,t){n.addEventListener(e,t)},function(n,e,t){n.removeEventListener(e,t)}).add("jquery",function(n,e,t){$(n).on(e,t)},function(n,e,t){$(n).off(e,t)}).add("hammer",function(e,t,o){n.Hammer.on(e,t,o)},function(e,t,o){n.Hammer.off(e,t,o)}),window.Events});</script></head><body></body></html>
+<script>"use strict";DIJS.prefix("pb").bind("Events",function(n){var e=n("/$"),t=n("Hammer"),o=window.Events.Handlers;return o.add("dom",function(n,e,t){n.addEventListener(e,t)},function(n,e,t){n.removeEventListener(e,t)}).add("jquery",function(n,t,o){e(n).on(t,o)},function(n,t,o){e(n).off(t,o)}).add("hammer",function(n,e,o){t.on(n,e,o)},function(n,e,o){t.off(n,e,o)}),window.Events});</script>
+</head><body></body></html>

@@ -2,5 +2,5 @@
 
 <link rel="import" href="third_party/di.html">
 
-<script>"use strict";DI.prefix("pb.trigger").bind("Triggers",{},function(r){var e=new Set,t=(Symbol(),Symbol(),Symbol(),Symbol(),{parse:function(r){var t=null,n=!0,i=!1,a=void 0;try{for(var o,l=e[Symbol.iterator]();!(n=(o=l.next()).done);n=!0){var f=o.value;if(t=f(r))break}}catch(u){i=!0,a=u}finally{try{!n&&l["return"]&&l["return"]()}finally{if(i)throw a}}if(!t)throw new Error("Unparsable trigger string: "+r);return t},register:function(r){e.add(r)},clear:function(){e.clear()}});return t});</script>
+<script>"use strict";DIJS.prefix("pb.trigger").bind("Triggers",function(){var r=new Set,e=(Symbol(),Symbol(),Symbol(),Symbol(),{parse:function(e){var t=null,n=!0,i=!1,a=void 0;try{for(var o,l=r[Symbol.iterator]();!(n=(o=l.next()).done);n=!0){var f=o.value;if(t=f(e))break}}catch(u){i=!0,a=u}finally{try{!n&&l["return"]&&l["return"]()}finally{if(i)throw a}}if(!t)throw new Error("Unparsable trigger string: "+e);return t},register:function(e){r.add(e)},clear:function(){r.clear()}});return e});</script>
 </head><body></body></html>

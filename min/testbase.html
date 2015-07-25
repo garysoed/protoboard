@@ -8,5 +8,5 @@
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="testutils.html">
 
-<script>"use strict";DI.bind("_F",{},function(){return spies.Fakes}),DI.bind("_M",{},function(){return spies.Matchers}),DI.bind("expect",{},function(){return chai.expect}),DI.bind("TEST_MODE",{},function(){return!0});</script>
+<script>"use strict";DIJS.bind("_F",function(){return spies.Fakes}),DIJS.bind("_M",function(){return spies.Matchers}),DIJS.bind("expect",function(){return chai.expect}),DIJS.bind("TEST_MODE",function(){return!0});</script>
 </head><body></body></html>

@@ -2,5 +2,5 @@
 
 <link rel="import" href="third_party/di.html">
 
-<script>"use strict";var _defineProperty=function(e,r,n){return Object.defineProperty(e,r,{value:n,enumerable:!0,configurable:!0,writable:!0})};DI.prefix("pb").bind("service.Preview",{},function(e){var r=Symbol(),n=Object.defineProperties(function(){var e={};return _defineProperty(e,r,null),_defineProperty(e,"Events",{ELEMENT_CHANGED:"element-changed"}),e}(),{previewedEl:{get:function(){return this[r]},set:function(e){var t=this[r]!==e;this[r]=e,t&&$(this).trigger(n.Events.ELEMENT_CHANGED)},configurable:!0,enumerable:!0}});return n});</script>
+<script>"use strict";var _defineProperty=function(e,r,n){return Object.defineProperty(e,r,{value:n,enumerable:!0,configurable:!0,writable:!0})};DIJS.prefix("pb").bind("service.Preview",function(){var e=Symbol(),r=Object.defineProperties(function(){var r={};return _defineProperty(r,e,null),_defineProperty(r,"Events",{ELEMENT_CHANGED:"element-changed"}),r}(),{previewedEl:{get:function(){return this[e]},set:function(n){var t=this[e]!==n;this[e]=n,t&&$(this).trigger(r.Events.ELEMENT_CHANGED)},configurable:!0,enumerable:!0}});return r});</script>
 </head><body></body></html>
