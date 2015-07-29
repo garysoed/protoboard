@@ -23,6 +23,7 @@ module.exports = function(config) {
       { pattern: 'node_modules/spies/**', included: false },
 
       { pattern: 'out/testbase.html', included: false},
+      { pattern: 'out/*_test.html', included: true },
       { pattern: 'out/**/*_test.html', included: true }
     ],
 
