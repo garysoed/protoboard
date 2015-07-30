@@ -39,7 +39,7 @@
  * {{#crossLink "service.Config"}}{{/crossLink}}. For example:
  *
  * ```javascript
- * DIJS.run(function(require) {
+ * Protoboard.setup(function(require) {
  *   var Config = require('service.Config');
  *   Config.add('pb-c-card', new CustomAbility());
  * });

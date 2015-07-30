@@ -61,19 +61,22 @@ DIJS
    * {{#crossLink "service.Template"}}{{/crossLink}}. So in the example above, we can register the
    * data as follows:
    * ```javascript
-   * DIJS.run(['pb.service', 'pb', function(Template, Bootstrap) {
-   *   Template
-   *       .addData('cards', [
-   *         { name: 'Apprentice' },
-   *         { name: 'Jack of All Trades' },
-   *         { name: 'Baker' },
-   *         { name: 'Bishop' }
-   *       ])
-   *       .addData('game', {
-   *         name: 'Awesome deck building game'
-   *       });
-   *   Bootstrap.run(document);
-   * }]);
+   * Protoboard
+   *     .setup(function(require) {
+   *       var Template = require('pb.service.Template');
+   *
+   *       Template
+   *           .addData('cards', [
+   *             { name: 'Apprentice' },
+   *             { name: 'Jack of All Trades' },
+   *             { name: 'Baker' },
+   *             { name: 'Bishop' }
+   *           ])
+   *           .addData('game', {
+   *             name: 'Awesome deck building game'
+   *           });
+   *     })
+   *     .run(document);
    * ```
    *
    * With the above example, this will produce the following:

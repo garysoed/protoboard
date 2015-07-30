@@ -1,0 +1,37 @@
+<html><head><base href=".">
+
+<link rel="import" href="bootstrap.html">
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+var __setupFn__ = Symbol();
+
+var Protoboard = {
+  setup: function setup(setupFn) {
+    this[__setupFn__] = setupFn;
+    return this;
+  },
+  run: function run() {
+    var _this = this;
+
+    var doc = arguments[0] === undefined ? document : arguments[0];
+
+    return new Promise(function (resolve, reject) {
+      DIJS.run(function (require, optional) {
+        var Bootstrap = require("pb.Bootstrap");
+
+        if (_this[__setupFn__]) {
+          _this[__setupFn__](require);
+        }
+
+        Bootstrap.run(doc).then(function () {
+          resolve(require);
+        });
+      });
+    });
+  }
+};
+
+window.Protoboard = Protoboard;</script>
+</head><body></body></html>

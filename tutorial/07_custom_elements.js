@@ -14,12 +14,13 @@
  * service's {{#crossLink "service.Config/add:method"}}add{{/crossLink}} method. For example:
  *
  * ```javascript
- * DIJS.run(function(require) {
- *   var Config = require('pb.service.Config');
- *   var Pickable = require('pb.ability.Pickable');
+ * Protoboard
+ *     .setup(function(require) {
+ *       var Config = require('pb.service.Config');
+ *       var Pickable = require('pb.ability.Pickable');
  *
- *   Config.add('custom-element', new Pickable());
- * });
+ *       Config.add('custom-element', new Pickable());
+ *     });
  * ```
  *
  * This adds the {{#crossLink "ability.Pickable"}}{{/crossLink}} ability to the custom element with
@@ -30,7 +31,7 @@
  * {{#crossLink "service.Registry/add:method"}}add{{/crossLink}} method:
  *
  * ```javascript
- * DIJS.run(function(require) {
+ * Protoboard.setup(function(require) {
  *   var $registry = require('pb.$registry');
  *   $registry.add('custom-element', CustomElement);
  * });

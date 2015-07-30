@@ -10,7 +10,7 @@
  * {{#crossLink "trigger.Triggers/register:method"}}register{{/crossLink}} method. For example:
  *
  * ```javascript
- * DIJS.run(function(require) {
+ * Protoboard.setup(function(require) {
  *   var Events = require('Events');
  *   var Trigger = require('trigger.Trigger');
  *   var Triggers = require('trigger.Triggers');

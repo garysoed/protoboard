@@ -38,7 +38,7 @@ DIJS
      */
     add(name, ctor) {
       if (this[__elements__].has(name)) {
-        throw `${name} is already registered`;
+        throw new Error(`${name} is already registered`);
       }
       this[__elements__].set(name, ctor.prototype);
       this.runAtRegister((doc, Config) => {

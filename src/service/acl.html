@@ -88,10 +88,12 @@ DIJS
    * <div id="acl" pb-acl-readable="player1 player2"></div>
    * ```
    * ```javascript
-   *   DIJS.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
-   *     AclService.registerElement(document.querySelector('#acl'));
-   *     Bootstrap.run(document);
-   *   }]);
+   *   Protoboard
+   *       .setup(function(require) {
+   *         var AclService = require('pb.service.Acl');
+   *         AclService.registerElement(document.querySelector('#acl'));
+   *       })
+   *       .run(document);
    * ```
    *
    * In the example above, the DIJSV element will be readable if and only if the current player is set
@@ -108,13 +110,14 @@ DIJS
    * <div id="acl" pb-acl-readable="corporation"></div>
    * ```
    * ```javascript
-   *   DIJS.run(['pb.service.Acl', 'pb.=', function(AclService, Bootstrap) {
-   *     AclService
-   *         .registerElement(document.querySelector('#acl'))
-   *         .addGroup('corporation', 'weyland', 'jinteki', 'nbn');
-   *
-   *     Bootstrap.run(document);
-   *   }]);
+   *   Protoboard
+   *       .setup(function(require) {
+   *         var AclService = require('pb.service.Acl');
+   *         AclService
+   *             .registerElement(document.querySelector('#acl'))
+   *             .addGroup('corporation', 'weyland', 'jinteki', 'nbn');
+   *       })
+   *       .run(document);
    * ```
    * The element above will be readable if the current player is a member of the corporation group.
    * Groups can contain other groups as members.

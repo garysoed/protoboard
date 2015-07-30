@@ -21,7 +21,9 @@ DIJS
    * Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
    * partials and data to the template. For example:
    * ```javascript
-   * DIJS.run(['pb.service.=', function(Template) {
+   * Protoboard.setup(function(require) {
+   *   var Template = require('pb.service.Template');
+   *
    *   // Registers a partial. The partial value must be contained in the element passed into the
    *   // service.
    *   Template.addPartial('card', document.querySelector('template'));
@@ -33,7 +35,7 @@ DIJS
    *     { value: 'A', suit: 'Heart' },
    *     { value: 'A', suit: 'Diamond' },
    *   ]);
-   * }]);
+   * });
    * ```
    *
    * This class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for
