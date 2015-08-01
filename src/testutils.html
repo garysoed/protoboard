@@ -42,6 +42,14 @@ DIJS.bind('pb.t', require => {
       return Object.getOwnPropertySymbols(obj).find(symbol => {
         return `Symbol(${name})` === symbol.toString();
       });
+    },
+
+    getPrivateProperty(obj, name) {
+      return obj[this.getSymbol(obj, name)];
+    },
+
+    getPrivateMethod(obj, name) {
+      return obj[this.getSymbol(obj.constructor.prototype, name)];
     }
   };
 

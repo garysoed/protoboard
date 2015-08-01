@@ -1,17 +1,17 @@
 <base href="..">
 
 <link rel="import" href="ability/abilities.html">
+<link rel="import" href="external.html">
 <link rel="import" href="service/config.html">
 <link rel="import" href="third_party/di.html">
 
 <script>
 
 DIJS
-    .prefix('pb')
-    .bind('service.Registry', require => {
-
-  const Abilities = require('ability.Abilities');
-  const Config = require('service.Config');
+.bind('pb.service.Registry', require => {
+  const Abilities = require('pb.ability.Abilities');
+  const Config = require('pb.service.Config');
+  const console = require('console');
 
   const __elements__ = Symbol();
   const __toRun__ = Symbol();
@@ -42,21 +42,20 @@ DIJS
       }
       this[__elements__].set(name, ctor.prototype);
       this.runAtRegister((doc, Config) => {
-        let builder = Abilities.of(ctor.prototype);
-
         if (!Config.getAll(name)) {
           console.warn(`No configuration for ${name}`);
-          return;
+        } else {
+          let builder = Abilities.of(ctor.prototype);
+          for (let ability of Config.getAll(name)) {
+            builder.add(ability);
+          }
         }
-        Config.getAll(name).forEach(ability => {
-          builder.add(ability);
-        });
 
         // TODO(gs): Handle this
         try {
           doc.registerElement(name, ctor);
         } catch (e) {
-          console.warn(e);
+          console.warn(e.message);
         }
       });
       return this;
@@ -92,6 +91,7 @@ DIJS
     }
 
     reset() {
+      console.warn('Registry#reset is deprecated');
       this[__elements__] = new Map();
       this[__toRun__] = [];
     }

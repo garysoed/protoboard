@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>service.Registry Unit Tests</title>
+
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+<script>
+DIJS
+.with('pb.service.Config', require => {
+  const _ = require('_');
+  return {
+    getAll: _.spiedFunction()
+  };
+})
+.with('pb.ability.Abilities.Builder', require => {
+  const _ = require('_');
+  const Builder = {
+    add: _.spiedFunction()
+  };
+  Builder.add.overrideReturn(Builder);
+  return Builder;
+})
+.with('pb.ability.Abilities', require => {
+  const _ = require('_');
+  const Builder = require('pb.ability.Abilities.Builder');
+
+  const Abilities = {
+    of : _.spiedFunction()
+  };
+  Abilities.of.overrideReturn(Builder);
+  return Abilities;
+})
+.with('console', require => {
+  const _ = require('_');
+  return {
+    warn: _.spiedFunction()
+  };
+})
+.run(require => {
+  const _ = require('_');
+  const Abilities = require('pb.ability.Abilities');
+  const Builder = require('pb.ability.Abilities.Builder');
+  const Config = require('pb.service.Config');
+  const console = require('console');
+  const expect = require('expect');
+  const Registry = require('pb.service.Registry');
+  const t = require('pb.t');
+
+  describe.only('service.Registry', () => {
+    var ABILITY = t.createFakeAbility('ability');
+
+    let registry;
+    let FakeElement;
+    let doc;
+
+
+    beforeEach(done => {
+      registry = new Registry();
+      FakeElement = function() {};
+      doc = {
+        registerElement: _.spiedFunction()
+      };
+      done();
+    });
+
+    describe('#add', () => {
+      it('should register the given element name and prototype, and register the abilities', () => {
+        Config.getAll.overrideReturn([ABILITY]);
+
+        registry.add('el-name', FakeElement);
+        registry.register(doc);
+
+        expect(Abilities.of).calledWith(FakeElement.prototype).at.least(1);
+        expect(Builder.add).calledWith(ABILITY).at.least(1);
+        expect(doc.registerElement).calledWith('el-name', FakeElement).at.least(1);
+      });
+      it('should warn if there are no configurations for the current element', () => {
+        Config.getAll.overrideReturn(null);
+
+        registry.add('el-name', FakeElement);
+        registry.register(doc);
+
+        expect(Abilities.of).called().to.equal(0);
+        expect(console.warn).called().at.least(1);
+        expect(doc.registerElement).calledWith('el-name', FakeElement).at.least(1);
+      });
+      it('should throw exception if the element has been registered', () => {
+        registry.add('el-name', FakeElement);
+        expect(() => registry.add('el-name', function() {})).to.throw('el-name');
+      });
+      it('should warn if document.registerElement throws an error', () => {
+        let errorMessage = 'error message';
+
+        Config.getAll.overrideReturn(null);
+        doc.registerElement = () => {
+          throw new Error(errorMessage);
+        };
+
+        registry.add('el-name', FakeElement);
+        registry.register(doc);
+
+        expect(console.warn).calledWith(errorMessage).at.least(1);
+      });
+    });
+
+    describe('#runAtRegister', () => {
+      it('should run the given function at register', () => {
+        let fn = _.spiedFunction();
+        registry.runAtRegister(fn);
+        registry.register(doc);
+
+        expect(fn).calledWith(doc, Config).at.least(1);
+      });
+    });
+
+    afterEach(done => {
+      _.reset();
+      done();
+    });
+  });
+});
+</script>
+</body>

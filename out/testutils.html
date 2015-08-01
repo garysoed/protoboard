@@ -50,6 +50,14 @@ DIJS.bind("pb.t", function (require) {
       return Object.getOwnPropertySymbols(obj).find(function (symbol) {
         return "Symbol(" + name + ")" === symbol.toString();
       });
+    },
+
+    getPrivateProperty: function getPrivateProperty(obj, name) {
+      return obj[this.getSymbol(obj, name)];
+    },
+
+    getPrivateMethod: function getPrivateMethod(obj, name) {
+      return obj[this.getSymbol(obj.constructor.prototype, name)];
     }
   };
 

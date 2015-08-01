@@ -14,16 +14,15 @@
 
   <script>
   DIJS
-      .prefix('pb')
       .constant('doc', document.currentScript.ownerDocument)
       .run(require => {
 
-  const _ = require('/_');
-  const _M = require('/_M');
+  const _ = require('_');
+  const _M = require('_M');
 
   const doc = require('doc');
-  const expect = require('/expect');
-  const Utils = require('Utils');
+  const expect = require('expect');
+  const Utils = require('pb.Utils');
 
   describe('Utils', () => {
     describe('#extractTemplate', () => {

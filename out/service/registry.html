@@ -1,6 +1,7 @@
 <html><head><base href="..">
 
 <link rel="import" href="ability/abilities.html">
+<link rel="import" href="external.html">
 <link rel="import" href="service/config.html">
 <link rel="import" href="third_party/di.html">
 
@@ -10,10 +11,10 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("service.Registry", function (require) {
-
-  var Abilities = require("ability.Abilities");
-  var Config = require("service.Config");
+DIJS.bind("pb.service.Registry", function (require) {
+  var Abilities = require("pb.ability.Abilities");
+  var Config = require("pb.service.Config");
+  var console = require("console");
 
   var __elements__ = Symbol();
   var __toRun__ = Symbol();
@@ -34,20 +35,40 @@ DIJS.prefix("pb").bind("service.Registry", function (require) {
           }
           this[__elements__].set(name, ctor.prototype);
           this.runAtRegister(function (doc, Config) {
-            var builder = Abilities.of(ctor.prototype);
-
             if (!Config.getAll(name)) {
               console.warn("No configuration for " + name);
-              return;
+            } else {
+              var builder = Abilities.of(ctor.prototype);
+              var _iteratorNormalCompletion = true;
+              var _didIteratorError = false;
+              var _iteratorError = undefined;
+
+              try {
+                for (var _iterator = Config.getAll(name)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                  var ability = _step.value;
+
+                  builder.add(ability);
+                }
+              } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion && _iterator["return"]) {
+                    _iterator["return"]();
+                  }
+                } finally {
+                  if (_didIteratorError) {
+                    throw _iteratorError;
+                  }
+                }
+              }
             }
-            Config.getAll(name).forEach(function (ability) {
-              builder.add(ability);
-            });
 
             try {
               doc.registerElement(name, ctor);
             } catch (e) {
-              console.warn(e);
+              console.warn(e.message);
             }
           });
           return this;
@@ -91,6 +112,7 @@ DIJS.prefix("pb").bind("service.Registry", function (require) {
       },
       reset: {
         value: function reset() {
+          console.warn("Registry#reset is deprecated");
           this[__elements__] = new Map();
           this[__toRun__] = [];
         }

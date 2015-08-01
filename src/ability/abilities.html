@@ -1,23 +1,20 @@
 <base href="..">
 
+<link rel="import" href="external.html">
 <link rel="import" href="polyfill.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="utils.html">
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('ability.Abilities', (require, optional) => {
-
-  const TEST_MODE = optional('/TEST_MODE');
-  const Utils = require('Utils');
-
-  // Private symbols.
-  const __abilities__ = Symbol('abilities');
+.bind('pb.ability.Abilities.__symbols__', () => {
+  return {
+    __abilities__: Symbol('abilities')
+  };
+})
+.bind('pb.ability.Abilities.__builder__', require => {
+  const __abilities__ = require('pb.ability.Abilities.__symbols__').__abilities__;
   const __elProto__ = Symbol();
-  const __observer__ = Symbol('observer');
-
-  const __onMutation__ = Symbol('onMutation');
 
   class Builder {
 
@@ -86,6 +83,18 @@ DIJS
     }
   }
 
+  return Builder;
+})
+.bind('pb.ability.Abilities.__ctor__', require => {
+  const Builder = require('pb.ability.Abilities.__builder__');
+  const MutationObserver = require('MutationObserver');
+  const Utils = require('pb.Utils');
+
+  // Private symbols.
+  const __abilities__ = require('pb.ability.Abilities.__symbols__').__abilities__;
+  const __observer__ = Symbol('observer');
+  const __onMutation__ = Symbol('onMutation');
+
   /**
    * Helper class to register abilities to custom elements. You can use this class to customize
    * abilities, add abilities, and trigger registered abilities. Any interactions should start with
@@ -100,7 +109,7 @@ DIJS
    * @class ability.Abilities
    * @static
    */
-  const Abilities = {
+  class Abilities {
 
     /**
      * Handler called when the MutationObserver detected a change.
@@ -117,7 +126,7 @@ DIJS
           el[__abilities__].get(attrName).updateConfig(el);
         }
       }
-    },
+    }
 
     /**
      * Creates a new {{#crossLink "ability.Abilities.Builder"}}Builder{{/crossLink}} to operate on
@@ -129,7 +138,7 @@ DIJS
      */
     of(proto) {
       return new Builder(proto);
-    },
+    }
 
     /**
      * Initializes the added abilities on the given element.
@@ -164,7 +173,7 @@ DIJS
       abilities.forEach(ability => {
         ability.init(el);
       });
-    },
+    }
 
     /**
      * Triggers the ability corresponding to the given name.
@@ -186,13 +195,13 @@ DIJS
 
       ability.trigger(el);
     }
-  };
-
-  if (TEST_MODE) {
-    Abilities.Builder = Builder;
   }
 
   return Abilities;
+})
+.bind('pb.ability.Abilities', require => {
+  const Abilities = require('pb.ability.Abilities.__ctor__');
+  return new Abilities();
 });
 
 </script>

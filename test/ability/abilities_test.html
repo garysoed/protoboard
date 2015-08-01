@@ -4,45 +4,168 @@
   <base href="..">
   <title>ability.Abilities Unit Tests</title>
 
-  <link rel="import" href="testbase.html">
-
   <link rel="import" href="ability/abilities.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="testing/fakemutationobserver.html">
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('fakeTriggerable', require => require('t').createFakeAbility('fakeTriggerable'))
-      .with('ability.Triggerable', require => {
-        var fakeTriggerable = require('fakeTriggerable');
+<script>
+DIJS
+.with('MutationObserver', require => require('pb.testing.FakeMutationObserver'))
+.run(require => {
+  const _ = require('_');
+  const _M = require('_M');
+  const Abilities = require('pb.ability.Abilities.__ctor__');
+  const Builder = require('pb.ability.Abilities.__builder__');
+  const expect = require('expect');
+  const t = require('pb.t');
+  const Utils = require('pb.Utils');
 
-        return (config, knownAbilities) => {
-          fakeTriggerable.config = config;
-          fakeTriggerable.knownAbilities = knownAbilities;
-          return fakeTriggerable;
-        };
-    })
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
-
-  const _ = require('/_');
-  const _M = require('/_M');
-  const Abilities = require('ability.Abilities');
-  const doc = require('doc');
-  const expect = require('/expect');
-  const t = require('t');
-  const Utils = require('Utils');
+  const __abilities__ = require('pb.ability.Abilities.__symbols__').__abilities__;
 
   describe('ability.Abilities', () => {
-    describe('$Builder', () => {
+    let abilities;
+    let FakeElement;
 
+    beforeEach(done => {
+      abilities = new Abilities();
+
+      FakeElement = function() {};
+      FakeElement.prototype = Object.create(HTMLElement.prototype);
+
+      done();
+    });
+
+    describe('#__onMutation__', () => {
+      it('should call updateConfig for every record object', () => {
+        let ability1 = t.createFakeAbility('ability 1');
+        let ability2 = t.createFakeAbility('ability 2');
+        let records = [
+          {
+            target: new FakeElement(),
+            attributeName: ability1.attrName
+          },
+          {
+            target: new FakeElement(),
+            attributeName: ability2.attrName
+          }
+        ];
+
+        abilities.of(FakeElement.prototype)
+            .add(ability1)
+            .add(ability2);
+
+        t.getPrivateMethod(abilities, 'onMutation')(records);
+        expect(ability1.updateConfig).calledWith(records[0].target).at.least(1);
+        expect(ability2.updateConfig).calledWith(records[1].target).at.least(1);
+      });
+      it('should not throw exception if the element has no abilities', () => {
+        t.getPrivateMethod(abilities, 'onMutation')([{
+          target: new FakeElement(),
+          attributeName: 'attributeName'
+        }]);
+      });
+      it('should not throw exception if the element has no attribute that has been mutated', () => {
+        let ability = t.createFakeAbility('ability');
+        ability.attrName = 'attrName';
+        ability.attrTrigger = 'attrTrigger';
+
+        let el = new FakeElement();
+        abilities.of(FakeElement.prototype).add(ability);
+
+        t.getPrivateMethod(abilities, 'onMutation')([{ target: el, attributeName: 'nonExistent' }]);
+      });
+    });
+
+    describe('#init', () => {
       let el;
-      let builder;
 
       beforeEach(done => {
-        el = doc.createElement('div');
-        builder = new Abilities.Builder(el);
+        el = new FakeElement();
+        done();
+      });
+
+      it('should observe mutation and call set default value for every registered ability', () => {
+        let ability1 = t.createFakeAbility('ability 1');
+        let ability2 = t.createFakeAbility('ability 2');
+
+        abilities.of(FakeElement.prototype)
+            .add(ability1)
+            .add(ability2);
+
+        _.spy(Utils, 'extendFn');
+
+        abilities.init(el);
+
+        expect(ability1.init).calledWith(el).at.least(1);
+        expect(ability2.init).calledWith(el).at.least(1);
+
+        let observer = t.getPrivateProperty(el, 'observer');
+        _.spy(observer, 'observe');
+        _.spy(observer, 'disconnect');
+
+        // Check the attached callback.
+        let attachedCallbackCaptor = _M.isA(Function);
+        expect(Utils.extendFn)
+            .calledWith(el, 'attachedCallback', attachedCallbackCaptor).at.least(1);
+        attachedCallbackCaptor.matchingArgs[0]();
+
+        let configCaptor = _M.isA(Object);
+        expect(observer.observe).calledWith(el, configCaptor).at.least(1);
+
+        let config = configCaptor.matchingArgs[0];
+        expect(config.attributes).to.be.true;
+
+        // Check the detached callback.
+        let detachedCallbackCaptor = _M.isA(Function);
+        expect(Utils.extendFn)
+            .calledWith(el, 'detachedCallback', detachedCallbackCaptor).at.least(1);
+        detachedCallbackCaptor.matchingArgs[0]();
+
+        expect(observer.disconnect).calledWith().at.least(1);
+      });
+      it('should handle element with no registered abilities', () => {
+        abilities.init(el);
+        expect(t.getPrivateProperty(el, 'observer')).to.be.instanceOf(MutationObserver);
+      });
+      it('should throw exception if the element has been initialized', () => {
+        abilities.init(el);
+        expect(() => abilities.init(el)).to.throw('already initialized');
+      });
+    });
+
+    describe('#trigger', () => {
+      let el;
+
+      beforeEach(done => {
+        el = new FakeElement();
+        done();
+      });
+
+      it('should trigger the ability', () => {
+        let ability = t.createFakeAbility('ability');
+        abilities.of(FakeElement.prototype).add(ability);
+
+        _.spy(ability, 'trigger');
+        abilities.trigger(el, ability.attrName);
+        expect(ability.trigger).calledWith(el).at.least(1);
+      });
+      it('should throw error if the element has no abilities', () => {
+        expect(() => abilities.trigger(el, 'ability')).to.throw(Error);
+      });
+      it('should throw error if the element does not have the specified ability', () => {
+        let ability = t.createFakeAbility('ability');
+        abilities.of(FakeElement.prototype).add(ability);
+        expect(() => abilities.trigger(el, 'other ability')).to.throw(Error);
+      });
+    });
+
+    describe('$Builder', () => {
+      let builder;
+
+      beforeEach(function(done) {
+        builder = new Builder(FakeElement.prototype);
         done();
       });
 
@@ -52,9 +175,9 @@
 
           expect(builder.add(ability)).to.equal(builder);
 
-          let abilities = el[t.getSymbol(el, 'abilities')];
-          expect(abilities.get(ability.attrName)).to.equal(ability);
-          expect(abilities.get(ability.attrTrigger)).to.equal(ability);
+          let addedAbilities = FakeElement.prototype[__abilities__];
+          expect(addedAbilities.get(ability.attrName)).to.equal(ability);
+          expect(addedAbilities.get(ability.attrTrigger)).to.equal(ability);
         });
         it('should add ability to an element with another ability', () => {
           let ability1 = t.createFakeAbility('Ability 1');
@@ -62,12 +185,12 @@
 
           expect(builder.add(ability1).add(ability2)).to.equal(builder);
 
-          let abilities = el[t.getSymbol(el, 'abilities')];
-          expect(abilities.get(ability1.attrName)).to.equal(ability1);
-          expect(abilities.get(ability1.attrTrigger)).to.equal(ability1);
+          let addedAbilities = FakeElement.prototype[__abilities__];
+          expect(addedAbilities.get(ability1.attrName)).to.equal(ability1);
+          expect(addedAbilities.get(ability1.attrTrigger)).to.equal(ability1);
 
-          expect(abilities.get(ability2.attrName)).to.equal(ability2);
-          expect(abilities.get(ability2.attrTrigger)).to.equal(ability2);
+          expect(addedAbilities.get(ability2.attrName)).to.equal(ability2);
+          expect(addedAbilities.get(ability2.attrTrigger)).to.equal(ability2);
         });
         it('should throw exception if an ability with the same name has been registered', () => {
           let ability1 = t.createFakeAbility('Ability');
@@ -76,20 +199,18 @@
           builder.add(ability1);
 
           expect(() => builder.add(ability2))
-              .to
-              .throw(`${ability1.attrName} is already registered`);
+              .to.throw(`${ability1.attrName} is already registered`);
         });
         it('should throw exception if an ability with the same trigger has been registered', () => {
           let ability1 = t.createFakeAbility('Ability');
-          ability1.attrName = 'AttrName';
           let ability2 = t.createFakeAbility('Ability');
+          ability1.attrName = 'AttrName';
           ability2.attrName = 'AttrName2';
 
           builder.add(ability1);
 
           expect(() => builder.add(ability2))
-              .to
-              .throw(`${ability1.attrTrigger} is already registered`);
+              .to.throw(`${ability1.attrTrigger} is already registered`);
         });
       });
 
@@ -108,146 +229,11 @@
       });
     });
 
-    describe('#__onMutation__', () => {
-
-      const __onMutation__ = t.getSymbol(Abilities, 'onMutation');
-
-      it('should call updateConfig for every record object', () => {
-        let ability1 = t.createFakeAbility('ability 1');
-        let ability2 = t.createFakeAbility('ability 2');
-        let records = [
-          {
-            target: doc.createElement('div'),
-            attributeName: ability1.attrName
-          },
-          {
-            target: doc.createElement('title'),
-            attributeName: ability2.attrName
-          }
-        ];
-
-        Abilities.of(records[0].target).add(ability1);
-        Abilities.of(records[1].target).add(ability2);
-
-        Abilities[__onMutation__](records);
-        expect(ability1.updateConfig).calledWith(records[0].target).at.least(1);
-        expect(ability2.updateConfig).calledWith(records[1].target).at.least(1);
-      });
-      it('should not throw exception if the element has no abilities', () => {
-        Abilities[__onMutation__]([{
-          target: doc.createElement('div'),
-          attributeName: 'attributeName'
-        }]);
-      });
-      it('should not throw exception if the element has no attribute that has been mutated', () => {
-        let ability = t.createFakeAbility('ability');
-        ability.attrName = 'attrName';
-        ability.attrTrigger = 'attrTrigger';
-        let el = doc.createElement('div');
-
-        Abilities.of(el).add(ability);
-
-        Abilities[__onMutation__]([{ target: el, attributeName: 'nonExistent' }]);
-      });
-    });
-
-    describe('#init', () => {
-      let el;
-
-      beforeEach(done => {
-        el = doc.createElement('div');
-        done();
-      });
-
-      it('should observe mutation and call set default value for every registered ability', () => {
-        let ability1 = t.createFakeAbility('ability 1');
-        let ability2 = t.createFakeAbility('ability 2');
-
-        Abilities.of(el)
-            .add(ability1)
-            .add(ability2);
-
-        _.spy(Utils, 'extendFn');
-
-        Abilities.init(el);
-
-        expect(ability1.init).calledWith(el).at.least(1);
-        expect(ability2.init).calledWith(el).at.least(1);
-
-        let observer = el[t.getSymbol(el, 'observer')];
-        _.spy(observer, 'observe');
-        _.spy(observer, 'disconnect');
-
-        // Check the attached callback.
-        let attachedCallbackCaptor = _M.isA(Function);
-        expect(Utils.extendFn)
-            .calledWith(el, 'attachedCallback', attachedCallbackCaptor)
-            .at
-            .least(1);
-        attachedCallbackCaptor.matchingArgs[0]();
-
-        let configCaptor = _M.isA(Object);
-        expect(observer.observe).calledWith(el, configCaptor).at.least(1);
-
-        let config = configCaptor.matchingArgs[0];
-        expect(config.attributes).to.be.true;
-
-        // Check the detached callback.
-        let detachedCallbackCaptor = _M.isA(Function);
-        expect(Utils.extendFn)
-            .calledWith(el, 'detachedCallback', detachedCallbackCaptor)
-            .at
-            .least(1);
-        detachedCallbackCaptor.matchingArgs[0]();
-
-        expect(observer.disconnect).calledWith().at.least(1);
-      });
-      it('should handle element with no registered abilities', () => {
-        Abilities.init(el);
-        expect(el[t.getSymbol(el, 'observer')]).to.be.instanceOf(MutationObserver);
-      });
-      it('should throw exception if the element has been initialized', () => {
-        Abilities.init(el);
-        expect(() => Abilities.init(el)).to.throw('already initialized');
-      });
-    });
-
-    describe('#trigger', () => {
-      let el;
-
-      beforeEach(done => {
-        el = doc.createElement('div');
-        done();
-      });
-
-      it('should trigger the ability', () => {
-        let ability = t.createFakeAbility('ability');
-        Abilities.of(el.constructor.prototype).add(ability);
-
-        _.spy(ability, 'trigger');
-        Abilities.trigger(el, ability.attrName);
-        expect(ability.trigger).calledWith(el).at.least(1);
-      });
-      it('should throw error if the element has no abilities', () => {
-        expect(() => Abilities.trigger(el, 'ability')).to.throw(Error);
-      });
-      it('should throw error if the element does not have the specified ability', () => {
-        let ability = t.createFakeAbility('ability');
-        Abilities.of(el.constructor.prototype).add(ability);
-        expect(() => Abilities.trigger(el, 'other ability')).to.throw(Error);
-      });
-
-      afterEach(done => {
-        Abilities.of(el.constructor.prototype).reset();
-        done();
-      });
-    });
-
     afterEach(done => {
       _.reset();
       done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

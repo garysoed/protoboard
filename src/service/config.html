@@ -4,9 +4,7 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('service.Config', require => {
-
+.bind('pb.service.Config.__ctor__', () => {
   const configuration = new Map();
 
   /**
@@ -35,7 +33,7 @@ DIJS
    * @class service.Config
    * @static
    */
-  const Config = {
+  class Config {
 
     /**
      * Adds the given abilities to the given element name.
@@ -55,7 +53,7 @@ DIJS
       });
 
       return this;
-    },
+    }
 
     /**
      * @method getAll
@@ -66,7 +64,7 @@ DIJS
      */
     getAll(elementName) {
       return configuration.get(elementName) || null;
-    },
+    }
 
     /**
      * Sets the given trigger as the default trigger for abilities whose name matches the given
@@ -88,7 +86,7 @@ DIJS
           }
         }
       }
-    },
+    }
 
     /**
      * Removes all configurations that has been added to the service.
@@ -98,8 +96,12 @@ DIJS
     reset() {
       configuration.clear();
     }
-  };
+  }
 
   return Config;
+})
+.bind('pb.service.Config', require => {
+  const Service = require('pb.service.Config');
+  return new Service();
 });
 </script>

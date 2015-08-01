@@ -1,0 +1,26 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+DIJS
+.bind('pb.testing.FakeMutationObserver', () => {
+
+  class FakeMutationObserver extends MutationObserver {
+    constructor(handler) {
+      this.handler = handler;
+      this.el = null;
+      this.observerConfig = null;
+    }
+
+    observe(el, observerConfig) {
+      this.el = el;
+      this.observerConfig = observerConfig;
+    }
+
+    disconnect() { }
+  }
+
+  return FakeMutationObserver;
+});
+</script>

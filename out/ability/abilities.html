@@ -1,27 +1,25 @@
 <html><head><base href="..">
 
+<link rel="import" href="external.html">
 <link rel="import" href="polyfill.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="utils.html">
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("ability.Abilities", function (require, optional) {
-
-  var TEST_MODE = optional("/TEST_MODE");
-  var Utils = require("Utils");
-
-  var __abilities__ = Symbol("abilities");
+DIJS.bind("pb.ability.Abilities.__symbols__", function () {
+  return {
+    __abilities__: Symbol("abilities")
+  };
+}).bind("pb.ability.Abilities.__builder__", function (require) {
+  var __abilities__ = require("pb.ability.Abilities.__symbols__").__abilities__;
   var __elProto__ = Symbol();
-  var __observer__ = Symbol("observer");
-
-  var __onMutation__ = Symbol("onMutation");
 
   var Builder = (function () {
     function Builder(proto) {
@@ -97,91 +95,108 @@ DIJS.prefix("pb").bind("ability.Abilities", function (require, optional) {
     return Builder;
   })();
 
+  return Builder;
+}).bind("pb.ability.Abilities.__ctor__", function (require) {
+  var Builder = require("pb.ability.Abilities.__builder__");
+  var MutationObserver = require("MutationObserver");
+  var Utils = require("pb.Utils");
+
+  var __abilities__ = require("pb.ability.Abilities.__symbols__").__abilities__;
+  var __observer__ = Symbol("observer");
+  var __onMutation__ = Symbol("onMutation");
+
   var Abilities = (function () {
-    var _Abilities = {};
+    function Abilities() {
+      _classCallCheck(this, Abilities);
+    }
 
-    _defineProperty(_Abilities, __onMutation__, function (records) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+    _createComputedClass(Abilities, [{
+      key: __onMutation__,
+      value: function (records) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
-      try {
-        for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var record = _step.value;
-
-          var el = record.target;
-          var attrName = record.attributeName;
-          if (el[__abilities__] && el[__abilities__].has(attrName)) {
-            el[__abilities__].get(attrName).updateConfig(el);
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator["return"]) {
-            _iterator["return"]();
+          for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var record = _step.value;
+
+            var el = record.target;
+            var attrName = record.attributeName;
+            if (el[__abilities__] && el[__abilities__].has(attrName)) {
+              el[__abilities__].get(attrName).updateConfig(el);
+            }
           }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
           }
         }
       }
-    });
-
-    _defineProperty(_Abilities, "of", function of(proto) {
-      return new Builder(proto);
-    });
-
-    _defineProperty(_Abilities, "init", function init(el) {
-      if (el[__observer__]) {
-        throw "Element " + el + " is already initialized";
+    }, {
+      key: "of",
+      value: function of(proto) {
+        return new Builder(proto);
       }
-      el[__observer__] = new MutationObserver(this[__onMutation__]);
+    }, {
+      key: "init",
+      value: function init(el) {
+        if (el[__observer__]) {
+          throw "Element " + el + " is already initialized";
+        }
+        el[__observer__] = new MutationObserver(this[__onMutation__]);
 
-      if (!el[__abilities__]) {
-        return;
+        if (!el[__abilities__]) {
+          return;
+        }
+
+        var observerConfig = {
+          attributes: true
+        };
+
+        Utils.extendFn(el, "attachedCallback", function () {
+          return el[__observer__].observe(el, observerConfig);
+        });
+        Utils.extendFn(el, "detachedCallback", function () {
+          return el[__observer__].disconnect();
+        });
+
+        var abilities = new Set(el[__abilities__].values());
+        abilities.forEach(function (ability) {
+          ability.init(el);
+        });
       }
+    }, {
+      key: "trigger",
+      value: function trigger(el, name) {
+        var ability = null;
+        if (el[__abilities__]) {
+          ability = el[__abilities__].get(name);
+        }
 
-      var observerConfig = {
-        attributes: true
-      };
+        if (!ability) {
+          throw new Error("Ability " + name + " is not registered with element " + el);
+        }
 
-      Utils.extendFn(el, "attachedCallback", function () {
-        return el[__observer__].observe(el, observerConfig);
-      });
-      Utils.extendFn(el, "detachedCallback", function () {
-        return el[__observer__].disconnect();
-      });
-
-      var abilities = new Set(el[__abilities__].values());
-      abilities.forEach(function (ability) {
-        ability.init(el);
-      });
-    });
-
-    _defineProperty(_Abilities, "trigger", function trigger(el, name) {
-      var ability = null;
-      if (el[__abilities__]) {
-        ability = el[__abilities__].get(name);
+        ability.trigger(el);
       }
+    }]);
 
-      if (!ability) {
-        throw new Error("Ability " + name + " is not registered with element " + el);
-      }
-
-      ability.trigger(el);
-    });
-
-    return _Abilities;
+    return Abilities;
   })();
 
-  if (TEST_MODE) {
-    Abilities.Builder = Builder;
-  }
-
   return Abilities;
+}).bind("pb.ability.Abilities", function (require) {
+  var Abilities = require("pb.ability.Abilities.__ctor__");
+  return new Abilities();
 });</script>
 </head><body></body></html>
