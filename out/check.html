@@ -8,7 +8,7 @@ var _createComputedClass = (function () { function defineProperties(target, prop
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("Check", function () {
+DIJS.bind("pb.Check.__ctor__", function () {
   var __checked__ = Symbol();
   var __input__ = Symbol();
   var __value__ = Symbol();
@@ -111,6 +111,10 @@ DIJS.prefix("pb").bind("Check", function () {
 
     return Check;
   })();
+
+  return Check;
+}).bind("pb.Check", function (require) {
+  var Check = require("pb.Check.__ctor__");
 
   function check(input) {
     return new Check(input);

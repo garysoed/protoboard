@@ -10,13 +10,11 @@
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .run(require => {
-
-  const expect = require('/expect');
-  const Check = require('Check');
+<script>
+DIJS
+.run(require => {
+  const expect = require('expect');
+  const Check = require('pb.Check');
 
   describe('Check', () => {
     describe('#isInt', () => {
@@ -114,6 +112,6 @@
       });
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

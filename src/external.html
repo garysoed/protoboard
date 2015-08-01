@@ -3,6 +3,10 @@
 <link rel="import" href="third_party/di.html">
 
 <script>
+/**
+ * Wraps built in external vars so they are overridable in tests.
+ */
+
 DIJS
 .bind('MutationObserver', () => MutationObserver)
 .bind('console', () => console);

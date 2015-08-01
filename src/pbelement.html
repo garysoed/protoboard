@@ -6,11 +6,10 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('PbElement', require => {
+.bind('pb.PbElement', require => {
 
-  const $ = require('/$');
-  const Abilities = require('ability.Abilities');
+  const $ = require('$');
+  const Abilities = require('pb.ability.Abilities');
 
   // Private symbols.
   const __createdPromise__ = Symbol();

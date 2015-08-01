@@ -93,7 +93,7 @@ DIJS
   return Bootstrap;
 })
 .bind('pb.Bootstrap', require => {
-  const Bootstrap = require('pb.Bootstrap');
+  const Bootstrap = require('pb.Bootstrap.__ctor__');
   return new Bootstrap();
 });
 </script>

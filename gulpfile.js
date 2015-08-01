@@ -237,12 +237,12 @@ gulp.task('watch', gulp.parallel(
     gulp.series(
         'source',
         function _watchSources() {
-          gulp.watch(SRC_DIR + '/**/*.html', gulp.task('source'));
+          gulp.watch([SRC_DIR + '/**/*.html', SRC_DIR + '/*.html'], gulp.task('source'));
         }),
     gulp.series(
         'test-source',
         function _watchTestSources() {
-          gulp.watch(TEST_DIR + '/**/*.html', gulp.task('test-source'));
+          gulp.watch([TEST_DIR + '/**/*.html', TEST_DIR + '/*.html'], gulp.task('test-source'));
         })
     ));
 

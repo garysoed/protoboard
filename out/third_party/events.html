@@ -8,10 +8,9 @@
 
 <script>"use strict";
 
-DIJS.prefix("pb").bind("Events", function (require) {
-
-  var $ = require("/$");
-  var Hammer = require("Hammer");
+DIJS.bind("pb.Events", function (require) {
+  var $ = require("$");
+  var Hammer = require("pb.Hammer");
 
   var Handlers = window.Events.Handlers;
   Handlers.add("dom", function (element, eventName, handler) {

@@ -9,17 +9,16 @@
   <link rel="import" href="testbase.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const $ = require('/$');
+  const _ = require('_');
+  const $ = require('$');
   const doc = require('doc');
-  const expect = require('/expect');
-  const PbElement = require('PbElement');
+  const expect = require('expect');
+  const PbElement = require('pb.PbElement');
 
   describe('PbElement', () => {
     describe('#createdCallback', () => {
@@ -84,6 +83,6 @@
       });
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

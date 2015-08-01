@@ -4,55 +4,64 @@
 <link rel="import" href="third_party/di.html">
 
 <script>
-const __setupFn__ = Symbol();
-
-/**
- * The entry point to Protoboard. Use this class to setup the game and run it.
- *
- * @class Protoboard
- * @static
- */
-const Protoboard = {
+DIJS
+.bind('pb.Protoboard.__ctor__', require => {
+  const DIJS = require('DIJS');
+  const __setupFn__ = Symbol();
 
   /**
-   * Registers a function to be ran before the game is ran.
+   * The entry point to Protoboard. Use this class to setup the game and run it.
    *
-   * @method setup
-   * @param {Function} setupFn Function to be run before the game starts. This function has one
-   *     argument, which is a function that can be used to retrieve Protoboard classes.
-   * @return {Protoboard} This object for chainin.
+   * @class Protoboard
+   * @static
    */
-  setup(setupFn) {
-    this[__setupFn__] = setupFn;
-    return this;
-  },
+  class Protoboard {
 
-  /**
-   * Runs the game on the given document object.
-   *
-   * @method run
-   * @param {Document} [doc = document] Document to run the game on. Defaults to the root document
-   *     if not specified.
-   * @return {Promise} Promise that will be resolved with a function when the game has started. Use
-   *     this function to retrieve Protoboard classes.
-   */
-  run(doc = document) {
-    return new Promise((resolve, reject) => {
-      DIJS.run((require, optional) => {
-        const Bootstrap = require('pb.Bootstrap');
+    /**
+     * Registers a function to be ran before the game is ran.
+     *
+     * @method setup
+     * @param {Function} setupFn Function to be run before the game starts. This function has one
+     *     argument, which is a function that can be used to retrieve Protoboard classes.
+     * @return {Protoboard} This object for chainin.
+     */
+    setup(setupFn) {
+      this[__setupFn__] = setupFn;
+      return this;
+    }
 
-        if (this[__setupFn__]) {
-          this[__setupFn__](require);
-        }
+    /**
+     * Runs the game on the given document object.
+     *
+     * @method run
+     * @param {Document} [doc = document] Document to run the game on. Defaults to the root document
+     *     if not specified.
+     * @return {Promise} Promise that will be resolved with a function when the game has started. Use
+     *     this function to retrieve Protoboard classes.
+     */
+    run(doc = document) {
+      return new Promise((resolve, reject) => {
+        DIJS.run(require => {
+          const Bootstrap = require('pb.Bootstrap');
 
-        Bootstrap.run(doc)
-            .then(() => {
-              resolve(require);
-            });
+          if (this[__setupFn__]) {
+            this[__setupFn__](require);
+          }
+
+          Bootstrap.run(doc)
+              .then(() => {
+                resolve(require);
+              });
+        });
       });
-    });
+    }
   }
-};
 
-window['Protoboard'] = Protoboard;
+  return Protoboard;
+});
+
+window['Protoboard'] = DIJS.run(require => {
+  const Protoboard = require('pb.Protoboard.__ctor__');
+  return new Protoboard();
+});
 </script>

@@ -5,8 +5,7 @@
 <script>
 
 DIJS
-    .prefix('pb')
-    .bind('Check', () => {
+.bind('pb.Check.__ctor__', () => {
 
   // Private symbols.
   const __checked__ = Symbol();
@@ -178,6 +177,11 @@ DIJS
       return (this[__value__] === undefined) ? backup : this[__value__];
     }
   }
+
+  return Check;
+})
+.bind('pb.Check', require => {
+  const Check = require('pb.Check.__ctor__');
 
   function check(input) {
     return new Check(input);

@@ -9,81 +9,84 @@
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .with('Bootstrap', require => {
-        const _ = require('/_');
-        return {
-          run: _.spiedFunction()
-        };
-      })
-      .run(require => {
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.constant('DIJS', {
+  keys: new Map(),
+  require: function(key) {
+    return this.keys.get(key);
+  },
+  run: function(fn) {
+    fn(this.require.bind(this));
+  }
+})
+.run(require => {
 
-    const _ = require('/_');
-    const doc = require('doc');
-    const expect = require('/expect');
+  const _ = require('_');
+  const DIJS = require('DIJS');
+  const doc = require('doc');
+  const expect = require('expect');
+  const Protoboard = require('pb.Protoboard.__ctor__');
 
-    describe.only('Protoboard', () => {
-      describe('#run', () => {
-        it('should call the setup function before calling Bootstrap', done => {
-          Protoboard
-              .setup(require => {
-              })
-              .run()
-              .then(require => {
-                expect(Bootstrap.run).called().at.least(1);
-                done();
-              });
-        });
-        it('should pass the same require and optional in the setup and in the resolve handler', done => {
-          let setupFn = _.spiedFunction();
-          Protoboard
-              .setup((require, optional) => {
-                setupFn(require, optional);
-              })
-              .run()
-              .then(require => {
-                expect(setupFn).calledWith(require).at.least(1);
-                done();
-              });
-        });
-        it('should run Bootstrap on root document if not specified', done => {
-          Protoboard
-              .setup(require => {
-                const Bootstrap = require('pb.Bootstrap');
-                _.spy(Bootstrap, 'run').overrideReturn(Promise.resolve());
-              })
-              .run()
-              .then(require => {
-                const Bootstrap = require('pb.Bootstrap');
+  describe.only('Protoboard', () => {
+    let bootstrap;
+    let protoboard;
 
-                expect(Bootstrap.run).calledWith(document).at.least(1);
-                done();
-              });
-        });
-        it('should run Bootstrap on the specified document', done => {
-          Protoboard
-              .setup(require => {
-                const Bootstrap = require('pb.Bootstrap');
-                _.spy(Bootstrap, 'run').overrideReturn(Promise.resolve());
-              })
-              .run(doc)
-              .then(require => {
-                const Bootstrap = require('pb.Bootstrap');
+    beforeEach(() => {
+      bootstrap = {
+        run: _.spiedFunction().overrideReturn(Promise.resolve(null))
+      };
+      protoboard = new Protoboard();
 
-                expect(Bootstrap.run).calledWith(doc).at.least(1);
-                done();
-              });
-        });
+      DIJS.keys.set('pb.Bootstrap', bootstrap);
+    });
+
+    describe('#run', () => {
+      it('should call the setup function before calling Bootstrap', done => {
+        let setupFn = _.spiedFunction();
+        protoboard
+            .setup(setupFn)
+            .run()
+            .then(require => {
+              expect(bootstrap.run).called().at.least(1);
+              expect(setupFn).calledWith(require).at.least(1);
+              expect(setupFn).called().before(bootstrap.run).called();
+              done();
+            });
       });
-
-      afterEach(done => {
-        _.reset();
-        done();
+      it('should pass the same require in the setup and in the resolve handler', done => {
+        let setupFn = _.spiedFunction();
+        protoboard
+            .setup(setupFn)
+            .run()
+            .then(require => {
+              expect(setupFn).calledWith(require).at.least(1);
+              done();
+            });
+      });
+      it('should run Bootstrap on root document if not specified', done => {
+        protoboard
+            .run()
+            .then(require => {
+              expect(bootstrap.run).calledWith(document).at.least(1);
+              done();
+            });
+      });
+      it('should run Bootstrap on the specified document', done => {
+        protoboard
+            .run(doc)
+            .then(require => {
+              expect(bootstrap.run).calledWith(doc).at.least(1);
+              done();
+            });
       });
     });
+
+    afterEach(() => {
+      _.reset();
+    });
   });
-  </script>
+});
+</script>
 </body>

@@ -5,33 +5,57 @@
 
 <script>"use strict";
 
-var __setupFn__ = Symbol();
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var Protoboard = {
-  setup: function setup(setupFn) {
-    this[__setupFn__] = setupFn;
-    return this;
-  },
-  run: function run() {
-    var _this = this;
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-    var doc = arguments[0] === undefined ? document : arguments[0];
+DIJS.bind("pb.Protoboard.__ctor__", function (require) {
+  var DIJS = require("DIJS");
+  var __setupFn__ = Symbol();
 
-    return new Promise(function (resolve, reject) {
-      DIJS.run(function (require, optional) {
-        var Bootstrap = require("pb.Bootstrap");
+  var Protoboard = (function () {
+    function Protoboard() {
+      _classCallCheck(this, Protoboard);
+    }
 
-        if (_this[__setupFn__]) {
-          _this[__setupFn__](require);
+    _createClass(Protoboard, {
+      setup: {
+        value: function setup(setupFn) {
+          this[__setupFn__] = setupFn;
+          return this;
         }
+      },
+      run: {
+        value: function run() {
+          var _this = this;
 
-        Bootstrap.run(doc).then(function () {
-          resolve(require);
-        });
-      });
+          var doc = arguments[0] === undefined ? document : arguments[0];
+
+          return new Promise(function (resolve, reject) {
+            DIJS.run(function (require) {
+              var Bootstrap = require("pb.Bootstrap");
+
+              if (_this[__setupFn__]) {
+                _this[__setupFn__](require);
+              }
+
+              Bootstrap.run(doc).then(function () {
+                resolve(require);
+              });
+            });
+          });
+        }
+      }
     });
-  }
-};
 
-window.Protoboard = Protoboard;</script>
+    return Protoboard;
+  })();
+
+  return Protoboard;
+});
+
+window.Protoboard = DIJS.run(function (require) {
+  var Protoboard = require("pb.Protoboard.__ctor__");
+  return new Protoboard();
+});</script>
 </head><body></body></html>

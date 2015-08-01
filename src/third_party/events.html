@@ -8,11 +8,9 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('Events', require => {
-
-  const $ = require('/$');
-  const Hammer = require('Hammer');
+.bind('pb.Events', require => {
+  const $ = require('$');
+  const Hammer = require('pb.Hammer');
 
   let Handlers = window['Events']['Handlers'];
   Handlers
