@@ -112,7 +112,7 @@ DIJS.bind("pb.service.Config.__ctor__", function () {
 
   return Config;
 }).bind("pb.service.Config", function (require) {
-  var Service = require("pb.service.Config");
+  var Service = require("pb.service.Config.__ctor__");
   return new Service();
 });</script>
 </head><body></body></html>

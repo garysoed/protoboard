@@ -4,12 +4,10 @@
 
 <script>
 DIJS
-    .prefix('pb.trigger')
-    .bind('Triggers', () => {
-
-  const PARSE_FNS = new Set();
+.bind('pb.trigger.Triggers.__ctor__', () => {
 
   // Private symbols
+  const __parseFns__ = Symbol();
   const __observer__ = Symbol();
   const __target__ = Symbol();
   const __triggers__ = Symbol();
@@ -24,7 +22,11 @@ DIJS
    * @since 1.0.0
    * @static
    */
-  let Triggers = {
+  class Triggers {
+
+    constructor() {
+      this[__parseFns__] = new Set();
+    }
 
     /**
      * Parses the given string using the registered parse functions and returns the first matching
@@ -36,7 +38,7 @@ DIJS
      */
     parse(triggerString) {
       let trigger = null;
-      for (let parseFn of PARSE_FNS) {
+      for (let parseFn of this[__parseFns__]) {
         trigger = parseFn(triggerString);
         if (trigger) {
           break;
@@ -47,7 +49,7 @@ DIJS
         throw new Error(`Unparsable trigger string: ${triggerString}`);
       }
       return trigger;
-    },
+    }
 
     /**
      * Registers a parsing function.
@@ -57,19 +59,25 @@ DIJS
      *    parsed trigger if the input string is valid, or `undefined` otherwise.
      */
     register(parseFn) {
-      PARSE_FNS.add(parseFn);
-    },
+      this[__parseFns__].add(parseFn);
+    }
 
     /**
      * Clears any registered functions.
      *
      * @method clear
+     * @deprecated
      */
     clear() {
-      PARSE_FNS.clear();
+      console.warn('Deprecated - FOR TESTING ONLY');
+      this[__parseFns__].clear();
     }
-  };
+  }
 
   return Triggers;
+})
+.bind('pb.trigger.Triggers', require => {
+  const Triggers = require('pb.Triggers');
+  return new Triggers();
 });
 </script>

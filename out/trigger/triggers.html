@@ -4,60 +4,82 @@
 
 <script>"use strict";
 
-DIJS.prefix("pb.trigger").bind("Triggers", function () {
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  var PARSE_FNS = new Set();
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+DIJS.bind("pb.trigger.Triggers.__ctor__", function () {
+  var __parseFns__ = Symbol();
   var __observer__ = Symbol();
   var __target__ = Symbol();
   var __triggers__ = Symbol();
 
   var __onMutation__ = Symbol();
 
-  var Triggers = {
-    parse: function parse(triggerString) {
-      var trigger = null;
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+  var Triggers = (function () {
+    function Triggers() {
+      _classCallCheck(this, Triggers);
 
-      try {
-        for (var _iterator = PARSE_FNS[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var parseFn = _step.value;
-
-          trigger = parseFn(triggerString);
-          if (trigger) {
-            break;
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"]) {
-            _iterator["return"]();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      if (!trigger) {
-        throw new Error("Unparsable trigger string: " + triggerString);
-      }
-      return trigger;
-    },
-    register: function register(parseFn) {
-      PARSE_FNS.add(parseFn);
-    },
-    clear: function clear() {
-      PARSE_FNS.clear();
+      this[__parseFns__] = new Set();
     }
-  };
+
+    _createClass(Triggers, {
+      parse: {
+        value: function parse(triggerString) {
+          var trigger = null;
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = this[__parseFns__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var parseFn = _step.value;
+
+              trigger = parseFn(triggerString);
+              if (trigger) {
+                break;
+              }
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator["return"]) {
+                _iterator["return"]();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
+          }
+
+          if (!trigger) {
+            throw new Error("Unparsable trigger string: " + triggerString);
+          }
+          return trigger;
+        }
+      },
+      register: {
+        value: function register(parseFn) {
+          this[__parseFns__].add(parseFn);
+        }
+      },
+      clear: {
+        value: function clear() {
+          console.warn("Deprecated - FOR TESTING ONLY");
+          this[__parseFns__].clear();
+        }
+      }
+    });
+
+    return Triggers;
+  })();
 
   return Triggers;
+}).bind("pb.trigger.Triggers", function (require) {
+  var Triggers = require("pb.Triggers");
+  return new Triggers();
 });</script>
 </head><body></body></html>

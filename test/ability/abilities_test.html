@@ -28,13 +28,11 @@ DIJS
     let abilities;
     let FakeElement;
 
-    beforeEach(done => {
+    beforeEach(() => {
       abilities = new Abilities();
 
       FakeElement = function() {};
       FakeElement.prototype = Object.create(HTMLElement.prototype);
-
-      done();
     });
 
     describe('#__onMutation__', () => {
@@ -229,9 +227,8 @@ DIJS
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
 });

@@ -31,30 +31,31 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('$registry', require => new (require('service.Registry'))())
-    .bind('Bootstrap', (require, optional) => {
+.bind('pb.$registry', require => {
+  const Registry = require('pb.service.Registry');
+  return new Registry();
+})
+.bind('pb.Bootstrap.__ctor__', (require, optional) => {
+  const $registry = require('pb.$registry');
+  const Config = require('pb.service.Config');
+  const Utils = require('pb.Utils');
 
-  const $registry = require('$registry');
-  const Config = require('service.Config');
-  const Utils = require('Utils');
-
-  optional('component.Card');
-  optional('component.Dice');
-  optional('component.Token');
-  optional('grid.HexGrid');
-  optional('grid.RectGrid');
-  optional('grid.TriangleGrid');
-  optional('region.Bag');
-  optional('region.CubeTower');
-  optional('region.Deck');
-  optional('region.Hand');
-  optional('region.Rect');
-  optional('service.State');
-  optional('ui.Generate');
-  optional('ui.Preview');
-  optional('ui.Previewer');
-  optional('ui.Shape');
+  optional('pb.component.Card');
+  optional('pb.component.Dice');
+  optional('pb.component.Token');
+  optional('pb.grid.HexGrid');
+  optional('pb.grid.RectGrid');
+  optional('pb.grid.TriangleGrid');
+  optional('pb.region.Bag');
+  optional('pb.region.CubeTower');
+  optional('pb.region.Deck');
+  optional('pb.region.Hand');
+  optional('pb.region.Rect');
+  optional('pb.service.State');
+  optional('pb.ui.Generate');
+  optional('pb.ui.Preview');
+  optional('pb.ui.Previewer');
+  optional('pb.ui.Shape');
 
   /**
    * Class responsible for bootstrapping the entire app. Call the
@@ -63,7 +64,7 @@ DIJS
    * @class Bootstrap
    * @static
    */
-  const BOOTSTRAP = {
+  class Bootstrap {
 
     /**
      * Runs the bootstrapping logic. All setup logic should occur before calling this.
@@ -88,7 +89,11 @@ DIJS
             }
           });
       }
-  };
-  return BOOTSTRAP;
+  }
+  return Bootstrap;
+})
+.bind('pb.Bootstrap', require => {
+  const Bootstrap = require('pb.Bootstrap');
+  return new Bootstrap();
 });
 </script>

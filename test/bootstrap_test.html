@@ -9,22 +9,19 @@
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.run(require => {
+  const Bootstrap = require('pb.Bootstrap.__ctor__');
 
-    const Bootstrap = require('Bootstrap');
-    const doc = require('doc');
-
-    describe('Bootstrap', () => {
-      describe('#run', () => {
-        it('should not throw any exceptions', () => {
-          Bootstrap.run(doc);
-        });
+  describe('Bootstrap', () => {
+    describe('#run', () => {
+      it('should not throw any exceptions', () => {
+        let bootstrap = new Bootstrap();
+        bootstrap.run(document);
       });
     });
   });
-  </script>
+});
+</script>
 </body>

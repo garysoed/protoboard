@@ -101,7 +101,7 @@ DIJS
   return Config;
 })
 .bind('pb.service.Config', require => {
-  const Service = require('pb.service.Config');
+  const Service = require('pb.service.Config.__ctor__');
   return new Service();
 });
 </script>

@@ -10,49 +10,50 @@
   <link rel="import" href="trigger/triggers.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.run(require => {
+  const _ = require('_');
+  const expect = require('expect');
+  const Triggers = require('pb.trigger.Triggers.__ctor__');
 
-    const _ = require('/_');
-    const expect = require('/expect');
-    const Triggers = require('trigger.Triggers');
+  describe('trigger.Triggers', () => {
+    let triggers;
 
-    describe('trigger.Triggers', () => {
-      describe('#parse', () => {
-        it('should be able to parse a registered trigger', () => {
-          let result = 5;
-          let parser = _.spiedFunction().overrideReturn(result);
-          let string = 'triggerString';
-          Triggers.register(parser);
-          expect(Triggers.parse(string)).to.equal(result);
-          expect(parser).calledWith(string).at.least(1);
-        });
-        it('should return the first registered matching trigger', () => {
-          let result = 6;
-          let parser1 = _.spiedFunction().overrideReturn(result);
-          let parser2 = _.spiedFunction().overrideReturn(result);
-          let string = 'triggerString';
-          Triggers.register(parser1);
-          Triggers.register(parser2);
-          expect(Triggers.parse(string)).to.equal(result);
-          expect(parser1).calledWith(string).at.least(1);
-          expect(parser2).called().to.equal(0);
-        });
-        it('should throw an error if no trigger is found', () => {
-          let string = 'triggerString';
-          expect(() => Triggers.parse(string)).to.throw(string);
-        });
+    beforeEach(() => {
+      triggers = new Triggers();
+    });
+
+    describe('#parse', () => {
+      it('should be able to parse a registered trigger', () => {
+        let result = 5;
+        let parser = _.spiedFunction().overrideReturn(result);
+        let string = 'triggerString';
+        triggers.register(parser);
+        expect(triggers.parse(string)).to.equal(result);
+        expect(parser).calledWith(string).at.least(1);
       });
-
-      afterEach(done => {
-        Triggers.clear();
-        _.reset();
-        done();
+      it('should return the first registered matching trigger', () => {
+        let result = 6;
+        let parser1 = _.spiedFunction().overrideReturn(result);
+        let parser2 = _.spiedFunction().overrideReturn(result);
+        let string = 'triggerString';
+        triggers.register(parser1);
+        triggers.register(parser2);
+        expect(triggers.parse(string)).to.equal(result);
+        expect(parser1).calledWith(string).at.least(1);
+        expect(parser2).called().to.equal(0);
+      });
+      it('should throw an error if no trigger is found', () => {
+        let string = 'triggerString';
+        expect(() => triggers.parse(string)).to.throw(string);
       });
     });
+
+    afterEach(() => {
+      _.reset();
+    });
   });
-  </script>
+});
+</script>
 </body>

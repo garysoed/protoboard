@@ -29,69 +29,87 @@ p {
 
 <script>"use strict";
 
-DIJS.prefix("pb").bind("$registry", function (require) {
-  return new (require("service.Registry"))();
-}).bind("Bootstrap", function (require, optional) {
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  var $registry = require("$registry");
-  var Config = require("service.Config");
-  var Utils = require("Utils");
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  optional("component.Card");
-  optional("component.Dice");
-  optional("component.Token");
-  optional("grid.HexGrid");
-  optional("grid.RectGrid");
-  optional("grid.TriangleGrid");
-  optional("region.Bag");
-  optional("region.CubeTower");
-  optional("region.Deck");
-  optional("region.Hand");
-  optional("region.Rect");
-  optional("service.State");
-  optional("ui.Generate");
-  optional("ui.Preview");
-  optional("ui.Previewer");
-  optional("ui.Shape");
+DIJS.bind("pb.$registry", function (require) {
+  var Registry = require("pb.service.Registry");
+  return new Registry();
+}).bind("pb.Bootstrap.__ctor__", function (require, optional) {
+  var $registry = require("pb.$registry");
+  var Config = require("pb.service.Config");
+  var Utils = require("pb.Utils");
 
-  var BOOTSTRAP = {
-    run: function run(document) {
-      return Utils.watch(function () {
-        return document.readyState === "interactive" || document.readyState === "complete";
-      }).then(function () {
-        $registry.register(document, Config);
+  optional("pb.component.Card");
+  optional("pb.component.Dice");
+  optional("pb.component.Token");
+  optional("pb.grid.HexGrid");
+  optional("pb.grid.RectGrid");
+  optional("pb.grid.TriangleGrid");
+  optional("pb.region.Bag");
+  optional("pb.region.CubeTower");
+  optional("pb.region.Deck");
+  optional("pb.region.Hand");
+  optional("pb.region.Rect");
+  optional("pb.service.State");
+  optional("pb.ui.Generate");
+  optional("pb.ui.Preview");
+  optional("pb.ui.Previewer");
+  optional("pb.ui.Shape");
 
-        var tags = Utils.toArray(document.querySelectorAll(":unresolved")).map(function (el) {
-          return el.tagName.toLowerCase();
-        });
-        var tagSet = new Set(tags);
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = tagSet[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var tag = _step.value;
-
-            console.warn("Element " + tag + " is unresolved");
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator["return"]) {
-              _iterator["return"]();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-      });
+  var Bootstrap = (function () {
+    function Bootstrap() {
+      _classCallCheck(this, Bootstrap);
     }
-  };
-  return BOOTSTRAP;
+
+    _createClass(Bootstrap, {
+      run: {
+        value: function run(document) {
+          return Utils.watch(function () {
+            return document.readyState === "interactive" || document.readyState === "complete";
+          }).then(function () {
+            $registry.register(document, Config);
+
+            var tags = Utils.toArray(document.querySelectorAll(":unresolved")).map(function (el) {
+              return el.tagName.toLowerCase();
+            });
+            var tagSet = new Set(tags);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = tagSet[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var tag = _step.value;
+
+                console.warn("Element " + tag + " is unresolved");
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator["return"]) {
+                  _iterator["return"]();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+          });
+        }
+      }
+    });
+
+    return Bootstrap;
+  })();
+
+  return Bootstrap;
+}).bind("pb.Bootstrap", function (require) {
+  var Bootstrap = require("pb.Bootstrap");
+  return new Bootstrap();
 });</script>
 </head><body></body></html>

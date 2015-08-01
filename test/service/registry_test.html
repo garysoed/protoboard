@@ -11,33 +11,32 @@
 <script>
 DIJS
 .with('pb.service.Config', require => {
-  const _ = require('_');
   return {
-    getAll: _.spiedFunction()
+    getAll() {
+      return [];
+    }
   };
 })
 .with('pb.ability.Abilities.Builder', require => {
-  const _ = require('_');
   const Builder = {
-    add: _.spiedFunction()
+    add() {
+      return Builder;
+    }
   };
-  Builder.add.overrideReturn(Builder);
   return Builder;
 })
 .with('pb.ability.Abilities', require => {
-  const _ = require('_');
   const Builder = require('pb.ability.Abilities.Builder');
-
   const Abilities = {
-    of : _.spiedFunction()
+    of() {
+      return Builder;
+    }
   };
-  Abilities.of.overrideReturn(Builder);
   return Abilities;
 })
 .with('console', require => {
-  const _ = require('_');
   return {
-    warn: _.spiedFunction()
+    warn() { }
   };
 })
 .run(require => {
@@ -50,26 +49,26 @@ DIJS
   const Registry = require('pb.service.Registry');
   const t = require('pb.t');
 
-  describe.only('service.Registry', () => {
+  describe('service.Registry', () => {
     var ABILITY = t.createFakeAbility('ability');
 
     let registry;
     let FakeElement;
     let doc;
 
-
-    beforeEach(done => {
+    beforeEach(() => {
       registry = new Registry();
       FakeElement = function() {};
       doc = {
         registerElement: _.spiedFunction()
       };
-      done();
     });
 
     describe('#add', () => {
       it('should register the given element name and prototype, and register the abilities', () => {
-        Config.getAll.overrideReturn([ABILITY]);
+        _.spy(Config, 'getAll').overrideReturn([ABILITY]);
+        _.spy(Abilities, 'of');
+        _.spy(Builder, 'add');
 
         registry.add('el-name', FakeElement);
         registry.register(doc);
@@ -79,7 +78,9 @@ DIJS
         expect(doc.registerElement).calledWith('el-name', FakeElement).at.least(1);
       });
       it('should warn if there are no configurations for the current element', () => {
-        Config.getAll.overrideReturn(null);
+        _.spy(Config, 'getAll').overrideReturn(null);
+        _.spy(Abilities, 'of');
+        _.spy(console, 'warn');
 
         registry.add('el-name', FakeElement);
         registry.register(doc);
@@ -95,7 +96,8 @@ DIJS
       it('should warn if document.registerElement throws an error', () => {
         let errorMessage = 'error message';
 
-        Config.getAll.overrideReturn(null);
+        _.spy(Config, 'getAll').overrideReturn(null);
+        _.spy(console, 'warn');
         doc.registerElement = () => {
           throw new Error(errorMessage);
         };
@@ -119,7 +121,6 @@ DIJS
 
     afterEach(done => {
       _.reset();
-      done();
     });
   });
 });
