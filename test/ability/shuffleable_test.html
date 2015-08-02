@@ -14,7 +14,10 @@
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => new require('pb.service.Registry')())
+.with('pb.$registry', require => {
+  const Registry = require('pb.service.Registry');
+  return new Registry();
+})
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 

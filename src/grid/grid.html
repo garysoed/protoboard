@@ -7,14 +7,12 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .constant('doc', document.currentScript.ownerDocument)
-    .bind('grid.Grid', require => {
+.constant('doc', document.currentScript.ownerDocument)
+.bind('pb.grid.Grid', require => {
 
-  const doc = require('doc');
-  const Check = require('Check');
-  const PbElement = require('PbElement');
-  const Utils = require('Utils');
+  const Check = require('pb.Check');
+  const PbElement = require('pb.PbElement');
+  const Utils = require('pb.Utils');
 
   const ATTR_ROW = 'pb-row';
   const ATTR_COL = 'pb-col';

@@ -62,6 +62,7 @@ function copyDeps(outDir) {
                 'bower_components/animate.css/animate.min.css',
                 'bower_components/chance/chance.js',
                 'bower_components/di-js/out/bin.min.js',
+                'bower_components/di-js/out/bin.js',
                 'bower_components/hammerjs/hammer.js',
                 'bower_components/handlebars/handlebars.js',
                 'bower_components/jquery/dist/jquery.js',

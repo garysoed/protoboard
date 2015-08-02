@@ -11,7 +11,7 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.with('pb.Events', require => require('t').createFakeEvents())
+.with('pb.Events', require => require('pb.t').createFakeEvents())
 .run(require => {
 
   const _ = require('_');
@@ -27,6 +27,9 @@ DIJS
 
     beforeEach(() => {
       click = new Click();
+      _.spy(Events, 'of');
+      _.spy(Events, 'on');
+      _.spy(Events, 'off');
     });
 
     describe('#on', () => {

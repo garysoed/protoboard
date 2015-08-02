@@ -22,37 +22,29 @@
   <template id="tile">
     <content></content>
   </template>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .with('template', require => require('doc').querySelector('template#main'))
-      .with('rowTemplate', require => require('doc').querySelector('template#row'))
-      .with('tileTemplate', require => require('doc').querySelector('template#tile'))
-      .run(require => {
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.with('template', require => require('doc').querySelector('template#main'))
+.with('rowTemplate', require => require('doc').querySelector('template#row'))
+.with('tileTemplate', require => require('doc').querySelector('template#tile'))
+.run(require => {
 
-  const _ = require('/_');
-  const _M = require('/_M');
-  const $ = require('/$');
-  const $registry = require('$registry');
-  const Config = require('service.Config');
+  const _ = require('_');
+  const _M = require('_M');
+  const $ = require('$');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
-  const expect = require('/expect');
-  const Grid = require('grid.Grid');
+  const expect = require('expect');
+  const Grid = require('pb.grid.Grid');
   const template = require('template');
   const rowTemplate = require('rowTemplate');
   const tileTemplate = require('tileTemplate');
 
-  describe('Grid', () => {
+  describe('grid.Grid', () => {
     let grid;
 
-    before(done => {
-      $registry.register(doc, Config);
-      done();
-    });
-
-    beforeEach(done => {
+    beforeEach(() => {
       Object.defineProperty(Grid.prototype, 'rootEl', {
         get: function() { return this.shadowRoot.querySelector('#root'); }
       });
@@ -65,8 +57,6 @@
           .attr('row', 2)
           .attr('col', 3);
       Object.setPrototypeOf(grid, Grid.prototype);
-
-      done();
     });
 
     describe('#created', () => {
@@ -123,6 +113,6 @@
       });
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

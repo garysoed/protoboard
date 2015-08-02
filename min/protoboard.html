@@ -1,0 +1,7 @@
+<html><head><base href=".">
+
+<link rel="import" href="bootstrap.html">
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";var _createClass=function(){function n(n,r){for(var t in r){var o=r[t];o.configurable=!0,o.value&&(o.writable=!0)}Object.defineProperties(n,r)}return function(r,t,o){return t&&n(r.prototype,t),o&&n(r,o),r}}(),_classCallCheck=function(n,r){if(!(n instanceof r))throw new TypeError("Cannot call a class as a function")};DIJS.bind("pb.Protoboard.__ctor__",function(n){var r=n("DIJS"),t=Symbol(),o=function(){function n(){_classCallCheck(this,n)}return _createClass(n,{setup:{value:function(n){return this[t]=n,this}},run:{value:function(){var n=this,o=void 0===arguments[0]?document:arguments[0];return new Promise(function(e,u){r.run(function(r){var u=r("pb.Bootstrap");n[t]&&n[t](r),u.run(o).then(function(){e(r)})})})}}}),n}();return o}),window.Protoboard=DIJS.run(function(n){var r=n("pb.Protoboard.__ctor__");return new r});</script>
+</head><body></body></html>

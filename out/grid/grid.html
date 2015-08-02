@@ -15,12 +15,11 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument).bind("grid.Grid", function (require) {
+DIJS.constant("doc", document.currentScript.ownerDocument).bind("pb.grid.Grid", function (require) {
 
-  var doc = require("doc");
-  var Check = require("Check");
-  var PbElement = require("PbElement");
-  var Utils = require("Utils");
+  var Check = require("pb.Check");
+  var PbElement = require("pb.PbElement");
+  var Utils = require("pb.Utils");
 
   var ATTR_ROW = "pb-row";
   var ATTR_COL = "pb-col";
