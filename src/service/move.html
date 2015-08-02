@@ -37,29 +37,31 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('service.Move', require => {
+.bind('pb.service.Move.__symbols__', () => {
+  return {
+    __container__: Symbol('container'),
+    __onContainerMutation__: Symbol('onContainerMutation'),
+    __onMouseMove__: Symbol('onMouseMove')
+  };
+})
+.bind('pb.service.Move.__ctor__', require => {
 
-  const $ = require('/$');
-  const $registry = require('$registry');
-  const Config = require('service.Config');
-  const Events = require('Events');
-  const PbElement = require('PbElement');
-  const Utils = require('Utils');
+  const $ = require('$');
+  const Events = require('pb.Events');
+  const Utils = require('pb.Utils');
 
   const EVENT_MOVE = 'move';
-  const EL_NAME = 'pb-s-move';
 
   // Private symbols.
-  const __container__ = Symbol('container');
+  const __container__ = require('pb.service.Move.__symbols__').__container__;
   const __height__ = Symbol();
   const __mouseX__ = Symbol();
   const __mouseY__ = Symbol();
   const __width__ = Symbol();
 
   const __moveContainer__ = Symbol('moveContainer');
-  const __onMouseMove__ = Symbol('onMouseMove');
-  const __onContainerMutation__ = Symbol('onContainerMutation');
+  const __onMouseMove__ = require('pb.service.Move.__symbols__').__onMouseMove__;
+  const __onContainerMutation__ = require('pb.service.Move.__symbols__').__onContainerMutation__;
 
   const __origin__ = Symbol();
 
@@ -78,16 +80,11 @@ DIJS
    * @class service.Move
    * @static
    */
-  let Move = {
+  class Move {
 
-    /**
-     * The container of all the moved elements.
-     *
-     * @property __container__
-     * @type Element
-     * @private
-     */
-    [__container__]: null,
+    constructor() {
+      this[__container__] = null;
+    }
 
     /**
      * Moves the container element to the last known location of the mouse.
@@ -110,7 +107,7 @@ DIJS
 
       this[__container__].style.left = `${this[__mouseX__] - width / 2}px`;
       this[__container__].style.top = `${this[__mouseY__] - height / 2}px`;
-    },
+    }
 
     /**
      * Handles event when the mouse is moved.
@@ -123,7 +120,7 @@ DIJS
       this[__moveContainer__]();
       this[__mouseX__] = event.clientX;
       this[__mouseY__] = event.clientY;
-    },
+    }
 
     /**
      * Handles event when there is a mutation on the container element.
@@ -146,7 +143,7 @@ DIJS
           }
         });
       }
-    },
+    }
 
     /**
      * Sets the given element as being moved.
@@ -160,7 +157,7 @@ DIJS
       el[__origin__] = el.parentElement;
       this[__container__].appendChild(el);
       this[__moveContainer__]();
-    },
+    }
 
     /**
      * The elements that are being moved.
@@ -171,7 +168,7 @@ DIJS
      */
     get movedElements() {
       return new Set(Utils.toArray(this[__container__].children));
-    },
+    }
 
     /**
      * The next element to be moved.
@@ -182,7 +179,7 @@ DIJS
      */
     get nextElement() {
       return this[__container__].lastElementChild;
-    },
+    }
 
     /**
      * Last known X coordinate of the mouse in px.
@@ -193,7 +190,7 @@ DIJS
      */
     get mouseX() {
       return this[__mouseX__];
-    },
+    }
 
     /**
      * Last known Y coordinate of the mouse in px.
@@ -204,7 +201,7 @@ DIJS
      */
     get mouseY() {
       return this[__mouseY__];
-    },
+    }
 
     /**
      * Events that this class can trigger.
@@ -219,7 +216,27 @@ DIJS
         get MOVE() { return 'move'; }
       };
     }
-  };
+  }
+
+  return Move;
+})
+.bind('pb.service.Move', require => {
+  const Move = require('pb.service.Move.__ctor__');
+  return new Move();
+})
+.bind('pb.service.Move.__elem__', require => {
+
+  const $registry = require('pb.$registry');
+  const Config = require('pb.service.Config');
+  const Events = require('pb.Events');
+  const Move = require('pb.service.Move');
+  const PbElement = require('pb.PbElement');
+
+  const __container__ = require('pb.service.Move.__symbols__').__container__;
+  const __onContainerMutation__ = require('pb.service.Move.__symbols__').__onContainerMutation__;
+  const __onMouseMove__ = require('pb.service.Move.__symbols__').__onMouseMove__;
+
+  const EL_NAME = 'pb-s-move';
 
   class MoveElement extends PbElement { }
 
@@ -235,6 +252,6 @@ DIJS
     observer.observe(Move[__container__], { childList: true });
   });
 
-  return Move;
+  return MoveElement;
 });
 </script>

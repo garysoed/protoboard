@@ -40,140 +40,139 @@ pb-s-move > *:nth-child(5) {
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
-
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("service.Move", function (require) {
+DIJS.bind("pb.service.Move.__symbols__", function () {
+  return {
+    __container__: Symbol("container"),
+    __onContainerMutation__: Symbol("onContainerMutation"),
+    __onMouseMove__: Symbol("onMouseMove")
+  };
+}).bind("pb.service.Move.__ctor__", function (require) {
 
-  var $ = require("/$");
-  var $registry = require("$registry");
-  var Config = require("service.Config");
-  var Events = require("Events");
-  var PbElement = require("PbElement");
-  var Utils = require("Utils");
+  var $ = require("$");
+  var Events = require("pb.Events");
+  var Utils = require("pb.Utils");
 
   var EVENT_MOVE = "move";
-  var EL_NAME = "pb-s-move";
 
-  var __container__ = Symbol("container");
+  var __container__ = require("pb.service.Move.__symbols__").__container__;
   var __height__ = Symbol();
   var __mouseX__ = Symbol();
   var __mouseY__ = Symbol();
   var __width__ = Symbol();
 
   var __moveContainer__ = Symbol("moveContainer");
-  var __onMouseMove__ = Symbol("onMouseMove");
-  var __onContainerMutation__ = Symbol("onContainerMutation");
+  var __onMouseMove__ = require("pb.service.Move.__symbols__").__onMouseMove__;
+  var __onContainerMutation__ = require("pb.service.Move.__symbols__").__onContainerMutation__;
 
   var __origin__ = Symbol();
 
-  var Move = Object.defineProperties((function () {
-    var _Object$defineProperties = {};
+  var Move = (function () {
+    function Move() {
+      _classCallCheck(this, Move);
 
-    _defineProperty(_Object$defineProperties, __container__, null);
+      this[__container__] = null;
+    }
 
-    _defineProperty(_Object$defineProperties, __moveContainer__, function () {
-      var width = 0;
-      var height = 0;
-      Utils.toArray(this[__container__].children).forEach(function (child) {
-        if (!child[__width__] || !child[__height__]) {
-          var rect = child.getBoundingClientRect();
-          child[__height__] = Math.max(rect.height, height);
-          child[__width__] = Math.max(rect.width, width);
-        }
-        height = child[__height__];
-        width = child[__width__];
-      });
-
-      this[__container__].style.left = "" + (this[__mouseX__] - width / 2) + "px";
-      this[__container__].style.top = "" + (this[__mouseY__] - height / 2) + "px";
-    });
-
-    _defineProperty(_Object$defineProperties, __onMouseMove__, function (event) {
-      this[__moveContainer__]();
-      this[__mouseX__] = event.clientX;
-      this[__mouseY__] = event.clientY;
-    });
-
-    _defineProperty(_Object$defineProperties, __onContainerMutation__, function (records) {
-      var _this = this;
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var record = _step.value;
-
-          Utils.toArray(record.removedNodes).forEach(function (removedNode) {
-            if (removedNode[__origin__] && removedNode[__origin__] !== removedNode.parentElement) {
-              $(_this).trigger(_this.Events.MOVE, {
-                moved: removedNode,
-                from: removedNode[__origin__],
-                to: removedNode.parentElement
-              });
-            }
-          });
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"]) {
-            _iterator["return"]();
+    _createComputedClass(Move, [{
+      key: __moveContainer__,
+      value: function () {
+        var width = 0;
+        var height = 0;
+        Utils.toArray(this[__container__].children).forEach(function (child) {
+          if (!child[__width__] || !child[__height__]) {
+            var rect = child.getBoundingClientRect();
+            child[__height__] = Math.max(rect.height, height);
+            child[__width__] = Math.max(rect.width, width);
           }
+          height = child[__height__];
+          width = child[__width__];
+        });
+
+        this[__container__].style.left = "" + (this[__mouseX__] - width / 2) + "px";
+        this[__container__].style.top = "" + (this[__mouseY__] - height / 2) + "px";
+      }
+    }, {
+      key: __onMouseMove__,
+      value: function (event) {
+        this[__moveContainer__]();
+        this[__mouseX__] = event.clientX;
+        this[__mouseY__] = event.clientY;
+      }
+    }, {
+      key: __onContainerMutation__,
+      value: function (records) {
+        var _this = this;
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var record = _step.value;
+
+            Utils.toArray(record.removedNodes).forEach(function (removedNode) {
+              if (removedNode[__origin__] && removedNode[__origin__] !== removedNode.parentElement) {
+                $(_this).trigger(_this.Events.MOVE, {
+                  moved: removedNode,
+                  from: removedNode[__origin__],
+                  to: removedNode.parentElement
+                });
+              }
+            });
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
           }
         }
       }
-    });
-
-    _defineProperty(_Object$defineProperties, "add", function add(el) {
-      el[__height__] = undefined;
-      el[__width__] = undefined;
-      el[__origin__] = el.parentElement;
-      this[__container__].appendChild(el);
-      this[__moveContainer__]();
-    });
-
-    return _Object$defineProperties;
-  })(), {
-    movedElements: {
+    }, {
+      key: "add",
+      value: function add(el) {
+        el[__height__] = undefined;
+        el[__width__] = undefined;
+        el[__origin__] = el.parentElement;
+        this[__container__].appendChild(el);
+        this[__moveContainer__]();
+      }
+    }, {
+      key: "movedElements",
       get: function () {
         return new Set(Utils.toArray(this[__container__].children));
-      },
-      configurable: true,
-      enumerable: true
-    },
-    nextElement: {
+      }
+    }, {
+      key: "nextElement",
       get: function () {
         return this[__container__].lastElementChild;
-      },
-      configurable: true,
-      enumerable: true
-    },
-    mouseX: {
+      }
+    }, {
+      key: "mouseX",
       get: function () {
         return this[__mouseX__];
-      },
-      configurable: true,
-      enumerable: true
-    },
-    mouseY: {
+      }
+    }, {
+      key: "mouseY",
       get: function () {
         return this[__mouseY__];
-      },
-      configurable: true,
-      enumerable: true
-    },
-    Events: {
+      }
+    }, {
+      key: "Events",
       get: function () {
         return Object.defineProperties({}, {
           MOVE: {
@@ -184,11 +183,29 @@ DIJS.prefix("pb").bind("service.Move", function (require) {
             enumerable: true
           }
         });
-      },
-      configurable: true,
-      enumerable: true
-    }
-  });
+      }
+    }]);
+
+    return Move;
+  })();
+
+  return Move;
+}).bind("pb.service.Move", function (require) {
+  var Move = require("pb.service.Move.__ctor__");
+  return new Move();
+}).bind("pb.service.Move.__elem__", function (require) {
+
+  var $registry = require("pb.$registry");
+  var Config = require("pb.service.Config");
+  var Events = require("pb.Events");
+  var Move = require("pb.service.Move");
+  var PbElement = require("pb.PbElement");
+
+  var __container__ = require("pb.service.Move.__symbols__").__container__;
+  var __onContainerMutation__ = require("pb.service.Move.__symbols__").__onContainerMutation__;
+  var __onMouseMove__ = require("pb.service.Move.__symbols__").__onMouseMove__;
+
+  var EL_NAME = "pb-s-move";
 
   var MoveElement = (function (_PbElement) {
     function MoveElement() {
@@ -215,6 +232,6 @@ DIJS.prefix("pb").bind("service.Move", function (require) {
     observer.observe(Move[__container__], { childList: true });
   });
 
-  return Move;
+  return MoveElement;
 });</script>
 </head><body></body></html>

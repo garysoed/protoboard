@@ -4,16 +4,7 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('service.Log', (required, optional) => {
-
-  const TEST_MODE = optional('/TEST_MODE');
-
-  // Private symbols
-  const __entries__ = Symbol();
-  const __preprocessors__ = Symbol();
-  const __printers__ = Symbol();
-
+.bind('pb.service.Log.__entry__', require => {
   /**
    * An object that contains log entry. You can add properties by using the
    * {{#crossLink "service.Log.Entry/set:method"}}set{{/crossLink}} method. To retrieve properties,
@@ -37,6 +28,17 @@ DIJS
       });
     }
   }
+
+  return Entry;
+})
+.bind('pb.service.Log.__ctor__', require => {
+
+  const Entry = require('pb.service.Log.__entry__');
+
+  // Private symbols
+  const __entries__ = Symbol();
+  const __preprocessors__ = Symbol();
+  const __printers__ = Symbol();
 
   /**
    * A service to log events and happenings in a game. Use this service to collect statistics about
@@ -122,10 +124,13 @@ DIJS
    * @static
    * @since 1.1.0
    */
-  let Log = {
-    [__entries__]: [],
-    [__preprocessors__]: [],
-    [__printers__]: [],
+  class Log {
+
+    constructor() {
+      this[__entries__] = [];
+      this[__preprocessors__] = [];
+      this[__printers__] = [];
+    }
 
     /**
      * Adds an entry to the log.
@@ -171,7 +176,7 @@ DIJS
       }
 
       return this;
-    },
+    }
 
     /**
      * Adds a preprocessor to preprocess a log entry. A preprocessor is a function that takes an
@@ -184,7 +189,7 @@ DIJS
     addPreprocessor(preprocessor) {
       this[__preprocessors__].push(preprocessor);
       return this;
-    },
+    }
 
     /**
      * Adds a printer to preprocess a log entry. A printer is a function that takes an
@@ -198,31 +203,35 @@ DIJS
     addPrinter(printer) {
       this[__printers__].push(printer);
       return this;
-    },
+    }
 
     /**
      * Removes all preprocessors and printers that have been added to this service.
      *
      * @method clearProcessors
      * @return {service.Log} This service, for chaining.
+     * @deprecated
      * @since 1.1.0
      */
     clearProcessors() {
+      console.warn('deprecated');
       this[__preprocessors__].splice(0, this[__preprocessors__].length);
       this[__printers__].splice(0, this[__printers__].length);
       return this;
-    },
+    }
 
     /**
      * Removes all entries that have been added to this service.
      *
      * @method clear
      * @return {service.Log} This service, for chaining.
+     * @deprecated
      */
     clear() {
+      console.warn('deprecated');
       this[__entries__].splice(0, this[__entries__].length);
       return this;
-    },
+    }
 
     /**
      * The entries as a blob.
@@ -233,7 +242,7 @@ DIJS
      */
     get blob() {
       return new Blob([this.entries], { type: 'text/plain' });
-    },
+    }
 
     /**
      * The entries as a string.
@@ -244,7 +253,7 @@ DIJS
      */
     get entries() {
       return this[__entries__].join('\n');
-    },
+    }
 
     /**
      * Default printer of the service. This printer is also used if no custom printers are  added.
@@ -260,12 +269,12 @@ DIJS
         }
       };
     }
-  };
-
-  if (TEST_MODE) {
-    Log.Entry = Entry;
   }
 
   return Log;
+})
+.bind('pb.service.Log', require => {
+  const Log = require('pb.service.Log.__ctor__');
+  return new Log();
 });
 </script>

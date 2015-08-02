@@ -77,7 +77,7 @@ DIJS
   return Triggers;
 })
 .bind('pb.trigger.Triggers', require => {
-  const Triggers = require('pb.Triggers');
+  const Triggers = require('pb.trigger.Triggers.__ctor__');
   return new Triggers();
 });
 </script>

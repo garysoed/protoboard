@@ -9,15 +9,14 @@
 
 <script>
 DIJS
-    .bind('CustomEvent', () => CustomEvent)
-    .prefix('pb')
-    .bind('ability.Ability', require => {
+.bind('CustomEvent', () => CustomEvent)
+.bind('pb.ability.Ability', require => {
 
-  const $ = require('/$');
-  const Check = require('Check');
-  const CustomEvent = require('/CustomEvent');
-  const Log = require('service.Log');
-  const Triggers = require('trigger.Triggers');
+  const $ = require('$');
+  const Check = require('pb.Check');
+  const CustomEvent = require('CustomEvent');
+  const Log = require('pb.service.Log');
+  const Triggers = require('pb.trigger.Triggers');
 
   // Private symbols.
   const __name__ = Symbol();
@@ -80,8 +79,11 @@ DIJS
       }
 
       let newValue = $(el).attr(this.attrTrigger);
-      if (!el[__triggerMap__].has(this)
-          || newValue !== el[__triggerMap__].get(this).toString()) {
+      if (newValue
+          && (!el[__triggerMap__].has(this)
+              || newValue !== el[__triggerMap__].get(this).toString())) {
+
+        // Unlisten if it is already listening.
         if (el[__triggerMap__].has(this)) {
           el[__triggerMap__].get(this).off(el);
         }

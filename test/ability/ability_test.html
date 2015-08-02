@@ -10,40 +10,28 @@
   <link rel="import" href="testutils.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('trigger.Triggers', () => {
-        return {
-          trigger: undefined,
-          triggerStr: undefined,
-          parse: function(arg) {
-            this.triggerStr = arg;
-            return this.trigger;
-          }
-        };
-      })
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const _M = require('/_M');
+  const _ = require('_');
+  const _M = require('_M');
 
-  const $ = require('/$');
+  const $ = require('$');
 
-  const Ability = require('ability.Ability');
+  const Ability = require('pb.ability.Ability');
   const doc = require('doc');
-  const expect = require('/expect');
-  const Log = require('service.Log');
-  const t = require('t');
-  const Triggers = require('trigger.Triggers');
+  const expect = require('expect');
+  const Log = require('pb.service.Log');
+  const t = require('pb.t');
+  const Triggers = require('pb.trigger.Triggers');
 
   describe('ability.Ability', () => {
     let el;
 
-    beforeEach(done => {
+    beforeEach(() => {
       el = doc.createElement('div');
-      done();
     });
 
     describe('#init', () => {
@@ -83,17 +71,18 @@
         let newTrigger = t.createFakeTrigger('new trigger');
 
         let ability = new Ability('name', trigger);
-        Triggers.trigger = trigger;
+
+        _.spy(Triggers, 'parse');
+        Triggers.parse.overrideReturn(trigger);
         ability.init(el);
 
         $(el).attr(ability.attrTrigger, newTrigger.toString());
 
-        Triggers.trigger = newTrigger;
-
+        Triggers.parse.overrideReturn(newTrigger);
         ability.updateConfig(el);
 
         expect(trigger.off).calledWith(el).at.least(1);
-        expect(Triggers.triggerStr).to.be.equal(newTrigger.toString());
+        expect(Triggers.parse).calledWith(newTrigger.toString()).at.least(1);
         expect(newTrigger.on).calledWith(el, ability).at.least(1);
         expect(el[t.getSymbol(el, 'triggerMap')].get(ability)).to.be.equal(newTrigger);
       });
@@ -101,6 +90,10 @@
         let trigger = t.createFakeTrigger('triggerName');
         let ability = new Ability('name', trigger);
         $(el).attr(ability.attrTrigger, trigger.toString());
+
+        _.spy(Triggers, 'parse');
+        Triggers.parse.overrideReturn(trigger);
+        ability.init(el);
 
         ability.updateConfig(el);
 
@@ -160,11 +153,10 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

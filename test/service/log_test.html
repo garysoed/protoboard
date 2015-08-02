@@ -8,39 +8,47 @@
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .run(require => {
+<script>
+DIJS
+.run(require => {
+  const _ = require('_');
+  const _M = require('_M');
 
-  const _ = require('/_');
-  const _M = require('/_M');
-
-  const expect = require('/expect');
-  const Log = require('service.Log');
+  const Entry = require('pb.service.Log.__entry__');
+  const expect = require('expect');
+  const Log = require('pb.service.Log.__ctor__');
 
   describe('service.Log$Entry', () => {
+    let entry;
+
+    beforeEach(() => {
+      entry = new Entry();
+    });
+
     it('should return the set value', () => {
-      let entry = new Log.Entry();
       entry.set('key', 'value');
       expect(entry.key).to.be.equal('value');
     });
     it('should not allow values to be overridden by using set', () => {
-      let entry = new Log.Entry();
       entry.set('key', 'value');
       expect(() => entry.set('key', 'newValue')).to.throw();
     });
     it('should not allow properties to be overridden by using direct override', () => {
-      let entry = new Log.Entry();
       entry.set('key', 'value');
       expect(() => entry.key = 'newValue').to.throw();
     });
   });
 
   describe('service.Log', () => {
-    let timestamp = new Date(1234);
-    let category = 'test';
-    let value = 12;
+    let TIMESTAMP = new Date(1234);
+    let CATEGORY = 'test';
+    let VALUE = 12;
+
+    let log;
+
+    beforeEach(() => {
+      log = new Log();
+    });
 
     describe('#log', () => {
       function expectEntryHas(entry, timestamp, category, value) {
@@ -50,9 +58,13 @@
       }
 
       it('should use the default processor when no processors are specified', () => {
-        _.spy(Date, 'now').overrideReturn(timestamp);
-        expect(Log.log(category, value).entries)
-            .to.be.equal(Log.defaultPrinter({ timestamp, category, value }));
+        _.spy(Date, 'now').overrideReturn(TIMESTAMP);
+        expect(log.log(CATEGORY, VALUE).entries)
+            .to.be.equal(log.defaultPrinter({
+              timestamp: TIMESTAMP,
+              category: CATEGORY,
+              value: VALUE
+            }));
       });
       it('should use the specified preprocessors and call them in order', () => {
         let preprocessor1 = entry => entry.set('a', 1);
@@ -63,12 +75,12 @@
           d: 4
         };
 
-        Log
+        log
             .addPreprocessor(preprocessor1)
             .addPreprocessor(preprocessor2)
             .addPrinter(printer);
 
-        Log.log('category', 'value', extras);
+        log.log('category', 'value', extras);
 
         let entryMatcher = _M.isA(Object);
         expect(printer).calledWith(entryMatcher).at.least(1);
@@ -85,61 +97,65 @@
         let entry = 'entry';
         let printer = _.spiedFunction().overrideReturn(entry);
 
-        _.spy(Date, 'now').overrideReturn(timestamp);
+        _.spy(Date, 'now').overrideReturn(TIMESTAMP);
 
-        Log.addPrinter(printer);
-        expect(Log.log(category, value).entries).to.be.equal(entry);
+        log.addPrinter(printer);
+        expect(log.log(CATEGORY, VALUE).entries).to.be.equal(entry);
 
         let entryMatcher = _M.isA(Object);
         expect(printer).calledWith(entryMatcher).at.least(1);
 
-        expectEntryHas(entryMatcher.matchingArgs[0], timestamp, category, value);
+        expectEntryHas(entryMatcher.matchingArgs[0], TIMESTAMP, CATEGORY, VALUE);
       });
       it('should print nothing if the printer returns empty string', () => {
         let printer1 = _.spiedFunction().overrideReturn('');
         let printer2 = _.spiedFunction().overrideReturn('blah');
 
-        Log
+        log
             .addPrinter(printer1)
             .addPrinter(printer2);
 
-        expect(Log.log('category', 'value').entries).to.be.equal('');
+        expect(log.log('category', 'value').entries).to.be.equal('');
       });
       it('should pick the first processor that returns a non null and non undefined', () => {
         let entry = 'entry';
         let printer = _.spiedFunction().overrideReturn(entry);
 
-        _.spy(Date, 'now').overrideReturn(timestamp);
+        _.spy(Date, 'now').overrideReturn(TIMESTAMP);
 
-        Log
+        log
             .addPrinter(() => null)
             .addPrinter(() => undefined)
             .addPrinter(printer)
             .addPrinter(() => 'not used');
-        expect(Log.log(category, value).entries).to.be.equal(entry);
+        expect(log.log(CATEGORY, VALUE).entries).to.be.equal(entry);
 
         let entryMatcher = _M.isA(Object);
         expect(printer).calledWith(entryMatcher).at.least(1);
 
-        expectEntryHas(entryMatcher.matchingArgs[0], timestamp, category, value);
+        expectEntryHas(entryMatcher.matchingArgs[0], TIMESTAMP, CATEGORY, VALUE);
       });
       it('should not add any entries if there are no processors that returns a non empty string', () => {
-        Log
+        log
             .addPrinter(() => null)
             .addPrinter(() => '');
-        expect(Log.log(category, value).entries).to.be.equal('');
+        expect(log.log(CATEGORY, VALUE).entries).to.be.equal('');
       });
     });
 
     describe('#blob', () => {
       it('should return a blob with the correct content and MIME type', done => {
-        _.spy(Date, 'now').overrideReturn(timestamp);
+        _.spy(Date, 'now').overrideReturn(TIMESTAMP);
 
-        let blob = Log.log(category, value).blob;
+        let blob = log.log(CATEGORY, VALUE).blob;
         let reader = new FileReader();
         reader.addEventListener('loadend', () => {
           expect(reader.result)
-              .to.be.equal(Log.defaultPrinter({ timestamp, category, value }));
+              .to.be.equal(log.defaultPrinter({
+                timestamp: TIMESTAMP,
+                category: CATEGORY,
+                value: VALUE
+              }));
           done();
         });
         reader.readAsText(blob);
@@ -151,7 +167,7 @@
         let entry = {
           phase: 'before'
         };
-        expect(Log.defaultPrinter(entry)).to.be.undefined;
+        expect(log.defaultPrinter(entry)).to.be.undefined;
       });
       it('should print something if the entry is in a phase other than before', () => {
         let entry = {
@@ -160,18 +176,14 @@
           category: 'category',
           value: 'value'
         };
-        expect(Log.defaultPrinter(entry)).to.be.a('string');
+        expect(log.defaultPrinter(entry)).to.be.a('string');
       });
     });
 
-    afterEach(done => {
-      Log
-          .clearProcessors()
-          .clear();
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

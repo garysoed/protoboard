@@ -4,20 +4,11 @@
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
-
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("service.Log", function (required, optional) {
-
-  var TEST_MODE = optional("/TEST_MODE");
-
-  var __entries__ = Symbol();
-  var __preprocessors__ = Symbol();
-  var __printers__ = Symbol();
-
+DIJS.bind("pb.service.Log.__entry__", function (require) {
   var Entry = (function () {
     function Entry() {
       _classCallCheck(this, Entry);
@@ -38,147 +29,158 @@ DIJS.prefix("pb").bind("service.Log", function (required, optional) {
     return Entry;
   })();
 
-  var Log = Object.defineProperties((function () {
-    var _Object$defineProperties = {};
+  return Entry;
+}).bind("pb.service.Log.__ctor__", function (require) {
 
-    _defineProperty(_Object$defineProperties, __entries__, []);
+  var Entry = require("pb.service.Log.__entry__");
 
-    _defineProperty(_Object$defineProperties, __preprocessors__, []);
+  var __entries__ = Symbol();
+  var __preprocessors__ = Symbol();
+  var __printers__ = Symbol();
 
-    _defineProperty(_Object$defineProperties, __printers__, []);
+  var Log = (function () {
+    function Log() {
+      _classCallCheck(this, Log);
 
-    _defineProperty(_Object$defineProperties, "log", function log(category, value) {
-      var extra = arguments[2] === undefined ? {} : arguments[2];
-
-      var entry = new Entry();
-      entry.set("category", category);
-      entry.set("value", value);
-      entry.set("timestamp", new Date(Date.now()));
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = Object.keys(extra)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var key = _step.value;
-
-          entry.set(key, extra[key]);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"]) {
-            _iterator["return"]();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = this[__preprocessors__][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var preprocessor = _step2.value;
-
-          preprocessor(entry);
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-            _iterator2["return"]();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-
-      var stringEntry = null;
-      if (this[__printers__].length > 0) {
-        stringEntry = this[__printers__].reduce(function (prevEntry, printer) {
-          if (prevEntry === null || prevEntry === undefined) {
-            return printer(entry);
-          } else {
-            return prevEntry;
-          }
-        }, null);
-      } else {
-        stringEntry = this.defaultPrinter(entry);
-      }
-
-      if (stringEntry) {
-        this[__entries__].push(stringEntry);
-      }
-
-      return this;
-    });
-
-    _defineProperty(_Object$defineProperties, "addPreprocessor", function addPreprocessor(preprocessor) {
-      this[__preprocessors__].push(preprocessor);
-      return this;
-    });
-
-    _defineProperty(_Object$defineProperties, "addPrinter", function addPrinter(printer) {
-      this[__printers__].push(printer);
-      return this;
-    });
-
-    _defineProperty(_Object$defineProperties, "clearProcessors", function clearProcessors() {
-      this[__preprocessors__].splice(0, this[__preprocessors__].length);
-      this[__printers__].splice(0, this[__printers__].length);
-      return this;
-    });
-
-    _defineProperty(_Object$defineProperties, "clear", function clear() {
-      this[__entries__].splice(0, this[__entries__].length);
-      return this;
-    });
-
-    return _Object$defineProperties;
-  })(), {
-    blob: {
-      get: function () {
-        return new Blob([this.entries], { type: "text/plain" });
-      },
-      configurable: true,
-      enumerable: true
-    },
-    entries: {
-      get: function () {
-        return this[__entries__].join("\n");
-      },
-      configurable: true,
-      enumerable: true
-    },
-    defaultPrinter: {
-      get: function () {
-        return function (entry) {
-          if (entry.phase !== "before") {
-            return "" + entry.timestamp.toLocaleString() + " " + entry.category + " - " + entry.value;
-          }
-        };
-      },
-      configurable: true,
-      enumerable: true
+      this[__entries__] = [];
+      this[__preprocessors__] = [];
+      this[__printers__] = [];
     }
-  });
 
-  if (TEST_MODE) {
-    Log.Entry = Entry;
-  }
+    _createClass(Log, {
+      log: {
+        value: function log(category, value) {
+          var extra = arguments[2] === undefined ? {} : arguments[2];
+
+          var entry = new Entry();
+          entry.set("category", category);
+          entry.set("value", value);
+          entry.set("timestamp", new Date(Date.now()));
+
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = Object.keys(extra)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var key = _step.value;
+
+              entry.set(key, extra[key]);
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator["return"]) {
+                _iterator["return"]();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
+          }
+
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = this[__preprocessors__][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var preprocessor = _step2.value;
+
+              preprocessor(entry);
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+                _iterator2["return"]();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+
+          var stringEntry = null;
+          if (this[__printers__].length > 0) {
+            stringEntry = this[__printers__].reduce(function (prevEntry, printer) {
+              if (prevEntry === null || prevEntry === undefined) {
+                return printer(entry);
+              } else {
+                return prevEntry;
+              }
+            }, null);
+          } else {
+            stringEntry = this.defaultPrinter(entry);
+          }
+
+          if (stringEntry) {
+            this[__entries__].push(stringEntry);
+          }
+
+          return this;
+        }
+      },
+      addPreprocessor: {
+        value: function addPreprocessor(preprocessor) {
+          this[__preprocessors__].push(preprocessor);
+          return this;
+        }
+      },
+      addPrinter: {
+        value: function addPrinter(printer) {
+          this[__printers__].push(printer);
+          return this;
+        }
+      },
+      clearProcessors: {
+        value: function clearProcessors() {
+          console.warn("deprecated");
+          this[__preprocessors__].splice(0, this[__preprocessors__].length);
+          this[__printers__].splice(0, this[__printers__].length);
+          return this;
+        }
+      },
+      clear: {
+        value: function clear() {
+          console.warn("deprecated");
+          this[__entries__].splice(0, this[__entries__].length);
+          return this;
+        }
+      },
+      blob: {
+        get: function () {
+          return new Blob([this.entries], { type: "text/plain" });
+        }
+      },
+      entries: {
+        get: function () {
+          return this[__entries__].join("\n");
+        }
+      },
+      defaultPrinter: {
+        get: function () {
+          return function (entry) {
+            if (entry.phase !== "before") {
+              return "" + entry.timestamp.toLocaleString() + " " + entry.category + " - " + entry.value;
+            }
+          };
+        }
+      }
+    });
+
+    return Log;
+  })();
 
   return Log;
+}).bind("pb.service.Log", function (require) {
+  var Log = require("pb.service.Log.__ctor__");
+  return new Log();
 });</script>
 </head><body></body></html>

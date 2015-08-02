@@ -13,37 +13,38 @@
 </head>
 <body>
   <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+DIJS
+.constant('pb.$registry', {
+  fn: null,
+  add() {},
+  runAtRegister(fn) {
+    this.fn = fn;
+  }
+})
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const $ = require('/$');
-  const $registry = require('$registry');
+  const _ = require('_');
+  const $ = require('$');
+  const $registry = require('pb.$registry');
 
   const doc = require('doc');
-  const Events = require('Events');
-  const expect = require('/expect');
-  const t = require('t');
-  const Move = require('service.Move');
-  const Utils = require('Utils');
+  const Events = require('pb.Events');
+  const expect = require('expect');
+  const t = require('pb.t');
+  const Move = require('pb.service.Move.__ctor__');
+  const Utils = require('pb.Utils');
 
   // Private symbols.
-  const __container__ = t.getSymbol(Move, 'container');
-  const __moveContainer__ = t.getSymbol(Move, 'moveContainer');
   const __onMouseMove__ = t.getSymbol(Move, 'onMouseMove');
   const __onContainerMutation__ = t.getSymbol(Move, 'onContainerMutation');
 
   describe('service.Move', () => {
-    before(done => {
-      $registry.register(doc);
-      done();
-    });
+    let move;
 
-    beforeEach(done => {
-      done();
+    beforeEach(() => {
+      move = new Move();
+      move[t.getSymbol(move, 'container')] = doc.createElement('div');
     });
 
     describe('__moveContainer__', () => {
@@ -53,15 +54,14 @@
         let child2 = doc.createElement('div');
         _.spy(child2, 'getBoundingClientRect').overrideReturn({ width: 10, height: 40 });
 
-        let container = Move[__container__];
+        let container = t.getPrivateProperty(move, 'container');
         container.appendChild(child1);
         container.appendChild(child2);
 
         let x = 55;
         let y = 77;
-        Move[__onMouseMove__]({ clientX: x, clientY: y });
-
-        Move[__moveContainer__]();
+        t.getPrivateMethod(move, 'onMouseMove')({ clientX: x, clientY: y });
+        t.getPrivateMethod(move, 'moveContainer')();
 
         expect(container.style.left).to.equal('45px');
         expect(container.style.top).to.equal('57px');
@@ -71,14 +71,15 @@
     describe('__onMouseMove__', () => {
       it('should set the mouse coordinates correctly and move the container', () => {
         let event = { clientX: 12, clientY: 24};
+        let __moveContainer__ = t.getSymbol(Move.prototype, 'moveContainer');
 
-        _.spy(Move, __moveContainer__);
+        _.spy(move, __moveContainer__);
 
-        Move[__onMouseMove__](event);
+        t.getPrivateMethod(move, 'onMouseMove')(event);
 
-        expect(Move.mouseX).to.equal(event.clientX);
-        expect(Move.mouseY).to.equal(event.clientY);
-        expect(Move[__moveContainer__]).calledWith().at.least(1);
+        expect(move.mouseX).to.equal(event.clientX);
+        expect(move.mouseY).to.equal(event.clientY);
+        expect(move[__moveContainer__]).calledWith().at.least(1);
       });
     });
 
@@ -89,63 +90,61 @@
         let newParent = doc.createElement('div');
 
         parent.appendChild(el);
-        Move.add(el);
+        move.add(el);
 
         newParent.appendChild(el);
-        Events.of(Move).on('jquery', Move.Events.MOVE, (event, data) => {
+        Events.of(move).on('jquery', move.Events.MOVE, (event, data) => {
           expect(data.moved).to.equal(el);
           expect(data.from).to.equal(parent);
           expect(data.to).to.equal(newParent);
           done();
         });
-        Move[__onContainerMutation__]([{ removedNodes: [el] }]);
+        t.getPrivateMethod(move, 'onContainerMutation')([{ removedNodes: [el] }]);
       });
-      it('should not trigger an event for an element that was not added to the container', function(done) {
+      it('should not trigger an event for an element that was not added to the container', () => {
         const TIMEOUT = 500;
 
         let el = doc.createElement('div');
-        this.timeout(TIMEOUT);
-        setTimeout(done, TIMEOUT - 100);
 
-        Events.of(Move).on('jquery', Move.Events.MOVE, () => {
-          expect.fail();
-        });
-        Move[__onContainerMutation__]([{ removedNodes: [el] }]);
-        Events.of(Move).off();
+        let handler = _.spiedFunction();
+        Events.of(move).on('jquery', move.Events.MOVE, handler);
+        t.getPrivateMethod(move, 'onContainerMutation')([{ removedNodes: [el] }]);
+
+        expect(handler).called().to.equal(0);
       });
-      it('should not trigger an event if the element is returned to the origin source', function(done) {
-        const TIMEOUT = 500;
-
+      it('should not trigger an event if the element is returned to the origin source', () => {
         let el = doc.createElement('div');
         let parent = doc.createElement('div');
 
-        this.timeout(TIMEOUT);
-        setTimeout(done, TIMEOUT - 100);
-
         parent.appendChild(el);
-        Move.add(el);
+        move.add(el);
 
-        Events.of(Move).on('jquery', Move.Events.MOVE, () => {
-          expect.fail();
-        });
+        let handler = _.spiedFunction();
+        Events.of(move).on('jquery', move.Events.MOVE, handler);
 
         // Add it back to the old parent.
         parent.appendChild(el);
-        Move[__onContainerMutation__]([{ removedNodes: [el] }]);
-        Events.of(Move).off();
+        t.getPrivateMethod(move, 'onContainerMutation')([{ removedNodes: [el] }]);
+
+        expect(handler).called().to.equal(0);
+      });
+
+      afterEach(() => {
+        Events.of(move).off();
       });
     });
 
     describe('add', () => {
       it('should add the element to the container and move the container', () => {
         let el = doc.createElement('div');
+        let __moveContainer__ = t.getSymbol(Move.prototype, 'moveContainer');
 
-        _.spy(Move, __moveContainer__);
+        _.spy(move, __moveContainer__);
 
-        Move.add(el);
+        move.add(el);
 
-        expect(Move[__moveContainer__]).calledWith().at.least(1);
-        expect(Move[__container__].contains(el)).to.be.true;
+        expect(move[__moveContainer__]).calledWith().at.least(1);
+        expect(t.getPrivateProperty(move, 'container').contains(el)).to.be.true;
       });
     });
 
@@ -154,11 +153,11 @@
         let child1 = doc.createElement('div');
         let child2 = doc.createElement('div');
 
-        let container = Move[__container__];
+        let container = t.getPrivateProperty(move, 'container');
         container.appendChild(child1);
         container.appendChild(child2);
 
-        expect(Utils.toArray(Move.movedElements)).to.eql([child1, child2]);
+        expect(Utils.toArray(move.movedElements)).to.eql([child1, child2]);
       });
     });
 
@@ -167,24 +166,36 @@
         let child1 = doc.createElement('div');
         let child2 = doc.createElement('div');
 
-        let container = Move[__container__];
+        let container = t.getPrivateProperty(move, 'container');
         container.appendChild(child1);
         container.appendChild(child2);
 
-        expect(Move.nextElement).to.eql(child2);
+        expect(move.nextElement).to.eql(child2);
       });
       it('should return null if there are no children', () => {
-        expect(Move.nextElement).to.equal(null);
+        expect(move.nextElement).to.equal(null);
       });
     });
 
-    afterEach(done => {
+    describe('registry', () => {
+      it('should create a move element, append it to the body, and add it as the container', () => {
+        // Runs the registration.
+        require('pb.service.Move.__elem__');
+
+        const MoveService = require('pb.service.Move');
+        $registry.fn(doc);
+
+        let container = t.getPrivateProperty(MoveService, 'container');
+        expect(container.nodeName).to.equal('PB-S-MOVE');
+        expect(doc.body.contains(container)).to.be.true;
+      });
+    });
+
+    afterEach(() => {
       _.reset();
       Events.of(Move).off();
-      Move[__container__].innerHTML = '';
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

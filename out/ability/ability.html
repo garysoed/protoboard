@@ -15,13 +15,13 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 DIJS.bind("CustomEvent", function () {
   return CustomEvent;
-}).prefix("pb").bind("ability.Ability", function (require) {
+}).bind("pb.ability.Ability", function (require) {
 
-  var $ = require("/$");
-  var Check = require("Check");
-  var CustomEvent = require("/CustomEvent");
-  var Log = require("service.Log");
-  var Triggers = require("trigger.Triggers");
+  var $ = require("$");
+  var Check = require("pb.Check");
+  var CustomEvent = require("CustomEvent");
+  var Log = require("pb.service.Log");
+  var Triggers = require("pb.trigger.Triggers");
 
   var __name__ = Symbol();
   var __defaultTrigger__ = Symbol("defaultTrigger");
@@ -52,7 +52,7 @@ DIJS.bind("CustomEvent", function () {
           }
 
           var newValue = $(el).attr(this.attrTrigger);
-          if (!el[__triggerMap__].has(this) || newValue !== el[__triggerMap__].get(this).toString()) {
+          if (newValue && (!el[__triggerMap__].has(this) || newValue !== el[__triggerMap__].get(this).toString())) {
             if (el[__triggerMap__].has(this)) {
               el[__triggerMap__].get(this).off(el);
             }

@@ -49,7 +49,7 @@ DIJS.bind('pb.t', require => {
     },
 
     getPrivateMethod(obj, name) {
-      return obj[this.getSymbol(obj.constructor.prototype, name)];
+      return obj[this.getSymbol(obj.constructor.prototype, name)].bind(obj);
     }
   };
 
