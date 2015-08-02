@@ -8,18 +8,17 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<script type="text/javascript">
+<script>
 DIJS
-    .prefix('pb')
-    .bind('ability.StaggeredDroppable', require => {
+.bind('pb.ability.StaggeredDroppable', require => {
 
-  const $ = require('/$');
-  const Chance = require('/Chance');
-  const Check = require('Check');
-  const Droppable = require('ability.Droppable');
-  const Key = require('trigger.Key');
-  const Move = require('service.Move');
-  const Utils = require('Utils');
+  const $ = require('$');
+  const Chance = require('Chance');
+  const Check = require('pb.Check');
+  const Droppable = require('pb.ability.Droppable');
+  const Key = require('pb.trigger.Key');
+  const Move = require('pb.service.Move');
+  const Utils = require('pb.Utils');
 
   // Private constants
   const __defaultProbabilities__ = Symbol();

@@ -9,17 +9,16 @@
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .run(require => {
+<script>
+DIJS
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.run(require => {
 
-    require('component.Token');
+  require('pb.component.Token');
 
-    describe('component.Token', () => {
-      it('should not throw exception when injected', () => {});
-    });
+  describe('component.Token', () => {
+    it('should not throw exception when injected', () => {});
   });
-  </script>
+});
+</script>
 </body>

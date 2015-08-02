@@ -9,14 +9,13 @@
 
 <script type="text/javascript">
 DIJS
-    .prefix('pb')
-    .bind('ability.SelectedPickable', require => {
+.bind('pb.ability.SelectedPickable', require => {
 
-  const $ = require('/$');
-  const Click = require('trigger.Click');
-  const Move = require('service.Move');
-  const Pickable = require('ability.Pickable');
-  const Utils = require('Utils');
+  const $ = require('$');
+  const Click = require('pb.trigger.Click');
+  const Move = require('pb.service.Move');
+  const Pickable = require('pb.ability.Pickable');
+  const Utils = require('pb.Utils');
 
   const __selectionFn__ = Symbol('selectionFn');
 

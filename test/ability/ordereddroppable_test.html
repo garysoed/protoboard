@@ -12,175 +12,172 @@
   <link rel="import" href="utils.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('service.Move', {
-        nextElement: null,
-        mouseX: 0
-      })
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.constant('pb.service.Move', {
+  nextElement: null,
+  mouseX: 0
+})
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-    const $ = require('/$');
-    const _ = require('/_');
-    const doc = require('doc');
-    const expect = require('/expect');
-    const Move = require('service.Move');
-    const OrderedDroppable = require('ability.OrderedDroppable');
-    const Utils = require('Utils');
+  const $ = require('$');
+  const _ = require('_');
+  const doc = require('doc');
+  const expect = require('expect');
+  const Move = require('pb.service.Move');
+  const OrderedDroppable = require('pb.ability.OrderedDroppable');
+  const Utils = require('pb.Utils');
 
-    describe('ability.OrderedDroppable', () => {
-      describe('#trigger', () => {
-        let el;
+  describe('ability.OrderedDroppable', () => {
+    describe('#trigger', () => {
+      let el;
+      beforeEach(() => {
+        el = doc.createElement('div');
+      });
+
+      describe('horizontal mode', () => {
+        let droppable;
+
         beforeEach(done => {
-          el = doc.createElement('div');
+          droppable = new OrderedDroppable(
+              undefined, // name
+              undefined, // defaultTrigger
+              undefined, // defaultEnabled
+              false      // isVertical
+          );
+          $(el).attr(droppable.attrName, 'true');
           done();
         });
 
-        describe('horizontal mode', () => {
-          let droppable;
-
-          beforeEach(done => {
-            droppable = new OrderedDroppable(
-                undefined, // name
-                undefined, // defaultTrigger
-                undefined, // defaultEnabled
-                false      // isVertical
-            );
-            $(el).attr(droppable.attrName, 'true');
-            done();
+        it('should insert before the correct child', () => {
+          let child1 = doc.createElement('div');
+          _.spy(child1, 'getBoundingClientRect').overrideReturn({
+            left: 10,
+            width: 20
           });
 
-          it('should insert before the correct child', () => {
-            let child1 = doc.createElement('div');
-            _.spy(child1, 'getBoundingClientRect').overrideReturn({
-              left: 10,
-              width: 20
-            });
-
-            let child2 = doc.createElement('div');
-            _.spy(child2, 'getBoundingClientRect').overrideReturn({
-              left: 35,
-              width: 20
-            });
-
-            el.appendChild(child1);
-            el.appendChild(child2);
-            el.classList.add('pb-over');
-
-            let dragged = doc.createElement('div');
-
-            Move.nextElement = dragged;
-            Move.mouseX = 40;
-
-            droppable.trigger(el);
-
-            expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+          let child2 = doc.createElement('div');
+          _.spy(child2, 'getBoundingClientRect').overrideReturn({
+            left: 35,
+            width: 20
           });
-          it('should insert as the last child if eventX is too far to the right', () => {
-            let child1 = doc.createElement('div');
-            _.spy(child1, 'getBoundingClientRect').overrideReturn({
-              left: 10,
-              width: 20
-            });
 
-            let child2 = doc.createElement('div');
-            _.spy(child2, 'getBoundingClientRect').overrideReturn({
-              left: 35,
-              width: 20
-            });
+          el.appendChild(child1);
+          el.appendChild(child2);
+          el.classList.add('pb-over');
 
-            el.appendChild(child1);
-            el.appendChild(child2);
+          let dragged = doc.createElement('div');
 
-            let dragged = doc.createElement('div');
-            Move.nextElement = dragged;
-            Move.mouseX = 50;
+          Move.nextElement = dragged;
+          Move.mouseX = 40;
 
-            droppable.trigger(el);
+          droppable.trigger(el);
 
-            expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
+          expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+        });
+        it('should insert as the last child if eventX is too far to the right', () => {
+          let child1 = doc.createElement('div');
+          _.spy(child1, 'getBoundingClientRect').overrideReturn({
+            left: 10,
+            width: 20
           });
-          it('should not crash if there are no last dragged element', () => {
-            Move.nextElement = null;
-            droppable.trigger(el);
+
+          let child2 = doc.createElement('div');
+          _.spy(child2, 'getBoundingClientRect').overrideReturn({
+            left: 35,
+            width: 20
           });
+
+          el.appendChild(child1);
+          el.appendChild(child2);
+
+          let dragged = doc.createElement('div');
+          Move.nextElement = dragged;
+          Move.mouseX = 50;
+
+          droppable.trigger(el);
+
+          expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
+        });
+        it('should not crash if there are no last dragged element', () => {
+          Move.nextElement = null;
+          droppable.trigger(el);
+        });
+      });
+
+      describe('vertical mode', () => {
+        let droppable;
+
+        beforeEach(done => {
+          droppable = new OrderedDroppable(
+              undefined, // name
+              undefined, // defaultTrigger
+              undefined, // defaultEnabled
+              true       // isVertical
+          );
+          $(el).attr(droppable.attrName, 'true');
+          done();
         });
 
-        describe('vertical mode', () => {
-          let droppable;
-
-          beforeEach(done => {
-            droppable = new OrderedDroppable(
-                undefined, // name
-                undefined, // defaultTrigger
-                undefined, // defaultEnabled
-                true       // isVertical
-            );
-            $(el).attr(droppable.attrName, 'true');
-            done();
+        it('should insert before the correct child for vertical mode', () => {
+          let child1 = doc.createElement('div');
+          _.spy(child1, 'getBoundingClientRect').overrideReturn({
+            top: 10,
+            height: 20
           });
 
-          it('should insert before the correct child for vertical mode', () => {
-            let child1 = doc.createElement('div');
-            _.spy(child1, 'getBoundingClientRect').overrideReturn({
-              top: 10,
-              height: 20
-            });
-
-            let child2 = doc.createElement('div');
-            _.spy(child2, 'getBoundingClientRect').overrideReturn({
-              top: 35,
-              height: 20
-            });
-
-            el.appendChild(child1);
-            el.appendChild(child2);
-            el.classList.add('pb-over');
-
-            let dragged = doc.createElement('div');
-
-            Move.nextElement = dragged;
-            Move.mouseY = 40;
-
-            droppable.trigger(el);
-
-            expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+          let child2 = doc.createElement('div');
+          _.spy(child2, 'getBoundingClientRect').overrideReturn({
+            top: 35,
+            height: 20
           });
-          it('should insert as the last child if eventY is too far down for vertical mode', () => {
-            let child1 = doc.createElement('div');
-            _.spy(child1, 'getBoundingClientRect').overrideReturn({
-              top: 10,
-              height: 20
-            });
 
-            let child2 = doc.createElement('div');
-            _.spy(child2, 'getBoundingClientRect').overrideReturn({
-              top: 35,
-              height: 20
-            });
+          el.appendChild(child1);
+          el.appendChild(child2);
+          el.classList.add('pb-over');
 
-            el.appendChild(child1);
-            el.appendChild(child2);
+          let dragged = doc.createElement('div');
 
-            let dragged = doc.createElement('div');
-            Move.nextElement = dragged;
-            Move.mouseY = 50;
+          Move.nextElement = dragged;
+          Move.mouseY = 40;
 
-            droppable.trigger(el);
+          droppable.trigger(el);
 
-            expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
-          });
-          it('should not crash if there are no last dragged element', () => {
-            Move.nextElement = null;
-            droppable.trigger(el);
-          });
+          expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
         });
+        it('should insert as the last child if eventY is too far down for vertical mode', () => {
+          let child1 = doc.createElement('div');
+          _.spy(child1, 'getBoundingClientRect').overrideReturn({
+            top: 10,
+            height: 20
+          });
 
+          let child2 = doc.createElement('div');
+          _.spy(child2, 'getBoundingClientRect').overrideReturn({
+            top: 35,
+            height: 20
+          });
+
+          el.appendChild(child1);
+          el.appendChild(child2);
+
+          let dragged = doc.createElement('div');
+          Move.nextElement = dragged;
+          Move.mouseY = 50;
+
+          droppable.trigger(el);
+
+          expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
+        });
+        it('should not crash if there are no last dragged element', () => {
+          Move.nextElement = null;
+          droppable.trigger(el);
+        });
       });
     });
   });
-  </script>
+});
+</script>
 </body>

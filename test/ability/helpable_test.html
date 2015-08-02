@@ -14,28 +14,27 @@
   <link rel="import" href="trigger/key.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const expect = require('/expect');
-  const _ = require('/_');
-  const $registry = require('$registry');
-  const Abilities = require('ability.Abilities');
-  const Click = require('trigger.Click');
-  const Config = require('service.Config');
+  const expect = require('expect');
+  const _ = require('_');
+  const $registry = require('pb.$registry');
+  const Abilities = require('pb.ability.Abilities');
+  const Click = require('pb.trigger.Click');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
-  const Helpable = require('ability.Helpable');
-  const Key = require('trigger.Key');
-  const t = require('t');
+  const Helpable = require('pb.ability.Helpable');
+  const Key = require('pb.trigger.Key');
+  const t = require('pb.t');
 
   describe('ability.Helpable', () => {
     let displayEl;
 
-    before(() => {
+    beforeEach(() => {
       displayEl = doc.createElement('div');
       _.spy(doc, 'createElement').overrideReturn(displayEl);
       $registry.register(doc, Config);
@@ -85,11 +84,10 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

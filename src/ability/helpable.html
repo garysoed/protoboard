@@ -60,20 +60,18 @@
 </template>
 
 <script>
-DIJS
-    .prefix('pb')
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('template', require => require('doc').querySelector('template'))
-    .bind('ability.Helpable', require => {
+(function(doc) {
 
-  const $registry = require('$registry');
-  const Abilities = require('ability.Abilities');
-  const Ability = require('ability.Ability');
-  const doc = require('doc');
-  const Events = require('Events');
-  const Key = require('trigger.Key');
-  const template = require('template');
-  const Utils = require('Utils');
+DIJS
+.bind('pb.ability.Helpable', require => {
+
+  const $registry = require('pb.$registry');
+  const Abilities = require('pb.ability.Abilities');
+  const Ability = require('pb.ability.Ability');
+  const Events = require('pb.Events');
+  const Key = require('pb.trigger.Key');
+  const template = doc.querySelector('template');
+  const Utils = require('pb.Utils');
 
   let displayEl = null;
 
@@ -144,4 +142,5 @@ DIJS
 
   return Helpable;
 });
+})(document.currentScript.ownerDocument);
 </script>

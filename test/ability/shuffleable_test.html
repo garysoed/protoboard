@@ -12,28 +12,26 @@
   <link rel="import" href="service/registry.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new require('service.Registry')())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.with('pb.$registry', require => new require('pb.service.Registry')())
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const Chance = require('/Chance');
+  const _ = require('_');
+  const Chance = require('Chance');
   const doc = require('doc');
-  const expect = require('/expect');
-  const Shuffleable = require('ability.Shuffleable');
-  const Utils = require('Utils');
+  const expect = require('expect');
+  const Shuffleable = require('pb.ability.Shuffleable');
+  const Utils = require('pb.Utils');
 
   describe('ability.Shuffleable', () => {
     let el;
     let shuffleable;
 
-    beforeEach(done => {
+    beforeEach(() => {
       el = doc.createElement('div');
       shuffleable = new Shuffleable(undefined, undefined, true);
-      done();
     });
 
     describe('#init', () => {
@@ -89,11 +87,10 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

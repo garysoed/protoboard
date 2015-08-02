@@ -8,7 +8,7 @@
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
 
-<script type="text/javascript">"use strict";
+<script>"use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -18,15 +18,15 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("ability.StaggeredDroppable", function (require) {
+DIJS.bind("pb.ability.StaggeredDroppable", function (require) {
 
-  var $ = require("/$");
-  var Chance = require("/Chance");
-  var Check = require("Check");
-  var Droppable = require("ability.Droppable");
-  var Key = require("trigger.Key");
-  var Move = require("service.Move");
-  var Utils = require("Utils");
+  var $ = require("$");
+  var Chance = require("Chance");
+  var Check = require("pb.Check");
+  var Droppable = require("pb.ability.Droppable");
+  var Key = require("pb.trigger.Key");
+  var Move = require("pb.service.Move");
+  var Utils = require("pb.Utils");
 
   var __defaultProbabilities__ = Symbol();
 

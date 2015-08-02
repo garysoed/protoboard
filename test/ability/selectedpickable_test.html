@@ -13,55 +13,54 @@
   <link rel="import" href="third_party/jquery.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .with('$registry', require => new (require('service.Registry'))())
-      .run(require => {
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.run(require => {
 
-    const $ = require('/$');
-    const _ = require('/_');
-    const doc = require('doc');
-    const expect = require('/expect');
-    const Move = require('service.Move');
-    const SelectedPickable = require('ability.SelectedPickable');
+  const $ = require('$');
+  const _ = require('_');
+  const doc = require('doc');
+  const expect = require('expect');
+  const Move = require('pb.service.Move');
+  const SelectedPickable = require('pb.ability.SelectedPickable');
 
-    describe('ability.SelectedPickable', () => {
-      describe('#trigger', () => {
-        let pickable;
-        let selectFn;
-        let parent;
+  describe('ability.SelectedPickable', () => {
+    describe('#trigger', () => {
+      let pickable;
+      let selectFn;
+      let parent;
 
-        beforeEach(done => {
-          selectFn = _.spiedFunction();
-          pickable = new SelectedPickable(selectFn);
-          parent = doc.createElement('div');
-          pickable.init(parent);
-          done();
-        });
+      beforeEach(done => {
+        selectFn = _.spiedFunction();
+        pickable = new SelectedPickable(selectFn);
+        parent = doc.createElement('div');
+        pickable.init(parent);
+        done();
+      });
 
-        it('should add the element returned by the selection function to the move service', () => {
-          let el = doc.createElement('div');
-          selectFn.overrideReturn(el);
-          _.spy(Move, 'add').overrideReturn();
+      it('should add the element returned by the selection function to the move service', () => {
+        let el = doc.createElement('div');
+        selectFn.overrideReturn(el);
+        _.spy(Move, 'add').overrideReturn();
 
-          pickable.trigger(parent);
+        pickable.trigger(parent);
 
-          expect(Move.add).calledWith(el).at.least(1);
-          expect(selectFn).calledWith(parent).at.least(1);
-        });
-        it('should do nothing if the selection function returned null', () => {
-          selectFn.overrideReturn(null);
-          _.spy(Move, 'add').overrideReturn();
+        expect(Move.add).calledWith(el).at.least(1);
+        expect(selectFn).calledWith(parent).at.least(1);
+      });
+      it('should do nothing if the selection function returned null', () => {
+        selectFn.overrideReturn(null);
+        _.spy(Move, 'add').overrideReturn();
 
-          pickable.trigger(parent);
+        pickable.trigger(parent);
 
-          expect(Move.add).called().to.equal(0);
-          expect(selectFn).calledWith(parent).at.least(1);
-        });
+        expect(Move.add).called().to.equal(0);
+        expect(selectFn).calledWith(parent).at.least(1);
       });
     });
   });
-  </script>
+});
+</script>
 </body>

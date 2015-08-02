@@ -15,21 +15,20 @@
 </template>
 
 <script>
-DIJS
-    .prefix('pb')
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('template', require => require('doc').querySelector('template'))
-    .bind('component.Token', require => {
+(function(doc) {
 
-  const $registry = require('$registry');
-  const Component = require('component.Component');
-  const Config = require('service.Config');
-  const doc = require('doc');
-  const Helpable = require('ability.Helpable');
-  const Key = require('trigger.Key');
-  const Pickable = require('ability.Pickable');
-  const template = require('template');
-  const Utils = require('Utils');
+const template = doc.querySelector('template');
+
+DIJS
+.bind('pb.component.Token', require => {
+
+  const $registry = require('pb.$registry');
+  const Component = require('pb.component.Component');
+  const Config = require('pb.service.Config');
+  const Helpable = require('pb.ability.Helpable');
+  const Key = require('pb.trigger.Key');
+  const Pickable = require('pb.ability.Pickable');
+  const Utils = require('pb.Utils');
 
   /**
    * A simple movable component with only one state. Examples of token:
@@ -84,4 +83,5 @@ DIJS
 
   return Token;
 });
+})(document.currentScript.ownerDocument);
 </script>

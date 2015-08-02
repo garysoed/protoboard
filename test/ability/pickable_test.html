@@ -9,26 +9,24 @@
   <link rel="import" href="testbase.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new require('service.Registry')())
-      .constant('service.Move', { add() {} })
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.with('pb.$registry', require => new require('pb.service.Registry')())
+.constant('pb.service.Move', { add() {} })
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
+  const _ = require('_');
   const doc = require('doc');
-  const expect = require('/expect');
-  const Move = require('service.Move');
-  const Pickable = require('ability.Pickable');
+  const expect = require('expect');
+  const Move = require('pb.service.Move');
+  const Pickable = require('pb.ability.Pickable');
 
   describe('ability.Pickable', () => {
     let el;
 
-    beforeEach(done => {
+    beforeEach(() => {
       el = doc.createElement('div');
-      done();
     });
 
     describe('#init', () => {
@@ -69,11 +67,10 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

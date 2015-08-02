@@ -7,13 +7,12 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('ability.Pickable', require => {
+.bind('pb.ability.Pickable', require => {
 
-  const $ = require('/$');
-  const Ability = require('ability.Ability');
-  const Click = require('trigger.Click');
-  const Move = require('service.Move');
+  const $ = require('$');
+  const Ability = require('pb.ability.Ability');
+  const Click = require('pb.trigger.Click');
+  const Move = require('pb.service.Move');
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();

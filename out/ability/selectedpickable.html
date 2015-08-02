@@ -17,13 +17,13 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("ability.SelectedPickable", function (require) {
+DIJS.bind("pb.ability.SelectedPickable", function (require) {
 
-  var $ = require("/$");
-  var Click = require("trigger.Click");
-  var Move = require("service.Move");
-  var Pickable = require("ability.Pickable");
-  var Utils = require("Utils");
+  var $ = require("$");
+  var Click = require("pb.trigger.Click");
+  var Move = require("pb.service.Move");
+  var Pickable = require("pb.ability.Pickable");
+  var Utils = require("pb.Utils");
 
   var __selectionFn__ = Symbol("selectionFn");
 

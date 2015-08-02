@@ -19,13 +19,13 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("ability.Shuffleable", function (require) {
+DIJS.bind("pb.ability.Shuffleable", function (require) {
 
-  var $ = require("/$");
-  var Ability = require("ability.Ability");
-  var Chance = require("/Chance");
-  var Click = require("trigger.Click");
-  var Utils = require("Utils");
+  var $ = require("$");
+  var Ability = require("pb.ability.Ability");
+  var Chance = require("Chance");
+  var Click = require("pb.trigger.Click");
+  var Utils = require("pb.Utils");
 
   var __defaultEnabled__ = Symbol();
 

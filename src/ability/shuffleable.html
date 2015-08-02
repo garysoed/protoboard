@@ -11,14 +11,13 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('ability.Shuffleable', require => {
+.bind('pb.ability.Shuffleable', require => {
 
-  const $ = require('/$');
-  const Ability = require('ability.Ability');
-  const Chance = require('/Chance');
-  const Click = require('trigger.Click');
-  const Utils = require('Utils');
+  const $ = require('$');
+  const Ability = require('pb.ability.Ability');
+  const Chance = require('Chance');
+  const Click = require('pb.trigger.Click');
+  const Utils = require('pb.Utils');
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();

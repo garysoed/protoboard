@@ -13,28 +13,26 @@
   <link rel="import" href="third_party/jquery.html">
 </head>
 <body>
-  <div id="testholder"></div>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<div id="testholder"></div>
+<script>
+DIJS
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const $ = require('/$');
-  const $registry = require('$registry');
+  const _ = require('_');
+  const $ = require('$');
+  const $registry = require('pb.$registry');
 
-  const Chance = require('/Chance');
-  const Config = require('service.Config');
-  const Dice = require('component.Dice');
+  const Chance = require('Chance');
+  const Config = require('pb.service.Config');
+  const Dice = require('pb.component.Dice');
   const doc = require('doc');
-  const expect = require('/expect');
+  const expect = require('expect');
 
   describe('component.Dice', () => {
-    before(done => {
+    before(() => {
       $registry.register(doc, Config);
-      done();
     });
 
     describe('#createdCallback', () => {
@@ -119,9 +117,8 @@
     describe('$Rollable', () => {
       let el;
 
-      beforeEach(done => {
+      beforeEach(() => {
         el = doc.createElement('div');
-        done();
       });
 
       describe('#init', () => {
@@ -164,9 +161,8 @@
 
     describe('$DiceFlippable', () => {
       let el;
-      beforeEach(done => {
+      beforeEach(() => {
         el = doc.createElement('div');
-        done();
       });
 
       describe('#init', () => {
@@ -209,11 +205,10 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

@@ -8,13 +8,12 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('ability.Toggleable', require => {
+.bind('pb.ability.Toggleable', require => {
 
-  const $ = require('/$');
-  const Ability = require('ability.Ability');
-  const Check = require('Check');
-  const Key = require('trigger.Key');
+  const $ = require('$');
+  const Ability = require('pb.ability.Ability');
+  const Check = require('pb.Check');
+  const Key = require('pb.trigger.Key');
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();

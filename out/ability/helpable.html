@@ -77,101 +77,101 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
-  return require("doc").querySelector("template");
-}).bind("ability.Helpable", function (require) {
+(function (doc) {
 
-  var $registry = require("$registry");
-  var Abilities = require("ability.Abilities");
-  var Ability = require("ability.Ability");
-  var doc = require("doc");
-  var Events = require("Events");
-  var Key = require("trigger.Key");
-  var template = require("template");
-  var Utils = require("Utils");
+  DIJS.bind("pb.ability.Helpable", function (require) {
 
-  var displayEl = null;
+    var $registry = require("pb.$registry");
+    var Abilities = require("pb.ability.Abilities");
+    var Ability = require("pb.ability.Ability");
+    var Events = require("pb.Events");
+    var Key = require("pb.trigger.Key");
+    var template = doc.querySelector("template");
+    var Utils = require("pb.Utils");
 
-  var Helpable = (function (_Ability) {
-    function Helpable() {
-      var name = arguments[0] === undefined ? "helpable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Key("?") : arguments[1];
+    var displayEl = null;
 
-      _classCallCheck(this, Helpable);
+    var Helpable = (function (_Ability) {
+      function Helpable() {
+        var name = arguments[0] === undefined ? "helpable" : arguments[0];
+        var defaultTrigger = arguments[1] === undefined ? new Key("?") : arguments[1];
 
-      _get(Object.getPrototypeOf(Helpable.prototype), "constructor", this).call(this, name, defaultTrigger);
-    }
+        _classCallCheck(this, Helpable);
 
-    _inherits(Helpable, _Ability);
-
-    _createClass(Helpable, {
-      doTrigger: {
-        value: function doTrigger(el) {
-          var abilities = Abilities.of(el).getAll();
-          displayEl.innerHTML = "";
-
-          var doc = displayEl.ownerDocument;
-
-          var headerEl = doc.createElement("h1");
-          headerEl.innerText = el.nodeName;
-          displayEl.appendChild(headerEl);
-
-          var _iteratorNormalCompletion = true;
-          var _didIteratorError = false;
-          var _iteratorError = undefined;
-
-          try {
-            for (var _iterator = abilities[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-              var _step$value = _slicedToArray(_step.value, 2);
-
-              var _name = _step$value[0];
-              var ability = _step$value[1];
-
-              if (ability.isEnabled(el)) {
-                var entry = doc.createElement("div");
-                entry.classList.add("entry");
-                entry.innerHTML = "<div class=\"trigger\">" + ability.getTrigger(el).helpText + "</div>: " + _name;
-                displayEl.appendChild(entry);
-              }
-            }
-          } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion && _iterator["return"]) {
-                _iterator["return"]();
-              }
-            } finally {
-              if (_didIteratorError) {
-                throw _iteratorError;
-              }
-            }
-          }
-
-          displayEl.style.display = "";
-        }
-      },
-      isEnabled: {
-        value: function isEnabled() {
-          return true;
-        }
+        _get(Object.getPrototypeOf(Helpable.prototype), "constructor", this).call(this, name, defaultTrigger);
       }
+
+      _inherits(Helpable, _Ability);
+
+      _createClass(Helpable, {
+        doTrigger: {
+          value: function doTrigger(el) {
+            var abilities = Abilities.of(el).getAll();
+            displayEl.innerHTML = "";
+
+            var doc = displayEl.ownerDocument;
+
+            var headerEl = doc.createElement("h1");
+            headerEl.innerText = el.nodeName;
+            displayEl.appendChild(headerEl);
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = abilities[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var _step$value = _slicedToArray(_step.value, 2);
+
+                var _name = _step$value[0];
+                var ability = _step$value[1];
+
+                if (ability.isEnabled(el)) {
+                  var entry = doc.createElement("div");
+                  entry.classList.add("entry");
+                  entry.innerHTML = "<div class=\"trigger\">" + ability.getTrigger(el).helpText + "</div>: " + _name;
+                  displayEl.appendChild(entry);
+                }
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator["return"]) {
+                  _iterator["return"]();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+
+            displayEl.style.display = "";
+          }
+        },
+        isEnabled: {
+          value: function isEnabled() {
+            return true;
+          }
+        }
+      });
+
+      return Helpable;
+    })(Ability);
+
+    $registry.runAtRegister(function (document, config) {
+      displayEl = document.createElement("div");
+      displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+      displayEl.style.display = "none";
+      Events.of(displayEl).on("dom", "click", function () {
+        displayEl.style.display = "none";
+      });
+      document.body.appendChild(displayEl);
     });
 
     return Helpable;
-  })(Ability);
-
-  $registry.runAtRegister(function (document, config) {
-    displayEl = document.createElement("div");
-    displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-    displayEl.style.display = "none";
-    Events.of(displayEl).on("dom", "click", function () {
-      displayEl.style.display = "none";
-    });
-    document.body.appendChild(displayEl);
   });
-
-  return Helpable;
-});</script>
+})(document.currentScript.ownerDocument);</script>
 </head><body></body></html>
