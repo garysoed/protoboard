@@ -23,11 +23,20 @@ DIJS.bind('pb.t', require => {
     },
 
     createFakeEvents() {
-      let fake = {};
-      fake.of = _.spiedFunction().overrideReturn(fake);
-      fake.on = _.spiedFunction().overrideReturn(fake);
-      fake.off = _.spiedFunction().overrideReturn(fake);
-      return fake;
+      let fakeEvents = {
+        of() {
+          return fakeEvents;
+        },
+
+        on() {
+          return fakeEvents;
+        },
+
+        off() {
+          return fakeEvents;
+        }
+      };
+      return fakeEvents;
     },
 
     createFakeTrigger(name) {

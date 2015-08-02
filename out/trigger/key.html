@@ -15,21 +15,148 @@
 
 var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
 var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("trigger.Key", function (require) {
+DIJS.bind("pb.trigger.Key.__service__.__ctor__", function (require) {
+  var Events = require("pb.Events");
+  var Move = require("pb.service.Move");
 
-  var Events = require("Events");
-  var Move = require("service.Move");
-  var Trigger = require("trigger.Trigger");
-  var Triggers = require("trigger.Triggers");
-  var $registry = require("$registry");
+  var __hoveredEls__ = Symbol("hoveredEls");
+
+  var __onKeyPress__ = Symbol("onKeyPress");
+
+  var Service = (function () {
+    function Service() {
+      _classCallCheck(this, Service);
+
+      this[__hoveredEls__] = new Map();
+    }
+
+    _createComputedClass(Service, [{
+      key: __onKeyPress__,
+      value: function (event) {
+        var char = String.fromCharCode(event.keyCode);
+        var triggeredEl = null;
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this[__hoveredEls__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _step$value = _slicedToArray(_step.value, 2);
+
+            var el = _step$value[0];
+            var keyMap = _step$value[1];
+
+            if (keyMap.has(char) && (!triggeredEl || triggeredEl.contains(el))) {
+              triggeredEl = el;
+            }
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        if (triggeredEl) {
+          var abilitySet = this[__hoveredEls__].get(triggeredEl).get(char);
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = abilitySet[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var ability = _step2.value;
+
+              ability.trigger(triggeredEl);
+              break;
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+                _iterator2["return"]();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+
+          var rect = triggeredEl.getBoundingClientRect();
+          if (Move.movedElements.has(triggeredEl) || rect.left > Move.mouseX || rect.right < Move.mouseX || rect.top > Move.mouseY || rect.bottom < Move.mouseY) {
+            this[__hoveredEls__]["delete"](triggeredEl);
+          }
+        }
+      }
+    }, {
+      key: "init",
+      value: function init(doc) {
+        Events.of(doc.body, this).on("dom", "keypress", this[__onKeyPress__].bind(this));
+      }
+    }, {
+      key: "add",
+      value: function add(element, key, ability) {
+        if (!this[__hoveredEls__].has(element)) {
+          this[__hoveredEls__].set(element, new Map());
+        }
+
+        var keyMap = this[__hoveredEls__].get(element);
+        if (!keyMap.get(key)) {
+          keyMap.set(key, new Set());
+        }
+
+        keyMap.get(key).add(ability);
+      }
+    }, {
+      key: "remove",
+      value: function remove(element) {
+        this[__hoveredEls__]["delete"](element);
+      }
+    }, {
+      key: "clear",
+      value: function clear() {
+        this[__hoveredEls__].clear();
+      }
+    }, {
+      key: "hoveredEls",
+      get: function () {
+        return this[__hoveredEls__];
+      }
+    }]);
+
+    return Service;
+  })();
+
+  return Service;
+}).bind("pb.trigger.Key.__service__", function (require) {
+  var Service = require("pb.trigger.Key.__service__.__ctor__");
+  return new Service();
+}).bind("pb.trigger.Key", function (require) {
+
+  var $registry = require("pb.$registry");
+  var Events = require("pb.Events");
+  var Move = require("pb.service.Move");
+  var Service = require("pb.trigger.Key.__service__");
+  var Trigger = require("pb.trigger.Trigger");
+  var Triggers = require("pb.trigger.Triggers");
 
   var __active__ = Symbol();
   var __key__ = Symbol("key");
@@ -90,125 +217,9 @@ DIJS.prefix("pb").bind("trigger.Key", function (require) {
     return undefined;
   });
 
-  var __hoveredEls__ = Symbol("hoveredEls");
-
-  var __onKeyPress__ = Symbol("onKeyPress");
-
-  var Service = Object.defineProperties((function () {
-    var _Object$defineProperties = {};
-
-    _defineProperty(_Object$defineProperties, __hoveredEls__, new Map());
-
-    _defineProperty(_Object$defineProperties, __onKeyPress__, function (event) {
-      var char = String.fromCharCode(event.keyCode);
-      var triggeredEl = null;
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this[__hoveredEls__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _step$value = _slicedToArray(_step.value, 2);
-
-          var el = _step$value[0];
-          var keyMap = _step$value[1];
-
-          if (keyMap.has(char) && (!triggeredEl || triggeredEl.contains(el))) {
-            triggeredEl = el;
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"]) {
-            _iterator["return"]();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      if (triggeredEl) {
-        var abilitySet = this[__hoveredEls__].get(triggeredEl).get(char);
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = abilitySet[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var ability = _step2.value;
-
-            ability.trigger(triggeredEl);
-            break;
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-              _iterator2["return"]();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-
-        var rect = triggeredEl.getBoundingClientRect();
-        if (Move.movedElements.has(triggeredEl) || rect.left > Move.mouseX || rect.right < Move.mouseX || rect.top > Move.mouseY || rect.bottom < Move.mouseY) {
-          this[__hoveredEls__]["delete"](triggeredEl);
-        }
-      }
-    });
-
-    _defineProperty(_Object$defineProperties, "init", function init(doc) {
-      Events.of(doc.body, Service).on("dom", "keypress", this[__onKeyPress__].bind(Service));
-    });
-
-    _defineProperty(_Object$defineProperties, "add", function add(element, key, ability) {
-      if (!this[__hoveredEls__].has(element)) {
-        this[__hoveredEls__].set(element, new Map());
-      }
-
-      var keyMap = this[__hoveredEls__].get(element);
-      if (!keyMap.get(key)) {
-        keyMap.set(key, new Set());
-      }
-
-      keyMap.get(key).add(ability);
-    });
-
-    _defineProperty(_Object$defineProperties, "remove", function remove(element) {
-      this[__hoveredEls__]["delete"](element);
-    });
-
-    _defineProperty(_Object$defineProperties, "clear", function clear() {
-      this[__hoveredEls__].clear();
-    });
-
-    return _Object$defineProperties;
-  })(), {
-    hoveredEls: {
-      get: function () {
-        return this[__hoveredEls__];
-      },
-      configurable: true,
-      enumerable: true
-    }
-  });
-
   $registry.runAtRegister(function (doc) {
     Service.init(doc);
   });
-
-  Key.Service = Service;
 
   return Key;
 });</script>

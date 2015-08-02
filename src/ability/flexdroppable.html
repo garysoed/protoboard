@@ -6,15 +6,14 @@
 <link rel="import" href="trigger/click.html">
 <link rel="import" href="utils.html">
 
-<script type="text/javascript">
+<script>
 DIJS
-    .prefix('pb')
-    .bind('ability.FlexDroppable', require => {
+.bind('pb.ability.FlexDroppable', require => {
 
-  const Click = require('trigger.Click');
-  const Droppable = require('ability.Droppable');
-  const Move = require('service.Move');
-  const Utils = require('Utils');
+  const Click = require('pb.trigger.Click');
+  const Droppable = require('pb.ability.Droppable');
+  const Move = require('pb.service.Move');
+  const Utils = require('pb.Utils');
 
   // Private symbols
   const __mutationObserver__ = Symbol('mutationObserver');

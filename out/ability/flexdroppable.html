@@ -6,7 +6,7 @@
 <link rel="import" href="trigger/click.html">
 <link rel="import" href="utils.html">
 
-<script type="text/javascript">"use strict";
+<script>"use strict";
 
 var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -16,12 +16,12 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("ability.FlexDroppable", function (require) {
+DIJS.bind("pb.ability.FlexDroppable", function (require) {
 
-  var Click = require("trigger.Click");
-  var Droppable = require("ability.Droppable");
-  var Move = require("service.Move");
-  var Utils = require("Utils");
+  var Click = require("pb.trigger.Click");
+  var Droppable = require("pb.ability.Droppable");
+  var Move = require("pb.service.Move");
+  var Utils = require("pb.Utils");
 
   var __mutationObserver__ = Symbol("mutationObserver");
   var __onDomMutation__ = Symbol("onDomMutation");

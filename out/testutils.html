@@ -29,11 +29,20 @@ DIJS.bind("pb.t", function (require) {
     },
 
     createFakeEvents: function createFakeEvents() {
-      var fake = {};
-      fake.of = _.spiedFunction().overrideReturn(fake);
-      fake.on = _.spiedFunction().overrideReturn(fake);
-      fake.off = _.spiedFunction().overrideReturn(fake);
-      return fake;
+      var fakeEvents = {
+        of: function of() {
+          return fakeEvents;
+        },
+
+        on: function on() {
+          return fakeEvents;
+        },
+
+        off: function off() {
+          return fakeEvents;
+        }
+      };
+      return fakeEvents;
     },
 
     createFakeTrigger: function createFakeTrigger(name) {
