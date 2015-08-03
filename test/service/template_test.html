@@ -10,31 +10,37 @@
   <link rel="import" href="testbase.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .constant('Handlebars', {
-        helpers: {},
-        registerHelper(name, helper) {
-          this.helpers[name] = helper;
-        },
-        registerPartial() {
-          return this;
-        }
-      })
-      .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.constant('Handlebars', {
+  helpers: {},
+  registerHelper(name, helper) {
+    this.helpers[name] = helper;
+  },
+  registerPartial() {
+    return this;
+  }
+})
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const _M = require('/_M');
+  const _ = require('_');
+  const _M = require('_M');
 
-  const Check = require('Check');
+  const Check = require('pb.Check');
   const doc = require('doc');
-  const expect = require('/expect');
-  const Handlebars = require('/Handlebars');
-  const Template = require('service.Template');
+  const expect = require('expect');
+  const forHelper = require('pb.service.Template.__forHelper__');
+  const Handlebars = require('Handlebars');
+  const Template = require('pb.service.Template.__ctor__');
 
   describe('service.Template', () => {
+    let template;
+
+    beforeEach(() => {
+      template = new Template();
+    });
+
     describe('#addPartial', () => {
       it('should register partial to Handlebars', () => {
         let name = 'partialName';
@@ -43,7 +49,7 @@
 
         _.spy(Handlebars, 'registerPartial');
 
-        Template.addPartial(name, el);
+        template.addPartial(name, el);
         expect(Handlebars.registerPartial).calledWith(name, '{{> abc}}').at.least(1);
       });
     });
@@ -52,8 +58,8 @@
       it('should handle adding data before retrieval', done => {
         let name = 'data';
         let data = {};
-        Template.addData(name, data);
-        Template.get(name)
+        template.addData(name, data);
+        template.get(name)
             .then(result => {
               expect(result).to.be.eql([name, data]);
               done();
@@ -62,22 +68,19 @@
       it('should handle adding data after retrieval', done => {
         let name = 'data';
         let data = {};
-        Template.get(name)
+        template.get(name)
             .then(result => {
               expect(result).to.be.eql([name, data]);
               done();
             });
-        Template.addData(name, data);
+        template.addData(name, data);
       });
     });
 
     describe('$pb-for helper', () => {
-      let forHelper;
 
-      beforeEach(done => {
-        forHelper = Handlebars.helpers['pb-for'];
+      beforeEach(() => {
         Handlebars.createFrame = input => input;
-        done();
       });
 
       it('should repeat the inner block a number of times', () => {
@@ -112,11 +115,10 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

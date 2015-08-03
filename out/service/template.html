@@ -7,42 +7,69 @@
 
 <script>"use strict";
 
-DIJS.prefix("pb").bind("service.Template", function (require) {
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-  var $ = require("/$");
-  var Check = require("Check");
-  var Events = require("Events");
-  var Handlebars = require("/Handlebars");
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-  var promiseMap = new Map();
+DIJS.bind("pb.service.Template.__ctor__", function (require) {
 
-  var Service = {
-    addPartial: function addPartial(name, element) {
-      Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
-      return this;
-    },
-    addData: function addData(name, data) {
-      if (promiseMap.has(name)) {
-        $(Service).trigger(name, data);
-      } else {
-        promiseMap.set(name, Promise.resolve([name, data]));
-      }
-      return this;
-    },
-    get: function get(name) {
-      if (!promiseMap.has(name)) {
-        promiseMap.set(name, new Promise(function (resolve, reject) {
-          Events.of(Service, this).on("jquery", name, function (event, data) {
-            resolve([name, data]);
-          });
-        }));
-      }
+  var $ = require("$");
+  var Events = require("pb.Events");
+  var Handlebars = require("Handlebars");
 
-      return promiseMap.get(name);
+  var __promises__ = Symbol("promises");
+
+  var Service = (function () {
+    function Service() {
+      _classCallCheck(this, Service);
+
+      this[__promises__] = new Map();
     }
-  };
 
-  Handlebars.registerHelper("pb-for", function (from, to, step, options) {
+    _createClass(Service, {
+      addPartial: {
+        value: function addPartial(name, element) {
+          Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
+          return this;
+        }
+      },
+      addData: {
+        value: function addData(name, data) {
+          if (this[__promises__].has(name)) {
+            $(this).trigger(name, data);
+          } else {
+            this[__promises__].set(name, Promise.resolve([name, data]));
+          }
+          return this;
+        }
+      },
+      get: {
+        value: function get(name) {
+          var _this = this;
+
+          if (!this[__promises__].has(name)) {
+            this[__promises__].set(name, new Promise(function (resolve, reject) {
+              Events.of(_this, _this).on("jquery", name, function (event, data) {
+                resolve([name, data]);
+              });
+            }));
+          }
+
+          return this[__promises__].get(name);
+        }
+      }
+    });
+
+    return Service;
+  })();
+
+  return Service;
+}).bind("pb.service.Template.__forHelper__", function (require) {
+
+  var Check = require("pb.Check");
+  var Handlebars = require("Handlebars");
+
+  return function (from, to, step, options) {
     if (options === undefined) {
       options = step;
       step = 1;
@@ -54,8 +81,14 @@ DIJS.prefix("pb").bind("service.Template", function (require) {
       rv += options.fn(this, { data: data });
     }
     return rv;
-  });
+  };
+}).bind("pb.service.Template", function (require) {
 
-  return Service;
+  var Service = require("pb.service.Template.__ctor__");
+  var forHelper = require("pb.service.Template.__forHelper__");
+
+  Handlebars.registerHelper("pb-for", forHelper);
+
+  return new Service();
 });</script>
 </head><body></body></html>

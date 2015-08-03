@@ -7,15 +7,13 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('service.Template', require => {
+.bind('pb.service.Template.__ctor__', require => {
 
-  const $ = require('/$');
-  const Check = require('Check');
-  const Events = require('Events');
-  const Handlebars = require('/Handlebars');
+  const $ = require('$');
+  const Events = require('pb.Events');
+  const Handlebars = require('Handlebars');
 
-  const promiseMap = new Map();
+  const __promises__ = Symbol('promises');
 
   /**
    * Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
@@ -46,7 +44,11 @@ DIJS
    * @static
    * @since 0.2.0
    */
-  const Service = {
+  class Service {
+
+    constructor() {
+      this[__promises__] = new Map();
+    }
 
     /**
      * Registers the given partial.
@@ -62,7 +64,7 @@ DIJS
     addPartial(name, element) {
       Handlebars.registerPartial(name, element.innerHTML.replace('&gt;', '>'));
       return this;
-    },
+    }
 
     /**
      * Adds data to be inserted into the templates.
@@ -73,13 +75,13 @@ DIJS
      * @return {service.Template} This service for chaining.
      */
     addData(name, data) {
-      if (promiseMap.has(name)) {
-        $(Service).trigger(name, data);
+      if (this[__promises__].has(name)) {
+        $(this).trigger(name, data);
       } else {
-        promiseMap.set(name, Promise.resolve([name, data]));
+        this[__promises__].set(name, Promise.resolve([name, data]));
       }
       return this;
-    },
+    }
 
     /**
      * Retrieves the data with the given key.
@@ -90,24 +92,29 @@ DIJS
      *    data requested.
      */
     get(name) {
-      if (!promiseMap.has(name)) {
-        promiseMap.set(
+      if (!this[__promises__].has(name)) {
+        this[__promises__].set(
             name,
-            new Promise(function(resolve, reject) {
-              Events.of(Service, this)
+            new Promise((resolve, reject) => {
+              Events.of(this, this)
                   .on('jquery', name, (event, data) => {
                     resolve([name, data]);
                   });
             }));
       }
 
-      return promiseMap.get(name);
+      return this[__promises__].get(name);
     }
-  };
+  }
 
+  return Service;
+})
+.bind('pb.service.Template.__forHelper__', require => {
 
-  // Use function since Handlebars changes the context of this.
-  Handlebars.registerHelper('pb-for', function(from, to, step, options) {
+  const Check = require('pb.Check');
+  const Handlebars = require('Handlebars');
+
+  return function(from, to, step, options) {
     if (options === undefined) {
       // Shift the args if step is not defined.
       options = step;
@@ -122,9 +129,17 @@ DIJS
       rv += options.fn(this, { data: data });
     }
     return rv;
-  });
+  };
+})
+.bind('pb.service.Template', require => {
 
-  return Service;
+  const Service = require('pb.service.Template.__ctor__');
+  const forHelper = require('pb.service.Template.__forHelper__');
+
+  // Use function since Handlebars changes the context of this.
+  Handlebars.registerHelper('pb-for', forHelper);
+
+  return new Service();
 });
 
 </script>
