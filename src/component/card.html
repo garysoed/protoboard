@@ -71,11 +71,12 @@
 </template>
 
 <script>
-(function(doc) {
-
-const template = doc.querySelector('template');
-
 DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.with('template', require => {
+  const template = require('doc');
+  return doc.querySelector('template');
+})
 .bind('pb.component.Card', require => {
 
   const $registry = require('pb.$registry');
@@ -146,5 +147,4 @@ DIJS
 
   return Card;
 });
-})(document.currentScript.ownerDocument);
 </script>

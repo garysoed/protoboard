@@ -6,8 +6,6 @@
 
 <script>
 DIJS.bind('pb.t', require => {
-  const _ = require('_');
-
   let TestUtil = {
     createFakeAbility(name, trigger = this.createFakeTrigger(`${name}-trigger`)) {
       return {
@@ -15,10 +13,10 @@ DIJS.bind('pb.t', require => {
         attrTrigger: `attr${name}Trigger`,
         defaultTrigger: trigger,
         getTrigger: () => trigger,
-        init: _.spiedFunction(),
-        isEnabled: _.spiedFunction(),
-        updateConfig: _.spiedFunction(),
-        trigger: _.spiedFunction()
+        init() {},
+        isEnabled() {} ,
+        updateConfig() {} ,
+        trigger() {}
       };
     },
 
@@ -42,8 +40,8 @@ DIJS.bind('pb.t', require => {
     createFakeTrigger(name) {
       return {
         toString() { return name; },
-        on: _.spiedFunction(),
-        off: _.spiedFunction()
+        on() {},
+        off() {}
       };
     },
 

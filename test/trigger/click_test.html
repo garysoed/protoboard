@@ -22,7 +22,7 @@ DIJS
   const Events = require('pb.Events');
   const t = require('pb.t');
 
-  describe('Click', () => {
+  describe('trigger.Click', () => {
     let click;
 
     beforeEach(() => {
@@ -36,6 +36,8 @@ DIJS
       it('should register singletap on hammer', () => {
         let ability = t.createFakeAbility('test');
         let element = doc.createElement('div');
+
+        _.spy(ability, 'trigger');
 
         click.on(element, ability);
 

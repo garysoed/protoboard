@@ -45,6 +45,10 @@ DIJS
       it('should add the abilities as child of the display element and show the element', () => {
         let ability1 = t.createFakeAbility('ability', new Click());
         let ability2 = t.createFakeAbility('ability2', new Key('a'));
+
+        _.spy(ability1, 'isEnabled');
+        _.spy(ability2, 'isEnabled');
+
         ability1.isEnabled.overrideReturn(true);
         ability2.isEnabled.overrideReturn(true);
 

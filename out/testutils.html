@@ -7,8 +7,6 @@
 <script>"use strict";
 
 DIJS.bind("pb.t", function (require) {
-  var _ = require("_");
-
   var TestUtil = {
     createFakeAbility: function createFakeAbility(name) {
       var trigger = arguments[1] === undefined ? this.createFakeTrigger("" + name + "-trigger") : arguments[1];
@@ -20,10 +18,10 @@ DIJS.bind("pb.t", function (require) {
           getTrigger: function () {
             return trigger;
           },
-          init: _.spiedFunction(),
-          isEnabled: _.spiedFunction(),
-          updateConfig: _.spiedFunction(),
-          trigger: _.spiedFunction()
+          init: function init() {},
+          isEnabled: function isEnabled() {},
+          updateConfig: function updateConfig() {},
+          trigger: function trigger() {}
         };
       })();
     },
@@ -50,8 +48,8 @@ DIJS.bind("pb.t", function (require) {
         toString: function toString() {
           return name;
         },
-        on: _.spiedFunction(),
-        off: _.spiedFunction()
+        on: function on() {},
+        off: function off() {}
       };
     },
 

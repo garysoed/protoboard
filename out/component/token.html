@@ -24,50 +24,48 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-(function (doc) {
+DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
+  var template = require("doc");
+  return doc.querySelector("template");
+}).bind("pb.component.Token", function (require) {
 
-  var template = doc.querySelector("template");
+  var $registry = require("pb.$registry");
+  var Component = require("pb.component.Component");
+  var Config = require("pb.service.Config");
+  var Helpable = require("pb.ability.Helpable");
+  var Key = require("pb.trigger.Key");
+  var Pickable = require("pb.ability.Pickable");
+  var Utils = require("pb.Utils");
 
-  DIJS.bind("pb.component.Token", function (require) {
+  var Token = (function (_Component) {
+    function Token() {
+      _classCallCheck(this, Token);
 
-    var $registry = require("pb.$registry");
-    var Component = require("pb.component.Component");
-    var Config = require("pb.service.Config");
-    var Helpable = require("pb.ability.Helpable");
-    var Key = require("pb.trigger.Key");
-    var Pickable = require("pb.ability.Pickable");
-    var Utils = require("pb.Utils");
+      if (_Component != null) {
+        _Component.apply(this, arguments);
+      }
+    }
 
-    var Token = (function (_Component) {
-      function Token() {
-        _classCallCheck(this, Token);
+    _inherits(Token, _Component);
 
-        if (_Component != null) {
-          _Component.apply(this, arguments);
+    _createClass(Token, {
+      createdCallback: {
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Token.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
         }
       }
-
-      _inherits(Token, _Component);
-
-      _createClass(Token, {
-        createdCallback: {
-          value: function createdCallback() {
-            _get(Object.getPrototypeOf(Token.prototype), "createdCallback", this).call(this);
-            this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-          }
-        }
-      });
-
-      return Token;
-    })(Component);
-
-    Token.NODE_NAME = "pb-c-token";
-
-    Config.add(Token.NODE_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true));
-
-    $registry.add(Token.NODE_NAME, Token);
+    });
 
     return Token;
-  });
-})(document.currentScript.ownerDocument);</script>
+  })(Component);
+
+  Token.NODE_NAME = "pb-c-token";
+
+  Config.add(Token.NODE_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true));
+
+  $registry.add(Token.NODE_NAME, Token);
+
+  return Token;
+});</script>
 </head><body></body></html>

@@ -33,6 +33,7 @@ DIJS
 
       FakeElement = function() {};
       FakeElement.prototype = Object.create(HTMLElement.prototype);
+      FakeElement.prototype.constructor = FakeElement;
     });
 
     describe('#__onMutation__', () => {
@@ -53,6 +54,9 @@ DIJS
         abilities.of(FakeElement.prototype)
             .add(ability1)
             .add(ability2);
+
+        _.spy(ability1, 'updateConfig');
+        _.spy(ability2, 'updateConfig');
 
         t.getPrivateMethod(abilities, 'onMutation')(records);
         expect(ability1.updateConfig).calledWith(records[0].target).at.least(1);
@@ -93,6 +97,8 @@ DIJS
             .add(ability2);
 
         _.spy(Utils, 'extendFn');
+        _.spy(ability1, 'init');
+        _.spy(ability2, 'init');
 
         abilities.init(el);
 

@@ -51,176 +51,176 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-(function (doc) {
+DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
+  var doc = require("doc");
+  return doc.querySelector("template");
+}).bind("pb.component.Dice", function (require) {
 
-  var template = doc.querySelector("template");
+  var $ = require("$");
+  var $registry = require("pb.$registry");
+  var Ability = require("pb.ability.Ability");
+  var Chance = require("Chance");
+  var Check = require("pb.Check");
+  var Click = require("pb.trigger.Click");
+  var Component = require("pb.component.Component");
+  var Config = require("pb.service.Config");
+  var doc = require("doc");
+  var Helpable = require("pb.ability.Helpable");
+  var Key = require("pb.trigger.Key");
+  var Pickable = require("pb.ability.Pickable");
+  var Shuffleable = require("pb.ability.Shuffleable");
+  var template = require("template");
+  var Utils = require("pb.Utils");
 
-  DIJS.bind("pb.component.Dice", function (require) {
+  var EL_NAME = "pb-c-dice";
+  var ATTR_PAIR = "pb-dice-pair";
+  var ATTR_SHOW_SIDE_A = "show-side-a";
+  var SUPPORTED_TYPES = ["d2", "d4", "d6", "d8", "d10", "d12", "d20"];
 
-    var $ = require("$");
-    var $registry = require("pb.$registry");
-    var Ability = require("pb.ability.Ability");
-    var Chance = require("Chance");
-    var Check = require("pb.Check");
-    var Click = require("pb.trigger.Click");
-    var Component = require("pb.component.Component");
-    var Config = require("pb.service.Config");
-    var Helpable = require("pb.ability.Helpable");
-    var Key = require("pb.trigger.Key");
-    var Pickable = require("pb.ability.Pickable");
-    var Shuffleable = require("pb.ability.Shuffleable");
-    var Utils = require("pb.Utils");
+  var __defaultEnabled__ = Symbol();
+  var __defaultShowA__ = Symbol();
+  var __isShowA__ = Symbol();
 
-    var EL_NAME = "pb-c-dice";
-    var ATTR_PAIR = "pb-dice-pair";
-    var ATTR_SHOW_SIDE_A = "show-side-a";
-    var SUPPORTED_TYPES = ["d2", "d4", "d6", "d8", "d10", "d12", "d20"];
+  var Rollable = (function (_Shuffleable) {
+    function Rollable() {
+      var name = arguments[0] === undefined ? "rollable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+      var defaultShowA = arguments[3] === undefined ? true : arguments[3];
 
-    var __defaultEnabled__ = Symbol();
-    var __defaultShowA__ = Symbol();
-    var __isShowA__ = Symbol();
+      _classCallCheck(this, Rollable);
 
-    var Rollable = (function (_Shuffleable) {
-      function Rollable() {
-        var name = arguments[0] === undefined ? "rollable" : arguments[0];
-        var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
-        var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
-        var defaultShowA = arguments[3] === undefined ? true : arguments[3];
+      _get(Object.getPrototypeOf(Rollable.prototype), "constructor", this).call(this, name, defaultTrigger);
 
-        _classCallCheck(this, Rollable);
+      this[__defaultEnabled__] = defaultEnabled;
+      this[__defaultShowA__] = defaultShowA;
+    }
 
-        _get(Object.getPrototypeOf(Rollable.prototype), "constructor", this).call(this, name, defaultTrigger);
+    _inherits(Rollable, _Shuffleable);
 
-        this[__defaultEnabled__] = defaultEnabled;
-        this[__defaultShowA__] = defaultShowA;
-      }
-
-      _inherits(Rollable, _Shuffleable);
-
-      _createClass(Rollable, {
-        init: {
-          value: function init(el) {
-            _get(Object.getPrototypeOf(Rollable.prototype), "init", this).call(this, el);
-            if ($(el).attr(this.attrName) === undefined) {
-              $(el).attr(this.attrName, this[__defaultEnabled__]);
-            }
-
-            if ($(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
-              $(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
-            }
+    _createClass(Rollable, {
+      init: {
+        value: function init(el) {
+          _get(Object.getPrototypeOf(Rollable.prototype), "init", this).call(this, el);
+          if ($(el).attr(this.attrName) === undefined) {
+            $(el).attr(this.attrName, this[__defaultEnabled__]);
           }
-        },
-        doTrigger: {
-          value: function doTrigger(el) {
-            _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
-            $(el).attr(ATTR_SHOW_SIDE_A, Chance.bool());
+
+          if ($(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
+            $(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
           }
         }
-      });
-
-      return Rollable;
-    })(Shuffleable);
-
-    var DiceFlippable = (function (_Ability) {
-      function DiceFlippable() {
-        var name = arguments[0] === undefined ? "pb-dice-flippable" : arguments[0];
-        var defaultTrigger = arguments[1] === undefined ? new Key("f") : arguments[1];
-        var defaultEnabled = arguments[2] === undefined ? false : arguments[2];
-        var defaultShowA = arguments[3] === undefined ? true : arguments[3];
-
-        _classCallCheck(this, DiceFlippable);
-
-        _get(Object.getPrototypeOf(DiceFlippable.prototype), "constructor", this).call(this, name, defaultTrigger);
-
-        this[__defaultEnabled__] = defaultEnabled;
-        this[__defaultShowA__] = defaultShowA;
-      }
-
-      _inherits(DiceFlippable, _Ability);
-
-      _createClass(DiceFlippable, {
-        init: {
-          value: function init(el) {
-            _get(Object.getPrototypeOf(DiceFlippable.prototype), "init", this).call(this, el);
-            if ($(el).attr(this.attrName) === undefined) {
-              $(el).attr(this.attrName, this[__defaultEnabled__]);
-            }
-
-            if ($(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
-              $(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
-            }
-          }
-        },
-        doTrigger: {
-          value: function doTrigger(el) {
-            $(el).attr(ATTR_SHOW_SIDE_A, !Check($(el).attr(ATTR_SHOW_SIDE_A)).isBoolean().orThrows());
-          }
-        }
-      });
-
-      return DiceFlippable;
-    })(Ability);
-
-    var Dice = (function (_Component) {
-      function Dice() {
-        _classCallCheck(this, Dice);
-
-        if (_Component != null) {
-          _Component.apply(this, arguments);
+      },
+      doTrigger: {
+        value: function doTrigger(el) {
+          _get(Object.getPrototypeOf(Rollable.prototype), "doTrigger", this).call(this, el);
+          $(el).attr(ATTR_SHOW_SIDE_A, Chance.bool());
         }
       }
+    });
 
-      _inherits(Dice, _Component);
+    return Rollable;
+  })(Shuffleable);
 
-      _createClass(Dice, {
-        createdCallback: {
-          value: function createdCallback() {
-            _get(Object.getPrototypeOf(Dice.prototype), "createdCallback", this).call(this);
-            this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  var DiceFlippable = (function (_Ability) {
+    function DiceFlippable() {
+      var name = arguments[0] === undefined ? "pb-dice-flippable" : arguments[0];
+      var defaultTrigger = arguments[1] === undefined ? new Key("f") : arguments[1];
+      var defaultEnabled = arguments[2] === undefined ? false : arguments[2];
+      var defaultShowA = arguments[3] === undefined ? true : arguments[3];
 
-            if (this.children.length <= 0) {
-              var type = $(this).attr("type");
-              if (SUPPORTED_TYPES.indexOf(type) >= 0) {
-                var faceCount = Number.parseInt(type.substring(1));
-                for (var i = 0; i < faceCount; i += 1) {
-                  var faceEl = doc.createElement("div");
-                  faceEl.innerText = i + 1;
-                  this.appendChild(faceEl);
-                }
-              }
-            }
+      _classCallCheck(this, DiceFlippable);
 
-            if (this.querySelectorAll("[" + ATTR_PAIR + "]").length <= 0) {
-              var children = Utils.toArray(this.children);
-              if (children.length % 2 !== 0) {
-                throw new Error("Number of children of dice should be event");
-              }
+      _get(Object.getPrototypeOf(DiceFlippable.prototype), "constructor", this).call(this, name, defaultTrigger);
 
-              for (var i = 0; i < children.length / 2; i++) {
-                var pairEl = doc.createElement("div");
-                $(pairEl).attr(ATTR_PAIR, "");
-                pairEl.appendChild(children[i]);
-                pairEl.appendChild(children[children.length - 1 - i]);
-                this.appendChild(pairEl);
+      this[__defaultEnabled__] = defaultEnabled;
+      this[__defaultShowA__] = defaultShowA;
+    }
+
+    _inherits(DiceFlippable, _Ability);
+
+    _createClass(DiceFlippable, {
+      init: {
+        value: function init(el) {
+          _get(Object.getPrototypeOf(DiceFlippable.prototype), "init", this).call(this, el);
+          if ($(el).attr(this.attrName) === undefined) {
+            $(el).attr(this.attrName, this[__defaultEnabled__]);
+          }
+
+          if ($(el).attr(ATTR_SHOW_SIDE_A) === undefined) {
+            $(el).attr(ATTR_SHOW_SIDE_A, this[__defaultShowA__]);
+          }
+        }
+      },
+      doTrigger: {
+        value: function doTrigger(el) {
+          $(el).attr(ATTR_SHOW_SIDE_A, !Check($(el).attr(ATTR_SHOW_SIDE_A)).isBoolean().orThrows());
+        }
+      }
+    });
+
+    return DiceFlippable;
+  })(Ability);
+
+  var Dice = (function (_Component) {
+    function Dice() {
+      _classCallCheck(this, Dice);
+
+      if (_Component != null) {
+        _Component.apply(this, arguments);
+      }
+    }
+
+    _inherits(Dice, _Component);
+
+    _createClass(Dice, {
+      createdCallback: {
+        value: function createdCallback() {
+          _get(Object.getPrototypeOf(Dice.prototype), "createdCallback", this).call(this);
+          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+
+          if (this.children.length <= 0) {
+            var type = $(this).attr("type");
+            if (SUPPORTED_TYPES.indexOf(type) >= 0) {
+              var faceCount = Number.parseInt(type.substring(1));
+              for (var i = 0; i < faceCount; i += 1) {
+                var faceEl = doc.createElement("div");
+                faceEl.innerText = i + 1;
+                this.appendChild(faceEl);
               }
             }
           }
+
+          if (this.querySelectorAll("[" + ATTR_PAIR + "]").length <= 0) {
+            var children = Utils.toArray(this.children);
+            if (children.length % 2 !== 0) {
+              throw new Error("Number of children of dice should be event");
+            }
+
+            for (var i = 0; i < children.length / 2; i++) {
+              var pairEl = doc.createElement("div");
+              $(pairEl).attr(ATTR_PAIR, "");
+              pairEl.appendChild(children[i]);
+              pairEl.appendChild(children[children.length - 1 - i]);
+              this.appendChild(pairEl);
+            }
+          }
         }
-      });
-
-      return Dice;
-    })(Component);
-
-    Dice.NODE_NAME = EL_NAME;
-
-    Config.add(EL_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true), new Rollable("roll", new Key("r"), true), new DiceFlippable("flip", new Key("f")));
-
-    $registry.add(EL_NAME, Dice);
-
-    Dice.DiceFlippable = DiceFlippable;
-    Dice.Rollable = Rollable;
+      }
+    });
 
     return Dice;
-  });
-})(document.currentScript.ownerDocument);</script>
+  })(Component);
+
+  Dice.NODE_NAME = EL_NAME;
+
+  Config.add(EL_NAME, new Helpable("help"), new Pickable("pick", new Key("q"), true), new Rollable("roll", new Key("r"), true), new DiceFlippable("flip", new Key("f")));
+
+  $registry.add(EL_NAME, Dice);
+
+  Dice.DiceFlippable = DiceFlippable;
+  Dice.Rollable = Rollable;
+
+  return Dice;
+});</script>
 </head><body></body></html>

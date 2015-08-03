@@ -37,7 +37,7 @@ DIJS
   const Service = require('pb.trigger.Key.__service__.__ctor__');
   const t = require('pb.t');
 
-  describe('Key', () => {
+  describe('trigger.Key', () => {
     let key;
 
     beforeEach(() => {
@@ -114,6 +114,9 @@ DIJS
           let ability2 = t.createFakeAbility('ability2');
           service.add(el1, 'a', ability1);
           service.add(el2, 'a', ability2);
+
+          _.spy(ability1, 'trigger');
+          _.spy(ability2, 'trigger');
 
           _.spy(el2, 'getBoundingClientRect').overrideReturn({
             left: 12,

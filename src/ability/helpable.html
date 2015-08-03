@@ -60,12 +60,12 @@
 </template>
 
 <script>
-(function(doc) {
-
 DIJS
+.constant('doc', document.currentScript.ownerDocument)
 .bind('pb.ability.Helpable', require => {
 
   const $registry = require('pb.$registry');
+  const doc = require('doc');
   const Abilities = require('pb.ability.Abilities');
   const Ability = require('pb.ability.Ability');
   const Events = require('pb.Events');
@@ -142,5 +142,4 @@ DIJS
 
   return Helpable;
 });
-})(document.currentScript.ownerDocument);
 </script>

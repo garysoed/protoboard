@@ -73,6 +73,9 @@ DIJS
         let ability = new Ability('name', trigger);
 
         _.spy(Triggers, 'parse');
+        _.spy(trigger, 'off');
+        _.spy(newTrigger, 'on');
+
         Triggers.parse.overrideReturn(trigger);
         ability.init(el);
 
@@ -92,6 +95,8 @@ DIJS
         $(el).attr(ability.attrTrigger, trigger.toString());
 
         _.spy(Triggers, 'parse');
+        _.spy(trigger, 'off');
+
         Triggers.parse.overrideReturn(trigger);
         ability.init(el);
 

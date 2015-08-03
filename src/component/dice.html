@@ -44,11 +44,12 @@
 </template>
 
 <script>
-(function(doc) {
-
-const template = doc.querySelector('template');
-
 DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.with('template', require => {
+  const doc = require('doc');
+  return doc.querySelector('template');
+})
 .bind('pb.component.Dice', require => {
 
   const $ = require('$');
@@ -59,10 +60,12 @@ DIJS
   const Click = require('pb.trigger.Click');
   const Component = require('pb.component.Component');
   const Config = require('pb.service.Config');
+  const doc = require('doc');
   const Helpable = require('pb.ability.Helpable');
   const Key = require('pb.trigger.Key');
   const Pickable = require('pb.ability.Pickable');
   const Shuffleable = require('pb.ability.Shuffleable');
+  const template = require('template');
   const Utils = require('pb.Utils');
 
   const EL_NAME = 'pb-c-dice';
@@ -327,5 +330,4 @@ DIJS
 
   return Dice;
 });
-})(document.currentScript.ownerDocument);
 </script>
