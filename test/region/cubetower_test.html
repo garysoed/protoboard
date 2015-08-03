@@ -13,35 +13,34 @@
   <link rel="import" href="utils.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .constant('service.Move', {
-        movedElements: []
-      })
-      .constant('Chance', {
-        binom() { }
-      })
-      .run(require => {
+<script>
+DIJS
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.constant('doc', document.currentScript.ownerDocument)
+.constant('pb.service.Move', {
+  movedElements: []
+})
+.constant('Chance', {
+  binom() { }
+})
+.run(require => {
 
-  const $ = require('/$');
-  const $registry = require('$registry');
-  const _ = require('/_');
+  const $ = require('$');
+  const $registry = require('pb.$registry');
+  const _ = require('_');
 
-  const Chance = require('/Chance');
-  const Config = require('service.Config');
-  const CubeTower = require('region.CubeTower');
+  const Chance = require('Chance');
+  const Config = require('pb.service.Config');
+  const CubeTower = require('pb.region.CubeTower');
   const doc = require('doc');
-  const expect = require('/expect');
-  const Move = require('service.Move');
-  const Utils = require('Utils');
+  const expect = require('expect');
+  const Move = require('pb.service.Move');
+  const Utils = require('pb.Utils');
 
   const Droppable = CubeTower.TowerDroppable;
 
   describe('region.CubeTower', () => {
-    before(() => {
+    beforeEach(() => {
       $registry.register(doc, Config);
     });
 
@@ -60,9 +59,8 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       Move.movedElements.splice(0, Move.movedElements.length);
-      done();
     });
   });
   });

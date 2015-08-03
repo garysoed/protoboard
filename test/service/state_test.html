@@ -13,27 +13,27 @@
   <link rel="import" href="utils.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const $ = require('/$');
-  const $registry = require('$registry');
+  const _ = require('_');
+  const $ = require('$');
+  const $registry = require('pb.$registry');
 
-  const Config = require('service.Config');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
-  const expect = require('/expect');
-  const State = require('service.State');
-  const Utils = require('Utils');
+  const expect = require('expect');
+  const State = require('pb.service.State.__ctor__');
+  const Utils = require('pb.Utils');
 
   describe('service.State', () => {
-    before(done => {
-      $registry.register(doc, Config);
-      done();
+    let state;
+
+    beforeEach(() => {
+      state = new State(doc);
     });
 
     describe('#get', () => {
@@ -44,11 +44,11 @@
         $(el).attr(key, value);
         doc.body.appendChild(el);
 
-        expect(State.get(key)).to.equal(value);
+        expect(state.get(key)).to.equal(value);
       });
       it('should create pb-state element if it does not exist', () => {
         let key = 'key';
-        expect(State.get(key)).to.equal('');
+        expect(state.get(key)).to.equal('');
         expect(doc.body.querySelector(`pb-state[${key}]`)).to.exist;
       });
       it('should add the key to an existing pb-state element if it does not exist', () => {
@@ -56,7 +56,7 @@
         let el = doc.createElement('pb-state');
         doc.body.appendChild(el);
 
-        expect(State.get(key)).to.equal('');
+        expect(state.get(key)).to.equal('');
         expect($(el).attr(key)).to.equal('');
       });
     });
@@ -69,11 +69,11 @@
         $(el).attr(key, value);
         doc.body.appendChild(el);
 
-        State.put(key, value);
+        state.put(key, value);
         expect($(el).attr(key)).to.equal(value);
       });
       it('should create pb-state element if it does not exist', () => {
-        State.put(key, value);
+        state.put(key, value);
         expect(doc.body.querySelector(`pb-state[${key}=${value}]`)).to.exist;
       });
       it('should add the key to an existing pb-state element if it does not exist', () => {
@@ -82,19 +82,18 @@
         let el = doc.createElement('pb-state');
         doc.body.appendChild(el);
 
-        State.put(key, value);
+        state.put(key, value);
         expect($(el).attr(key)).to.equal(value);
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       Utils.toArray(doc.querySelectorAll('pb-state'))
           .forEach(el => {
             doc.body.removeChild(el);
           });
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

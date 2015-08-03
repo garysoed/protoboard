@@ -38,20 +38,20 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
+DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
   return require("doc").querySelector("template");
-}).bind("region.Rect", function (require) {
+}).bind("pb.region.Rect", function (require) {
 
-  var $registry = require("$registry");
+  var $registry = require("pb.$registry");
 
-  var Config = require("service.Config");
+  var Config = require("pb.service.Config");
   var doc = require("doc");
-  var FlexDroppable = require("ability.FlexDroppable");
-  var Helpable = require("ability.Helpable");
-  var Key = require("trigger.Key");
-  var Region = require("region.Region");
+  var FlexDroppable = require("pb.ability.FlexDroppable");
+  var Helpable = require("pb.ability.Helpable");
+  var Key = require("pb.trigger.Key");
+  var Region = require("pb.region.Region");
   var template = require("template");
-  var Utils = require("Utils");
+  var Utils = require("pb.Utils");
 
   var EL_NAME = "pb-r-rect";
 

@@ -15,31 +15,30 @@
   <link rel="import" href="third_party/jquery.html">
 </head>
 <body>
-  <pb-r-bag id="emptyChildren"></pb-r-bag>
-  <pb-r-bag id="hasContent">
-    <div pb-placeholder-content>content</div>
-  </pb-r-bag>
-  <pb-r-bag id="hasPlaceholder">
-    <div pb-placeholder>Placeholder</div>
-  </pb-r-bag>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<pb-r-bag id="emptyChildren"></pb-r-bag>
+<pb-r-bag id="hasContent">
+  <div pb-placeholder-content>content</div>
+</pb-r-bag>
+<pb-r-bag id="hasPlaceholder">
+  <div pb-placeholder>Placeholder</div>
+</pb-r-bag>
+<script>
+DIJS
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const _M = require('/_M');
-  const $ = require('/$');
-  const $registry = require('$registry');
+  const _ = require('_');
+  const _M = require('_M');
+  const $ = require('$');
+  const $registry = require('pb.$registry');
 
-  const Bag = require('region.Bag');
-  const Chance = require('/Chance');
-  const Config = require('service.Config');
+  const Bag = require('pb.region.Bag');
+  const Chance = require('Chance');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
-  const expect = require('/expect');
-  const t = require('t');
+  const expect = require('expect');
+  const t = require('pb.t');
 
   // Private symbols
   let __draggable__ = t.getSymbol(Bag.prototype, 'draggable');
@@ -47,9 +46,8 @@
   let __selectChild__ = t.getSymbol(Bag, 'selectChild');
 
   describe('Bag', () => {
-    before(done => {
+    before(() => {
       $registry.register(doc, Config);
-      done();
     });
 
     describe('#createdCallback', () => {
@@ -127,11 +125,10 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

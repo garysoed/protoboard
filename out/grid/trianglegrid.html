@@ -65,17 +65,17 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", function (require) {
+DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("templateMain", function (require) {
   return require("doc").querySelector("template#main");
 })["with"]("templateRow", function (require) {
   return require("doc").querySelector("template#row");
 })["with"]("templateTile", function (require) {
   return require("doc").querySelector("template#tile");
-}).bind("grid.TriangleGrid", function (require) {
+}).bind("pb.grid.TriangleGrid", function (require) {
 
-  var $registry = require("$registry");
-  var Config = require("service.Config");
-  var Grid = require("grid.Grid");
+  var $registry = require("pb.$registry");
+  var Config = require("pb.service.Config");
+  var Grid = require("pb.grid.Grid");
   var templateMain = require("templateMain");
   var templateRow = require("templateRow");
   var templateTile = require("templateTile");

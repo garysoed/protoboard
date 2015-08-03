@@ -42,23 +42,22 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('template', require => require('doc').querySelector('template'))
-    .bind('region.Deck', require => {
+.constant('doc', document.currentScript.ownerDocument)
+.with('template', require => require('doc').querySelector('template'))
+.bind('pb.region.Deck', require => {
 
-  const $registry = require('$registry');
+  const $registry = require('pb.$registry');
 
-  const Abilities = require('ability.Abilities');
-  const Config = require('service.Config');
+  const Abilities = require('pb.ability.Abilities');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
-  const Droppable = require('ability.Droppable');
-  const Helpable = require('ability.Helpable');
-  const Key = require('trigger.Key');
-  const Region = require('region.Region');
-  const Shuffleable = require('ability.Shuffleable');
+  const Droppable = require('pb.ability.Droppable');
+  const Helpable = require('pb.ability.Helpable');
+  const Key = require('pb.trigger.Key');
+  const Region = require('pb.region.Region');
+  const Shuffleable = require('pb.ability.Shuffleable');
   const template = require('template');
-  const Utils = require('Utils');
+  const Utils = require('pb.Utils');
 
   /**
    * Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.

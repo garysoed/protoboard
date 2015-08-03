@@ -10,16 +10,15 @@
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .run(require => {
-    require('grid.RectGrid');
+<script>
+DIJS
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.run(require => {
+  require('pb.grid.RectGrid');
 
-    describe('grid.RectGrid', () => {
-      it('should not throw exception when injected', () => {});
-    });
+  describe('grid.RectGrid', () => {
+    it('should not throw exception when injected', () => {});
   });
-  </script>
+});
+</script>
 </body>

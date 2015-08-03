@@ -10,18 +10,17 @@
   <link rel="import" href="third_party/jquery.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const $ = require('/$');
+  const $ = require('$');
 
   const doc = require('doc');
-  const expect = require('/expect');
-  const Region = require('region.Region');
-  const t = require('t');
+  const expect = require('expect');
+  const Region = require('pb.region.Region');
+  const t = require('pb.t');
 
   const __onMutation__ = t.getSymbol(Region.prototype, 'onMutation');
 
@@ -29,10 +28,9 @@
     let el;
 
     describe('__onMutation__', () => {
-      beforeEach(done => {
+      beforeEach(() => {
         el = doc.createElement('pb-region');
         Object.setPrototypeOf(el, Region.prototype);
-        done();
       });
 
       it('should update the child count if nodes are added', () => {
@@ -53,6 +51,6 @@
       });
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

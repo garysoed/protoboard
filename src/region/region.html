@@ -23,14 +23,13 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('template', require => require('doc').querySelector('template'))
-    .bind('region.Region', require => {
+.constant('doc', document.currentScript.ownerDocument)
+.with('template', require => require('doc').querySelector('template'))
+.bind('pb.region.Region', require => {
 
-  const $ = require('/$');
-  const PbElement = require('PbElement');
-  const Utils = require('Utils');
+  const $ = require('$');
+  const PbElement = require('pb.PbElement');
+  const Utils = require('pb.Utils');
 
   const __onMutation__ = Symbol('onMutation');
   const __mutationObserver__ = Symbol();

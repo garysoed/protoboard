@@ -12,33 +12,36 @@
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.constant('pb.service.State', {
+  data: new Map(),
+  get(key) {
+    return this.data.get(key);
+  },
+  put(key, value) {
+    this.data.set(key, value);
+  }
+})
+.run(require => {
 
-  const _ = require('/_');
-  const $ = require('/$');
-  const $registry = require('$registry');
+  const _ = require('_');
+  const $ = require('$');
 
-  const Acl = require('service.Acl');
-  const Config = require('service.Config');
+  const Acl = require('pb.service.Acl.__ctor__');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
-  const expect = require('/expect');
-  const t = require('t');
-  const Utils = require('Utils');
-
-  const Group = Acl.Group;
-
-  const __setEnabled__ = t.getSymbol(Acl, 'setEnabled');
-  const __update__ = t.getSymbol(Acl, 'update');
+  const expect = require('expect');
+  const Group = require('pb.service.Acl.__group__');
+  const t = require('pb.t');
+  const Utils = require('pb.Utils');
 
   describe('service.Acl', () => {
-    before(done => {
-      $registry.register(doc, Config);
-      done();
+    let acl;
+
+    beforeEach(() => {
+      acl = new Acl();
     });
 
     describe('$Group', () => {
@@ -81,8 +84,8 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, player);
 
-        Acl.currentPlayer = player;
-        Acl[__update__](el);
+        acl.currentPlayer = player;
+        t.getPrivateMethod(acl, 'update')(el);
 
         expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
         Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
@@ -94,9 +97,9 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, group);
 
-        Acl.currentPlayer = player;
-        Acl.addGroup(group, player);
-        Acl[__update__](el);
+        acl.currentPlayer = player;
+        acl.addGroup(group, player);
+        t.getPrivateMethod(acl, 'update')(el);
 
         expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
         Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
@@ -107,8 +110,8 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, 'player2');
 
-        Acl.currentPlayer = player;
-        Acl[__update__](el);
+        acl.currentPlayer = player;
+        t.getPrivateMethod(acl, 'update')(el);
 
         expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.false;
         Utils.watch(() => !el.classList.contains(`pb-acl-${action}`)).then(done);
@@ -118,8 +121,8 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, '');
 
-        Acl.currentPlayer = 'player';
-        Acl[__update__](el);
+        acl.currentPlayer = 'player';
+        t.getPrivateMethod(acl, 'update')(el);
 
         expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
         Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
@@ -133,8 +136,8 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, player);
 
-        Acl.currentPlayer = player;
-        Acl.registerElement(el);
+        acl.currentPlayer = player;
+        acl.registerElement(el);
 
         Utils.watch(() => el.classList.contains(`pb-acl-${action}`)).then(done);
       });
@@ -144,8 +147,8 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, player);
 
-        Acl.currentPlayer = player;
-        Acl.registerElement(el);
+        acl.currentPlayer = player;
+        acl.registerElement(el);
 
         Utils
             .watch(() => el.classList.contains(`pb-acl-${action}`))
@@ -164,8 +167,8 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, player);
 
-        Acl.currentPlayer = player;
-        Acl
+        acl.currentPlayer = player;
+        acl
             .registerElement(el)
             .isActionEnabled(el, action)
             .then(enabled => {
@@ -183,8 +186,8 @@
         $(parent).attr(`pb-acl-${action}`, 'otherplayer');
         parent.appendChild(child);
 
-        Acl.currentPlayer = player;
-        Acl
+        acl.currentPlayer = player;
+        acl
             .registerElement(child)
             .isActionEnabled(child, action)
             .then(enabled => {
@@ -199,8 +202,8 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, player);
 
-        Acl.currentPlayer = player;
-        Acl
+        acl.currentPlayer = player;
+        acl
             .isActionEnabled(el, action)
             .then(enabled => {
               expect(enabled).to.be.true;
@@ -213,8 +216,8 @@
         let player = 'player';
         let el = doc.createElement('div');
 
-        Acl.currentPlayer = player;
-        Acl
+        acl.currentPlayer = player;
+        acl
             .registerElement(el)
             .isActionEnabled(el, action)
             .then(enabled => {
@@ -229,9 +232,9 @@
         let groupName = 'groupName';
         let player1 = 'player1';
         let player2 = 'player2';
-        Acl.addGroup(groupName, player1, player2);
+        acl.addGroup(groupName, player1, player2);
 
-        let group = Acl.GROUPS.get(groupName);
+        let group = t.getPrivateProperty(acl, 'groups').get(groupName);
         expect(group.contains(player1)).to.be.true;
         expect(group.contains(player2)).to.be.true;
       });
@@ -239,11 +242,11 @@
         let subgroupName = 'subgroupName';
         let groupName = 'groupName';
         let member = 'member';
-        Acl
+        acl
             .addGroup(subgroupName, member)
             .addGroup(groupName, subgroupName);
 
-        let group = Acl.GROUPS.get(groupName);
+        let group = t.getPrivateProperty(acl, 'groups').get(groupName);
         expect(group.contains(member)).to.be.true;
       });
     });
@@ -254,25 +257,19 @@
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, player);
 
-        Acl.currentPlayer = player;
-        Acl.registerElement(el);
+        acl.currentPlayer = player;
+        acl.registerElement(el);
 
         Utils
             .watch(() => el.classList.contains(`pb-acl-${action}`))
             .then(() => {
-              Acl.currentPlayer = 'otherPlayer';
+              acl.currentPlayer = 'otherPlayer';
               return Utils.watch(() => !el.classList.contains(`pb-acl-${action}`));
             })
             .then(done);
       });
     });
-
-    afterEach(done => {
-      Acl.currentPlayer = null;
-      Acl.GROUPS.clear();
-      done();
-    });
   });
-  });
-  </script>
+});
+</script>
 </body>

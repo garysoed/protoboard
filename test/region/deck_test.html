@@ -9,30 +9,29 @@
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .constant('doc', document.currentScript.ownerDocument)
-      .with('$registry', require => new (require('service.Registry'))())
-      .run(require => {
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.run(require => {
 
-    const Deck = require('region.Deck');
-    const doc = require('doc');
-    const expect = require('/expect');
+  const Deck = require('pb.region.Deck');
+  const doc = require('doc');
+  const expect = require('expect');
 
-    describe('region.Deck', () => {
-      describe('get pickableChildCount', () => {
-        it('should return the correct number of children', () => {
-          let deck = doc.createElement('pb-r-deck');
-          Object.setPrototypeOf(deck, Deck.prototype);
-          deck.appendChild(doc.createElement('div'));
-          deck.appendChild(doc.createElement('div'));
-          deck.appendChild(doc.createElement('div'));
+  describe('region.Deck', () => {
+    describe('get pickableChildCount', () => {
+      it('should return the correct number of children', () => {
+        let deck = doc.createElement('pb-r-deck');
+        Object.setPrototypeOf(deck, Deck.prototype);
+        deck.appendChild(doc.createElement('div'));
+        deck.appendChild(doc.createElement('div'));
+        deck.appendChild(doc.createElement('div'));
 
-          expect(deck.pickableChildCount).to.equal(3);
-        });
+        expect(deck.pickableChildCount).to.equal(3);
       });
     });
   });
-  </script>
+});
+</script>
 </body>

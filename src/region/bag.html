@@ -58,30 +58,27 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('template', require => require('doc').querySelector('template#main'))
-    .with('placeHolderTmp', require => require('doc').querySelector('template#placeholder'))
-    .bind('region.Bag', (require, optional) => {
+.constant('doc', document.currentScript.ownerDocument)
+.with('template', require => require('doc').querySelector('template#main'))
+.with('placeHolderTmp', require => require('doc').querySelector('template#placeholder'))
+.bind('pb.region.Bag', (require, optional) => {
 
-  const $ = require('/$');
-  const $registry = require('$registry');
+  const $ = require('$');
+  const $registry = require('pb.$registry');
 
-  const Chance = require('/Chance');
-  const Click = require('trigger.Click');
-  const Config = require('service.Config');
+  const Chance = require('Chance');
+  const Click = require('pb.trigger.Click');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
-  const Droppable = require('ability.Droppable');
-  const Helpable = require('ability.Helpable');
-  const Key = require('trigger.Key');
-  const Move = require('service.Move');
+  const Droppable = require('pb.ability.Droppable');
+  const Helpable = require('pb.ability.Helpable');
+  const Key = require('pb.trigger.Key');
+  const Move = require('pb.service.Move');
   const placeHolderTmp = require('placeHolderTmp');
-  const Region = require('region.Region');
-  const SelectedPickable = require('ability.SelectedPickable');
+  const Region = require('pb.region.Region');
+  const SelectedPickable = require('pb.ability.SelectedPickable');
   const template = require('template');
-  const Utils = require('Utils');
-
-  const TEST_MODE = optional('/TEST_MODE');
+  const Utils = require('pb.Utils');
 
   const EL_NAME = 'pb-r-bag';
   const ATTR_PLACEHOLDER = 'pb-placeholder';

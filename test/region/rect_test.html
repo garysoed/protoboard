@@ -13,23 +13,22 @@
   <link rel="import" href="testutils.html">
 </head>
 <body>
-  <pb-r-rect></pb-r-rect>
+<pb-r-rect></pb-r-rect>
 
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.with('$registry', require => new (require('pb.service.Registry'))())
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
+  const _ = require('_');
 
   const doc = require('doc');
-  const expect = require('/expect');
-  const Move = require('service.Move');
-  const Rect = require('region.Rect');
-  const t = require('t');
-  const Utils = require('Utils');
+  const expect = require('expect');
+  const Move = require('pb.service.Move');
+  const Rect = require('pb.region.Rect');
+  const t = require('pb.t');
+  const Utils = require('pb.Utils');
 
   describe('Rect', () => {
     describe('get pickableChildCount', () => {
@@ -45,11 +44,10 @@
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

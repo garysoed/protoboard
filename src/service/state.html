@@ -6,22 +6,24 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .constant('doc', document.currentScript.ownerDocument)
-    .bind('service.State', require => {
+.constant('doc', document.currentScript.ownerDocument)
+.bind('pb.service.State.__elName__', () => 'pb-state')
+.bind('pb.service.State.__symbols__', () => {
+  return {
+    __document__: Symbol()
+  };
+})
+.bind('pb.service.State.__ctor__', require => {
 
-  const $ = require('/$');
-  const $registry = require('$registry');
-
-  const Config = require('service.Config');
+  const $ = require('$');
   const doc = require('doc');
 
-  const EL_NAME = 'pb-state';
-
-  const __document__ = Symbol();
+  const __document__ = require('pb.service.State.__symbols__').__document__;
   const __getElement__ = Symbol();
   const __observer__ = Symbol();
   const __onMutation__ = Symbol();
+
+  const EL_NAME = require('pb.service.State.__elName__');
 
   /**
    * Service that manages runtime state of the game. This service uses `pb-state` element to store
@@ -35,9 +37,11 @@ DIJS
    * @static
    * @since 0.3.0
    */
-  let Service = {
+  class Service {
 
-    [__document__]: null,
+    constructor(doc = null) {
+      this[__document__] = doc;
+    }
 
     /**
      * @method __getElement__
@@ -57,7 +61,7 @@ DIJS
         $(el).attr(key, '');
       }
       return el;
-    },
+    }
 
     /**
      * Sets the value of the given key.
@@ -68,7 +72,7 @@ DIJS
      */
     put(key, value) {
       $(this[__getElement__](key)).attr(key, value);
-    },
+    }
 
     /**
      * @method get
@@ -78,18 +82,32 @@ DIJS
     get(key) {
       return $(this[__getElement__](key)).attr(key);
     }
-  };
+  }
+
+  return Service;
+})
+.bind('pb.service.State', require => {
+
+  const $registry = require('pb.$registry');
+  const Config = require('pb.service.Config');
+  const State = require('pb.service.State.__ctor__');
+
+  const __document__ = require('pb.service.State.__symbols__').__document__;
+
+  const EL_NAME = require('pb.service.State.__elName__');
+
+  let state = new State();
 
   class Element extends HTMLElement { }
 
   $registry
       .add(EL_NAME, Element.prototype)
       .runAtRegister(doc => {
-        Service[__document__] = doc;
+        state[__document__] = doc;
       });
   Config.add(EL_NAME);
 
-  return Service;
+  return state;
 });
 
 </script>

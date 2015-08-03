@@ -9,35 +9,16 @@
 
 var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("service.Acl", function (require, optional) {
+DIJS.bind("pb.service.Acl.__group__", function (require) {
 
-  var Check = require("Check");
-  var State = require("service.State");
-  var Utils = require("Utils");
-
-  var TEST_MODE = optional("/TEST_MODE");
-
-  var ATTR_PREFIX = "pb-acl-";
-  var ATTR_CURRENT_PLAYER = "currentPlayer";
-
-  var __enabledMap__ = Symbol("enabledMap");
   var __members__ = Symbol();
   var __name__ = Symbol();
-  var __observer__ = Symbol();
-  var __parent__ = Symbol();
-  var __registeredEls__ = Symbol();
-
-  var __onMutation__ = Symbol();
-  var __reset__ = Symbol();
-  var __update__ = Symbol("update");
-
-  var GROUPS = new Map();
 
   var Group = (function () {
     function Group(name) {
@@ -94,172 +75,201 @@ DIJS.prefix("pb").bind("service.Acl", function (require, optional) {
     return Group;
   })();
 
-  var Service = Object.defineProperties((function () {
-    var _Object$defineProperties = {};
+  return Group;
+}).bind("pb.service.Acl.__ctor__", function (require) {
 
-    _defineProperty(_Object$defineProperties, __registeredEls__, new Set());
+  var Check = require("pb.Check");
+  var Group = require("pb.service.Acl.__group__");
+  var State = require("pb.service.State");
+  var Utils = require("pb.Utils");
 
-    _defineProperty(_Object$defineProperties, __reset__, function (el) {
-      if (el[__enabledMap__]) {
-        el[__enabledMap__].clear();
+  var ATTR_PREFIX = "pb-acl-";
+  var ATTR_CURRENT_PLAYER = "currentPlayer";
+
+  var __enabledMap__ = Symbol("enabledMap");
+  var __groups__ = Symbol("groups");
+  var __observer__ = Symbol();
+  var __parent__ = Symbol();
+  var __registeredEls__ = Symbol();
+
+  var __onMutation__ = Symbol();
+  var __reset__ = Symbol();
+  var __update__ = Symbol("update");
+
+  var Service = (function () {
+    function Service() {
+      _classCallCheck(this, Service);
+
+      this[__groups__] = new Map();
+      this[__registeredEls__] = new Set();
+    }
+
+    _createComputedClass(Service, [{
+      key: __reset__,
+      value: function (el) {
+        if (el[__enabledMap__]) {
+          el[__enabledMap__].clear();
+        }
       }
-    });
+    }, {
+      key: __update__,
+      value: function (el) {
+        var _this = this;
 
-    _defineProperty(_Object$defineProperties, __update__, function (el) {
-      var _this = this;
+        if (!el[__enabledMap__]) {
+          el[__enabledMap__] = new Map();
+        }
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
-      if (!el[__enabledMap__]) {
-        el[__enabledMap__] = new Map();
-      }
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+        try {
+          for (var _iterator = Utils.toMap(el.attributes)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _step$value;
 
-      try {
-        for (var _iterator = Utils.toMap(el.attributes)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _step$value;
+            var _ret = (function () {
+              _step$value = _slicedToArray(_step.value, 2);
+              var attrName = _step$value[0];
+              var attr = _step$value[1];
 
-          var _ret = (function () {
-            _step$value = _slicedToArray(_step.value, 2);
-            var attrName = _step$value[0];
-            var attr = _step$value[1];
+              if (!attrName.startsWith(ATTR_PREFIX)) {
+                return "continue";
+              }
 
-            if (!attrName.startsWith(ATTR_PREFIX)) {
-              return "continue";
+              var name = attrName.substring(ATTR_PREFIX.length);
+              var allowedPlayers = Check(attr.value).isList().orUse(null);
+              var enabled = allowedPlayers === null || allowedPlayers.length === 0 || allowedPlayers.some(function (player) {
+                return _this[__groups__].has(player) ? _this[__groups__].get(player).contains(_this.currentPlayer) : player === _this.currentPlayer;
+              });
+
+              el[__enabledMap__].set(name, enabled);
+              _this.isActionEnabled(el, name).then(function (enabled) {
+                el.classList.toggle("pb-acl-" + name, enabled);
+              });
+            })();
+
+            if (_ret === "continue") continue;
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
             }
-
-            var name = attrName.substring(ATTR_PREFIX.length);
-            var allowedPlayers = Check(attr.value).isList().orUse(null);
-            var enabled = allowedPlayers === null || allowedPlayers.length === 0 || allowedPlayers.some(function (player) {
-              return GROUPS.has(player) ? GROUPS.get(player).contains(_this.currentPlayer) : player === _this.currentPlayer;
-            });
-
-            el[__enabledMap__].set(name, enabled);
-            _this.isActionEnabled(el, name).then(function (enabled) {
-              el.classList.toggle("pb-acl-" + name, enabled);
-            });
-          })();
-
-          if (_ret === "continue") continue;
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
+      }
+    }, {
+      key: __onMutation__,
+      value: function (records) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
         try {
-          if (!_iteratorNormalCompletion && _iterator["return"]) {
-            _iterator["return"]();
+          for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var record = _step.value;
+
+            var attrName = record.attributeName;
+            if (attrName.startsWith(ATTR_PREFIX)) {
+              this[__reset__](record.target);
+              this[__update__](record.target);
+            }
           }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
           }
         }
       }
-    });
-
-    _defineProperty(_Object$defineProperties, __onMutation__, function (records) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var record = _step.value;
-
-          var attrName = record.attributeName;
-          if (attrName.startsWith(ATTR_PREFIX)) {
-            this[__reset__](record.target);
-            this[__update__](record.target);
-          }
+    }, {
+      key: "registerElement",
+      value: function registerElement(el) {
+        this[__registeredEls__].add(el);
+        if (!el[__observer__]) {
+          el[__observer__] = new MutationObserver(this[__onMutation__].bind(this));
+          el[__observer__].observe(el, { attributes: true });
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"]) {
-            _iterator["return"]();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-    });
-
-    _defineProperty(_Object$defineProperties, "registerElement", function registerElement(el) {
-      this[__registeredEls__].add(el);
-      if (!el[__observer__]) {
-        el[__observer__] = new MutationObserver(this[__onMutation__].bind(this));
-        el[__observer__].observe(el, { attributes: true });
-      }
-      this[__update__](el);
-      return this;
-    });
-
-    _defineProperty(_Object$defineProperties, "isActionEnabled", function isActionEnabled(el, actionName) {
-      var parentPromise = el.parentElement ? this.isActionEnabled(el.parentElement, actionName) : Promise.resolve(true);
-
-      if (!el[__enabledMap__]) {
-        el[__enabledMap__] = new Map();
         this[__update__](el);
+        return this;
       }
+    }, {
+      key: "isActionEnabled",
+      value: function isActionEnabled(el, actionName) {
+        var parentPromise = el.parentElement ? this.isActionEnabled(el.parentElement, actionName) : Promise.resolve(true);
 
-      var currentEnabled = !el[__enabledMap__].has(actionName) || el[__enabledMap__].get(actionName);
-
-      return Promise.all([parentPromise, currentEnabled]).then(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2);
-
-        var parent = _ref2[0];
-        var current = _ref2[1];
-        return parent && current;
-      });
-    });
-
-    _defineProperty(_Object$defineProperties, "addGroup", function addGroup(name) {
-      for (var _len = arguments.length, members = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        members[_key - 1] = arguments[_key];
-      }
-
-      var group = new Group(name);
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = members[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var member = _step.value;
-
-          if (GROUPS.has(member)) {
-            group.add(GROUPS.get(member));
-          } else {
-            group.add(member);
-          }
+        if (!el[__enabledMap__]) {
+          el[__enabledMap__] = new Map();
+          this[__update__](el);
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
+
+        var currentEnabled = !el[__enabledMap__].has(actionName) || el[__enabledMap__].get(actionName);
+
+        return Promise.all([parentPromise, currentEnabled]).then(function (_ref) {
+          var _ref2 = _slicedToArray(_ref, 2);
+
+          var parent = _ref2[0];
+          var current = _ref2[1];
+          return parent && current;
+        });
+      }
+    }, {
+      key: "addGroup",
+      value: function addGroup(name) {
+        for (var _len = arguments.length, members = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          members[_key - 1] = arguments[_key];
+        }
+
+        var group = new Group(name);
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
         try {
-          if (!_iteratorNormalCompletion && _iterator["return"]) {
-            _iterator["return"]();
+          for (var _iterator = members[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var member = _step.value;
+
+            if (this[__groups__].has(member)) {
+              group.add(this[__groups__].get(member));
+            } else {
+              group.add(member);
+            }
           }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
           }
         }
+
+        this[__groups__].set(name, group);
+        return this;
       }
-
-      GROUPS.set(name, group);
-      return this;
-    });
-
-    return _Object$defineProperties;
-  })(), {
-    currentPlayer: {
+    }, {
+      key: "currentPlayer",
       get: function () {
         return State.get(ATTR_CURRENT_PLAYER);
       },
@@ -315,17 +325,15 @@ DIJS.prefix("pb").bind("service.Acl", function (require, optional) {
             }
           }
         }
-      },
-      configurable: true,
-      enumerable: true
-    }
-  });
+      }
+    }]);
 
-  if (TEST_MODE) {
-    Service.Group = Group;
-    Service.GROUPS = GROUPS;
-  }
+    return Service;
+  })();
 
   return Service;
+}).bind("pb.service.Acl", function (require) {
+  var Service = require("pb.service.Acl.__ctor__");
+  return new Service();
 });</script>
 </head><body></body></html>

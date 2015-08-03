@@ -33,13 +33,13 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
+DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
   return require("doc").querySelector("template");
-}).bind("region.Region", function (require) {
+}).bind("pb.region.Region", function (require) {
 
-  var $ = require("/$");
-  var PbElement = require("PbElement");
-  var Utils = require("Utils");
+  var $ = require("$");
+  var PbElement = require("pb.PbElement");
+  var Utils = require("pb.Utils");
 
   var __onMutation__ = Symbol("onMutation");
   var __mutationObserver__ = Symbol();
