@@ -49,24 +49,23 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .constant('doc', document.currentScript.ownerDocument)
-    .with('circleTemplate', require => require('doc').querySelector('template#circle'))
-    .with('hexagonTemplate', require => require('doc').querySelector('template#hexagon'))
-    .with('squareTemplate', require => require('doc').querySelector('template#square'))
-    .with('triangleTemplate', require => require('doc').querySelector('template#triangle'))
-    .bind('ui.Shape', require => {
+.constant('doc', document.currentScript.ownerDocument)
+.with('circleTemplate', require => require('doc').querySelector('template#circle'))
+.with('hexagonTemplate', require => require('doc').querySelector('template#hexagon'))
+.with('squareTemplate', require => require('doc').querySelector('template#square'))
+.with('triangleTemplate', require => require('doc').querySelector('template#triangle'))
+.bind('pb.ui.Shape', require => {
 
-  const $ = require('/$');
-  const $registry = require('$registry');
+  const $ = require('$');
+  const $registry = require('pb.$registry');
 
   const circleTemplate = require('circleTemplate');
-  const Config = require('service.Config');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
   const hexagonTemplate = require('hexagonTemplate');
   const squareTemplate = require('squareTemplate');
   const triangleTemplate = require('triangleTemplate');
-  const Utils = require('Utils');
+  const Utils = require('pb.Utils');
 
   const EL_NAME = 'pb-u-shape';
   const ATTR_NAME = 'shape';

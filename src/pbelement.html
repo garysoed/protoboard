@@ -13,7 +13,7 @@ DIJS
 
   // Private symbols.
   const __createdPromise__ = Symbol();
-  const __createdResolve__ = Symbol();
+  const __createdResolve__ = Symbol('createdResolve');
 
   const ATTR_ID = 'pb-id';
   const IDS = new Map();
@@ -33,6 +33,7 @@ DIJS
      */
     createdCallback() {
       Abilities.init(this);
+      this[__createdResolve__] = null;
       this[__createdPromise__] = new Promise(resolve => {
         this[__createdResolve__] = resolve;
       });
@@ -56,7 +57,9 @@ DIJS
      * @method attachedCallback
      */
     attachedCallback() {
-      this[__createdResolve__]();
+      if (this[__createdResolve__]) {
+        this[__createdResolve__]();
+      }
     }
 
     /**

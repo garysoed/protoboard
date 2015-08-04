@@ -9,17 +9,16 @@
   <link rel="import" href="ui/shape.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .run(require => {
+<script>
+DIJS
+.with('$registry', require => new (require('pb.service.Registry'))())
+.run(require => {
 
-    require('ui.Shape');
+  require('pb.ui.Shape');
 
-    describe('ui.Shape', () => {
-      it('should not throw exception when injected', () => {});
-    });
+  describe('ui.Shape', () => {
+    it('should not throw exception when injected', () => {});
   });
-  </script>
+});
+</script>
 </body>

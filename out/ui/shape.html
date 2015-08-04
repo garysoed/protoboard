@@ -35,7 +35,7 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("circleTemplate", function (require) {
+DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("circleTemplate", function (require) {
   return require("doc").querySelector("template#circle");
 })["with"]("hexagonTemplate", function (require) {
   return require("doc").querySelector("template#hexagon");
@@ -43,18 +43,18 @@ DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"](
   return require("doc").querySelector("template#square");
 })["with"]("triangleTemplate", function (require) {
   return require("doc").querySelector("template#triangle");
-}).bind("ui.Shape", function (require) {
+}).bind("pb.ui.Shape", function (require) {
 
-  var $ = require("/$");
-  var $registry = require("$registry");
+  var $ = require("$");
+  var $registry = require("pb.$registry");
 
   var circleTemplate = require("circleTemplate");
-  var Config = require("service.Config");
+  var Config = require("pb.service.Config");
   var doc = require("doc");
   var hexagonTemplate = require("hexagonTemplate");
   var squareTemplate = require("squareTemplate");
   var triangleTemplate = require("triangleTemplate");
-  var Utils = require("Utils");
+  var Utils = require("pb.Utils");
 
   var EL_NAME = "pb-u-shape";
   var ATTR_NAME = "shape";

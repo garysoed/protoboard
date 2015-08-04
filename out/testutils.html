@@ -54,24 +54,24 @@ DIJS.bind("pb.t", function (require) {
     },
 
     createFakeJQuery: function createFakeJQuery() {
-      var $ = (function (_$) {
-        var _$Wrapper = function $(_x) {
-          return _$.apply(this, arguments);
+      var fakeJQuery = (function (_fakeJQuery) {
+        var _fakeJQueryWrapper = function fakeJQuery(_x) {
+          return _fakeJQuery.apply(this, arguments);
         };
 
-        _$Wrapper.toString = function () {
-          return _$.toString();
+        _fakeJQueryWrapper.toString = function () {
+          return _fakeJQuery.toString();
         };
 
-        return _$Wrapper;
+        return _fakeJQueryWrapper;
       })(function (el) {
-        $.el = el;
-        return $;
+        fakeJQuery.el = el;
+        return fakeJQuery;
       });
 
-      $.attr = function () {};
-      $.replaceWith = function () {};
-      return $;
+      fakeJQuery.attr = function () {};
+      fakeJQuery.replaceWith = function () {};
+      return fakeJQuery;
     },
 
     createFakePromise: function createFakePromise() {

@@ -4,38 +4,47 @@
 
 <script>"use strict";
 
-var _defineProperty = function (obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); };
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-DIJS.prefix("pb").bind("service.Preview", function () {
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.service.Preview.__ctor__", function () {
   var __previewedEl__ = Symbol();
 
-  var Preview = Object.defineProperties((function () {
-    var _Object$defineProperties = {};
+  var Preview = (function () {
+    function Preview() {
+      _classCallCheck(this, Preview);
 
-    _defineProperty(_Object$defineProperties, __previewedEl__, null);
+      this[__previewedEl__] = null;
+    }
 
-    _defineProperty(_Object$defineProperties, "Events", {
-      ELEMENT_CHANGED: "element-changed"
+    _createClass(Preview, {
+      previewedEl: {
+        get: function () {
+          return this[__previewedEl__];
+        },
+        set: function (el) {
+          var changed = this[__previewedEl__] !== el;
+          this[__previewedEl__] = el;
+          if (changed) {
+            $(this).trigger(Preview.Events.ELEMENT_CHANGED);
+          }
+        }
+      }
     });
 
-    return _Object$defineProperties;
-  })(), {
-    previewedEl: {
-      get: function () {
-        return this[__previewedEl__];
-      },
-      set: function (el) {
-        var changed = this[__previewedEl__] !== el;
-        this[__previewedEl__] = el;
-        if (changed) {
-          $(this).trigger(Preview.Events.ELEMENT_CHANGED);
-        }
-      },
-      configurable: true,
-      enumerable: true
-    }
-  });
+    return Preview;
+  })();
+
+  Preview.Events = {
+    ELEMENT_CHANGED: "element-changed"
+  };
 
   return Preview;
+}).bind("pb.service.Preview", function (require) {
+  var Preview = require("pb.service.Preview.__ctor__");
+  var preview = new Preview();
+  preview.Events = Preview.Events;
+  return preview;
 });</script>
 </head><body></body></html>

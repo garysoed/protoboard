@@ -9,17 +9,15 @@
 <link rel="import" href="utils.html">
 
 <script>
-DIJS
-    .prefix('pb')
-    .bind('ui.Preview', require => {
+DIJS.bind('pb.ui.Preview', require => {
 
-  const $registry = require('$registry');
+  const $registry = require('pb.$registry');
 
-  const Config = require('service.Config');
-  const Events = require('Events');
-  const PbElement = require('PbElement');
-  const Preview = require('service.Preview');
-  const Utils = require('Utils');
+  const Config = require('pb.service.Config');
+  const Events = require('pb.Events');
+  const PbElement = require('pb.PbElement');
+  const Preview = require('pb.service.Preview');
+  const Utils = require('pb.Utils');
 
   /**
    * Class that contains a preview if the mouse enters the parent element. This will display

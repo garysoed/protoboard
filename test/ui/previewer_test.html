@@ -12,38 +12,42 @@
   <link rel="import" href="ui/previewer.html">
 </head>
 <body>
-  <script>
-  DIJS
-      .prefix('pb')
-      .with('$registry', require => new (require('service.Registry'))())
-      .constant('doc', document.currentScript.ownerDocument)
-      .run(require => {
+<script>
+DIJS
+.with('$registry', require => new (require('pb.service.Registry'))())
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
 
-  const _ = require('/_');
-  const _M = require('/_M');
-  const $registry = require('$registry');
+  const _ = require('_');
+  const _M = require('_M');
 
-  const Config = require('service.Config');
+  const Config = require('pb.service.Config');
   const doc = require('doc');
-  const Events = require('Events');
-  const expect = require('/expect');
-  const Preview = require('service.Preview');
-  const Previewer = require('ui.Previewer');
-  const t = require('t');
-  const Utils = require('Utils');
+  const Events = require('pb.Events');
+  const expect = require('expect');
+  const Preview = require('pb.service.Preview');
+  const Previewer = require('pb.ui.Previewer');
+  const t = require('pb.t');
+  const Utils = require('pb.Utils');
 
   let __onPreviewElChanged__ = t.getSymbol(Previewer.prototype, 'onPreviewElChanged');
 
   describe('ui.Previewer', () => {
-    before(done => {
-      $registry.register(doc, Config);
-      done();
+    let previewerEl;
+
+    beforeEach(() => {
+      previewerEl = Object.create(Previewer.prototype, {
+        innerHTML: {
+          value: '',
+          writable: true
+        }
+      });
     });
 
     describe('#attachedCallback', () => {
       it('should observe previewedEl in Preview', () => {
         _.spy(Utils, 'observe');
-        doc.createElement('pb-u-previewer').attachedCallback();
+        previewerEl.attachedCallback();
 
         expect(Utils.observe).calledWith(Preview, 'previewedEl', _M.isA(Function));
       });
@@ -52,12 +56,11 @@
     describe('#detachedCallback', () => {
       it('should unobserve in Preview', () => {
         let offFn = _.spiedFunction();
-        let previewer = doc.createElement('pb-u-previewer');
 
         _.spy(Events, 'of').overrideReturn({ off: offFn });
-        previewer.detachedCallback();
+        previewerEl.detachedCallback();
 
-        expect(Events.of).calledWith(Preview, previewer).at.least(1);
+        expect(Events.of).calledWith(Preview, previewerEl).at.least(1);
         expect(offFn).calledWith().at.least(1);
       });
     });
@@ -67,25 +70,22 @@
         let innerHTML = 'test inner HTML';
         Preview.previewedEl = { innerHTML: innerHTML };
 
-        let previewer = doc.createElement('pb-u-previewer');
-        previewer[__onPreviewElChanged__]();
-        expect(previewer.innerHTML).to.be.equal(innerHTML);
+        previewerEl[__onPreviewElChanged__]();
+        expect(previewerEl.innerHTML).to.be.equal(innerHTML);
       });
       it('should clear the inner HTML if the previewEl is null', () => {
         let innerHTML = 'test inner HTML';
         Preview.previewedEl = null;
 
-        let previewer = doc.createElement('pb-u-previewer');
-        previewer[__onPreviewElChanged__]();
-        expect(previewer.innerHTML).to.be.equal('');
+        previewerEl[__onPreviewElChanged__]();
+        expect(previewerEl.innerHTML).to.be.equal('');
       });
     });
 
-    afterEach(done => {
+    afterEach(() => {
       _.reset();
-      done();
     });
   });
-  });
-  </script>
+});
+</script>
 </body>

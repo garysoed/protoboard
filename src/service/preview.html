@@ -5,8 +5,7 @@
 <script>
 
 DIJS
-    .prefix('pb')
-    .bind('service.Preview', () => {
+.bind('pb.service.Preview.__ctor__', () => {
   /**
    * Service that lets the user preview an element on mouse hover.
    *
@@ -17,9 +16,11 @@ DIJS
   // Private symbols
   const __previewedEl__ = Symbol();
 
-  let Preview = {
+  class Preview {
 
-    [__previewedEl__]: null,
+    constructor() {
+      this[__previewedEl__] = null;
+    }
 
     /**
      * Element that is being previewed, if any. If null, no element is being previewed.
@@ -29,25 +30,31 @@ DIJS
      */
     get previewedEl() {
       return this[__previewedEl__];
-    },
+    }
     set previewedEl(el) {
       let changed = this[__previewedEl__] !== el;
       this[__previewedEl__] = el;
       if (changed) {
         $(this).trigger(Preview.Events.ELEMENT_CHANGED);
       }
-    },
-
-    Events: {
-      /**
-       * Fired when the previewed element has been changed.
-       *
-       * @event element-changed
-       */
-      ELEMENT_CHANGED: 'element-changed'
     }
+  }
+
+  Preview.Events = {
+    /**
+     * Fired when the previewed element has been changed.
+     *
+     * @event element-changed
+     */
+    ELEMENT_CHANGED: 'element-changed'
   };
 
   return Preview;
+})
+.bind('pb.service.Preview', require => {
+  const Preview = require('pb.service.Preview.__ctor__');
+  let preview = new Preview();
+  preview.Events = Preview.Events;
+  return preview;
 });
 </script>

@@ -46,14 +46,14 @@ DIJS.bind('pb.t', require => {
     },
 
     createFakeJQuery() {
-      let $ = function(el) {
-        $.el = el;
-        return $;
+      let fakeJQuery = function(el) {
+        fakeJQuery.el = el;
+        return fakeJQuery;
       };
 
-      $.attr = () => {};
-      $.replaceWith = () => {};
-      return $;
+      fakeJQuery.attr = () => {};
+      fakeJQuery.replaceWith = () => {};
+      return fakeJQuery;
     },
 
     createFakePromise() {

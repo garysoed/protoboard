@@ -7,7 +7,9 @@
 <link rel="import" href="third_party/jquery.html">
 
 <script>
+// Should always use the real JQuery.
 DIJS
+.constant('$', $)
 .bind('pb.Events', require => {
   const $ = require('$');
   const Hammer = require('pb.Hammer');

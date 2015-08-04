@@ -23,19 +23,19 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
+DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
   return require("doc").querySelector("template");
-}).bind("ui.Previewer", function (require) {
+}).bind("pb.ui.Previewer", function (require) {
 
-  var $registry = require("$registry");
+  var $registry = require("pb.$registry");
 
-  var Config = require("service.Config");
+  var Config = require("pb.service.Config");
   var doc = require("doc");
-  var Events = require("Events");
-  var PbElement = require("PbElement");
-  var Preview = require("service.Preview");
+  var Events = require("pb.Events");
+  var PbElement = require("pb.PbElement");
+  var Preview = require("pb.service.Preview");
   var template = require("template");
-  var Utils = require("Utils");
+  var Utils = require("pb.Utils");
 
   var EL_NAME = "pb-u-previewer";
 
