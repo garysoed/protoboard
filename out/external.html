@@ -4,9 +4,11 @@
 
 <script>"use strict";
 
-DIJS.bind("MutationObserver", function () {
-  return MutationObserver;
-}).bind("console", function () {
+DIJS.bind("console", function () {
   return console;
+}).bind("MutationObserver", function () {
+  return MutationObserver;
+}).bind("Promise", function () {
+  return Promise;
 });</script>
 </head><body></body></html>

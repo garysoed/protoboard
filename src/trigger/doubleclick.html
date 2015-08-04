@@ -6,12 +6,11 @@
 
 <script>
 DIJS
-    .prefix('pb')
-    .bind('trigger.DoubleClick', require => {
+.bind('pb.trigger.DoubleClick', require => {
 
-  const Events = require('Events');
-  const Trigger = require('trigger.Trigger');
-  const Triggers = require('trigger.Triggers');
+  const Events = require('pb.Events');
+  const Trigger = require('pb.trigger.Trigger');
+  const Triggers = require('pb.trigger.Triggers');
 
   /**
    * Triggers an ability when the element is double clicked.

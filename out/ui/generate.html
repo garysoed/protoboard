@@ -20,16 +20,17 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.prefix("pb").bind("ui.Generate", function (require) {
+DIJS.bind("pb.ui.Generate", function (require) {
 
-  var $ = require("/$");
-  var $registry = require("$registry");
+  var $ = require("$");
+  var $registry = require("pb.$registry");
 
-  var Check = require("Check");
-  var Config = require("service.Config");
-  var Handlebars = require("/Handlebars");
-  var PbElement = require("PbElement");
-  var Template = require("service.Template");
+  var Check = require("pb.Check");
+  var Config = require("pb.service.Config");
+  var Handlebars = require("Handlebars");
+  var PbElement = require("pb.PbElement");
+  var Promise = require("Promise");
+  var Template = require("pb.service.Template");
 
   var EL_NAME = "pb-u-generate";
 

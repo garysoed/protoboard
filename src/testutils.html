@@ -45,6 +45,32 @@ DIJS.bind('pb.t', require => {
       };
     },
 
+    createFakeJQuery() {
+      let $ = function(el) {
+        $.el = el;
+        return $;
+      };
+
+      $.attr = () => {};
+      $.replaceWith = () => {};
+      return $;
+    },
+
+    createFakePromise() {
+      let Promise = {
+        all() {
+          return Promise;
+        },
+
+        then(fn) {
+          Promise.lastHandler = fn;
+          return Promise;
+        }
+      };
+
+      return Promise;
+    },
+
     getSymbol(obj, name) {
       return Object.getOwnPropertySymbols(obj).find(symbol => {
         return `Symbol(${name})` === symbol.toString();

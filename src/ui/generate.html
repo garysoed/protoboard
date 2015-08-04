@@ -9,18 +9,17 @@
 <link rel="import" href="third_party/jquery.html">
 
 <script>
-DIJS
-    .prefix('pb')
-    .bind('ui.Generate', require => {
+DIJS.bind('pb.ui.Generate', require => {
 
-  const $ = require('/$');
-  const $registry = require('$registry');
+  const $ = require('$');
+  const $registry = require('pb.$registry');
 
-  const Check = require('Check');
-  const Config = require('service.Config');
-  const Handlebars = require('/Handlebars');
-  const PbElement = require('PbElement');
-  const Template = require('service.Template');
+  const Check = require('pb.Check');
+  const Config = require('pb.service.Config');
+  const Handlebars = require('Handlebars');
+  const PbElement = require('pb.PbElement');
+  const Promise = require('Promise');
+  const Template = require('pb.service.Template');
 
   const EL_NAME = 'pb-u-generate';
 

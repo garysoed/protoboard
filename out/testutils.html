@@ -53,6 +53,42 @@ DIJS.bind("pb.t", function (require) {
       };
     },
 
+    createFakeJQuery: function createFakeJQuery() {
+      var $ = (function (_$) {
+        var _$Wrapper = function $(_x) {
+          return _$.apply(this, arguments);
+        };
+
+        _$Wrapper.toString = function () {
+          return _$.toString();
+        };
+
+        return _$Wrapper;
+      })(function (el) {
+        $.el = el;
+        return $;
+      });
+
+      $.attr = function () {};
+      $.replaceWith = function () {};
+      return $;
+    },
+
+    createFakePromise: function createFakePromise() {
+      var Promise = {
+        all: function all() {
+          return Promise;
+        },
+
+        then: function then(fn) {
+          Promise.lastHandler = fn;
+          return Promise;
+        }
+      };
+
+      return Promise;
+    },
+
     getSymbol: function getSymbol(obj, name) {
       return Object.getOwnPropertySymbols(obj).find(function (symbol) {
         return "Symbol(" + name + ")" === symbol.toString();
