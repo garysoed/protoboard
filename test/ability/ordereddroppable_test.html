@@ -40,7 +40,7 @@ DIJS
       describe('horizontal mode', () => {
         let droppable;
 
-        beforeEach(done => {
+        beforeEach(() => {
           droppable = new OrderedDroppable(
               undefined, // name
               undefined, // defaultTrigger
@@ -48,7 +48,6 @@ DIJS
               false      // isVertical
           );
           $(el).attr(droppable.attrName, 'true');
-          done();
         });
 
         it('should insert before the correct child', () => {
@@ -110,7 +109,7 @@ DIJS
       describe('vertical mode', () => {
         let droppable;
 
-        beforeEach(done => {
+        beforeEach(() => {
           droppable = new OrderedDroppable(
               undefined, // name
               undefined, // defaultTrigger
@@ -118,7 +117,6 @@ DIJS
               true       // isVertical
           );
           $(el).attr(droppable.attrName, 'true');
-          done();
         });
 
         it('should insert before the correct child for vertical mode', () => {

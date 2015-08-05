@@ -143,10 +143,9 @@ DIJS
       let droppable;
       let el;
 
-      beforeEach(done => {
+      beforeEach(() => {
         droppable = new StaggeredDroppable();
         el = doc.createElement('div');
-        done();
       });
 
       it('should return true if the stagger level is non zero', () => {

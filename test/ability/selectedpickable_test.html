@@ -32,12 +32,11 @@ DIJS
       let selectFn;
       let parent;
 
-      beforeEach(done => {
+      beforeEach(() => {
         selectFn = _.spiedFunction();
         pickable = new SelectedPickable(selectFn);
         parent = doc.createElement('div');
         pickable.init(parent);
-        done();
       });
 
       it('should add the element returned by the selection function to the move service', () => {
