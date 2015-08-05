@@ -57,6 +57,7 @@ DIJS
      * @method attachedCallback
      */
     attachedCallback() {
+      $(this).trigger(PbElement.Events.CREATED);
       if (this[__createdResolve__]) {
         this[__createdResolve__]();
       }
@@ -70,13 +71,15 @@ DIJS
     detachedCallback() { }
 
     /**
-     * Promise that will be resolved when the element has been created
+     * Promise that will be resolved when the element has been created.
      *
      * @type Promise
      * @property whenCreated
      * @final
+     * @deprecated
      */
     get whenCreated() {
+      console.warn('whenCreated has been deprecated. Listen to the created event instead.');
       return this[__createdPromise__];
     }
 
@@ -104,6 +107,15 @@ DIJS
       return this.pbId.split('-')[0];
     }
   }
+
+  PbElement.Events = {
+    /**
+     * Fired when the element has been created.
+     *
+     * @event created
+     */
+    CREATED: 'created'
+  };
 
   return PbElement;
 });

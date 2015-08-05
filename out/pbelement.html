@@ -59,6 +59,7 @@ DIJS.bind("pb.PbElement", function (require) {
       },
       attachedCallback: {
         value: function attachedCallback() {
+          $(this).trigger(PbElement.Events.CREATED);
           if (this[__createdResolve__]) {
             this[__createdResolve__]();
           }
@@ -69,6 +70,7 @@ DIJS.bind("pb.PbElement", function (require) {
       },
       whenCreated: {
         get: function () {
+          console.warn("whenCreated has been deprecated. Listen to the created event instead.");
           return this[__createdPromise__];
         }
       },
@@ -86,6 +88,10 @@ DIJS.bind("pb.PbElement", function (require) {
 
     return PbElement;
   })(HTMLElement);
+
+  PbElement.Events = {
+    CREATED: "created"
+  };
 
   return PbElement;
 });</script>

@@ -6,6 +6,7 @@
 
   <link rel="import" href="pbelement.html">
   <link rel="import" href="third_party/di.html">
+  <link rel="import" href="third_party/events.html">
   <link rel="import" href="testbase.html">
 </head>
 <body>
@@ -17,24 +18,23 @@ DIJS
   const _ = require('_');
   const $ = require('$');
   const doc = require('doc');
+  const Events = require('pb.Events');
   const expect = require('expect');
   const PbElement = require('pb.PbElement');
 
   describe('PbElement', () => {
+    let el;
+
+    beforeEach(() => {
+      el = doc.createElement('div');
+      Object.setPrototypeOf(el, PbElement.prototype);
+    });
+
     describe('#createdCallback', () => {
-      let el;
-      let pbElement;
-
-      beforeEach(done => {
-        el = doc.createElement('div');
-        done();
-      });
-
       it('should create id with the given prefix', () => {
         let prefix = 'prefix';
         $(el).attr('pb-id', prefix);
 
-        Object.setPrototypeOf(el, PbElement.prototype);
         el.createdCallback();
 
         expect($(el).attr('pb-id')).to.be.equal(`${prefix}-0`);
@@ -48,7 +48,6 @@ DIJS
         $(el).attr('pb-id', prefix);
         $(el2).attr('pb-id', prefix);
 
-        Object.setPrototypeOf(el, PbElement.prototype);
         el.createdCallback();
 
         Object.setPrototypeOf(el2, PbElement.prototype);
@@ -57,30 +56,24 @@ DIJS
         expect($(el2).attr('pb-id')).to.be.equal(`${prefix}-1`);
       });
       it('should default the prefix to the element\'s name', () => {
-        Object.setPrototypeOf(el, PbElement.prototype);
         el.createdCallback();
 
         expect($(el).attr('pb-id')).to.be.equal('div-0');
       });
     });
-    describe('#whenCreated', () => {
-      function createElement() {
-        let el = doc.createElement('div');
-        Object.setPrototypeOf(el, PbElement.prototype);
-        el.createdCallback();
-        return el;
-      }
 
-      it('should be resolved when the element is attached', done => {
-        let el = createElement();
-        el.whenCreated.then(() => done());
+    describe('#attachedCallback', () => {
+      it('should fire the `created` event', () => {
+        let handler = _.spiedFunction();
+        Events.of(el).on('jquery', PbElement.Events.CREATED, handler);
+
         el.attachedCallback();
+        expect(handler).called().at.least(1);
       });
-      it('should not be resolved when the element has not been attached', () => {
-        createElement().whenCreated.then(() => {
-          expect.to.fail();
-        });
-      });
+    });
+
+    afterEach(() => {
+      _.reset();
     });
   });
 });

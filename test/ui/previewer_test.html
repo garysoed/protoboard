@@ -36,12 +36,8 @@ DIJS
     let previewerEl;
 
     beforeEach(() => {
-      previewerEl = Object.create(Previewer.prototype, {
-        innerHTML: {
-          value: '',
-          writable: true
-        }
-      });
+      previewerEl = doc.createElement('div');
+      Object.setPrototypeOf(previewerEl, Previewer.prototype);
     });
 
     describe('#attachedCallback', () => {

@@ -30,18 +30,14 @@ DIJS
     let previewEl;
 
     beforeEach(() => {
-      previewEl = Object.create(Preview.prototype, {
-        parentElement: {
-          value: null,
-          writable: true
-        }
-      });
+      previewEl = doc.createElement('div');
+      Object.setPrototypeOf(previewEl, Preview.prototype);
     });
 
     describe('#attachedCallback', () => {
       it('should listen to mouse enter and leave on parent element', () => {
         let parent = doc.createElement('div');
-        previewEl.parentElement = parent;
+        parent.appendChild(previewEl);
 
         _.spy(parent, 'addEventListener');
 
@@ -58,7 +54,7 @@ DIJS
     describe('#detachedCallback', () => {
       it('should stop listening to mouse enter and leave from parent element', () => {
         let parent = doc.createElement('div');
-        previewEl.parentElement = parent;
+        parent.appendChild(previewEl);
 
         _.spy(parent, 'addEventListener');
         _.spy(parent, 'removeEventListener');
