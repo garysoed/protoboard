@@ -19,6 +19,10 @@ DIJS
 .with('$', require => {
   return require('pb.t').createFakeJQuery();
 })
+.with('pb.$registry', require => {
+  const Registry = require('pb.service.Registry');
+  return new Registry();
+})
 .with('Promise', require => {
   return require('pb.t').createFakePromise();
 })

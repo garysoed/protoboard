@@ -35,14 +35,46 @@ var OUT_DIR  = 'out';
 var MIN_DIR  = 'min';
 
 var KARMA_CONF = __dirname + '/karma.conf.js';
-var KARMA_CONFIG = require(KARMA_CONF);
+
+
+function karmaHelper(files, callback, hasError) {
+  if (hasError) {
+    callback(hasError);
+  } else if (files.length <= 0) {
+    callback();
+  } else {
+    var conf = files.splice(0, 1)[0];
+    console.log('Testing: ' + conf);
+    karma.start({
+      configFile: conf,
+      singleRun: true
+    }, karmaHelper.bind(null, files, callback));
+  }
+}
 
 function runKarma(singleRun, callback) {
-  karma.start({
-    configFile: KARMA_CONF,
-    singleRun: singleRun
-  }, callback);
-};
+  var options = minimist(process.argv.slice(2), {
+    'string': 'dir',
+  });
+
+  var files;
+  if (options.dir) {
+    files = [path.join(__dirname, options.dir, 'karma.conf.js')];
+  } else {
+    files = glob.sync(path.join(__dirname,'test/**/karma.conf.js'));
+  }
+
+  console.log('Karma configs: ' + files);
+
+  if (singleRun) {
+    karmaHelper(files, callback);
+  } else {
+    karma.start({
+      configFile: files[0],
+      singleRun: singleRun
+    }, callback);
+  }
+}
 
 function compileTheme() {
   var options = minimist(process.argv.slice(2), {

@@ -11,7 +11,7 @@
 <body>
 <script>
 DIJS
-.with('$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.service.Registry'))())
 .run(require => {
 
   require('pb.ui.Shape');
