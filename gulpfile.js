@@ -37,31 +37,15 @@ var MIN_DIR  = 'min';
 var KARMA_CONF = __dirname + '/karma.conf.js';
 
 
-function karmaHelper(files, callback, hasError) {
-  if (hasError) {
-    callback(hasError);
-  } else if (files.length <= 0) {
-    callback();
-  } else {
-    var conf = files.splice(0, 1)[0];
-    console.log('Testing: ' + conf);
-    var server = new karma({
-      configFile: conf,
-      singleRun: true
-    }, karmaHelper.bind(null, files, callback));
-    server.start();
-  }
-}
-
 function runKarma(singleRun, callback) {
   var options = minimist(process.argv.slice(2), {
-    'string': 'dir',
+    'string': 'tests',
     'default': {
-      'dir': '.'
+      'tests': '.'
     }
   });
 
-  var config = path.join(__dirname, options.dir, 'karma.conf.js');
+  var config = path.join(__dirname, options.tests, 'karma.conf.js');
 
   console.log('Karma configs: ' + config);
 

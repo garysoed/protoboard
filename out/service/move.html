@@ -119,7 +119,7 @@ DIJS.bind("pb.service.Move.__symbols__", function () {
 
             Utils.toArray(record.removedNodes).forEach(function (removedNode) {
               if (removedNode[__origin__] && removedNode[__origin__] !== removedNode.parentElement) {
-                $(_this).trigger(_this.Events.MOVE, {
+                $(_this).trigger(Move.Events.MOVE, {
                   moved: removedNode,
                   from: removedNode[__origin__],
                   to: removedNode.parentElement
@@ -171,23 +171,14 @@ DIJS.bind("pb.service.Move.__symbols__", function () {
       get: function () {
         return this[__mouseY__];
       }
-    }, {
-      key: "Events",
-      get: function () {
-        return Object.defineProperties({}, {
-          MOVE: {
-            get: function () {
-              return "move";
-            },
-            configurable: true,
-            enumerable: true
-          }
-        });
-      }
     }]);
 
     return Move;
   })();
+
+  Move.Events = {
+    MOVE: "move"
+  };
 
   return Move;
 }).bind("pb.service.Move", function (require) {

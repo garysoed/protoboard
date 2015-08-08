@@ -134,7 +134,7 @@ DIJS
         Utils.toArray(record.removedNodes).forEach(removedNode => {
           if (removedNode[__origin__] && removedNode[__origin__] !== removedNode.parentElement) {
             $(this).trigger(
-                this.Events.MOVE,
+                Move.Events.MOVE,
                 {
                   moved: removedNode,
                   from: removedNode[__origin__],
@@ -202,21 +202,16 @@ DIJS
     get mouseY() {
       return this[__mouseY__];
     }
-
-    /**
-     * Events that this class can trigger.
-     * - `MOVE`: Called when an element has been moved.
-     *
-     * @property Events
-     * @type Object
-     * @final
-     */
-    get Events() {
-      return {
-        get MOVE() { return 'move'; }
-      };
-    }
   }
+
+  Move.Events = {
+    /**
+     * Fired when an element has been moved.
+     *
+     * @event move
+     */
+    MOVE: 'move'
+  };
 
   return Move;
 })
