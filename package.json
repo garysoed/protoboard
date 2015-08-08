@@ -36,7 +36,7 @@
     "gulp-uglify": "^1.2.0",
     "gulp-zip": "^2.0.3",
     "jshint-stylish": "^1.0.0",
-    "karma": "^0.12.24",
+    "karma": "0.13.8",
     "karma-chrome-launcher": "^0.1.5",
     "karma-mocha": "^0.1.9",
     "karma-mocha-reporter": "^0.3.1",
@@ -49,6 +49,6 @@
   },
   "dependencies": {
     "di-js": "garysoed/di#4.0.0",
-    "listener": "git://github.com/garysoed/listener"
+    "listener": "git://github.com/garysoed/listener.git"
   }
 }

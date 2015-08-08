@@ -14,7 +14,7 @@ var uglify = require('gulp-uglify');
 var zip    = require('gulp-zip');
 
 var chalk    = require('chalk');
-var karma    = require('karma').server;
+var karma    = require('karma').Server;
 var minimist = require('minimist');
 
 var path = require('path');
@@ -45,10 +45,11 @@ function karmaHelper(files, callback, hasError) {
   } else {
     var conf = files.splice(0, 1)[0];
     console.log('Testing: ' + conf);
-    karma.start({
+    var server = new karma({
       configFile: conf,
       singleRun: true
     }, karmaHelper.bind(null, files, callback));
+    server.start();
   }
 }
 
@@ -69,10 +70,11 @@ function runKarma(singleRun, callback) {
   if (singleRun) {
     karmaHelper(files, callback);
   } else {
-    karma.start({
+    var server = new karma({
       configFile: files[0],
       singleRun: singleRun
     }, callback);
+    server.start();
   }
 }
 
