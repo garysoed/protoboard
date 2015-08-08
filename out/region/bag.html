@@ -71,10 +71,10 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", f
   return require("doc").querySelector("template#placeholder");
 }).bind("pb.region.Bag", function (require, optional) {
 
-  var $ = require("$");
+  var $ = require("pb.$");
   var $registry = require("pb.$registry");
 
-  var Chance = require("Chance");
+  var Chance = require("pb.Chance");
   var Click = require("pb.trigger.Click");
   var Config = require("pb.service.Config");
   var doc = require("doc");

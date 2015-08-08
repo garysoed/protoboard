@@ -16,7 +16,7 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.with('$', require => {
+.with('pb.$', require => {
   return require('pb.t').createFakeJQuery();
 })
 .with('pb.$registry', require => {
@@ -28,8 +28,8 @@ DIJS
 })
 .run(require => {
 
-  const _ = require('_');
-  const $ = require('$');
+  const _ = require('pb._');
+  const $ = require('pb.$');
 
   const Config = require('pb.service.Config');
   const doc = require('doc');

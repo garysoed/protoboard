@@ -13,9 +13,11 @@
   content: attr(child-count);
   position: absolute;
   right: 0;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
@@ -37,7 +39,7 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", f
   return require("doc").querySelector("template");
 }).bind("pb.region.Region", function (require) {
 
-  var $ = require("$");
+  var $ = require("pb.$");
   var PbElement = require("pb.PbElement");
   var Utils = require("pb.Utils");
 

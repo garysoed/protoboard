@@ -13,9 +13,9 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 DIJS.bind("pb.service.Template.__ctor__", function (require) {
 
-  var $ = require("$");
+  var $ = require("pb.$");
   var Events = require("pb.Events");
-  var Handlebars = require("Handlebars");
+  var Handlebars = require("pb.Handlebars");
 
   var __promises__ = Symbol("promises");
 
@@ -67,7 +67,7 @@ DIJS.bind("pb.service.Template.__ctor__", function (require) {
 }).bind("pb.service.Template.__forHelper__", function (require) {
 
   var Check = require("pb.Check");
-  var Handlebars = require("Handlebars");
+  var Handlebars = require("pb.Handlebars");
 
   return function (from, to, step, options) {
     if (options === undefined) {

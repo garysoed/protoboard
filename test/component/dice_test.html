@@ -20,11 +20,11 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('_');
-  const $ = require('$');
+  const _ = require('pb._');
+  const $ = require('pb.$');
   const $registry = require('pb.$registry');
 
-  const Chance = require('Chance');
+  const Chance = require('pb.Chance');
   const Config = require('pb.service.Config');
   const Dice = require('pb.component.Dice');
   const doc = require('doc');

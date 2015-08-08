@@ -12,7 +12,7 @@
 <body>
 <script>
 DIJS
-.constant('Handlebars', {
+.constant('pb.Handlebars', {
   helpers: {},
   registerHelper(name, helper) {
     this.helpers[name] = helper;
@@ -24,14 +24,14 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('_');
+  const _ = require('pb._');
   const _M = require('_M');
 
   const Check = require('pb.Check');
   const doc = require('doc');
   const expect = require('expect');
   const forHelper = require('pb.service.Template.__forHelper__');
-  const Handlebars = require('Handlebars');
+  const Handlebars = require('pb.Handlebars');
   const Template = require('pb.service.Template.__ctor__');
 
   describe('service.Template', () => {

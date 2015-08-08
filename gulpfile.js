@@ -56,26 +56,20 @@ function karmaHelper(files, callback, hasError) {
 function runKarma(singleRun, callback) {
   var options = minimist(process.argv.slice(2), {
     'string': 'dir',
+    'default': {
+      'dir': '.'
+    }
   });
 
-  var files;
-  if (options.dir) {
-    files = [path.join(__dirname, options.dir, 'karma.conf.js')];
-  } else {
-    files = glob.sync(path.join(__dirname,'test/**/karma.conf.js'));
-  }
+  var config = path.join(__dirname, options.dir, 'karma.conf.js');
 
-  console.log('Karma configs: ' + files);
+  console.log('Karma configs: ' + config);
 
-  if (singleRun) {
-    karmaHelper(files, callback);
-  } else {
-    var server = new karma({
-      configFile: files[0],
-      singleRun: singleRun
-    }, callback);
-    server.start();
-  }
+  var server = new karma({
+    configFile: config,
+    singleRun: singleRun
+  }, callback);
+  server.start();
 }
 
 function compileTheme() {

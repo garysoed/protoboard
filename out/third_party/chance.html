@@ -8,7 +8,7 @@
 
 DIJS.bind("pb.seed", function () {
   return new Date().getTime();
-}).bind("Chance", function (require, optional) {
+}).bind("pb.Chance", function (require, optional) {
   var seed = optional("pb.seed");
 
   var chance = new Chance(seed);

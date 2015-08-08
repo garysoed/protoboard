@@ -28,13 +28,13 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('_');
+  const _ = require('pb._');
   const _M = require('_M');
-  const $ = require('$');
+  const $ = require('pb.$');
   const $registry = require('pb.$registry');
 
   const Bag = require('pb.region.Bag');
-  const Chance = require('Chance');
+  const Chance = require('pb.Chance');
   const Config = require('pb.service.Config');
   const doc = require('doc');
   const expect = require('expect');

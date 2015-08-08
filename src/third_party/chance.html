@@ -7,7 +7,7 @@
 <script>
 DIJS
     .bind('pb.seed', () => (new Date()).getTime())
-    .bind('Chance', (require, optional) => {
+    .bind('pb.Chance', (require, optional) => {
       const seed = optional('pb.seed');
 
       let chance = new Chance(seed);

@@ -56,10 +56,10 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", f
   return doc.querySelector("template");
 }).bind("pb.component.Dice", function (require) {
 
-  var $ = require("$");
+  var $ = require("pb.$");
   var $registry = require("pb.$registry");
   var Ability = require("pb.ability.Ability");
-  var Chance = require("Chance");
+  var Chance = require("pb.Chance");
   var Check = require("pb.Check");
   var Click = require("pb.trigger.Click");
   var Component = require("pb.component.Component");

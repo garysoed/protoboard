@@ -45,7 +45,7 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("circleTempla
   return require("doc").querySelector("template#triangle");
 }).bind("pb.ui.Shape", function (require) {
 
-  var $ = require("$");
+  var $ = require("pb.$");
   var $registry = require("pb.$registry");
 
   var circleTemplate = require("circleTemplate");

@@ -63,10 +63,10 @@ DIJS
 .with('placeHolderTmp', require => require('doc').querySelector('template#placeholder'))
 .bind('pb.region.Bag', (require, optional) => {
 
-  const $ = require('$');
+  const $ = require('pb.$');
   const $registry = require('pb.$registry');
 
-  const Chance = require('Chance');
+  const Chance = require('pb.Chance');
   const Click = require('pb.trigger.Click');
   const Config = require('pb.service.Config');
   const doc = require('doc');

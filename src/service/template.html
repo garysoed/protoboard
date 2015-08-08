@@ -9,9 +9,9 @@
 DIJS
 .bind('pb.service.Template.__ctor__', require => {
 
-  const $ = require('$');
+  const $ = require('pb.$');
   const Events = require('pb.Events');
-  const Handlebars = require('Handlebars');
+  const Handlebars = require('pb.Handlebars');
 
   const __promises__ = Symbol('promises');
 
@@ -112,7 +112,7 @@ DIJS
 .bind('pb.service.Template.__forHelper__', require => {
 
   const Check = require('pb.Check');
-  const Handlebars = require('Handlebars');
+  const Handlebars = require('pb.Handlebars');
 
   return function(from, to, step, options) {
     if (options === undefined) {
