@@ -86,6 +86,15 @@ DIJS.bind('pb.t', require => {
     }
   };
 
+  TestUtil.FakeMutationObserver = function(handler) {
+    TestUtil.FakeMutationObserver.instance.handler = handler;
+    return TestUtil.FakeMutationObserver.instance;
+  };
+
+  TestUtil.FakeMutationObserver.instance = {
+    observe: () => {}
+  };
+
   return TestUtil;
 });
 </script>
