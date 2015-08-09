@@ -8,13 +8,13 @@
  * the files you need under `bower_components/protoboard`. Run `npm install` in the source
  * directory's root, and you can compile the source code by running:
  * ```bash
- * gulp src
+ * gulp pack
  * ```
  *
  * The script reads from JSON files in the `./themes` directory. By default, they use the
  * `./themes/slateblue.json` theme. To change the colour theme to "medium sea green", you can run:
  * ```bash
- * gulp ex --theme ./themes/mediumseagreen.json
+ * gulp pack --theme ./themes/mediumseagreen.json
  * ```
  *
  * Though Protoboard comes with several themes, you can make your own theme. Create a json file with
