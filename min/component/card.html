@@ -25,7 +25,7 @@
   position: absolute;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  transition: -webkit-transform .3s;
+  -webkit-transition: -webkit-transform .3s;
   transition: transform .3s;
   z-index: -1;
 }
@@ -36,7 +36,7 @@
 }
 
 :host([tap="true"]) {
-  transition: -webkit-transform .3s;
+  -webkit-transition: -webkit-transform .3s;
   transition: transform .3s;
 }
 
@@ -76,5 +76,5 @@
   </div>
 </template>
 
-<script>"use strict";var _createClass=function(){function e(e,t){for(var r in t){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,t)}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_get=function e(t,r,n){var o=Object.getOwnPropertyDescriptor(t,r);if(void 0===o){var a=Object.getPrototypeOf(t);return null===a?void 0:e(a,r,n)}if("value"in o&&o.writable)return o.value;var i=o.get;return void 0===i?void 0:i.call(n)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DIJS.constant("doc",document.currentScript.ownerDocument)["with"]("template",function(e){e("doc");return doc.querySelector("template")}).bind("pb.component.Card",function(e){var t=e("pb.$registry"),r=e("pb.trigger.Click"),n=e("pb.component.Component"),o=e("pb.service.Config"),a=e("pb.ability.Helpable"),i=e("pb.trigger.Key"),c=e("pb.ability.Pickable"),l=e("pb.ability.Toggleable"),p=e("pb.Utils"),u=function(e){function t(){_classCallCheck(this,t),null!=e&&e.apply(this,arguments)}return _inherits(t,e),_createClass(t,{createdCallback:{value:function(){_get(Object.getPrototypeOf(t.prototype),"createdCallback",this).call(this),this.createShadowRoot().appendChild(p.activateTemplate(template,doc)),this.attachedCallback()}}}),t}(n);return u.NODE_NAME="pb-c-card",o.add(u.NODE_NAME,new a("help"),new c("pick",new i("q"),!0),new l("flip",new r,!0),new l("tap",new i("t"),!0)),t.add(u.NODE_NAME,u),u});</script>
+<script>"use strict";var _createClass=function(){function e(e,t){for(var r in t){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,t)}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_get=function e(t,r,n){var a=Object.getOwnPropertyDescriptor(t,r);if(void 0===a){var o=Object.getPrototypeOf(t);return null===o?void 0:e(o,r,n)}if("value"in a&&a.writable)return a.value;var i=a.get;return void 0===i?void 0:i.call(n)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DIJS.constant("doc",document.currentScript.ownerDocument)["with"]("template",function(e){var t=e("doc");return t.querySelector("template")}).bind("pb.component.Card",function(e){var t=e("pb.$registry"),r=e("pb.trigger.Click"),n=e("pb.component.Component"),a=e("pb.service.Config"),o=e("doc"),i=e("pb.ability.Helpable"),c=e("pb.trigger.Key"),l=e("pb.ability.Pickable"),p=e("template"),u=e("pb.ability.Toggleable"),b=e("pb.Utils"),s=function(e){function t(){_classCallCheck(this,t),null!=e&&e.apply(this,arguments)}return _inherits(t,e),_createClass(t,{createdCallback:{value:function(){_get(Object.getPrototypeOf(t.prototype),"createdCallback",this).call(this),this.createShadowRoot().appendChild(b.activateTemplate(p,o)),this.attachedCallback()}}}),t}(n);return s.NODE_NAME="pb-c-card",a.add(s.NODE_NAME,new i("help"),new l("pick",new c("q"),!0),new u("flip",new r,!0),new u("tap",new c("t"),!0)),t.add(s.NODE_NAME,s),s});</script>
 </head><body></body></html>
