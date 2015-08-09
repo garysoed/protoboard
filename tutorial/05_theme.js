@@ -47,6 +47,5 @@
  * is a function that accepts the file name of the theme JSON file.
  *
  * @class 5 Theming
- * @since 0.2.0
  * @module tutorial
  */
