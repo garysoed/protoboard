@@ -182,14 +182,10 @@ DIJS.bind("pb.service.Move.__symbols__", function () {
 
   return Move;
 }).bind("pb.service.Move", function (require) {
-  var Move = require("pb.service.Move.__ctor__");
-  return new Move();
-}).bind("pb.service.Move.__elem__", function (require) {
-
   var $registry = require("pb.$registry");
   var Config = require("pb.service.Config");
   var Events = require("pb.Events");
-  var Move = require("pb.service.Move");
+  var Move = require("pb.service.Move.__ctor__");
   var PbElement = require("pb.PbElement");
 
   var __container__ = require("pb.service.Move.__symbols__").__container__;
@@ -197,6 +193,8 @@ DIJS.bind("pb.service.Move.__symbols__", function () {
   var __onMouseMove__ = require("pb.service.Move.__symbols__").__onMouseMove__;
 
   var EL_NAME = "pb-s-move";
+
+  var moveService = new Move();
 
   var MoveElement = (function (_PbElement) {
     function MoveElement() {
@@ -215,14 +213,13 @@ DIJS.bind("pb.service.Move.__symbols__", function () {
   Config.add(EL_NAME);
   $registry.add(EL_NAME, MoveElement);
   $registry.runAtRegister(function (doc) {
-    Events.of(doc.body, Move).on("dom", "mousemove", Move[__onMouseMove__].bind(Move));
-    Move[__container__] = doc.createElement(EL_NAME);
-    doc.body.appendChild(Move[__container__]);
+    Events.of(doc.body, moveService).on("dom", "mousemove", moveService[__onMouseMove__].bind(moveService));
+    moveService[__container__] = doc.createElement(EL_NAME);
+    doc.body.appendChild(moveService[__container__]);
 
-    var observer = new MutationObserver(Move[__onContainerMutation__].bind(Move));
-    observer.observe(Move[__container__], { childList: true });
+    var observer = new MutationObserver(moveService[__onContainerMutation__].bind(moveService));
+    observer.observe(moveService[__container__], { childList: true });
   });
-
-  return MoveElement;
+  return moveService;
 });</script>
 </head><body></body></html>

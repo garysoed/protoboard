@@ -16,9 +16,11 @@
 }
 
 #content {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
@@ -43,5 +45,5 @@
   </div>
 </template>
 
-<script>"use strict";var _createClass=function(){function e(e,t){for(var r in t){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,t)}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_get=function e(t,r,n){var o=Object.getOwnPropertyDescriptor(t,r);if(void 0===o){var i=Object.getPrototypeOf(t);return null===i?void 0:e(i,r,n)}if("value"in o&&o.writable)return o.value;var a=o.get;return void 0===a?void 0:a.call(n)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DIJS.prefix("pb").constant("doc",document.currentScript.ownerDocument)["with"]("template",function(e){return e("doc").querySelector("template")}).bind("region.Hand",function(e){var t=e("$registry"),r=e("service.Config"),n=e("doc"),o=e("ability.Helpable"),i=e("trigger.Key"),a=e("ability.OrderedDroppable"),c=e("region.Region"),l=e("template"),u=e("Utils"),p="pb-r-hand",s=function(e){function t(){_classCallCheck(this,t),null!=e&&e.apply(this,arguments)}return _inherits(t,e),_createClass(t,{createdCallback:{value:function(){_get(Object.getPrototypeOf(t.prototype),"createdCallback",this).call(this),this.createShadowRoot().appendChild(u.activateTemplate(l,n))}},pickableChildCount:{get:function(){return this.childElementCount}}}),t}(c);return s.NODE_NAME=p,r.add(p,new o("help"),new a("drop",new i("d"),!0,!1)),t.add(p,s),s});</script>
+<script>"use strict";var _createClass=function(){function e(e,t){for(var r in t){var n=t[r];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,t)}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),_get=function e(t,r,n){var o=Object.getOwnPropertyDescriptor(t,r);if(void 0===o){var i=Object.getPrototypeOf(t);return null===i?void 0:e(i,r,n)}if("value"in o&&o.writable)return o.value;var a=o.get;return void 0===a?void 0:a.call(n)},_inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)},_classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")};DIJS.constant("doc",document.currentScript.ownerDocument)["with"]("template",function(e){return e("doc").querySelector("template")}).bind("pb.region.Hand",function(e){var t=e("pb.$registry"),r=e("pb.service.Config"),n=e("doc"),o=e("pb.ability.Helpable"),i=e("pb.trigger.Key"),a=e("pb.ability.OrderedDroppable"),c=e("pb.region.Region"),l=e("template"),u=e("pb.Utils"),p="pb-r-hand",s=function(e){function t(){_classCallCheck(this,t),null!=e&&e.apply(this,arguments)}return _inherits(t,e),_createClass(t,{createdCallback:{value:function(){_get(Object.getPrototypeOf(t.prototype),"createdCallback",this).call(this),this.createShadowRoot().appendChild(u.activateTemplate(l,n))}},pickableChildCount:{get:function(){return this.childElementCount}}}),t}(c);return s.NODE_NAME=p,r.add(p,new o("help"),new a("drop",new i("d"),!0,!1)),t.add(p,s),s});</script>
 </head><body></body></html>

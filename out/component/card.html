@@ -25,7 +25,7 @@
   position: absolute;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  transition: -webkit-transform .3s;
+  -webkit-transition: -webkit-transform .3s;
   transition: transform .3s;
   z-index: -1;
 }
@@ -36,7 +36,7 @@
 }
 
 :host([tap="true"]) {
-  transition: -webkit-transform .3s;
+  -webkit-transition: -webkit-transform .3s;
   transition: transform .3s;
 }
 
@@ -87,7 +87,7 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
 DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", function (require) {
-  var template = require("doc");
+  var doc = require("doc");
   return doc.querySelector("template");
 }).bind("pb.component.Card", function (require) {
 
@@ -95,9 +95,11 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", f
   var Click = require("pb.trigger.Click");
   var Component = require("pb.component.Component");
   var Config = require("pb.service.Config");
+  var doc = require("doc");
   var Helpable = require("pb.ability.Helpable");
   var Key = require("pb.trigger.Key");
   var Pickable = require("pb.ability.Pickable");
+  var template = require("template");
   var Toggleable = require("pb.ability.Toggleable");
   var Utils = require("pb.Utils");
 

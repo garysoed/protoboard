@@ -216,15 +216,10 @@ DIJS
   return Move;
 })
 .bind('pb.service.Move', require => {
-  const Move = require('pb.service.Move.__ctor__');
-  return new Move();
-})
-.bind('pb.service.Move.__elem__', require => {
-
   const $registry = require('pb.$registry');
   const Config = require('pb.service.Config');
   const Events = require('pb.Events');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.service.Move.__ctor__');
   const PbElement = require('pb.PbElement');
 
   const __container__ = require('pb.service.Move.__symbols__').__container__;
@@ -233,20 +228,21 @@ DIJS
 
   const EL_NAME = 'pb-s-move';
 
+  let moveService = new Move();
+
   class MoveElement extends PbElement { }
 
   Config.add(EL_NAME);
   $registry.add(EL_NAME, MoveElement);
   $registry.runAtRegister(doc => {
-    Events.of(doc.body, Move)
-        .on('dom', 'mousemove', Move[__onMouseMove__].bind(Move));
-    Move[__container__] = doc.createElement(EL_NAME);
-    doc.body.appendChild(Move[__container__]);
+    Events.of(doc.body, moveService)
+        .on('dom', 'mousemove', moveService[__onMouseMove__].bind(moveService));
+    moveService[__container__] = doc.createElement(EL_NAME);
+    doc.body.appendChild(moveService[__container__]);
 
-    let observer = new MutationObserver(Move[__onContainerMutation__].bind(Move));
-    observer.observe(Move[__container__], { childList: true });
+    let observer = new MutationObserver(moveService[__onContainerMutation__].bind(moveService));
+    observer.observe(moveService[__container__], { childList: true });
   });
-
-  return MoveElement;
+  return moveService;
 });
 </script>
