@@ -7,10 +7,11 @@
   "colorForeground": "black",
   "colorBorder": "#B6B6B6",
 
-  "colorLightPrimary": "#C8E6C9",
-  "colorPrimary": "#4CAF50",
-  "colorDarkPrimary": "#388E3C",
-  "colorAccent": "#8BC34A",
+  "colorLightPrimary": "#D1C4E9",
+  "colorPrimary": "#673AB7",
+  "colorDarkPrimary": "#311B92",
+  "colorAccent": "#64DD17",
+
   "options": {
     "linkNatives": "true",
     "outdir": "./doc",
