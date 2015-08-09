@@ -1,5 +1,10 @@
 {
   "vars": {
+    "--color-primary": "#607D8B",
+    "--color-dark-primary": "#263238",
+    "--color-light-primary": "#CFD8DC",
+    "--color-accent": "#FFD600",
+
     "--color-lighter": "#c8c8c8",
     "--color-light": "#a7a7a7",
     "--color-normal": "#888888",
