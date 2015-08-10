@@ -19,6 +19,8 @@ DIJS
   const Events = require('pb.Events');
   const Move = require('pb.service.Move');
 
+  const __document__ = Symbol('document');
+
   // Element > key > [ability]
   const __hoveredEls__ = Symbol('hoveredEls');
 
@@ -34,6 +36,7 @@ DIJS
   class Service {
     constructor() {
       this[__hoveredEls__] = new Map();
+      this[__document__] = null;
     }
 
     /**
@@ -45,32 +48,35 @@ DIJS
      */
     [__onKeyPress__](event) {
       const char = String.fromCharCode(event.keyCode);
-      let triggeredEl = null;
 
-      // First, find the triggered element that is the deepest in the chain.
-      for (let [el, keyMap] of this[__hoveredEls__]) {
-        if (keyMap.has(char) && (!triggeredEl || triggeredEl.contains(el))) {
-          triggeredEl = el;
-        }
-      }
+      let target = this[__document__].elementFromPoint(Move.mouseX, Move.mouseY);
+      let abilityTriggered = false;
+      while (target !== null && !abilityTriggered) {
+        let keyMap = this[__hoveredEls__].get(target);
+        if (keyMap) {
+          let abilitySet = keyMap.get(char);
+          if (abilitySet) {
+            for (let ability of abilitySet) {
+              ability.trigger(target);
 
-      // Trigger the element and stop listening for the triggered element.
-      if (triggeredEl) {
-        let abilitySet = this[__hoveredEls__].get(triggeredEl).get(char);
-        for (let ability of abilitySet) {
-          ability.trigger(triggeredEl);
-          break;
+              // Check if the mouse is still inside the triggered el.
+              const rect = target.getBoundingClientRect();
+              if (Move.movedElements.has(target)
+                  || rect.left > Move.mouseX
+                  || rect.right < Move.mouseX
+                  || rect.top > Move.mouseY
+                  || rect.bottom < Move.mouseY) {
+                this[__hoveredEls__].delete(target);
+              }
+
+              abilityTriggered = true;
+
+              break;
+            }
+          }
         }
 
-        // Check if the mouse is still inside the triggered el.
-        const rect = triggeredEl.getBoundingClientRect();
-        if (Move.movedElements.has(triggeredEl)
-            || rect.left > Move.mouseX
-            || rect.right < Move.mouseX
-            || rect.top > Move.mouseY
-            || rect.bottom < Move.mouseY) {
-          this[__hoveredEls__].delete(triggeredEl);
-        }
+        target = target.parentElement;
       }
     }
 
@@ -81,6 +87,7 @@ DIJS
      * @param {Document} doc The document to listen to key presses.
      */
     init(doc) {
+      this[__document__] = doc;
       Events.of(doc.body, this)
           .on('dom', 'keypress', this[__onKeyPress__].bind(this));
     }

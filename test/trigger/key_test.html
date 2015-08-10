@@ -110,6 +110,7 @@ DIJS
           let el1 = doc.createElement('div');
           let el2 = doc.createElement('div');
           el1.appendChild(el2);
+
           let ability1 = t.createFakeAbility('ability1');
           let ability2 = t.createFakeAbility('ability2');
           service.add(el1, 'a', ability1);
@@ -117,6 +118,7 @@ DIJS
 
           _.spy(ability1, 'trigger');
           _.spy(ability2, 'trigger');
+          _.spy(doc, 'elementFromPoint').overrideReturn(el2);
 
           _.spy(el2, 'getBoundingClientRect').overrideReturn({
             left: 12,
@@ -130,8 +132,9 @@ DIJS
           let event = {
             keyCode: 'a'.charCodeAt(0)
           };
-
           handler(event);
+
+          expect(doc.elementFromPoint).calledWith(0, 0).at.least(1);
 
           // Check that the first ability is called.
           expect(ability1.trigger).called().to.be.equal(0);
@@ -165,6 +168,7 @@ DIJS
         it('should unlisten to the element if it is being moved', () => {
           let el = doc.createElement('div');
           service.add(el, 'a', t.createFakeAbility('ability'));
+          _.spy(doc, 'elementFromPoint').overrideReturn(el);
 
           _.spy(el, 'getBoundingClientRect').overrideReturn({
             left: 10,
@@ -178,7 +182,7 @@ DIJS
 
           handler({ keyCode: 97 });
 
-          // Check that the ability is still there.
+          // Check that the element has been unregistered.
           const map = t.getPrivateProperty(service, 'hoveredEls');
           expect(map.has(el)).to.be.false;
         });
