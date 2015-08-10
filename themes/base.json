@@ -13,6 +13,7 @@
     "--color-highlight": "var(--color-accent)",
     "--color-shadow": "var(--color-primary)",
     "--color-font": "var(--color-foreground)",
+    "--color-font-dark": "var(--color-background)",
 
     "--drop-shadow-layer-1": "0px 2px 5px var(--color-shadow)",
     "--drop-shadow-layer-2": "0px 4px 10px var(--color-shadow)",

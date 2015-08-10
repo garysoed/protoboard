@@ -27,7 +27,8 @@
     }
 
     #root {
-      border: var(--border);
+      outline: var(--border);
+      outline-offset: -2px;
       box-sizing: border-box;
       position: relative;
       height: 100%;
@@ -35,7 +36,7 @@
     }
 
     :host(:hover) #root {
-      border-color: var(--color-accent);
+      outline-color: var(--color-accent);
     }
   </style>
 

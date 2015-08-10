@@ -11,7 +11,8 @@
 <template>
   <style>
     #root {
-      border: var(--border);
+      outline: var(--border);
+      outline-offset: -2px;
       position: relative;
     }
 
@@ -30,7 +31,7 @@
     }
 
     :host(:hover) #root {
-      border-color: var(--color-accent);
+      outline-color: var(--color-accent);
     }
   </style>
 
