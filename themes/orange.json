@@ -1,0 +1,9 @@
+{
+  "base": "./base.json",
+  "vars": {
+    "--color-primary": "#FF9800",
+    "--color-dark-primary": "#E65100",
+    "--color-light-primary": "#F8BBD0",
+    "--color-accent": "#00C853"
+  }
+}
