@@ -27,11 +27,15 @@
     }
 
     #root {
-      outline: var(--border);
-      outline-offset: -1px;
+      border: var(--border);
+      box-sizing: border-box;
       position: relative;
       height: 100%;
       width: 100%;
+    }
+
+    :host(:hover) #root {
+      border-color: var(--color-accent);
     }
   </style>
 

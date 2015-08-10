@@ -60,7 +60,7 @@ function compileTheme() {
   var options = minimist(process.argv.slice(2), {
     'string': 'theme',
     'default': {
-      'theme': './themes/slateblue.json'
+      'theme': './themes/cloudy_day.json'
     }
   });
   return myth({ 'variables': loadtheme(options.theme) });

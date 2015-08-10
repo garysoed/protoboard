@@ -36,7 +36,7 @@
       transition: transform var(--transition-duration);
     }
 
-    :host([flip-active="true"])::shadow #container {
+    :host([flip-active="true"]) #container {
       transform: rotateY(180deg);
     }
 
@@ -59,6 +59,11 @@
       transform: rotateY(180deg);
       border: 5px solid var(--color-border);
       box-sizing: border-box;
+    }
+
+    :host(:hover) ::content [pb-back],
+    :host(:hover) ::content [pb-front] {
+      border-color: var(--color-accent);
     }
   </style>
 

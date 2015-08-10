@@ -10,8 +10,7 @@
 
 <template>
   <style>#root {
-  outline: 1px solid #311B92;
-  outline-offset: -1px;
+  border: 2px solid #311B92;
   position: relative;
 }
 
@@ -36,6 +35,10 @@
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+}
+
+:host(:hover) #root {
+  border-color: #64DD17;
 }</style>
 
   <div id="root">

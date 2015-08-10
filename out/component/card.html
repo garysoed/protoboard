@@ -40,7 +40,7 @@
   transition: transform .3s;
 }
 
-:host([flip-active="true"])::shadow #container {
+:host([flip-active="true"]) #container {
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
@@ -55,7 +55,7 @@
 
 ::content [pb-back] {
   background-color: #673AB7;
-  border: 1px solid #311B92;
+  border: 2px solid #311B92;
   box-sizing: border-box;
 }
 
@@ -66,6 +66,11 @@
   transform: rotateY(180deg);
   border: 5px solid #311B92;
   box-sizing: border-box;
+}
+
+:host(:hover) ::content [pb-back],
+:host(:hover) ::content [pb-front] {
+  border-color: #64DD17;
 }</style>
 
   <div id="root">

@@ -11,8 +11,11 @@
 
 <template>
   <style>:host {
-  outline: 1px solid #311B92;
-  outline-offset: -1px;
+  border: 2px solid #311B92;
+}
+
+:host(:hover) {
+  border-color: #64DD17;
 }
 
 ::content > * {

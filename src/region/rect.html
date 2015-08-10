@@ -12,8 +12,11 @@
 <template>
   <style>
     :host {
-      outline: var(--border);
-      outline-offset: -1px;
+      border: var(--border);
+    }
+
+    :host(:hover) {
+      border-color: var(--color-accent);
     }
 
     ::content > * {

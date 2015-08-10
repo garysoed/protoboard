@@ -19,8 +19,7 @@
     }
 
     #root {
-      outline: var(--border);
-      outline-offset: -1px;
+      border: var(--border);
       width: 100%;
       height: 100%;
     }
@@ -43,6 +42,10 @@
 
     ::content > [pb-placeholder]:only-child {
       display: none;
+    }
+
+    :host(:hover) #root {
+      border-color: var(--color-accent);
     }
   </style>
 
