@@ -14,6 +14,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "Check",
         "Hammer",
         "PbElement",
+        "Protoboard",
         "Utils",
         "ability.Abilities",
         "ability.Abilities.Builder",

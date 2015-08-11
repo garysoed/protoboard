@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <base href=".">
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#19760A">
+  <meta name="theme-color" content="#607D8B">
 
   <title>service.Config - Protoboard</title>
 
@@ -60,10 +62,6 @@
       text-decoration: none;
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
-
     pre,
     code,
     a.crosslink {
@@ -89,11 +87,7 @@
     }
 
     section.collapsible > header h2 {
-      font-size: 1.2em;
-    }
-
-    section.collapsible.collapsed > header {
-      padding-bottom: 5px;
+      font-size: 1.8em;
     }
 
     section.collapsible > div {
@@ -138,72 +132,71 @@
 
   <!-- COLORS!!! -->
   <style>
+    .button, .main-main a {
+      color: #607D8B;
+    }
+    .button:hover, .main-main a:hover {
+      color: #FFD600;
+    }
+    .reverse .button {
+      color: #CFD8DC;
+    }
+    .reverse .button:hover {
+      color: #FFD600;
+    }
+    .reverse .button.primary {
+      color: white;
+    }
+    .reverse .button.primary:hover {
+      color: #FFD600;
+    }
+
+    .main-menu-button:hover {
+      color: #FFD600;
+    }
+
     body {
       background-color: white;
       color: black;
     }
     .reverse {
-      background-color: #19760A;
-      color: #9AE08F;
+      background-color: #607D8B;
+      color: #CFD8DC;
     }
 
     table, dl {
-      border-color: #19760A;
-    }
-
-    a, a:visited,
-    a.external, a.external:visited {
-      color: #19760A;
-    }
-    .reverse a, .reverse a:visited,
-    .reverse a.external, .reverse a.external:visited {
-      color: #9AE08F;
+      border-color: #607D8B;
     }
 
     .since {
-      color: #19760A;
+      color: #263238;
     }
     .reverse .since {
-      color: #9AE08F;
+      color: #CFD8DC;
     }
 
     header.main-header {
-      -webkit-filter: drop-shadow(0px 2px 5px #19760A);
+      -webkit-filter: drop-shadow(0px 2px 5px #263238);
     }
     header.main-header.scroll-top {
       -webkit-filter: none;
     }
 
     li.sidebar-selected {
-      background-color: #9AE08F;
-    }
-    .reverse li.sidebar-selected a {
-      color: black;
+      border-right: 5px solid #FFD600;
     }
 
-    section.collapsible > header {
-      background-color: #19760A;
-      color: white;
-    }
-    .reverse section.collapsible > header {
-      background-color: #4AAE3B;
-      color: black;
-    }
-
-    section.collapsible > header:hover h2 {
-      -webkit-filter: drop-shadow(0px 0px 5px white);
-    }
-    .reverse section.collapsible > header:hover h2 {
-      -webkit-filter: drop-shadow(0px 0px 5px black);
+    .reverse section.collapsible.collapsed > header {
+      color: #CFD8DC;
     }
 
     .description code {
-      color: #62870C;
-      background-color: #DAF49C;
+      color: black;
+      background-color: #CFD8DC;
     }
 
     code .keyword {
-      color: #62870C;
+      color: black;
     }
 
     .description pre code {
@@ -211,247 +204,304 @@
     }
 
     pre.prettyprint {
-      border-color: #19760A;
+      border-color: #607D8B;
     }
 
     header.tutorial {
-      color: #19760A;
+      color: #263238;
     }
 
     footer {
-      border: 2px solid #19760A;
+      border: 2px solid #607D8B;
     }
 
     .divider {
-      border-color: #19760A;
-    }
-
-    .method tbody:nth-child(2n) {
-      background-color: #9AE08F;
-    }
-
-    .method tbody:nth-child(2n+1) {
-      background-color: white;
+      border-color: #B6B6B6;
     }
   </style>
 </head>
 <body>
   <header class="main-header reverse scroll-top">
-    <div class="main-menu-button">&#9776;</div>
+    <div class="main-menu-button button primary">&#9776;</div>
     <div class="main-header-section">
-      <h1><a href="../index.html">Protoboard</a></h1>
-      <div class="since">v 2.0.2</div>
+      <h1><a class="button primary" href="../index.html">Protoboard</a></h1>
+      <div class="since">v 3.0.0</div>
     </div>
-    <a href="https://github.com/garysoed/protoboard">GitHub</a>
+    <a class="button" href="https://github.com/garysoed/protoboard">GitHub</a>
   </header>
   <section class="main-content">
     <section class="main-sidebar reverse"><div class="sidebar">
     <section class="collapsible ">
       <header>
-        <h2>tutorial</h2>
+        <h2 class="button ">tutorial</h2>
       </header>
       <div>
         <ul>
-          <li class="">
-            <a href="../classes/1 Overview.html">1 Overview</a>
-          </li>
-          <li class="">
-            <a href="../classes/2 Prerequisites.html">2 Prerequisites</a>
-          </li>
-          <li class="">
-            <a href="../classes/3 Basic Usage.html">3 Basic Usage</a>
-          </li>
-          <li class="">
-            <a href="../classes/4 Customizing Components.html">4 Customizing Components</a>
-          </li>
-          <li class="">
-            <a href="../classes/5 Theming.html">5 Theming</a>
-          </li>
-          <li class="">
-            <a href="../classes/6 JavaScript.html">6 JavaScript</a>
-          </li>
-          <li class="">
-            <a href="../classes/7 Custom Elements.html">7 Custom Elements</a>
-          </li>
-          <li class="">
-            <a href="../classes/8 Abilities.html">8 Abilities</a>
-          </li>
-          <li class="">
-            <a href="../classes/9 Triggers.html">9 Triggers</a>
-          </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/1 Overview.html">1 Overview</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/2 Prerequisites.html">2 Prerequisites</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/3 Basic Usage.html">3 Basic Usage</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/4 Customizing Components.html">4 Customizing Components</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/5 Theming.html">5 Theming</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/6 JavaScript.html">6 JavaScript</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/7 Custom Elements.html">7 Custom Elements</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/8 Abilities.html">8 Abilities</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/9 Triggers.html">9 Triggers</a>
+            </li>
         </ul>
       </div>
     </section>
     <section class="collapsible selected">
       <header>
-        <h2>api</h2>
+        <h2 class="button primary">api</h2>
       </header>
       <div>
         <ul>
-          <li class="">
-            <a href="../classes/ability.Abilities.html">ability.Abilities</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.Abilities.Builder.html">ability.Abilities.Builder</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.Ability.html">ability.Ability</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.Droppable.html">ability.Droppable</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.FlexDroppable.html">ability.FlexDroppable</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.Helpable.html">ability.Helpable</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.OrderedDroppable.html">ability.OrderedDroppable</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.Pickable.html">ability.Pickable</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.SelectedPickable.html">ability.SelectedPickable</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.Shuffleable.html">ability.Shuffleable</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.StaggeredDroppable.html">ability.StaggeredDroppable</a>
-          </li>
-          <li class="">
-            <a href="../classes/ability.Toggleable.html">ability.Toggleable</a>
-          </li>
-          <li class="">
-            <a href="../classes/Bootstrap.html">Bootstrap</a>
-          </li>
-          <li class="">
-            <a href="../classes/Check.html">Check</a>
-          </li>
-          <li class="">
-            <a href="../classes/component.Card.html">component.Card</a>
-          </li>
-          <li class="">
-            <a href="../classes/component.Component.html">component.Component</a>
-          </li>
-          <li class="">
-            <a href="../classes/component.Dice.html">component.Dice</a>
-          </li>
-          <li class="">
-            <a href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a>
-          </li>
-          <li class="">
-            <a href="../classes/component.Dice.Rollable.html">component.Dice.Rollable</a>
-          </li>
-          <li class="">
-            <a href="../classes/component.Token.html">component.Token</a>
-          </li>
-          <li class="">
-            <a href="../classes/grid.Grid.html">grid.Grid</a>
-          </li>
-          <li class="">
-            <a href="../classes/grid.HexGrid.html">grid.HexGrid</a>
-          </li>
-          <li class="">
-            <a href="../classes/grid.RectGrid.html">grid.RectGrid</a>
-          </li>
-          <li class="">
-            <a href="../classes/grid.TriangleGrid.html">grid.TriangleGrid</a>
-          </li>
-          <li class="">
-            <a href="../classes/Hammer.html">Hammer</a>
-          </li>
-          <li class="">
-            <a href="../classes/PbElement.html">PbElement</a>
-          </li>
-          <li class="">
-            <a href="../classes/region.Bag.html">region.Bag</a>
-          </li>
-          <li class="">
-            <a href="../classes/region.CubeTower.html">region.CubeTower</a>
-          </li>
-          <li class="">
-            <a href="../classes/region.Deck.html">region.Deck</a>
-          </li>
-          <li class="">
-            <a href="../classes/region.Hand.html">region.Hand</a>
-          </li>
-          <li class="">
-            <a href="../classes/region.Rect.html">region.Rect</a>
-          </li>
-          <li class="">
-            <a href="../classes/region.Region.html">region.Region</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.Acl.html">service.Acl</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.Acl.Group.html">service.Acl.Group</a>
-          </li>
-          <li class="sidebar-selected">
-            <a href="../classes/service.Config.html">service.Config</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.Log.html">service.Log</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.Log.Entry.html">service.Log.Entry</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.Move.html">service.Move</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.Preview.html">service.Preview</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.Registry.html">service.Registry</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.State.html">service.State</a>
-          </li>
-          <li class="">
-            <a href="../classes/service.Template.html">service.Template</a>
-          </li>
-          <li class="">
-            <a href="../classes/trigger.Click.html">trigger.Click</a>
-          </li>
-          <li class="">
-            <a href="../classes/trigger.DoubleClick.html">trigger.DoubleClick</a>
-          </li>
-          <li class="">
-            <a href="../classes/trigger.Key.html">trigger.Key</a>
-          </li>
-          <li class="">
-            <a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
-          </li>
-          <li class="">
-            <a href="../classes/trigger.Trigger.html">trigger.Trigger</a>
-          </li>
-          <li class="">
-            <a href="../classes/trigger.Triggers.html">trigger.Triggers</a>
-          </li>
-          <li class="">
-            <a href="../classes/ui.Generate.html">ui.Generate</a>
-          </li>
-          <li class="">
-            <a href="../classes/ui.Preview.html">ui.Preview</a>
-          </li>
-          <li class="">
-            <a href="../classes/ui.Previewer.html">ui.Previewer</a>
-          </li>
-          <li class="">
-            <a href="../classes/ui.Shape.html">ui.Shape</a>
-          </li>
-          <li class="">
-            <a href="../classes/Utils.html">Utils</a>
-          </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.Abilities.html">ability.Abilities</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.Abilities.Builder.html">ability.Abilities.Builder</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.Ability.html">ability.Ability</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.Droppable.html">ability.Droppable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.FlexDroppable.html">ability.FlexDroppable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.Helpable.html">ability.Helpable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.OrderedDroppable.html">ability.OrderedDroppable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.Pickable.html">ability.Pickable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.SelectedPickable.html">ability.SelectedPickable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.Shuffleable.html">ability.Shuffleable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.StaggeredDroppable.html">ability.StaggeredDroppable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ability.Toggleable.html">ability.Toggleable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/Bootstrap.html">Bootstrap</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/Check.html">Check</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/component.Card.html">component.Card</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/component.Component.html">component.Component</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/component.Dice.html">component.Dice</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/component.Dice.Rollable.html">component.Dice.Rollable</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/component.Token.html">component.Token</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/grid.Grid.html">grid.Grid</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/grid.HexGrid.html">grid.HexGrid</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/grid.RectGrid.html">grid.RectGrid</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/grid.TriangleGrid.html">grid.TriangleGrid</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/Hammer.html">Hammer</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/PbElement.html">PbElement</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/Protoboard.html">Protoboard</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/region.Bag.html">region.Bag</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/region.CubeTower.html">region.CubeTower</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/region.Deck.html">region.Deck</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/region.Hand.html">region.Hand</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/region.Rect.html">region.Rect</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/region.Region.html">region.Region</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.Acl.html">service.Acl</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.Acl.Group.html">service.Acl.Group</a>
+            </li>
+            <li class="sidebar-selected">
+              <a class="button primary"
+                  href="../classes/service.Config.html">service.Config</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.Log.html">service.Log</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.Log.Entry.html">service.Log.Entry</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.Move.html">service.Move</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.Preview.html">service.Preview</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.Registry.html">service.Registry</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.State.html">service.State</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/service.Template.html">service.Template</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/trigger.Click.html">trigger.Click</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/trigger.DoubleClick.html">trigger.DoubleClick</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/trigger.Key.html">trigger.Key</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/trigger.Trigger.html">trigger.Trigger</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/trigger.Triggers.html">trigger.Triggers</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ui.Generate.html">ui.Generate</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ui.Preview.html">ui.Preview</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ui.Previewer.html">ui.Previewer</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/ui.Shape.html">ui.Shape</a>
+            </li>
+            <li class="">
+              <a class="button "
+                  href="../classes/Utils.html">Utils</a>
+            </li>
         </ul>
       </div>
     </section>
 </div>
-
 
 </section>
     <section class="main-main"><div class="class">
@@ -484,8 +534,8 @@ For example:</p>
 
 
     <section class="collapsible class-subsection">
-      <header>
-        <h2>Methods</h2>
+      <header class="reverse">
+        <h2 class="button primary">Methods</h2>
       </header>
       <div>
           <section class="method ">
@@ -694,49 +744,8 @@ For example:</p>
 </body>
   <script src="../assets/vendor/prettify/prettify-min.js"></script>
   <script>prettyPrint();</script>
-  <script>
-
-    var isMobile = false;
-    var rootEl = isMobile ? document.querySelector('.main-main') : document;
-    var els = rootEl.querySelectorAll('section.collapsible');
-    for (var i = 0; i < els.length; i++) {
-      var section = els.item(i);
-      var content = section.querySelector('div');
-      var header = section.querySelector('header');
-      var height = content.clientHeight + 'px';
-      header.addEventListener('click', function(section, content, contentHeight) {
-        section.classList.toggle('collapsed');
-        content.style.height = section.classList.contains('collapsed') ? '0' : contentHeight;
-      }.bind(header, section, content, height));
-      content.style.height = height;
-    }
-
-    var selected = document.querySelector('.sidebar-selected');
-    if (selected) {
-      selected.scrollIntoView();
-    }
-
-    var sinceEl = document.querySelector('.main-header-section .since');
-    var headerEl = document.querySelector('.main-header');
-    var mainEl = document.querySelector('.main-main');
-    mainEl.addEventListener('scroll', function() {
-      if (mainEl.scrollTop <= 0) {
-        headerEl.classList.add('scroll-top');
-      } else {
-        headerEl.classList.remove('scroll-top');
-      }
-
-      var maxScroll = mainEl.scrollHeight - mainEl.clientHeight;
-      var ratio = Math.max(0, 1 - mainEl.scrollTop / maxScroll * 3);
-      sinceEl.style.height = ratio * 25 + 'px';
-
-      var padding = (1 + 1 * ratio) + 'em';
-      headerEl.style.paddingTop = padding;
-      headerEl.style.paddingBottom = padding;
-    });
-
-    document.querySelector('.main-menu-button').addEventListener('click', function() {
-      document.querySelector('section.main-content').classList.toggle('expand');
-    });
-  </script>
+  <script src="../assets/js/selection.js"></script>
+  <script src="../assets/js/collapse.js"></script>
+  <script src="../assets/js/scroll.js"></script>
+  <script src="../assets/js/xhr.js"></script>
 </html>

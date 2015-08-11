@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#607D8B">
 
-  <title>trigger.Key.Service - Protoboard</title>
+  <title>Protoboard - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -386,8 +386,8 @@
               <a class="button "
                   href="../classes/PbElement.html">PbElement</a>
             </li>
-            <li class="">
-              <a class="button "
+            <li class="sidebar-selected">
+              <a class="button primary"
                   href="../classes/Protoboard.html">Protoboard</a>
             </li>
             <li class="">
@@ -466,8 +466,8 @@
               <a class="button "
                   href="../classes/trigger.Key.html">trigger.Key</a>
             </li>
-            <li class="sidebar-selected">
-              <a class="button primary"
+            <li class="">
+              <a class="button "
                   href="../classes/trigger.Key.Service.html">trigger.Key.Service</a>
             </li>
             <li class="">
@@ -507,37 +507,17 @@
     <section class="main-main"><div class="class">
   <section class="class-summary">
       <header>
-        <code><span class="keyword">private</span> <span class="keyword">static</span> trigger.Key.Service</code>
+        <code><span class="keyword">static</span> Protoboard</code>
       </header>
 
     <div class="content description">
-      <p>Helper service for detecting key press.</p>
+      <p>The entry point to Protoboard. Use this class to setup the game and run it.</p>
 
     </div>
 
   </section>
 
 
-    <section class="collapsible class-subsection">
-      <header class="reverse">
-        <h2 class="button primary">Properties</h2>
-      </header>
-      <div>
-          <section class="props ">
-            <header id="property_hoveredEls">
-              <code class="method-signature"><span class="keyword">readonly</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map.html" class="crosslink external" target="_blank">Map</a> hoveredEls</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Map of elements to trigger the ability on. The key is the element, the value is a map of key
-          to a set of abilities.</p>
-          </span>
-          
-            </div>
-          
-          </section>
-          
-      </div>
-    </section>
 
     <section class="collapsible class-subsection">
       <header class="reverse">
@@ -545,111 +525,25 @@
       </header>
       <div>
           <section class="method ">
-            <header id="method_add">
-              <code class="method-signature">add(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element, <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> key, <a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a> ability)</code>
+            <header id="method_run">
+              <code class="method-signature">run(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc ) => <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Registers the given element to trigger the given ability when the given key is pressed.</p>
+              <span class="description"><p>Runs the game on the given document object.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>element</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The element to trigger when the given key is pressed.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>key</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The key to press</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>ability</code></p>
-                    </td>
-                    <td class="method-type">
-                      <p><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code></p>
-                    </td>
-                    <td class="description">
-                      <p>The ability to trigger.</p>
-          
-                    </td>
-                  </tr>
-          
-                </tbody>
-              </table>
-          
-              <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to trigger when the given key is pressed.</p>
-          </dd>
-                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></code> <code>key</code></dt>
-                <dd><p>The key to press</p>
-          </dd>
-                <dt><code><a href="../classes/ability.Ability.html" class="crosslink">ability.Ability</a></code> <code>ability</code></dt>
-                <dd><p>The ability to trigger.</p>
-          </dd>
-              </dl>
-          
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method ">
-            <header id="method_clear">
-              <code class="method-signature">clear()</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Clears all registered elements.</p>
-          </span>
-          
-            </div>
-          
-            <div class="divider"></div>
-          </section>
-          
-          <section class="method ">
-            <header id="method_init">
-              <code class="method-signature">init(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a> doc)</code>
-            </header>
-            <div class="content">
-              <span class="description"><p>Initializes the service.</p>
-          </span>
-          
-              <table class="method-params">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <p><code>doc</code></p>
+                      <p><code>[doc = document]</code></p>
                     </td>
                     <td class="method-type">
                       <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The document to listen to key presses.</p>
+                      <p>Document to run the game on. Defaults to the root document
+          if not specified.</p>
           
                     </td>
                   </tr>
@@ -658,11 +552,17 @@
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>doc</code></dt>
-                <dd><p>The document to listen to key presses.</p>
+                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Document.html" class="crosslink external" target="_blank">Document</a></code> <code>[doc = document]</code></dt>
+                <dd><p>Document to run the game on. Defaults to the root document
+          if not specified.</p>
           </dd>
               </dl>
           
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise.html" class="crosslink external" target="_blank">Promise</a></code><span class="description"><p>Promise that will be resolved with a function when the game has started. Use
+          this function to retrieve Protoboard classes.</p>
+          </span>
+                </div>
           
             </div>
           
@@ -670,24 +570,25 @@
           </section>
           
           <section class="method ">
-            <header id="method_remove">
-              <code class="method-signature">remove(<a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a> element)</code>
+            <header id="method_setup">
+              <code class="method-signature">setup(<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> setupFn) => <a href="../classes/Protoboard.html" class="crosslink">Protoboard</a></code>
             </header>
             <div class="content">
-              <span class="description"><p>Unregisters the given element.</p>
+              <span class="description"><p>Registers a function to be ran before the game is ran.</p>
           </span>
           
               <table class="method-params">
                 <tbody>
                   <tr>
                     <td colspan="2">
-                      <p><code>element</code></p>
+                      <p><code>setupFn</code></p>
                     </td>
                     <td class="method-type">
-                      <p><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code></p>
+                      <p><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code></p>
                     </td>
                     <td class="description">
-                      <p>The element to unregister.</p>
+                      <p>Function to be run before the game starts. This function has one
+          argument, which is a function that can be used to retrieve Protoboard classes.</p>
           
                     </td>
                   </tr>
@@ -696,11 +597,16 @@
               </table>
           
               <dl class="method-params-small">
-                <dt><code><a href="../assets/redirect.html#classes/developer.mozilla.org/en-US/docs/Web/API/Element.html" class="crosslink external" target="_blank">Element</a></code> <code>element</code></dt>
-                <dd><p>The element to unregister.</p>
+                <dt><code><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></code> <code>setupFn</code></dt>
+                <dd><p>Function to be run before the game starts. This function has one
+          argument, which is a function that can be used to retrieve Protoboard classes.</p>
           </dd>
               </dl>
           
+                <div class="method-returns">
+                  <code><span class="keyword">return</span> <a href="../classes/Protoboard.html" class="crosslink">Protoboard</a></code><span class="description"><p>This object for chainin.</p>
+          </span>
+                </div>
           
             </div>
           
