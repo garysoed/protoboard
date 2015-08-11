@@ -24,7 +24,7 @@ var Promise = require('promise');
 
 var loadtheme = require('./loadtheme');
 
-var VERSION = '2.0.2';
+var VERSION = '3.0.0';
 
 var PARALLEL_TEST_COUNT = 2;
 
@@ -261,7 +261,7 @@ gulp.task('watch', gulp.parallel(
 
 gulp.task('pack', gulp.series(
     'clean',
-    gulp.parallel('compile', 'doc'),
+    gulp.parallel('compile'),
     gulp.parallel(
         function _bump() {
           return gulp.src(['./bower.json', './package.json', './yuidoc.json'])
@@ -280,6 +280,7 @@ gulp.task('pack', gulp.series(
         'copy-deps-min'
     ),
     gulp.parallel(
+        'doc',
         function _packMin() {
           return gulp.src([MIN_DIR + '/**/*'])
               .pipe(zip('bin.min.zip'))

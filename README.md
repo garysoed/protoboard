@@ -13,6 +13,21 @@ Interested in contributing? Read the guideline [here](./CONTRIBUTING.md).
 These are the release notes for the most current major version. For older release notes, go to the
 [Releases page](https://github.com/garysoed/protoboard/releases).
 
+### 3.0.0
+
+Breaking changes
+-   Theming changes: Now the colors variables use `--color-primary`, `--color-dark-primary`,
+    `--color-accent`, `--color-light-primary`
+-   Color themes have been changed
+-   `PbElement.whenCreated` has been removed. Now `PbElement`s dispatch `created` events.
+-   Interface to bootstrap Protoboard has been changed. Instead of using `DIJS`, use `Protoboard`
+    instead. See documentation and tutorial for details.
+
+Improvements
+-   Changed implementation of of `trigger.Key` to be less buggy
+-   Improved documentations
+-   Stability improvements for tests
+
 ### 2.0.2
 
 Bug fixes
