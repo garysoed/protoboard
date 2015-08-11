@@ -23,11 +23,11 @@
  *
  * ```javascript
  * Protoboard
- * 	   .setup(function(require) {
- * 	     // Setup logic goes here
- * 	   })
- * 	   .run(document)
- * 	   .then(function(require) {
+ *     .setup(function(require) {
+ *       // Setup logic goes here
+ *     })
+ *     .run(document)
+ *     .then(function(require) {
  *       // Logic that runs after the game is running goes here.
  *     });
  * ```

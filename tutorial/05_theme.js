@@ -14,7 +14,7 @@
  * The script reads from JSON files in the `./themes` directory. By default, they use the
  * `./themes/slateblue.json` theme. To change the colour theme to "medium sea green", you can run:
  * ```bash
- * gulp pack --theme ./themes/mediumseagreen.json
+ * gulp pack --theme ./themes/strawberry.json
  * ```
  *
  * Though Protoboard comes with several themes, you can make your own theme. Create a json file with
@@ -23,11 +23,10 @@
  * {
  *   "base": "./bower_components/protoboard/themes/base.json"
  *   "vars": {
- *     "--color-lighter": "#CBC7E2",
- *     "--color-light": "#ABA5CF",
- *     "--color-normal": "#8982B8",
- *     "--color-dark": "#6B62A4",
- *     "--color-darker": "#50468F"
+ *       "--color-primary": "#F44336",
+ *       "--color-dark-primary": "#B71C1C",
+ *       "--color-light-primary": "#FFCDD2",
+ *       "--color-accent": "#FFD600"
  *   }
  * }
  * ```

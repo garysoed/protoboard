@@ -82,15 +82,15 @@ DIJS
    * Protoboard.setup(function(require) {
    *   var Log = require('pb.service.Log');
    *   Log
-   *   	   .addPreprocessor(function(entry) {
-   *   	     if (entry.category === 'player-count') {
-   *   	       entry.set('count', entry.value);
-   *   	     }
-   *   	   })
+   *       .addPreprocessor(function(entry) {
+   *         if (entry.category === 'player-count') {
+   *           entry.set('count', entry.value);
+   *         }
+   *       })
    *       .addPrinter(function(entry) {
    *         if (entry.category === 'player-count') {
    *           return entry.timestamp.toLocaleString()
-   *           	   + ': ' + entry.category + ' on ' + entry.count;
+   *               + ': ' + entry.category + ' on ' + entry.count;
    *         } else {
    *           return null;
    *         }
