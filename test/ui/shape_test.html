@@ -35,23 +35,23 @@ DIJS
     });
 
     it('should initialize the color from the attribute on creation', () => {
-      $(el).attr('color', 'red');
+      $(el).attr('color', 'rgb(255, 0, 0)');
       $(el).attr('shape', 'circle');
       el.createdCallback();
 
-      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).to.equal('red');
+      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).to.equal('rgb(255, 0, 0)');
     });
     it('should react to changes to the color attribute', () => {
       $(el).attr('shape', 'circle');
       el.createdCallback();
 
-      $(el).attr('color', 'red');
+      $(el).attr('color', 'rgb(255, 0, 0)');
       t.FakeMutationObserver.instance.handler([{
         type: 'attributes',
         attributeName: 'color'
       }]);
 
-      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).to.equal('red');
+      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).to.equal('rgb(255, 0, 0)');
     });
     it('should throw error if the shape is not handled', () => {
       expect(() => el.createdCallback()).to.throw(/Unrecognized shape/);
