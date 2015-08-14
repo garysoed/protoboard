@@ -29,7 +29,7 @@
 
 <script>"use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
@@ -52,12 +52,18 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("circleTempla
   var Config = require("pb.service.Config");
   var doc = require("doc");
   var hexagonTemplate = require("hexagonTemplate");
+  var MutationObserver = require("MutationObserver");
   var squareTemplate = require("squareTemplate");
   var triangleTemplate = require("triangleTemplate");
   var Utils = require("pb.Utils");
 
   var EL_NAME = "pb-u-shape";
   var ATTR_NAME = "shape";
+  var ATTR_COLOR = "color";
+
+  var __observer__ = Symbol();
+  var __onObserve__ = Symbol();
+  var __updateColor__ = Symbol();
 
   var Shape = (function (_HTMLElement) {
     function Shape() {
@@ -70,31 +76,69 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("circleTempla
 
     _inherits(Shape, _HTMLElement);
 
-    _createClass(Shape, {
-      createdCallback: {
-        value: function createdCallback() {
-          var shape = $(this).attr(ATTR_NAME);
-          var template = undefined;
-          switch (shape) {
-            case "circle":
-              template = circleTemplate;
-              break;
-            case "hexagon":
-              template = hexagonTemplate;
-              break;
-            case "square":
-              template = squareTemplate;
-              break;
-            case "triangle":
-              template = triangleTemplate;
-              break;
-            default:
-              throw new Error("Unrecognized shape: " + shape);
+    _createComputedClass(Shape, [{
+      key: __onObserve__,
+      value: function (records) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = records[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var record = _step.value;
+
+            if (record.type === "attributes" && record.attributeName === ATTR_COLOR) {
+              this[__updateColor__]();
+            }
           }
-          this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
         }
       }
-    });
+    }, {
+      key: __updateColor__,
+      value: function () {
+        this.shadowRoot.querySelector(".pb-shape").style.fill = $(this).attr(ATTR_COLOR);
+      }
+    }, {
+      key: "createdCallback",
+      value: function createdCallback() {
+        var shape = $(this).attr(ATTR_NAME);
+        var template = undefined;
+        switch (shape) {
+          case "circle":
+            template = circleTemplate;
+            break;
+          case "hexagon":
+            template = hexagonTemplate;
+            break;
+          case "square":
+            template = squareTemplate;
+            break;
+          case "triangle":
+            template = triangleTemplate;
+            break;
+          default:
+            throw new Error("Unrecognized shape: " + shape);
+        }
+        this.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+
+        this[__observer__] = new MutationObserver(this[__onObserve__].bind(this));
+        this[__observer__].observe(this, { attributes: true });
+        this[__updateColor__]();
+      }
+    }]);
 
     return Shape;
   })(HTMLElement);

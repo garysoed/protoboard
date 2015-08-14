@@ -5,19 +5,57 @@
   <title>ui.Shape Unit Tests</title>
 
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testutils.html">
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="ui/shape.html">
 </head>
 <body>
 <script>
 DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.with('MutationObserver', require => {
+  const t = require('pb.t');
+  return t.FakeMutationObserver;
+})
 .with('pb.$registry', require => new (require('pb.service.Registry'))())
 .run(require => {
 
-  require('pb.ui.Shape');
+  const $ = require('pb.$');
+  const doc = require('doc');
+  const expect = require('expect');
+  const Shape = require('pb.ui.Shape');
+  const t = require('pb.t');
 
   describe('ui.Shape', () => {
-    it('should not throw exception when injected', () => {});
+    let el;
+
+    beforeEach(() => {
+      el = doc.createElement('div');
+      Object.setPrototypeOf(el, Shape.prototype);
+    });
+
+    it('should initialize the color from the attribute on creation', () => {
+      $(el).attr('color', 'red');
+      $(el).attr('shape', 'circle');
+      el.createdCallback();
+
+      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).to.equal('red');
+    });
+    it('should react to changes to the color attribute', () => {
+      $(el).attr('shape', 'circle');
+      el.createdCallback();
+
+      $(el).attr('color', 'red');
+      t.FakeMutationObserver.instance.handler([{
+        type: 'attributes',
+        attributeName: 'color'
+      }]);
+
+      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).to.equal('red');
+    });
+    it('should throw error if the shape is not handled', () => {
+      expect(() => el.createdCallback()).to.throw(/Unrecognized shape/);
+    });
   });
 });
 </script>

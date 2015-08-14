@@ -63,12 +63,18 @@ DIJS
   const Config = require('pb.service.Config');
   const doc = require('doc');
   const hexagonTemplate = require('hexagonTemplate');
+  const MutationObserver = require('MutationObserver');
   const squareTemplate = require('squareTemplate');
   const triangleTemplate = require('triangleTemplate');
   const Utils = require('pb.Utils');
 
   const EL_NAME = 'pb-u-shape';
   const ATTR_NAME = 'shape';
+  const ATTR_COLOR = 'color';
+
+  const __observer__ = Symbol();
+  const __onObserve__ = Symbol();
+  const __updateColor__ = Symbol();
 
   /**
    * Creates a shape. To create a shape, use the `pb-u-shape` element and specify the attribute
@@ -82,13 +88,38 @@ DIJS
    * <pb-u-shape shape="circle"></pb-u-shape>
    * ```
    *
-   * The created shape is an embedded SVG. So you can customize it using CSS. Use
-   * `pb-u-shape::shadow .pb-shape` to select the shape.
+   * The created shape is an embedded SVG. You can change its color by setting the `color`
+   * attribute. This takes any color that CSS takes.
    *
    * @class ui.Shape
    * @extends HTMLElement
    */
   class Shape extends HTMLElement {
+
+    /**
+     * Handler called when the mutation observer has detected a mutation.
+     *
+     * @method __onObserve__
+     * @param {Array} records Arrays of record objects.
+     * @private
+     */
+    [__onObserve__](records) {
+      for (let record of records) {
+        if (record.type === 'attributes' && record.attributeName === ATTR_COLOR) {
+          this[__updateColor__]();
+        }
+      }
+    }
+
+    /**
+     * Updates the color of the shape based on the attribute's value.
+     *
+     * @method __updateColor__
+     * @private
+     */
+    [__updateColor__]() {
+      this.shadowRoot.querySelector('.pb-shape').style.fill = $(this).attr(ATTR_COLOR);
+    }
 
     /**
      * Called when the element is created.
@@ -116,6 +147,10 @@ DIJS
       }
       this.createShadowRoot()
           .appendChild(Utils.activateTemplate(template, doc));
+
+      this[__observer__] = new MutationObserver(this[__onObserve__].bind(this));
+      this[__observer__].observe(this, { attributes: true });
+      this[__updateColor__]();
     }
   }
 

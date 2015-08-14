@@ -16,15 +16,6 @@ body {
 p {
   margin-after: .5em;
   margin-before: .5em;
-}
-
-.pb-trbl-fit,
-* /deep/ .pb-trbl-fit {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
 }</style>
 
 <script>"use strict";var _createClass=function(){function e(e,r){for(var n in r){var t=r[n];t.configurable=!0,t.value&&(t.writable=!0)}Object.defineProperties(e,r)}return function(r,n,t){return n&&e(r.prototype,n),t&&e(r,t),r}}(),_classCallCheck=function(e,r){if(!(e instanceof r))throw new TypeError("Cannot call a class as a function")};DIJS.bind("pb.$registry",function(e){var r=e("pb.service.Registry");return new r}).bind("pb.Bootstrap.__ctor__",function(e,r){var n=e("pb.$registry"),t=e("pb.service.Config"),i=e("pb.Utils");r("pb.component.Card"),r("pb.component.Dice"),r("pb.component.Token"),r("pb.grid.HexGrid"),r("pb.grid.RectGrid"),r("pb.grid.TriangleGrid"),r("pb.region.Bag"),r("pb.region.CubeTower"),r("pb.region.Deck"),r("pb.region.Hand"),r("pb.region.Rect"),r("pb.service.State"),r("pb.ui.Generate"),r("pb.ui.Preview"),r("pb.ui.Previewer"),r("pb.ui.Shape");var o=function(){function e(){_classCallCheck(this,e)}return _createClass(e,{run:{value:function(e){return i.watch(function(){return"interactive"===e.readyState||"complete"===e.readyState}).then(function(){n.register(e,t);var r=i.toArray(e.querySelectorAll(":unresolved")).map(function(e){return e.tagName.toLowerCase()}),o=new Set(r),a=!0,c=!1,u=void 0;try{for(var p,b=o[Symbol.iterator]();!(a=(p=b.next()).done);a=!0){var s=p.value;console.warn("Element "+s+" is unresolved")}}catch(l){c=!0,u=l}finally{try{!a&&b["return"]&&b["return"]()}finally{if(c)throw u}}})}}}),e}();return o}).bind("pb.Bootstrap",function(e){var r=e("pb.Bootstrap.__ctor__");return new r});</script>
