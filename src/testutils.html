@@ -57,15 +57,25 @@ DIJS.bind('pb.t', require => {
     },
 
     createFakePromise() {
+      let handlers = [];
       let Promise = {
         all() {
           return Promise;
         },
 
         then(fn) {
+          handlers.push(fn);
           Promise.lastHandler = fn;
           return Promise;
         }
+      };
+
+      Promise.resolve = function(result) {
+        let rv = result;
+        for (let handler of handlers) {
+          rv = handler(rv);
+        }
+        return rv;
       };
 
       return Promise;

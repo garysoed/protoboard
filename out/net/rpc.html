@@ -1,0 +1,134 @@
+<html><head><base href="..">
+
+<link rel="import" href="net/utils.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>"use strict";
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.net.Rpc.__ctor__", function (require) {
+
+  var $ = require("pb.$");
+  var normalize = require("pb.net.Utils").normalize;
+
+  var __cache__ = Symbol();
+  var __io__ = Symbol();
+  var __onUpdate__ = Symbol();
+  var __updateCache__ = Symbol();
+  var __triggerUpdates__ = Symbol("triggerUpdates");
+
+  var Rpc = (function () {
+    function Rpc(io) {
+      _classCallCheck(this, Rpc);
+
+      this[__cache__] = new Map();
+      this[__io__] = io;
+
+      io.listen(this[__onUpdate__].bind(this));
+    }
+
+    _createComputedClass(Rpc, [{
+      key: __onUpdate__,
+      value: function (path, newValue) {
+        var normalizedPath = normalize(path);
+        this[__updateCache__](path, newValue);
+        this[__triggerUpdates__](normalizedPath);
+      }
+    }, {
+      key: __updateCache__,
+      value: function (path, data) {
+        this[__cache__].set(normalize(path), Promise.resolve(data));
+        if (data instanceof Object) {
+          for (var key in data) {
+            this[__updateCache__](normalize(path, key), data[key]);
+          }
+        }
+      }
+    }, {
+      key: __triggerUpdates__,
+      value: function (path) {
+        var parts = path.split("/");
+        while (parts.length > 1) {
+          var triggerPath = parts.join("/");
+          if (triggerPath.length > 0) {
+            $(this).trigger(parts.join("/"));
+          }
+          parts.pop();
+        }
+      }
+    }, {
+      key: "add",
+      value: function add(path) {
+        var _this = this;
+
+        return this[__io__].add(normalize(path)).then(function (newId) {
+          var newPath = normalize(path, newId);
+          _this[__cache__].set(newPath, Promise.resolve({}));
+          _this[__triggerUpdates__](newPath);
+          return newId;
+        });
+      }
+    }, {
+      key: "remove",
+      value: function remove(path) {
+        var _this = this;
+
+        var normalizedPath = normalize(path);
+        return this[__io__].remove(normalizedPath).then(function () {
+          _this[__cache__]["delete"](normalizedPath);
+          _this[__triggerUpdates__](normalizedPath);
+        });
+      }
+    }, {
+      key: "get",
+      value: function get(path) {
+        var _this = this;
+
+        var normalizedPath = normalize(path);
+        if (!this[__cache__].has(normalizedPath)) {
+          this[__cache__].set(normalizedPath, this[__io__].get(normalizedPath).then(function (value) {
+            _this[__updateCache__](normalizedPath, value);
+            return value;
+          }));
+        }
+        return this[__cache__].get(normalizedPath);
+      }
+    }, {
+      key: "set",
+      value: function set(path, data) {
+        var _this = this;
+
+        var normalizedPath = normalize(path);
+        if (data instanceof Object) {
+          this[__cache__].set(normalizedPath, data);
+
+          var promises = [];
+          for (var key in data) {
+            promises.push(this.set(normalize(path, key), data[key]));
+          }
+          return Promise.all(promises).then(function () {
+            _this[__triggerUpdates__](normalizedPath);
+          });
+        } else {
+          return this[__io__].set(normalizedPath, data).then(function () {
+            _this[__cache__].set(normalizedPath, Promise.resolve(data));
+            _this[__triggerUpdates__](normalizedPath);
+          });
+        }
+      }
+    }]);
+
+    return Rpc;
+  })();
+
+  return Rpc;
+}).bind("pb.net.Rpc", function (require) {
+  var IO = require("pb.net.IO");
+  var Rpc = require("pb.net.Rpc.__ctor__");
+  return new Rpc(IO);
+});</script>
+</head><body></body></html>

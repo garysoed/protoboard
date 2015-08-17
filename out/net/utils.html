@@ -1,0 +1,46 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+DIJS.bind("pb.net.Utils", function () {
+  return {
+    normalize: function normalize() {
+      for (var _len = arguments.length, paths = Array(_len), _key = 0; _key < _len; _key++) {
+        paths[_key] = arguments[_key];
+      }
+
+      var parts = [];
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = paths[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var path = _step.value;
+
+          parts = parts.concat(path.split("/").filter(function (part) {
+            return part !== "";
+          }));
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"]) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return "/" + parts.join("/");
+    }
+  };
+});</script>
+</head><body></body></html>

@@ -1,0 +1,147 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>
+DIJS
+.bind('pb.net.Sync', require => {
+
+  const $ = require('pb.$');
+  const Events = require('pb.Events');
+  const normalize = require('pb.net.Utils').normalize;
+  const Rpc = require('pb.net.Rpc');
+
+  const __id__ = Symbol();
+  const __onUpdated__ = Symbol();
+  const __prefix__ = Symbol();
+
+  /**
+   * Represents a synchronized object.
+   *
+   * @class pb.net.Sync
+   * @since 3.1.0
+   */
+  class Sync {
+
+    /**
+     * @constructor
+     * @class pb.net.Sync
+     * @param {string} id ID of the object.
+     * @param {string} prefix Prefix of the object's path.
+     */
+    constructor(id, prefix) {
+      this[__id__] = id;
+      this[__prefix__] = prefix;
+
+      Events.of(Rpc, this)
+          .on('jquery', this.path, this[__onUpdated__].bind(this));
+    }
+
+    /**
+     * Called when the object is updated.
+     *
+     * @method __onUpdated__
+     * @private
+     */
+    [__onUpdated__]() {
+      $(this).trigger(Sync.Events.UPDATED);
+    }
+
+    /**
+     * Adds a new entry as a child of this object.
+     *
+     * @method add
+     * @return {Promise} Promise that will be resolved with the newly added entry.
+     */
+    add() {
+      return Rpc.add(this.path)
+          .then(newId => {
+            return new Sync(newId, this.path);
+          });
+    }
+
+    /**
+     * Removes the current object from the parent's entry.
+     *
+     * @method remove
+     * @return {Promise} Promise that will be resolved when the removal is successful.
+     */
+    remove() {
+      return Rpc.remove(this.path);
+    }
+
+    /**
+     * Gets this object's data.
+     *
+     * @method get
+     * @return {Promise} Promise that will be resolved with this object's data.
+     */
+    get() {
+      return Rpc.get(this.path);
+    }
+
+    /**
+     * Sets this object's data.
+     *
+     * @method set
+     * @param {Any} data The data to set.
+     * @return {Promise} Promise that will be resolve with this object when setting the data is
+     *    successful.
+     */
+    set(data) {
+      return Rpc.set(this.path, data)
+          .then(() => {
+            return this;
+          });
+    }
+
+    /**
+     * Retrives a synchronized object in the given path.
+     *
+     * @method sync
+     * @param {string} subpath Relative path to the synchronized object to return.
+     * @return {pb.net.Sync} Sync object at the given path.
+     */
+    sync(subpath) {
+      let subParts = normalize(subpath).split('/');
+      let subId = subParts.pop();
+
+      return new Sync(subId, normalize(this.path, ...subParts));
+    }
+
+    /**
+     * ID of this object.
+     *
+     * @type string
+     * @property id
+     * @final
+     */
+    get id() {
+      return this[__id__];
+    }
+
+    /**
+     * Full path to this object.
+     *
+     * @type string
+     * @property path
+     * @final
+     */
+    get path() {
+      return normalize(this[__prefix__], this[__id__]);
+    }
+  }
+
+  Sync.Events = {
+    /**
+     * Fired when the object's data has been updated.
+     *
+     * @event updated
+     */
+    UPDATED: 'updated'
+  };
+
+  return Sync;
+});
+</script>

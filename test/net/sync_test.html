@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>net.Sync Unit Tests</title>
+
+  <link rel="import" href="net/sync.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+<script>
+DIJS
+.constant('pb.net.Rpc', {
+  add: () => {},
+  get: () => {},
+  remove: () => {},
+  set: () => {}
+})
+.run(require => {
+
+  const $ = require('pb.$');
+  const _ = require('pb._');
+  const Events = require('pb.Events');
+  const expect = require('expect');
+  const Rpc = require('pb.net.Rpc');
+  const Sync = require('pb.net.Sync');
+
+  describe('net.Sync', () => {
+    const ID = 'id';
+    const PREFIX = '/prefix';
+
+    let sync;
+
+    beforeEach(() => {
+      sync = new Sync(ID, PREFIX);
+    });
+
+    it('should listen to changes from Rpc', () => {
+      let handler = _.spiedFunction();
+      Events.of(sync, sync).on('jquery', Sync.Events.UPDATED, handler);
+
+      $(Rpc).trigger(`${PREFIX}/${ID}`);
+      expect(handler).called().at.least(1);
+    });
+
+    describe('add', () => {
+      it('should return the newly added sync object', done => {
+        _.spy(Rpc, 'add').overrideReturn(Promise.resolve('newId'));
+
+        sync.add()
+            .then(newSync => {
+              expect(newSync.id).to.equal('newId');
+              expect(newSync.path).to.equal(`${PREFIX}/${ID}/newId`);
+
+              expect(Rpc.add).calledWith(`${PREFIX}/${ID}`).at.least(1);
+              done();
+            });
+      });
+    });
+
+    describe('remove', () => {
+      it('should remove the current object', done => {
+        _.spy(Rpc, 'remove').overrideReturn(Promise.resolve());
+
+        sync.remove()
+            .then(() => {
+              expect(Rpc.remove).calledWith(`${PREFIX}/${ID}`).at.least(1);
+              done();
+            });
+      });
+    });
+
+    describe('get', () => {
+      it('should retrieve the value from Rpc', done => {
+        _.spy(Rpc, 'get').overrideReturn(Promise.resolve(1));
+
+        sync.get()
+            .then(value => {
+              expect(value).to.equal(1);
+              done();
+            });
+      });
+    });
+
+    describe('set', () => {
+      it('should set the value and returns itself', done => {
+        _.spy(Rpc, 'set').overrideReturn(Promise.resolve());
+
+        sync.set('data')
+            .then(returnedSync => {
+              expect(Rpc.set).calledWith(`${PREFIX}/${ID}`, 'data').at.least(1);
+              expect(returnedSync).to.equal(sync);
+              done();
+            });
+      });
+    });
+
+    describe('sync', () => {
+      it('should return a sync object with the given subpath', () => {
+        let subpath = 'c/d';
+
+        let subSync = sync.sync(subpath);
+        expect(subSync.id).to.equal('d');
+        expect(subSync.path).to.equal(`${sync.path}/${subpath}`);
+      });
+    });
+
+    afterEach(() => {
+      _.reset();
+    });
+  });
+});
+</script>
+</body>

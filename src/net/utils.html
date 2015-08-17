@@ -1,0 +1,26 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+DIJS
+.bind('pb.net.Utils', () => {
+  return {
+    /**
+     * Joins and normalize the given paths.
+     *
+     * @method normalize
+     * @param {string} ...paths Parts of the paths to be joined and normalized.
+     * @return {string} The joined and normalized paths.
+     */
+    normalize(...paths) {
+      let parts = [];
+      for (let path of paths) {
+        parts = parts.concat(path.split('/').filter(part => part !== ''));
+      }
+
+      return '/' + parts.join('/');
+    }
+  };
+});
+</script>

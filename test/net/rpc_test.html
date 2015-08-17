@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>net.Rpc Unit Tests</title>
+
+  <link rel="import" href="net/rpc.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+<script>
+DIJS
+.run(require => {
+  const _ = require('pb._');
+  const Events = require('pb.Events');
+  const expect = require('expect');
+  const Rpc = require('pb.net.Rpc.__ctor__');
+  const t = require('pb.t');
+
+  describe('net.Rpc', () => {
+    let fakeIo;
+    let listenHandler;
+    let rpc;
+
+    beforeEach(() => {
+      fakeIo = {
+        add: () => {},
+        get: () => {},
+        listen: handler => {
+          listenHandler = handler;
+        },
+        remove: () => {},
+        set: () => {}
+      };
+      rpc = new Rpc(fakeIo);
+    });
+
+    it('should update the cache in reaction to changes triggered by IO', done => {
+      _.spy(fakeIo, 'get');
+      listenHandler('/a/b', {
+        c: {
+          d: 1
+        }
+      });
+
+      Promise.all([
+        rpc.get('/a/b'),
+        rpc.get('/a/b/c'),
+        rpc.get('/a/b/c/d')
+      ]).then(values => {
+        let [ab, abc, abcd] = values;
+        expect(ab).to.eql({ c: { d: 1 } });
+        expect(abc).to.eql({ d: 1 });
+        expect(abcd).to.eql(1);
+
+        expect(fakeIo.get).called().to.equal(0);
+        done();
+      });
+    });
+    it('should trigger updates in reaction to changes triggered by IO', () => {
+      let aHandler = _.spiedFunction();
+      let abHandler = _.spiedFunction();
+
+      Events.of(rpc, this)
+          .on('jquery', '/a', aHandler)
+          .on('jquery', '/a/b', abHandler);
+
+      listenHandler('/a/b', 1);
+
+      expect(aHandler).called().at.least(1);
+      expect(abHandler).called().at.least(1);
+    });
+
+    describe('__triggerUpdates__', () => {
+      it('should trigger paths and their ancestors', () => {
+        let aHandler = _.spiedFunction();
+        let abHandler = _.spiedFunction();
+
+        Events.of(rpc, this)
+            .on('jquery', '/a', aHandler)
+            .on('jquery', '/a/b', abHandler);
+
+        t.getPrivateMethod(rpc, 'triggerUpdates')('/a/b');
+
+        expect(aHandler).called().at.least(1);
+        expect(abHandler).called().at.least(1);
+      });
+      it('should not trigger paths that are not the ancestor path', () => {
+        let handler = _.spiedFunction();
+        Events.of(rpc, this).on('jquery', '/c', handler);
+
+        t.getPrivateMethod(rpc, 'triggerUpdates')('/a/b');
+
+        expect(handler).called().to.equal(0);
+      });
+    });
+
+    describe('add', () => {
+      let promise;
+
+      beforeEach(() => {
+        promise = t.createFakePromise();
+        _.spy(fakeIo, 'add').overrideReturn(promise);
+      });
+
+      it('should resolve with the new ID', done => {
+        rpc.add('/a/b/c').then(newId => {
+          expect(newId).to.equal('newId');
+          done();
+        });
+
+        expect(fakeIo.add).calledWith('/a/b/c').at.least(1);
+        promise.resolve('newId');
+      });
+      it('should trigger update on the path', done => {
+        let aHandler = _.spiedFunction();
+        let abHandler = _.spiedFunction();
+
+        Events.of(rpc, this)
+            .on('jquery', '/a', aHandler)
+            .on('jquery', '/a/b', abHandler);
+
+        rpc.add('/a/b').then(() => {
+          expect(aHandler).called().at.least(1);
+          expect(abHandler).called().at.least(1);
+          done();
+        });
+
+        promise.resolve('newId');
+      });
+      it('should cache the returned result', done => {
+        _.spy(fakeIo, 'get');
+
+        rpc.add('/a/b');
+        promise.resolve('newId');
+
+        rpc.get('/a/b/newId').then(value => {
+          expect(value).to.exist;
+          expect(fakeIo.get).called().to.equal(0);
+          done();
+        });
+      });
+    });
+
+    describe('remove', () => {
+      const NEW_ID = 'newId';
+      const REMOVED_PATH = `/a/b/${NEW_ID}`;
+
+      beforeEach(() => {
+        let promise = t.createFakePromise();
+        _.spy(fakeIo, 'add').overrideReturn(promise);
+        rpc.add('/a/b');
+        promise.resolve(NEW_ID);
+      });
+
+      it('should clear the cache when successful', done => {
+        let promise = t.createFakePromise();
+
+        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve('newValue'));
+        _.spy(fakeIo, 'remove').overrideReturn(Promise.resolve());
+
+        rpc.remove(REMOVED_PATH)
+            .then(() => {
+              return rpc.get(REMOVED_PATH);
+            })
+            .then(value => {
+              expect(fakeIo.get).calledWith(REMOVED_PATH).at.least(1);
+              expect(value).to.equal('newValue');
+              done();
+            });
+      });
+      it('should trigger update on the path', done => {
+        let aHandler = _.spiedFunction();
+        let abHandler = _.spiedFunction();
+        let itemHandler = _.spiedFunction();
+
+        _.spy(fakeIo, 'remove').overrideReturn(Promise.resolve());
+        Events.of(rpc, this)
+            .on('jquery', '/a', aHandler)
+            .on('jquery', '/a/b', abHandler)
+            .on('jquery', REMOVED_PATH, itemHandler);
+
+        rpc.remove(REMOVED_PATH)
+            .then(() => {
+              expect(aHandler).called().at.least(1);
+              expect(abHandler).called().at.least(1);
+              expect(itemHandler).called().at.least(1);
+              done();
+            });
+      });
+    });
+
+    describe('get', () => {
+      const PATH = '/a/b';
+
+      it('should resolve primitive value', done => {
+        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve(1));
+        rpc.get(PATH)
+            .then(value => {
+              expect(value).to.equal(1);
+              expect(fakeIo.get).calledWith(PATH).at.least(1);
+              done();
+            });
+      });
+      it('should resolve object value and their sub objects', done => {
+        let expectedAb = {
+          c: {
+            d: 3
+          }
+        };
+        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve(expectedAb));
+        rpc.get(PATH)
+            .then(value => {
+              expect(fakeIo.get).calledWith(PATH).at.least(1);
+              return Promise.all([
+                value,
+                rpc.get('/a/b/c'),
+                rpc.get('/a/b/c/d')
+              ]);
+            }).then(values => {
+              let [ab, abc, abcd] = values;
+
+              expect(ab).to.eql(expectedAb);
+              expect(abc).to.eql(expectedAb.c);
+              expect(abcd).to.eql(expectedAb.c.d);
+              done();
+            });
+      });
+      it('should cache primitive value', done => {
+        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve(1));
+        rpc.get(PATH)
+            .then(() => {
+              _.reset(fakeIo.get);
+              _.spy(fakeIo, 'get');
+              return rpc.get(PATH);
+            })
+            .then(value => {
+              expect(value).to.equal(1);
+              expect(fakeIo.get).called().to.equal(0);
+              done();
+            });
+      });
+      it('should cache object and their sub objects', done => {
+        let expectedAb = {
+          c: {
+            d: 3
+          }
+        };
+        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve(expectedAb));
+        rpc.get(PATH)
+            .then(value => {
+              _.reset(fakeIo.get);
+              _.spy(fakeIo, 'get');
+              return Promise.all([
+                rpc.get(PATH),
+                rpc.get(`${PATH}/c`),
+                rpc.get(`${PATH}/c/d`)
+              ]);
+            }).then(values => {
+              let [ab, abc, abcd] = values;
+
+              expect(ab).to.eql(expectedAb);
+              expect(abc).to.eql(expectedAb.c);
+              expect(abcd).to.eql(expectedAb.c.d);
+
+              expect(fakeIo.get).called().to.equal(0);
+              done();
+            });
+      });
+    });
+
+    describe('set', () => {
+      const PATH = '/a/b';
+
+      it('should set primitive value', done => {
+        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
+        rpc.set(PATH, 1)
+            .then(() => {
+              expect(fakeIo.set).calledWith(PATH, 1).at.least(1);
+              done();
+            });
+      });
+      it('should trigger update for primitive value', done => {
+        let aHandler = _.spiedFunction();
+        let abHandler = _.spiedFunction();
+
+        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
+        Events.of(rpc, this)
+            .on('jquery', '/a', aHandler)
+            .on('jquery', PATH, abHandler);
+
+        rpc.set(PATH, 1)
+            .then(() => {
+              expect(aHandler).called().at.least(1);
+              expect(abHandler).called().at.least(1);
+              done();
+            });
+      });
+      it('should cache when setting primitive value', done => {
+        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
+        rpc.set(PATH, 1)
+            .then(() => {
+              _.spy(fakeIo, 'get');
+              return rpc.get(PATH);
+            })
+            .then(value => {
+              expect(value).to.equal(1);
+              expect(fakeIo.get).called().to.equal(0);
+              done();
+            });
+      });
+      it('should set object value and their sub objects', done => {
+        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
+        rpc.set(PATH, {
+              c1: 1,
+              c2: {
+                d: 2
+              }
+            })
+            .then(() => {
+              expect(fakeIo.set).calledWith(`${PATH}/c1`, 1).at.least(1);
+              expect(fakeIo.set).calledWith(`${PATH}/c2/d`, 2).at.least(1);
+              done();
+            });
+      });
+      it('should trigger update for the object', done => {
+        let abc1Handler = _.spiedFunction();
+        let abc2Handler = _.spiedFunction();
+        let abc2dHandler = _.spiedFunction();
+
+        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
+        Events.of(rpc, this)
+            .on('jquery', `${PATH}/c1`, abc1Handler)
+            .on('jquery', `${PATH}/c2`, abc2Handler)
+            .on('jquery', `${PATH}/c2/d`, abc2dHandler);
+
+        rpc.set(PATH, {
+              c1: 1,
+              c2: {
+                d: 2
+              }
+            })
+            .then(() => {
+              expect(abc1Handler).called().at.least(1);
+              expect(abc2Handler).called().at.least(1);
+              expect(abc2dHandler).called().at.least(1);
+              done();
+            });
+      });
+      it('should cache the set object and the sub objects', done => {
+        let expectedAb = {
+          c1: 1,
+          c2: {
+            d: 2
+          }
+        };
+        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
+        rpc.set(PATH, expectedAb)
+            .then(() => {
+              _.spy(fakeIo, 'get');
+              return Promise.all([
+                rpc.get(PATH),
+                rpc.get(`${PATH}/c1`),
+                rpc.get(`${PATH}/c2`),
+                rpc.get(`${PATH}/c2/d`)
+              ]);
+            })
+            .then(values => {
+              let [ab, abc1, abc2, abc2d] = values;
+              expect(ab).to.equal(expectedAb);
+              expect(abc1).to.equal(expectedAb.c1);
+              expect(abc2).to.equal(expectedAb.c2);
+              expect(abc2d).to.equal(expectedAb.c2.d);
+              expect(fakeIo.get).called().to.equal(0);
+              done();
+            });
+      });
+    });
+
+    afterEach(() => {
+      _.reset();
+    });
+  });
+});
+</script>
+</body>

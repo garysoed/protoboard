@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>net.Utils Unit Tests</title>
+
+  <link rel="import" href="net/utils.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+<script>
+DIJS
+.run(require => {
+  const expect = require('expect');
+  const Utils = require('pb.net.Utils');
+
+  describe('net.Utils', () => {
+    it('should join and normalize paths', () => {
+      expect(Utils.normalize('a/b', 'c', '/d/')).to.equal('/a/b/c/d');
+    });
+  });
+});
+</script>
+</body>

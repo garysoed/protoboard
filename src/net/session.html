@@ -1,0 +1,120 @@
+<base href="..">
+
+<link rel="import" href="net/sync.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
+
+<script>
+DIJS
+.bind('pb.net.Session.__ctor__', require => {
+
+  const Events = require('pb.Events');
+  const Sync = require('pb.net.Sync');
+
+  const __checkPlayers__ = Symbol();
+  const __rootSync__ = Symbol();
+
+  /**
+   * Service that manages game session.
+   *
+   * @class net.Session
+   */
+  class Service {
+
+    constructor(rootSync) {
+      this[__rootSync__] = rootSync;
+    }
+
+    /**
+     * Checks if there are enough players in the game.
+     *
+     * @method __checkPlayers__
+     * @param {net.Sync} gameSync Game sync object to check if there are enough players.
+     * @param {Function} callback Function called when there are enough players in the game.
+     * @private
+     */
+    [__checkPlayers__](gameSync, callback) {
+      gameSync.get()
+          .then(game => {
+            if (game.playerCount <= game.players.length) {
+              Events.of(gameSync, this).off('jquery', Sync.Events.UPDATED);
+              callback();
+            }
+          });
+    }
+
+    /**
+     * Creates a new game.
+     *
+     * @method create
+     * @param {number} playerCount Number of players required for this game.
+     * @param {Object} initialState Initial state of the game. Defaults to empty object.
+     * @return {Promise} Promise that will be resolved with the game sync object when the game has
+     *    been created.
+     */
+    create(playerCount, initialState = {}) {
+      return this[__rootSync__].add()
+          .then(gameSync => {
+            return gameSync.set({
+              playerCount,
+              players: [],
+              state: initialState
+            });
+          });
+    }
+
+    /**
+     * Joins the given game.
+     *
+     * @method join
+     * @param {string} gameId ID of the game to join.
+     * @param {string} playerDisplayName Display name of the player joining the game.
+     * @param {Object} initialPlayerState The initial state of the player joining the game.
+     * @return {Promise} Promise that will be resolved with the game sync when the join is
+     *    successful.
+     */
+    join(gameId, playerDisplayName, initialPlayerState = {}) {
+      let gameSync = this[__rootSync__].sync(gameId);
+      let playersSync = gameSync.sync('players');
+      return playersSync
+          .add()
+          .then(playerSync => {
+            return playerSync.set({
+              name: playerDisplayName,
+              state: initialPlayerState
+            });
+          })
+          .then(() => {
+            return gameSync;
+          });
+    }
+
+    /**
+     * Waits the game to have enough players, then start it.
+     *
+     * @method start
+     * @param {string} gameId ID of the game to start.
+     * @return {Promise} Promise that will be resolved with the game sync object when the game has
+     *    enough players.
+     */
+    start(gameId) {
+      let gameSync = this[__rootSync__].sync(gameId);
+      return new Promise((resolve, reject) => {
+        let boundResolve = resolve.bind(null, gameSync);
+        Events.of(gameSync, this).on(
+            'jquery',
+            Sync.Events.UPDATED,
+            this[__checkPlayers__].bind(this, gameSync, boundResolve));
+        this[__checkPlayers__](gameSync, boundResolve);
+      });
+    }
+  }
+
+  return Service;
+})
+.bind('pb.net.Session', require => {
+  const SessionService = require('pb.net.Session.__ctor__');
+  const Sync = require('pb.net.Sync');
+  return new SessionService(new Sync('(root)'));
+});
+</script>

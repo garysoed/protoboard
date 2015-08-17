@@ -1,0 +1,184 @@
+<base href="..">
+
+<link rel="import" href="net/utils.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>
+DIJS.bind('pb.net.Rpc.__ctor__', require => {
+
+  const $ = require('pb.$');
+  const normalize = require('pb.net.Utils').normalize;
+
+  const __cache__ = Symbol();
+  const __io__ = Symbol();
+  const __onUpdate__ = Symbol();
+  const __updateCache__ = Symbol();
+  const __triggerUpdates__ = Symbol('triggerUpdates');
+
+  /**
+   * Wrapper class for net.IO. This provides caching and other networking logic that clients
+   * wouldn't need to implement.
+   *
+   * @class net.Rpc
+   * @since 3.1.0
+   */
+  class Rpc {
+    /**
+     * @constructor
+     * @class net.Rpc
+     * @param {net.IO} io Implementation of {{#crossLink "net.AbstractIO"}}{{/crossLink}}.
+     */
+    constructor(io) {
+      this[__cache__] = new Map();
+      this[__io__] = io;
+
+      io.listen(this[__onUpdate__].bind(this));
+    }
+
+    /**
+     * Handler called when there is an update from the server.
+     *
+     * @method __onUpdate__
+     * @param {string} path Path of resource that is updated.
+     * @param {Any} newValue The new updated value.
+     * @private
+     */
+    [__onUpdate__](path, newValue) {
+      let normalizedPath = normalize(path);
+      this[__updateCache__](path, newValue);
+      this[__triggerUpdates__](normalizedPath);
+    }
+
+    /**
+     * Updates the cache value with the given data.
+     *
+     * @method __updateCache__
+     * @param {string} path Path to update the value of.
+     * @param {Any} data Data to update the value of.
+     * @private
+     */
+    [__updateCache__](path, data) {
+      this[__cache__].set(normalize(path), Promise.resolve(data));
+      if (data instanceof Object) {
+        for (let key in data) {
+          this[__updateCache__](normalize(path, key), data[key]);
+        }
+      }
+    }
+
+    /**
+     * Triggers updates on the given path, and all the ancestor paths.
+     *
+     * @method __triggerUpdates__
+     * @param {string} path The path to trigger updates on.
+     * @private
+     */
+    [__triggerUpdates__](path) {
+      let parts = path.split('/');
+      while (parts.length > 1) {
+        let triggerPath = parts.join('/');
+        if (triggerPath.length > 0) {
+          $(this).trigger(parts.join('/'));
+        }
+        parts.pop();
+      }
+    }
+
+    /**
+     * Adds a new object on the given path.
+     *
+     * @method add
+     * @param {string} path Path to add a new object to.
+     * @return {Promise} Promise that will be resolved with the new object's ID when addition is
+     *    successful.
+     */
+    add(path) {
+      return this[__io__].add(normalize(path))
+          .then(newId => {
+            let newPath = normalize(path, newId);
+            this[__cache__].set(newPath, Promise.resolve({}));
+            this[__triggerUpdates__](newPath);
+            return newId;
+          });
+    }
+
+    /**
+     * Removes the object in the given path.
+     *
+     * @method remove
+     * @param {string} path Path of the object to be removed.
+     * @return {Promise} Promise that will be resolved when the object has been deleted.
+     */
+    remove(path) {
+      let normalizedPath = normalize(path);
+      return this[__io__].remove(normalizedPath)
+          .then(() => {
+            this[__cache__].delete(normalizedPath);
+            this[__triggerUpdates__](normalizedPath);
+          });
+    }
+
+    /**
+     * Retrieves the value corresponding to the given path.
+     *
+     * @method get
+     * @param {string} path The path whose value should be retrieved.
+     * @return {Promise} Promise that will be resolved with the value corresponding to the given
+     *    path.
+     */
+    get(path) {
+      let normalizedPath = normalize(path);
+      if (!this[__cache__].has(normalizedPath)) {
+        this[__cache__].set(
+            normalizedPath,
+            this[__io__]
+                .get(normalizedPath)
+                .then(value => {
+                  this[__updateCache__](normalizedPath, value);
+                  return value;
+                }));
+      }
+      return this[__cache__].get(normalizedPath);
+    }
+
+    /**
+     * Sets the value of the given path.
+     *
+     * @method set
+     * @param {string} path The path to set the value to.
+     * @param {Any} data Data to set the path's value to.
+     * @return {Promise} Promise that will be resolved when setting the value is successful.
+     */
+    set(path, data) {
+      let normalizedPath = normalize(path);
+      if (data instanceof Object) {
+        this[__cache__].set(normalizedPath, data);
+
+        let promises = [];
+        for (let key in data) {
+          promises.push(this.set(normalize(path, key), data[key]));
+        }
+        return Promise.all(promises)
+            .then(() => {
+              this[__triggerUpdates__](normalizedPath);
+            });
+      } else {
+        return this[__io__]
+            .set(normalizedPath, data)
+            .then(() => {
+              this[__cache__].set(normalizedPath, Promise.resolve(data));
+              this[__triggerUpdates__](normalizedPath);
+            });
+      }
+    }
+  }
+
+  return Rpc;
+})
+.bind('pb.net.Rpc', require => {
+  const IO = require('pb.net.IO');
+  const Rpc = require('pb.net.Rpc.__ctor__');
+  return new Rpc(IO);
+});
+</script>

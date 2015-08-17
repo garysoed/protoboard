@@ -1,0 +1,97 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>"use strict";
+
+var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.net.Sync", function (require) {
+
+  var $ = require("pb.$");
+  var Events = require("pb.Events");
+  var normalize = require("pb.net.Utils").normalize;
+  var Rpc = require("pb.net.Rpc");
+
+  var __id__ = Symbol();
+  var __onUpdated__ = Symbol();
+  var __prefix__ = Symbol();
+
+  var Sync = (function () {
+    function Sync(id, prefix) {
+      _classCallCheck(this, Sync);
+
+      this[__id__] = id;
+      this[__prefix__] = prefix;
+
+      Events.of(Rpc, this).on("jquery", this.path, this[__onUpdated__].bind(this));
+    }
+
+    _createComputedClass(Sync, [{
+      key: __onUpdated__,
+      value: function () {
+        $(this).trigger(Sync.Events.UPDATED);
+      }
+    }, {
+      key: "add",
+      value: function add() {
+        var _this = this;
+
+        return Rpc.add(this.path).then(function (newId) {
+          return new Sync(newId, _this.path);
+        });
+      }
+    }, {
+      key: "remove",
+      value: function remove() {
+        return Rpc.remove(this.path);
+      }
+    }, {
+      key: "get",
+      value: function get() {
+        return Rpc.get(this.path);
+      }
+    }, {
+      key: "set",
+      value: function set(data) {
+        var _this = this;
+
+        return Rpc.set(this.path, data).then(function () {
+          return _this;
+        });
+      }
+    }, {
+      key: "sync",
+      value: function sync(subpath) {
+        var subParts = normalize(subpath).split("/");
+        var subId = subParts.pop();
+
+        return new Sync(subId, normalize.apply(undefined, [this.path].concat(_toConsumableArray(subParts))));
+      }
+    }, {
+      key: "id",
+      get: function () {
+        return this[__id__];
+      }
+    }, {
+      key: "path",
+      get: function () {
+        return normalize(this[__prefix__], this[__id__]);
+      }
+    }]);
+
+    return Sync;
+  })();
+
+  Sync.Events = {
+    UPDATED: "updated"
+  };
+
+  return Sync;
+});</script>
+</head><body></body></html>
