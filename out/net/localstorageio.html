@@ -1,0 +1,129 @@
+<html><head><base href="..">
+
+<link rel="import" href="net/abstractio.html">
+<link rel="import" href="net/utils.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
+
+<script>"use strict";
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.net.LocalStorageIO", function (require) {
+
+  var AbstractIO = require("pb.net.AbstractIO");
+  var Events = require("pb.Events");
+  var NetUtils = require("pb.net.Utils");
+
+  var __listeners__ = Symbol();
+  var __onStorageEvent__ = Symbol("onStorageEvent");
+  var __root__ = Symbol();
+  var __storage__ = Symbol();
+  var __unprefix__ = Symbol();
+
+  var LocalStorageIO = (function (_AbstractIO) {
+    function LocalStorageIO() {
+      var root = arguments[0] === undefined ? "/pb" : arguments[0];
+      var localStorage = arguments[1] === undefined ? window.localStorage : arguments[1];
+
+      _classCallCheck(this, LocalStorageIO);
+
+      this[__listeners__] = [];
+      this[__root__] = NetUtils.normalize(root);
+      this[__storage__] = localStorage;
+      Events.of(window, this).on("dom", "storage", this[__onStorageEvent__].bind(this));
+    }
+
+    _inherits(LocalStorageIO, _AbstractIO);
+
+    _createComputedClass(LocalStorageIO, [{
+      key: __unprefix__,
+      value: function (path) {
+        return path.substring(this[__root__].length);
+      }
+    }, {
+      key: __onStorageEvent__,
+      value: function (event) {
+        if (event.storageArea !== this[__storage__]) {
+          return;
+        }
+
+        if (!event.key.startsWith(this[__root__])) {
+          return;
+        }
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this[__listeners__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var listener = _step.value;
+
+            listener(this[__unprefix__](event.key), JSON.parse(event.newValue));
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
+    }, {
+      key: "listen",
+      value: function listen(callback) {
+        this[__listeners__].push(callback);
+      }
+    }, {
+      key: "add",
+      value: function add(path) {
+        var id = 0;
+        var newPath = NetUtils.normalize(this[__root__], path, "" + id);
+
+        while (this[__storage__].getItem(newPath) !== null) {
+          id++;
+          newPath = NetUtils.normalize(this[__root__], path, "" + id);
+        }
+
+        this[__storage__].setItem(newPath, JSON.stringify({}));
+
+        return Promise.resolve("" + id);
+      }
+    }, {
+      key: "remove",
+      value: function remove(path) {
+        this[__storage__].removeItem(NetUtils.normalize(this[__root__], path));
+        return Promise.resolve();
+      }
+    }, {
+      key: "get",
+      value: function get(path) {
+        var item = this[__storage__].getItem(NetUtils.normalize(this[__root__], path));
+        return Promise.resolve(JSON.parse(item));
+      }
+    }, {
+      key: "set",
+      value: function set(path, data) {
+        this[__storage__].setItem(NetUtils.normalize(this[__root__], path), JSON.stringify(data));
+        return Promise.resolve();
+      }
+    }]);
+
+    return LocalStorageIO;
+  })(AbstractIO);
+
+  return LocalStorageIO;
+});</script>
+</head><body></body></html>

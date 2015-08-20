@@ -12,6 +12,7 @@
 
 <script>
 DIJS.bind('_F', () => spies.Fakes);
+DIJS.bind('pb.spies.Fakes', () => spies.Fakes);
 DIJS.bind('_M', () => spies.Matchers);
 DIJS.bind('pb.spies.Matchers', () => spies.Matchers);
 DIJS.bind('expect', () => chai.expect);

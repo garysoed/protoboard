@@ -1,0 +1,50 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.net.AbstractIO", function () {
+  var AbstractIO = (function () {
+    function AbstractIO() {
+      _classCallCheck(this, AbstractIO);
+    }
+
+    _createClass(AbstractIO, {
+      listen: {
+        value: function listen(callback) {
+          throw new Error("Unimplemented");
+        }
+      },
+      add: {
+        value: function add(path) {
+          throw new Error("Unimplemented");
+        }
+      },
+      remove: {
+        value: function remove(path) {
+          throw new Error("Unimplemented");
+        }
+      },
+      get: {
+        value: function get(path) {
+          throw new Error("Unimplemented");
+        }
+      },
+      set: {
+        value: function set(path, data) {
+          throw new Error("Unimplemented");
+        }
+      }
+    });
+
+    return AbstractIO;
+  })();
+
+  return AbstractIO;
+});</script>
+</head><body></body></html>

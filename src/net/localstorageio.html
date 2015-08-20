@@ -1,0 +1,149 @@
+<base href="..">
+
+<link rel="import" href="net/abstractio.html">
+<link rel="import" href="net/utils.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/events.html">
+
+<script>
+DIJS
+.bind('pb.net.LocalStorageIO', require => {
+
+  const AbstractIO = require('pb.net.AbstractIO');
+  const Events = require('pb.Events');
+  const NetUtils = require('pb.net.Utils');
+
+  const __listeners__ = Symbol();
+  const __onStorageEvent__ = Symbol('onStorageEvent');
+  const __root__ = Symbol();
+  const __storage__ = Symbol();
+  const __unprefix__ = Symbol();
+
+  class LocalStorageIO extends AbstractIO {
+
+    /**
+     * Implementation of net.AbstractIO that stores data in local store.
+     *
+     * @constructor
+     * @class net.InMemoryIO
+     * @param {Storage} [localStorage] The LocalStorage object. Defaults to window.localStorage.
+     * @extends net.AbstractIO
+     */
+    constructor(root = '/pb', localStorage = window.localStorage) {
+      this[__listeners__] = [];
+      this[__root__] = NetUtils.normalize(root);
+      this[__storage__] = localStorage;
+      Events.of(window, this)
+          .on('dom', 'storage', this[__onStorageEvent__].bind(this));
+    }
+
+    /**
+     * Removes the prefix string from the given path.
+     *
+     * @method __unprefix__
+     * @param {string} path The path whose prefix should be removed.
+     * @return {string} Path with the prefix removed.
+     * @private
+     */
+    [__unprefix__](path) {
+      return path.substring(this[__root__].length);
+    }
+
+    /**
+     * Handler called when the storage content has changed.
+     *
+     * @method __onStorageEvent__
+     * @param {StorageEvent} event The event object.
+     * @private
+     */
+    [__onStorageEvent__](event) {
+      if (event.storageArea !== this[__storage__]) {
+        return;
+      }
+
+      if (!event.key.startsWith(this[__root__])) {
+        return;
+      }
+
+      for (let listener of this[__listeners__]) {
+        listener(this[__unprefix__](event.key), JSON.parse(event.newValue));
+      }
+    }
+
+    /**
+     * Registers the callback to listen for changes.
+     *
+     * @method listen
+     * @param {Function} callback Callback called when there is a change on the data. This will be
+     *    called with two arguments: path of the data changed, and the new value of the data.
+     */
+    listen(callback) {
+      this[__listeners__].push(callback);
+    }
+
+    /**
+     * Allocates a new object as a child of the given path. Should also call listener callbacks
+     * that have been added.
+     *
+     * @method add
+     * @param {string} path Path to add the new object to.
+     * @return {Promise} Promise that will be resolved with the ID of the newly created object.
+     */
+    add(path) {
+      let id = 0;
+      let newPath = NetUtils.normalize(this[__root__], path, `${id}`);
+
+      while (this[__storage__].getItem(newPath) !== null) {
+        id++;
+        newPath = NetUtils.normalize(this[__root__], path, `${id}`);
+      }
+
+      this[__storage__].setItem(newPath, JSON.stringify({}));
+
+      return Promise.resolve(`${id}`);
+    }
+
+    /**
+     * Removes the object in the given path. Should also call listener callbacks that have been
+     * added.
+     *
+     * @method remove
+     * @param {string} path Path of the object to be removed.
+     * @return {Promise} Promise that will be resolved when the removal is successful.
+     */
+    remove(path) {
+      this[__storage__].removeItem(NetUtils.normalize(this[__root__], path));
+      return Promise.resolve();
+    }
+
+    /**
+     * Retrieves the data corresponding to the given path.
+     *
+     * @method get
+     * @param {string} path Path of the object to be retrieved.
+     * @return {Promise} Promise that will be resolved with the retrieved data.
+     */
+    get(path) {
+      let item = this[__storage__].getItem(NetUtils.normalize(this[__root__], path));
+      return Promise.resolve(JSON.parse(item));
+    }
+
+    /**
+     * Sets the data to the given path. Should also call listener callbacks that have been added.
+     *
+     * @method set
+     * @param {string} path Path of the object to set the value of.
+     * @param {Any} data Data to set the path's value to.
+     * @return {Promise} Promise that will be resolved when setting the value is successful.
+     */
+    set(path, data) {
+      this[__storage__].setItem(
+          NetUtils.normalize(this[__root__], path),
+          JSON.stringify(data));
+      return Promise.resolve();
+    }
+  }
+
+  return LocalStorageIO;
+});
+</script>

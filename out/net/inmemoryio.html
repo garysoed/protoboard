@@ -1,4 +1,105 @@
 <html><head><base href="..">
 
+<link rel="import" href="net/abstractio.html">
 <link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.net.InMemoryIO", function (require) {
+  var AbstractIO = require("pb.net.AbstractIO");
+
+  var __callbacks__ = Symbol();
+  var __map__ = Symbol();
+  var __triggerUpdate__ = Symbol();
+
+  var InMemoryIO = (function (_AbstractIO) {
+    function InMemoryIO() {
+      _classCallCheck(this, InMemoryIO);
+
+      this[__callbacks__] = [];
+      this[__map__] = new Map();
+    }
+
+    _inherits(InMemoryIO, _AbstractIO);
+
+    _createComputedClass(InMemoryIO, [{
+      key: __triggerUpdate__,
+      value: function (path, data) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this[__callbacks__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var callback = _step.value;
+
+            callback(path, data);
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
+    }, {
+      key: "listen",
+      value: function listen(callback) {
+        this[__callbacks__].push(callback);
+      }
+    }, {
+      key: "add",
+      value: function add(path) {
+        var id = 0;
+        while (this[__map__].has("" + path + "/" + id)) {
+          id++;
+        }
+
+        var newPath = "" + path + "/" + id;
+        var data = {};
+        this[__map__].set(newPath, data);
+        this[__triggerUpdate__](newPath, data);
+
+        return Promise.resolve("" + id);
+      }
+    }, {
+      key: "remove",
+      value: function remove(path) {
+        this[__map__]["delete"](path);
+        this[__triggerUpdate__](path, null);
+        return Promise.resolve();
+      }
+    }, {
+      key: "get",
+      value: function get(path) {
+        return Promise.resolve(this[__map__].get(path));
+      }
+    }, {
+      key: "set",
+      value: function set(path, data) {
+        this[__map__].set(path, data);
+        this[__triggerUpdate__](path, data);
+        return Promise.resolve();
+      }
+    }]);
+
+    return InMemoryIO;
+  })(AbstractIO);
+
+  return InMemoryIO;
+});</script>
 </head><body></body></html>

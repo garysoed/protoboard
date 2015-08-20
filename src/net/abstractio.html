@@ -1,0 +1,78 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+DIJS
+.bind('pb.net.AbstractIO', () => {
+
+  /**
+   * Base IO class. Extend this class to provide your implementation of server - client
+   * communication.
+   *
+   * @class net.AbstractIO
+   */
+  class AbstractIO {
+
+    /**
+     * Registers the callback to listen for changes.
+     *
+     * @method listen
+     * @param {Function} callback Callback called when there is a change on the data. This will be
+     *    called with two arguments: path of the data changed, and the new value of the data.
+     */
+    listen(callback) {
+      throw new Error('Unimplemented');
+    }
+
+    /**
+     * Allocates a new object as a child of the given path. Should also call listener callbacks
+     * that have been added.
+     *
+     * @method add
+     * @param {string} path Path to add the new object to.
+     * @return {Promise} Promise that will be resolved with the ID of the newly created object.
+     */
+    add(path) {
+      throw new Error('Unimplemented');
+    }
+
+    /**
+     * Removes the object in the given path. Should also call listener callbacks that have been
+     * added.
+     *
+     * @method remove
+     * @param {string} path Path of the object to be removed.
+     * @return {Promise} Promise that will be resolved when the removal is successful.
+     */
+    remove(path) {
+      throw new Error('Unimplemented');
+    }
+
+    /**
+     * Retrieves the data corresponding to the given path.
+     *
+     * @method get
+     * @param {string} path Path of the object to be retrieved.
+     * @return {Promise} Promise that will be resolved with the retrieved data.
+     */
+    get(path) {
+      throw new Error('Unimplemented');
+    }
+
+    /**
+     * Sets the data to the given path. Should also call listener callbacks that have been added.
+     *
+     * @method set
+     * @param {string} path Path of the object to set the value of.
+     * @param {Any} data Data to set the path's value to.
+     * @return {Promise} Promise that will be resolved when setting the value is successful.
+     */
+    set(path, data) {
+      throw new Error('Unimplemented');
+    }
+  }
+
+  return AbstractIO;
+});
+</script>
