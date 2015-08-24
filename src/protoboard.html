@@ -14,6 +14,11 @@ DIJS
   const __players__ = Symbol();
   const __setupFn__ = Symbol();
 
+  /**
+   * Runs the Protoboard game.
+   *
+   * @class Protoboard.Runner
+   */
   class Runner {
 
     /**
@@ -58,7 +63,16 @@ DIJS
     }
 
     /**
-     * Runs the game on the given document object.
+     * Runs the game on the given document object. Also makes available the following variables to
+     * the templating system:
+     *
+     * -   `pb.playerCount`: Contains number of players in the game.
+     * -   `pb.players`: Array of player objects. Each player object is an object with:
+     *
+     *     -   id: ID of the player
+     *     -   state: The player's state
+     *
+     * -   `pb.state`: Contains the game state object.
      *
      * @method run
      * @param {Document} [doc] Document to run the game on. Defaults to the root document.
@@ -98,10 +112,7 @@ DIJS
                     // Initialize the templates.
                     TemplateService.addData('pb.playerCount', gameData.playerCount);
                     TemplateService.addData('pb.players', gameData.players);
-
-                    for (let stateKey in gameData.state) {
-                      TemplateService.addData(`pb.${stateKey}`, gameData.state[stateKey]);
-                    }
+                    TemplateService.addData('pb.state', gameData.state);
                     return gameData;
                   })
                   .then(gameData => {
@@ -194,18 +205,6 @@ DIJS
     }
 
     /**
-     * Creates a new game.
-     *
-     * @method forNewGame
-     * @param {number} playerCount Number of players that the game should have before starting.
-     * @param {Object} [initialGameState] The initial state of the game. Defaults to empty string.
-     * @return {Protoboard.Runner} The runner object.
-     */
-    forNewGame(playerCount, initialGameState = {}) {
-      return Runner.forNewGame(this[__io__], playerCount, initialGameState);
-    }
-
-    /**
      * Creates a game based on an existing game.
      *
      * @method forExistingGame
@@ -214,6 +213,31 @@ DIJS
      */
     forExistingGame(gameId) {
       return Runner.forExistingGame(this[__io__], gameId);
+    }
+
+    /**
+     * Creates a new game.
+     *
+     * @method forNewGame
+     * @param {number} [playerCount] Number of players that the game should have before starting.
+     *    Defaults to 0.
+     * @param {Object} [initialGameState] The initial state of the game. Defaults to empty string.
+     * @return {Protoboard.Runner} The runner object.
+     */
+    forNewGame(playerCount = 0, initialGameState = {}) {
+      return Runner.forNewGame(this[__io__], playerCount, initialGameState);
+    }
+
+    /**
+     * Runs Protoboard game with default settings.
+     *
+     * @method run
+     * @param {Document} doc = document The Document to run the game in.
+     * @return {Promise} Promise that will be resolved with a function when the game has started.
+     *    Use this function to retrieve Protoboard classes.
+     */
+    run(doc = document) {
+      return this.forNewGame().run(doc);
     }
   }
 

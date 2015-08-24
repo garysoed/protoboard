@@ -10,7 +10,7 @@
  * {{#crossLink "trigger.Triggers/register:method"}}register{{/crossLink}} method. For example:
  *
  * ```javascript
- * Protoboard.setup(function(require) {
+ * Protoboard.forNewGame().setup(function(require) {
  *   var Events = require('Events');
  *   var Trigger = require('trigger.Trigger');
  *   var Triggers = require('trigger.Triggers');
@@ -42,7 +42,7 @@
  * The {{#crossLink "Events"}}{{/crossLink}} class is a utility class to make event registering and
  * unregistering easier to manage.
  *
- * @class 9 Triggers
+ * @class 09 Triggers
  * @since 1.0.0
  * @module tutorial
  */

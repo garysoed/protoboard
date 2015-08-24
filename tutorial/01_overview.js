@@ -4,11 +4,15 @@
  * components. Aesthetics, performance, and correctness are outside the scope of this project,
  * though we do provide some basic support for theming.
  *
- * This aims to be customizable in different levels:
- * 1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)
- * 2. HTML: Developers can use preexisting HTML elements to write their own game.
- * 3. {{#crossLink "5 Theming"}}Theme{{/crossLink}}: This library comes with some existing themes. You
- * can customize the color themes, and if you use CSS, you can customize in greater details.
+ * This tutorial will go through some concepts and how-tos for using Protoboard. It is recommended
+ * that you read the tutorials in the order that they are presented.
+ *
+ * Protoboard aims to be customizable in different levels:
+ *
+ * 1.  JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)
+ * 1.  HTML: Developers can use preexisting HTML elements to write their own game.
+ * 1.  {{#crossLink "05 Theming"}}Theme{{/crossLink}}: This library comes with some existing themes.
+ *     You can customize the color themes, and if you use CSS, you can customize in greater details.
  *
  * Some glossary of terminologies for the API:
  * {{#html 'dl'}}
@@ -38,13 +42,16 @@
  * {{/html}}
  *
  * Every element introduced in Protoboard has 3 parts of its name:
- * 1. `pb-` is the prefix of every Protoboard element.
- * 2. The second prefix indicates the type of element:
- *    - `pb-c-` indicates a component
- *    - `pb-r-` indicates a region
- *    - `pb-u-` indicates a UI element.
- * 3. The last part is the name of the element.
  *
- * @class 1 Overview
+ * 1.  `pb-` is the prefix of every Protoboard element.
+ * 1.  The second prefix indicates the type of element:
+ *     -   `pb-c-` indicates a component
+ *     -   `pb-r-` indicates a region
+ *     -   `pb-u-` indicates a UI element.
+ * 1.  The last part is the name of the element.
+ *
+ * You can use the above to figure out the corresponding API.
+ *
+ * @class 01 Overview
  * @module tutorial
  */

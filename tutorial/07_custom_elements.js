@@ -15,6 +15,7 @@
  *
  * ```javascript
  * Protoboard
+ *     .forNewGame()
  *     .setup(function(require) {
  *       var Config = require('pb.service.Config');
  *       var Pickable = require('pb.ability.Pickable');
@@ -31,7 +32,7 @@
  * {{#crossLink "service.Registry/add:method"}}add{{/crossLink}} method:
  *
  * ```javascript
- * Protoboard.setup(function(require) {
+ * Protoboard.forNewGame().setup(function(require) {
  *   var $registry = require('pb.$registry');
  *   $registry.add('custom-element', CustomElement);
  * });
@@ -40,6 +41,6 @@
  * Note that you need to do all of the above before calling
  * {{#crossLink "Bootstrap/run:method"}}{{/crossLink}}.
  *
- * @class 7 Custom Elements
+ * @class 07 Custom Elements
  * @module tutorial
  */

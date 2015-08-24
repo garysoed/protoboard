@@ -39,13 +39,13 @@
  * {{#crossLink "service.Config"}}{{/crossLink}}. For example:
  *
  * ```javascript
- * Protoboard.setup(function(require) {
+ * Protoboard.forNewGame().setup(function(require) {
  *   var Config = require('service.Config');
  *   Config.add('pb-c-card', new CustomAbility());
  * });
  * ```
  * The example above adds the CustomAbility to all `pb-c-card` elements.
  *
- * @class 8 Abilities
+ * @class 08 Abilities
  * @module tutorial
  */

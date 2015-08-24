@@ -7,18 +7,21 @@
  * You will need the source code. If you installed protoboard as a bower package, you will find all
  * the files you need under `bower_components/protoboard`. Run `npm install` in the source
  * directory's root, and you can compile the source code by running:
+ *
  * ```bash
  * gulp pack
  * ```
  *
  * The script reads from JSON files in the `./themes` directory. By default, they use the
- * `./themes/slateblue.json` theme. To change the colour theme to "medium sea green", you can run:
+ * `./themes/cloudy_day.json` theme. To change the colour theme to "strawberry", you can run:
+ *
  * ```bash
  * gulp pack --theme ./themes/strawberry.json
  * ```
  *
  * Though Protoboard comes with several themes, you can make your own theme. Create a json file with
  * two keys: `base` and `vars`:
+ *
  * ```json
  * {
  *   "base": "./bower_components/protoboard/themes/base.json"
@@ -45,6 +48,6 @@
  * If you want to use the theme in your own CSS file, require the `loadtheme` in your Node JS. This
  * is a function that accepts the file name of the theme JSON file.
  *
- * @class 5 Theming
+ * @class 05 Theming
  * @module tutorial
  */

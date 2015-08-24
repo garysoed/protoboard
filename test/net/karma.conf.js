@@ -7,6 +7,6 @@ module.exports = function(config) {
   var configObj = JSON.parse(JSON.stringify(base));
   configObj.basePath = '../..';
   configObj.files.push({ pattern: 'out/net/*_test.html', included: true });
-  configObj.files.push({ pattern: 'out/net/*_testsuite.html', included: true });
+  configObj.files.push({ pattern: 'out/net/*_testsuite.html', included: false });
   config.set(configObj);
 };

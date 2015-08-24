@@ -103,10 +103,7 @@ DIJS.bind("pb.Protoboard.__runner__", function (require) {
               }).then(function (gameData) {
                 TemplateService.addData("pb.playerCount", gameData.playerCount);
                 TemplateService.addData("pb.players", gameData.players);
-
-                for (var stateKey in gameData.state) {
-                  TemplateService.addData("pb." + stateKey, gameData.state[stateKey]);
-                }
+                TemplateService.addData("pb.state", gameData.state);
                 return gameData;
               }).then(function (gameData) {
                 return Promise.all([gameData, Promise.resolve(_this[__setupFn__] ? _this[__setupFn__](require) : null)]);
@@ -175,16 +172,24 @@ DIJS.bind("pb.Protoboard.__runner__", function (require) {
           return this;
         }
       },
+      forExistingGame: {
+        value: function forExistingGame(gameId) {
+          return Runner.forExistingGame(this[__io__], gameId);
+        }
+      },
       forNewGame: {
-        value: function forNewGame(playerCount) {
+        value: function forNewGame() {
+          var playerCount = arguments[0] === undefined ? 0 : arguments[0];
           var initialGameState = arguments[1] === undefined ? {} : arguments[1];
 
           return Runner.forNewGame(this[__io__], playerCount, initialGameState);
         }
       },
-      forExistingGame: {
-        value: function forExistingGame(gameId) {
-          return Runner.forExistingGame(this[__io__], gameId);
+      run: {
+        value: function run() {
+          var doc = arguments[0] === undefined ? document : arguments[0];
+
+          return this.forNewGame().run(doc);
         }
       }
     });

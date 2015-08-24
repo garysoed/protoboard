@@ -66,7 +66,7 @@ var Scope = (function () {
     value: function bind(key, fn) {
       var newScope = this["with"](key, fn);
       if (this[__globalBindings__].has(key)) {
-        throw new Error("Key ${key} is already bound");
+        throw new Error("Key" + key + " is already bound");
       }
       this[__globalBindings__].set(key, newScope);
       return this;

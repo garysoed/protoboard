@@ -62,12 +62,12 @@ DIJS
               Rpc.get('/(root)'),
               TemplateService.get('pb.playerCount'),
               TemplateService.get('pb.players'),
-              TemplateService.get('pb.randomSeed')
+              TemplateService.get('pb.state')
             ]);
           })
           .then(values => {
             let [require, root, ...templateData] = values;
-            let [templatePlayerCount, templatePlayers, templateRandomSeed] = templateData;
+            let [templatePlayerCount, templatePlayers, templateState] = templateData;
             const StateService = require('pb.service.State');
             const TemplateService = require('pb.service.Template');
 
@@ -102,7 +102,7 @@ DIJS
 
             expect(templatePlayerCount).to.eql(['pb.playerCount', 2]);
             expect(templatePlayers).to.eql(['pb.players', expectedPlayers]);
-            expect(templateRandomSeed).to.eql(['pb.randomSeed', 1234]);
+            expect(templateState).to.eql(['pb.state', { randomSeed: 1234 }]);
           });
     });
     it('should correctly setup for existing game', () => {
@@ -133,12 +133,12 @@ DIJS
                 Rpc.get('/(root)'),
                 TemplateService.get('pb.playerCount'),
                 TemplateService.get('pb.players'),
-                TemplateService.get('pb.randomSeed')
+                TemplateService.get('pb.state')
               ]);
             })
             .then(values => {
               let [require, root, ...templateData] = values;
-              let [templatePlayerCount, templatePlayers, templateRandomSeed] = templateData;
+              let [templatePlayerCount, templatePlayers, templateState] = templateData;
               const StateService = require('pb.service.State');
               const TemplateService = require('pb.service.Template');
 
@@ -173,7 +173,7 @@ DIJS
 
               expect(templatePlayerCount).to.eql(['pb.playerCount', 2]);
               expect(templatePlayers).to.eql(['pb.players', expectedPlayers]);
-              expect(templateRandomSeed).to.eql(['pb.randomSeed', 1234]);
+              expect(templateState).to.eql(['pb.state', { randomSeed: 1234 }]);
             });
       });
     });
