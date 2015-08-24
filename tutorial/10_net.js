@@ -7,6 +7,12 @@
  *
  * ```
  * Protoboard
+ *     .withIo(new Io())
+ *     .forNewGame(2, {}) / .forExistingGame
+ *     .join('Gary')
+ *     .setup(function(require) {
+ *     })
+ *     .run(document);
  *     .setup(function(require) {
  *       var SessionService = require('pb.net.Session');
  *       return SessionService

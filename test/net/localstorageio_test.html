@@ -4,6 +4,7 @@
   <base href="..">
   <title>net.LocalStorageIO Unit Tests</title>
 
+  <link rel="import" href="net/io_testsuite.html">
   <link rel="import" href="net/localstorageio.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="testutils.html">
@@ -13,128 +14,23 @@
 <script>
 DIJS
 .run(require => {
-  const _ = require('pb._');
-  const _M = require('pb.spies.Matchers');
-  const _F = require('pb.spies.Fakes');
-  const expect = require('expect');
+  const IOTestSuite = require('pb.net.IOTestSuite');
   const LocalStorageIO = require('pb.net.LocalStorageIO');
   const t = require('pb.t');
 
   describe('net.LocalStorageIO', () => {
-    const PREFIX = '/test';
-
-    let fakeStorage;
-    let io;
-
-    beforeEach(() => {
-      fakeStorage = _F.ofType(Storage);
-      io = new LocalStorageIO(PREFIX, fakeStorage);
-    });
-
-    describe('__onStorageEvent__', () => {
-      let listener;
-
-      beforeEach(() => {
-        listener = _.spiedFunction();
-        io.listen(listener);
-      });
-
-      it('should call listeners for changes in local store', () => {
-        let newValue = { a: 1 };
-        let path = '/key';
-
+    IOTestSuite(
+      LocalStorageIO.bind(null, '/root', window.localStorage),
+      (io, path, newData) => {
         t.getPrivateMethod(io, 'onStorageEvent')({
-          storageArea: fakeStorage,
-          key: `${PREFIX}${path}`,
-          newValue: JSON.stringify(newValue)
+          storageArea: window.localStorage,
+          key: `/root${path}`,
+          newValue: JSON.stringify(newData)
         });
-        expect(listener).calledWith(path, newValue).at.least(1);
       });
-
-      it('should ignore changes for other storage', () => {
-        t.getPrivateMethod(io, 'onStorageEvent')({
-          storageArea: {},
-          key: `${PREFIX}/key`,
-          newValue: JSON.stringify({ a: 1 })
-        });
-        expect(listener).called().to.equal(0);
-      });
-      it('should ignore changes if the key does not match the prefix', () => {
-        t.getPrivateMethod(io, 'onStorageEvent')({
-          storageArea: {},
-          key: `otherPrefix/key`,
-          newValue: JSON.stringify({ a: 1 })
-        });
-        expect(listener).called().to.equal(0);
-      });
-    });
-
-    describe('add', () => {
-      it('should add a new object and return with a new ID', done => {
-        let path = '/path';
-
-        let origGetItem = fakeStorage.getItem;
-        fakeStorage.getItem = checkedPath => {
-          return (checkedPath === `${PREFIX}${path}/0`) ? JSON.stringify(1) : null;
-        };
-        _.spy(fakeStorage, 'setItem').overrideReturn();
-
-        io.add(path)
-            .then(id => {
-              expect(id).to.equal('1');
-              expect(fakeStorage.setItem).calledWith(`${PREFIX}${path}/1`, _M.isA(Object));
-
-              fakeStorage.getItem = origGetItem;
-              done();
-            });
-      });
-    });
-
-    describe('remove', () => {
-      it('should remove the item from local store', done => {
-        let path = '/path';
-        _.spy(fakeStorage, 'removeItem').overrideReturn();
-
-        io.remove(path)
-            .then(() => {
-              expect(fakeStorage.removeItem).calledWith(`${PREFIX}${path}`).at.least(1);
-              done();
-            });
-      });
-    });
-
-    describe('get', () => {
-      it('should return the item stored in local store', done => {
-        let path = '/path';
-        let value = { a: { b: 1 } };
-        _.spy(fakeStorage, 'getItem').overrideReturn(JSON.stringify(value));
-
-        io.get(path)
-            .then(actualValue => {
-              expect(actualValue).to.eql(value);
-              expect(fakeStorage.getItem).calledWith(`${PREFIX}${path}`).at.least(1);
-              done();
-            });
-      });
-    });
-
-    describe('set', () => {
-      it('should set the data into local store', done => {
-        let path = '/path';
-        let value = { a: { b: 1 } };
-        _.spy(fakeStorage, 'setItem').overrideReturn();
-
-        io.set(path, value)
-            .then(() => {
-              expect(fakeStorage.setItem)
-                  .calledWith(`${PREFIX}${path}`, JSON.stringify(value)).at.least(1);
-              done();
-            });
-      });
-    });
 
     afterEach(() => {
-      _.reset();
+      window.localStorage.clear();
     });
   });
 });

@@ -19,11 +19,11 @@ DIJS.bind("pb.net.LocalStorageIO", function (require) {
   var Events = require("pb.Events");
   var NetUtils = require("pb.net.Utils");
 
-  var __listeners__ = Symbol();
+  var __listeners__ = Symbol("listeners");
   var __onStorageEvent__ = Symbol("onStorageEvent");
-  var __root__ = Symbol();
-  var __storage__ = Symbol();
-  var __unprefix__ = Symbol();
+  var __root__ = Symbol("root");
+  var __storage__ = Symbol("storage");
+  var __unprefix__ = Symbol("unprefix");
 
   var LocalStorageIO = (function (_AbstractIO) {
     function LocalStorageIO() {
@@ -41,11 +41,6 @@ DIJS.bind("pb.net.LocalStorageIO", function (require) {
     _inherits(LocalStorageIO, _AbstractIO);
 
     _createComputedClass(LocalStorageIO, [{
-      key: __unprefix__,
-      value: function (path) {
-        return path.substring(this[__root__].length);
-      }
-    }, {
       key: __onStorageEvent__,
       value: function (event) {
         if (event.storageArea !== this[__storage__]) {
@@ -82,36 +77,19 @@ DIJS.bind("pb.net.LocalStorageIO", function (require) {
         }
       }
     }, {
+      key: __unprefix__,
+      value: function (path) {
+        return path.substring(this[__root__].length);
+      }
+    }, {
       key: "listen",
       value: function listen(callback) {
         this[__listeners__].push(callback);
       }
     }, {
-      key: "add",
-      value: function add(path) {
-        var id = 0;
-        var newPath = NetUtils.normalize(this[__root__], path, "" + id);
-
-        while (this[__storage__].getItem(newPath) !== null) {
-          id++;
-          newPath = NetUtils.normalize(this[__root__], path, "" + id);
-        }
-
-        this[__storage__].setItem(newPath, JSON.stringify({}));
-
-        return Promise.resolve("" + id);
-      }
-    }, {
-      key: "remove",
-      value: function remove(path) {
-        this[__storage__].removeItem(NetUtils.normalize(this[__root__], path));
-        return Promise.resolve();
-      }
-    }, {
       key: "get",
       value: function get(path) {
-        var item = this[__storage__].getItem(NetUtils.normalize(this[__root__], path));
-        return Promise.resolve(JSON.parse(item));
+        return Promise.resolve(JSON.parse(this[__storage__].getItem(NetUtils.normalize(this[__root__], path))));
       }
     }, {
       key: "set",

@@ -4,93 +4,90 @@
   <base href="..">
   <title>net.Session Unit Tests</title>
 
+  <link rel="import" href="net/inmemoryio.html">
   <link rel="import" href="net/session.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testutils.html">
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
 <script>
 DIJS
-.constant('pb.net.Rpc', {})
+.with('pb.net.IO', require => {
+  const InMemoryIO = require('pb.net.InMemoryIO');
+  return new InMemoryIO();
+})
 .run(require => {
-
   const _ = require('pb._');
   const _M = require('pb.spies.Matchers');
   const expect = require('expect');
+  const IO = require('pb.net.IO');
+  const Rpc = require('pb.net.Rpc');
   const Session = require('pb.net.Session.__ctor__');
+  const Sync = require('pb.net.Sync');
+  const t = require('pb.t');
 
   describe('net.Session', () => {
-    let fakeRootSync;
     let session;
 
     beforeEach(() => {
-      fakeRootSync = {
-        add: () => {},
-        sync: () => {}
-      };
-
-      session = new Session(fakeRootSync);
+      session = new Session(new Sync('(root)', '/'));
     });
 
     describe('create', () => {
-      // TODO(gs): Rewrite with InMemoryIO.
       it('should create a new game with the correct data', done => {
-        let gameSync = {
-          set: () => {}
-        };
+        session.create(2)
+            .then(oldGameSync => {
+              return Promise.all([
+                oldGameSync,
+                session.create(3, { randomSeed: 1234 })
+              ]);
+            })
+            .then(values => {
+              let [oldGameSync, newGameSync] = values;
+              expect(oldGameSync.id).to.not.equal(newGameSync.id);
 
-        _.spy(fakeRootSync, 'add').overrideReturn(Promise.resolve(gameSync));
-        _.spy(gameSync, 'set').overrideReturn(Promise.resolve(gameSync));
-
-        session.create(3, { randomSeed: 1234 })
-            .then(value => {
-              expect(value).to.equal(gameSync);
-
-              let isObject = _M.isA(Object);
-              expect(gameSync.set).calledWith(isObject);
-
-              expect(isObject.matchingArgs[0]).to.eql({
+              return newGameSync.get();
+            })
+            .then(gameData => {
+              expect(gameData).to.eql({
                 playerCount: 3,
                 players: [],
                 state: {
                   randomSeed: 1234
                 }
               });
-
               done();
             });
       });
     });
 
+    describe('get', () => {
+      it('should return the game sync object corresponding to the given ID', () => {
+        expect(session.get('gameId').id).to.equal('gameId');
+      });
+    });
+
     describe('join', () => {
-      let playerSync;
-      let gameSync;
-
-      beforeEach(() => {
-        playerSync = {
-          set: () => Promise.resolve()
-        };
-        let playersSync = {
-          add: () => Promise.resolve(playerSync)
-        };
-        gameSync = {
-          sync: () => playersSync
-        };
-
-        _.spy(fakeRootSync, 'sync').overrideReturn(gameSync);
+      beforeEach(done => {
+        // Create the gameSync "remotely"
+        let gameSync = new Sync('gameId', '/games');
+        gameSync.set({
+          players: []
+        }).then(() => {
+          done();
+        });
       });
 
       it('should join the given game with the correct player data', done => {
-        _.spy(playerSync, 'set');
-
-        session.join('gameId', 'Player Name', { role: 'Medic' })
+        let gameSync = new Sync('gameId', '/games');
+        session.join(gameSync, 'Player Name', { role: 'Medic' })
             .then(value => {
               expect(value).to.equal(gameSync);
-
-              let isObject = _M.isA(Object);
-              expect(playerSync.set).calledWith(isObject).at.least(1);
-
-              expect(isObject.matchingArgs[0]).to.eql({
+              return gameSync.sync('players').get();
+            })
+            .then(playersData => {
+              expect(playersData[0]).to.eql({
                 name: 'Player Name',
                 state: {
                   role: 'Medic'
@@ -102,33 +99,25 @@ DIJS
     });
 
     describe('start', () => {
-      let gameSync;
-
-      beforeEach(() => {
-        gameSync = {
-          get: () => {},
-          sync: () => playersSync
-        };
-
-        _.spy(fakeRootSync, 'sync').overrideReturn(gameSync);
-      });
-
       it('should return promise that is resolved when there are enough players in the game', done => {
-        _.spy(gameSync, 'get').overrideReturn(Promise.resolve({
+        let gameSync = new Sync('gameId', '/games');
+        gameSync.set({
           playerCount: 2,
           players: [{}, {}]
-        }));
-
-        session.start('gameId')
-            .then(value => {
-              expect(value).to.equal(gameSync);
-              done();
-            });
+        })
+        .then(() => {
+          return session.start(gameSync);
+        })
+        .then(value => {
+          expect(value).to.equal(gameSync);
+          done();
+        });
       });
     });
 
     afterEach(() => {
       _.reset();
+      t.getPrivateProperty(IO, 'data').clear();
     });
   });
 });

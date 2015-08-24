@@ -1,25 +1,44 @@
 <html><head><base href=".">
 
 <link rel="import" href="bootstrap.html">
+<link rel="import" href="net/inmemoryio.html">
+<link rel="import" href="net/session.html">
 <link rel="import" href="third_party/di.html">
 
 <script>"use strict";
+
+var _toArray = function (arr) { return Array.isArray(arr) ? arr : Array.from(arr); };
 
 var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.bind("pb.Protoboard.__ctor__", function (require) {
-  var DIJS = require("DIJS");
+DIJS.bind("pb.Protoboard.__runner__", function (require) {
 
+  var __gameSyncPromise__ = Symbol("gameSyncPromise");
+  var __io__ = Symbol();
+  var __players__ = Symbol();
   var __setupFn__ = Symbol();
 
-  var Protoboard = (function () {
-    function Protoboard() {
-      _classCallCheck(this, Protoboard);
+  var Runner = (function () {
+    function Runner(io, gameSyncPromise) {
+      _classCallCheck(this, Runner);
+
+      this[__gameSyncPromise__] = gameSyncPromise;
+      this[__io__] = io;
+      this[__players__] = [];
     }
 
-    _createClass(Protoboard, {
+    _createClass(Runner, {
+      join: {
+        value: function join(id, initialState) {
+          this[__players__].push({
+            id: id,
+            state: initialState
+          });
+          return this;
+        }
+      },
       setup: {
         value: function setup(setupFn) {
           this[__setupFn__] = setupFn;
@@ -33,18 +52,139 @@ DIJS.bind("pb.Protoboard.__ctor__", function (require) {
           var doc = arguments[0] === undefined ? document : arguments[0];
 
           return new Promise(function (resolve, reject) {
-            DIJS.run(function (require) {
+            DIJS.constant("pb.net.IO", _this[__io__]).run(function (require) {
               var Bootstrap = require("pb.Bootstrap");
+              var SessionService = require("pb.net.Session");
+              var StateService = require("pb.service.State");
+              var TemplateService = require("pb.service.Template");
 
-              if (_this[__setupFn__]) {
-                _this[__setupFn__](require);
-              }
+              _this[__gameSyncPromise__](require).then(function (gameSync) {
+                var joinPromise = Promise.resolve();
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
 
-              Bootstrap.run(doc).then(function () {
-                resolve(require);
+                try {
+                  for (var _iterator = _this[__players__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    (function () {
+                      var player = _step.value;
+
+                      joinPromise = joinPromise.then((function (player) {
+                        return SessionService.join(gameSync, player.id, player.state);
+                      }).bind(null, player));
+                    })();
+                  }
+                } catch (err) {
+                  _didIteratorError = true;
+                  _iteratorError = err;
+                } finally {
+                  try {
+                    if (!_iteratorNormalCompletion && _iterator["return"]) {
+                      _iterator["return"]();
+                    }
+                  } finally {
+                    if (_didIteratorError) {
+                      throw _iteratorError;
+                    }
+                  }
+                }
+
+                return Promise.all([gameSync, joinPromise]);
+              }).then(function (values) {
+                var _values = _toArray(values);
+
+                var gameSync = _values[0];
+
+                var rest = _values.slice(1);
+
+                return SessionService.start(gameSync).then(function (gameSync) {
+                  return gameSync.get();
+                });
+              }).then(function (gameData) {
+                TemplateService.addData("pb.playerCount", gameData.playerCount);
+                TemplateService.addData("pb.players", gameData.players);
+
+                for (var stateKey in gameData.state) {
+                  TemplateService.addData("pb." + stateKey, gameData.state[stateKey]);
+                }
+                return gameData;
+              }).then(function (gameData) {
+                return Promise.all([gameData, Promise.resolve(_this[__setupFn__] ? _this[__setupFn__](require) : null)]);
+              }).then(function (values) {
+                var _values = _toArray(values);
+
+                var gameData = _values[0];
+
+                var rest = _values.slice(1);
+
+                return Promise.all([gameData, Bootstrap.run(doc)]);
+              }).then(function (values) {
+                var _values = _toArray(values);
+
+                var gameData = _values[0];
+
+                var rest = _values.slice(1);
+
+                StateService.put("pb_playerCount", gameData.playerCount);
+              }).then(function () {
+                return resolve(require);
               });
             });
           });
+        }
+      }
+    });
+
+    return Runner;
+  })();
+
+  Runner.forNewGame = function (io, playerCount, initialGameState) {
+    return new Runner(io, function (require) {
+      var SessionService = require("pb.net.Session");
+      return SessionService.create(playerCount, initialGameState);
+    });
+  };
+
+  Runner.forExistingGame = function (io, gameId) {
+    return new Runner(io, function (require) {
+      var SessionService = require("pb.net.Session");
+      return Promise.resolve(SessionService.get(gameId));
+    });
+  };
+
+  return Runner;
+}).bind("pb.Protoboard.__ctor__", function (require) {
+  var DIJS = require("DIJS");
+  var InMemoryIO = require("pb.net.InMemoryIO");
+  var Runner = require("pb.Protoboard.__runner__");
+
+  var __io__ = Symbol();
+  var __setupFn__ = Symbol();
+
+  var Protoboard = (function () {
+    function Protoboard() {
+      _classCallCheck(this, Protoboard);
+
+      this[__io__] = new InMemoryIO();
+    }
+
+    _createClass(Protoboard, {
+      withIo: {
+        value: function withIo(io) {
+          this[__io__] = io;
+          return this;
+        }
+      },
+      forNewGame: {
+        value: function forNewGame(playerCount) {
+          var initialGameState = arguments[1] === undefined ? {} : arguments[1];
+
+          return Runner.forNewGame(this[__io__], playerCount, initialGameState);
+        }
+      },
+      forExistingGame: {
+        value: function forExistingGame(gameId) {
+          return Runner.forExistingGame(this[__io__], gameId);
         }
       }
     });

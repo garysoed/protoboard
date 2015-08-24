@@ -13,11 +13,11 @@ DIJS
   const Events = require('pb.Events');
   const NetUtils = require('pb.net.Utils');
 
-  const __listeners__ = Symbol();
+  const __listeners__ = Symbol('listeners');
   const __onStorageEvent__ = Symbol('onStorageEvent');
-  const __root__ = Symbol();
-  const __storage__ = Symbol();
-  const __unprefix__ = Symbol();
+  const __root__ = Symbol('root');
+  const __storage__ = Symbol('storage');
+  const __unprefix__ = Symbol('unprefix');
 
   class LocalStorageIO extends AbstractIO {
 
@@ -35,18 +35,6 @@ DIJS
       this[__storage__] = localStorage;
       Events.of(window, this)
           .on('dom', 'storage', this[__onStorageEvent__].bind(this));
-    }
-
-    /**
-     * Removes the prefix string from the given path.
-     *
-     * @method __unprefix__
-     * @param {string} path The path whose prefix should be removed.
-     * @return {string} Path with the prefix removed.
-     * @private
-     */
-    [__unprefix__](path) {
-      return path.substring(this[__root__].length);
     }
 
     /**
@@ -71,6 +59,18 @@ DIJS
     }
 
     /**
+     * Removes the prefix string from the given path.
+     *
+     * @method __unprefix__
+     * @param {string} path The path whose prefix should be removed.
+     * @return {string} Path with the prefix removed.
+     * @private
+     */
+    [__unprefix__](path) {
+      return path.substring(this[__root__].length);
+    }
+
+    /**
      * Registers the callback to listen for changes.
      *
      * @method listen
@@ -82,41 +82,6 @@ DIJS
     }
 
     /**
-     * Allocates a new object as a child of the given path. Should also call listener callbacks
-     * that have been added.
-     *
-     * @method add
-     * @param {string} path Path to add the new object to.
-     * @return {Promise} Promise that will be resolved with the ID of the newly created object.
-     */
-    add(path) {
-      let id = 0;
-      let newPath = NetUtils.normalize(this[__root__], path, `${id}`);
-
-      while (this[__storage__].getItem(newPath) !== null) {
-        id++;
-        newPath = NetUtils.normalize(this[__root__], path, `${id}`);
-      }
-
-      this[__storage__].setItem(newPath, JSON.stringify({}));
-
-      return Promise.resolve(`${id}`);
-    }
-
-    /**
-     * Removes the object in the given path. Should also call listener callbacks that have been
-     * added.
-     *
-     * @method remove
-     * @param {string} path Path of the object to be removed.
-     * @return {Promise} Promise that will be resolved when the removal is successful.
-     */
-    remove(path) {
-      this[__storage__].removeItem(NetUtils.normalize(this[__root__], path));
-      return Promise.resolve();
-    }
-
-    /**
      * Retrieves the data corresponding to the given path.
      *
      * @method get
@@ -124,8 +89,9 @@ DIJS
      * @return {Promise} Promise that will be resolved with the retrieved data.
      */
     get(path) {
-      let item = this[__storage__].getItem(NetUtils.normalize(this[__root__], path));
-      return Promise.resolve(JSON.parse(item));
+      return Promise.resolve(
+          JSON.parse(
+              this[__storage__].getItem(NetUtils.normalize(this[__root__], path))));
     }
 
     /**
@@ -137,9 +103,7 @@ DIJS
      * @return {Promise} Promise that will be resolved when setting the value is successful.
      */
     set(path, data) {
-      this[__storage__].setItem(
-          NetUtils.normalize(this[__root__], path),
-          JSON.stringify(data));
+      this[__storage__].setItem(NetUtils.normalize(this[__root__], path), JSON.stringify(data));
       return Promise.resolve();
     }
   }

@@ -1,6 +1,10 @@
 <base href="..">
 
+<link rel="import" href="net/rpc.html">
 <link rel="import" href="net/sync.html">
+<link rel="import" href="net/utils.html">
+<link rel="import" href="service/state.html">
+<link rel="import" href="service/template.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 
@@ -14,13 +18,15 @@ DIJS
   const __checkPlayers__ = Symbol();
   const __rootSync__ = Symbol();
 
-  /**
-   * Service that manages game session.
-   *
-   * @class net.Session
-   */
   class Service {
 
+    /**
+     * Service that manages game session.
+     *
+     * @constructor
+     * @param {net.Sync} rootSync Sync object of the root.
+     * @class net.Session
+     */
     constructor(rootSync) {
       this[__rootSync__] = rootSync;
     }
@@ -36,7 +42,7 @@ DIJS
     [__checkPlayers__](gameSync, callback) {
       gameSync.get()
           .then(game => {
-            if (game.playerCount <= game.players.length) {
+            if (game.playerCount <= Object.keys(game.players).length) {
               Events.of(gameSync, this).off('jquery', Sync.Events.UPDATED);
               callback();
             }
@@ -56,7 +62,7 @@ DIJS
       return this[__rootSync__].add()
           .then(gameSync => {
             return gameSync.set({
-              playerCount,
+              playerCount: playerCount,
               players: [],
               state: initialState
             });
@@ -64,24 +70,32 @@ DIJS
     }
 
     /**
+     * @method get
+     * @param {string} gameId ID of the game sync object to return.
+     * @return {net.Sync} The game sync object with the given ID.
+     */
+    get(gameId) {
+      return this[__rootSync__].sync(gameId);
+    }
+
+    /**
      * Joins the given game.
      *
      * @method join
-     * @param {string} gameId ID of the game to join.
-     * @param {string} playerDisplayName Display name of the player joining the game.
-     * @param {Object} initialPlayerState The initial state of the player joining the game.
+     * @param {string} gameSync Game sync object to join.
+     * @param {string} id Display name of the player joining the game.
+     * @param {Object} state The initial state of the player joining the game.
      * @return {Promise} Promise that will be resolved with the game sync when the join is
      *    successful.
      */
-    join(gameId, playerDisplayName, initialPlayerState = {}) {
-      let gameSync = this[__rootSync__].sync(gameId);
+    join(gameSync, id, state = {}) {
       let playersSync = gameSync.sync('players');
       return playersSync
           .add()
           .then(playerSync => {
             return playerSync.set({
-              name: playerDisplayName,
-              state: initialPlayerState
+              id: id,
+              state: state
             });
           })
           .then(() => {
@@ -97,8 +111,7 @@ DIJS
      * @return {Promise} Promise that will be resolved with the game sync object when the game has
      *    enough players.
      */
-    start(gameId) {
-      let gameSync = this[__rootSync__].sync(gameId);
+    start(gameSync) {
       return new Promise((resolve, reject) => {
         let boundResolve = resolve.bind(null, gameSync);
         Events.of(gameSync, this).on(
@@ -115,6 +128,6 @@ DIJS
 .bind('pb.net.Session', require => {
   const SessionService = require('pb.net.Session.__ctor__');
   const Sync = require('pb.net.Sync');
-  return new SessionService(new Sync('(root)'));
+  return new SessionService(new Sync('(root)', '/'));
 });
 </script>

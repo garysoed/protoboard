@@ -5,6 +5,7 @@
   <title>net.InMemoryIO Unit Tests</title>
 
   <link rel="import" href="net/inmemoryio.html">
+  <link rel="import" href="net/io_testsuite.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
 </head>
@@ -16,85 +17,29 @@ DIJS
   const _M = require('pb.spies.Matchers');
   const expect = require('expect');
   const InMemoryIO = require('pb.net.InMemoryIO');
+  const IOTestSuite = require('pb.net.IOTestSuite');
+  const t = require('pb.t');
 
   describe('net.InMemoryIO', () => {
+    IOTestSuite(
+        InMemoryIO,
+        (io, path, newData) => {
+          t.getPrivateMethod(io, 'triggerUpdate')(path, newData);
+        });
+
     let io;
 
     beforeEach(() => {
       io = new InMemoryIO();
     });
 
-    describe('add', () => {
-      it('should return a promise that resolves with the new ID', done => {
-        io.set('root/0', 'existingData')
-            .then(() => {
-              return io.add('/root');
-            })
-            .then(newId => {
-              return io.get(`/root/${newId}`);
-            })
-            .then(value => {
-              expect(value).to.exist;
-              done();
-            });
-      });
-      it('should trigger update after adding the value', done => {
-        let listener = _.spiedFunction();
-        io.listen(listener);
-        io.add('/root')
-            .then(newId => {
-              expect(listener).calledWith(`/root/${newId}`, _M.isA(Object)).at.least(1);
-              done();
-            });
-      });
-    });
-
-    describe('remove', () => {
-      const PATH = '/existing/path';
-
-      beforeEach(done => {
-        io.set(PATH, {}).then(done);
-      });
-
-      it('should return a promise that is resolved after deletion', done => {
-        io.remove(PATH)
-            .then(() => {
-              return io.get(PATH);
-            })
-            .then(value => {
-              expect(value).to.not.exist;
-              done();
-            });
-      });
-      it('should trigger update after deleting the value', done => {
-        let listener = _.spiedFunction();
-        io.listen(listener);
-        io.remove(PATH)
-            .then(() => {
-              expect(listener).calledWith(PATH, null).at.least(1);
-              done();
-            });
-      });
-    });
-
     describe('set', () => {
-      it('should return a promise that is resolved after setting the value', done => {
-        io.set('/path', 2)
-            .then(() => {
-              return io.get('/path');
-            })
-            .then(value => {
-              expect(value).to.equal(2);
-              done();
-            });
-      });
-      it('should trigger update after setting the value', done => {
+      it('should trigger update after setting the value', () => {
         let listener = _.spiedFunction();
         io.listen(listener);
-        io.set('/path', 3)
+        return io.set('/path', 3)
             .then(() => {
               expect(listener).calledWith('/path', 3).at.least(1);
-              done();
             });
       });
     });

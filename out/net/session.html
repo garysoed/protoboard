@@ -1,6 +1,10 @@
 <html><head><base href="..">
 
+<link rel="import" href="net/rpc.html">
 <link rel="import" href="net/sync.html">
+<link rel="import" href="net/utils.html">
+<link rel="import" href="service/state.html">
+<link rel="import" href="service/template.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 
@@ -31,7 +35,7 @@ DIJS.bind("pb.net.Session.__ctor__", function (require) {
         var _this = this;
 
         gameSync.get().then(function (game) {
-          if (game.playerCount <= game.players.length) {
+          if (game.playerCount <= Object.keys(game.players).length) {
             Events.of(gameSync, _this).off("jquery", Sync.Events.UPDATED);
             callback();
           }
@@ -51,16 +55,20 @@ DIJS.bind("pb.net.Session.__ctor__", function (require) {
         });
       }
     }, {
+      key: "get",
+      value: function get(gameId) {
+        return this[__rootSync__].sync(gameId);
+      }
+    }, {
       key: "join",
-      value: function join(gameId, playerDisplayName) {
-        var initialPlayerState = arguments[2] === undefined ? {} : arguments[2];
+      value: function join(gameSync, id) {
+        var state = arguments[2] === undefined ? {} : arguments[2];
 
-        var gameSync = this[__rootSync__].sync(gameId);
         var playersSync = gameSync.sync("players");
         return playersSync.add().then(function (playerSync) {
           return playerSync.set({
-            name: playerDisplayName,
-            state: initialPlayerState
+            id: id,
+            state: state
           });
         }).then(function () {
           return gameSync;
@@ -68,10 +76,9 @@ DIJS.bind("pb.net.Session.__ctor__", function (require) {
       }
     }, {
       key: "start",
-      value: function start(gameId) {
+      value: function start(gameSync) {
         var _this = this;
 
-        var gameSync = this[__rootSync__].sync(gameId);
         return new Promise(function (resolve, reject) {
           var boundResolve = resolve.bind(null, gameSync);
           Events.of(gameSync, _this).on("jquery", Sync.Events.UPDATED, _this[__checkPlayers__].bind(_this, gameSync, boundResolve));
@@ -87,6 +94,6 @@ DIJS.bind("pb.net.Session.__ctor__", function (require) {
 }).bind("pb.net.Session", function (require) {
   var SessionService = require("pb.net.Session.__ctor__");
   var Sync = require("pb.net.Sync");
-  return new SessionService(new Sync("(root)"));
+  return new SessionService(new Sync("(root)", "/"));
 });</script>
 </head><body></body></html>

@@ -136,7 +136,11 @@ gulp.task('test-source', gulp.series(
     function _testSource() {
       var scriptSubs = subs('script');
 
-      return gulp.src([TEST_DIR + '/**/*_test.html', TEST_DIR +'/testbase.html'])
+      return gulp.src([
+            TEST_DIR + '/**/*_test.html',
+            TEST_DIR + '/**/*_testsuite.html',
+            TEST_DIR +'/testbase.html'
+          ])
           .pipe(newer('out'))
           .pipe(scriptSubs.extract)
               .pipe(babel({modules: 'ignore', comments: false}))
@@ -289,6 +293,7 @@ gulp.task('pack', gulp.series(
         function _pack() {
           return gulp.src(OUT_DIR + '/**/*')
               .pipe(ignore.exclude(/.*_test\.html$/))
+              .pipe(ignore.exclude(/.*_testsuite\.html$/))
               .pipe(ignore.exclude(/.*\.min\.html$/))
               .pipe(zip('bin.zip'))
               .pipe(gulp.dest('dist'));

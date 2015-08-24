@@ -10,15 +10,16 @@ DIJS.bind('pb.net.Rpc.__ctor__', require => {
   const $ = require('pb.$');
   const normalize = require('pb.net.Utils').normalize;
 
-  const __cache__ = Symbol();
+  const __get__ = Symbol('get');
   const __io__ = Symbol();
   const __onUpdate__ = Symbol();
-  const __updateCache__ = Symbol();
+  const __remove__ = Symbol('remove');
+  const __set__ = Symbol('set');
   const __triggerUpdates__ = Symbol('triggerUpdates');
+  const __updateAncestorIndexes__ = Symbol('updateAncestorIndexes');
 
   /**
-   * Wrapper class for net.IO. This provides caching and other networking logic that clients
-   * wouldn't need to implement.
+   * Wrapper class for net.IO.
    *
    * @class net.Rpc
    * @since 3.1.0
@@ -30,10 +31,42 @@ DIJS.bind('pb.net.Rpc.__ctor__', require => {
      * @param {net.IO} io Implementation of {{#crossLink "net.AbstractIO"}}{{/crossLink}}.
      */
     constructor(io) {
-      this[__cache__] = new Map();
       this[__io__] = io;
 
       io.listen(this[__onUpdate__].bind(this));
+    }
+
+    /**
+     * Retrieves the value in the given path, constructing an object if necessary.
+     *
+     * @method __get__
+     * @param {string} path The path whose value should be returned.
+     * @return {Promise} [description]
+     */
+    [__get__](path) {
+      return this[__io__].get(path)
+          .then(data => {
+            if (data && data.$index) {
+              let promises = [];
+              for (let key of data.keys) {
+                promises.push(this[__get__](normalize(path, key))
+                  .then((key, value) => {
+                    return [key, value];
+                  }.bind(null, key)));
+              }
+              return Promise.all(promises)
+                  .then(pairs => {
+                    let object = {};
+                    for (let pair of pairs) {
+                      let [key, value] = pair;
+                      object[key] = value;
+                    }
+                    return object;
+                  });
+            } else {
+              return Promise.resolve(data);
+            }
+          });
     }
 
     /**
@@ -46,25 +79,65 @@ DIJS.bind('pb.net.Rpc.__ctor__', require => {
      */
     [__onUpdate__](path, newValue) {
       let normalizedPath = normalize(path);
-      this[__updateCache__](path, newValue);
       this[__triggerUpdates__](normalizedPath);
     }
 
     /**
-     * Updates the cache value with the given data.
+     * Removes the entry in the given path, and update the ancestor indexes.
      *
-     * @method __updateCache__
-     * @param {string} path Path to update the value of.
-     * @param {Any} data Data to update the value of.
+     * @method __remove__
+     * @param {string} path Path whose entry should be deleted.
+     * @return {promise} Promise that will be resolved when the removal is done.
+     */
+    [__remove__](path) {
+      let parts = path.split('/');
+      let id = parts.pop();
+
+      let promises = [this[__io__].set(path, null)];
+      if (parts.length > 1) {
+        let parentPath = parts.join('/');
+        promises.push(this[__io__].get(parentPath)
+            .then(value => {
+              if (value && value.$index && value.keys.indexOf(id) >= 0) {
+                value.keys.splice(value.keys.indexOf(id), 1);
+              }
+
+              if (value.keys.length === 0) {
+                return this[__remove__](parentPath);
+              } else {
+                return this[__io__].set(parentPath, value);
+              }
+            }));
+      }
+
+      return Promise.all(promises);
+    }
+
+    /**
+     * Sets the given data to the given path.
+     *
+     * @method __set__
+     * @param {string} path Path to store the data in.
+     * @param {Any} data Data to be stored. This should be a primitive, Object, or Array.
+     * @return {Promise} Promise that will be resolved when the set operation is completed.
      * @private
      */
-    [__updateCache__](path, data) {
-      this[__cache__].set(normalize(path), Promise.resolve(data));
-      if (data instanceof Object) {
+    [__set__](path, data) {
+      let promises = [];
+      if (data instanceof Object && !(data instanceof Array)) {
+        promises.push(this[__io__].set(
+            path,
+            {
+              $index: true,
+              keys: Object.keys(data)
+            }));
         for (let key in data) {
-          this[__updateCache__](normalize(path, key), data[key]);
+          promises.push(this[__set__](normalize(path, key), data[key]));
         }
+      } else {
+        promises.push(this[__io__].set(path, data));
       }
+      return Promise.all(promises);
     }
 
     /**
@@ -85,6 +158,40 @@ DIJS.bind('pb.net.Rpc.__ctor__', require => {
       }
     }
 
+
+    /**
+     * Updates the ancestors in the given path to contain indexes.
+     *
+     * @method __updateAncestorIndexes__
+     * @param {string} path Ancestor path to update.
+     * @return {Promise} Promise that will be resolved when the update operation is completed.
+     * @private
+     */
+    [__updateAncestorIndexes__](path) {
+      let ancestorPromises = [];
+      let parts = path.split('/');
+      let ancestorPath = normalize(parts.splice(0, 1)[0]);
+
+      for (let part of parts) {
+        ancestorPromises.push(this[__io__].get(ancestorPath)
+            .then((path, part, ancestor) => {
+              if (!ancestor || !ancestor.$index) {
+                ancestor = { $index: true, keys: [] };
+              }
+
+              if (ancestor.keys.indexOf(part) < 0) {
+                ancestor.keys.push(part);
+              }
+
+              // Don't use __set__ since we do not want to unravel the array.
+              return this[__io__].set(path, ancestor);
+            }.bind(null, ancestorPath, part)));
+        ancestorPath = normalize(ancestorPath, part);
+      }
+
+      return Promise.all(ancestorPromises);
+    }
+
     /**
      * Adds a new object on the given path.
      *
@@ -94,12 +201,25 @@ DIJS.bind('pb.net.Rpc.__ctor__', require => {
      *    successful.
      */
     add(path) {
-      return this[__io__].add(normalize(path))
-          .then(newId => {
-            let newPath = normalize(path, newId);
-            this[__cache__].set(newPath, Promise.resolve({}));
-            this[__triggerUpdates__](newPath);
-            return newId;
+      let normalizedPath = normalize(path);
+      return this[__updateAncestorIndexes__](path)
+          .then(() => this[__io__].get(normalizedPath))
+          .then(index => {
+            if (!index || !index.$index) {
+              index = {
+                $index: true,
+                keys: []
+              };
+            }
+
+            // Find the first non existent key
+            let newId = 0;
+            while (index.keys.indexOf(`${newId}`) >= 0) {
+              newId++;
+            }
+
+            return this.set(normalize(path, `${newId}`), {})
+                .then(() => `${newId}`);
           });
     }
 
@@ -111,16 +231,12 @@ DIJS.bind('pb.net.Rpc.__ctor__', require => {
      * @return {Promise} Promise that will be resolved when the object has been deleted.
      */
     remove(path) {
-      let normalizedPath = normalize(path);
-      return this[__io__].remove(normalizedPath)
-          .then(() => {
-            this[__cache__].delete(normalizedPath);
-            this[__triggerUpdates__](normalizedPath);
-          });
+      return this[__remove__](normalize(path));
     }
 
     /**
-     * Retrieves the value corresponding to the given path.
+     * Retrieves the value corresponding to the given path. If the path points to an index, this
+     * will compile all the paths into an object.
      *
      * @method get
      * @param {string} path The path whose value should be retrieved.
@@ -128,49 +244,44 @@ DIJS.bind('pb.net.Rpc.__ctor__', require => {
      *    path.
      */
     get(path) {
-      let normalizedPath = normalize(path);
-      if (!this[__cache__].has(normalizedPath)) {
-        this[__cache__].set(
-            normalizedPath,
-            this[__io__]
-                .get(normalizedPath)
-                .then(value => {
-                  this[__updateCache__](normalizedPath, value);
-                  return value;
-                }));
-      }
-      return this[__cache__].get(normalizedPath);
+      return this[__get__](normalize(path));
     }
 
     /**
-     * Sets the value of the given path.
+     * Sets the value of the given path. If the data is a non array object, this will create
+     * an index object at the given path. This method will then store the object's keys in
+     * individual entries. For example, suppose we store the following object in '/a':
+     *
+     * ```json
+     * {
+     *   b: 1,
+     *   c: {
+     *     d: 2
+     *   }
+     * }
+     * ```
+     *
+     * This will result in the following mapping:
+     *
+     * ```
+     * /a       -> (index)
+     * /a/b     -> 1
+     * /a/b/c   -> (index)
+     * /a/b/c/d -> 2
+     * ```
      *
      * @method set
      * @param {string} path The path to set the value to.
-     * @param {Any} data Data to set the path's value to.
+     * @param {Any} data Data to set the path's value to. This should be a primitive, Object, or
+     *    Array.
      * @return {Promise} Promise that will be resolved when setting the value is successful.
      */
     set(path, data) {
       let normalizedPath = normalize(path);
-      if (data instanceof Object) {
-        this[__cache__].set(normalizedPath, data);
-
-        let promises = [];
-        for (let key in data) {
-          promises.push(this.set(normalize(path, key), data[key]));
-        }
-        return Promise.all(promises)
-            .then(() => {
-              this[__triggerUpdates__](normalizedPath);
-            });
-      } else {
-        return this[__io__]
-            .set(normalizedPath, data)
-            .then(() => {
-              this[__cache__].set(normalizedPath, Promise.resolve(data));
-              this[__triggerUpdates__](normalizedPath);
-            });
-      }
+      return this[__updateAncestorIndexes__](normalizedPath)
+          .then(() => {
+            return this[__set__](normalizedPath, data);
+          });
     }
   }
 

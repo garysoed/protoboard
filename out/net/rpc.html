@@ -6,6 +6,8 @@
 
 <script>"use strict";
 
+var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
+
 var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
@@ -15,38 +17,149 @@ DIJS.bind("pb.net.Rpc.__ctor__", function (require) {
   var $ = require("pb.$");
   var normalize = require("pb.net.Utils").normalize;
 
-  var __cache__ = Symbol();
+  var __get__ = Symbol("get");
   var __io__ = Symbol();
   var __onUpdate__ = Symbol();
-  var __updateCache__ = Symbol();
+  var __remove__ = Symbol("remove");
+  var __set__ = Symbol("set");
   var __triggerUpdates__ = Symbol("triggerUpdates");
+  var __updateAncestorIndexes__ = Symbol("updateAncestorIndexes");
 
   var Rpc = (function () {
     function Rpc(io) {
       _classCallCheck(this, Rpc);
 
-      this[__cache__] = new Map();
       this[__io__] = io;
 
       io.listen(this[__onUpdate__].bind(this));
     }
 
     _createComputedClass(Rpc, [{
+      key: __get__,
+      value: function (path) {
+        var _this = this;
+
+        return this[__io__].get(path).then(function (data) {
+          if (data && data.$index) {
+            var promises = [];
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = data.keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                (function () {
+                  var key = _step.value;
+
+                  promises.push(_this[__get__](normalize(path, key)).then((function (key, value) {
+                    return [key, value];
+                  }).bind(null, key)));
+                })();
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator["return"]) {
+                  _iterator["return"]();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+
+            return Promise.all(promises).then(function (pairs) {
+              var object = {};
+              var _iteratorNormalCompletion2 = true;
+              var _didIteratorError2 = false;
+              var _iteratorError2 = undefined;
+
+              try {
+                for (var _iterator2 = pairs[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                  var pair = _step2.value;
+
+                  var _pair = _slicedToArray(pair, 2);
+
+                  var key = _pair[0];
+                  var value = _pair[1];
+
+                  object[key] = value;
+                }
+              } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+                    _iterator2["return"]();
+                  }
+                } finally {
+                  if (_didIteratorError2) {
+                    throw _iteratorError2;
+                  }
+                }
+              }
+
+              return object;
+            });
+          } else {
+            return Promise.resolve(data);
+          }
+        });
+      }
+    }, {
       key: __onUpdate__,
       value: function (path, newValue) {
         var normalizedPath = normalize(path);
-        this[__updateCache__](path, newValue);
         this[__triggerUpdates__](normalizedPath);
       }
     }, {
-      key: __updateCache__,
-      value: function (path, data) {
-        this[__cache__].set(normalize(path), Promise.resolve(data));
-        if (data instanceof Object) {
-          for (var key in data) {
-            this[__updateCache__](normalize(path, key), data[key]);
-          }
+      key: __remove__,
+      value: function (path) {
+        var _this = this;
+
+        var parts = path.split("/");
+        var id = parts.pop();
+
+        var promises = [this[__io__].set(path, null)];
+        if (parts.length > 1) {
+          (function () {
+            var parentPath = parts.join("/");
+            promises.push(_this[__io__].get(parentPath).then(function (value) {
+              if (value && value.$index && value.keys.indexOf(id) >= 0) {
+                value.keys.splice(value.keys.indexOf(id), 1);
+              }
+
+              if (value.keys.length === 0) {
+                return _this[__remove__](parentPath);
+              } else {
+                return _this[__io__].set(parentPath, value);
+              }
+            }));
+          })();
         }
+
+        return Promise.all(promises);
+      }
+    }, {
+      key: __set__,
+      value: function (path, data) {
+        var promises = [];
+        if (data instanceof Object && !(data instanceof Array)) {
+          promises.push(this[__io__].set(path, {
+            $index: true,
+            keys: Object.keys(data)
+          }));
+          for (var key in data) {
+            promises.push(this[__set__](normalize(path, key), data[key]));
+          }
+        } else {
+          promises.push(this[__io__].set(path, data));
+        }
+        return Promise.all(promises);
       }
     }, {
       key: __triggerUpdates__,
@@ -61,41 +174,89 @@ DIJS.bind("pb.net.Rpc.__ctor__", function (require) {
         }
       }
     }, {
+      key: __updateAncestorIndexes__,
+      value: function (path) {
+        var _this = this;
+
+        var ancestorPromises = [];
+        var parts = path.split("/");
+        var ancestorPath = normalize(parts.splice(0, 1)[0]);
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = parts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            (function () {
+              var part = _step.value;
+
+              ancestorPromises.push(_this[__io__].get(ancestorPath).then((function (path, part, ancestor) {
+                if (!ancestor || !ancestor.$index) {
+                  ancestor = { $index: true, keys: [] };
+                }
+
+                if (ancestor.keys.indexOf(part) < 0) {
+                  ancestor.keys.push(part);
+                }
+
+                return _this[__io__].set(path, ancestor);
+              }).bind(null, ancestorPath, part)));
+              ancestorPath = normalize(ancestorPath, part);
+            })();
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        return Promise.all(ancestorPromises);
+      }
+    }, {
       key: "add",
       value: function add(path) {
         var _this = this;
 
-        return this[__io__].add(normalize(path)).then(function (newId) {
-          var newPath = normalize(path, newId);
-          _this[__cache__].set(newPath, Promise.resolve({}));
-          _this[__triggerUpdates__](newPath);
-          return newId;
+        var normalizedPath = normalize(path);
+        return this[__updateAncestorIndexes__](path).then(function () {
+          return _this[__io__].get(normalizedPath);
+        }).then(function (index) {
+          if (!index || !index.$index) {
+            index = {
+              $index: true,
+              keys: []
+            };
+          }
+
+          var newId = 0;
+          while (index.keys.indexOf("" + newId) >= 0) {
+            newId++;
+          }
+
+          return _this.set(normalize(path, "" + newId), {}).then(function () {
+            return "" + newId;
+          });
         });
       }
     }, {
       key: "remove",
       value: function remove(path) {
-        var _this = this;
-
-        var normalizedPath = normalize(path);
-        return this[__io__].remove(normalizedPath).then(function () {
-          _this[__cache__]["delete"](normalizedPath);
-          _this[__triggerUpdates__](normalizedPath);
-        });
+        return this[__remove__](normalize(path));
       }
     }, {
       key: "get",
       value: function get(path) {
-        var _this = this;
-
-        var normalizedPath = normalize(path);
-        if (!this[__cache__].has(normalizedPath)) {
-          this[__cache__].set(normalizedPath, this[__io__].get(normalizedPath).then(function (value) {
-            _this[__updateCache__](normalizedPath, value);
-            return value;
-          }));
-        }
-        return this[__cache__].get(normalizedPath);
+        return this[__get__](normalize(path));
       }
     }, {
       key: "set",
@@ -103,22 +264,9 @@ DIJS.bind("pb.net.Rpc.__ctor__", function (require) {
         var _this = this;
 
         var normalizedPath = normalize(path);
-        if (data instanceof Object) {
-          this[__cache__].set(normalizedPath, data);
-
-          var promises = [];
-          for (var key in data) {
-            promises.push(this.set(normalize(path, key), data[key]));
-          }
-          return Promise.all(promises).then(function () {
-            _this[__triggerUpdates__](normalizedPath);
-          });
-        } else {
-          return this[__io__].set(normalizedPath, data).then(function () {
-            _this[__cache__].set(normalizedPath, Promise.resolve(data));
-            _this[__triggerUpdates__](normalizedPath);
-          });
-        }
+        return this[__updateAncestorIndexes__](normalizedPath).then(function () {
+          return _this[__set__](normalizedPath, data);
+        });
       }
     }]);
 

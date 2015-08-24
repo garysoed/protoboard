@@ -1,22 +1,48 @@
 <base href=".">
 
 <link rel="import" href="bootstrap.html">
+<link rel="import" href="net/inmemoryio.html">
+<link rel="import" href="net/session.html">
 <link rel="import" href="third_party/di.html">
 
 <script>
 DIJS
-.bind('pb.Protoboard.__ctor__', require => {
-  const DIJS = require('DIJS');
+.bind('pb.Protoboard.__runner__', require => {
 
+  const __gameSyncPromise__ = Symbol('gameSyncPromise');
+  const __io__ = Symbol();
+  const __players__ = Symbol();
   const __setupFn__ = Symbol();
 
-  /**
-   * The entry point to Protoboard. Use this class to setup the game and run it.
-   *
-   * @class Protoboard
-   * @static
-   */
-  class Protoboard {
+  class Runner {
+
+    /**
+     * @constructor
+     * @param {net.AbstractIO} io Implementation of AbstractIO to use.
+     * @param {Promise} gameSyncPromise Promise that will be resolved with a Game Sync object.
+     * @class Protoboard.Runner
+     */
+    constructor(io, gameSyncPromise) {
+      this[__gameSyncPromise__] = gameSyncPromise;
+      this[__io__] = io;
+      this[__players__] = [];
+    }
+
+    /**
+     * Joins the game locally.
+     *
+     * @method join
+     * @param {string} id ID of the player.
+     * @param {Object} initialState Initial state of the player.
+     * @return {Protoboard.Runner} This object for chaining.
+     */
+    join(id, initialState) {
+      this[__players__].push({
+        id: id,
+        state: initialState
+      });
+      return this;
+    }
 
     /**
      * Registers a function to be ran before the game is ran.
@@ -35,26 +61,159 @@ DIJS
      * Runs the game on the given document object.
      *
      * @method run
-     * @param {Document} [doc = document] Document to run the game on. Defaults to the root document
-     *     if not specified.
-     * @return {Promise} Promise that will be resolved with a function when the game has started. Use
-     *     this function to retrieve Protoboard classes.
+     * @param {Document} [doc] Document to run the game on. Defaults to the root document.
+     * @return {Promise} Promise that will be resolved with a function when the game has started.
+     *    Use this function to retrieve Protoboard classes.
      */
     run(doc = document) {
       return new Promise((resolve, reject) => {
-        DIJS.run(require => {
-          const Bootstrap = require('pb.Bootstrap');
+        DIJS
+            .constant('pb.net.IO', this[__io__])
+            .run(require => {
+              const Bootstrap = require('pb.Bootstrap');
+              const SessionService = require('pb.net.Session');
+              const StateService = require('pb.service.State');
+              const TemplateService = require('pb.service.Template');
 
-          if (this[__setupFn__]) {
-            this[__setupFn__](require);
-          }
+              this[__gameSyncPromise__](require)
+                  .then(gameSync => {
+                    // Join all the players to join locally.
+                    let joinPromise = Promise.resolve();
+                    for (let player of this[__players__]) {
+                      joinPromise = joinPromise.then(player => {
+                        return SessionService.join(gameSync, player.id, player.state);
+                      }.bind(null, player));
+                    }
 
-          Bootstrap.run(doc)
-              .then(() => {
-                resolve(require);
-              });
+                    // TODO(gs): Store the gamesync somewhere.
+                    return Promise.all([gameSync, joinPromise]);
+                  })
+                  .then(values => {
+                    // Wait for all the players to join.
+                    let [gameSync, ...rest] = values;
+                    return SessionService.start(gameSync)
+                        .then(gameSync => gameSync.get());
+                  })
+                  .then(gameData => {
+                    // Initialize the templates.
+                    TemplateService.addData('pb.playerCount', gameData.playerCount);
+                    TemplateService.addData('pb.players', gameData.players);
+
+                    for (let stateKey in gameData.state) {
+                      TemplateService.addData(`pb.${stateKey}`, gameData.state[stateKey]);
+                    }
+                    return gameData;
+                  })
+                  .then(gameData => {
+                    return Promise.all([
+                      gameData,
+                      Promise.resolve(this[__setupFn__] ? this[__setupFn__](require) : null)
+                    ]);
+                  })
+                  .then(values => {
+                    let [gameData, ...rest] = values;
+                    return Promise.all([gameData, Bootstrap.run(doc)]);
+                  })
+                  .then(values => {
+                    let [gameData, ...rest] = values;
+
+                    // Initialize the state service.
+                    StateService.put('pb_playerCount', gameData.playerCount);
+                  })
+                  .then(() => resolve(require));
         });
       });
+    }
+  }
+
+  /**
+   * Creates a runner for a new game.
+   *
+   * @method forNewGame
+   * @param {net.AbstractIO} io AbstractIO implementation to use.
+   * @param {number} playerCount Number of players in the game.
+   * @param {Object} initialGameState Initial state of the game.
+   * @return {Protoboard.Runner} The new instance of Protoboard.Runner.
+   * @static
+   */
+  Runner.forNewGame = function(io, playerCount, initialGameState) {
+    return new Runner(io, require => {
+      const SessionService = require('pb.net.Session');
+      return SessionService.create(playerCount, initialGameState);
+    });
+  };
+
+  /**
+   * Creates a runner for an existing game.
+   *
+   * @method forExistingGame
+   * @param {net.AbstractIO} io AbstractIO implementation to use.
+   * @param {string} gameId ID of the game to use.
+   * @return {Protoboard.Runner} The new instance of Protoboard.Runner.
+   * @static
+   */
+  Runner.forExistingGame = function(io, gameId) {
+    return new Runner(io, require => {
+      const SessionService = require('pb.net.Session');
+      return Promise.resolve(SessionService.get(gameId));
+    });
+  };
+
+  return Runner;
+})
+.bind('pb.Protoboard.__ctor__', require => {
+  const DIJS = require('DIJS');
+  const InMemoryIO = require('pb.net.InMemoryIO');
+  const Runner = require('pb.Protoboard.__runner__');
+
+  const __io__ = Symbol();
+  const __setupFn__ = Symbol();
+
+  /**
+   * The entry point to Protoboard. Use this class to setup the game and run it.
+   *
+   * @class Protoboard
+   * @static
+   */
+  class Protoboard {
+
+    constructor() {
+      this[__io__] = new InMemoryIO();
+    }
+
+    /**
+     * Sets the game to use the given IO.
+     *
+     * @method withIo
+     * @param {net.AbstractIO} io Implementation of Abstract IO to use.
+     * @return {Protoboard} This object for chaining.
+     */
+    withIo(io) {
+      this[__io__] = io;
+      return this;
+    }
+
+    /**
+     * Creates a new game.
+     *
+     * @method forNewGame
+     * @param {number} playerCount Number of players that the game should have before starting.
+     * @param {Object} [initialGameState] The initial state of the game. Defaults to empty string.
+     * @return {Protoboard.Runner} The runner object.
+     */
+    forNewGame(playerCount, initialGameState = {}) {
+      return Runner.forNewGame(this[__io__], playerCount, initialGameState);
+    }
+
+    /**
+     * Creates a game based on an existing game.
+     *
+     * @method forExistingGame
+     * @param {string} gameId ID of game to use.
+     * @return {Protoboard.Runner} The runner object.
+     */
+    forExistingGame(gameId) {
+      return Runner.forExistingGame(this[__io__], gameId);
     }
   }
 

@@ -14,16 +14,16 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 DIJS.bind("pb.net.InMemoryIO", function (require) {
   var AbstractIO = require("pb.net.AbstractIO");
 
-  var __callbacks__ = Symbol();
-  var __map__ = Symbol();
-  var __triggerUpdate__ = Symbol();
+  var __callbacks__ = Symbol("callbacks");
+  var __data__ = Symbol("data");
+  var __triggerUpdate__ = Symbol("triggerUpdate");
 
   var InMemoryIO = (function (_AbstractIO) {
     function InMemoryIO() {
       _classCallCheck(this, InMemoryIO);
 
       this[__callbacks__] = [];
-      this[__map__] = new Map();
+      this[__data__] = new Map();
     }
 
     _inherits(InMemoryIO, _AbstractIO);
@@ -62,36 +62,15 @@ DIJS.bind("pb.net.InMemoryIO", function (require) {
         this[__callbacks__].push(callback);
       }
     }, {
-      key: "add",
-      value: function add(path) {
-        var id = 0;
-        while (this[__map__].has("" + path + "/" + id)) {
-          id++;
-        }
-
-        var newPath = "" + path + "/" + id;
-        var data = {};
-        this[__map__].set(newPath, data);
-        this[__triggerUpdate__](newPath, data);
-
-        return Promise.resolve("" + id);
-      }
-    }, {
-      key: "remove",
-      value: function remove(path) {
-        this[__map__]["delete"](path);
-        this[__triggerUpdate__](path, null);
-        return Promise.resolve();
-      }
-    }, {
       key: "get",
       value: function get(path) {
-        return Promise.resolve(this[__map__].get(path));
+        var stored = this[__data__].get(path);
+        return Promise.resolve(stored === undefined ? null : stored);
       }
     }, {
       key: "set",
       value: function set(path, data) {
-        this[__map__].set(path, data);
+        this[__data__].set(path, data);
         this[__triggerUpdate__](path, data);
         return Promise.resolve();
       }

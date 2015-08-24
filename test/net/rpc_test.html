@@ -4,6 +4,7 @@
   <base href="..">
   <title>net.Rpc Unit Tests</title>
 
+  <link rel="import" href="net/inmemoryio.html">
   <link rel="import" href="net/rpc.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
@@ -15,49 +16,20 @@ DIJS
   const _ = require('pb._');
   const Events = require('pb.Events');
   const expect = require('expect');
+  const InMemoryIO = require('pb.net.InMemoryIO');
   const Rpc = require('pb.net.Rpc.__ctor__');
   const t = require('pb.t');
 
   describe('net.Rpc', () => {
-    let fakeIo;
+    let io;
     let listenHandler;
     let rpc;
 
     beforeEach(() => {
-      fakeIo = {
-        add: () => {},
-        get: () => {},
-        listen: handler => {
-          listenHandler = handler;
-        },
-        remove: () => {},
-        set: () => {}
-      };
-      rpc = new Rpc(fakeIo);
+      io = new InMemoryIO();
+      rpc = new Rpc(io);
     });
 
-    it('should update the cache in reaction to changes triggered by IO', done => {
-      _.spy(fakeIo, 'get');
-      listenHandler('/a/b', {
-        c: {
-          d: 1
-        }
-      });
-
-      Promise.all([
-        rpc.get('/a/b'),
-        rpc.get('/a/b/c'),
-        rpc.get('/a/b/c/d')
-      ]).then(values => {
-        let [ab, abc, abcd] = values;
-        expect(ab).to.eql({ c: { d: 1 } });
-        expect(abc).to.eql({ d: 1 });
-        expect(abcd).to.eql(1);
-
-        expect(fakeIo.get).called().to.equal(0);
-        done();
-      });
-    });
     it('should trigger updates in reaction to changes triggered by IO', () => {
       let aHandler = _.spiedFunction();
       let abHandler = _.spiedFunction();
@@ -66,7 +38,7 @@ DIJS
           .on('jquery', '/a', aHandler)
           .on('jquery', '/a/b', abHandler);
 
-      listenHandler('/a/b', 1);
+      io.set('/a/b', 1);
 
       expect(aHandler).called().at.least(1);
       expect(abHandler).called().at.least(1);
@@ -97,96 +69,84 @@ DIJS
     });
 
     describe('add', () => {
-      let promise;
-
       beforeEach(() => {
-        promise = t.createFakePromise();
-        _.spy(fakeIo, 'add').overrideReturn(promise);
+        return io.set('/a/b', { $index: true, keys: ['0'] });
       });
 
-      it('should resolve with the new ID', done => {
-        rpc.add('/a/b/c').then(newId => {
-          expect(newId).to.equal('newId');
-          done();
+      it('should resolve with the new ID', () => {
+        return rpc.add('/a/b').then(newId => {
+          expect(newId).to.equal('1');
         });
-
-        expect(fakeIo.add).calledWith('/a/b/c').at.least(1);
-        promise.resolve('newId');
       });
-      it('should trigger update on the path', done => {
-        let aHandler = _.spiedFunction();
-        let abHandler = _.spiedFunction();
+      it('should backfill the ancestors', () => {
+        return rpc.add('/a/b')
+            .then(() => Promise.all([
+              io.get('/a'),
+              io.get('/a/b')
+            ]))
+            .then(values => {
+              let [a, ab] = values;
+              expect(a.$index).to.be.true;
+              expect(a.keys).to.eql(['b']);
 
-        Events.of(rpc, this)
-            .on('jquery', '/a', aHandler)
-            .on('jquery', '/a/b', abHandler);
-
-        rpc.add('/a/b').then(() => {
-          expect(aHandler).called().at.least(1);
-          expect(abHandler).called().at.least(1);
-          done();
-        });
-
-        promise.resolve('newId');
+              expect(ab.$index).to.be.true;
+              expect(ab.keys).to.eql(['0', '1']);
+            });
       });
-      it('should cache the returned result', done => {
-        _.spy(fakeIo, 'get');
-
-        rpc.add('/a/b');
-        promise.resolve('newId');
-
-        rpc.get('/a/b/newId').then(value => {
-          expect(value).to.exist;
-          expect(fakeIo.get).called().to.equal(0);
-          done();
-        });
+      it('should replace existing non object entry', () => {
+        return rpc.set('/a/b', 1)
+            .then(() => rpc.add('/a/b'))
+            .then(() => io.get('/a/b'))
+            .then(value => {
+              expect(value.$index).to.be.true;
+              expect(value.keys).to.eql(['0']);
+            });
+      });
+      it('should initialize the entry with empty object', () => {
+        return rpc.add('/a/b')
+            .then(newId => rpc.get(`/a/b/${newId}`))
+            .then(value => {
+              expect(value).to.eql({});
+            });
       });
     });
 
     describe('remove', () => {
-      const NEW_ID = 'newId';
-      const REMOVED_PATH = `/a/b/${NEW_ID}`;
+      let removedPath;
 
       beforeEach(() => {
-        let promise = t.createFakePromise();
-        _.spy(fakeIo, 'add').overrideReturn(promise);
-        rpc.add('/a/b');
-        promise.resolve(NEW_ID);
-      });
-
-      it('should clear the cache when successful', done => {
-        let promise = t.createFakePromise();
-
-        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve('newValue'));
-        _.spy(fakeIo, 'remove').overrideReturn(Promise.resolve());
-
-        rpc.remove(REMOVED_PATH)
-            .then(() => {
-              return rpc.get(REMOVED_PATH);
-            })
-            .then(value => {
-              expect(fakeIo.get).calledWith(REMOVED_PATH).at.least(1);
-              expect(value).to.equal('newValue');
-              done();
+        return rpc.add('/a/b')
+            .then(newId => {
+              removedPath = `/a/b/${newId}`;
             });
       });
-      it('should trigger update on the path', done => {
-        let aHandler = _.spiedFunction();
-        let abHandler = _.spiedFunction();
-        let itemHandler = _.spiedFunction();
 
-        _.spy(fakeIo, 'remove').overrideReturn(Promise.resolve());
-        Events.of(rpc, this)
-            .on('jquery', '/a', aHandler)
-            .on('jquery', '/a/b', abHandler)
-            .on('jquery', REMOVED_PATH, itemHandler);
-
-        rpc.remove(REMOVED_PATH)
-            .then(() => {
-              expect(aHandler).called().at.least(1);
-              expect(abHandler).called().at.least(1);
-              expect(itemHandler).called().at.least(1);
-              done();
+      it('should delete the entry', () => {
+        return rpc.remove(removedPath)
+            .then(() => io.get(removedPath))
+            .then(value => {
+              expect(value).to.be.null;
+            });
+      });
+      it('should update the parent index', () => {
+        return rpc.add('/a/b')
+            .then(() => rpc.remove(removedPath))
+            .then(() => io.get('/a/b'))
+            .then(value => {
+              expect(value.$index).to.be.true;
+              expect(value.keys).to.eql(['1']);
+            });
+      });
+      it('should propagate removal all the way to the root', () => {
+        return rpc.remove(removedPath)
+            .then(() => Promise.all([
+              io.get('/a'),
+              io.get('/a/b')
+            ]))
+            .then(values => {
+              let [a, ab] = values;
+              expect(a).to.be.null;
+              expect(ab).to.be.null;
             });
       });
     });
@@ -194,78 +154,42 @@ DIJS
     describe('get', () => {
       const PATH = '/a/b';
 
-      it('should resolve primitive value', done => {
-        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve(1));
-        rpc.get(PATH)
+      it('should resolve primitive value', () => {
+        return io.set(PATH, 1)
+            .then(() => rpc.get(PATH))
             .then(value => {
               expect(value).to.equal(1);
-              expect(fakeIo.get).calledWith(PATH).at.least(1);
-              done();
             });
       });
-      it('should resolve object value and their sub objects', done => {
+      it('should resolve object value and their sub objects', () => {
         let expectedAb = {
           c: {
             d: 3
           }
         };
-        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve(expectedAb));
-        rpc.get(PATH)
-            .then(value => {
-              expect(fakeIo.get).calledWith(PATH).at.least(1);
-              return Promise.all([
-                value,
-                rpc.get('/a/b/c'),
-                rpc.get('/a/b/c/d')
-              ]);
-            }).then(values => {
-              let [ab, abc, abcd] = values;
 
-              expect(ab).to.eql(expectedAb);
-              expect(abc).to.eql(expectedAb.c);
-              expect(abcd).to.eql(expectedAb.c.d);
-              done();
-            });
+        return Promise.all([
+          io.set(PATH, { $index: true, keys: ['c'] }),
+          io.set(`${PATH}/c`, { $index: true, keys: ['d'] }),
+          io.set(`${PATH}/c/d`, 3)
+        ])
+        .then(() => Promise.all([
+          rpc.get(PATH),
+          rpc.get(`${PATH}/c`),
+          rpc.get(`${PATH}/c/d`)
+        ]))
+        .then(values => {
+          let [ab, abc, abcd] = values;
+
+          expect(ab).to.eql(expectedAb);
+          expect(abc).to.eql(expectedAb.c);
+          expect(abcd).to.eql(expectedAb.c.d);
+        });
       });
-      it('should cache primitive value', done => {
-        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve(1));
-        rpc.get(PATH)
-            .then(() => {
-              _.reset(fakeIo.get);
-              _.spy(fakeIo, 'get');
-              return rpc.get(PATH);
-            })
+      it('should return null if the value does not exist', () => {
+        return rpc.get(PATH)
             .then(value => {
-              expect(value).to.equal(1);
-              expect(fakeIo.get).called().to.equal(0);
-              done();
-            });
-      });
-      it('should cache object and their sub objects', done => {
-        let expectedAb = {
-          c: {
-            d: 3
-          }
-        };
-        _.spy(fakeIo, 'get').overrideReturn(Promise.resolve(expectedAb));
-        rpc.get(PATH)
-            .then(value => {
-              _.reset(fakeIo.get);
-              _.spy(fakeIo, 'get');
-              return Promise.all([
-                rpc.get(PATH),
-                rpc.get(`${PATH}/c`),
-                rpc.get(`${PATH}/c/d`)
-              ]);
-            }).then(values => {
-              let [ab, abc, abcd] = values;
-
-              expect(ab).to.eql(expectedAb);
-              expect(abc).to.eql(expectedAb.c);
-              expect(abcd).to.eql(expectedAb.c.d);
-
-              expect(fakeIo.get).called().to.equal(0);
-              done();
+              expect(value).to.be.null;
             });
       });
     });
@@ -273,107 +197,81 @@ DIJS
     describe('set', () => {
       const PATH = '/a/b';
 
-      it('should set primitive value', done => {
-        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
-        rpc.set(PATH, 1)
-            .then(() => {
-              expect(fakeIo.set).calledWith(PATH, 1).at.least(1);
-              done();
-            });
-      });
-      it('should trigger update for primitive value', done => {
-        let aHandler = _.spiedFunction();
-        let abHandler = _.spiedFunction();
-
-        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
-        Events.of(rpc, this)
-            .on('jquery', '/a', aHandler)
-            .on('jquery', PATH, abHandler);
-
-        rpc.set(PATH, 1)
-            .then(() => {
-              expect(aHandler).called().at.least(1);
-              expect(abHandler).called().at.least(1);
-              done();
-            });
-      });
-      it('should cache when setting primitive value', done => {
-        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
-        rpc.set(PATH, 1)
-            .then(() => {
-              _.spy(fakeIo, 'get');
-              return rpc.get(PATH);
-            })
+      it('should set primitive value', () => {
+        return rpc.set(PATH, 1)
+            .then(() => io.get(PATH))
             .then(value => {
               expect(value).to.equal(1);
-              expect(fakeIo.get).called().to.equal(0);
-              done();
             });
       });
-      it('should set object value and their sub objects', done => {
-        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
-        rpc.set(PATH, {
+      it('should set object value and their sub objects', () => {
+        return rpc.set(PATH, {
               c1: 1,
               c2: {
                 d: 2
               }
             })
-            .then(() => {
-              expect(fakeIo.set).calledWith(`${PATH}/c1`, 1).at.least(1);
-              expect(fakeIo.set).calledWith(`${PATH}/c2/d`, 2).at.least(1);
-              done();
-            });
-      });
-      it('should trigger update for the object', done => {
-        let abc1Handler = _.spiedFunction();
-        let abc2Handler = _.spiedFunction();
-        let abc2dHandler = _.spiedFunction();
-
-        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
-        Events.of(rpc, this)
-            .on('jquery', `${PATH}/c1`, abc1Handler)
-            .on('jquery', `${PATH}/c2`, abc2Handler)
-            .on('jquery', `${PATH}/c2/d`, abc2dHandler);
-
-        rpc.set(PATH, {
-              c1: 1,
-              c2: {
-                d: 2
-              }
-            })
-            .then(() => {
-              expect(abc1Handler).called().at.least(1);
-              expect(abc2Handler).called().at.least(1);
-              expect(abc2dHandler).called().at.least(1);
-              done();
-            });
-      });
-      it('should cache the set object and the sub objects', done => {
-        let expectedAb = {
-          c1: 1,
-          c2: {
-            d: 2
-          }
-        };
-        _.spy(fakeIo, 'set').overrideReturn(Promise.resolve());
-        rpc.set(PATH, expectedAb)
-            .then(() => {
-              _.spy(fakeIo, 'get');
-              return Promise.all([
-                rpc.get(PATH),
-                rpc.get(`${PATH}/c1`),
-                rpc.get(`${PATH}/c2`),
-                rpc.get(`${PATH}/c2/d`)
-              ]);
-            })
+            .then(() => Promise.all([
+                io.get(`${PATH}/c1`),
+                io.get(`${PATH}/c2`),
+                io.get(`${PATH}/c2/d`)
+            ]))
             .then(values => {
-              let [ab, abc1, abc2, abc2d] = values;
-              expect(ab).to.equal(expectedAb);
-              expect(abc1).to.equal(expectedAb.c1);
-              expect(abc2).to.equal(expectedAb.c2);
-              expect(abc2d).to.equal(expectedAb.c2.d);
-              expect(fakeIo.get).called().to.equal(0);
-              done();
+              let [c1, c2, c2d] = values;
+
+              expect(c1).to.eql(1);
+              expect(c2.$index).to.be.true;
+              expect(c2.keys).to.eql([ 'd' ]);
+              expect(c2d).to.eql(2);
+            });
+      });
+      it('should handle objects with no keys', () => {
+        return rpc.set(PATH, {})
+            .then(() => io.get(PATH))
+            .then(value => {
+              expect(value.$index).to.be.true;
+              expect(value.keys).to.eql([]);
+            });
+      });
+      it('should handle arrays', () => {
+        return rpc.set(PATH, [])
+            .then(() => io.get(PATH))
+            .then(value => {
+              expect(value).to.eql([]);
+            });
+      });
+      it('should backfill the ancestors', () => {
+        return rpc.set(PATH, 1)
+            .then(() => io.get('/a'))
+            .then(value => {
+              expect(value.$index).to.be.true;
+              expect(value.keys).to.eql(['b']);
+            });
+      });
+      it('should replace non index ancestors with index', () => {
+        return rpc.set(PATH, 1)
+            .then(() => rpc.set(`${PATH}/c`, 2))
+            .then(() => io.get(`${PATH}`))
+            .then(value => {
+              expect(value.$index).to.be.true;
+              expect(value.keys).to.eql(['c']);
+            });
+      });
+      it('should update the indexes of the ancestors', () => {
+        return rpc.set(PATH, 1)
+            .then(() => rpc.set(`/a/c`, 2))
+            .then(() => io.get(`/a`))
+            .then(value => {
+              expect(value.$index).to.be.true;
+              expect(value.keys).to.eql(['b', 'c']);
+            });
+      });
+      it('should not add duplicate keys', () => {
+        return rpc.set(PATH, 1)
+            .then(() => rpc.set(PATH, 2))
+            .then(() => io.get('/a'))
+            .then(value => {
+              expect(value.keys).to.eql(['b']);
             });
       });
     });
