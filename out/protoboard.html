@@ -15,6 +15,9 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 DIJS.bind("pb.Protoboard.__runner__", function (require) {
 
+  var CachedIO = require("pb.net.CachedIO");
+  var InMemoryIO = require("pb.net.InMemoryIO");
+
   var __gameSyncPromise__ = Symbol("gameSyncPromise");
   var __io__ = Symbol();
   var __players__ = Symbol();
@@ -25,7 +28,7 @@ DIJS.bind("pb.Protoboard.__runner__", function (require) {
       _classCallCheck(this, Runner);
 
       this[__gameSyncPromise__] = gameSyncPromise;
-      this[__io__] = io;
+      this[__io__] = new CachedIO(io, new InMemoryIO());
       this[__players__] = [];
     }
 

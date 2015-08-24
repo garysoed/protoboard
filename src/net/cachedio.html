@@ -1,0 +1,127 @@
+<base href="..">
+
+<link rel="import" href="net/abstractio.html">
+<link rel="import" href="third_party/di.html">
+
+<script>
+DIJS
+.bind('pb.net.CachedIO', require => {
+  const AbstractIO = require('pb.net.AbstractIO');
+
+  const __cacheIo__ = Symbol('cacheIo');
+  const __callbacks__ = Symbol('callbacks');
+  const __originalIo__ = Symbol('originalIo');
+  const __triggerCallbacks__ = Symbol('triggerCallbacks');
+
+  const __onCacheUpdate__ = Symbol('onCacheUpdate');
+  const __onUpdate__ = Symbol('onUpdate');
+
+  /**
+   * Implementation of AbstractIO with a cache.
+   *
+   * @class net.CachedIO
+   * @extends net.AbstractIO
+   */
+  class CachedIO extends AbstractIO {
+
+    /**
+     * @constructor
+     * @param {net.AbstractIO} originalIo The actual IO object.
+     * @param {net.AbstractIO} cacheIo The cache IO object.
+     * @class net.CachedIO
+     */
+    constructor(originalIo, cacheIo) {
+      this[__cacheIo__] = cacheIo;
+      this[__callbacks__] = [];
+      this[__originalIo__] = originalIo;
+
+      cacheIo.listen(this[__onCacheUpdate__].bind(this));
+      originalIo.listen(this[__onUpdate__].bind(this));
+    }
+
+    /**
+     * Handler called when the cache is updated.
+     *
+     * @method __onCacheUpdate__
+     * @param {string} path The path that was updated.
+     * @param {Object} newValue The new value corresponding to the path that was updated.
+     * @private
+     */
+    [__onCacheUpdate__](path, newValue) {
+      this[__triggerCallbacks__](path, newValue);
+    }
+
+    /**
+     * Handler called when the original IO is updated.
+     *
+     * @method __onUpdate__
+     * @param {string} path The path that was updated.
+     * @param {Object} newValue The new value corresponding to the path that was updated.
+     * @private
+     */
+    [__onUpdate__](path, newValue) {
+      // Update the cache.
+      this[__cacheIo__].set(path, newValue);
+      this[__triggerCallbacks__](path, newValue);
+    }
+
+    /**
+     * Triggers the callbacks that are listening to the io.
+     *
+     * @method __triggerCallbacks__
+     * @param {string} path The path that was updated.
+     * @param {Object} newValue The new value corresponding to the updated path.
+     * @private
+     */
+    [__triggerCallbacks__](path, newValue) {
+      for (let callback of this[__callbacks__]) {
+        callback(path, newValue);
+      }
+    }
+
+    /**
+     * Listens to changes to this IO object.
+     *
+     * @method listen
+     * @param {Function} callback Callback called when there is a change on the data. This will be
+     *    called with two arguments: path of the data changed, and the new value of the data.
+     */
+    listen(callback) {
+      this[__callbacks__].push(callback);
+    }
+
+    /**
+     * Retrieves the data corresponding to the given path.
+     *
+     * @method get
+     * @param {string} path Path of the object to be retrieved.
+     * @return {Promise} Promise that will be resolved with the retrieved data.
+     */
+    get(path) {
+      return this[__cacheIo__]
+          .get(path)
+          .then(data => (data === null) ? this[__originalIo__].get(path) : data);
+    }
+
+    /**
+     * Sets the data to the given path. If the objects in the path's ancestors don't exist, the
+     * implementation should create those objects. Should also call listener callbacks that have
+     * been added.
+     *
+     * @method set
+     * @param {string} path Path of the object to set the value of.
+     * @param {Any} data Data to set the path's value to. If set to null, you can safely
+     *    deallocate the space.
+     * @return {Promise} Promise that will be resolved when setting the value is successful.
+     */
+    set(path, data) {
+      return Promise.all([
+        this[__cacheIo__].set(path, data),
+        this[__originalIo__].set(path, data)
+      ]);
+    }
+  }
+
+  return CachedIO;
+});
+</script>

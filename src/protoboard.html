@@ -9,6 +9,9 @@
 DIJS
 .bind('pb.Protoboard.__runner__', require => {
 
+  const CachedIO = require('pb.net.CachedIO');
+  const InMemoryIO = require('pb.net.InMemoryIO');
+
   const __gameSyncPromise__ = Symbol('gameSyncPromise');
   const __io__ = Symbol();
   const __players__ = Symbol();
@@ -29,7 +32,7 @@ DIJS
      */
     constructor(io, gameSyncPromise) {
       this[__gameSyncPromise__] = gameSyncPromise;
-      this[__io__] = io;
+      this[__io__] = new CachedIO(io, new InMemoryIO());
       this[__players__] = [];
     }
 

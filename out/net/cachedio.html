@@ -1,0 +1,104 @@
+<html><head><base href="..">
+
+<link rel="import" href="net/abstractio.html">
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.net.CachedIO", function (require) {
+  var AbstractIO = require("pb.net.AbstractIO");
+
+  var __cacheIo__ = Symbol("cacheIo");
+  var __callbacks__ = Symbol("callbacks");
+  var __originalIo__ = Symbol("originalIo");
+  var __triggerCallbacks__ = Symbol("triggerCallbacks");
+
+  var __onCacheUpdate__ = Symbol("onCacheUpdate");
+  var __onUpdate__ = Symbol("onUpdate");
+
+  var CachedIO = (function (_AbstractIO) {
+    function CachedIO(originalIo, cacheIo) {
+      _classCallCheck(this, CachedIO);
+
+      this[__cacheIo__] = cacheIo;
+      this[__callbacks__] = [];
+      this[__originalIo__] = originalIo;
+
+      cacheIo.listen(this[__onCacheUpdate__].bind(this));
+      originalIo.listen(this[__onUpdate__].bind(this));
+    }
+
+    _inherits(CachedIO, _AbstractIO);
+
+    _createComputedClass(CachedIO, [{
+      key: __onCacheUpdate__,
+      value: function (path, newValue) {
+        this[__triggerCallbacks__](path, newValue);
+      }
+    }, {
+      key: __onUpdate__,
+      value: function (path, newValue) {
+        this[__cacheIo__].set(path, newValue);
+        this[__triggerCallbacks__](path, newValue);
+      }
+    }, {
+      key: __triggerCallbacks__,
+      value: function (path, newValue) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this[__callbacks__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var callback = _step.value;
+
+            callback(path, newValue);
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"]) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
+    }, {
+      key: "listen",
+      value: function listen(callback) {
+        this[__callbacks__].push(callback);
+      }
+    }, {
+      key: "get",
+      value: function get(path) {
+        var _this = this;
+
+        return this[__cacheIo__].get(path).then(function (data) {
+          return data === null ? _this[__originalIo__].get(path) : data;
+        });
+      }
+    }, {
+      key: "set",
+      value: function set(path, data) {
+        return Promise.all([this[__cacheIo__].set(path, data), this[__originalIo__].set(path, data)]);
+      }
+    }]);
+
+    return CachedIO;
+  })(AbstractIO);
+
+  return CachedIO;
+});</script>
+</head><body></body></html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>net.CachedIO Unit Tests</title>
+
+  <link rel="import" href="net/cachedio.html">
+  <link rel="import" href="net/inmemoryio.html">
+  <link rel="import" href="net/io_testsuite.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="testutils.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+<script>
+DIJS
+.run(require => {
+
+  const _ = require('pb._');
+  const CachedIO = require('pb.net.CachedIO');
+  const expect = require('expect');
+  const InMemoryIO = require('pb.net.InMemoryIO');
+  const IOTestSuite = require('pb.net.IOTestSuite');
+  const t = require('pb.t');
+
+  describe('net.CachedIO', () => {
+    let cachedIo;
+    let io;
+    let originalIo;
+
+    beforeEach(() => {
+      cachedIo = new InMemoryIO();
+      originalIo = new InMemoryIO();
+      io = new CachedIO(originalIo, cachedIo);
+    });
+
+    IOTestSuite(
+        () => new CachedIO(originalIo, cachedIo),
+        (io, path, newData) => {
+          t.getPrivateMethod(originalIo, 'triggerUpdate')(path, newData);
+        });
+
+    describe('onUpdate', () => {
+      it('should update the cache from updates from the original IO', () => {
+        t.getPrivateMethod(originalIo, 'triggerUpdate')('/a', 1);
+
+        _.spy(originalIo, 'get');
+
+        return io.get('/a')
+            .then(data => {
+              expect(data).to.equal(1);
+              expect(originalIo.get).called().to.equal(0);
+            });
+      });
+      it('should call the listener if cache is updated', () => {
+        let listener = _.spiedFunction();
+        io.listen(listener);
+
+        t.getPrivateMethod(cachedIo, 'triggerUpdate')('/a', 1);
+        expect(listener).calledWith('/a', 1).at.least(1);
+      });
+    });
+
+    describe('get', () => {
+      it('should not call the original IO object if the path is cached', () => {
+        _.spy(originalIo, 'get');
+
+        return cachedIo.set('/a', 1)
+            .then(() => io.get('/a'))
+            .then(data => {
+              expect(data).to.equal(1);
+              expect(originalIo.get).called().to.equal(0);
+            });
+      });
+      it('should call the original IO object if the path is not cached', () => {
+        _.spy(originalIo, 'get').overrideReturn(Promise.resolve(1));
+
+        return io.get('/a')
+            .then(data => {
+              expect(data).to.equal(1);
+              expect(originalIo.get).calledWith('/a').at.least(1);
+            });
+      });
+    });
+
+    describe('set', () => {
+      it('should update both the original IO and the cache IO', () => {
+        _.spy(originalIo, 'set');
+        _.spy(cachedIo, 'set');
+
+        return io.set('/a', 1)
+            .then(() => {
+              expect(originalIo.set).calledWith('/a', 1).at.least(1);
+              expect(cachedIo.set).calledWith('/a', 1).at.least(1);
+            });
+      });
+    });
+
+    afterEach(() => {
+      _.reset();
+    });
+  });
+});
+</script>
+</body>
