@@ -1,0 +1,7 @@
+<html><head><base href="..">
+
+<link rel="import" href="testbase.html">
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";DIJS.bind("pb.net.IOTestSuite",function(t){function e(t,e){var a=void 0;beforeEach(function(){a=new t}),describe("triggerUpdate",function(){it("should call listener for update",function(){var t=n.spiedFunction();a.listen(t),e(a,"path",{a:1}),i(t).calledWith("path",{a:1}).at.least(1)})}),describe("set and get",function(){it("should return a promise that is resolved after setting the value",function(){return a.set("/path",2).then(function(){return a.get("/path")}).then(function(t){i(t).to.equal(2)})})}),afterEach(function(){n.reset()})}var n=t("pb._"),i=(t("pb.spies.Matchers"),t("expect"));return e});</script>
+</head><body></body></html>
