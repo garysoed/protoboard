@@ -25,6 +25,10 @@
   position: absolute;
 }
 
+::content > *:not(:last-child) {
+  display: none;
+}
+
 #root {
   outline: 2px solid #263238;
   outline-offset: -2px;

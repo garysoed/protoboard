@@ -26,6 +26,10 @@
       position: absolute;
     }
 
+    ::content > *:not(:last-child) {
+      display: none;
+    }
+
     #root {
       outline: var(--border);
       outline-offset: -2px;
