@@ -11,13 +11,13 @@
  * you should extend {{#crossLink "region.Region"}}{{/crossLink}}.
  *
  * After creating the custom element, you need to add abilities to it. To do this, use the Config
- * service's {{#crossLink "service.Config/add:method"}}add{{/crossLink}} method. For example:
+ * service's {{#crossLink "data.ConfigService/add:method"}}add{{/crossLink}} method. For example:
  *
  * ```javascript
  * Protoboard
  *     .forNewGame()
  *     .setup(function(require) {
- *       var Config = require('pb.service.Config');
+ *       var Config = require('pb.data.ConfigService');
  *       var Pickable = require('pb.ability.Pickable');
  *
  *       Config.add('custom-element', new Pickable());
@@ -29,7 +29,7 @@
  *
  * You will also need to make Protoboard recognizes the new element. To do this, inject a
  * `pb.$registry` instance and call its
- * {{#crossLink "service.Registry/add:method"}}add{{/crossLink}} method:
+ * {{#crossLink "ui.RegistryService/add:method"}}add{{/crossLink}} method:
  *
  * ```javascript
  * Protoboard.forNewGame().setup(function(require) {

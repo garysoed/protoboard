@@ -3,7 +3,7 @@
 <link rel="import" href="bootstrap.html">
 <link rel="import" href="net/cachedio.html">
 <link rel="import" href="net/inmemoryio.html">
-<link rel="import" href="net/session.html">
+<link rel="import" href="net/sessionservice.html">
 <link rel="import" href="third_party/di.html">
 
 <script>"use strict";
@@ -58,9 +58,9 @@ DIJS.bind("pb.Protoboard.__runner__", function (require) {
           return new Promise(function (resolve, reject) {
             DIJS.constant("pb.net.IO", _this[__io__]).run(function (require) {
               var Bootstrap = require("pb.Bootstrap");
-              var SessionService = require("pb.net.Session");
-              var StateService = require("pb.service.State");
-              var TemplateService = require("pb.service.Template");
+              var SessionService = require("pb.net.SessionService");
+              var StateService = require("pb.data.StateService");
+              var TemplateService = require("pb.ui.TemplateService");
 
               _this[__gameSyncPromise__](require).then(function (gameSync) {
                 var joinPromise = Promise.resolve();
@@ -141,14 +141,14 @@ DIJS.bind("pb.Protoboard.__runner__", function (require) {
 
   Runner.forNewGame = function (io, playerCount, initialGameState) {
     return new Runner(io, function (require) {
-      var SessionService = require("pb.net.Session");
+      var SessionService = require("pb.net.SessionService");
       return SessionService.create(playerCount, initialGameState);
     });
   };
 
   Runner.forExistingGame = function (io, gameId) {
     return new Runner(io, function (require) {
-      var SessionService = require("pb.net.Session");
+      var SessionService = require("pb.net.SessionService");
       return Promise.resolve(SessionService.get(gameId));
     });
   };

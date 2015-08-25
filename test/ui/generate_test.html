@@ -4,9 +4,9 @@
   <base href="..">
   <title>ui.Generate Unit Tests</title>
 
-  <link rel="import" href="service/config.html">
-  <link rel="import" href="service/registry.html">
-  <link rel="import" href="service/template.html">
+  <link rel="import" href="data/configservice.html">
+  <link rel="import" href="ui/registryservice.html">
+  <link rel="import" href="ui/templateservice.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="ui/generate.html">
@@ -20,7 +20,7 @@ DIJS
   return require('pb.t').createFakeJQuery();
 })
 .with('pb.$registry', require => {
-  const Registry = require('pb.service.Registry');
+  const Registry = require('pb.ui.RegistryService');
   return new Registry();
 })
 .with('Promise', require => {
@@ -31,12 +31,12 @@ DIJS
   const _ = require('pb._');
   const $ = require('pb.$');
 
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const doc = require('doc');
   const expect = require('expect');
   const Generate = require('pb.ui.Generate');
   const Promise = require('Promise');
-  const Template = require('pb.service.Template');
+  const Template = require('pb.ui.TemplateService');
   const Utils = require('pb.Utils');
 
   describe('ui.Generate', () => {
@@ -51,7 +51,7 @@ DIJS
         });
       });
 
-      it('should replace itself with data registered to service.Template', () => {
+      it('should replace itself with data registered to ui.TemplateService', () => {
         let dataA = 'a';
         let dataB = 'B';
 

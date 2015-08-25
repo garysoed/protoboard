@@ -11,7 +11,7 @@
 <body>
 <script>
 DIJS
-.constant('pb.net.Rpc', {
+.constant('pb.net.RpcService', {
   add: () => {},
   get: () => {},
   remove: () => {},
@@ -23,7 +23,7 @@ DIJS
   const _ = require('pb._');
   const Events = require('pb.Events');
   const expect = require('expect');
-  const Rpc = require('pb.net.Rpc');
+  const Rpc = require('pb.net.RpcService');
   const Sync = require('pb.net.Sync');
 
   describe('net.Sync', () => {

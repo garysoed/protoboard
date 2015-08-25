@@ -6,14 +6,14 @@
   <link rel="import" href="testbase.html">
 
   <link rel="import" href="third_party/di.html">
-  <link rel="import" href="service/config.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="data/configservice.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="ui/preview.html">
 </head>
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
@@ -21,7 +21,7 @@ DIJS
   const _M = require('_M');
   const $registry = require('pb.$registry');
 
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const doc = require('doc');
   const expect = require('expect');
   const Preview = require('pb.ui.Preview');

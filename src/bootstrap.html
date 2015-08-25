@@ -1,8 +1,8 @@
 <base href=".">
 
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="service/config.html">
-<link rel="import" href="service/registry.html">
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="ui/registryservice.html">
 
 <style>
   @import url(http://fonts.googleapis.com/css?family=Roboto);
@@ -23,12 +23,12 @@
 <script>
 DIJS
 .bind('pb.$registry', require => {
-  const Registry = require('pb.service.Registry');
+  const Registry = require('pb.ui.RegistryService');
   return new Registry();
 })
 .bind('pb.Bootstrap.__ctor__', (require, optional) => {
   const $registry = require('pb.$registry');
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const Utils = require('pb.Utils');
 
   optional('pb.component.Card');
@@ -42,7 +42,7 @@ DIJS
   optional('pb.region.Deck');
   optional('pb.region.Hand');
   optional('pb.region.Rect');
-  optional('pb.service.State');
+  optional('pb.data.StateService');
   optional('pb.ui.Generate');
   optional('pb.ui.Preview');
   optional('pb.ui.Previewer');

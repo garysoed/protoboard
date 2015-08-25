@@ -1,9 +1,0 @@
-<html><head><base href="..">
-
-<link rel="import" href="check.html">
-<link rel="import" href="third_party/di.html">
-<link rel="import" href="third_party/handlebars.html">
-<link rel="import" href="third_party/jquery.html">
-
-<script>"use strict";var _createClass=function(){function e(e,r){for(var t in r){var n=r[t];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(e,r)}return function(r,t,n){return t&&e(r.prototype,t),n&&e(r,n),r}}(),_classCallCheck=function(e,r){if(!(e instanceof r))throw new TypeError("Cannot call a class as a function")};DIJS.bind("pb.service.Template.__ctor__",function(e){var r=e("pb.$"),t=e("pb.Events"),n=e("pb.Handlebars"),a=Symbol("promises"),i=function(){function e(){_classCallCheck(this,e),this[a]=new Map}return _createClass(e,{addPartial:{value:function(e,r){return n.registerPartial(e,r.innerHTML.replace("&gt;",">")),this}},addData:{value:function(e,t){return this[a].has(e)?r(this).trigger(e,t):this[a].set(e,Promise.resolve([e,t])),this}},get:{value:function(e){var r=this;return this[a].has(e)||this[a].set(e,new Promise(function(n,a){t.of(r,r).on("jquery",e,function(r,t){n([e,t])})})),this[a].get(e)}}}),e}();return i}).bind("pb.service.Template.__forHelper__",function(e){var r=e("pb.Check"),t=e("pb.Handlebars");return function(e,n,a,i){void 0===i&&(i=a,a=1);for(var s="",o=r(e).isInt().orThrows();o<r(n).isInt().orThrows();o+=r(a).isInt().orThrows()){var c=t.createFrame(i.data||{});c.index=o,s+=i.fn(this,{data:c})}return s}}).bind("pb.service.Template",function(e){var r=e("pb.service.Template.__ctor__"),t=e("pb.service.Template.__forHelper__");return Handlebars.registerHelper("pb-for",t),new r});</script>
-</head><body></body></html>

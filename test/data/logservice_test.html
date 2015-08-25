@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>data.LogService Unit Tests</title>
+
+  <link rel="import" href="data/logservice.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+<script>
+DIJS
+.run(require => {
+  const _ = require('pb._');
+  const _M = require('_M');
+
+  const Entry = require('pb.data.LogService.__entry__');
+  const expect = require('expect');
+  const Log = require('pb.data.LogService.__ctor__');
+
+  describe('data.LogService$Entry', () => {
+    let entry;
+
+    beforeEach(() => {
+      entry = new Entry();
+    });
+
+    it('should return the set value', () => {
+      entry.set('key', 'value');
+      expect(entry.key).to.be.equal('value');
+    });
+    it('should not allow values to be overridden by using set', () => {
+      entry.set('key', 'value');
+      expect(() => entry.set('key', 'newValue')).to.throw();
+    });
+    it('should not allow properties to be overridden by using direct override', () => {
+      entry.set('key', 'value');
+      expect(() => entry.key = 'newValue').to.throw();
+    });
+  });
+
+  describe('data.LogService', () => {
+    let TIMESTAMP = new Date(1234);
+    let CATEGORY = 'test';
+    let VALUE = 12;
+
+    let log;
+
+    beforeEach(() => {
+      log = new Log();
+    });
+
+    describe('#log', () => {
+      function expectEntryHas(entry, timestamp, category, value) {
+        expect(entry.timestamp.getTime()).to.be.equal(timestamp.getTime());
+        expect(entry.category).to.be.equal(category);
+        expect(entry.value).to.be.equal(value);
+      }
+
+      it('should use the default processor when no processors are specified', () => {
+        _.spy(Date, 'now').overrideReturn(TIMESTAMP);
+        expect(log.log(CATEGORY, VALUE).entries)
+            .to.be.equal(log.defaultPrinter({
+              timestamp: TIMESTAMP,
+              category: CATEGORY,
+              value: VALUE
+            }));
+      });
+      it('should use the specified preprocessors and call them in order', () => {
+        let preprocessor1 = entry => entry.set('a', 1);
+        let preprocessor2 = entry => entry.set('b', entry.a);
+        let printer = _.spiedFunction();
+        let extras = {
+          c: 3,
+          d: 4
+        };
+
+        log
+            .addPreprocessor(preprocessor1)
+            .addPreprocessor(preprocessor2)
+            .addPrinter(printer);
+
+        log.log('category', 'value', extras);
+
+        let entryMatcher = _M.isA(Object);
+        expect(printer).calledWith(entryMatcher).at.least(1);
+
+        let matchingEntry = entryMatcher.matchingArgs[0];
+        expect(matchingEntry.category).to.be.equal('category');
+        expect(matchingEntry.value).to.be.equal('value');
+        expect(matchingEntry.a).to.be.equal(1);
+        expect(matchingEntry.b).to.be.equal(1);
+        expect(matchingEntry.c).to.be.equal(3);
+        expect(matchingEntry.d).to.be.equal(4);
+      });
+      it('should use the specified printer', () => {
+        let entry = 'entry';
+        let printer = _.spiedFunction().overrideReturn(entry);
+
+        _.spy(Date, 'now').overrideReturn(TIMESTAMP);
+
+        log.addPrinter(printer);
+        expect(log.log(CATEGORY, VALUE).entries).to.be.equal(entry);
+
+        let entryMatcher = _M.isA(Object);
+        expect(printer).calledWith(entryMatcher).at.least(1);
+
+        expectEntryHas(entryMatcher.matchingArgs[0], TIMESTAMP, CATEGORY, VALUE);
+      });
+      it('should print nothing if the printer returns empty string', () => {
+        let printer1 = _.spiedFunction().overrideReturn('');
+        let printer2 = _.spiedFunction().overrideReturn('blah');
+
+        log
+            .addPrinter(printer1)
+            .addPrinter(printer2);
+
+        expect(log.log('category', 'value').entries).to.be.equal('');
+      });
+      it('should pick the first processor that returns a non null and non undefined', () => {
+        let entry = 'entry';
+        let printer = _.spiedFunction().overrideReturn(entry);
+
+        _.spy(Date, 'now').overrideReturn(TIMESTAMP);
+
+        log
+            .addPrinter(() => null)
+            .addPrinter(() => undefined)
+            .addPrinter(printer)
+            .addPrinter(() => 'not used');
+        expect(log.log(CATEGORY, VALUE).entries).to.be.equal(entry);
+
+        let entryMatcher = _M.isA(Object);
+        expect(printer).calledWith(entryMatcher).at.least(1);
+
+        expectEntryHas(entryMatcher.matchingArgs[0], TIMESTAMP, CATEGORY, VALUE);
+      });
+      it('should not add any entries if there are no processors that returns a non empty string', () => {
+        log
+            .addPrinter(() => null)
+            .addPrinter(() => '');
+        expect(log.log(CATEGORY, VALUE).entries).to.be.equal('');
+      });
+    });
+
+    describe('#blob', () => {
+      it('should return a blob with the correct content and MIME type', done => {
+        _.spy(Date, 'now').overrideReturn(TIMESTAMP);
+
+        let blob = log.log(CATEGORY, VALUE).blob;
+        let reader = new FileReader();
+        reader.addEventListener('loadend', () => {
+          expect(reader.result)
+              .to.be.equal(log.defaultPrinter({
+                timestamp: TIMESTAMP,
+                category: CATEGORY,
+                value: VALUE
+              }));
+          done();
+        });
+        reader.readAsText(blob);
+      });
+    });
+
+    describe('#defaultPrinter', () => {
+      it('should return undefined if the entry is in before phase', () => {
+        let entry = {
+          phase: 'before'
+        };
+        expect(log.defaultPrinter(entry)).to.be.undefined;
+      });
+      it('should print something if the entry is in a phase other than before', () => {
+        let entry = {
+          timestamp: new Date(),
+          phase: 'after',
+          category: 'category',
+          value: 'value'
+        };
+        expect(log.defaultPrinter(entry)).to.be.a('string');
+      });
+    });
+
+    afterEach(() => {
+      _.reset();
+    });
+  });
+});
+</script>
+</body>

@@ -12,7 +12,7 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .run(require => {
 
   const Deck = require('pb.region.Deck');

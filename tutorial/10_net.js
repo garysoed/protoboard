@@ -53,7 +53,7 @@
  * are enough number of players, it will run the rest of the startup process.
  *
  * Note that Protoboard will make the game state available to the
- * {{#crossLink "service.Template"}}TemplateService{{/crossLink}}. Look at the documentation of
+ * {{#crossLink "ui.TemplateService"}}TemplateService{{/crossLink}}. Look at the documentation of
  * {{#crossLink "Protoboard.Runner/run:method"}}{{/crossLink}} for this.
  *
  * @class 10 Networked Games

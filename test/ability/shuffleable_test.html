@@ -9,13 +9,13 @@
   <link rel="import" href="ability/shuffleable.html">
   <link rel="import" href="third_party/chance.html">
   <link rel="import" href="third_party/di.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="ui/registryservice.html">
 </head>
 <body>
 <script>
 DIJS
 .with('pb.$registry', require => {
-  const Registry = require('pb.service.Registry');
+  const Registry = require('pb.ui.RegistryService');
   return new Registry();
 })
 .constant('doc', document.currentScript.ownerDocument)

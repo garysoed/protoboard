@@ -8,8 +8,8 @@
 
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="region/bag.html">
-  <link rel="import" href="service/config.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="data/configservice.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="testutils.html">
   <link rel="import" href="third_party/chance.html">
   <link rel="import" href="third_party/jquery.html">
@@ -24,7 +24,7 @@
 </pb-r-bag>
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
@@ -35,7 +35,7 @@ DIJS
 
   const Bag = require('pb.region.Bag');
   const Chance = require('pb.Chance');
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const doc = require('doc');
   const expect = require('expect');
   const t = require('pb.t');

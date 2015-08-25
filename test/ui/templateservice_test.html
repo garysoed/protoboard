@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>ui.TemplateService Unit Tests</title>
+
+  <link rel="import" href="check.html">
+  <link rel="import" href="third_party/di.html">
+  <link rel="import" href="ui/templateservice.html">
+  <link rel="import" href="testbase.html">
+</head>
+<body>
+<script>
+DIJS
+.constant('pb.Handlebars', {
+  helpers: {},
+  registerHelper(name, helper) {
+    this.helpers[name] = helper;
+  },
+  registerPartial() {
+    return this;
+  }
+})
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
+
+  const _ = require('pb._');
+  const _M = require('_M');
+
+  const Check = require('pb.Check');
+  const doc = require('doc');
+  const expect = require('expect');
+  const forHelper = require('pb.ui.TemplateService.__forHelper__');
+  const Handlebars = require('pb.Handlebars');
+  const Template = require('pb.ui.TemplateService.__ctor__');
+
+  describe('ui.TemplateService', () => {
+    let template;
+
+    beforeEach(() => {
+      template = new Template();
+    });
+
+    describe('#addPartial', () => {
+      it('should register partial to Handlebars', () => {
+        let name = 'partialName';
+        let el = doc.createElement('div');
+        el.innerHTML = '{{&gt; abc}}';
+
+        _.spy(Handlebars, 'registerPartial');
+
+        template.addPartial(name, el);
+        expect(Handlebars.registerPartial).calledWith(name, '{{> abc}}').at.least(1);
+      });
+    });
+
+    describe('#addData and #get', () => {
+      it('should handle adding data before retrieval', done => {
+        let name = 'data';
+        let data = {};
+        template.addData(name, data);
+        template.get(name)
+            .then(result => {
+              expect(result).to.be.eql([name, data]);
+              done();
+            });
+      });
+      it('should handle adding data after retrieval', done => {
+        let name = 'data';
+        let data = {};
+        template.get(name)
+            .then(result => {
+              expect(result).to.be.eql([name, data]);
+              done();
+            });
+        template.addData(name, data);
+      });
+    });
+
+    describe('$pb-for helper', () => {
+
+      beforeEach(() => {
+        Handlebars.createFrame = input => input;
+      });
+
+      it('should repeat the inner block a number of times', () => {
+        let content = 'content';
+        let options = {
+          fn: _.spiedFunction().overrideReturn(content)
+        };
+
+        let result = forHelper.call(Handlebars, '0', '5', '2', options);
+        expect(result).to.be.equal(content + content + content);
+
+        let isAObject = _M.isA(Object);
+        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(3);
+
+        let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
+        expect(indexes).to.be.eql([0, 2, 4]);
+      });
+      it('should default step to 1', () => {
+        let content = 'content';
+        let options = {
+          fn: _.spiedFunction().overrideReturn(content)
+        };
+
+        let result = forHelper.call(Handlebars, '0', '2', options);
+        expect(result).to.be.equal(content + content);
+
+        let isAObject = _M.isA(Object);
+        expect(options.fn).calledWith(Handlebars, isAObject).to.be.equal(2);
+
+        let indexes = isAObject.matchingArgs.map(arg => arg.data.index);
+        expect(indexes).to.be.eql([0, 1]);
+      });
+    });
+
+    afterEach(() => {
+      _.reset();
+    });
+  });
+});
+</script>
+</body>

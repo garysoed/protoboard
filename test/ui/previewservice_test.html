@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="..">
+  <title>ui.PreviewService Unit Tests</title>
+
+  <link rel="import" href="ui/previewservice.html">
+  <link rel="import" href="testbase.html">
+  <link rel="import" href="third_party/di.html">
+</head>
+<body>
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.run(require => {
+
+  const _ = require('pb._');
+  const doc = require('doc');
+  const Events = require('pb.Events');
+  const expect = require('expect');
+  const Preview = require('pb.ui.PreviewService.__ctor__');
+
+  describe('ui.PreviewService', () => {
+    let el;
+    let preview;
+
+    beforeEach(() => {
+      el = document.createElement('div');
+      preview = new Preview();
+    });
+
+    describe('get and set', () => {
+      it('should change the previewed element and trigger an event', () => {
+        let handler = _.spiedFunction();
+        Events.of(preview, this)
+            .on('jquery', Preview.Events.ELEMENT_CHANGED, handler);
+
+        preview.previewedEl = el;
+        expect(preview.previewedEl).to.equal(el);
+        expect(handler).called().at.least(1);
+      });
+      it('should not trigger an event if the set element does not change', () => {
+        preview.previewedEl = el;
+
+        let handler = _.spiedFunction();
+        Events.of(preview, this)
+            .on('jquery', Preview.Events.ELEMENT_CHANGED, handler);
+
+        preview.previewedEl = el;
+        expect(preview.previewedEl).to.equal(el);
+        expect(handler).called().to.equal(0);
+      });
+    });
+  });
+});
+</script>
+</body>

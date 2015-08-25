@@ -1,9 +1,0 @@
-<html><head><base href="..">
-
-<link rel="import" href="ability/abilities.html">
-<link rel="import" href="external.html">
-<link rel="import" href="service/config.html">
-<link rel="import" href="third_party/di.html">
-
-<script>"use strict";var _createClass=function(){function t(t,r){for(var e in r){var n=r[e];n.configurable=!0,n.value&&(n.writable=!0)}Object.defineProperties(t,r)}return function(r,e,n){return e&&t(r.prototype,e),n&&t(r,n),r}}(),_classCallCheck=function(t,r){if(!(t instanceof r))throw new TypeError("Cannot call a class as a function")};DIJS.bind("pb.service.Registry",function(t){var r=t("pb.ability.Abilities"),e=t("pb.service.Config"),n=t("console"),i=Symbol(),a=Symbol(),o=function(){function t(){_classCallCheck(this,t),this[i]=new Map,this[a]=[]}return _createClass(t,{add:{value:function(t,e){if(this[i].has(t))throw new Error(""+t+" is already registered");return this[i].set(t,e.prototype),this.runAtRegister(function(i,a){if(a.getAll(t)){var o=r.of(e.prototype),s=!0,l=!1,u=void 0;try{for(var c,f=a.getAll(t)[Symbol.iterator]();!(s=(c=f.next()).done);s=!0){var h=c.value;o.add(h)}}catch(v){l=!0,u=v}finally{try{!s&&f["return"]&&f["return"]()}finally{if(l)throw u}}}else n.warn("No configuration for "+t);try{i.registerElement(t,e)}catch(y){n.warn(y.message)}}),this}},runAtRegister:{value:function(t){return this[a].push(t),this}},register:{value:function(t){var r=!0,n=!1,i=void 0;try{for(var o,s=this[a][Symbol.iterator]();!(r=(o=s.next()).done);r=!0){var l=o.value;l(t,e)}}catch(u){n=!0,i=u}finally{try{!r&&s["return"]&&s["return"]()}finally{if(n)throw i}}return this}},reset:{value:function(){n.warn("Registry#reset is deprecated"),this[i]=new Map,this[a]=[]}}}),t}();return o});</script>
-</head><body></body></html>

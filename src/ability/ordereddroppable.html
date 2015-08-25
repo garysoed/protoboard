@@ -1,7 +1,7 @@
 <base href="..">
 
 <link rel="import" href="ability/droppable.html">
-<link rel="import" href="service/move.html">
+<link rel="import" href="ui/moveservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/key.html">
 <link rel="import" href="utils.html">
@@ -12,7 +12,7 @@ DIJS
 
   const Droppable = require('pb.ability.Droppable');
   const Key = require('pb.trigger.Key');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
   const Utils = require('pb.Utils');
 
   // Private constants
@@ -47,7 +47,7 @@ DIJS
     }
 
     /**
-     * Drops the element added to {{#crossLink "service.Move"}}{{/crossLink}} as a child of the
+     * Drops the element added to {{#crossLink "ui.MoveService"}}{{/crossLink}} as a child of the
      * given element. The position of the dropped child depends on the position of the mouse at the
      * trigger time relative to the other children.
      *

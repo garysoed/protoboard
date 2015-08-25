@@ -6,8 +6,8 @@
   <link rel="import" href="testbase.html">
 
   <link rel="import" href="third_party/di.html">
-  <link rel="import" href="service/config.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="data/configservice.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="grid/grid.html">
 </head>
 <body>
@@ -33,7 +33,7 @@ DIJS
   const _ = require('pb._');
   const _M = require('_M');
   const $ = require('pb.$');
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const doc = require('doc');
   const expect = require('expect');
   const Grid = require('pb.grid.Grid');
@@ -43,6 +43,7 @@ DIJS
 
   describe('grid.Grid', () => {
     let grid;
+    let div;
 
     beforeEach(() => {
       Object.defineProperty(Grid.prototype, 'rootEl', {
@@ -52,7 +53,7 @@ DIJS
       Object.defineProperty(Grid.prototype, 'rowTemplate', { get: () => rowTemplate });
       Object.defineProperty(Grid.prototype, 'tileTemplate', { get: () => tileTemplate });
 
-      grid = doc.createElement('pb-g-grid');
+      grid = doc.createElement('div');
       $(grid)
           .attr('row', 2)
           .attr('col', 3);
@@ -75,23 +76,19 @@ DIJS
       });
 
       it('should throw exception if row is not a number', () => {
-        let div = doc.createElement('pb-g-rectgrid');
-        Object.setPrototypeOf(div, Grid.prototype);
-        $(div)
+        $(grid)
             .attr('row', 'a')
             .attr('col', 1);
 
-        expect(() => div.createdCallback()).to.throw('a');
+        expect(() => grid.createdCallback()).to.throw('a');
       });
 
       it('should throw exception if col is not a number', () => {
-        let div = doc.createElement('pb-g-rectgrid');
-        Object.setPrototypeOf(div, Grid.prototype);
-        $(div)
+        $(grid)
             .attr('row', 1)
             .attr('col', 'a');
 
-        expect(() => div.createdCallback()).to.throw('a');
+        expect(() => grid.createdCallback()).to.throw('a');
       });
     });
 

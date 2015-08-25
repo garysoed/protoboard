@@ -1,9 +1,0 @@
-<html><head><base href="..">
-
-<link rel="import" href="ability/ability.html">
-<link rel="import" href="third_party/di.html">
-<link rel="import" href="third_party/jquery.html">
-<link rel="import" href="service/move.html">
-
-<script>"use strict";var _createClass=function(){function t(t,e){for(var r in e){var i=e[r];i.configurable=!0,i.value&&(i.writable=!0)}Object.defineProperties(t,e)}return function(e,r,i){return r&&t(e.prototype,r),i&&t(e,i),e}}(),_get=function t(e,r,i){var n=Object.getOwnPropertyDescriptor(e,r);if(void 0===n){var o=Object.getPrototypeOf(e);return null===o?void 0:t(o,r,i)}if("value"in n&&n.writable)return n.value;var a=n.get;return void 0===a?void 0:a.call(i)},_inherits=function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(t.__proto__=e)},_classCallCheck=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")};DIJS.bind("pb.ability.Pickable",function(t){var e=t("pb.$"),r=t("pb.ability.Ability"),i=t("pb.trigger.Click"),n=t("pb.service.Move"),o=Symbol(),a=function(t){function r(){var t=void 0===arguments[0]?"pickable":arguments[0],e=void 0===arguments[1]?new i:arguments[1],n=void 0===arguments[2]?!0:arguments[2];_classCallCheck(this,r),_get(Object.getPrototypeOf(r.prototype),"constructor",this).call(this,t,e),this[o]=n}return _inherits(r,t),_createClass(r,{init:{value:function(t){_get(Object.getPrototypeOf(r.prototype),"init",this).call(this,t),void 0===e(t).attr(this.attrName)&&e(t).attr(this.attrName,this[o])}},doTrigger:{value:function(t){n.add(t)}}}),r}(r);return a});</script>
-</head><body></body></html>

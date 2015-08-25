@@ -2,8 +2,8 @@
 
 <link rel="import" href="check.html">
 <link rel="import" href="pbelement.html">
-<link rel="import" href="service/config.html">
-<link rel="import" href="service/template.html">
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="ui/templateservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/handlebars.html">
 <link rel="import" href="third_party/jquery.html">
@@ -15,11 +15,11 @@ DIJS.bind('pb.ui.Generate', require => {
   const $registry = require('pb.$registry');
 
   const Check = require('pb.Check');
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const Handlebars = require('pb.Handlebars');
   const PbElement = require('pb.PbElement');
   const Promise = require('Promise');
-  const Template = require('pb.service.Template');
+  const Template = require('pb.ui.TemplateService');
 
   const EL_NAME = 'pb-u-generate';
 
@@ -57,12 +57,12 @@ DIJS.bind('pb.ui.Generate', require => {
    * ```
    *
    * All data passed into the templates, or custom partials used must be registered using the
-   * {{#crossLink "service.Template"}}{{/crossLink}}. So in the example above, we can register the
+   * {{#crossLink "ui.TemplateService"}}{{/crossLink}}. So in the example above, we can register the
    * data as follows:
    * ```javascript
    * Protoboard
    *     .setup(function(require) {
-   *       var Template = require('pb.service.Template');
+   *       var Template = require('pb.ui.TemplateService');
    *
    *       Template
    *           .addData('cards', [

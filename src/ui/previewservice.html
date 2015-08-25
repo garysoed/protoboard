@@ -1,0 +1,60 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+
+DIJS
+.bind('pb.ui.PreviewService.__ctor__', () => {
+  /**
+   * Service that lets the user preview an element on mouse hover.
+   *
+   * @class ui.PreviewService
+   * @static
+   */
+
+  // Private symbols
+  const __previewedEl__ = Symbol();
+
+  class Preview {
+
+    constructor() {
+      this[__previewedEl__] = null;
+    }
+
+    /**
+     * Element that is being previewed, if any. If null, no element is being previewed.
+     *
+     * @property previewedEl
+     * @type Element|null
+     */
+    get previewedEl() {
+      return this[__previewedEl__];
+    }
+    set previewedEl(el) {
+      let changed = this[__previewedEl__] !== el;
+      this[__previewedEl__] = el;
+      if (changed) {
+        $(this).trigger(Preview.Events.ELEMENT_CHANGED);
+      }
+    }
+  }
+
+  Preview.Events = {
+    /**
+     * Fired when the previewed element has been changed.
+     *
+     * @event element-changed
+     */
+    ELEMENT_CHANGED: 'element-changed'
+  };
+
+  return Preview;
+})
+.bind('pb.ui.PreviewService', require => {
+  const Preview = require('pb.ui.PreviewService.__ctor__');
+  let preview = new Preview();
+  preview.Events = Preview.Events;
+  return preview;
+});
+</script>

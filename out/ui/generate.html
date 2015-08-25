@@ -2,8 +2,8 @@
 
 <link rel="import" href="check.html">
 <link rel="import" href="pbelement.html">
-<link rel="import" href="service/config.html">
-<link rel="import" href="service/template.html">
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="ui/templateservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/handlebars.html">
 <link rel="import" href="third_party/jquery.html">
@@ -26,11 +26,11 @@ DIJS.bind("pb.ui.Generate", function (require) {
   var $registry = require("pb.$registry");
 
   var Check = require("pb.Check");
-  var Config = require("pb.service.Config");
+  var Config = require("pb.data.ConfigService");
   var Handlebars = require("pb.Handlebars");
   var PbElement = require("pb.PbElement");
   var Promise = require("Promise");
-  var Template = require("pb.service.Template");
+  var Template = require("pb.ui.TemplateService");
 
   var EL_NAME = "pb-u-generate";
 

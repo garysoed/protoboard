@@ -5,7 +5,7 @@
   <title>ability.FlexDroppable Unit Tests</title>
 
   <link rel="import" href="ability/flexdroppable.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="testutils.html">
   <link rel="import" href="third_party/di.html">
@@ -16,7 +16,7 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.constant('pb.service.Move', {
+.constant('pb.ui.MoveService', {
   nextElement: null,
   remove: () => {},
   mouseX: 0,
@@ -28,7 +28,7 @@ DIJS
   const doc = require('doc');
   const expect = require('expect');
   const FlexDroppable = require('pb.ability.FlexDroppable');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
   const t = require('pb.t');
   const Utils = require('pb.Utils');
 

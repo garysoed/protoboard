@@ -6,8 +6,8 @@
 
   <link rel="import" href="ability/abilities.html">
   <link rel="import" href="ability/helpable.html">
-  <link rel="import" href="service/config.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="data/configservice.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="trigger/click.html">
@@ -16,7 +16,7 @@
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
@@ -25,7 +25,7 @@ DIJS
   const $registry = require('pb.$registry');
   const Abilities = require('pb.ability.Abilities');
   const Click = require('pb.trigger.Click');
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const doc = require('doc');
   const Helpable = require('pb.ability.Helpable');
   const Key = require('pb.trigger.Key');

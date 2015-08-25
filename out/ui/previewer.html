@@ -1,8 +1,8 @@
 <html><head><base href="..">
 
 <link rel="import" href="pbelement.html">
-<link rel="import" href="service/config.html">
-<link rel="import" href="service/preview.html">
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="ui/previewservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 <link rel="import" href="utils.html">
@@ -29,11 +29,11 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", f
 
   var $registry = require("pb.$registry");
 
-  var Config = require("pb.service.Config");
+  var Config = require("pb.data.ConfigService");
   var doc = require("doc");
   var Events = require("pb.Events");
   var PbElement = require("pb.PbElement");
-  var Preview = require("pb.service.Preview");
+  var Preview = require("pb.ui.PreviewService");
   var template = require("template");
   var Utils = require("pb.Utils");
 

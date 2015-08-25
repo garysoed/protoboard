@@ -3,7 +3,7 @@
 <link rel="import" href="bootstrap.html">
 <link rel="import" href="net/cachedio.html">
 <link rel="import" href="net/inmemoryio.html">
-<link rel="import" href="net/session.html">
+<link rel="import" href="net/sessionservice.html">
 <link rel="import" href="third_party/di.html">
 
 <script>
@@ -89,9 +89,9 @@ DIJS
             .constant('pb.net.IO', this[__io__])
             .run(require => {
               const Bootstrap = require('pb.Bootstrap');
-              const SessionService = require('pb.net.Session');
-              const StateService = require('pb.service.State');
-              const TemplateService = require('pb.service.Template');
+              const SessionService = require('pb.net.SessionService');
+              const StateService = require('pb.data.StateService');
+              const TemplateService = require('pb.ui.TemplateService');
 
               this[__gameSyncPromise__](require)
                   .then(gameSync => {
@@ -153,7 +153,7 @@ DIJS
    */
   Runner.forNewGame = function(io, playerCount, initialGameState) {
     return new Runner(io, require => {
-      const SessionService = require('pb.net.Session');
+      const SessionService = require('pb.net.SessionService');
       return SessionService.create(playerCount, initialGameState);
     });
   };
@@ -169,7 +169,7 @@ DIJS
    */
   Runner.forExistingGame = function(io, gameId) {
     return new Runner(io, require => {
-      const SessionService = require('pb.net.Session');
+      const SessionService = require('pb.net.SessionService');
       return Promise.resolve(SessionService.get(gameId));
     });
   };

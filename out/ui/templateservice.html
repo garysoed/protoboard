@@ -1,0 +1,94 @@
+<html><head><base href="..">
+
+<link rel="import" href="check.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/handlebars.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.ui.TemplateService.__ctor__", function (require) {
+
+  var $ = require("pb.$");
+  var Events = require("pb.Events");
+  var Handlebars = require("pb.Handlebars");
+
+  var __promises__ = Symbol("promises");
+
+  var Service = (function () {
+    function Service() {
+      _classCallCheck(this, Service);
+
+      this[__promises__] = new Map();
+    }
+
+    _createClass(Service, {
+      addPartial: {
+        value: function addPartial(name, element) {
+          Handlebars.registerPartial(name, element.innerHTML.replace("&gt;", ">"));
+          return this;
+        }
+      },
+      addData: {
+        value: function addData(name, data) {
+          if (this[__promises__].has(name)) {
+            $(this).trigger(name, data);
+          } else {
+            this[__promises__].set(name, Promise.resolve([name, data]));
+          }
+          return this;
+        }
+      },
+      get: {
+        value: function get(name) {
+          var _this = this;
+
+          if (!this[__promises__].has(name)) {
+            this[__promises__].set(name, new Promise(function (resolve, reject) {
+              Events.of(_this, _this).on("jquery", name, function (event, data) {
+                resolve([name, data]);
+              });
+            }));
+          }
+
+          return this[__promises__].get(name);
+        }
+      }
+    });
+
+    return Service;
+  })();
+
+  return Service;
+}).bind("pb.ui.TemplateService.__forHelper__", function (require) {
+
+  var Check = require("pb.Check");
+  var Handlebars = require("pb.Handlebars");
+
+  return function (from, to, step, options) {
+    if (options === undefined) {
+      options = step;
+      step = 1;
+    }
+    var rv = "";
+    for (var i = Check(from).isInt().orThrows(); i < Check(to).isInt().orThrows(); i += Check(step).isInt().orThrows()) {
+      var data = Handlebars.createFrame(options.data || {});
+      data.index = i;
+      rv += options.fn(this, { data: data });
+    }
+    return rv;
+  };
+}).bind("pb.ui.TemplateService", function (require) {
+
+  var Service = require("pb.ui.TemplateService.__ctor__");
+  var forHelper = require("pb.ui.TemplateService.__forHelper__");
+
+  Handlebars.registerHelper("pb-for", forHelper);
+
+  return new Service();
+});</script>
+</head><body></body></html>

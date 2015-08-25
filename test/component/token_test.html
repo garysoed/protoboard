@@ -11,7 +11,7 @@
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .run(require => {
 
   require('pb.component.Token');

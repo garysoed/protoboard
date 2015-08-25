@@ -3,7 +3,7 @@
 <link rel="import" href="third_party/di.html">
 
 <link rel="import" href="pbelement.html">
-<link rel="import" href="service/config.html">
+<link rel="import" href="data/configservice.html">
 <link rel="import" href="grid/grid.html">
 <link rel="import" href="utils.html">
 
@@ -53,7 +53,7 @@ DIJS
 .bind('pb.grid.RectGrid', require => {
 
   const $registry = require('pb.$registry');
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const Grid = require('pb.grid.Grid');
   const templateMain = require('templateMain');
   const templateRow = require('templateRow');

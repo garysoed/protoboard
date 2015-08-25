@@ -12,7 +12,7 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.constant('pb.service.Move', {
+.constant('pb.ui.MoveService', {
   mouseX: 0,
   mouseY: 0,
   movedElements: new Set()
@@ -21,7 +21,7 @@ DIJS
   add() {},
   remove() {}
 })
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .with('pb.Events', require => require('pb.t').createFakeEvents())
 .run(require => {
 
@@ -33,7 +33,7 @@ DIJS
   const expect = require('expect');
   const Key = require('pb.trigger.Key');
   const KeyService = require('pb.trigger.Key.__service__');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
   const Service = require('pb.trigger.Key.__service__.__ctor__');
   const t = require('pb.t');
 

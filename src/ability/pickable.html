@@ -3,7 +3,7 @@
 <link rel="import" href="ability/ability.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
-<link rel="import" href="service/move.html">
+<link rel="import" href="ui/moveservice.html">
 
 <script>
 DIJS
@@ -12,7 +12,7 @@ DIJS
   const $ = require('pb.$');
   const Ability = require('pb.ability.Ability');
   const Click = require('pb.trigger.Click');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();

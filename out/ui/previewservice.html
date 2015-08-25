@@ -1,0 +1,50 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.ui.PreviewService.__ctor__", function () {
+  var __previewedEl__ = Symbol();
+
+  var Preview = (function () {
+    function Preview() {
+      _classCallCheck(this, Preview);
+
+      this[__previewedEl__] = null;
+    }
+
+    _createClass(Preview, {
+      previewedEl: {
+        get: function () {
+          return this[__previewedEl__];
+        },
+        set: function (el) {
+          var changed = this[__previewedEl__] !== el;
+          this[__previewedEl__] = el;
+          if (changed) {
+            $(this).trigger(Preview.Events.ELEMENT_CHANGED);
+          }
+        }
+      }
+    });
+
+    return Preview;
+  })();
+
+  Preview.Events = {
+    ELEMENT_CHANGED: "element-changed"
+  };
+
+  return Preview;
+}).bind("pb.ui.PreviewService", function (require) {
+  var Preview = require("pb.ui.PreviewService.__ctor__");
+  var preview = new Preview();
+  preview.Events = Preview.Events;
+  return preview;
+});</script>
+</head><body></body></html>

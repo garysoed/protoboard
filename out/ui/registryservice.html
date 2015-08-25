@@ -1,0 +1,127 @@
+<html><head><base href="..">
+
+<link rel="import" href="ability/abilities.html">
+<link rel="import" href="external.html">
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.ui.RegistryService", function (require) {
+  var Abilities = require("pb.ability.Abilities");
+  var Config = require("pb.data.ConfigService");
+  var console = require("console");
+
+  var __elements__ = Symbol();
+  var __toRun__ = Symbol();
+
+  var Registry = (function () {
+    function Registry() {
+      _classCallCheck(this, Registry);
+
+      this[__elements__] = new Map();
+      this[__toRun__] = [];
+    }
+
+    _createClass(Registry, {
+      add: {
+        value: function add(name, ctor) {
+          if (this[__elements__].has(name)) {
+            throw new Error("" + name + " is already registered");
+          }
+          this[__elements__].set(name, ctor.prototype);
+          this.runAtRegister(function (doc, Config) {
+            if (!Config.getAll(name)) {
+              console.warn("No configuration for " + name);
+            } else {
+              var builder = Abilities.of(ctor.prototype);
+              var _iteratorNormalCompletion = true;
+              var _didIteratorError = false;
+              var _iteratorError = undefined;
+
+              try {
+                for (var _iterator = Config.getAll(name)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                  var ability = _step.value;
+
+                  builder.add(ability);
+                }
+              } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion && _iterator["return"]) {
+                    _iterator["return"]();
+                  }
+                } finally {
+                  if (_didIteratorError) {
+                    throw _iteratorError;
+                  }
+                }
+              }
+            }
+
+            try {
+              doc.registerElement(name, ctor);
+            } catch (e) {
+              console.warn(e.message);
+            }
+          });
+          return this;
+        }
+      },
+      runAtRegister: {
+        value: function runAtRegister(fn) {
+          this[__toRun__].push(fn);
+          return this;
+        }
+      },
+      register: {
+        value: function register(doc) {
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = this[__toRun__][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var fn = _step.value;
+
+              fn(doc, Config);
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator["return"]) {
+                _iterator["return"]();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
+          }
+
+          return this;
+        }
+      },
+      reset: {
+        value: function reset() {
+          console.warn("Registry#reset is deprecated");
+          this[__elements__] = new Map();
+          this[__toRun__] = [];
+        }
+      }
+    });
+
+    return Registry;
+  })();
+
+  return Registry;
+});</script>
+</head><body></body></html>

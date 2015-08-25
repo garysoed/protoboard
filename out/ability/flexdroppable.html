@@ -1,7 +1,7 @@
 <html><head><base href="..">
 
 <link rel="import" href="ability/droppable.html">
-<link rel="import" href="service/move.html">
+<link rel="import" href="ui/moveservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
 <link rel="import" href="utils.html">
@@ -20,7 +20,7 @@ DIJS.bind("pb.ability.FlexDroppable", function (require) {
 
   var Click = require("pb.trigger.Click");
   var Droppable = require("pb.ability.Droppable");
-  var Move = require("pb.service.Move");
+  var Move = require("pb.ui.MoveService");
   var Utils = require("pb.Utils");
 
   var __mutationObserver__ = Symbol("mutationObserver");

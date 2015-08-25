@@ -1,8 +1,8 @@
 <base href="..">
 
 <link rel="import" href="pbelement.html">
-<link rel="import" href="service/config.html">
-<link rel="import" href="service/preview.html">
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="ui/previewservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 <link rel="import" href="utils.html">
@@ -21,18 +21,18 @@ DIJS
 
   const $registry = require('pb.$registry');
 
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const doc = require('doc');
   const Events = require('pb.Events');
   const PbElement = require('pb.PbElement');
-  const Preview = require('pb.service.Preview');
+  const Preview = require('pb.ui.PreviewService');
   const template = require('template');
   const Utils = require('pb.Utils');
 
   /**
    * Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered
    * over. This works in tandem with {{#crossLink ui.Preview}}{{/crossLink}} and
-   * {{#crossLink service.Preview}}{{/crossLink}}.
+   * {{#crossLink ui.PreviewService}}{{/crossLink}}.
    *
    * @class ui.Previewer
    * @extends PbElement

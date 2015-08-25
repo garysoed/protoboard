@@ -1,0 +1,112 @@
+<base href="..">
+
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>
+DIJS
+.constant('doc', document.currentScript.ownerDocument)
+.bind('pb.data.StateService.__elName__', () => 'pb-state')
+.bind('pb.data.StateService.__symbols__', () => {
+  return {
+    __document__: Symbol()
+  };
+})
+.bind('pb.data.StateService.__ctor__', require => {
+
+  const $ = require('pb.$');
+  const doc = require('doc');
+
+  const __document__ = require('pb.data.StateService.__symbols__').__document__;
+  const __getElement__ = Symbol();
+  const __observer__ = Symbol();
+  const __onMutation__ = Symbol();
+
+  const EL_NAME = require('pb.data.StateService.__elName__');
+
+  /**
+   * Service that manages runtime state of the game. This service uses `pb-state` element to store
+   * the state.
+   *
+   * You can set the runtime state by modifying the `pb-state` element attributes, or by using this
+   * service. Every attribute name of the `pb-state` element corresponds to the key, while its value
+   * is the associated value.
+   *
+   * @class data.StateService
+   * @static
+   */
+  class Service {
+
+    constructor(doc = null) {
+      this[__document__] = doc;
+    }
+
+    /**
+     * @method __getElement__
+     * @param {string} key The key that the `pb-state` element should contain.
+     * @return {!Element} The `pb-state` element with the given key.
+     * @private
+     */
+    [__getElement__](key) {
+      let el = this[__document__].querySelector(`${EL_NAME}[${key}]`);
+      if (!el) {
+        // Check if a pb-state element already exists.
+        el = this[__document__].querySelector(`${EL_NAME}`);
+        if (!el) {
+          el = this[__document__].createElement(`${EL_NAME}`);
+          this[__document__].body.appendChild(el);
+        }
+        $(el).attr(key, '');
+      }
+      return el;
+    }
+
+    /**
+     * Sets the value of the given key.
+     *
+     * @method put
+     * @param {string} key The key corresponding to the value to be inserted.
+     * @param {string} value The value to set.
+     */
+    put(key, value) {
+      $(this[__getElement__](key)).attr(key, value);
+    }
+
+    /**
+     * @method get
+     * @param {string} key The key to retrieve the value of.
+     * @return {string} The value corresponding to the key.
+     */
+    get(key) {
+      return $(this[__getElement__](key)).attr(key);
+    }
+  }
+
+  return Service;
+})
+.bind('pb.data.StateService', require => {
+
+  const $registry = require('pb.$registry');
+  const Config = require('pb.data.ConfigService');
+  const State = require('pb.data.StateService.__ctor__');
+
+  const __document__ = require('pb.data.StateService.__symbols__').__document__;
+
+  const EL_NAME = require('pb.data.StateService.__elName__');
+
+  let state = new State();
+
+  class Element extends HTMLElement { }
+
+  $registry
+      .add(EL_NAME, Element.prototype)
+      .runAtRegister(doc => {
+        state[__document__] = doc;
+      });
+  Config.add(EL_NAME);
+
+  return state;
+});
+
+</script>

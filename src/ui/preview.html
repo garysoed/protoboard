@@ -1,9 +1,9 @@
 <base href="..">
 
 <link rel="import" href="pbelement.html">
-<link rel="import" href="service/config.html">
-<link rel="import" href="service/preview.html">
-<link rel="import" href="service/registry.html">
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="ui/previewservice.html">
+<link rel="import" href="ui/registryservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 <link rel="import" href="utils.html">
@@ -13,10 +13,10 @@ DIJS.bind('pb.ui.Preview', require => {
 
   const $registry = require('pb.$registry');
 
-  const Config = require('pb.service.Config');
+  const Config = require('pb.data.ConfigService');
   const Events = require('pb.Events');
   const PbElement = require('pb.PbElement');
-  const Preview = require('pb.service.Preview');
+  const Preview = require('pb.ui.PreviewService');
   const Utils = require('pb.Utils');
 
   /**

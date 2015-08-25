@@ -53,10 +53,10 @@ DIJS
           .join('playerId', { name: 'Player 1' })
           .join('playerId2', { name: 'Player 2' })
           .setup(setupFn)
-          .run()
+          .run(doc)
           .then(require => {
-            const Rpc = require('pb.net.Rpc');
-            const TemplateService = require('pb.service.Template');
+            const Rpc = require('pb.net.RpcService');
+            const TemplateService = require('pb.ui.TemplateService');
             return Promise.all([
               require,
               Rpc.get('/(root)'),
@@ -68,8 +68,8 @@ DIJS
           .then(values => {
             let [require, root, ...templateData] = values;
             let [templatePlayerCount, templatePlayers, templateState] = templateData;
-            const StateService = require('pb.service.State');
-            const TemplateService = require('pb.service.Template');
+            const StateService = require('pb.data.StateService');
+            const TemplateService = require('pb.ui.TemplateService');
 
             let expectedPlayers = {
               0: {
@@ -124,10 +124,10 @@ DIJS
             .forExistingGame('0')
             .join('playerId2', { name: 'Player 2' })
             .setup(setupFn)
-            .run()
+            .run(doc)
             .then(require => {
-              const Rpc = require('pb.net.Rpc');
-              const TemplateService = require('pb.service.Template');
+              const Rpc = require('pb.net.RpcService');
+              const TemplateService = require('pb.ui.TemplateService');
               return Promise.all([
                 require,
                 Rpc.get('/(root)'),
@@ -139,8 +139,8 @@ DIJS
             .then(values => {
               let [require, root, ...templateData] = values;
               let [templatePlayerCount, templatePlayers, templateState] = templateData;
-              const StateService = require('pb.service.State');
-              const TemplateService = require('pb.service.Template');
+              const StateService = require('pb.data.StateService');
+              const TemplateService = require('pb.ui.TemplateService');
 
               let expectedPlayers = {
                 0: {

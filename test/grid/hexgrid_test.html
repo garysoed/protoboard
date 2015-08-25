@@ -5,14 +5,14 @@
   <title>grid.HexGrid Unit Tests</title>
 
   <link rel="import" href="grid/hexgrid.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .run(require => {
   require('pb.grid.HexGrid');
 

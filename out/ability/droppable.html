@@ -1,7 +1,7 @@
 <html><head><base href="..">
 
 <link rel="import" href="ability/ability.html">
-<link rel="import" href="service/move.html">
+<link rel="import" href="ui/moveservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
 
@@ -20,7 +20,7 @@ DIJS.bind("pb.ability.Droppable", function (require) {
   var $ = require("pb.$");
   var Ability = require("pb.ability.Ability");
   var Click = require("pb.trigger.Click");
-  var Move = require("pb.service.Move");
+  var Move = require("pb.ui.MoveService");
 
   var __defaultEnabled__ = Symbol();
 

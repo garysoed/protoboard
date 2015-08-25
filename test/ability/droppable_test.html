@@ -7,8 +7,8 @@
   <link rel="import" href="testbase.html">
 
   <link rel="import" href="ability/droppable.html">
-  <link rel="import" href="service/move.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="ui/moveservice.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="third_party/events.html">
   <link rel="import" href="third_party/jquery.html">
@@ -17,7 +17,7 @@
 <body>
 <script>
 DIJS
-.constant('pb.service.Move', {
+.constant('pb.ui.MoveService', {
   nextElement: null
 })
 .constant('doc', document.currentScript.ownerDocument)
@@ -27,7 +27,7 @@ DIJS
   const doc = require('doc');
   const Droppable = require('pb.ability.Droppable');
   const expect = require('expect');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
   const Utils = require('pb.Utils');
 
   describe('ability.Droppable', () => {

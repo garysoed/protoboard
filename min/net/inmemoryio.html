@@ -1,7 +1,0 @@
-<html><head><base href="..">
-
-<link rel="import" href="net/abstractio.html">
-<link rel="import" href="third_party/di.html">
-
-<script>"use strict";var _createComputedClass=function(){function t(t,e){for(var r=0;r<e.length;r++){var n=e[r];n.configurable=!0,n.value&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(e,r,n){return r&&t(e.prototype,r),n&&t(e,n),e}}(),_inherits=function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(t.__proto__=e)},_classCallCheck=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")};DIJS.bind("pb.net.InMemoryIO",function(t){var e=t("pb.net.AbstractIO"),r=Symbol("callbacks"),n=Symbol("data"),o=Symbol("triggerUpdate"),i=function(t){function e(){_classCallCheck(this,e),this[r]=[],this[n]=new Map}return _inherits(e,t),_createComputedClass(e,[{key:o,value:function(t,e){var n=!0,o=!1,i=void 0;try{for(var a,l=this[r][Symbol.iterator]();!(n=(a=l.next()).done);n=!0){var u=a.value;u(t,e)}}catch(s){o=!0,i=s}finally{try{!n&&l["return"]&&l["return"]()}finally{if(o)throw i}}}},{key:"listen",value:function(t){this[r].push(t)}},{key:"get",value:function(t){var e=this[n].get(t);return Promise.resolve(void 0===e?null:e)}},{key:"set",value:function(t,e){return this[n].set(t,e),this[o](t,e),Promise.resolve()}}]),e}(e);return i});</script>
-</head><body></body></html>

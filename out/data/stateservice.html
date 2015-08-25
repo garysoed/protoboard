@@ -1,0 +1,105 @@
+<html><head><base href="..">
+
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>"use strict";
+
+var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
+
+var _createComputedClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var prop = props[i]; prop.configurable = true; if (prop.value) prop.writable = true; Object.defineProperty(target, prop.key, prop); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.constant("doc", document.currentScript.ownerDocument).bind("pb.data.StateService.__elName__", function () {
+  return "pb-state";
+}).bind("pb.data.StateService.__symbols__", function () {
+  return {
+    __document__: Symbol()
+  };
+}).bind("pb.data.StateService.__ctor__", function (require) {
+
+  var $ = require("pb.$");
+  var doc = require("doc");
+
+  var __document__ = require("pb.data.StateService.__symbols__").__document__;
+  var __getElement__ = Symbol();
+  var __observer__ = Symbol();
+  var __onMutation__ = Symbol();
+
+  var EL_NAME = require("pb.data.StateService.__elName__");
+
+  var Service = (function () {
+    function Service() {
+      var doc = arguments[0] === undefined ? null : arguments[0];
+
+      _classCallCheck(this, Service);
+
+      this[__document__] = doc;
+    }
+
+    _createComputedClass(Service, [{
+      key: __getElement__,
+      value: function (key) {
+        var el = this[__document__].querySelector("" + EL_NAME + "[" + key + "]");
+        if (!el) {
+          el = this[__document__].querySelector("" + EL_NAME);
+          if (!el) {
+            el = this[__document__].createElement("" + EL_NAME);
+            this[__document__].body.appendChild(el);
+          }
+          $(el).attr(key, "");
+        }
+        return el;
+      }
+    }, {
+      key: "put",
+      value: function put(key, value) {
+        $(this[__getElement__](key)).attr(key, value);
+      }
+    }, {
+      key: "get",
+      value: function get(key) {
+        return $(this[__getElement__](key)).attr(key);
+      }
+    }]);
+
+    return Service;
+  })();
+
+  return Service;
+}).bind("pb.data.StateService", function (require) {
+
+  var $registry = require("pb.$registry");
+  var Config = require("pb.data.ConfigService");
+  var State = require("pb.data.StateService.__ctor__");
+
+  var __document__ = require("pb.data.StateService.__symbols__").__document__;
+
+  var EL_NAME = require("pb.data.StateService.__elName__");
+
+  var state = new State();
+
+  var Element = (function (_HTMLElement) {
+    function Element() {
+      _classCallCheck(this, Element);
+
+      if (_HTMLElement != null) {
+        _HTMLElement.apply(this, arguments);
+      }
+    }
+
+    _inherits(Element, _HTMLElement);
+
+    return Element;
+  })(HTMLElement);
+
+  $registry.add(EL_NAME, Element.prototype).runAtRegister(function (doc) {
+    state[__document__] = doc;
+  });
+  Config.add(EL_NAME);
+
+  return state;
+});</script>
+</head><body></body></html>

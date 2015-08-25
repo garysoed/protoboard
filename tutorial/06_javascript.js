@@ -1,6 +1,6 @@
 /**
  * Protoboard exposes JavaScript API that you can use to customize your board game prototype. Some
- * services, such as the {{#crossLink "service.Log"}}Log Service{{/crossLink}}, requires you to call
+ * services, such as the {{#crossLink "data.LogService"}}Log Service{{/crossLink}}, requires you to call
  * the JavaScript API.
  *
  * In order to access the API, you will to import the file containing the JavaScript you want to
@@ -16,12 +16,12 @@
  *     .forNewGame(2, {})
  *     .setup(function(require) {
  *       // Access the log service here.
- *       require('pb.service.Log').log('event', 'setting up');
+ *       require('pb.data.LogService').log('event', 'setting up');
  *     })
  *     .run(document)
  *     .then(function(require) {
  *       // You can also access the log service here.
- *       require('pb.service.Log').log('event', 'running');
+ *       require('pb.data.LogService').log('event', 'running');
  *     });
  * ```
  *

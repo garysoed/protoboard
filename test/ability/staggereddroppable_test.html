@@ -5,7 +5,7 @@
   <title>ability.StaggeredDroppable Unit Tests</title>
 
   <link rel="import" href="ability/staggereddroppable.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/chance.html">
   <link rel="import" href="third_party/di.html">
@@ -15,9 +15,9 @@
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .constant('doc', document.currentScript.ownerDocument)
-.constant('pb.service.Move', {
+.constant('pb.ui.MoveService', {
   nextElement: null
 })
 .run(require => {
@@ -26,7 +26,7 @@ DIJS
   const Chance = require('pb.Chance');
   const doc = require('doc');
   const expect = require('expect');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
   const StaggeredDroppable = require('pb.ability.StaggeredDroppable');
   const Utils = require('pb.Utils');
 

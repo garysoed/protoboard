@@ -1,6 +1,6 @@
 <html><head><base href="..">
 
-<link rel="import" href="service/move.html">
+<link rel="import" href="ui/moveservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 <link rel="import" href="trigger/trigger.html">
@@ -16,7 +16,7 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 DIJS.bind("pb.trigger.Key.__service__.__ctor__", function (require) {
   var Events = require("pb.Events");
-  var Move = require("pb.service.Move");
+  var Move = require("pb.ui.MoveService");
 
   var __document__ = Symbol("document");
 
@@ -131,7 +131,7 @@ DIJS.bind("pb.trigger.Key.__service__.__ctor__", function (require) {
 
   var $registry = require("pb.$registry");
   var Events = require("pb.Events");
-  var Move = require("pb.service.Move");
+  var Move = require("pb.ui.MoveService");
   var Service = require("pb.trigger.Key.__service__");
   var Trigger = require("pb.trigger.Trigger");
   var Triggers = require("pb.trigger.Triggers");

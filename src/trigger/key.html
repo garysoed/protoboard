@@ -1,6 +1,6 @@
 <base href="..">
 
-<link rel="import" href="service/move.html">
+<link rel="import" href="ui/moveservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/events.html">
 <link rel="import" href="trigger/trigger.html">
@@ -10,7 +10,7 @@
 DIJS
 .bind('pb.trigger.Key.__service__.__ctor__', require => {
   const Events = require('pb.Events');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
 
   const __document__ = Symbol('document');
 
@@ -148,7 +148,7 @@ DIJS
 
   const $registry = require('pb.$registry');
   const Events = require('pb.Events');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
   const Service = require('pb.trigger.Key.__service__');
   const Trigger = require('pb.trigger.Trigger');
   const Triggers = require('pb.trigger.Triggers');

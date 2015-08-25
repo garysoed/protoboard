@@ -4,7 +4,7 @@
 <link rel="import" href="ability/pickable.html">
 <link rel="import" href="ability/toggleable.html">
 <link rel="import" href="component/component.html">
-<link rel="import" href="service/config.html">
+<link rel="import" href="data/configservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
 <link rel="import" href="trigger/key.html">
@@ -100,7 +100,7 @@ DIJS.constant("doc", document.currentScript.ownerDocument)["with"]("template", f
   var $registry = require("pb.$registry");
   var Click = require("pb.trigger.Click");
   var Component = require("pb.component.Component");
-  var Config = require("pb.service.Config");
+  var Config = require("pb.data.ConfigService");
   var doc = require("doc");
   var Helpable = require("pb.ability.Helpable");
   var Key = require("pb.trigger.Key");

@@ -14,8 +14,8 @@
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
-.constant('pb.service.Move', {
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
+.constant('pb.ui.MoveService', {
   nextElement: null,
   mouseX: 0
 })
@@ -26,7 +26,7 @@ DIJS
   const _ = require('pb._');
   const doc = require('doc');
   const expect = require('expect');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
   const OrderedDroppable = require('pb.ability.OrderedDroppable');
   const Utils = require('pb.Utils');
 

@@ -7,8 +7,8 @@
 
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="region/rect.html">
-  <link rel="import" href="service/move.html">
-  <link rel="import" href="service/registry.html">
+  <link rel="import" href="ui/moveservice.html">
+  <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="utils.html">
   <link rel="import" href="testutils.html">
 </head>
@@ -17,7 +17,7 @@
 
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.service.Registry'))())
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
@@ -25,7 +25,7 @@ DIJS
 
   const doc = require('doc');
   const expect = require('expect');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
   const Rect = require('pb.region.Rect');
   const t = require('pb.t');
   const Utils = require('pb.Utils');

@@ -2,7 +2,7 @@
 
 <link rel="import" href="ability/droppable.html">
 <link rel="import" href="check.html">
-<link rel="import" href="service/move.html">
+<link rel="import" href="ui/moveservice.html">
 <link rel="import" href="third_party/chance.html">
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="trigger/key.html">
@@ -25,7 +25,7 @@ DIJS.bind("pb.ability.StaggeredDroppable", function (require) {
   var Check = require("pb.Check");
   var Droppable = require("pb.ability.Droppable");
   var Key = require("pb.trigger.Key");
-  var Move = require("pb.service.Move");
+  var Move = require("pb.ui.MoveService");
   var Utils = require("pb.Utils");
 
   var __defaultProbabilities__ = Symbol();

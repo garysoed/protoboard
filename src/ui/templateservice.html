@@ -1,0 +1,144 @@
+<base href="..">
+
+<link rel="import" href="check.html">
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="third_party/handlebars.html">
+<link rel="import" href="third_party/jquery.html">
+
+<script>
+DIJS
+.bind('pb.ui.TemplateService.__ctor__', require => {
+
+  const $ = require('pb.$');
+  const Events = require('pb.Events');
+  const Handlebars = require('pb.Handlebars');
+
+  const __promises__ = Symbol('promises');
+
+  /**
+   * Service to manage templates in a ProtoBoard app. Use this service to register Handlebar
+   * partials and data to the template. For example:
+   * ```javascript
+   * Protoboard.setup(function(require) {
+   *   var Template = require('pb.ui.TemplateService');
+   *
+   *   // Registers a partial. The partial value must be contained in the element passed into the
+   *   // service.
+   *   Template.addPartial('card', document.querySelector('template'));
+   *
+   *   // Registers data to the template.
+   *   Template.addData('cards', [
+   *     { value: 'A', suit: 'Spade' },
+   *     { value: 'A', suit: 'Club' },
+   *     { value: 'A', suit: 'Heart' },
+   *     { value: 'A', suit: 'Diamond' },
+   *   ]);
+   * });
+   * ```
+   *
+   * This class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for
+   * loop that copies the inner block several times. You can access the index of the loop using the
+   * `@index` variable.
+   *
+   * @class ui.TemplateService
+   * @static
+   */
+  class Service {
+
+    constructor() {
+      this[__promises__] = new Map();
+    }
+
+    /**
+     * Registers the given partial.
+     *
+     * @method addPartial
+     * @param {string} name Name to use for the partial.
+     * @param {Element} element Element whose innerHTML contains the partial definition. Note that
+     *    while this class does not enforce it, this element's type should be
+     *    {{#crossLink "&lt;template&gt;"}}{{/crossLink}}. This is to deal with handling ">" to
+     *    allow you to use HTML tags in the partial and calling other partials.
+     * @return {ui.TemplateService} This service for chaining.
+     */
+    addPartial(name, element) {
+      Handlebars.registerPartial(name, element.innerHTML.replace('&gt;', '>'));
+      return this;
+    }
+
+    /**
+     * Adds data to be inserted into the templates.
+     *
+     * @method addData
+     * @param {string} name Name to add the data by.
+     * @param {any} data Data to be added.
+     * @return {ui.TemplateService} This service for chaining.
+     */
+    addData(name, data) {
+      if (this[__promises__].has(name)) {
+        $(this).trigger(name, data);
+      } else {
+        this[__promises__].set(name, Promise.resolve([name, data]));
+      }
+      return this;
+    }
+
+    /**
+     * Retrieves the data with the given key.
+     *
+     * @method get
+     * @param {string} name Key of the data to retrieve.
+     * @return {Promise} Promise that will be resolved with an array consisting of the key and the
+     *    data requested.
+     */
+    get(name) {
+      if (!this[__promises__].has(name)) {
+        this[__promises__].set(
+            name,
+            new Promise((resolve, reject) => {
+              Events.of(this, this)
+                  .on('jquery', name, (event, data) => {
+                    resolve([name, data]);
+                  });
+            }));
+      }
+
+      return this[__promises__].get(name);
+    }
+  }
+
+  return Service;
+})
+.bind('pb.ui.TemplateService.__forHelper__', require => {
+
+  const Check = require('pb.Check');
+  const Handlebars = require('pb.Handlebars');
+
+  return function(from, to, step, options) {
+    if (options === undefined) {
+      // Shift the args if step is not defined.
+      options = step;
+      step = 1;
+    }
+    let rv = '';
+    for (let i = Check(from).isInt().orThrows();
+        i < Check(to).isInt().orThrows();
+        i += Check(step).isInt().orThrows()) {
+      let data = Handlebars.createFrame(options.data || {});
+      data.index = i;
+      rv += options.fn(this, { data: data });
+    }
+    return rv;
+  };
+})
+.bind('pb.ui.TemplateService', require => {
+
+  const Service = require('pb.ui.TemplateService.__ctor__');
+  const forHelper = require('pb.ui.TemplateService.__forHelper__');
+
+  // Use function since Handlebars changes the context of this.
+  Handlebars.registerHelper('pb-for', forHelper);
+
+  return new Service();
+});
+
+</script>

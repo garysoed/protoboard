@@ -1,0 +1,102 @@
+<base href="..">
+
+<link rel="import" href="ability/abilities.html">
+<link rel="import" href="external.html">
+<link rel="import" href="data/configservice.html">
+<link rel="import" href="third_party/di.html">
+
+<script>
+
+DIJS
+.bind('pb.ui.RegistryService', require => {
+  const Abilities = require('pb.ability.Abilities');
+  const Config = require('pb.data.ConfigService');
+  const console = require('console');
+
+  const __elements__ = Symbol();
+  const __toRun__ = Symbol();
+
+  class Registry {
+    /**
+     * A service that collects functions to be ran at bootstrap.
+     *
+     * @constructor
+     * @class ui.RegistryService
+     */
+    constructor() {
+      this[__elements__] = new Map();
+      this[__toRun__] = [];
+    }
+
+    /**
+     * Sets the given element name and prototype to be registered as custom element at bootstrap.
+     *
+     * @method add
+     * @param {name} name Element name to register
+     * @param {Object} ctor Constructor function of the custom element.
+     * @return {!ui.RegistryService} This object for chaining.
+     */
+    add(name, ctor) {
+      if (this[__elements__].has(name)) {
+        throw new Error(`${name} is already registered`);
+      }
+      this[__elements__].set(name, ctor.prototype);
+      this.runAtRegister((doc, Config) => {
+        if (!Config.getAll(name)) {
+          console.warn(`No configuration for ${name}`);
+        } else {
+          let builder = Abilities.of(ctor.prototype);
+          for (let ability of Config.getAll(name)) {
+            builder.add(ability);
+          }
+        }
+
+        // TODO(gs): Handle this
+        try {
+          doc.registerElement(name, ctor);
+        } catch (e) {
+          console.warn(e.message);
+        }
+      });
+      return this;
+    }
+
+    /**
+     * Runs the given function at bootstrap.
+     *
+     * @method runAtRegister
+     * @param {Function} fn The function to run. This function takes in a
+     *    {{#crossLink "Document"}}{{/crossLink}} and a
+     *    {{#crossLink "data.ConfigService"}}{{/crossLink}}.
+     * @return {!ui.RegistryService} This object for chaining.
+     */
+    runAtRegister(fn) {
+      this[__toRun__].push(fn);
+      return this;
+    }
+
+    /**
+     * Runs all the collected functions.
+     *
+     * @method register
+     * @param {Document} doc Document object to run the functions in.
+     * @param {data.ConfigService} Config The configuration service to use.
+     * @return {!ui.RegistryService} This object for chaining.
+     */
+    register(doc) {
+      for (let fn of this[__toRun__]) {
+        fn(doc, Config);
+      }
+      return this;
+    }
+
+    reset() {
+      console.warn('Registry#reset is deprecated');
+      this[__elements__] = new Map();
+      this[__toRun__] = [];
+    }
+  }
+
+  return Registry;
+});
+</script>

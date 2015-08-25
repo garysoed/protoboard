@@ -6,7 +6,7 @@
  * {{#crossLink "ability.Ability"}}{{/crossLink}} class. Extending this class provides the following
  * features:
  * - Reacts to changes to configuration attribute(s) of this ability.
- * - Hook into the {{#crossLink "service.Log"}}Logging service{{/crossLink}}
+ * - Hook into the {{#crossLink "data.LogService"}}Logging service{{/crossLink}}
  * - Customizable trigger
  *
  * Every instance of an ability has a default configuration. When an element created, the ability
@@ -36,11 +36,11 @@
  * the configuration on the element.
  *
  * Now that you have your custom ability, you can add it to an element using the
- * {{#crossLink "service.Config"}}{{/crossLink}}. For example:
+ * {{#crossLink "data.ConfigService"}}{{/crossLink}}. For example:
  *
  * ```javascript
  * Protoboard.forNewGame().setup(function(require) {
- *   var Config = require('service.Config');
+ *   var Config = require('data.ConfigService');
  *   Config.add('pb-c-card', new CustomAbility());
  * });
  * ```

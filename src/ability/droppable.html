@@ -1,7 +1,7 @@
 <base href="..">
 
 <link rel="import" href="ability/ability.html">
-<link rel="import" href="service/move.html">
+<link rel="import" href="ui/moveservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="trigger/click.html">
 
@@ -12,7 +12,7 @@ DIJS
   const $ = require('pb.$');
   const Ability = require('pb.ability.Ability');
   const Click = require('pb.trigger.Click');
-  const Move = require('pb.service.Move');
+  const Move = require('pb.ui.MoveService');
 
   // Private symbols.
   const __defaultEnabled__ = Symbol();
@@ -53,7 +53,7 @@ DIJS
     }
 
     /**
-     * Drops the next element added to {{#crossLink "service.Move"}}{{/crossLink}} as a child of the
+     * Drops the next element added to {{#crossLink "ui.MoveService"}}{{/crossLink}} as a child of the
      * given element.
      *
      * @method doTrigger
