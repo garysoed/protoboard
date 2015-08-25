@@ -14,11 +14,11 @@
 DIJS
 .with('MutationObserver', require => require('pb.testing.FakeMutationObserver'))
 .run(require => {
-  const _ = require('pb._');
-  const _M = require('_M');
+  const _ = require('spies.Spies');
+  const _M = require('spies.Matchers');
   const Abilities = require('pb.ability.Abilities.__ctor__');
   const Builder = require('pb.ability.Abilities.__builder__');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const t = require('pb.t');
   const Utils = require('pb.Utils');
 

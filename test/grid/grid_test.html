@@ -30,12 +30,12 @@ DIJS
 .with('tileTemplate', require => require('doc').querySelector('template#tile'))
 .run(require => {
 
-  const _ = require('pb._');
-  const _M = require('_M');
-  const $ = require('pb.$');
+  const _ = require('spies.Spies');
+  const _M = require('spies.Matchers');
+  const $ = require('jquery');
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Grid = require('pb.grid.Grid');
   const template = require('template');
   const rowTemplate = require('rowTemplate');

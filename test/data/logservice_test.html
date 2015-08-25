@@ -12,11 +12,11 @@
 <script>
 DIJS
 .run(require => {
-  const _ = require('pb._');
-  const _M = require('_M');
+  const _ = require('spies.Spies');
+  const _M = require('spies.Matchers');
 
   const Entry = require('pb.data.LogService.__entry__');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Log = require('pb.data.LogService.__ctor__');
 
   describe('data.LogService$Entry', () => {

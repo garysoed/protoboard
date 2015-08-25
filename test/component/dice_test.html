@@ -20,15 +20,15 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('pb._');
-  const $ = require('pb.$');
+  const _ = require('spies.Spies');
+  const $ = require('jquery');
   const $registry = require('pb.$registry');
 
   const Chance = require('pb.Chance');
   const Config = require('pb.data.ConfigService');
   const Dice = require('pb.component.Dice');
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
 
   describe('component.Dice', () => {
     before(() => {

@@ -30,14 +30,14 @@ DIJS
 })
 .run(require => {
 
-  const _ = require('pb._');
-  const _M = require('_M');
-  const $ = require('pb.$');
+  const _ = require('spies.Spies');
+  const _M = require('spies.Matchers');
+  const $ = require('jquery');
 
   const Acl = require('pb.data.AclService.__ctor__');
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const FakeMutationObserver = require('MutationObserver');
   const Group = require('pb.data.AclService.__group__');
   const t = require('pb.t');

@@ -21,10 +21,10 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('pb._');
+  const _ = require('spies.Spies');
 
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Move = require('pb.ui.MoveService');
   const Rect = require('pb.region.Rect');
   const t = require('pb.t');

@@ -14,11 +14,11 @@ DIJS
 .with('pb.Events', require => require('pb.t').createFakeEvents())
 .run(require => {
 
-  const _ = require('pb._');
-  const _M = require('_M');
+  const _ = require('spies.Spies');
+  const _M = require('spies.Matchers');
   const Click = require('pb.trigger.Click');
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Events = require('pb.Events');
   const t = require('pb.t');
 

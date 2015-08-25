@@ -17,11 +17,11 @@ DIJS
     .constant('doc', document.currentScript.ownerDocument)
     .run(require => {
 
-const _ = require('pb._');
-const _M = require('_M');
+const _ = require('spies.Spies');
+const _M = require('spies.Matchers');
 
 const doc = require('doc');
-const expect = require('expect');
+const expect = require('chai.expect');
 const Utils = require('pb.Utils');
 
 describe('Utils', () => {

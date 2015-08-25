@@ -19,13 +19,13 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('pb._');
-  const $ = require('pb.$');
+  const _ = require('spies.Spies');
+  const $ = require('jquery');
   const $registry = require('pb.$registry');
 
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const State = require('pb.data.StateService.__ctor__');
   const Utils = require('pb.Utils');
 

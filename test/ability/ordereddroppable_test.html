@@ -22,10 +22,10 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const $ = require('pb.$');
-  const _ = require('pb._');
+  const $ = require('jquery');
+  const _ = require('spies.Spies');
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Move = require('pb.ui.MoveService');
   const OrderedDroppable = require('pb.ability.OrderedDroppable');
   const Utils = require('pb.Utils');

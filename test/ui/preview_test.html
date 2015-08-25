@@ -17,13 +17,13 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('pb._');
-  const _M = require('_M');
+  const _ = require('spies.Spies');
+  const _M = require('spies.Matchers');
   const $registry = require('pb.$registry');
 
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Preview = require('pb.ui.Preview');
 
   describe('ui.Preview', () => {

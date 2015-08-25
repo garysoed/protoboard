@@ -9,9 +9,9 @@
 <script>
 // Should always use the real JQuery.
 DIJS
-.constant('pb.$', $)
+.constant('jquery', $)
 .bind('pb.Events', require => {
-  const $ = require('pb.$');
+  const $ = require('jquery');
   const Hammer = require('pb.Hammer');
 
   let Handlers = window['Events']['Handlers'];

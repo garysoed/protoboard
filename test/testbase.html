@@ -1,9 +1,7 @@
 <base href=".">
 <script src="../node_modules/chai/chai.js"></script>
 
-<script>
-  var TEST_MODE = true;
-</script>
+<link rel="import" href="../node_modules/spies/main_chai_expect.html">
 <link rel="import" href="third_party/jquery.html">
 <link rel="import" href="third_party/spies.html">
 
@@ -11,10 +9,8 @@
 <link rel="import" href="testutils.html">
 
 <script>
-DIJS.bind('_F', () => spies.Fakes);
-DIJS.bind('pb.spies.Fakes', () => spies.Fakes);
-DIJS.bind('_M', () => spies.Matchers);
-DIJS.bind('pb.spies.Matchers', () => spies.Matchers);
-DIJS.bind('expect', () => chai.expect);
-DIJS.bind('TEST_MODE', () => true);
+DIJS.bind('spies.Spies', () => spies.Spies);
+DIJS.bind('spies.Fakes', () => spies.Fakes);
+DIJS.bind('spies.Matchers', () => spies.Matchers);
+DIJS.bind('chai.expect', () => chai.expect);
 </script>

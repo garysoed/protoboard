@@ -20,9 +20,9 @@ DIJS
 .with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .run(require => {
 
-  const $ = require('pb.$');
+  const $ = require('jquery');
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Shape = require('pb.ui.Shape');
   const t = require('pb.t');
 

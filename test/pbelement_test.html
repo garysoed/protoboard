@@ -15,11 +15,11 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('pb._');
-  const $ = require('pb.$');
+  const _ = require('spies.Spies');
+  const $ = require('jquery');
   const doc = require('doc');
   const Events = require('pb.Events');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const PbElement = require('pb.PbElement');
 
   describe('PbElement', () => {

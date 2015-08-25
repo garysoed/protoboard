@@ -14,10 +14,10 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('pb._');
+  const _ = require('spies.Spies');
   const doc = require('doc');
   const Events = require('pb.Events');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Preview = require('pb.ui.PreviewService.__ctor__');
 
   describe('ui.PreviewService', () => {

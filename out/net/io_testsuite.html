@@ -6,9 +6,9 @@
 <script>"use strict";
 
 DIJS.bind("pb.net.IOTestSuite", function (require) {
-  var _ = require("pb._");
-  var _M = require("pb.spies.Matchers");
-  var expect = require("expect");
+  var _ = require("spies.Spies");
+  var _M = require("spies.Matchers");
+  var expect = require("chai.expect");
 
   function IOTestSuite(ctor, triggerUpdate) {
     var io = undefined;

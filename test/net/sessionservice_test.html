@@ -18,9 +18,9 @@ DIJS
   return new InMemoryIO();
 })
 .run(require => {
-  const _ = require('pb._');
-  const _M = require('pb.spies.Matchers');
-  const expect = require('expect');
+  const _ = require('spies.Spies');
+  const _M = require('spies.Matchers');
+  const expect = require('chai.expect');
   const IO = require('pb.net.IO');
   const Rpc = require('pb.net.RpcService');
   const Session = require('pb.net.SessionService.__ctor__');

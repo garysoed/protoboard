@@ -15,10 +15,10 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const $ = require('pb.$');
+  const $ = require('jquery');
 
   const doc = require('doc');
-  const expect = require('expect');
+  const expect = require('chai.expect');
   const Region = require('pb.region.Region');
   const t = require('pb.t');
 
