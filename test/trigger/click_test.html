@@ -5,13 +5,18 @@
   <title>Click Unit Tests</title>
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testing/fakeability.html">
+  <link rel="import" href="testing/fakeevents.html">
   <link rel="import" href="trigger/click.html">
 </head>
 <body>
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.with('pb.Events', require => require('pb.t').createFakeEvents())
+.with('pb.Events', require => {
+  const FakeEvents = require('pb.testing.FakeEvents');
+  return new FakeEvents();
+})
 .run(require => {
 
   const _ = require('spies.Spies');
@@ -20,6 +25,7 @@ DIJS
   const doc = require('doc');
   const expect = require('chai.expect');
   const Events = require('pb.Events');
+  const FakeAbility = require('pb.testing.FakeAbility');
   const t = require('pb.t');
 
   describe('trigger.Click', () => {
@@ -34,7 +40,7 @@ DIJS
 
     describe('#on', () => {
       it('should register singletap on hammer', () => {
-        let ability = t.createFakeAbility('test');
+        let ability = new FakeAbility('test');
         let element = doc.createElement('div');
 
         _.spy(ability, 'trigger');

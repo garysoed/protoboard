@@ -1,9 +1,8 @@
-``<html><head><base href="..">
+<html><head><base href="..">
 
 <link rel="import" href="ability/ability.html">
+<link rel="import" href="testing/faketrigger.html">
 <link rel="import" href="third_party/di.html">
-<link rel="import" href="third_party/jquery.html">
-<link rel="import" href="ui/moveservice.html">
 
 <script>"use strict";
 
@@ -15,50 +14,64 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.bind("pb.ability.Pickable", function (require) {
+DIJS.bind("pb.testing.FakeAbility", function (require) {
 
-  var $ = require("jquery");
   var Ability = require("pb.ability.Ability");
-  var Click = require("pb.trigger.Click");
-  var Move = require("pb.ui.MoveService");
+  var FakeTrigger = require("pb.testing.FakeTrigger");
 
-  var __defaultEnabled__ = Symbol();
+  var __name__ = Symbol("name");
+  var __trigger__ = Symbol("trigger");
 
-  var Pickable = (function (_Ability) {
-    function Pickable() {
-      var name = arguments[0] === undefined ? "pickable" : arguments[0];
-      var defaultTrigger = arguments[1] === undefined ? new Click() : arguments[1];
-      var defaultEnabled = arguments[2] === undefined ? true : arguments[2];
+  var FakeAbility = (function (_Ability) {
+    function FakeAbility(name) {
+      var _this = this;
 
-      _classCallCheck(this, Pickable);
+      var trigger = arguments[1] === undefined ? new FakeTrigger(name) : arguments[1];
+      return (function () {
+        _classCallCheck(_this, FakeAbility);
 
-      _get(Object.getPrototypeOf(Pickable.prototype), "constructor", this).call(this, name, defaultTrigger);
-
-      this[__defaultEnabled__] = defaultEnabled;
+        _get(Object.getPrototypeOf(FakeAbility.prototype), "constructor", _this).call(_this, name, trigger);
+        _this[__name__] = name;
+        _this[__trigger__] = "" + name + "-on";
+      })();
     }
 
-    _inherits(Pickable, _Ability);
+    _inherits(FakeAbility, _Ability);
 
-    _createClass(Pickable, {
+    _createClass(FakeAbility, {
       init: {
-        value: function init(el) {
-          _get(Object.getPrototypeOf(Pickable.prototype), "init", this).call(this, el);
-
-          if ($(el).attr(this.attrName) === undefined) {
-            $(el).attr(this.attrName, this[__defaultEnabled__]);
-          }
+        value: function init() {}
+      },
+      isEnabled: {
+        value: function isEnabled() {}
+      },
+      updateConfig: {
+        value: function updateConfig() {}
+      },
+      trigger: {
+        value: function trigger() {}
+      },
+      attrName: {
+        get: function () {
+          return this[__name__];
+        },
+        set: function (value) {
+          this[__name__] = value;
         }
       },
-      doTrigger: {
-        value: function doTrigger(el) {
-          Move.add(el);
+      attrTrigger: {
+        get: function () {
+          return this[__trigger__];
+        },
+        set: function (value) {
+          this[__trigger__] = value;
         }
       }
     });
 
-    return Pickable;
+    return FakeAbility;
   })(Ability);
 
-  return Pickable;
+  return FakeAbility;
 });</script>
 </head><body></body></html>

@@ -8,6 +8,7 @@
   <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="ui/templateservice.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testing/fakejquery.html">
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="ui/generate.html">
   <link rel="import" href="utils.html">
@@ -16,15 +17,10 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.with('jquery', require => {
-  return require('pb.t').createFakeJQuery();
-})
+.with('jquery', require => require('pb.testing.FakeJQuery'))
 .with('pb.$registry', require => {
   const Registry = require('pb.ui.RegistryService');
   return new Registry();
-})
-.with('Promise', require => {
-  return require('pb.t').createFakePromise();
 })
 .run(require => {
 
@@ -54,26 +50,29 @@ DIJS
       it('should replace itself with data registered to ui.TemplateService', () => {
         let dataA = 'a';
         let dataB = 'B';
-
-        Template
-            .addData('dataA', dataA)
-            .addData('dataB', dataB);
-
-        _.spy($, 'attr').overrideReturn('dataA dataB');
-
         let innerHTML =
               '<div>Data A: {{dataA}}</div>'
             + '<div>Data B: {{dataB}}</div>';
 
+        let originalGet = Template.get;
+        Template.get = name => {
+          if (name === 'dataA') {
+            return Promise.resolve(['dataA', dataA]);
+          } else if (name === 'dataB') {
+            return Promise.resolve(['dataB', dataB]);
+          }
+        };
+        _.spy($, 'attr').overrideReturn('dataA dataB');
+        _.spy($, 'replaceWith');
         _.spy(generate, 'querySelector').overrideReturn({ innerHTML: innerHTML });
 
-        _.spy($, 'replaceWith');
-        generate.createdCallback();
-
-        Promise.lastHandler([['dataA', dataA], ['dataB', dataB]]);
-
-        expect($.replaceWith).calledWith(`<div>Data A: ${dataA}</div><div>Data B: ${dataB}</div>`)
-            .at.least(1);
+        return generate.createdCallback()
+            .then(() => {
+              expect($.replaceWith)
+                  .calledWith(`<div>Data A: ${dataA}</div><div>Data B: ${dataB}</div>`)
+                  .at.least(1);
+              Template.get = originalGet;
+            });
       });
     });
 

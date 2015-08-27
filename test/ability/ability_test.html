@@ -5,9 +5,10 @@
   <title>ability.Ability Unit Tests</title>
 
   <link rel="import" href="ability/ability.html">
-  <link rel="import" href="third_party/di.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testing/faketrigger.html">
   <link rel="import" href="testutils.html">
+  <link rel="import" href="third_party/di.html">
 </head>
 <body>
 <script>
@@ -23,6 +24,7 @@ DIJS
   const Ability = require('pb.ability.Ability');
   const doc = require('doc');
   const expect = require('chai.expect');
+  const FakeTrigger = require('pb.testing.FakeTrigger');
   const Log = require('pb.data.LogService');
   const t = require('pb.t');
   const Triggers = require('pb.trigger.Triggers');
@@ -37,7 +39,7 @@ DIJS
     describe('#init', () => {
       it('should set the default value of the trigger', () => {
         let triggerStr = 'triggerStr';
-        let trigger = t.createFakeTrigger(triggerStr);
+        let trigger = new FakeTrigger(triggerStr);
         let ability = new Ability('name', trigger);
 
         _.spy(ability, 'updateConfig').overrideReturn();
@@ -53,7 +55,7 @@ DIJS
       });
       it('should not override the trigger value if it is already set', () => {
         let attrValue = 'value';
-        let trigger = t.createFakeTrigger('triggerName');
+        let trigger = new FakeTrigger('triggerName');
         let ability = new Ability('name', trigger);
         $(el).attr(ability.attrTrigger, attrValue);
 
@@ -67,8 +69,8 @@ DIJS
 
     describe('#updateConfig', () => {
       it('should update the trigger if the trigger changes', () => {
-        let trigger = t.createFakeTrigger('triggerName');
-        let newTrigger = t.createFakeTrigger('new trigger');
+        let trigger = new FakeTrigger('triggerName');
+        let newTrigger = new FakeTrigger('new trigger');
 
         let ability = new Ability('name', trigger);
 
@@ -90,7 +92,7 @@ DIJS
         expect(el[t.getSymbol(el, 'triggerMap')].get(ability)).to.be.equal(newTrigger);
       });
       it('should be noop if the trigger does not change', () => {
-        let trigger = t.createFakeTrigger('triggerName');
+        let trigger = new FakeTrigger('triggerName');
         let ability = new Ability('name', trigger);
         $(el).attr(ability.attrTrigger, trigger.toString());
 

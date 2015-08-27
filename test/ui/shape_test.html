@@ -5,6 +5,7 @@
   <title>ui.Shape Unit Tests</title>
 
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testing/fakemutationobserver.html">
   <link rel="import" href="testutils.html">
   <link rel="import" href="third_party/di.html">
   <link rel="import" href="ui/shape.html">
@@ -13,18 +14,15 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.with('MutationObserver', require => {
-  const t = require('pb.t');
-  return t.FakeMutationObserver;
-})
+.with('MutationObserver', require => require('pb.testing.FakeMutationObserver'))
 .with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .run(require => {
 
   const $ = require('jquery');
   const doc = require('doc');
   const expect = require('chai.expect');
+  const FakeMutationObserver = require('MutationObserver');
   const Shape = require('pb.ui.Shape');
-  const t = require('pb.t');
 
   describe('ui.Shape', () => {
     let el;
@@ -46,7 +44,7 @@ DIJS
       el.createdCallback();
 
       $(el).attr('color', 'rgb(255, 0, 0)');
-      t.FakeMutationObserver.instance.handler([{
+      FakeMutationObserver.lastInstance.handler([{
         type: 'attributes',
         attributeName: 'color'
       }]);

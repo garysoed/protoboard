@@ -1,0 +1,50 @@
+<base href="..">
+
+<link rel="import" href="ability/ability.html">
+<link rel="import" href="testing/faketrigger.html">
+<link rel="import" href="third_party/di.html">
+
+<script>
+DIJS.bind('pb.testing.FakeAbility', require => {
+
+  const Ability = require('pb.ability.Ability');
+  const FakeTrigger = require('pb.testing.FakeTrigger');
+
+  const __name__ = Symbol('name');
+  const __trigger__ = Symbol('trigger');
+
+  class FakeAbility extends Ability {
+    constructor(name, trigger = new FakeTrigger(name)) {
+      super(name, trigger);
+      this[__name__] = name;
+      this[__trigger__] = `${name}-on`;
+    }
+
+    init() {}
+
+    isEnabled() {}
+
+    updateConfig() {}
+
+    trigger() {}
+
+    get attrName() {
+      return this[__name__];
+    }
+
+    set attrName(value) {
+      this[__name__] = value;
+    }
+
+    get attrTrigger() {
+      return this[__trigger__];
+    }
+
+    set attrTrigger(value) {
+      this[__trigger__] = value;
+    }
+  }
+
+  return FakeAbility;
+});
+</script>

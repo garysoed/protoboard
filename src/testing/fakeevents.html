@@ -1,0 +1,24 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+DIJS
+.bind('pb.testing.FakeEvents', () => {
+  class FakeEvents {
+    of() {
+      return this;
+    }
+
+    on() {
+      return this;
+    }
+
+    off() {
+      return this;
+    }
+  }
+
+  return FakeEvents;
+});
+</script>

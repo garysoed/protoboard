@@ -8,6 +8,7 @@
   <link rel="import" href="data/configservice.html">
   <link rel="import" href="ui/registryservice.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testing/fakemutationobserver.html">
   <link rel="import" href="testutils.html">
   <link rel="import" href="third_party/di.html">
 </head>
@@ -15,10 +16,7 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.with('MutationObserver', require => {
-  const t = require('pb.t');
-  return t.FakeMutationObserver;
-})
+.with('MutationObserver', require => require('pb.testing.FakeMutationObserver'))
 .constant('pb.data.StateService', {
   data: new Map(),
   get(key) {
@@ -88,54 +86,51 @@ DIJS
         let player = 'player';
         let action = 'action';
         let el = doc.createElement('div');
-        let actionEnabledPromise = t.createFakePromise();
+        let actionEnabledPromise = Promise.resolve(true);
         $(el).attr(`pb-acl-${action}`, player);
 
         _.spy(acl, 'isActionEnabled').overrideReturn(actionEnabledPromise);
 
         acl.currentPlayer = player;
-        t.getPrivateMethod(acl, 'update')(el);
-
-        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
-
-        actionEnabledPromise.lastHandler(true);
-        expect(el.classList.contains(`pb-acl-${action}`)).to.be.true;
+        return t.getPrivateMethod(acl, 'update')(el)
+            .then(() => {
+              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
+              expect(el.classList.contains(`pb-acl-${action}`)).to.be.true;
+            });
       });
       it('should check for group membership and add the CSS class', () => {
         let group = 'group';
         let player = 'player';
         let action = 'action';
         let el = doc.createElement('div');
-        let actionEnabledPromise = t.createFakePromise();
+        let actionEnabledPromise = Promise.resolve(true);
 
         $(el).attr(`pb-acl-${action}`, group);
         _.spy(acl, 'isActionEnabled').overrideReturn(actionEnabledPromise);
 
         acl.currentPlayer = player;
         acl.addGroup(group, player);
-        t.getPrivateMethod(acl, 'update')(el);
-
-        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
-
-        actionEnabledPromise.lastHandler(true);
-        expect(el.classList.contains(`pb-acl-${action}`)).to.be.true;
+        return t.getPrivateMethod(acl, 'update')(el)
+            .then(() => {
+              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
+              expect(el.classList.contains(`pb-acl-${action}`)).to.be.true;
+            });
       });
       it('should set the CSS class to none if action is disabled', () => {
         let player = 'player';
         let action = 'action';
         let el = doc.createElement('div');
-        let actionEnabledPromise = t.createFakePromise();
+        let actionEnabledPromise = Promise.resolve(false);
 
         $(el).attr(`pb-acl-${action}`, 'player2');
         _.spy(acl, 'isActionEnabled').overrideReturn(actionEnabledPromise);
 
         acl.currentPlayer = player;
-        t.getPrivateMethod(acl, 'update')(el);
-
-        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.false;
-
-        actionEnabledPromise.lastHandler(false);
-        expect(el.classList.contains(`pb-acl-${action}`)).to.be.false;
+        return t.getPrivateMethod(acl, 'update')(el)
+            .then(() => {
+              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.false;
+              expect(el.classList.contains(`pb-acl-${action}`)).to.be.false;
+            });
       });
       it('should set the action as enabled if the attribute is set to empty string', done => {
         let action = 'action';
@@ -161,7 +156,7 @@ DIJS
         let action = 'action';
         let player = 'player';
         let el = doc.createElement('div');
-        let actionEnabledPromise = t.createFakePromise();
+        let actionEnabledPromise = Promise.resolve(true);
 
         _.spy(acl, 'isActionEnabled').overrideReturn(actionEnabledPromise);
         $(el).attr(`pb-acl-${action}`, player);
@@ -169,8 +164,9 @@ DIJS
         acl.currentPlayer = player;
         acl.registerElement(el);
 
-        actionEnabledPromise.lastHandler(true);
-        expect(el.classList.contains(`pb-acl-${action}`)).to.be.true;
+        return Utils.watch(() => {
+          return el.classList.contains(`pb-acl-${action}`);
+        });
       });
 
       it('should react to attribute change', () => {
@@ -179,17 +175,17 @@ DIJS
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, player);
 
-        _.spy(FakeMutationObserver.instance, 'observe');
+        _.spy(FakeMutationObserver.prototype, 'observe');
 
         acl.currentPlayer = player;
         acl.registerElement(el);
 
         let objectMatcher = _M.isA(Object);
-        expect(FakeMutationObserver.instance.observe).calledWith(el, objectMatcher).at.least(1);
+        expect(FakeMutationObserver.lastInstance.observe).calledWith(el, objectMatcher).at.least(1);
         expect(objectMatcher.matchingArgs[0].attributes).to.be.true;
 
         $(el).attr(`pb-acl-${action}`, 'player2');
-        FakeMutationObserver.instance.handler([
+        FakeMutationObserver.lastInstance.handler([
           {
             attributeName: `pb-acl-${action}`,
             target: el
@@ -293,7 +289,7 @@ DIJS
     });
 
     describe('set currentPlayer', () => {
-      it('should refresh registered element', done => {
+      it('should refresh registered element', () => {
         let action = 'action';
         let player = 'player';
         let el = doc.createElement('div');
@@ -302,13 +298,12 @@ DIJS
         acl.currentPlayer = player;
         acl.registerElement(el);
 
-        Utils
+        return Utils
             .watch(() => el.classList.contains(`pb-acl-${action}`))
             .then(() => {
               acl.currentPlayer = 'otherPlayer';
               return Utils.watch(() => !el.classList.contains(`pb-acl-${action}`));
-            })
-            .then(done);
+            });
       });
     });
 

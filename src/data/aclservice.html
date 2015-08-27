@@ -178,6 +178,8 @@ DIJS
       if (!el[__enabledMap__]) {
         el[__enabledMap__] = new Map();
       }
+
+      let promises = [];
       for (let [attrName, attr] of Utils.toMap(el.attributes)) {
         if (!attrName.startsWith(ATTR_PREFIX)) {
           continue;
@@ -194,11 +196,13 @@ DIJS
             });
 
         el[__enabledMap__].set(name, enabled);
-        this.isActionEnabled(el, name)
+        promises.push(this.isActionEnabled(el, name)
             .then(enabled => {
               el.classList.toggle(`pb-acl-${name}`, enabled);
-            });
+            }));
       }
+
+      return Promise.all(promises);
     }
 
     /**

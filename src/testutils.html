@@ -7,80 +7,6 @@
 <script>
 DIJS.bind('pb.t', require => {
   let TestUtil = {
-    createFakeAbility(name, trigger = this.createFakeTrigger(`${name}-trigger`)) {
-      return {
-        attrName: `attr${name}`,
-        attrTrigger: `attr${name}Trigger`,
-        defaultTrigger: trigger,
-        getTrigger: () => trigger,
-        init() {},
-        isEnabled() {} ,
-        updateConfig() {} ,
-        trigger() {}
-      };
-    },
-
-    createFakeEvents() {
-      let fakeEvents = {
-        of() {
-          return fakeEvents;
-        },
-
-        on() {
-          return fakeEvents;
-        },
-
-        off() {
-          return fakeEvents;
-        }
-      };
-      return fakeEvents;
-    },
-
-    createFakeTrigger(name) {
-      return {
-        toString() { return name; },
-        on() {},
-        off() {}
-      };
-    },
-
-    createFakeJQuery() {
-      let fakeJQuery = function(el) {
-        fakeJQuery.el = el;
-        return fakeJQuery;
-      };
-
-      fakeJQuery.attr = () => {};
-      fakeJQuery.replaceWith = () => {};
-      return fakeJQuery;
-    },
-
-    createFakePromise() {
-      let handlers = [];
-      let Promise = {
-        all() {
-          return Promise;
-        },
-
-        then(fn) {
-          handlers.push(fn);
-          Promise.lastHandler = fn;
-          return Promise;
-        }
-      };
-
-      Promise.resolve = function(result) {
-        let rv = result;
-        for (let handler of handlers) {
-          rv = handler(rv);
-        }
-        return rv;
-      };
-
-      return Promise;
-    },
-
     getSymbol(obj, name) {
       return Object.getOwnPropertySymbols(obj).find(symbol => {
         return `Symbol(${name})` === symbol.toString();
@@ -94,15 +20,6 @@ DIJS.bind('pb.t', require => {
     getPrivateMethod(obj, name) {
       return obj[this.getSymbol(obj.constructor.prototype, name)].bind(obj);
     }
-  };
-
-  TestUtil.FakeMutationObserver = function(handler) {
-    TestUtil.FakeMutationObserver.instance.handler = handler;
-    return TestUtil.FakeMutationObserver.instance;
-  };
-
-  TestUtil.FakeMutationObserver.instance = {
-    observe: () => {}
   };
 
   return TestUtil;

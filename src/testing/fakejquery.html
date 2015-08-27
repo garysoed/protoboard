@@ -1,0 +1,17 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+DIJS
+.bind('pb.testing.FakeJQuery', () => {
+  function FakeJQuery(el) {
+    FakeJQuery.el = el;
+    return FakeJQuery;
+  }
+
+  FakeJQuery.attr = () => {};
+  FakeJQuery.replaceWith = () => {};
+  return FakeJQuery;
+});
+</script>

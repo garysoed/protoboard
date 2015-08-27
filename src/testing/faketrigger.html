@@ -1,0 +1,29 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/trigger.html">
+
+<script>
+DIJS.bind('pb.testing.FakeTrigger', require => {
+
+  const Trigger = require('pb.trigger.Trigger');
+
+  const __name__ = Symbol('name');
+
+  class FakeTrigger extends Trigger {
+    constructor(name) {
+      this[__name__] = name;
+    }
+
+    toString() {
+      return this[__name__];
+    }
+
+    on() {}
+
+    off() {}
+  }
+
+  return FakeTrigger;
+});
+</script>

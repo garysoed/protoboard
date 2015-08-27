@@ -11,6 +11,8 @@ DIJS
       this.handler = handler;
       this.el = null;
       this.observerConfig = null;
+
+      FakeMutationObserver.lastInstance = this;
     }
 
     observe(el, observerConfig) {

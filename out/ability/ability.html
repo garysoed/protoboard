@@ -23,7 +23,7 @@ DIJS.bind("CustomEvent", function () {
   var Log = require("pb.data.LogService");
   var Triggers = require("pb.trigger.Triggers");
 
-  var __name__ = Symbol();
+  var __name__ = Symbol("name");
   var __defaultTrigger__ = Symbol("defaultTrigger");
   var __triggerMap__ = Symbol("triggerMap");
 

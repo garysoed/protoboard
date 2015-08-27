@@ -1,0 +1,40 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.testing.FakeEvents", function () {
+  var FakeEvents = (function () {
+    function FakeEvents() {
+      _classCallCheck(this, FakeEvents);
+    }
+
+    _createClass(FakeEvents, {
+      of: {
+        value: function of() {
+          return this;
+        }
+      },
+      on: {
+        value: function on() {
+          return this;
+        }
+      },
+      off: {
+        value: function off() {
+          return this;
+        }
+      }
+    });
+
+    return FakeEvents;
+  })();
+
+  return FakeEvents;
+});</script>
+</head><body></body></html>

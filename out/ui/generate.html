@@ -55,7 +55,7 @@ DIJS.bind("pb.ui.Generate", function (require) {
           var promises = Check($(this).attr("input")).isList().orUse([]).map(function (name) {
             return Template.get(name);
           });
-          Promise.all(promises).then(function (dataList) {
+          return Promise.all(promises).then(function (dataList) {
             var dataObj = {};
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;

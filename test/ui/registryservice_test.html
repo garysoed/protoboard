@@ -5,6 +5,7 @@
   <title>ui.RegistryService Unit Tests</title>
 
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testing/fakeability.html">
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
@@ -47,11 +48,12 @@ DIJS
   const Config = require('pb.data.ConfigService');
   const console = require('console');
   const expect = require('chai.expect');
+  const FakeAbility = require('pb.testing.FakeAbility');
   const Registry = require('pb.ui.RegistryService');
   const t = require('pb.t');
 
   describe('ui.RegistryService', () => {
-    var ABILITY = t.createFakeAbility('ability');
+    var ABILITY = new FakeAbility('ability');
 
     let registry;
     let FakeElement;

@@ -8,119 +8,6 @@
 
 DIJS.bind("pb.t", function (require) {
   var TestUtil = {
-    createFakeAbility: function createFakeAbility(name) {
-      var trigger = arguments[1] === undefined ? this.createFakeTrigger("" + name + "-trigger") : arguments[1];
-      return (function () {
-        return {
-          attrName: "attr" + name,
-          attrTrigger: "attr" + name + "Trigger",
-          defaultTrigger: trigger,
-          getTrigger: function () {
-            return trigger;
-          },
-          init: function init() {},
-          isEnabled: function isEnabled() {},
-          updateConfig: function updateConfig() {},
-          trigger: function trigger() {}
-        };
-      })();
-    },
-
-    createFakeEvents: function createFakeEvents() {
-      var fakeEvents = {
-        of: function of() {
-          return fakeEvents;
-        },
-
-        on: function on() {
-          return fakeEvents;
-        },
-
-        off: function off() {
-          return fakeEvents;
-        }
-      };
-      return fakeEvents;
-    },
-
-    createFakeTrigger: function createFakeTrigger(name) {
-      return {
-        toString: function toString() {
-          return name;
-        },
-        on: function on() {},
-        off: function off() {}
-      };
-    },
-
-    createFakeJQuery: function createFakeJQuery() {
-      var fakeJQuery = (function (_fakeJQuery) {
-        var _fakeJQueryWrapper = function fakeJQuery(_x) {
-          return _fakeJQuery.apply(this, arguments);
-        };
-
-        _fakeJQueryWrapper.toString = function () {
-          return _fakeJQuery.toString();
-        };
-
-        return _fakeJQueryWrapper;
-      })(function (el) {
-        fakeJQuery.el = el;
-        return fakeJQuery;
-      });
-
-      fakeJQuery.attr = function () {};
-      fakeJQuery.replaceWith = function () {};
-      return fakeJQuery;
-    },
-
-    createFakePromise: function createFakePromise() {
-      var handlers = [];
-      var Promise = {
-        all: function all() {
-          return Promise;
-        },
-
-        then: function then(fn) {
-          handlers.push(fn);
-          Promise.lastHandler = fn;
-          return Promise;
-        }
-      };
-
-      Promise.resolve = function (result) {
-        var rv = result;
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = handlers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var handler = _step.value;
-
-            rv = handler(rv);
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator["return"]) {
-              _iterator["return"]();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-
-        return rv;
-      };
-
-      return Promise;
-    },
-
     getSymbol: function getSymbol(obj, name) {
       return Object.getOwnPropertySymbols(obj).find(function (symbol) {
         return "Symbol(" + name + ")" === symbol.toString();
@@ -134,15 +21,6 @@ DIJS.bind("pb.t", function (require) {
     getPrivateMethod: function getPrivateMethod(obj, name) {
       return obj[this.getSymbol(obj.constructor.prototype, name)].bind(obj);
     }
-  };
-
-  TestUtil.FakeMutationObserver = function (handler) {
-    TestUtil.FakeMutationObserver.instance.handler = handler;
-    return TestUtil.FakeMutationObserver.instance;
-  };
-
-  TestUtil.FakeMutationObserver.instance = {
-    observe: function () {}
   };
 
   return TestUtil;

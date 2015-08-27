@@ -42,7 +42,7 @@ DIJS.bind("pb.ability.Abilities.__symbols__", function () {
           this[__elProto__][__abilities__].set(ability.attrName, ability);
 
           if (this[__elProto__][__abilities__].has(ability.attrTrigger)) {
-            throw new Error("Ability with key " + ability.attrTrigger + " is already registered");
+            throw new Error("Ability with trigger " + ability.attrTrigger + " is already registered");
           }
           this[__elProto__][__abilities__].set(ability.attrTrigger, ability);
 

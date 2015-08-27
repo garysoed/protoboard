@@ -6,6 +6,7 @@
 
   <link rel="import" href="ability/abilities.html">
   <link rel="import" href="testbase.html">
+  <link rel="import" href="testing/fakeability.html">
   <link rel="import" href="testing/fakemutationobserver.html">
   <link rel="import" href="third_party/di.html">
 </head>
@@ -19,6 +20,7 @@ DIJS
   const Abilities = require('pb.ability.Abilities.__ctor__');
   const Builder = require('pb.ability.Abilities.__builder__');
   const expect = require('chai.expect');
+  const FakeAbility = require('pb.testing.FakeAbility');
   const t = require('pb.t');
   const Utils = require('pb.Utils');
 
@@ -38,8 +40,8 @@ DIJS
 
     describe('#__onMutation__', () => {
       it('should call updateConfig for every record object', () => {
-        let ability1 = t.createFakeAbility('ability 1');
-        let ability2 = t.createFakeAbility('ability 2');
+        let ability1 = new FakeAbility('ability 1');
+        let ability2 = new FakeAbility('ability 2');
         let records = [
           {
             target: new FakeElement(),
@@ -69,7 +71,7 @@ DIJS
         }]);
       });
       it('should not throw exception if the element has no attribute that has been mutated', () => {
-        let ability = t.createFakeAbility('ability');
+        let ability = new FakeAbility('ability');
         ability.attrName = 'attrName';
         ability.attrTrigger = 'attrTrigger';
 
@@ -88,8 +90,8 @@ DIJS
       });
 
       it('should observe mutation and call set default value for every registered ability', () => {
-        let ability1 = t.createFakeAbility('ability 1');
-        let ability2 = t.createFakeAbility('ability 2');
+        let ability1 = new FakeAbility('ability 1');
+        let ability2 = new FakeAbility('ability 2');
 
         abilities.of(FakeElement.prototype)
             .add(ability1)
@@ -146,7 +148,7 @@ DIJS
       });
 
       it('should trigger the ability', () => {
-        let ability = t.createFakeAbility('ability');
+        let ability = new FakeAbility('ability');
         abilities.of(FakeElement.prototype).add(ability);
 
         _.spy(ability, 'trigger');
@@ -157,7 +159,7 @@ DIJS
         expect(() => abilities.trigger(el, 'ability')).to.throw(Error);
       });
       it('should throw error if the element does not have the specified ability', () => {
-        let ability = t.createFakeAbility('ability');
+        let ability = new FakeAbility('ability');
         abilities.of(FakeElement.prototype).add(ability);
         expect(() => abilities.trigger(el, 'other ability')).to.throw(Error);
       });
@@ -173,7 +175,7 @@ DIJS
 
       describe('#add', () => {
         it('should add ability to a clean element', () => {
-          let ability = t.createFakeAbility('Ability');
+          let ability = new FakeAbility('Ability');
 
           expect(builder.add(ability)).to.equal(builder);
 
@@ -182,8 +184,8 @@ DIJS
           expect(addedAbilities.get(ability.attrTrigger)).to.equal(ability);
         });
         it('should add ability to an element with another ability', () => {
-          let ability1 = t.createFakeAbility('Ability 1');
-          let ability2 = t.createFakeAbility('Ability 2');
+          let ability1 = new FakeAbility('Ability 1');
+          let ability2 = new FakeAbility('Ability 2');
 
           expect(builder.add(ability1).add(ability2)).to.equal(builder);
 
@@ -195,8 +197,8 @@ DIJS
           expect(addedAbilities.get(ability2.attrTrigger)).to.equal(ability2);
         });
         it('should throw exception if an ability with the same name has been registered', () => {
-          let ability1 = t.createFakeAbility('Ability');
-          let ability2 = t.createFakeAbility('Ability');
+          let ability1 = new FakeAbility('Ability');
+          let ability2 = new FakeAbility('Ability');
 
           builder.add(ability1);
 
@@ -204,8 +206,8 @@ DIJS
               .to.throw(`${ability1.attrName} is already registered`);
         });
         it('should throw exception if an ability with the same trigger has been registered', () => {
-          let ability1 = t.createFakeAbility('Ability');
-          let ability2 = t.createFakeAbility('Ability');
+          let ability1 = new FakeAbility('Ability');
+          let ability2 = new FakeAbility('Ability');
           ability1.attrName = 'AttrName';
           ability2.attrName = 'AttrName2';
 
@@ -218,7 +220,7 @@ DIJS
 
       describe('#getAll', () => {
         it('should return the abilities correctly', () => {
-          let ability = t.createFakeAbility('Ability');
+          let ability = new FakeAbility('Ability');
           builder.add(ability);
 
           var map = builder.getAll();

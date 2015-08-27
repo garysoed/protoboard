@@ -1,6 +1,7 @@
 <html><head><base href="..">
 
 <link rel="import" href="third_party/di.html">
+<link rel="import" href="trigger/trigger.html">
 
 <script>"use strict";
 
@@ -10,35 +11,38 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.bind("pb.testing.FakeMutationObserver", function () {
-  var FakeMutationObserver = (function (_MutationObserver) {
-    function FakeMutationObserver(handler) {
-      _classCallCheck(this, FakeMutationObserver);
+DIJS.bind("pb.testing.FakeTrigger", function (require) {
 
-      this.handler = handler;
-      this.el = null;
-      this.observerConfig = null;
+  var Trigger = require("pb.trigger.Trigger");
 
-      FakeMutationObserver.lastInstance = this;
+  var __name__ = Symbol("name");
+
+  var FakeTrigger = (function (_Trigger) {
+    function FakeTrigger(name) {
+      _classCallCheck(this, FakeTrigger);
+
+      this[__name__] = name;
     }
 
-    _inherits(FakeMutationObserver, _MutationObserver);
+    _inherits(FakeTrigger, _Trigger);
 
-    _createClass(FakeMutationObserver, {
-      observe: {
-        value: function observe(el, observerConfig) {
-          this.el = el;
-          this.observerConfig = observerConfig;
+    _createClass(FakeTrigger, {
+      toString: {
+        value: function toString() {
+          return this[__name__];
         }
       },
-      disconnect: {
-        value: function disconnect() {}
+      on: {
+        value: function on() {}
+      },
+      off: {
+        value: function off() {}
       }
     });
 
-    return FakeMutationObserver;
-  })(MutationObserver);
+    return FakeTrigger;
+  })(Trigger);
 
-  return FakeMutationObserver;
+  return FakeTrigger;
 });</script>
 </head><body></body></html>

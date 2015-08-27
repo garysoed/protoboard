@@ -5,6 +5,7 @@
   <title>ability.Helpable Unit Tests</title>
 
   <link rel="import" href="ability/abilities.html">
+  <link rel="import" href="ability/droppable.html">
   <link rel="import" href="ability/helpable.html">
   <link rel="import" href="data/configservice.html">
   <link rel="import" href="ui/registryservice.html">
@@ -27,9 +28,9 @@ DIJS
   const Click = require('pb.trigger.Click');
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
+  const Droppable = require('pb.ability.Droppable');
   const Helpable = require('pb.ability.Helpable');
   const Key = require('pb.trigger.Key');
-  const t = require('pb.t');
 
   describe('ability.Helpable', () => {
     let displayEl;
@@ -43,8 +44,8 @@ DIJS
 
     describe('#trigger', () => {
       it('should add the abilities as child of the display element and show the element', () => {
-        let ability1 = t.createFakeAbility('ability', new Click());
-        let ability2 = t.createFakeAbility('ability2', new Key('a'));
+        let ability1 = new Droppable('ability', new Click());
+        let ability2 = new Droppable('ability2', new Key('a'));
 
         _.spy(ability1, 'isEnabled');
         _.spy(ability2, 'isEnabled');
@@ -71,7 +72,7 @@ DIJS
       });
 
       it('should not add disabled abilities', () => {
-        let ability = t.createFakeAbility('disabled', new Click());
+        let ability = new Droppable('disabled', new Click());
         let helpable = new Helpable();
         let el = doc.createElement('div');
         Abilities.of(el)

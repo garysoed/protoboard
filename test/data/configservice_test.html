@@ -2,10 +2,11 @@
 <html>
 <head>
   <base href="..">
-  <title>server.Config Unit Tests</title>
+  <title>data.ConfigService Unit Tests</title>
 
   <link rel="import" href="testbase.html">
-  <link rel="import" href="testutils.html">
+  <link rel="import" href="testing/fakeability.html">
+  <link rel="import" href="testing/faketrigger.html">
   <link rel="import" href="third_party/di.html">
 </head>
 <body>
@@ -14,9 +15,10 @@ DIJS
 .run(require => {
   const Config = require('pb.data.ConfigService.__ctor__');
   const expect = require('chai.expect');
-  const t = require('pb.t');
+  const FakeAbility = require('pb.testing.FakeAbility');
+  const FakeTrigger = require('pb.testing.FakeTrigger');
 
-  describe('server.Config', () => {
+  describe('data.ConfigService', () => {
     describe('setDefaultTrigger', () => {
       let elementA;
       let abilityA;
@@ -29,10 +31,10 @@ DIJS
 
       beforeEach(() => {
         elementA = 'element-A';
-        abilityA = t.createFakeAbility('abilityA');
-        abilityB = t.createFakeAbility('abilityB');
+        abilityA = new FakeAbility('abilityA');
+        abilityB = new FakeAbility('abilityB');
         elementC = 'element-C';
-        abilityA2 = t.createFakeAbility('abilityA');
+        abilityA2 = new FakeAbility('abilityA');
 
         configService = new Config();
         configService
@@ -44,7 +46,7 @@ DIJS
         let triggerB = abilityB.defaultTrigger;
         let triggerA2 = abilityA2.defaultTrigger;
 
-        let newTrigger = t.createFakeTrigger('newTrigger');
+        let newTrigger = new FakeTrigger('newTrigger');
         configService.setDefaultTrigger(newTrigger, abilityA.attrName, elementA);
 
         expect(abilityA.defaultTrigger).to.equal(newTrigger);
@@ -52,7 +54,7 @@ DIJS
         expect(abilityA2.defaultTrigger).to.equal(triggerA2);
       });
       it('should set trigger of abilities with the given name for all elements', () => {
-        let newTrigger = t.createFakeTrigger('newTrigger');
+        let newTrigger = new FakeTrigger('newTrigger');
         let triggerB = abilityB.defaultTrigger;
 
         configService.setDefaultTrigger(newTrigger, abilityA.attrName);

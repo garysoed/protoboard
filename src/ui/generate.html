@@ -106,7 +106,7 @@ DIJS.bind('pb.ui.Generate', require => {
           .isList()
           .orUse([])
           .map(name => Template.get(name));
-      Promise
+      return Promise
           .all(promises)
           .then(dataList => {
             let dataObj = {};
