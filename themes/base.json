@@ -9,8 +9,6 @@
 
     "--color-border": "var(--color-dark-primary)",
     "--color-background-dark": "var(--color-light-primary)",
-    "--color-background-darker": "var(--color-primary)",
-    "--color-highlight": "var(--color-accent)",
     "--color-shadow": "var(--color-primary)",
     "--color-font": "var(--color-foreground)",
     "--color-font-dark": "var(--color-background)",
