@@ -11,7 +11,7 @@
 DIJS
 .constant('jquery', $)
 .bind('pb.Events', require => {
-  const $ = require('jquery');
+  const $ = require('pb.JQuery');
   const Hammer = require('pb.Hammer');
 
   let Handlers = window['Events']['Handlers'];

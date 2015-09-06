@@ -17,7 +17,7 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.with('jquery', require => require('pb.testing.FakeJQuery'))
+.with('pb.JQuery', require => require('pb.testing.FakeJQuery'))
 .with('pb.$registry', require => {
   const Registry = require('pb.ui.RegistryService');
   return new Registry();
@@ -25,7 +25,7 @@ DIJS
 .run(require => {
 
   const _ = require('spies.Spies');
-  const $ = require('jquery');
+  const $ = require('pb.JQuery');
 
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');

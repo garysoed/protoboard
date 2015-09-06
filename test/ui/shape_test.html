@@ -18,7 +18,7 @@ DIJS
 .with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .run(require => {
 
-  const $ = require('jquery');
+  const $ = require('pb.JQuery');
   const doc = require('doc');
   const expect = require('chai.expect');
   const FakeMutationObserver = require('MutationObserver');
