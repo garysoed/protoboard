@@ -105,9 +105,9 @@ DIJS.bind("pb.Protoboard.__runner__", function (require) {
                   return gameSync.get();
                 });
               }).then(function (gameData) {
-                TemplateService.addData("pb.playerCount", gameData.playerCount);
-                TemplateService.addData("pb.players", gameData.players);
-                TemplateService.addData("pb.state", gameData.state);
+                TemplateService.addData("pb_playerCount", gameData.playerCount);
+                TemplateService.addData("pb_players", gameData.players);
+                TemplateService.addData("pb_state", gameData.state);
                 return gameData;
               }).then(function (gameData) {
                 return Promise.all([gameData, Promise.resolve(_this[__setupFn__] ? _this[__setupFn__](require) : null)]);

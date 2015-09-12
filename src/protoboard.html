@@ -70,13 +70,13 @@ DIJS
      * Runs the game on the given document object. Also makes available the following variables to
      * the templating system:
      *
-     * -   `pb.playerCount`: Contains number of players in the game.
-     * -   `pb.players`: Array of player objects. Each player object is an object with:
+     * -   `pb_playerCount`: Contains number of players in the game.
+     * -   `pb_players`: Array of player objects. Each player object is an object with:
      *
      *     -   id: ID of the player
      *     -   state: The player's state
      *
-     * -   `pb.state`: Contains the game state object.
+     * -   `pb_state`: Contains the game state object.
      *
      * @method run
      * @param {Document} [doc] Document to run the game on. Defaults to the root document.
@@ -114,9 +114,9 @@ DIJS
                   })
                   .then(gameData => {
                     // Initialize the templates.
-                    TemplateService.addData('pb.playerCount', gameData.playerCount);
-                    TemplateService.addData('pb.players', gameData.players);
-                    TemplateService.addData('pb.state', gameData.state);
+                    TemplateService.addData('pb_playerCount', gameData.playerCount);
+                    TemplateService.addData('pb_players', gameData.players);
+                    TemplateService.addData('pb_state', gameData.state);
                     return gameData;
                   })
                   .then(gameData => {
