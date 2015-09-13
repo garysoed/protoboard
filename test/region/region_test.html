@@ -18,7 +18,6 @@ DIJS
   const $ = require('pb.JQuery');
 
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Region = require('pb.region.Region');
   const t = require('pb.t');
 
@@ -37,17 +36,17 @@ DIJS
         Object.defineProperty(el, 'pickableChildCount', { get: function() { return 3; } });
 
         el[__onMutation__]([{ addedNodes: [{}, {}], removedNodes: [] }]);
-        expect($(el).attr('child-count')).to.equal('3');
+        expect($(el).attr('child-count')).toEqual('3');
       });
       it('should update the child count if nodes are removed', () => {
         Object.defineProperty(el, 'pickableChildCount', { get: function() { return 3; } });
 
         el[__onMutation__]([{ addedNodes: [], removedNodes: [{}, {}] }]);
-        expect($(el).attr('child-count')).to.equal('3');
+        expect($(el).attr('child-count')).toEqual('3');
       });
       it('should do nothing if no nodes are added or removed', () => {
         el[__onMutation__]([]);
-        expect($(el).attr('child-count')).to.be.undefined;
+        expect($(el).attr('child-count')).toEqual(undefined);
       });
     });
   });

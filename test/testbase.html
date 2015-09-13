@@ -9,8 +9,83 @@
 <link rel="import" href="testutils.html">
 
 <script>
-DIJS.bind('spies.Spies', () => spies.Spies);
-DIJS.bind('spies.Fakes', () => spies.Fakes);
-DIJS.bind('spies.Matchers', () => spies.Matchers);
-DIJS.bind('chai.expect', () => chai.expect);
+DIJS
+.bind('spies.Spies', () => spies.Spies)
+.bind('spies.Fakes', () => spies.Fakes)
+.bind('spies.Matchers', () => spies.Matchers)
+.bind('jasmine.toExist', () => {
+  return (util, customEqualityTesters) => {
+    return {
+      compare(actual) {
+        let result = {
+          pass: actual !== null && actual !== undefined
+        };
+
+        if (result.pass) {
+          result.message = `Expected ${actual} to not exist`;
+        } else {
+          result.message = `Expected ${actual} to exist`;
+        }
+
+        return result;
+      }
+    };
+  };
+})
+.bind('jasmine.toBeATypeOf', () => {
+  return (util, customEqualityTesters) => {
+    return {
+      compare(actual, expected) {
+        let result = {
+          pass: typeof actual === expected
+        };
+
+        if (result.pass) {
+          result.message = `Expected ${actual} to not be a type of ${expected}`;
+        } else {
+          result.message = `Expected ${actual} to be a type of ${expected}`;
+        }
+        return result;
+      }
+    };
+  };
+})
+.bind('jasmine.toBeAnInstanceOf', () => {
+  return (util, customEqualityTesters) => {
+    return {
+      compare(actual, expected) {
+        let result = {
+          pass: actual instanceof expected
+        };
+
+        if (result.pass) {
+          result.message = `Expected ${actual} to not be an instance of ${expected.name}`;
+        } else {
+          result.message = `Expected ${actual} to be an instance of ${expected.name}`;
+        }
+        return result;
+      }
+    };
+  };
+})
+.bind('jasmine', () => jasmine)
+.bind('test.expect', () => expect)
+.run(require => {
+  const toBeAnInstanceOf = require('jasmine.toBeAnInstanceOf');
+  const toBeATypeOf = require('jasmine.toBeATypeOf');
+  const toExist = require('jasmine.toExist');
+
+  // TODO(gs): Export these
+  window['toBeAnInstanceOf'] = toBeAnInstanceOf;
+  window['toBeATypeOf'] = toBeATypeOf;
+  window['toExist'] = toExist;
+});
+
+beforeEach(() => {
+  jasmine.addMatchers({
+    toBeAnInstanceOf: toBeAnInstanceOf,
+    toBeATypeOf: toBeATypeOf,
+    toExist: toExist
+  });
+});
 </script>

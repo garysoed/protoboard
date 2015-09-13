@@ -24,12 +24,10 @@ DIJS
 })
 .run(require => {
 
-  const _ = require('spies.Spies');
   const $ = require('pb.JQuery');
 
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Generate = require('pb.ui.Generate');
   const Promise = require('Promise');
   const Template = require('pb.ui.TemplateService');
@@ -47,7 +45,7 @@ DIJS
         });
       });
 
-      it('should replace itself with data registered to ui.TemplateService', () => {
+      it('should replace itself with data registered to ui.TemplateService', done => {
         let dataA = 'a';
         let dataB = 'B';
         let innerHTML =
@@ -62,22 +60,18 @@ DIJS
             return Promise.resolve(['dataB', dataB]);
           }
         };
-        _.spy($, 'attr').overrideReturn('dataA dataB');
-        _.spy($, 'replaceWith');
-        _.spy(generate, 'querySelector').overrideReturn({ innerHTML: innerHTML });
+        spyOn($, 'attr').and.returnValue('dataA dataB');
+        spyOn($, 'replaceWith');
+        spyOn(generate, 'querySelector').and.returnValue({ innerHTML: innerHTML });
 
-        return generate.createdCallback()
+        generate.createdCallback()
             .then(() => {
               expect($.replaceWith)
-                  .calledWith(`<div>Data A: ${dataA}</div><div>Data B: ${dataB}</div>`)
-                  .at.least(1);
+                  .toHaveBeenCalledWith(`<div>Data A: ${dataA}</div><div>Data B: ${dataB}</div>`);
               Template.get = originalGet;
-            });
+            })
+            .then(done);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

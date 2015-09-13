@@ -30,13 +30,10 @@ DIJS
 })
 .run(require => {
 
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
-
   const doc = require('doc');
   const Events = require('pb.Events');
-  const expect = require('chai.expect');
   const FakeAbility = require('pb.testing.FakeAbility');
+  const j = require('jasmine');
   const Key = require('pb.trigger.Key');
   const KeyService = require('pb.trigger.Key.__service__');
   const Move = require('pb.ui.MoveService');
@@ -56,40 +53,36 @@ DIJS
         let ability = new FakeAbility('test');
         let event = {};
 
-        _.spy(Events, 'of');
-        _.spy(Events, 'on');
+        spyOn(Events, 'of').and.callThrough();
+        spyOn(Events, 'on').and.callThrough();
         key.on(element, ability);
 
-        expect(Events.of).calledWith(element, key).at.least(1);
+        expect(Events.of).toHaveBeenCalledWith(element, key);
 
-        let keyboardHandlerCaptor = _M.isA(Function);
-        let mouseEnterCaptor = _M.isA(Function);
-        let mouseLeaveCaptor = _M.isA(Function);
+        spyOn(KeyService, 'add');
+        spyOn(KeyService, 'remove');
 
-        _.spy(KeyService, 'add');
-        _.spy(KeyService, 'remove');
+        expect(Events.on).toHaveBeenCalledWith('dom', 'mouseenter', j.any(Function));
+        expect(Events.on).toHaveBeenCalledWith('dom', 'mouseleave', j.any(Function));
 
-        expect(Events.on).calledWith('dom', 'mouseenter', mouseEnterCaptor).at.least(1);
-        expect(Events.on).calledWith('dom', 'mouseleave', mouseLeaveCaptor).at.least(1);
+        Events.on.calls.argsFor(0)[2]();
+        expect(KeyService.add).toHaveBeenCalledWith(element, 'a', ability);
 
-        mouseEnterCaptor.matchingArgs[0]();
-        expect(KeyService.add).calledWith(element, 'a', ability).at.least(1);
-
-        mouseLeaveCaptor.matchingArgs[0]();
-        expect(KeyService.remove).calledWith(element).at.least(1);
+        Events.on.calls.argsFor(1)[2]();
+        expect(KeyService.remove).toHaveBeenCalledWith(element);
       });
     });
 
     describe('#off', () => {
       it('should unregister all listeners', () => {
         let element = doc.createElement('div');
-        _.spy(Events, 'of');
-        _.spy(Events, 'off');
+        spyOn(Events, 'of').and.callThrough();
+        spyOn(Events, 'off').and.callThrough();
 
         key.off(element);
 
-        expect(Events.of).calledWith(element, key).at.least(1);
-        expect(Events.off).calledWith().at.least(1);
+        expect(Events.of).toHaveBeenCalledWith(element, key);
+        expect(Events.off).toHaveBeenCalledWith();
       });
     });
 
@@ -104,12 +97,10 @@ DIJS
         let handler;
 
         beforeEach(() => {
-          _.spy(Events, 'on');
+          spyOn(Events, 'on');
 
           service.init(doc);
-          let handlerCaptor = _M.isA(Function);
-          expect(Events.on).calledWith('dom', 'keypress', handlerCaptor).at.least(1);
-          handler = handlerCaptor.matchingArgs[0];
+          handler = Events.on.calls.argsFor(0)[2];
         });
 
         it('should trigger only the deepest hovered element and unlisten to the element if the mouse is not on the element', () => {
@@ -122,11 +113,11 @@ DIJS
           service.add(el1, 'a', ability1);
           service.add(el2, 'a', ability2);
 
-          _.spy(ability1, 'trigger');
-          _.spy(ability2, 'trigger');
-          _.spy(doc, 'elementFromPoint').overrideReturn(el2);
+          spyOn(ability1, 'trigger');
+          spyOn(ability2, 'trigger');
+          spyOn(doc, 'elementFromPoint').and.returnValue(el2);
 
-          _.spy(el2, 'getBoundingClientRect').overrideReturn({
+          spyOn(el2, 'getBoundingClientRect').and.returnValue({
             left: 12,
             right: 34,
             top: 56,
@@ -140,14 +131,14 @@ DIJS
           };
           handler(event);
 
-          expect(doc.elementFromPoint).calledWith(0, 0).at.least(1);
+          expect(doc.elementFromPoint).toHaveBeenCalledWith(0, 0);
 
           // Check that the first ability is called.
-          expect(ability1.trigger).called().to.be.equal(0);
-          expect(ability2.trigger).calledWith(el2).at.least(1);
+          expect(ability1.trigger).not.toHaveBeenCalled();
+          expect(ability2.trigger).toHaveBeenCalledWith(el2);
 
           // Check that the ability is deleted.
-          expect(t.getPrivateProperty(service, 'hoveredEls').has(el2)).to.be.false;
+          expect(t.getPrivateProperty(service, 'hoveredEls').has(el2)).toEqual(false);
         });
         it('should not crash if no element is hovered over', () => {
           handler({ keyCode: 97 });
@@ -156,7 +147,7 @@ DIJS
           let el = doc.createElement('div');
           service.add(el, 'a', new FakeAbility('ability'));
 
-          _.spy(el, 'getBoundingClientRect').overrideReturn({
+          spyOn(el, 'getBoundingClientRect').and.returnValue({
             left: 12,
             right: 34,
             top: 56,
@@ -169,14 +160,14 @@ DIJS
 
           // Check that the ability is still there.
           const map = t.getPrivateProperty(service, 'hoveredEls');
-          expect(map.has(el)).to.be.true;
+          expect(map.has(el)).toEqual(true);
         });
         it('should unlisten to the element if it is being moved', () => {
           let el = doc.createElement('div');
           service.add(el, 'a', new FakeAbility('ability'));
-          _.spy(doc, 'elementFromPoint').overrideReturn(el);
+          spyOn(doc, 'elementFromPoint').and.returnValue(el);
 
-          _.spy(el, 'getBoundingClientRect').overrideReturn({
+          spyOn(el, 'getBoundingClientRect').and.returnValue({
             left: 10,
             right: 20,
             top: 10,
@@ -190,18 +181,18 @@ DIJS
 
           // Check that the element has been unregistered.
           const map = t.getPrivateProperty(service, 'hoveredEls');
-          expect(map.has(el)).to.be.false;
+          expect(map.has(el)).toEqual(false);
         });
       });
 
       describe('init', () => {
         it('should listen to keypress events', () => {
-          _.spy(Events, 'of');
-          _.spy(Events, 'on');
+          spyOn(Events, 'of').and.callThrough();
+          spyOn(Events, 'on').and.callThrough();
 
           service.init(doc);
-          expect(Events.of).calledWith(doc.body, service).at.least(1);
-          expect(Events.on).calledWith('dom', 'keypress', _M.isA(Function)).at.least(1);
+          expect(Events.of).toHaveBeenCalledWith(doc.body, service);
+          expect(Events.on).toHaveBeenCalledWith('dom', 'keypress', j.any(Function));
         });
       });
 
@@ -218,9 +209,9 @@ DIJS
           service.add(el, key, ability);
 
           const map = t.getPrivateProperty(service, 'hoveredEls');
-          expect(map.has(el)).to.be.true;
-          expect(map.get(el).has(key)).to.be.true;
-          expect(map.get(el).get(key).has(ability)).to.be.true;
+          expect(map.has(el)).toEqual(true);
+          expect(map.get(el).has(key)).toEqual(true);
+          expect(map.get(el).get(key).has(ability)).toEqual(true);
         });
         it('should handle adding multiple abilities with the same element and key', () => {
           const ability1 = new FakeAbility('ability1');
@@ -230,8 +221,8 @@ DIJS
           service.add(el, key, ability2);
 
           const abilitySet = t.getPrivateProperty(service, 'hoveredEls').get(el).get(key);
-          expect(abilitySet.has(ability1)).to.be.true;
-          expect(abilitySet.has(ability2)).to.be.true;
+          expect(abilitySet.has(ability1)).toEqual(true);
+          expect(abilitySet.has(ability2)).toEqual(true);
         });
         it('should handle adding multiple keys to the same element', () => {
           const key1 = 'a';
@@ -242,10 +233,10 @@ DIJS
           service.add(el, key2, ability);
 
           const keyMap = t.getPrivateProperty(service, 'hoveredEls').get(el);
-          expect(keyMap.has(key1)).to.be.true;
-          expect(keyMap.get(key1).has(ability)).to.be.true;
-          expect(keyMap.has(key2)).to.be.true;
-          expect(keyMap.get(key2).has(ability)).to.be.true;
+          expect(keyMap.has(key1)).toEqual(true);
+          expect(keyMap.get(key1).has(ability)).toEqual(true);
+          expect(keyMap.has(key2)).toEqual(true);
+          expect(keyMap.get(key2).has(ability)).toEqual(true);
         });
       });
 
@@ -256,16 +247,12 @@ DIJS
           service.add(el, 'a', new FakeAbility('ability'));
 
           service.remove(el);
-          expect(t.getPrivateProperty(service, 'hoveredEls').has(el)).to.be.false;
+          expect(t.getPrivateProperty(service, 'hoveredEls').has(el)).toEqual(false);
         });
         it('should not crash if the element is not in the map', () => {
           service.remove(doc.createElement('div'));
         });
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

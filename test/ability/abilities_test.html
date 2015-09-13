@@ -15,12 +15,10 @@
 DIJS
 .with('MutationObserver', require => require('pb.testing.FakeMutationObserver'))
 .run(require => {
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
   const Abilities = require('pb.ability.Abilities.__ctor__');
   const Builder = require('pb.ability.Abilities.__builder__');
-  const expect = require('chai.expect');
   const FakeAbility = require('pb.testing.FakeAbility');
+  const j = require('jasmine');
   const t = require('pb.t');
   const Utils = require('pb.Utils');
 
@@ -57,12 +55,12 @@ DIJS
             .add(ability1)
             .add(ability2);
 
-        _.spy(ability1, 'updateConfig');
-        _.spy(ability2, 'updateConfig');
+        spyOn(ability1, 'updateConfig');
+        spyOn(ability2, 'updateConfig');
 
         t.getPrivateMethod(abilities, 'onMutation')(records);
-        expect(ability1.updateConfig).calledWith(records[0].target).at.least(1);
-        expect(ability2.updateConfig).calledWith(records[1].target).at.least(1);
+        expect(ability1.updateConfig).toHaveBeenCalledWith(records[0].target);
+        expect(ability2.updateConfig).toHaveBeenCalledWith(records[1].target);
       });
       it('should not throw exception if the element has no abilities', () => {
         t.getPrivateMethod(abilities, 'onMutation')([{
@@ -97,46 +95,40 @@ DIJS
             .add(ability1)
             .add(ability2);
 
-        _.spy(Utils, 'extendFn');
-        _.spy(ability1, 'init');
-        _.spy(ability2, 'init');
+        spyOn(Utils, 'extendFn');
+        spyOn(ability1, 'init');
+        spyOn(ability2, 'init');
 
         abilities.init(el);
 
-        expect(ability1.init).calledWith(el).at.least(1);
-        expect(ability2.init).calledWith(el).at.least(1);
+        expect(ability1.init).toHaveBeenCalledWith(el);
+        expect(ability2.init).toHaveBeenCalledWith(el);
 
         let observer = t.getPrivateProperty(el, 'observer');
-        _.spy(observer, 'observe');
-        _.spy(observer, 'disconnect');
+        spyOn(observer, 'observe');
+        spyOn(observer, 'disconnect');
 
         // Check the attached callback.
-        let attachedCallbackCaptor = _M.isA(Function);
-        expect(Utils.extendFn)
-            .calledWith(el, 'attachedCallback', attachedCallbackCaptor).at.least(1);
-        attachedCallbackCaptor.matchingArgs[0]();
+        expect(Utils.extendFn).toHaveBeenCalledWith(el, 'attachedCallback', j.any(Function));
+        Utils.extendFn.calls.argsFor(0)[2]();
 
-        let configCaptor = _M.isA(Object);
-        expect(observer.observe).calledWith(el, configCaptor).at.least(1);
-
-        let config = configCaptor.matchingArgs[0];
-        expect(config.attributes).to.be.true;
+        expect(observer.observe).toHaveBeenCalledWith(
+            el,
+            j.objectContaining({ attributes: true }));
 
         // Check the detached callback.
-        let detachedCallbackCaptor = _M.isA(Function);
-        expect(Utils.extendFn)
-            .calledWith(el, 'detachedCallback', detachedCallbackCaptor).at.least(1);
-        detachedCallbackCaptor.matchingArgs[0]();
+        expect(Utils.extendFn).toHaveBeenCalledWith(el, 'detachedCallback', j.any(Function));
+        Utils.extendFn.calls.argsFor(1)[2]();
 
-        expect(observer.disconnect).calledWith().at.least(1);
+        expect(observer.disconnect).toHaveBeenCalledWith();
       });
       it('should handle element with no registered abilities', () => {
         abilities.init(el);
-        expect(t.getPrivateProperty(el, 'observer')).to.be.instanceOf(MutationObserver);
+        expect(t.getPrivateProperty(el, 'observer')).toBeAnInstanceOf(MutationObserver);
       });
       it('should throw exception if the element has been initialized', () => {
         abilities.init(el);
-        expect(() => abilities.init(el)).to.throw('already initialized');
+        expect(() => abilities.init(el)).toThrowError(/already initialized/);
       });
     });
 
@@ -151,17 +143,17 @@ DIJS
         let ability = new FakeAbility('ability');
         abilities.of(FakeElement.prototype).add(ability);
 
-        _.spy(ability, 'trigger');
+        spyOn(ability, 'trigger');
         abilities.trigger(el, ability.attrName);
-        expect(ability.trigger).calledWith(el).at.least(1);
+        expect(ability.trigger).toHaveBeenCalledWith(el);
       });
       it('should throw error if the element has no abilities', () => {
-        expect(() => abilities.trigger(el, 'ability')).to.throw(Error);
+        expect(() => abilities.trigger(el, 'ability')).toThrowError(Error);
       });
       it('should throw error if the element does not have the specified ability', () => {
         let ability = new FakeAbility('ability');
         abilities.of(FakeElement.prototype).add(ability);
-        expect(() => abilities.trigger(el, 'other ability')).to.throw(Error);
+        expect(() => abilities.trigger(el, 'other ability')).toThrowError(Error);
       });
     });
 
@@ -177,24 +169,24 @@ DIJS
         it('should add ability to a clean element', () => {
           let ability = new FakeAbility('Ability');
 
-          expect(builder.add(ability)).to.equal(builder);
+          expect(builder.add(ability)).toEqual(builder);
 
           let addedAbilities = FakeElement.prototype[__abilities__];
-          expect(addedAbilities.get(ability.attrName)).to.equal(ability);
-          expect(addedAbilities.get(ability.attrTrigger)).to.equal(ability);
+          expect(addedAbilities.get(ability.attrName)).toEqual(ability);
+          expect(addedAbilities.get(ability.attrTrigger)).toEqual(ability);
         });
         it('should add ability to an element with another ability', () => {
           let ability1 = new FakeAbility('Ability 1');
           let ability2 = new FakeAbility('Ability 2');
 
-          expect(builder.add(ability1).add(ability2)).to.equal(builder);
+          expect(builder.add(ability1).add(ability2)).toEqual(builder);
 
           let addedAbilities = FakeElement.prototype[__abilities__];
-          expect(addedAbilities.get(ability1.attrName)).to.equal(ability1);
-          expect(addedAbilities.get(ability1.attrTrigger)).to.equal(ability1);
+          expect(addedAbilities.get(ability1.attrName)).toEqual(ability1);
+          expect(addedAbilities.get(ability1.attrTrigger)).toEqual(ability1);
 
-          expect(addedAbilities.get(ability2.attrName)).to.equal(ability2);
-          expect(addedAbilities.get(ability2.attrTrigger)).to.equal(ability2);
+          expect(addedAbilities.get(ability2.attrName)).toEqual(ability2);
+          expect(addedAbilities.get(ability2.attrTrigger)).toEqual(ability2);
         });
         it('should throw exception if an ability with the same name has been registered', () => {
           let ability1 = new FakeAbility('Ability');
@@ -203,7 +195,7 @@ DIJS
           builder.add(ability1);
 
           expect(() => builder.add(ability2))
-              .to.throw(`${ability1.attrName} is already registered`);
+              .toThrowError(new RegExp(`${ability1.attrName} is already registered`));
         });
         it('should throw exception if an ability with the same trigger has been registered', () => {
           let ability1 = new FakeAbility('Ability');
@@ -214,7 +206,7 @@ DIJS
           builder.add(ability1);
 
           expect(() => builder.add(ability2))
-              .to.throw(`${ability1.attrTrigger} is already registered`);
+              .toThrowError(new RegExp(`${ability1.attrTrigger} is already registered`));
         });
       });
 
@@ -224,17 +216,13 @@ DIJS
           builder.add(ability);
 
           var map = builder.getAll();
-          expect(map.size).to.be.equal(1);
-          expect(map.get(ability.attrName)).to.be.equal(ability);
+          expect(map.size).toEqual(1);
+          expect(map.get(ability.attrName)).toEqual(ability);
         });
         it('should return empty map if the element has no abilities', () => {
-          expect(builder.getAll().size).to.be.equal(0);
+          expect(builder.getAll().size).toEqual(0);
         });
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

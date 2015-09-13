@@ -13,8 +13,8 @@
 <script>
 DIJS
 .run(require => {
-  const _ = require('spies.Spies');
-  const expect = require('chai.expect');
+
+  const j = require('jasmine');
   const Triggers = require('pb.trigger.Triggers.__ctor__');
 
   describe('trigger.Triggers', () => {
@@ -27,31 +27,27 @@ DIJS
     describe('#parse', () => {
       it('should be able to parse a registered trigger', () => {
         let result = 5;
-        let parser = _.spiedFunction().overrideReturn(result);
+        let parser = j.createSpy('parser').and.returnValue(result);
         let string = 'triggerString';
         triggers.register(parser);
-        expect(triggers.parse(string)).to.equal(result);
-        expect(parser).calledWith(string).at.least(1);
+        expect(triggers.parse(string)).toEqual(result);
+        expect(parser).toHaveBeenCalledWith(string);
       });
       it('should return the first registered matching trigger', () => {
         let result = 6;
-        let parser1 = _.spiedFunction().overrideReturn(result);
-        let parser2 = _.spiedFunction().overrideReturn(result);
+        let parser1 = j.createSpy('parser1').and.returnValue(result);
+        let parser2 = j.createSpy('parser2').and.returnValue(result);
         let string = 'triggerString';
         triggers.register(parser1);
         triggers.register(parser2);
-        expect(triggers.parse(string)).to.equal(result);
-        expect(parser1).calledWith(string).at.least(1);
-        expect(parser2).called().to.equal(0);
+        expect(triggers.parse(string)).toEqual(result);
+        expect(parser1).toHaveBeenCalledWith(string);
+        expect(parser2).not.toHaveBeenCalled();
       });
       it('should throw an error if no trigger is found', () => {
         let string = 'triggerString';
-        expect(() => triggers.parse(string)).to.throw(string);
+        expect(() => triggers.parse(string)).toThrowError(new RegExp(string));
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

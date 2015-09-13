@@ -17,13 +17,11 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
   const $registry = require('pb.$registry');
 
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('chai.expect');
+  const j = require('jasmine');
   const Preview = require('pb.ui.Preview');
 
   describe('ui.Preview', () => {
@@ -39,12 +37,12 @@ DIJS
         let parent = doc.createElement('div');
         parent.appendChild(previewEl);
 
-        _.spy(parent, 'addEventListener');
+        spyOn(parent, 'addEventListener');
 
         previewEl.attachedCallback();
 
-        expect(parent.addEventListener).calledWith('mouseenter', _M.isA(Function)).at.least(1);
-        expect(parent.addEventListener).calledWith('mouseleave', _M.isA(Function)).at.least(1);
+        expect(parent.addEventListener).toHaveBeenCalledWith('mouseenter', j.any(Function));
+        expect(parent.addEventListener).toHaveBeenCalledWith('mouseleave', j.any(Function));
       });
       it('should not crash if there are no parent elements', () => {
         previewEl.attachedCallback();
@@ -56,31 +54,25 @@ DIJS
         let parent = doc.createElement('div');
         parent.appendChild(previewEl);
 
-        _.spy(parent, 'addEventListener');
-        _.spy(parent, 'removeEventListener');
+        spyOn(parent, 'addEventListener');
+        spyOn(parent, 'removeEventListener');
 
         previewEl.attachedCallback();
 
-        let mouseEnterHandlerMatcher = _M.isA(Function);
-        let mouseLeaveHandlerMatcher = _M.isA(Function);
-        expect(parent.addEventListener)
-            .calledWith('mouseenter', mouseEnterHandlerMatcher).at.least(1);
-        expect(parent.addEventListener)
-            .calledWith('mouseleave', mouseLeaveHandlerMatcher).at.least(1);
+        expect(parent.addEventListener).toHaveBeenCalledWith('mouseenter', j.any(Function));
+        expect(parent.addEventListener).toHaveBeenCalledWith('mouseleave', j.any(Function));
 
         previewEl.detachedCallback();
-        expect(parent.removeEventListener)
-            .calledWith('mouseenter', mouseEnterHandlerMatcher.matchingArgs[0]).at.least(1);
-        expect(parent.removeEventListener)
-            .calledWith('mouseleave', mouseLeaveHandlerMatcher.matchingArgs[0]).at.least(1);
+        expect(parent.removeEventListener).toHaveBeenCalledWith(
+            'mouseenter',
+            parent.addEventListener.calls.argsFor(0)[1]);
+        expect(parent.removeEventListener).toHaveBeenCalledWith(
+            'mouseleave',
+            parent.addEventListener.calls.argsFor(1)[1]);
       });
       it('should not crash if there are no parent elements', () => {
         previewEl.detachedCallback();
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

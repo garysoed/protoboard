@@ -13,102 +13,101 @@
 <script>
 DIJS
 .run(require => {
-  const expect = require('chai.expect');
   const Check = require('pb.Check');
 
   describe('Check', () => {
     describe('#isInt', () => {
       it('should parse defaulting radix to 10', () => {
-        expect(Check('123').isInt().orThrows()).to.equal(123);
+        expect(Check('123').isInt().orThrows()).toEqual(123);
       });
       it('should handle radix other than 10', () => {
-        expect(Check('12').isInt(5).orThrows()).to.equal(7);
+        expect(Check('12').isInt(5).orThrows()).toEqual(7);
       });
       it('should error when the input string is not a number', () => {
-        expect(Check('abc').isInt().orUse('NaN')).to.equal('NaN');
+        expect(Check('abc').isInt().orUse('NaN')).toEqual('NaN');
       });
       it('should error on undefined', () => {
-        expect(Check(undefined).isInt().orUse('error')).to.equal('error');
+        expect(Check(undefined).isInt().orUse('error')).toEqual('error');
       });
       it('should error on null', () => {
-        expect(Check(null).isInt().orUse('error')).to.equal('error');
+        expect(Check(null).isInt().orUse('error')).toEqual('error');
       });
     });
 
     describe('#isFloat', () => {
       it('should parse integer', () => {
-        expect(Check('1').isFloat().orThrows()).to.equal(1);
+        expect(Check('1').isFloat().orThrows()).toEqual(1);
       });
       it('should parse float', () => {
-        expect(Check('1.3').isFloat().orThrows()).to.equal(1.3);
+        expect(Check('1.3').isFloat().orThrows()).toEqual(1.3);
       });
       it('should error when the input string is not a number', () => {
-        expect(Check('abc').isFloat().orUse('error')).to.equal('error');
+        expect(Check('abc').isFloat().orUse('error')).toEqual('error');
       });
       it('should error on null', () => {
-        expect(Check(null).isFloat().orUse('error')).to.equal('error');
+        expect(Check(null).isFloat().orUse('error')).toEqual('error');
       });
     });
 
     describe('#isBoolean', () => {
       it('should parse true', () => {
-        expect(Check('true').isBoolean().orThrows()).to.be.true;
+        expect(Check('true').isBoolean().orThrows()).toEqual(true);
       });
       it('should parse false', () => {
-        expect(Check('false').isBoolean().orThrows()).to.be.false;
+        expect(Check('false').isBoolean().orThrows()).toEqual(false);
       });
       it('should parse TRUE', () => {
-        expect(Check('TRUE').isBoolean().orThrows()).to.be.true;
+        expect(Check('TRUE').isBoolean().orThrows()).toEqual(true);
       });
       it('should parse FALSE', () => {
-        expect(Check('FALSE').isBoolean().orThrows()).to.be.false;
+        expect(Check('FALSE').isBoolean().orThrows()).toEqual(false);
       });
       it('should error on undefined', () => {
-        expect(Check(undefined).isBoolean().orUse('error')).to.equal('error');
+        expect(Check(undefined).isBoolean().orUse('error')).toEqual('error');
       });
       it('should error on null', () => {
-        expect(Check(null).isBoolean().orUse('error')).to.equal('error');
+        expect(Check(null).isBoolean().orUse('error')).toEqual('error');
       });
     });
 
     describe('#isList', () => {
       it('should default the separator to a space', () => {
-        expect(Check('a b c').isList().orThrows()).to.eql(['a', 'b', 'c']);
+        expect(Check('a b c').isList().orThrows()).toEqual(['a', 'b', 'c']);
       });
       it('should parse the string by the given separator', () => {
-        expect(Check('a,b,c').isList(',').orThrows()).to.eql(['a', 'b', 'c']);
+        expect(Check('a,b,c').isList(',').orThrows()).toEqual(['a', 'b', 'c']);
       });
       it('should error on null', () => {
-        expect(Check(null).isList().orUse('error')).to.equal('error');
+        expect(Check(null).isList().orUse('error')).toEqual('error');
       });
     });
 
     describe('#orThrows', () => {
       it('should throw using an auto generated value', () => {
-        expect(() => Check(undefined).isInt().orThrows()).to.throw(/int/);
+        expect(() => Check(undefined).isInt().orThrows()).toThrowError(/int/);
       });
       it('should throw using the specified message', () => {
         var message = 'Error message';
-        expect(() => Check(null).isInt().orThrows(message)).to.throw(message);
+        expect(() => Check(null).isInt().orThrows(message)).toThrowError(new RegExp(message));
       });
       it('should handle multiple parse attempts', () => {
-        expect(Check('12').isBoolean().isInt().orThrows()).to.equal(12);
+        expect(Check('12').isBoolean().isInt().orThrows()).toEqual(12);
       });
       it('should return the first successful parsed value', () => {
-        expect(Check('12').isInt().isBoolean().orThrows()).to.equal(12);
+        expect(Check('12').isInt().isBoolean().orThrows()).toEqual(12);
       });
     });
 
     describe('#orUse', () => {
       it('should return the successful parse value', () => {
-        expect(Check('12').isInt().orUse('234')).to.equal(12);
+        expect(Check('12').isInt().orUse('234')).toEqual(12);
       });
       it('should return the first successful parse value', () => {
-        expect(Check('12').isInt().isBoolean().orUse('123')).to.equal(12);
+        expect(Check('12').isInt().isBoolean().orUse('123')).toEqual(12);
       });
       it('should return the given backup value if there were no successful parse', () => {
         var backup = 'backup value';
-        expect(Check(null).isInt().orUse(backup)).to.equal(backup);
+        expect(Check(null).isInt().orUse(backup)).toEqual(backup);
       });
     });
   });

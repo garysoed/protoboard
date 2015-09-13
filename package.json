@@ -38,6 +38,7 @@
     "jshint-stylish": "^1.0.0",
     "karma": "0.13.8",
     "karma-chrome-launcher": "^0.1.5",
+    "karma-jasmine": "^0.3.6",
     "karma-mocha": "^0.1.9",
     "karma-mocha-reporter": "^0.3.1",
     "minimist": "^1.1.0",

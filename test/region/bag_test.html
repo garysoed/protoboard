@@ -28,8 +28,6 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
   const $ = require('pb.JQuery');
   const $registry = require('pb.$registry');
 
@@ -37,7 +35,6 @@ DIJS
   const Chance = require('pb.Chance');
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const t = require('pb.t');
 
   // Private symbols
@@ -46,7 +43,7 @@ DIJS
   let __selectChild__ = t.getSymbol(Bag, 'selectChild');
 
   describe('Bag', () => {
-    before(() => {
+    beforeAll(() => {
       $registry.register(doc, Config);
     });
 
@@ -54,27 +51,27 @@ DIJS
       it('should create placeholder and its content if none is specified', () => {
         let el = doc.querySelector('#emptyChildren');
         let placeholder = el.querySelector('[pb-placeholder]');
-        expect(placeholder).to.exist;
-        expect(placeholder.childElementCount).to.be.at.least(1);
+        expect(placeholder).toExist();
+        expect(placeholder.childElementCount).toEqual(1);
       });
       it('should not create placeholder content if it is specified', () => {
         let el = doc.querySelector('#hasContent');
         let placeholders = el.querySelectorAll('[pb-placeholder]');
 
-        expect(placeholders.length).to.equal(1);
+        expect(placeholders.length).toEqual(1);
 
         let placeholder = placeholders.item(0);
         expect(placeholder.querySelector('[pb-placeholder-content]').innerHTML)
-            .to.equal('content');
+            .toEqual('content');
       });
       it('should not create placeholder or its content if placeholder is specified', () => {
         let el = doc.querySelector('#hasPlaceholder');
         let placeholders = el.querySelectorAll('[pb-placeholder]');
 
-        expect(placeholders.length).to.equal(1);
+        expect(placeholders.length).toEqual(1);
 
         let placeholder = placeholders.item(0);
-        expect(placeholder.innerHTML).to.equal('Placeholder');
+        expect(placeholder.innerHTML).toEqual('Placeholder');
       });
     });
 
@@ -84,7 +81,7 @@ DIJS
         Object.setPrototypeOf(bag, Bag.prototype);
         bag.appendChild(doc.createElement('div'));
         bag.appendChild(doc.createElement('div'));
-        expect(bag.pickableChildCount).to.equal(2);
+        expect(bag.pickableChildCount).toEqual(2);
       });
     });
 
@@ -107,13 +104,11 @@ DIJS
         el.appendChild(selectedChild);
         el.appendChild(child2);
 
-        _.spy(Chance, 'pick').overrideReturn(selectedChild);
+        spyOn(Chance, 'pick').and.returnValue(selectedChild);
 
         Bag[__selectChild__](el);
 
-        let childrenCaptor = _M.isA(Array);
-        expect(Chance.pick).calledWith(childrenCaptor).at.least(1);
-        expect(childrenCaptor.matchingArgs[0]).to.be.eql([child1, selectedChild, child2]);
+        expect(Chance.pick).toHaveBeenCalledWith([child1, selectedChild, child2]);
       });
       it('should not crash if there are no children', () => {
         let el = doc.createElement('div');
@@ -123,10 +118,6 @@ DIJS
 
         Bag[__selectChild__](el);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

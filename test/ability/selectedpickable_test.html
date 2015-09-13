@@ -20,9 +20,8 @@ DIJS
 .run(require => {
 
   const $ = require('pb.JQuery');
-  const _ = require('spies.Spies');
   const doc = require('doc');
-  const expect = require('chai.expect');
+  const j = require('jasmine');
   const Move = require('pb.ui.MoveService');
   const SelectedPickable = require('pb.ability.SelectedPickable');
 
@@ -33,7 +32,7 @@ DIJS
       let parent;
 
       beforeEach(() => {
-        selectFn = _.spiedFunction();
+        selectFn = j.createSpy('selectFn');
         pickable = new SelectedPickable(selectFn);
         parent = doc.createElement('div');
         pickable.init(parent);
@@ -41,22 +40,22 @@ DIJS
 
       it('should add the element returned by the selection function to the move service', () => {
         let el = doc.createElement('div');
-        selectFn.overrideReturn(el);
-        _.spy(Move, 'add').overrideReturn();
+        selectFn.and.returnValue(el);
+        spyOn(Move, 'add').and.returnValue();
 
         pickable.trigger(parent);
 
-        expect(Move.add).calledWith(el).at.least(1);
-        expect(selectFn).calledWith(parent).at.least(1);
+        expect(Move.add).toHaveBeenCalledWith(el);
+        expect(selectFn).toHaveBeenCalledWith(parent);
       });
       it('should do nothing if the selection function returned null', () => {
-        selectFn.overrideReturn(null);
-        _.spy(Move, 'add').overrideReturn();
+        selectFn.and.returnValue(null);
+        spyOn(Move, 'add').and.returnValue();
 
         pickable.trigger(parent);
 
-        expect(Move.add).called().to.equal(0);
-        expect(selectFn).calledWith(parent).at.least(1);
+        expect(Move.add).not.toHaveBeenCalled();
+        expect(selectFn).toHaveBeenCalledWith(parent);
       });
     });
   });

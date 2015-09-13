@@ -6,9 +6,8 @@
 <script>
 DIJS
 .bind('pb.net.IOTestSuite', require => {
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
-  const expect = require('chai.expect');
+
+  const j = require('jasmine');
 
   function IOTestSuite(ctor, triggerUpdate) {
     let io;
@@ -19,27 +18,24 @@ DIJS
 
     describe('triggerUpdate', () => {
       it('should call listener for update', () => {
-        let listener = _.spiedFunction();
+        let listener = j.createSpy('listener');
         io.listen(listener);
         triggerUpdate(io, 'path', { a: 1 });
-        expect(listener).calledWith('path', { a: 1 }).at.least(1);
+        expect(listener).toHaveBeenCalledWith('path', { a: 1 });
       });
     });
 
     describe('set and get', () => {
-      it('should return a promise that is resolved after setting the value', () => {
-        return io.set('/path', 2)
+      it('should return a promise that is resolved after setting the value', done => {
+        io.set('/path', 2)
             .then(() => {
               return io.get('/path');
             })
             .then(value => {
-              expect(value).to.equal(2);
-            });
+              expect(value).toEqual(2);
+            })
+            .then(done);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   }
 

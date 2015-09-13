@@ -16,7 +16,6 @@
       .run(require => {
 
   const Chance = require('pb.Chance');
-  const expect = require('chai.expect');
 
   describe('Chance', () => {
     describe('#binom', () => {
@@ -30,7 +29,7 @@
         let collection = [1, 2, 3];
         let gen = binomGen([true, false, true]);
         Chance.bool = () => gen.next().value;
-        expect(Chance.binom(collection)).to.eql([1, 3]);
+        expect(Chance.binom(collection)).toEqual([1, 3]);
       });
     });
   });

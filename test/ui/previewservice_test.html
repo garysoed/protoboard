@@ -14,10 +14,9 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
   const doc = require('doc');
   const Events = require('pb.Events');
-  const expect = require('chai.expect');
+  const j = require('jasmine');
   const Preview = require('pb.ui.PreviewService.__ctor__');
 
   describe('ui.PreviewService', () => {
@@ -31,24 +30,24 @@ DIJS
 
     describe('get and set', () => {
       it('should change the previewed element and trigger an event', () => {
-        let handler = _.spiedFunction();
+        let handler = j.createSpy('handler');
         Events.of(preview, this)
             .on('jquery', Preview.Events.ELEMENT_CHANGED, handler);
 
         preview.previewedEl = el;
-        expect(preview.previewedEl).to.equal(el);
-        expect(handler).called().at.least(1);
+        expect(preview.previewedEl).toEqual(el);
+        expect(handler).toHaveBeenCalled();
       });
       it('should not trigger an event if the set element does not change', () => {
         preview.previewedEl = el;
 
-        let handler = _.spiedFunction();
+        let handler = j.createSpy('handler');
         Events.of(preview, this)
             .on('jquery', Preview.Events.ELEMENT_CHANGED, handler);
 
         preview.previewedEl = el;
-        expect(preview.previewedEl).to.equal(el);
-        expect(handler).called().to.equal(0);
+        expect(preview.previewedEl).toEqual(el);
+        expect(handler).not.toHaveBeenCalled();
       });
     });
   });

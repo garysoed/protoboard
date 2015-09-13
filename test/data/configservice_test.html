@@ -14,7 +14,6 @@
 DIJS
 .run(require => {
   const Config = require('pb.data.ConfigService.__ctor__');
-  const expect = require('chai.expect');
   const FakeAbility = require('pb.testing.FakeAbility');
   const FakeTrigger = require('pb.testing.FakeTrigger');
 
@@ -49,18 +48,18 @@ DIJS
         let newTrigger = new FakeTrigger('newTrigger');
         configService.setDefaultTrigger(newTrigger, abilityA.attrName, elementA);
 
-        expect(abilityA.defaultTrigger).to.equal(newTrigger);
-        expect(abilityB.defaultTrigger).to.equal(triggerB);
-        expect(abilityA2.defaultTrigger).to.equal(triggerA2);
+        expect(abilityA.defaultTrigger).toEqual(newTrigger);
+        expect(abilityB.defaultTrigger).toEqual(triggerB);
+        expect(abilityA2.defaultTrigger).toEqual(triggerA2);
       });
       it('should set trigger of abilities with the given name for all elements', () => {
         let newTrigger = new FakeTrigger('newTrigger');
         let triggerB = abilityB.defaultTrigger;
 
         configService.setDefaultTrigger(newTrigger, abilityA.attrName);
-        expect(abilityA.defaultTrigger).to.equal(newTrigger);
-        expect(abilityB.defaultTrigger).to.equal(triggerB);
-        expect(abilityA2.defaultTrigger).to.equal(newTrigger);
+        expect(abilityA.defaultTrigger).toEqual(newTrigger);
+        expect(abilityB.defaultTrigger).toEqual(triggerB);
+        expect(abilityA2.defaultTrigger).toEqual(newTrigger);
       });
     });
   });

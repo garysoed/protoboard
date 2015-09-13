@@ -20,7 +20,6 @@ DIJS
 
   const $ = require('pb.JQuery');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const FakeMutationObserver = require('MutationObserver');
   const Shape = require('pb.ui.Shape');
 
@@ -37,7 +36,7 @@ DIJS
       $(el).attr('shape', 'circle');
       el.createdCallback();
 
-      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).to.equal('rgb(255, 0, 0)');
+      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).toEqual('rgb(255, 0, 0)');
     });
     it('should react to changes to the color attribute', () => {
       $(el).attr('shape', 'circle');
@@ -49,10 +48,10 @@ DIJS
         attributeName: 'color'
       }]);
 
-      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).to.equal('rgb(255, 0, 0)');
+      expect(el.shadowRoot.querySelector('.pb-shape').style.fill).toEqual('rgb(255, 0, 0)');
     });
     it('should throw error if the shape is not handled', () => {
-      expect(() => el.createdCallback()).to.throw(/Unrecognized shape/);
+      expect(() => el.createdCallback()).toThrowError(/Unrecognized shape/);
     });
   });
 });

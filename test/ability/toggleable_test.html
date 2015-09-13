@@ -17,7 +17,6 @@ DIJS
 .run(require => {
 
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Toggleable = require('pb.ability.Toggleable');
 
   describe('ability.Toggleable', () => {
@@ -31,8 +30,8 @@ DIJS
       it('should set the default values', () => {
         let toggleable = new Toggleable(undefined, undefined, { enabled: true, active: true });
         toggleable.init(el);
-        expect($(el).attr(toggleable.attrName)).to.equal('true');
-        expect($(el).attr(toggleable.attrActive)).to.be.equal('true');
+        expect($(el).attr(toggleable.attrName)).toEqual('true');
+        expect($(el).attr(toggleable.attrActive)).toEqual('true');
       });
       it('should do nothing if enabled is set', () => {
         let value = 'value';
@@ -41,8 +40,8 @@ DIJS
         $(el).attr(toggleable.attrName, value);
         toggleable.init(el);
 
-        expect($(el).attr(toggleable.attrName)).to.equal(value);
-        expect($(el).attr(toggleable.attrActive)).to.be.equal('true');
+        expect($(el).attr(toggleable.attrName)).toEqual(value);
+        expect($(el).attr(toggleable.attrActive)).toEqual('true');
       });
       it('should do nothing if state is set', () => {
         let value = 'value';
@@ -51,8 +50,8 @@ DIJS
         $(el).attr(toggleable.attrActive, value);
         toggleable.init(el);
 
-        expect($(el).attr(toggleable.attrName)).to.equal('true');
-        expect($(el).attr(toggleable.attrActive)).to.be.equal(value);
+        expect($(el).attr(toggleable.attrName)).toEqual('true');
+        expect($(el).attr(toggleable.attrActive)).toEqual(value);
       });
     });
 
@@ -68,14 +67,14 @@ DIJS
         $(el).attr(toggleable.attrActive, 'true');
         toggleable.trigger(el);
 
-        expect($(el).attr(toggleable.attrActive)).to.equal('false');
+        expect($(el).attr(toggleable.attrActive)).toEqual('false');
       });
       it('should do nothing if disabled', () => {
         $(el).attr(toggleable.attrName, 'false');
         $(el).attr(toggleable.attrActive, 'true');
         toggleable.trigger(el);
 
-        expect($(el).attr(toggleable.attrActive)).to.equal('true');
+        expect($(el).attr(toggleable.attrActive)).toEqual('true');
       });
     });
   });

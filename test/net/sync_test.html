@@ -20,9 +20,8 @@ DIJS
 .run(require => {
 
   const $ = require('pb.JQuery');
-  const _ = require('spies.Spies');
   const Events = require('pb.Events');
-  const expect = require('chai.expect');
+  const j = require('jasmine');
   const Rpc = require('pb.net.RpcService');
   const Sync = require('pb.net.Sync');
 
@@ -37,62 +36,62 @@ DIJS
     });
 
     it('should listen to changes from Rpc', () => {
-      let handler = _.spiedFunction();
+      let handler = j.createSpy('handler');
       Events.of(sync, sync).on('jquery', Sync.Events.UPDATED, handler);
 
       $(Rpc).trigger(`${PREFIX}/${ID}`);
-      expect(handler).called().at.least(1);
+      expect(handler).toHaveBeenCalled();
     });
 
     describe('add', () => {
       it('should return the newly added sync object', done => {
-        _.spy(Rpc, 'add').overrideReturn(Promise.resolve('newId'));
+        spyOn(Rpc, 'add').and.returnValue(Promise.resolve('newId'));
 
         sync.add()
             .then(newSync => {
-              expect(newSync.id).to.equal('newId');
-              expect(newSync.path).to.equal(`${PREFIX}/${ID}/newId`);
+              expect(newSync.id).toEqual('newId');
+              expect(newSync.path).toEqual(`${PREFIX}/${ID}/newId`);
 
-              expect(Rpc.add).calledWith(`${PREFIX}/${ID}`).at.least(1);
-              done();
-            });
+              expect(Rpc.add).toHaveBeenCalledWith(`${PREFIX}/${ID}`);
+            })
+            .then(done);
       });
     });
 
     describe('remove', () => {
       it('should remove the current object', done => {
-        _.spy(Rpc, 'remove').overrideReturn(Promise.resolve());
+        spyOn(Rpc, 'remove').and.returnValue(Promise.resolve());
 
         sync.remove()
             .then(() => {
-              expect(Rpc.remove).calledWith(`${PREFIX}/${ID}`).at.least(1);
-              done();
-            });
+              expect(Rpc.remove).toHaveBeenCalledWith(`${PREFIX}/${ID}`);
+            })
+            .then(done);
       });
     });
 
     describe('get', () => {
       it('should retrieve the value from Rpc', done => {
-        _.spy(Rpc, 'get').overrideReturn(Promise.resolve(1));
+        spyOn(Rpc, 'get').and.returnValue(Promise.resolve(1));
 
         sync.get()
             .then(value => {
-              expect(value).to.equal(1);
-              done();
-            });
+              expect(value).toEqual(1);
+            })
+            .then(done);
       });
     });
 
     describe('set', () => {
       it('should set the value and returns itself', done => {
-        _.spy(Rpc, 'set').overrideReturn(Promise.resolve());
+        spyOn(Rpc, 'set').and.returnValue(Promise.resolve());
 
         sync.set('data')
             .then(returnedSync => {
-              expect(Rpc.set).calledWith(`${PREFIX}/${ID}`, 'data').at.least(1);
-              expect(returnedSync).to.equal(sync);
-              done();
-            });
+              expect(Rpc.set).toHaveBeenCalledWith(`${PREFIX}/${ID}`, 'data');
+              expect(returnedSync).toEqual(sync);
+            })
+            .then(done);
       });
     });
 
@@ -101,13 +100,9 @@ DIJS
         let subpath = 'c/d';
 
         let subSync = sync.sync(subpath);
-        expect(subSync.id).to.equal('d');
-        expect(subSync.path).to.equal(`${sync.path}/${subpath}`);
+        expect(subSync.id).toEqual('d');
+        expect(subSync.path).toEqual(`${sync.path}/${subpath}`);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

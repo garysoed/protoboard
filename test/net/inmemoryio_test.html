@@ -13,11 +13,9 @@
 <script>
 DIJS
 .run(require => {
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
-  const expect = require('chai.expect');
   const InMemoryIO = require('pb.net.InMemoryIO');
   const IOTestSuite = require('pb.net.IOTestSuite');
+  const j = require('jasmine');
   const t = require('pb.t');
 
   describe('net.InMemoryIO', () => {
@@ -34,18 +32,15 @@ DIJS
     });
 
     describe('set', () => {
-      it('should trigger update after setting the value', () => {
-        let listener = _.spiedFunction();
+      it('should trigger update after setting the value', done => {
+        let listener = j.createSpy('listener');
         io.listen(listener);
-        return io.set('/path', 3)
+        io.set('/path', 3)
             .then(() => {
-              expect(listener).calledWith('/path', 3).at.least(1);
-            });
+              expect(listener).toHaveBeenCalledWith('/path', 3);
+            })
+            .then(done);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

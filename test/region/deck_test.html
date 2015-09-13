@@ -17,7 +17,6 @@ DIJS
 
   const Deck = require('pb.region.Deck');
   const doc = require('doc');
-  const expect = require('chai.expect');
 
   describe('region.Deck', () => {
     describe('get pickableChildCount', () => {
@@ -28,7 +27,7 @@ DIJS
         deck.appendChild(doc.createElement('div'));
         deck.appendChild(doc.createElement('div'));
 
-        expect(deck.pickableChildCount).to.equal(3);
+        expect(deck.pickableChildCount).toEqual(3);
       });
     });
   });

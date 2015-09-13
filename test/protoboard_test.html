@@ -23,11 +23,10 @@ DIJS
 })
 .run(require => {
 
-  const _ = require('spies.Spies');
   const DIJS = require('DIJS');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const InMemoryIO = require('pb.net.InMemoryIO');
+  const j = require('jasmine');
   const Protoboard = require('pb.Protoboard.__ctor__');
 
   describe('Protoboard', () => {
@@ -37,7 +36,7 @@ DIJS
 
     beforeEach(() => {
       bootstrap = {
-        run: _.spiedFunction().overrideReturn(Promise.resolve(null))
+        run: j.createSpy('run').and.returnValue(Promise.resolve(null))
       };
       io = new InMemoryIO();
       protoboard = new Protoboard();
@@ -45,9 +44,9 @@ DIJS
       DIJS.keys.set('pb.Bootstrap', bootstrap);
     });
 
-    it('should correctly setup for new game', () => {
-      let setupFn = _.spiedFunction();
-      return protoboard
+    it('should correctly setup for new game', done => {
+      let setupFn = j.createSpy('setupFn');
+      protoboard
           .withIo(io)
           .forNewGame(2, { randomSeed: 1234 })
           .join('playerId', { name: 'Player 1' })
@@ -86,9 +85,9 @@ DIJS
               }
             };
 
-            expect(setupFn).calledWith(require).at.least(1);
+            expect(setupFn).toHaveBeenCalledWith(require);
 
-            expect(root).to.eql({
+            expect(root).toEqual({
               0: {
                 playerCount: 2,
                 players: expectedPlayers,
@@ -98,17 +97,18 @@ DIJS
               }
             });
 
-            expect(StateService.get('pb_playerCount')).to.equal('2');
+            expect(StateService.get('pb_playerCount')).toEqual('2');
 
-            expect(templatePlayerCount).to.eql(['pb_playerCount', 2]);
-            expect(templatePlayers).to.eql(['pb_players', expectedPlayers]);
-            expect(templateState).to.eql(['pb_state', { randomSeed: 1234 }]);
-          });
+            expect(templatePlayerCount).toEqual(['pb_playerCount', 2]);
+            expect(templatePlayers).toEqual(['pb_players', expectedPlayers]);
+            expect(templateState).toEqual(['pb_state', { randomSeed: 1234 }]);
+          })
+          .then(done);
     });
-    it('should correctly setup for existing game', () => {
-      let setupFn = _.spiedFunction();
+    it('should correctly setup for existing game', done => {
+      let setupFn = j.createSpy('setupFn');
 
-      return Promise.all([
+      Promise.all([
         io.set('/(root)/0', { $index: true, keys: ['playerCount', 'players', 'state'] }),
         io.set('/(root)/0/playerCount', 2),
         io.set('/(root)/0/players', { $index: true, keys: ['0'] }),
@@ -120,7 +120,7 @@ DIJS
         io.set('/(root)/0/state/randomSeed', 1234)
       ])
       .then(() => {
-        return protoboard.withIo(io)
+        protoboard.withIo(io)
             .forExistingGame('0')
             .join('playerId2', { name: 'Player 2' })
             .setup(setupFn)
@@ -157,9 +157,9 @@ DIJS
                 }
               };
 
-              expect(setupFn).calledWith(require).at.least(1);
+              expect(setupFn).toHaveBeenCalledWith(require);
 
-              expect(root).to.eql({
+              expect(root).toEqual({
                 0: {
                   playerCount: 2,
                   players: expectedPlayers,
@@ -169,17 +169,14 @@ DIJS
                 }
               });
 
-              expect(StateService.get('pb_playerCount')).to.equal('2');
+              expect(StateService.get('pb_playerCount')).toEqual('2');
 
-              expect(templatePlayerCount).to.eql(['pb_playerCount', 2]);
-              expect(templatePlayers).to.eql(['pb_players', expectedPlayers]);
-              expect(templateState).to.eql(['pb_state', { randomSeed: 1234 }]);
-            });
+              expect(templatePlayerCount).toEqual(['pb_playerCount', 2]);
+              expect(templatePlayers).toEqual(['pb_players', expectedPlayers]);
+              expect(templateState).toEqual(['pb_state', { randomSeed: 1234 }]);
+            })
+            .then(done);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

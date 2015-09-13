@@ -25,7 +25,6 @@ DIJS
   const $ = require('pb.JQuery');
   const Chance = require('pb.Chance');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Move = require('pb.ui.MoveService');
   const StaggeredDroppable = require('pb.ability.StaggeredDroppable');
   const Utils = require('pb.Utils');
@@ -42,14 +41,14 @@ DIJS
         const ability =
             new StaggeredDroppable(undefined, undefined, undefined, [0.3, 0.2, 0.6]);
         ability.init(el);
-        expect($(el).attr(ability.attrChances)).to.equal('0.3 0.2 0.6');
+        expect($(el).attr(ability.attrChances)).toEqual('0.3 0.2 0.6');
       });
       it('should not set the default probabilities if specified on the element', () => {
         const initValue = '0.1 0.2';
 
         const ability = new StaggeredDroppable(undefined, undefined, undefined, [0.3, 0.4]);
         $(el).attr(ability.attrChances, initValue);
-        expect($(el).attr(ability.attrChances)).to.equal(initValue);
+        expect($(el).attr(ability.attrChances)).toEqual(initValue);
       });
     });
 
@@ -66,19 +65,19 @@ DIJS
       });
       it('should throw exception if the chances attribute is not a list', () => {
         $(el).removeAttr(ability.attrChances);
-        expect(() => ability.updateConfig(el)).to.throw('list');
+        expect(() => ability.updateConfig(el)).toThrowError(/list/);
       });
       it('should throw exception if one of the chances attribute is not a float', () => {
         $(el).attr(ability.attrChances, 'notAFloat');
-        expect(() => ability.updateConfig(el)).to.throw('float');
+        expect(() => ability.updateConfig(el)).toThrowError(/float/);
       });
       it('should throw exception if one of the chances attribute is < 0', () => {
         $(el).attr(ability.attrChances, '-1');
-        expect(() => ability.updateConfig(el)).to.throw('probability');
+        expect(() => ability.updateConfig(el)).toThrowError(/probability/);
       });
       it('should throw exception if one of the chances attribute is > 1', () => {
         $(el).attr(ability.attrChances, '3');
-        expect(() => ability.updateConfig(el)).to.throw('probability');
+        expect(() => ability.updateConfig(el)).toThrowError(/probability/);
       });
       it('should remove the pb-stagger-level attribute on child elements in levels that have been removed', () => {
         const child = doc.createElement('div');
@@ -87,7 +86,7 @@ DIJS
 
         $(el).attr(ability.attrChances, '0.5');
         ability.updateConfig(el);
-        expect($(child).attr('pb-stagger-level')).to.be.undefined;
+        expect($(child).attr('pb-stagger-level')).not.toExist();
       });
     });
 
@@ -103,7 +102,7 @@ DIJS
         const movedEl = doc.createElement('div');
         Move.nextElement = movedEl;
         ability.trigger(el);
-        expect(Utils.toArray(el.children)).to.eql([movedEl]);
+        expect(Utils.toArray(el.children)).toEqual([movedEl]);
       });
       it('should push the elements in the different levels', () => {
         $(el).attr(ability.attrChances, '0.2 0.6');
@@ -133,9 +132,9 @@ DIJS
 
         ability.trigger(el);
 
-        expect($(movedEl).attr('pb-stagger-level')).to.equal('0');
-        expect($(level0Child).attr('pb-stagger-level')).to.be.undefined;
-        expect($(level1Child).attr('pb-stagger-level')).to.equal('1');
+        expect($(movedEl).attr('pb-stagger-level')).toEqual('0');
+        expect($(level0Child).attr('pb-stagger-level')).not.toExist();
+        expect($(level1Child).attr('pb-stagger-level')).toEqual('1');
       });
     });
 
@@ -150,14 +149,14 @@ DIJS
 
       it('should return true if the stagger level is non zero', () => {
         $(el).attr('pb-stagger-level', 1);
-        expect(droppable.isInStaggerState(el)).to.be.true;
+        expect(droppable.isInStaggerState(el)).toEqual(true);
       });
       it('should return true if the stagger level is zero', () => {
         $(el).attr('pb-stagger-level', 0);
-        expect(droppable.isInStaggerState(el)).to.be.true;
+        expect(droppable.isInStaggerState(el)).toEqual(true);
       });
       it('should return false if the stagger level does not exist', () => {
-        expect(droppable.isInStaggerState(el)).to.be.false;
+        expect(droppable.isInStaggerState(el)).toEqual(false);
       });
     });
   });

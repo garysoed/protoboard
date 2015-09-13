@@ -18,9 +18,6 @@ DIJS
   return new InMemoryIO();
 })
 .run(require => {
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
-  const expect = require('chai.expect');
   const IO = require('pb.net.IO');
   const Rpc = require('pb.net.RpcService');
   const Session = require('pb.net.SessionService.__ctor__');
@@ -45,26 +42,26 @@ DIJS
             })
             .then(values => {
               let [oldGameSync, newGameSync] = values;
-              expect(oldGameSync.id).to.not.equal(newGameSync.id);
+              expect(oldGameSync.id).not.toEqual(newGameSync.id);
 
               return newGameSync.get();
             })
             .then(gameData => {
-              expect(gameData).to.eql({
+              expect(gameData).toEqual({
                 playerCount: 3,
                 players: [],
                 state: {
                   randomSeed: 1234
                 }
               });
-              done();
-            });
+            })
+            .then(done);
       });
     });
 
     describe('get', () => {
       it('should return the game sync object corresponding to the given ID', () => {
-        expect(session.get('gameId').id).to.equal('gameId');
+        expect(session.get('gameId').id).toEqual('gameId');
       });
     });
 
@@ -72,51 +69,51 @@ DIJS
       beforeEach(done => {
         // Create the gameSync "remotely"
         let gameSync = new Sync('gameId', '/games');
-        gameSync.set({
-          players: []
-        }).then(() => {
-          done();
-        });
+        gameSync
+            .set({
+              players: []
+            })
+            .then(done);
       });
 
       it('should join the given game with the correct player data', done => {
         let gameSync = new Sync('gameId', '/games');
         session.join(gameSync, 'Player Name', { role: 'Medic' })
             .then(value => {
-              expect(value).to.equal(gameSync);
+              expect(value).toEqual(gameSync);
               return gameSync.sync('players').get();
             })
             .then(playersData => {
-              expect(playersData[0]).to.eql({
+              expect(playersData[0]).toEqual({
                 id: 'Player Name',
                 state: {
                   role: 'Medic'
                 }
               });
-              done();
-            });
+            })
+            .then(done);
       });
     });
 
     describe('start', () => {
       it('should return promise that is resolved when there are enough players in the game', done => {
         let gameSync = new Sync('gameId', '/games');
-        gameSync.set({
-          playerCount: 2,
-          players: [{}, {}]
-        })
-        .then(() => {
-          return session.start(gameSync);
-        })
-        .then(value => {
-          expect(value).to.equal(gameSync);
-          done();
-        });
+        gameSync
+            .set({
+              playerCount: 2,
+              players: [{}, {}]
+            })
+            .then(() => {
+              return session.start(gameSync);
+            })
+            .then(value => {
+              expect(value).toEqual(gameSync);
+            })
+            .then(done);
       });
     });
 
     afterEach(() => {
-      _.reset();
       t.getPrivateProperty(IO, 'data').clear();
     });
   });

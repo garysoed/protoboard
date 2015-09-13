@@ -19,13 +19,11 @@ DIJS
 })
 .run(require => {
 
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
   const Click = require('pb.trigger.Click');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Events = require('pb.Events');
   const FakeAbility = require('pb.testing.FakeAbility');
+  const j = require('jasmine');
   const t = require('pb.t');
 
   describe('trigger.Click', () => {
@@ -33,9 +31,9 @@ DIJS
 
     beforeEach(() => {
       click = new Click();
-      _.spy(Events, 'of');
-      _.spy(Events, 'on');
-      _.spy(Events, 'off');
+      spyOn(Events, 'of').and.callThrough();
+      spyOn(Events, 'on').and.callThrough();
+      spyOn(Events, 'off').and.callThrough();
     });
 
     describe('#on', () => {
@@ -43,16 +41,15 @@ DIJS
         let ability = new FakeAbility('test');
         let element = doc.createElement('div');
 
-        _.spy(ability, 'trigger');
+        spyOn(ability, 'trigger');
 
         click.on(element, ability);
 
-        expect(Events.of).calledWith(element, click).at.least(1);
-        let handlerCaptor = _M.isA(Function);
-        expect(Events.on).calledWith('hammer', 'singletap', handlerCaptor).at.least(1);
+        expect(Events.of).toHaveBeenCalledWith(element, click);
+        expect(Events.on).toHaveBeenCalledWith('hammer', 'singletap', j.any(Function));
 
-        handlerCaptor.matchingArgs[0]();
-        expect(ability.trigger).calledWith(element).at.least(1);
+        Events.on.calls.argsFor(0)[2]();
+        expect(ability.trigger).toHaveBeenCalledWith(element);
       });
     });
 
@@ -62,13 +59,9 @@ DIJS
 
         click.off(element);
 
-        expect(Events.of).calledWith(element, click).at.least(1);
-        expect(Events.off).calledWith('hammer', 'singletap').at.least(1);
+        expect(Events.of).toHaveBeenCalledWith(element, click);
+        expect(Events.off).toHaveBeenCalledWith('hammer', 'singletap');
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

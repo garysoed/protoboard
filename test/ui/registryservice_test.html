@@ -42,13 +42,12 @@ DIJS
   };
 })
 .run(require => {
-  const _ = require('spies.Spies');
   const Abilities = require('pb.ability.Abilities');
   const Builder = require('pb.ability.Abilities.Builder');
   const Config = require('pb.data.ConfigService');
   const console = require('console');
-  const expect = require('chai.expect');
   const FakeAbility = require('pb.testing.FakeAbility');
+  const j = require('jasmine');
   const Registry = require('pb.ui.RegistryService');
   const t = require('pb.t');
 
@@ -63,44 +62,44 @@ DIJS
       registry = new Registry();
       FakeElement = function() {};
       doc = {
-        registerElement: _.spiedFunction()
+        registerElement: j.createSpy('registerElement')
       };
     });
 
     describe('#add', () => {
       it('should register the given element name and prototype, and register the abilities', () => {
-        _.spy(Config, 'getAll').overrideReturn([ABILITY]);
-        _.spy(Abilities, 'of');
-        _.spy(Builder, 'add');
+        spyOn(Config, 'getAll').and.returnValue([ABILITY]);
+        spyOn(Abilities, 'of').and.callThrough();
+        spyOn(Builder, 'add');
 
         registry.add('el-name', FakeElement);
         registry.register(doc);
 
-        expect(Abilities.of).calledWith(FakeElement.prototype).at.least(1);
-        expect(Builder.add).calledWith(ABILITY).at.least(1);
-        expect(doc.registerElement).calledWith('el-name', FakeElement).at.least(1);
+        expect(Abilities.of).toHaveBeenCalledWith(FakeElement.prototype);
+        expect(Builder.add).toHaveBeenCalledWith(ABILITY);
+        expect(doc.registerElement).toHaveBeenCalledWith('el-name', FakeElement);
       });
       it('should warn if there are no configurations for the current element', () => {
-        _.spy(Config, 'getAll').overrideReturn(null);
-        _.spy(Abilities, 'of');
-        _.spy(console, 'warn');
+        spyOn(Config, 'getAll').and.returnValue(null);
+        spyOn(Abilities, 'of');
+        spyOn(console, 'warn');
 
         registry.add('el-name', FakeElement);
         registry.register(doc);
 
-        expect(Abilities.of).called().to.equal(0);
-        expect(console.warn).called().at.least(1);
-        expect(doc.registerElement).calledWith('el-name', FakeElement).at.least(1);
+        expect(Abilities.of).not.toHaveBeenCalled();
+        expect(console.warn).toHaveBeenCalled();
+        expect(doc.registerElement).toHaveBeenCalledWith('el-name', FakeElement);
       });
       it('should throw exception if the element has been registered', () => {
         registry.add('el-name', FakeElement);
-        expect(() => registry.add('el-name', function() {})).to.throw('el-name');
+        expect(() => registry.add('el-name', function() {})).toThrowError(/el-name/);
       });
       it('should warn if document.registerElement throws an error', () => {
         let errorMessage = 'error message';
 
-        _.spy(Config, 'getAll').overrideReturn(null);
-        _.spy(console, 'warn');
+        spyOn(Config, 'getAll').and.returnValue(null);
+        spyOn(console, 'warn');
         doc.registerElement = () => {
           throw new Error(errorMessage);
         };
@@ -108,22 +107,18 @@ DIJS
         registry.add('el-name', FakeElement);
         registry.register(doc);
 
-        expect(console.warn).calledWith(errorMessage).at.least(1);
+        expect(console.warn).toHaveBeenCalledWith(errorMessage);
       });
     });
 
     describe('#runAtRegister', () => {
       it('should run the given function at register', () => {
-        let fn = _.spiedFunction();
+        let fn = j.createSpy('fn');
         registry.runAtRegister(fn);
         registry.register(doc);
 
-        expect(fn).calledWith(doc, Config).at.least(1);
+        expect(fn).toHaveBeenCalledWith(doc, Config);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

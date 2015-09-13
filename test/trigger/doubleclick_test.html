@@ -25,8 +25,9 @@ DIJS
   const doc = require('doc');
   const DoubleClick = require('pb.trigger.DoubleClick');
   const Events = require('pb.Events');
-  const expect = require('chai.expect');
+  const expect = require('test.expect');
   const FakeAbility = require('pb.testing.FakeAbility');
+  const j = require('jasmine');
 
   describe('DoubleClick', () => {
     let doubleClick;
@@ -40,18 +41,17 @@ DIJS
         let ability = new FakeAbility('test');
         let element = doc.createElement('div');
 
-        _.spy(ability, 'trigger');
-        _.spy(Events, 'of');
-        _.spy(Events, 'on');
+        spyOn(ability, 'trigger');
+        spyOn(Events, 'of').and.callThrough();
+        spyOn(Events, 'on').and.callThrough();
 
         doubleClick.on(element, ability);
 
-        expect(Events.of).calledWith(element, doubleClick).at.least(1);
-        let handlerCaptor = _M.isA(Function);
-        expect(Events.on).calledWith('hammer', 'doubletap', handlerCaptor).at.least(1);
+        expect(Events.of).toHaveBeenCalledWith(element, doubleClick);
+        expect(Events.on).toHaveBeenCalledWith('hammer', 'doubletap', j.any(Function));
 
-        handlerCaptor.matchingArgs[0]();
-        expect(ability.trigger).calledWith(element).at.least(1);
+        Events.on.calls.argsFor(0)[2]();
+        expect(ability.trigger).toHaveBeenCalledWith(element);
       });
     });
 
@@ -59,18 +59,14 @@ DIJS
       it('should unregister doubletap on hammer', () => {
         let element = doc.createElement('div');
 
-        _.spy(Events, 'of');
-        _.spy(Events, 'off');
+        spyOn(Events, 'of').and.callThrough();
+        spyOn(Events, 'off').and.callThrough();
 
         doubleClick.off(element);
 
-        expect(Events.of).calledWith(element, doubleClick).at.least(1);
-        expect(Events.off).calledWith('hammer', 'doubletap').at.least(1);
+        expect(Events.of).toHaveBeenCalledWith(element, doubleClick);
+        expect(Events.off).toHaveBeenCalledWith('hammer', 'doubletap');
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

@@ -9,7 +9,7 @@ module.exports = {
 
   // frameworks to use
   // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-  frameworks: ['mocha'],
+  frameworks: ['jasmine'],
 
 
   // list of files / patterns to load in the browser
@@ -45,7 +45,7 @@ module.exports = {
   // test results reporter to use
   // possible values: 'dots', 'progress'
   // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-  reporters: ['mocha'],
+  reporters: ['progress'],
 
   mochaReporter: {
     output: 'autowatch'

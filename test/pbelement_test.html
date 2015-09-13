@@ -15,11 +15,10 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
   const $ = require('pb.JQuery');
   const doc = require('doc');
   const Events = require('pb.Events');
-  const expect = require('chai.expect');
+  const j = require('jasmine');
   const PbElement = require('pb.PbElement');
 
   describe('PbElement', () => {
@@ -37,9 +36,9 @@ DIJS
 
         el.createdCallback();
 
-        expect($(el).attr('pb-id')).to.be.equal(`${prefix}-0`);
-        expect(el.pbId).to.be.equal(`${prefix}-0`);
-        expect(el.pbIdPrefix).to.be.equal(prefix);
+        expect($(el).attr('pb-id')).toEqual(`${prefix}-0`);
+        expect(el.pbId).toEqual(`${prefix}-0`);
+        expect(el.pbIdPrefix).toEqual(prefix);
       });
       it('should increment the number for the second element', () => {
         let prefix = 'prefix2';
@@ -53,27 +52,23 @@ DIJS
         Object.setPrototypeOf(el2, PbElement.prototype);
         el2.createdCallback();
 
-        expect($(el2).attr('pb-id')).to.be.equal(`${prefix}-1`);
+        expect($(el2).attr('pb-id')).toEqual(`${prefix}-1`);
       });
       it('should default the prefix to the element\'s name', () => {
         el.createdCallback();
 
-        expect($(el).attr('pb-id')).to.be.equal('div-0');
+        expect($(el).attr('pb-id')).toEqual('div-0');
       });
     });
 
     describe('#attachedCallback', () => {
       it('should fire the `created` event', () => {
-        let handler = _.spiedFunction();
+        let handler = j.createSpy('handler');
         Events.of(el).on('jquery', PbElement.Events.CREATED, handler);
 
         el.attachedCallback();
-        expect(handler).called().at.least(1);
+        expect(handler).toHaveBeenCalled();
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

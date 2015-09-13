@@ -23,9 +23,7 @@ DIJS
 .run(require => {
 
   const $ = require('pb.JQuery');
-  const _ = require('spies.Spies');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Move = require('pb.ui.MoveService');
   const OrderedDroppable = require('pb.ability.OrderedDroppable');
   const Utils = require('pb.Utils');
@@ -52,13 +50,13 @@ DIJS
 
         it('should insert before the correct child', () => {
           let child1 = doc.createElement('div');
-          _.spy(child1, 'getBoundingClientRect').overrideReturn({
+          spyOn(child1, 'getBoundingClientRect').and.returnValue({
             left: 10,
             width: 20
           });
 
           let child2 = doc.createElement('div');
-          _.spy(child2, 'getBoundingClientRect').overrideReturn({
+          spyOn(child2, 'getBoundingClientRect').and.returnValue({
             left: 35,
             width: 20
           });
@@ -74,17 +72,17 @@ DIJS
 
           droppable.trigger(el);
 
-          expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+          expect(Utils.toArray(el.children)).toEqual([child1, dragged, child2]);
         });
         it('should insert as the last child if eventX is too far to the right', () => {
           let child1 = doc.createElement('div');
-          _.spy(child1, 'getBoundingClientRect').overrideReturn({
+          spyOn(child1, 'getBoundingClientRect').and.returnValue({
             left: 10,
             width: 20
           });
 
           let child2 = doc.createElement('div');
-          _.spy(child2, 'getBoundingClientRect').overrideReturn({
+          spyOn(child2, 'getBoundingClientRect').and.returnValue({
             left: 35,
             width: 20
           });
@@ -98,7 +96,7 @@ DIJS
 
           droppable.trigger(el);
 
-          expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
+          expect(Utils.toArray(el.children)).toEqual([child1, child2, dragged]);
         });
         it('should not crash if there are no last dragged element', () => {
           Move.nextElement = null;
@@ -121,13 +119,13 @@ DIJS
 
         it('should insert before the correct child for vertical mode', () => {
           let child1 = doc.createElement('div');
-          _.spy(child1, 'getBoundingClientRect').overrideReturn({
+          spyOn(child1, 'getBoundingClientRect').and.returnValue({
             top: 10,
             height: 20
           });
 
           let child2 = doc.createElement('div');
-          _.spy(child2, 'getBoundingClientRect').overrideReturn({
+          spyOn(child2, 'getBoundingClientRect').and.returnValue({
             top: 35,
             height: 20
           });
@@ -143,17 +141,17 @@ DIJS
 
           droppable.trigger(el);
 
-          expect(Utils.toArray(el.children)).to.be.eql([child1, dragged, child2]);
+          expect(Utils.toArray(el.children)).toEqual([child1, dragged, child2]);
         });
         it('should insert as the last child if eventY is too far down for vertical mode', () => {
           let child1 = doc.createElement('div');
-          _.spy(child1, 'getBoundingClientRect').overrideReturn({
+          spyOn(child1, 'getBoundingClientRect').and.returnValue({
             top: 10,
             height: 20
           });
 
           let child2 = doc.createElement('div');
-          _.spy(child2, 'getBoundingClientRect').overrideReturn({
+          spyOn(child2, 'getBoundingClientRect').and.returnValue({
             top: 35,
             height: 20
           });
@@ -167,7 +165,7 @@ DIJS
 
           droppable.trigger(el);
 
-          expect(Utils.toArray(el.children)).to.be.eql([child1, child2, dragged]);
+          expect(Utils.toArray(el.children)).toEqual([child1, child2, dragged]);
         });
         it('should not crash if there are no last dragged element', () => {
           Move.nextElement = null;

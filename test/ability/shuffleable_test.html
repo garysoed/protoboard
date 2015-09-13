@@ -21,10 +21,8 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
   const Chance = require('pb.Chance');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Shuffleable = require('pb.ability.Shuffleable');
   const Utils = require('pb.Utils');
 
@@ -40,12 +38,12 @@ DIJS
     describe('#init', () => {
       it('should set the default value if attribute is not set', () => {
         shuffleable.init(el);
-        expect($(el).attr(shuffleable.attrName)).to.be.equal('true');
+        expect($(el).attr(shuffleable.attrName)).toEqual('true');
       });
       it('should be noop if the attribute is set', () => {
         $(el).attr(shuffleable.attrName, 'false');
         shuffleable.init(el);
-        expect($(el).attr(shuffleable.attrName)).to.be.equal('false');
+        expect($(el).attr(shuffleable.attrName)).toEqual('false');
       });
     });
 
@@ -66,30 +64,26 @@ DIJS
         $(el).attr(shuffleable.attrName, 'true');
         let shuffledChildren = [children[2], children[0], children[1]];
 
-        _.spy(Chance, 'shuffle').overrideReturn(shuffledChildren);
+        spyOn(Chance, 'shuffle').and.returnValue(shuffledChildren);
         shuffleable.trigger(el);
 
-        expect(Chance.shuffle).calledWith(children).at.least(1);
-        expect(Utils.toArray(el.children)).to.be.eql(shuffledChildren);
+        expect(Chance.shuffle).toHaveBeenCalledWith(children);
+        expect(Utils.toArray(el.children)).toEqual(shuffledChildren);
       });
       it('should be noop if disabled', () => {
         $(el).attr(shuffleable.attrName, 'false');
 
-        _.spy(Chance, 'shuffle');
+        spyOn(Chance, 'shuffle');
         shuffleable.trigger(el);
-        expect(Chance.shuffle).called().to.be.equal(0);
+        expect(Chance.shuffle).not.toHaveBeenCalled();
       });
       it('should be noop if attribute value is bad', () => {
         $(el).attr(shuffleable.attrName, 'invalid');
 
-        _.spy(Chance, 'shuffle');
+        spyOn(Chance, 'shuffle');
         shuffleable.trigger(el);
-        expect(Chance.shuffle).called().to.be.equal(0);
+        expect(Chance.shuffle).not.toHaveBeenCalled();
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

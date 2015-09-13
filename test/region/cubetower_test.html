@@ -27,13 +27,11 @@ DIJS
 
   const $ = require('pb.JQuery');
   const $registry = require('pb.$registry');
-  const _ = require('spies.Spies');
 
   const Chance = require('pb.Chance');
   const Config = require('pb.data.ConfigService');
   const CubeTower = require('pb.region.CubeTower');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Move = require('pb.ui.MoveService');
   const Utils = require('pb.Utils');
 
@@ -41,7 +39,7 @@ DIJS
 
   describe('region.CubeTower', () => {
     beforeEach(() => {
-      $registry.register(doc, Config);
+    $registry.register(doc, Config);
     });
 
     describe('get pickableChildCount', () => {
@@ -55,7 +53,7 @@ DIJS
         tower.appendChild(doc.createElement('div'));
         tower.appendChild(doc.createElement('div'));
 
-        expect(tower.pickableChildCount).to.equal(2);
+        expect(tower.pickableChildCount).toEqual(2);
       });
     });
 

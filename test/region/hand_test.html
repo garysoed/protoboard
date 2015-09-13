@@ -19,11 +19,9 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
   const $ = require('pb.JQuery');
 
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Hand = require('pb.region.Hand');
   const Move = require('pb.ui.MoveService');
   const Utils = require('pb.Utils');
@@ -39,12 +37,8 @@ DIJS
         hand.appendChild(doc.createElement('div'));
         hand.appendChild(doc.createElement('div'));
 
-        expect(hand.pickableChildCount).to.equal(3);
+        expect(hand.pickableChildCount).toEqual(3);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

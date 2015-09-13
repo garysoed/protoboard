@@ -24,13 +24,12 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
   const $ = require('pb.JQuery');
   const $registry = require('pb.$registry');
 
   const doc = require('doc');
   const Events = require('pb.Events');
-  const expect = require('chai.expect');
+  const j = require('jasmine');
   const t = require('pb.t');
   const Move = require('pb.ui.MoveService.__ctor__');
   const Utils = require('pb.Utils');
@@ -50,9 +49,9 @@ DIJS
     describe('__moveContainer__', () => {
       it('should set the left and top coordinates of the container correctly', () => {
         let child1 = doc.createElement('div');
-        _.spy(child1, 'getBoundingClientRect').overrideReturn({ width: 20, height: 30 });
+        spyOn(child1, 'getBoundingClientRect').and.returnValue({ width: 20, height: 30 });
         let child2 = doc.createElement('div');
-        _.spy(child2, 'getBoundingClientRect').overrideReturn({ width: 10, height: 40 });
+        spyOn(child2, 'getBoundingClientRect').and.returnValue({ width: 10, height: 40 });
 
         let container = t.getPrivateProperty(move, 'container');
         container.appendChild(child1);
@@ -63,8 +62,8 @@ DIJS
         t.getPrivateMethod(move, 'onMouseMove')({ clientX: x, clientY: y });
         t.getPrivateMethod(move, 'moveContainer')();
 
-        expect(container.style.left).to.equal('45px');
-        expect(container.style.top).to.equal('57px');
+        expect(container.style.left).toEqual('45px');
+        expect(container.style.top).toEqual('57px');
       });
     });
 
@@ -73,13 +72,13 @@ DIJS
         let event = { clientX: 12, clientY: 24};
         let __moveContainer__ = t.getSymbol(Move.prototype, 'moveContainer');
 
-        _.spy(move, __moveContainer__);
+        spyOn(move, __moveContainer__);
 
         t.getPrivateMethod(move, 'onMouseMove')(event);
 
-        expect(move.mouseX).to.equal(event.clientX);
-        expect(move.mouseY).to.equal(event.clientY);
-        expect(move[__moveContainer__]).calledWith().at.least(1);
+        expect(move.mouseX).toEqual(event.clientX);
+        expect(move.mouseY).toEqual(event.clientY);
+        expect(move[__moveContainer__]).toHaveBeenCalledWith();
       });
     });
 
@@ -94,9 +93,9 @@ DIJS
 
         newParent.appendChild(el);
         Events.of(move).on('jquery', Move.Events.MOVE, (event, data) => {
-          expect(data.moved).to.equal(el);
-          expect(data.from).to.equal(parent);
-          expect(data.to).to.equal(newParent);
+          expect(data.moved).toEqual(el);
+          expect(data.from).toEqual(parent);
+          expect(data.to).toEqual(newParent);
           done();
         });
         t.getPrivateMethod(move, 'onContainerMutation')([{ removedNodes: [el] }]);
@@ -106,11 +105,11 @@ DIJS
 
         let el = doc.createElement('div');
 
-        let handler = _.spiedFunction();
+        let handler = j.createSpy('handler');
         Events.of(move).on('jquery', Move.Events.MOVE, handler);
         t.getPrivateMethod(move, 'onContainerMutation')([{ removedNodes: [el] }]);
 
-        expect(handler).called().to.equal(0);
+        expect(handler).not.toHaveBeenCalled();
       });
       it('should not trigger an event if the element is returned to the origin source', () => {
         let el = doc.createElement('div');
@@ -119,14 +118,14 @@ DIJS
         parent.appendChild(el);
         move.add(el);
 
-        let handler = _.spiedFunction();
+        let handler = j.createSpy('handler');
         Events.of(move).on('jquery', Move.Events.MOVE, handler);
 
         // Add it back to the old parent.
         parent.appendChild(el);
         t.getPrivateMethod(move, 'onContainerMutation')([{ removedNodes: [el] }]);
 
-        expect(handler).called().to.equal(0);
+        expect(handler).not.toHaveBeenCalled();
       });
 
       afterEach(() => {
@@ -139,12 +138,12 @@ DIJS
         let el = doc.createElement('div');
         let __moveContainer__ = t.getSymbol(Move.prototype, 'moveContainer');
 
-        _.spy(move, __moveContainer__);
+        spyOn(move, __moveContainer__);
 
         move.add(el);
 
-        expect(move[__moveContainer__]).calledWith().at.least(1);
-        expect(t.getPrivateProperty(move, 'container').contains(el)).to.be.true;
+        expect(move[__moveContainer__]).toHaveBeenCalledWith();
+        expect(t.getPrivateProperty(move, 'container').contains(el)).toEqual(true);
       });
     });
 
@@ -157,7 +156,7 @@ DIJS
         container.appendChild(child1);
         container.appendChild(child2);
 
-        expect(Utils.toArray(move.movedElements)).to.eql([child1, child2]);
+        expect(Utils.toArray(move.movedElements)).toEqual([child1, child2]);
       });
     });
 
@@ -170,10 +169,10 @@ DIJS
         container.appendChild(child1);
         container.appendChild(child2);
 
-        expect(move.nextElement).to.eql(child2);
+        expect(move.nextElement).toEqual(child2);
       });
       it('should return null if there are no children', () => {
-        expect(move.nextElement).to.equal(null);
+        expect(move.nextElement).toEqual(null);
       });
     });
 
@@ -184,13 +183,12 @@ DIJS
         $registry.fn(doc);
 
         let container = t.getPrivateProperty(MoveService, 'container');
-        expect(container.nodeName).to.equal('PB-S-MOVE');
-        expect(doc.body.contains(container)).to.be.true;
+        expect(container.nodeName).toEqual('PB-S-MOVE');
+        expect(doc.body.contains(container)).toEqual(true);
       });
     });
 
     afterEach(() => {
-      _.reset();
       Events.of(Move).off();
     });
   });

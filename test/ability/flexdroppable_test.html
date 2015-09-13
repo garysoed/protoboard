@@ -24,11 +24,10 @@ DIJS
 })
 .run(require => {
 
-  const _ = require('spies.Spies');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const FlexDroppable = require('pb.ability.FlexDroppable');
   const Move = require('pb.ui.MoveService');
+  const j = require('jasmine');
   const t = require('pb.t');
   const Utils = require('pb.Utils');
 
@@ -50,8 +49,8 @@ DIJS
     describe('#trigger', () => {
       it('should append the last dragged element and position it correctly', () => {
         let lastDraggedEl = doc.createElement('div');
-        lastDraggedEl.attachedCallback = _.spiedFunction();
-        _.spy(lastDraggedEl, 'getBoundingClientRect').overrideReturn({
+        lastDraggedEl.attachedCallback = j.createSpy('attachedCallback');
+        spyOn(lastDraggedEl, 'getBoundingClientRect').and.returnValue({
           left: 56,
           top: 78,
           width: 24,
@@ -64,9 +63,9 @@ DIJS
 
         flexDroppable.trigger(el);
 
-        expect(Utils.toArray(el.children)).to.be.eql([lastDraggedEl]);
-        expect(lastDraggedEl.style.left).to.be.equal('22px');
-        expect(lastDraggedEl.style.top).to.be.equal('-100px');
+        expect(Utils.toArray(el.children)).toEqual([lastDraggedEl]);
+        expect(lastDraggedEl.style.left).toEqual('22px');
+        expect(lastDraggedEl.style.top).toEqual('-100px');
       });
     });
 
@@ -77,18 +76,14 @@ DIJS
         let el3 = { style: {} };
 
         flexDroppable[__onDomMutation__]([
-          { removedNodes: [ el1, el2 ] },
-          { removedNodes: [ el3 ] }
+          { removedNodes: [el1, el2] },
+          { removedNodes: [el3] }
         ]);
 
-        expect(el1.style).to.be.eql({ left: '', top: '' });
-        expect(el2.style).to.be.eql({ left: '', top: '' });
-        expect(el3.style).to.be.eql({ left: '', top: '' });
+        expect(el1.style).toEqual({ left: '', top: '' });
+        expect(el2.style).toEqual({ left: '', top: '' });
+        expect(el3.style).toEqual({ left: '', top: '' });
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

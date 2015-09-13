@@ -82,18 +82,34 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-DIJS.constant("doc", document.currentScript.ownerDocument).bind("pb.ability.Helpable", function (require) {
+DIJS.constant("doc", document.currentScript.ownerDocument).bind("pb.ability.Helpable.__displayEl__", function (require) {
 
   var $registry = require("pb.$registry");
   var doc = require("doc");
-  var Abilities = require("pb.ability.Abilities");
-  var Ability = require("pb.ability.Ability");
   var Events = require("pb.Events");
-  var Key = require("pb.trigger.Key");
   var template = doc.querySelector("template");
   var Utils = require("pb.Utils");
 
-  var displayEl = null;
+  var displayEl = document.createElement("div");
+  displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  displayEl.style.display = "none";
+
+  $registry.runAtRegister(function (document, config) {
+    Events.of(displayEl).on("dom", "click", function () {
+      displayEl.style.display = "none";
+    });
+    document.body.appendChild(displayEl);
+  });
+
+  return displayEl;
+}).bind("pb.ability.Helpable", function (require) {
+
+  var Abilities = require("pb.ability.Abilities");
+  var Ability = require("pb.ability.Ability");
+  var Key = require("pb.trigger.Key");
+  var Utils = require("pb.Utils");
+
+  var displayEl = require("pb.ability.Helpable.__displayEl__");
 
   var Helpable = (function (_Ability) {
     function Helpable() {
@@ -164,16 +180,6 @@ DIJS.constant("doc", document.currentScript.ownerDocument).bind("pb.ability.Help
 
     return Helpable;
   })(Ability);
-
-  $registry.runAtRegister(function (document, config) {
-    displayEl = document.createElement("div");
-    displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-    displayEl.style.display = "none";
-    Events.of(displayEl).on("dom", "click", function () {
-      displayEl.style.display = "none";
-    });
-    document.body.appendChild(displayEl);
-  });
 
   return Helpable;
 });</script>

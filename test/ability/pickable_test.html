@@ -21,7 +21,6 @@ DIJS
 
   const _ = require('spies.Spies');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Move = require('pb.ui.MoveService');
   const Pickable = require('pb.ability.Pickable');
 
@@ -36,14 +35,14 @@ DIJS
       it('should set the default value if the attribute is not set', () => {
         let pickable = new Pickable(undefined, undefined, true);
         pickable.init(el);
-        expect($(el).attr(pickable.attrName)).to.be.equal('true');
+        expect($(el).attr(pickable.attrName)).toEqual('true');
       });
       it('should not set the default value if the attribute is set', () => {
         let value = 'value';
         let pickable = new Pickable(undefined, undefined, true);
         $(el).attr(pickable.attrName, value);
         pickable.init(el);
-        expect($(el).attr(pickable.attrName)).to.equal(value);
+        expect($(el).attr(pickable.attrName)).toEqual(value);
       });
     });
 
@@ -52,26 +51,22 @@ DIJS
         let pickable = new Pickable(undefined, undefined, true);
         pickable.init(el);
 
-        _.spy(Move, 'add');
+        spyOn(Move, 'add');
 
         pickable.trigger(el);
 
-        expect(Move.add).calledWith(el).at.least(1);
+        expect(Move.add).toHaveBeenCalledWith(el);
       });
       it('should do nothing if not enabled', () => {
         let pickable = new Pickable(undefined, undefined, false);
         pickable.init(el);
 
-        _.spy(Move, 'add');
+        spyOn(Move, 'add');
 
         pickable.trigger(el, {});
 
-        expect(Move.add).called().to.equal(0);
+        expect(Move.add).not.toHaveBeenCalled();
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

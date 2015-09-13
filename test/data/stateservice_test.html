@@ -19,13 +19,11 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
   const $ = require('pb.JQuery');
   const $registry = require('pb.$registry');
 
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const State = require('pb.data.StateService.__ctor__');
   const Utils = require('pb.Utils');
 
@@ -44,20 +42,20 @@ DIJS
         $(el).attr(key, value);
         doc.body.appendChild(el);
 
-        expect(state.get(key)).to.equal(value);
+        expect(state.get(key)).toEqual(value);
       });
       it('should create pb-state element if it does not exist', () => {
         let key = 'key';
-        expect(state.get(key)).to.equal('');
-        expect(doc.body.querySelector(`pb-state[${key}]`)).to.exist;
+        expect(state.get(key)).toEqual('');
+        expect(doc.body.querySelector(`pb-state[${key}]`)).toExist();
       });
       it('should add the key to an existing pb-state element if it does not exist', () => {
         let key = 'key';
         let el = doc.createElement('pb-state');
         doc.body.appendChild(el);
 
-        expect(state.get(key)).to.equal('');
-        expect($(el).attr(key)).to.equal('');
+        expect(state.get(key)).toEqual('');
+        expect($(el).attr(key)).toEqual('');
       });
     });
     describe('#put', () => {
@@ -70,11 +68,11 @@ DIJS
         doc.body.appendChild(el);
 
         state.put(key, value);
-        expect($(el).attr(key)).to.equal(value);
+        expect($(el).attr(key)).toEqual(value);
       });
       it('should create pb-state element if it does not exist', () => {
         state.put(key, value);
-        expect(doc.body.querySelector(`pb-state[${key}=${value}]`)).to.exist;
+        expect(doc.body.querySelector(`pb-state[${key}=${value}]`)).toExist();
       });
       it('should add the key to an existing pb-state element if it does not exist', () => {
         let key = 'key';
@@ -83,7 +81,7 @@ DIJS
         doc.body.appendChild(el);
 
         state.put(key, value);
-        expect($(el).attr(key)).to.equal(value);
+        expect($(el).attr(key)).toEqual(value);
       });
     });
 

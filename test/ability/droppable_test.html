@@ -26,7 +26,6 @@ DIJS
   const $ = require('pb.JQuery');
   const doc = require('doc');
   const Droppable = require('pb.ability.Droppable');
-  const expect = require('chai.expect');
   const Move = require('pb.ui.MoveService');
   const Utils = require('pb.Utils');
 
@@ -41,14 +40,14 @@ DIJS
       it('should set the default value if the attribute is not set', () => {
         let droppable = new Droppable(undefined, undefined, false);
         droppable.init(el);
-        expect($(el).attr(droppable.attrName)).to.equal('false');
+        expect($(el).attr(droppable.attrName)).toEqual('false');
       });
       it('should not set the default value if the attribute is set', () => {
         let value = 'value';
         let droppable = new Droppable();
         $(el).attr(droppable.attrName, value);
         droppable.init(el);
-        expect($(el).attr(droppable.attrName)).to.equal(value);
+        expect($(el).attr(droppable.attrName)).toEqual(value);
       });
     });
 
@@ -65,7 +64,7 @@ DIJS
 
         droppable.trigger(el);
 
-        expect(Utils.toArray(el.children)).to.eql([child1]);
+        expect(Utils.toArray(el.children)).toEqual([child1]);
       });
       it('should do nothing if not enabled', () => {
         let child1 = doc.createElement('div');
@@ -77,7 +76,7 @@ DIJS
 
         droppable.trigger(el);
 
-        expect(el.children.length).to.equal(0);
+        expect(el.children.length).toEqual(0);
       });
     });
   });

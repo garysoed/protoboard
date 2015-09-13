@@ -62,18 +62,35 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
-.bind('pb.ability.Helpable', require => {
+.bind('pb.ability.Helpable.__displayEl__', require => {
 
   const $registry = require('pb.$registry');
   const doc = require('doc');
-  const Abilities = require('pb.ability.Abilities');
-  const Ability = require('pb.ability.Ability');
   const Events = require('pb.Events');
-  const Key = require('pb.trigger.Key');
   const template = doc.querySelector('template');
   const Utils = require('pb.Utils');
 
-  let displayEl = null;
+  let displayEl = document.createElement('div');
+  displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
+  displayEl.style.display = 'none';
+
+  $registry.runAtRegister((document, config) => {
+    Events.of(displayEl).on('dom', 'click', () => {
+      displayEl.style.display = 'none';
+    });
+    document.body.appendChild(displayEl);
+  });
+
+  return displayEl;
+})
+.bind('pb.ability.Helpable', require => {
+
+  const Abilities = require('pb.ability.Abilities');
+  const Ability = require('pb.ability.Ability');
+  const Key = require('pb.trigger.Key');
+  const Utils = require('pb.Utils');
+
+  const displayEl = require('pb.ability.Helpable.__displayEl__');
 
   class Helpable extends Ability {
     /**
@@ -129,16 +146,6 @@ DIJS
       return true;
     }
   }
-
-  $registry.runAtRegister((document, config) => {
-    displayEl = document.createElement('div');
-    displayEl.createShadowRoot().appendChild(Utils.activateTemplate(template, doc));
-    displayEl.style.display = 'none';
-    Events.of(displayEl).on('dom', 'click', () => {
-      displayEl.style.display = 'none';
-    });
-    document.body.appendChild(displayEl);
-  });
 
   return Helpable;
 });

@@ -12,12 +12,11 @@
 <script>
 DIJS
 .run(require => {
-  const expect = require('chai.expect');
   const Utils = require('pb.net.Utils');
 
   describe('net.Utils', () => {
     it('should join and normalize paths', () => {
-      expect(Utils.normalize('a/b', 'c', '/d/')).to.equal('/a/b/c/d');
+      expect(Utils.normalize('a/b', 'c', '/d/')).toEqual('/a/b/c/d');
     });
   });
 });

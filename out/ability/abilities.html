@@ -151,7 +151,7 @@ DIJS.bind("pb.ability.Abilities.__symbols__", function () {
       key: "init",
       value: function init(el) {
         if (el[__observer__]) {
-          throw "Element " + el + " is already initialized";
+          throw Error("Element " + el + " is already initialized");
         }
         el[__observer__] = new MutationObserver(this[__onMutation__]);
 

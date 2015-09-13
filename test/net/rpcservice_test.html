@@ -13,10 +13,9 @@
 <script>
 DIJS
 .run(require => {
-  const _ = require('spies.Spies');
   const Events = require('pb.Events');
-  const expect = require('chai.expect');
   const InMemoryIO = require('pb.net.InMemoryIO');
+  const j = require('jasmine');
   const Rpc = require('pb.net.RpcService.__ctor__');
   const t = require('pb.t');
 
@@ -31,8 +30,8 @@ DIJS
     });
 
     it('should trigger updates in reaction to changes triggered by IO', () => {
-      let aHandler = _.spiedFunction();
-      let abHandler = _.spiedFunction();
+      let aHandler = j.createSpy('aHandler');
+      let abHandler = j.createSpy('abHandler');
 
       Events.of(rpc, this)
           .on('jquery', '/a', aHandler)
@@ -40,14 +39,14 @@ DIJS
 
       io.set('/a/b', 1);
 
-      expect(aHandler).called().at.least(1);
-      expect(abHandler).called().at.least(1);
+      expect(aHandler).toHaveBeenCalled();
+      expect(abHandler).toHaveBeenCalled();
     });
 
     describe('__triggerUpdates__', () => {
       it('should trigger paths and their ancestors', () => {
-        let aHandler = _.spiedFunction();
-        let abHandler = _.spiedFunction();
+        let aHandler = j.createSpy('aHandler');
+        let abHandler = j.createSpy('abHandler');
 
         Events.of(rpc, this)
             .on('jquery', '/a', aHandler)
@@ -55,120 +54,131 @@ DIJS
 
         t.getPrivateMethod(rpc, 'triggerUpdates')('/a/b');
 
-        expect(aHandler).called().at.least(1);
-        expect(abHandler).called().at.least(1);
+        expect(aHandler).toHaveBeenCalled();
+        expect(abHandler).toHaveBeenCalled();
       });
       it('should not trigger paths that are not the ancestor path', () => {
-        let handler = _.spiedFunction();
+        let handler = j.createSpy('handler');
         Events.of(rpc, this).on('jquery', '/c', handler);
 
         t.getPrivateMethod(rpc, 'triggerUpdates')('/a/b');
 
-        expect(handler).called().to.equal(0);
+        expect(handler).not.toHaveBeenCalled();
       });
     });
 
     describe('add', () => {
-      beforeEach(() => {
-        return io.set('/a/b', { $index: true, keys: ['0'] });
+      beforeEach(done => {
+        io.set('/a/b', { $index: true, keys: ['0'] })
+            .then(done);
       });
 
-      it('should resolve with the new ID', () => {
-        return rpc.add('/a/b').then(newId => {
-          expect(newId).to.equal('1');
-        });
+      it('should resolve with the new ID', done => {
+        rpc.add('/a/b')
+            .then(newId => {
+              expect(newId).toEqual('1');
+            })
+            .then(done);
       });
-      it('should backfill the ancestors', () => {
-        return rpc.add('/a/b')
+      it('should backfill the ancestors', done => {
+        rpc.add('/a/b')
             .then(() => Promise.all([
               io.get('/a'),
               io.get('/a/b')
             ]))
             .then(values => {
               let [a, ab] = values;
-              expect(a.$index).to.be.true;
-              expect(a.keys).to.eql(['b']);
+              expect(a.$index).toEqual(true);
+              expect(a.keys).toEqual(['b']);
 
-              expect(ab.$index).to.be.true;
-              expect(ab.keys).to.eql(['0', '1']);
-            });
+              expect(ab.$index).toEqual(true);
+              expect(ab.keys).toEqual(['0', '1']);
+            })
+            .then(done);
       });
-      it('should replace existing non object entry', () => {
-        return rpc.set('/a/b', 1)
+      it('should replace existing non object entry', done => {
+        rpc.set('/a/b', 1)
             .then(() => rpc.add('/a/b'))
             .then(() => io.get('/a/b'))
             .then(value => {
-              expect(value.$index).to.be.true;
-              expect(value.keys).to.eql(['0']);
-            });
+              expect(value.$index).toEqual(true);
+              expect(value.keys).toEqual(['0']);
+            })
+            .then(done);
       });
-      it('should initialize the entry with empty object', () => {
-        return rpc.add('/a/b')
+      it('should initialize the entry with empty object', done => {
+        rpc.add('/a/b')
             .then(newId => rpc.get(`/a/b/${newId}`))
             .then(value => {
-              expect(value).to.eql({});
-            });
+              expect(value).toEqual({});
+            })
+            .then(done);
       });
     });
 
     describe('remove', () => {
       let removedPath;
 
-      beforeEach(() => {
-        return rpc.add('/a/b')
+      beforeEach(done => {
+        rpc.add('/a/b')
             .then(newId => {
               removedPath = `/a/b/${newId}`;
-            });
+            })
+            .then(done);
       });
 
-      it('should delete the entry', () => {
-        return rpc.remove(removedPath)
+      it('should delete the entry', done => {
+        rpc.remove(removedPath)
             .then(() => io.get(removedPath))
             .then(value => {
-              expect(value).to.be.null;
-            });
+              expect(value).toEqual(null);
+            })
+            .then(done);
       });
-      it('should update the parent index', () => {
-        return rpc.add('/a/b')
+      it('should update the parent index', done => {
+        rpc.add('/a/b')
             .then(() => rpc.remove(removedPath))
             .then(() => io.get('/a/b'))
             .then(value => {
-              expect(value.$index).to.be.true;
-              expect(value.keys).to.eql(['1']);
-            });
+              expect(value.$index).toEqual(true);
+              expect(value.keys).toEqual(['1']);
+            })
+            .then(done);
       });
-      it('should propagate removal all the way to the root', () => {
-        return rpc.remove(removedPath)
+      it('should propagate removal all the way to the root', done => {
+        rpc.remove(removedPath)
             .then(() => Promise.all([
               io.get('/a'),
               io.get('/a/b')
             ]))
             .then(values => {
               let [a, ab] = values;
-              expect(a).to.be.null;
-              expect(ab).to.be.null;
-            });
+              expect(a).toEqual(null);
+              expect(ab).toEqual(null);
+            })
+            .then(done);
       });
     });
 
     describe('get', () => {
       const PATH = '/a/b';
 
-      it('should resolve primitive value', () => {
-        return io.set(PATH, 1)
+      it('should resolve primitive value', done => {
+        io.set(PATH, 1)
             .then(() => rpc.get(PATH))
             .then(value => {
-              expect(value).to.equal(1);
-            });
+              expect(value).toEqual(1);
+            })
+            .then(done);
       });
-      it('should resolve object value and their sub objects', () => {
+      it('should resolve object value and their sub objects', done => {
         let expectedAb = {
           c: {
             d: 3
           }
         };
 
-        return Promise.all([
+        Promise.all([
           io.set(PATH, { $index: true, keys: ['c'] }),
           io.set(`${PATH}/c`, { $index: true, keys: ['d'] }),
           io.set(`${PATH}/c/d`, 3)
@@ -181,31 +191,34 @@ DIJS
         .then(values => {
           let [ab, abc, abcd] = values;
 
-          expect(ab).to.eql(expectedAb);
-          expect(abc).to.eql(expectedAb.c);
-          expect(abcd).to.eql(expectedAb.c.d);
-        });
+          expect(ab).toEqual(expectedAb);
+          expect(abc).toEqual(expectedAb.c);
+          expect(abcd).toEqual(expectedAb.c.d);
+        })
+        .then(done);
       });
-      it('should return null if the value does not exist', () => {
-        return rpc.get(PATH)
+      it('should return null if the value does not exist', done => {
+        rpc.get(PATH)
             .then(value => {
-              expect(value).to.be.null;
-            });
+              expect(value).toEqual(null);
+            })
+            .then(done);
       });
     });
 
     describe('set', () => {
       const PATH = '/a/b';
 
-      it('should set primitive value', () => {
-        return rpc.set(PATH, 1)
+      it('should set primitive value', done => {
+        rpc.set(PATH, 1)
             .then(() => io.get(PATH))
             .then(value => {
-              expect(value).to.equal(1);
-            });
+              expect(value).toEqual(1);
+            })
+            .then(done);
       });
-      it('should set object value and their sub objects', () => {
-        return rpc.set(PATH, {
+      it('should set object value and their sub objects', done => {
+        rpc.set(PATH, {
               c1: 1,
               c2: {
                 d: 2
@@ -219,65 +232,67 @@ DIJS
             .then(values => {
               let [c1, c2, c2d] = values;
 
-              expect(c1).to.eql(1);
-              expect(c2.$index).to.be.true;
-              expect(c2.keys).to.eql([ 'd' ]);
-              expect(c2d).to.eql(2);
-            });
+              expect(c1).toEqual(1);
+              expect(c2.$index).toEqual(true);
+              expect(c2.keys).toEqual([ 'd' ]);
+              expect(c2d).toEqual(2);
+            })
+            .then(done);
       });
-      it('should handle objects with no keys', () => {
-        return rpc.set(PATH, {})
+      it('should handle objects with no keys', done => {
+        rpc.set(PATH, {})
             .then(() => io.get(PATH))
             .then(value => {
-              expect(value.$index).to.be.true;
-              expect(value.keys).to.eql([]);
-            });
+              expect(value.$index).toEqual(true);
+              expect(value.keys).toEqual([]);
+            })
+            .then(done);
       });
-      it('should handle arrays', () => {
-        return rpc.set(PATH, [])
+      it('should handle arrays', done => {
+        rpc.set(PATH, [])
             .then(() => io.get(PATH))
             .then(value => {
-              expect(value).to.eql([]);
-            });
+              expect(value).toEqual([]);
+            })
+            .then(done);
       });
-      it('should backfill the ancestors', () => {
-        return rpc.set(PATH, 1)
+      it('should backfill the ancestors', done => {
+        rpc.set(PATH, 1)
             .then(() => io.get('/a'))
             .then(value => {
-              expect(value.$index).to.be.true;
-              expect(value.keys).to.eql(['b']);
-            });
+              expect(value.$index).toEqual(true);
+              expect(value.keys).toEqual(['b']);
+            })
+            .then(done);
       });
-      it('should replace non index ancestors with index', () => {
-        return rpc.set(PATH, 1)
+      it('should replace non index ancestors with index', done => {
+        rpc.set(PATH, 1)
             .then(() => rpc.set(`${PATH}/c`, 2))
             .then(() => io.get(`${PATH}`))
             .then(value => {
-              expect(value.$index).to.be.true;
-              expect(value.keys).to.eql(['c']);
-            });
+              expect(value.$index).toEqual(true);
+              expect(value.keys).toEqual(['c']);
+            })
+            .then(done);
       });
-      it('should update the indexes of the ancestors', () => {
-        return rpc.set(PATH, 1)
+      it('should update the indexes of the ancestors', done => {
+        rpc.set(PATH, 1)
             .then(() => rpc.set(`/a/c`, 2))
             .then(() => io.get(`/a`))
             .then(value => {
-              expect(value.$index).to.be.true;
-              expect(value.keys).to.eql(['b', 'c']);
-            });
+              expect(value.$index).toEqual(true);
+              expect(value.keys).toEqual(['b', 'c']);
+            }).then(done);
       });
-      it('should not add duplicate keys', () => {
-        return rpc.set(PATH, 1)
+      it('should not add duplicate keys', done => {
+        rpc.set(PATH, 1)
             .then(() => rpc.set(PATH, 2))
             .then(() => io.get('/a'))
             .then(value => {
-              expect(value.keys).to.eql(['b']);
-            });
+              expect(value.keys).toEqual(['b']);
+            })
+            .then(done);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

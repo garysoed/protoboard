@@ -16,16 +16,13 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
-
   const $ = require('pb.JQuery');
 
   const Ability = require('pb.ability.Ability');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const FakeTrigger = require('pb.testing.FakeTrigger');
   const Log = require('pb.data.LogService');
+  const j = require('jasmine');
   const t = require('pb.t');
   const Triggers = require('pb.trigger.Triggers');
 
@@ -42,16 +39,16 @@ DIJS
         let trigger = new FakeTrigger(triggerStr);
         let ability = new Ability('name', trigger);
 
-        _.spy(ability, 'updateConfig').overrideReturn();
+        spyOn(ability, 'updateConfig').and.returnValue();
 
         ability.init(el);
-        expect($(el).attr(ability.attrTrigger)).to.be.equal(triggerStr);
-        expect(ability.updateConfig).calledWith(el).at.least(1);
+        expect($(el).attr(ability.attrTrigger)).toEqual(triggerStr);
+        expect(ability.updateConfig).toHaveBeenCalledWith(el);
       });
       it('should do nothing if the default trigger is not provided', () => {
         let ability = new Ability('name');
         ability.init(el);
-        expect($(el).attr(ability.attrTrigger)).to.not.exist;
+        expect($(el).attr(ability.attrTrigger)).not.toExist();
       });
       it('should not override the trigger value if it is already set', () => {
         let attrValue = 'value';
@@ -59,11 +56,11 @@ DIJS
         let ability = new Ability('name', trigger);
         $(el).attr(ability.attrTrigger, attrValue);
 
-        _.spy(ability, 'updateConfig').overrideReturn();
+        spyOn(ability, 'updateConfig').and.returnValue();
 
         ability.init(el);
-        expect($(el).attr(ability.attrTrigger)).to.be.equal(attrValue);
-        expect(ability.updateConfig).calledWith(el).at.least(1);
+        expect($(el).attr(ability.attrTrigger)).toEqual(attrValue);
+        expect(ability.updateConfig).toHaveBeenCalledWith(el);
       });
     });
 
@@ -74,37 +71,37 @@ DIJS
 
         let ability = new Ability('name', trigger);
 
-        _.spy(Triggers, 'parse');
-        _.spy(trigger, 'off');
-        _.spy(newTrigger, 'on');
+        spyOn(Triggers, 'parse');
+        spyOn(trigger, 'off');
+        spyOn(newTrigger, 'on');
 
-        Triggers.parse.overrideReturn(trigger);
+        Triggers.parse.and.returnValue(trigger);
         ability.init(el);
 
         $(el).attr(ability.attrTrigger, newTrigger.toString());
 
-        Triggers.parse.overrideReturn(newTrigger);
+        Triggers.parse.and.returnValue(newTrigger);
         ability.updateConfig(el);
 
-        expect(trigger.off).calledWith(el).at.least(1);
-        expect(Triggers.parse).calledWith(newTrigger.toString()).at.least(1);
-        expect(newTrigger.on).calledWith(el, ability).at.least(1);
-        expect(el[t.getSymbol(el, 'triggerMap')].get(ability)).to.be.equal(newTrigger);
+        expect(trigger.off).toHaveBeenCalledWith(el);
+        expect(Triggers.parse).toHaveBeenCalledWith(newTrigger.toString());
+        expect(newTrigger.on).toHaveBeenCalledWith(el, ability);
+        expect(el[t.getSymbol(el, 'triggerMap')].get(ability)).toEqual(newTrigger);
       });
       it('should be noop if the trigger does not change', () => {
         let trigger = new FakeTrigger('triggerName');
         let ability = new Ability('name', trigger);
         $(el).attr(ability.attrTrigger, trigger.toString());
 
-        _.spy(Triggers, 'parse');
-        _.spy(trigger, 'off');
+        spyOn(Triggers, 'parse');
+        spyOn(trigger, 'off');
 
-        Triggers.parse.overrideReturn(trigger);
+        Triggers.parse.and.returnValue(trigger);
         ability.init(el);
 
         ability.updateConfig(el);
 
-        expect(trigger.off).called().to.be.equal(0);
+        expect(trigger.off).not.toHaveBeenCalled();
       });
       it('should not throw error if there are no triggers set', () => {
         let ability = new Ability('name');
@@ -117,51 +114,46 @@ DIJS
         let name = 'name';
         let id = 'elId';
         let el = doc.createElement('div');
-        let handler = _.spiedFunction();
+        let onTrigger = j.createSpy('onTrigger');
         $(el).attr('pb-id', id);
 
-        _.spy(Log, 'log');
+        spyOn(Log, 'log');
 
         let ability = new Ability(name, null);
-        _.spy(ability, 'doTrigger').overrideReturn();
-        _.spy(ability, 'isEnabled').overrideReturn(true);
-        el.addEventListener(name, handler);
+        spyOn(ability, 'doTrigger').and.returnValue();
+        spyOn(ability, 'isEnabled').and.returnValue(true);
+        el.addEventListener(name, onTrigger);
 
         ability.trigger(el);
 
-        expect(Log.log)
-            .calledWith(name, id, { phase: 'before' })
-            .before(ability.doTrigger).called();
-        expect(ability.isEnabled).calledWith(el).at.least(1);
-        expect(ability.doTrigger)
-            .calledWith(el)
-            .before(Log.log).calledWith(name, id, { phase: 'after' });
+        // TODO(gs): Test the order of the logs getting called.
+        expect(Log.log).toHaveBeenCalledWith(name, id, { phase: 'before' });
+        expect(ability.isEnabled).toHaveBeenCalledWith(el);
 
-        let objectCaptor = _M.isA(Object);
-        expect(handler).calledWith(objectCaptor).at.least(1);
-        expect(objectCaptor.matchingArgs[0].detail.ability).to.equal(ability);
+        expect(ability.doTrigger).toHaveBeenCalledWith(el);
+        expect(onTrigger).toHaveBeenCalledWith(j.objectContaining({
+          detail: {
+            ability: ability
+          }
+        }));
       });
 
       it('should not call doTrigger if not enabled', () => {
         let el = doc.createElement('div');
         let ability = new Ability(name, null);
-        let handler = _.spiedFunction();
-        _.spy(Log, 'log');
-        _.spy(ability, 'doTrigger').overrideReturn();
-        _.spy(ability, 'isEnabled').overrideReturn(false);
-        el.addEventListener(name, handler);
+        let onTrigger = j.createSpy('onTrigger');
+        spyOn(Log, 'log');
+        spyOn(ability, 'doTrigger').and.returnValue();
+        spyOn(ability, 'isEnabled').and.returnValue(false);
+        el.addEventListener(name, onTrigger);
 
         ability.trigger(el);
 
-        expect(ability.isEnabled).calledWith(el).at.least(1);
-        expect(ability.doTrigger).called().to.equal(0);
-        expect(handler).called().to.equal(0);
-        expect(Log.log).called().to.equal(0);
+        expect(ability.isEnabled).toHaveBeenCalledWith(el);
+        expect(ability.doTrigger).not.toHaveBeenCalled();
+        expect(onTrigger).not.toHaveBeenCalled();
+        expect(Log.log).not.toHaveBeenCalled();
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

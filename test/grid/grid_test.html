@@ -30,12 +30,9 @@ DIJS
 .with('tileTemplate', require => require('doc').querySelector('template#tile'))
 .run(require => {
 
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
   const $ = require('pb.JQuery');
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const Grid = require('pb.grid.Grid');
   const template = require('template');
   const rowTemplate = require('rowTemplate');
@@ -69,10 +66,10 @@ DIJS
         grid.appendChild(childEl);
         grid.createdCallback();
         let contentEls = grid.shadowRoot.querySelectorAll('content');
-        expect(contentEls.length).to.be.equal(6);
+        expect(contentEls.length).toEqual(6);
 
         let correctCellEl = grid.shadowRoot.querySelector('content[pb-row="1"][pb-col="2"]');
-        expect(correctCellEl.getDistributedNodes()[0]).to.be.equal(childEl);
+        expect(correctCellEl.getDistributedNodes()[0]).toEqual(childEl);
       });
 
       it('should throw exception if row is not a number', () => {
@@ -80,7 +77,7 @@ DIJS
             .attr('row', 'a')
             .attr('col', 1);
 
-        expect(() => grid.createdCallback()).to.throw('a');
+        expect(() => grid.createdCallback()).toThrowError(/a/);
       });
 
       it('should throw exception if col is not a number', () => {
@@ -88,7 +85,7 @@ DIJS
             .attr('row', 1)
             .attr('col', 'a');
 
-        expect(() => grid.createdCallback()).to.throw('a');
+        expect(() => grid.createdCallback()).toThrowError(/a/);
       });
     });
 
@@ -101,12 +98,12 @@ DIJS
         grid.appendChild(childEl);
 
         grid.createdCallback();
-        expect(grid.get(1, 2)).to.be.equal(childEl);
+        expect(grid.get(1, 2)).toEqual(childEl);
       });
 
       it('should return null if the cell is invalid', () => {
         grid.createdCallback();
-        expect(grid.get(2, 3)).to.not.exist;
+        expect(grid.get(2, 3)).not.toExist();
       });
     });
   });

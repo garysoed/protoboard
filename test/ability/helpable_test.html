@@ -17,41 +17,32 @@
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .constant('doc', document.currentScript.ownerDocument)
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
+.with('pb.ability.Helpable.__displayEl__', require => {
+  const doc = require('doc');
+  return doc.createElement('div');
+})
 .run(require => {
 
-  const expect = require('chai.expect');
-  const _ = require('spies.Spies');
   const $registry = require('pb.$registry');
   const Abilities = require('pb.ability.Abilities');
   const Click = require('pb.trigger.Click');
   const Config = require('pb.data.ConfigService');
+  const displayEl = require('pb.ability.Helpable.__displayEl__');
   const doc = require('doc');
   const Droppable = require('pb.ability.Droppable');
   const Helpable = require('pb.ability.Helpable');
   const Key = require('pb.trigger.Key');
 
   describe('ability.Helpable', () => {
-    let displayEl;
-
-    beforeEach(() => {
-      displayEl = doc.createElement('div');
-      _.spy(doc, 'createElement').overrideReturn(displayEl);
-      $registry.register(doc, Config);
-      _.reset(doc.createElement);
-    });
-
     describe('#trigger', () => {
       it('should add the abilities as child of the display element and show the element', () => {
         let ability1 = new Droppable('ability', new Click());
         let ability2 = new Droppable('ability2', new Key('a'));
 
-        _.spy(ability1, 'isEnabled');
-        _.spy(ability2, 'isEnabled');
-
-        ability1.isEnabled.overrideReturn(true);
-        ability2.isEnabled.overrideReturn(true);
+        spyOn(ability1, 'isEnabled').and.returnValue(true);
+        spyOn(ability2, 'isEnabled').and.returnValue(true);
 
         let helpable = new Helpable();
         let el = doc.createElement('div');
@@ -63,12 +54,12 @@ DIJS
 
         helpable.trigger(el);
         let children = displayEl.children;
-        expect(children.length).to.be.equal(4);
+        expect(children.length).toEqual(4);
 
-        expect(children.item(0).innerText).to.be.equal(el.nodeName);
-        expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);
-        expect(children.item(2).innerText).to.be.equal(`Click: ${ability1.attrName}`);
-        expect(children.item(3).innerText).to.be.equal(`a: ${ability2.attrName}`);
+        expect(children.item(0).innerText).toEqual(el.nodeName);
+        expect(children.item(1).innerText).toEqual(`?: ${helpable.attrName}`);
+        expect(children.item(2).innerText).toEqual(`Click: ${ability1.attrName}`);
+        expect(children.item(3).innerText).toEqual(`a: ${ability2.attrName}`);
       });
 
       it('should not add disabled abilities', () => {
@@ -82,15 +73,11 @@ DIJS
 
         helpable.trigger(el);
         let children = displayEl.children;
-        expect(children.length).to.be.equal(2);
+        expect(children.length).toEqual(2);
 
-        expect(children.item(0).innerText).to.be.equal(el.nodeName);
-        expect(children.item(1).innerText).to.be.equal(`?: ${helpable.attrName}`);
+        expect(children.item(0).innerText).toEqual(el.nodeName);
+        expect(children.item(1).innerText).toEqual(`?: ${helpable.attrName}`);
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });

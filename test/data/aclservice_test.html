@@ -28,16 +28,14 @@ DIJS
 })
 .run(require => {
 
-  const _ = require('spies.Spies');
-  const _M = require('spies.Matchers');
   const $ = require('pb.JQuery');
 
   const Acl = require('pb.data.AclService.__ctor__');
   const Config = require('pb.data.ConfigService');
   const doc = require('doc');
-  const expect = require('chai.expect');
   const FakeMutationObserver = require('MutationObserver');
   const Group = require('pb.data.AclService.__group__');
+  const j = require('jasmine');
   const t = require('pb.t');
   const Utils = require('pb.Utils');
 
@@ -54,12 +52,12 @@ DIJS
           let member = 'player';
           let group = new Group('group');
           group.add(member);
-          expect(group.contains(member)).to.be.true;
+          expect(group.contains(member)).toEqual(true);
         });
         it('should return true if the candidate is a group with the same name of the current group', () => {
           let groupName = 'group';
           let group = new Group(groupName);
-          expect(group.contains(groupName)).to.be.true;
+          expect(group.contains(groupName)).toEqual(true);
         });
         it('should return true if the candidate is a player who is a member of a subgroup', () => {
           let member = 'player';
@@ -68,7 +66,7 @@ DIJS
           let group = new Group('group');
           group.add(subgroup);
 
-          expect(group.contains(member)).to.be.true;
+          expect(group.contains(member)).toEqual(true);
         });
         it('should return false if the candidate is not a member of the group or its descendants', () => {
           let member = 'player';
@@ -76,7 +74,7 @@ DIJS
           let group = new Group('group');
           group.add(subgroup);
 
-          expect(group.contains(member)).to.be.false;
+          expect(group.contains(member)).toEqual(false);
         });
       });
     });
@@ -89,13 +87,13 @@ DIJS
         let actionEnabledPromise = Promise.resolve(true);
         $(el).attr(`pb-acl-${action}`, player);
 
-        _.spy(acl, 'isActionEnabled').overrideReturn(actionEnabledPromise);
+        spyOn(acl, 'isActionEnabled').and.returnValue(actionEnabledPromise);
 
         acl.currentPlayer = player;
         return t.getPrivateMethod(acl, 'update')(el)
             .then(() => {
-              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
-              expect(el.classList.contains(`pb-acl-${action}`)).to.be.true;
+              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).toEqual(true);
+              expect(el.classList.contains(`pb-acl-${action}`)).toEqual(true);
             });
       });
       it('should check for group membership and add the CSS class', () => {
@@ -106,14 +104,14 @@ DIJS
         let actionEnabledPromise = Promise.resolve(true);
 
         $(el).attr(`pb-acl-${action}`, group);
-        _.spy(acl, 'isActionEnabled').overrideReturn(actionEnabledPromise);
+        spyOn(acl, 'isActionEnabled').and.returnValue(actionEnabledPromise);
 
         acl.currentPlayer = player;
         acl.addGroup(group, player);
         return t.getPrivateMethod(acl, 'update')(el)
             .then(() => {
-              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
-              expect(el.classList.contains(`pb-acl-${action}`)).to.be.true;
+              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).toEqual(true);
+              expect(el.classList.contains(`pb-acl-${action}`)).toEqual(true);
             });
       });
       it('should set the CSS class to none if action is disabled', () => {
@@ -123,13 +121,13 @@ DIJS
         let actionEnabledPromise = Promise.resolve(false);
 
         $(el).attr(`pb-acl-${action}`, 'player2');
-        _.spy(acl, 'isActionEnabled').overrideReturn(actionEnabledPromise);
+        spyOn(acl, 'isActionEnabled').and.returnValue(actionEnabledPromise);
 
         acl.currentPlayer = player;
         return t.getPrivateMethod(acl, 'update')(el)
             .then(() => {
-              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.false;
-              expect(el.classList.contains(`pb-acl-${action}`)).to.be.false;
+              expect(el[t.getSymbol(el, 'enabledMap')].get(action)).toEqual(false);
+              expect(el.classList.contains(`pb-acl-${action}`)).toEqual(false);
             });
       });
       it('should set the action as enabled if the attribute is set to empty string', done => {
@@ -141,11 +139,11 @@ DIJS
         acl.currentPlayer = 'player';
         t.getPrivateMethod(acl, 'update')(el);
 
-        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).to.be.true;
+        expect(el[t.getSymbol(el, 'enabledMap')].get(action)).toEqual(true);
 
         acl.isActionEnabled(el, action)
             .then(enabled => {
-              expect(enabled).to.be.true;
+              expect(enabled).toEqual(true);
               done();
             });
       });
@@ -158,7 +156,7 @@ DIJS
         let el = doc.createElement('div');
         let actionEnabledPromise = Promise.resolve(true);
 
-        _.spy(acl, 'isActionEnabled').overrideReturn(actionEnabledPromise);
+        spyOn(acl, 'isActionEnabled').and.returnValue(actionEnabledPromise);
         $(el).attr(`pb-acl-${action}`, player);
 
         acl.currentPlayer = player;
@@ -175,14 +173,14 @@ DIJS
         let el = doc.createElement('div');
         $(el).attr(`pb-acl-${action}`, player);
 
-        _.spy(FakeMutationObserver.prototype, 'observe');
+        spyOn(FakeMutationObserver.prototype, 'observe');
 
         acl.currentPlayer = player;
         acl.registerElement(el);
 
-        let objectMatcher = _M.isA(Object);
-        expect(FakeMutationObserver.lastInstance.observe).calledWith(el, objectMatcher).at.least(1);
-        expect(objectMatcher.matchingArgs[0].attributes).to.be.true;
+        expect(FakeMutationObserver.lastInstance.observe).toHaveBeenCalledWith(
+            el,
+            j.objectContaining({ attributes: true }));
 
         $(el).attr(`pb-acl-${action}`, 'player2');
         FakeMutationObserver.lastInstance.handler([
@@ -192,7 +190,7 @@ DIJS
            }
         ]);
 
-        expect(el.classList.contains(`pb-acl-${action}`)).to.be.false;
+        expect(el.classList.contains(`pb-acl-${action}`)).toEqual(false);
       });
     });
 
@@ -208,7 +206,7 @@ DIJS
             .registerElement(el)
             .isActionEnabled(el, action)
             .then(enabled => {
-              expect(enabled).to.be.true;
+              expect(enabled).toEqual(true);
               done();
             })
             .catch(done);
@@ -227,7 +225,7 @@ DIJS
             .registerElement(child)
             .isActionEnabled(child, action)
             .then(enabled => {
-              expect(enabled).to.be.false;
+              expect(enabled).toEqual(false);
               done();
             })
             .catch(done);
@@ -242,7 +240,7 @@ DIJS
         acl
             .isActionEnabled(el, action)
             .then(enabled => {
-              expect(enabled).to.be.true;
+              expect(enabled).toEqual(true);
               done();
             })
             .catch(done);
@@ -257,7 +255,7 @@ DIJS
             .registerElement(el)
             .isActionEnabled(el, action)
             .then(enabled => {
-              expect(enabled).to.be.true;
+              expect(enabled).toEqual(true);
               done();
             })
             .catch(done);
@@ -272,8 +270,8 @@ DIJS
         acl.addGroup(groupName, player1, player2);
 
         let group = t.getPrivateProperty(acl, 'groups').get(groupName);
-        expect(group.contains(player1)).to.be.true;
-        expect(group.contains(player2)).to.be.true;
+        expect(group.contains(player1)).toEqual(true);
+        expect(group.contains(player2)).toEqual(true);
       });
       it('should add a group if the member is a group', () => {
         let subgroupName = 'subgroupName';
@@ -284,7 +282,7 @@ DIJS
             .addGroup(groupName, subgroupName);
 
         let group = t.getPrivateProperty(acl, 'groups').get(groupName);
-        expect(group.contains(member)).to.be.true;
+        expect(group.contains(member)).toEqual(true);
       });
     });
 
@@ -305,10 +303,6 @@ DIJS
               return Utils.watch(() => !el.classList.contains(`pb-acl-${action}`));
             });
       });
-    });
-
-    afterEach(() => {
-      _.reset();
     });
   });
 });
