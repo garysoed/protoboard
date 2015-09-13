@@ -1,0 +1,60 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+DIJS.bind("jasmine.toExist", function () {
+  return function (util, customEqualityTesters) {
+    return {
+      compare: function compare(actual) {
+        var result = {
+          pass: actual !== null && actual !== undefined
+        };
+
+        if (result.pass) {
+          result.message = "Expected " + actual + " to not exist";
+        } else {
+          result.message = "Expected " + actual + " to exist";
+        }
+
+        return result;
+      }
+    };
+  };
+}).bind("jasmine.toBeATypeOf", function () {
+  return function (util, customEqualityTesters) {
+    return {
+      compare: function compare(actual, expected) {
+        var result = {
+          pass: typeof actual === expected
+        };
+
+        if (result.pass) {
+          result.message = "Expected " + actual + " to not be a type of " + expected;
+        } else {
+          result.message = "Expected " + actual + " to be a type of " + expected;
+        }
+        return result;
+      }
+    };
+  };
+}).bind("jasmine.toBeAnInstanceOf", function () {
+  return function (util, customEqualityTesters) {
+    return {
+      compare: function compare(actual, expected) {
+        var result = {
+          pass: actual instanceof expected
+        };
+
+        if (result.pass) {
+          result.message = "Expected " + actual + " to not be an instance of " + expected.name;
+        } else {
+          result.message = "Expected " + actual + " to be an instance of " + expected.name;
+        }
+        return result;
+      }
+    };
+  };
+})["export"]("jasmine.toBeAnInstanceOf", "jasmine.matchers.toBeAnInstanceOf")["export"]("jasmine.toBeATypeOf", "jasmine.matchers.toBeATypeOf")["export"]("jasmine.toExist", "jasmine.matchers.toExist");</script>
+</head><body></body></html>
