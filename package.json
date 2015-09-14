@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/garysoed/protoboard",
   "devDependencies": {
-    "chai": "^3.1.0",
     "chalk": "^0.5.1",
     "doctheme": "git://github.com/garysoed/doctheme",
     "glob": "^5.0.14",
@@ -42,9 +41,7 @@
     "karma-mocha": "^0.1.9",
     "karma-mocha-reporter": "^0.3.1",
     "minimist": "^1.1.0",
-    "mocha": "^2.0.0",
     "promise": "^7.0.3",
-    "spies": "git://github.com/garysoed/spies.git",
     "through2": "^0.6.3",
     "yuidocjs": "^0.7.0"
   },

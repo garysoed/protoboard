@@ -1,5 +1,6 @@
 <base href=".">
-<script src="../node_modules/chai/chai.js"></script>
+
+<!-- <script src="../node_modules/mock-promises/lib/mock-promises.js"></script> -->
 
 <link rel="import" href="testutils.html">
 <link rel="import" href="testing/jasminehelpers.html">
@@ -8,7 +9,45 @@
 <script>
 DIJS.bind('jasmine', () => jasmine);
 
+let jasmineEnv = jasmine.getEnv();
+
+window.it = function(description, runner, timeout) {
+  if (runner.length > 0) {
+    jasmineEnv.it(description, runner, timeout);
+  } else {
+    jasmineEnv.it(description, done => {
+      let rv = runner();
+      if (rv instanceof Promise) {
+        rv
+            .then(done)
+            .catch(done.fail);
+      } else {
+        done();
+      }
+    }, timeout);
+  }
+};
+
+window.beforeEach = function(runner, timeout) {
+  if (runner.length > 0) {
+    jasmineEnv.beforeEach(runner, timeout);
+  } else {
+    jasmineEnv.beforeEach(done => {
+      let rv = runner();
+      if (rv instanceof Promise) {
+        rv
+            .then(done)
+            .catch(done.fail);
+      } else {
+        done();
+      }
+    }, timeout);
+  }
+};
+
+
 beforeEach(() => {
   jasmine.addMatchers(jasmine.matchers);
 });
+
 </script>

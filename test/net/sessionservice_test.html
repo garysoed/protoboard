@@ -32,8 +32,8 @@ DIJS
     });
 
     describe('create', () => {
-      it('should create a new game with the correct data', done => {
-        session.create(2)
+      it('should create a new game with the correct data', () => {
+        return session.create(2)
             .then(oldGameSync => {
               return Promise.all([
                 oldGameSync,
@@ -54,8 +54,7 @@ DIJS
                   randomSeed: 1234
                 }
               });
-            })
-            .then(done);
+            });
       });
     });
 
@@ -66,19 +65,16 @@ DIJS
     });
 
     describe('join', () => {
-      beforeEach(done => {
+      beforeEach(() => {
         // Create the gameSync "remotely"
         let gameSync = new Sync('gameId', '/games');
-        gameSync
-            .set({
-              players: []
-            })
-            .then(done);
+        return gameSync
+            .set({ players: [] });
       });
 
-      it('should join the given game with the correct player data', done => {
+      it('should join the given game with the correct player data', () => {
         let gameSync = new Sync('gameId', '/games');
-        session.join(gameSync, 'Player Name', { role: 'Medic' })
+        return session.join(gameSync, 'Player Name', { role: 'Medic' })
             .then(value => {
               expect(value).toEqual(gameSync);
               return gameSync.sync('players').get();
@@ -90,15 +86,14 @@ DIJS
                   role: 'Medic'
                 }
               });
-            })
-            .then(done);
+            });
       });
     });
 
     describe('start', () => {
-      it('should return promise that is resolved when there are enough players in the game', done => {
+      it('should return promise that is resolved when there are enough players in the game', () => {
         let gameSync = new Sync('gameId', '/games');
-        gameSync
+        return gameSync
             .set({
               playerCount: 2,
               players: [{}, {}]
@@ -108,8 +103,7 @@ DIJS
             })
             .then(value => {
               expect(value).toEqual(gameSync);
-            })
-            .then(done);
+            });
       });
     });
 

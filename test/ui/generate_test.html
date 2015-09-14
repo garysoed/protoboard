@@ -45,32 +45,29 @@ DIJS
         });
       });
 
-      it('should replace itself with data registered to ui.TemplateService', done => {
+      it('should replace itself with data registered to ui.TemplateService', () => {
         let dataA = 'a';
         let dataB = 'B';
         let innerHTML =
               '<div>Data A: {{dataA}}</div>'
             + '<div>Data B: {{dataB}}</div>';
 
-        let originalGet = Template.get;
-        Template.get = name => {
+        spyOn(Template, 'get').and.callFake(name => {
           if (name === 'dataA') {
             return Promise.resolve(['dataA', dataA]);
           } else if (name === 'dataB') {
             return Promise.resolve(['dataB', dataB]);
           }
-        };
+        });
         spyOn($, 'attr').and.returnValue('dataA dataB');
         spyOn($, 'replaceWith');
         spyOn(generate, 'querySelector').and.returnValue({ innerHTML: innerHTML });
 
-        generate.createdCallback()
+        return generate.createdCallback()
             .then(() => {
               expect($.replaceWith)
                   .toHaveBeenCalledWith(`<div>Data A: ${dataA}</div><div>Data B: ${dataB}</div>`);
-              Template.get = originalGet;
-            })
-            .then(done);
+            });
       });
     });
   });

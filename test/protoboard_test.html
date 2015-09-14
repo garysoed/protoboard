@@ -44,9 +44,9 @@ DIJS
       DIJS.keys.set('pb.Bootstrap', bootstrap);
     });
 
-    it('should correctly setup for new game', done => {
+    it('should correctly setup for new game', () => {
       let setupFn = j.createSpy('setupFn');
-      protoboard
+      return protoboard
           .withIo(io)
           .forNewGame(2, { randomSeed: 1234 })
           .join('playerId', { name: 'Player 1' })
@@ -102,13 +102,12 @@ DIJS
             expect(templatePlayerCount).toEqual(['pb_playerCount', 2]);
             expect(templatePlayers).toEqual(['pb_players', expectedPlayers]);
             expect(templateState).toEqual(['pb_state', { randomSeed: 1234 }]);
-          })
-          .then(done);
+          });
     });
-    it('should correctly setup for existing game', done => {
+    it('should correctly setup for existing game', () => {
       let setupFn = j.createSpy('setupFn');
 
-      Promise.all([
+      return Promise.all([
         io.set('/(root)/0', { $index: true, keys: ['playerCount', 'players', 'state'] }),
         io.set('/(root)/0/playerCount', 2),
         io.set('/(root)/0/players', { $index: true, keys: ['0'] }),
@@ -174,8 +173,7 @@ DIJS
               expect(templatePlayerCount).toEqual(['pb_playerCount', 2]);
               expect(templatePlayers).toEqual(['pb_players', expectedPlayers]);
               expect(templateState).toEqual(['pb_state', { randomSeed: 1234 }]);
-            })
-            .then(done);
+            });
       });
     });
   });

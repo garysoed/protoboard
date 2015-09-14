@@ -26,16 +26,20 @@ DIJS
     });
 
     describe('set and get', () => {
-      it('should return a promise that is resolved after setting the value', done => {
-        io.set('/path', 2)
+      it('should return a promise that is resolved after setting the value', () => {
+        io.$$ = 1;
+        return io.set('/path', 2)
             .then(() => {
               return io.get('/path');
             })
             .then(value => {
               expect(value).toEqual(2);
-            })
-            .then(done);
+            });
       });
+    });
+
+    afterEach(() => {
+      // window.Promise = mockPromises.getOriginalPromise();
     });
   }
 

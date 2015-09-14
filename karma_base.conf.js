@@ -16,16 +16,6 @@ module.exports = {
   files: [
     // Generated files
     { pattern: 'out/**/!(*_test).*', included: false },
-
-    // Deps
-    { pattern: 'node_modules/chai/chai.js', included: false },
-    { pattern: 'node_modules/spies/main.html', included: false },
-    { pattern: 'node_modules/spies/main.js', included: false },
-    { pattern: 'node_modules/spies/main_chai_expect.html', included: false },
-    { pattern: 'node_modules/spies/node_modules/chai/chai.js', included: false },
-    { pattern: 'node_modules/spies/node_modules/traceur/bin/traceur-runtime.js', included: false },
-    { pattern: 'node_modules/spies/src/plugin/chai-expect.js', included: false },
-
     { pattern: 'out/testbase.html', included: false },
   ],
 

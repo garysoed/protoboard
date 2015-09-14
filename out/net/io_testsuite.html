@@ -26,14 +26,17 @@ DIJS.bind("pb.net.IOTestSuite", function (require) {
     });
 
     describe("set and get", function () {
-      it("should return a promise that is resolved after setting the value", function (done) {
-        io.set("/path", 2).then(function () {
+      it("should return a promise that is resolved after setting the value", function () {
+        io.$$ = 1;
+        return io.set("/path", 2).then(function () {
           return io.get("/path");
         }).then(function (value) {
           expect(value).toEqual(2);
-        }).then(done);
+        });
       });
     });
+
+    afterEach(function () {});
   }
 
   return IOTestSuite;

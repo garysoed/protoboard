@@ -52,25 +52,25 @@ DIJS
     });
 
     describe('#addData and #get', () => {
-      it('should handle adding data before retrieval', done => {
+      it('should handle adding data before retrieval', () => {
         let name = 'data';
         let data = {};
         template.addData(name, data);
-        template.get(name)
+        return template.get(name)
             .then(result => {
               expect(result).toEqual([name, data]);
-            })
-            .then(done);
+            });
       });
-      it('should handle adding data after retrieval', done => {
+      it('should handle adding data after retrieval', () => {
         let name = 'data';
         let data = {};
-        template.get(name)
+        let promise = template.get(name);
+        template.addData(name, data);
+
+        return promise
             .then(result => {
               expect(result).toEqual([name, data]);
-            })
-            .then(done);
-        template.addData(name, data);
+            });
       });
     });
 

@@ -32,14 +32,13 @@ DIJS
     });
 
     describe('set', () => {
-      it('should trigger update after setting the value', done => {
+      it('should trigger update after setting the value', () => {
         let listener = j.createSpy('listener');
         io.listen(listener);
-        io.set('/path', 3)
+        return io.set('/path', 3)
             .then(() => {
               expect(listener).toHaveBeenCalledWith('/path', 3);
-            })
-            .then(done);
+            });
       });
     });
   });

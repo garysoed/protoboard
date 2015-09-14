@@ -44,54 +44,50 @@ DIJS
     });
 
     describe('add', () => {
-      it('should return the newly added sync object', done => {
+      it('should return the newly added sync object', () => {
         spyOn(Rpc, 'add').and.returnValue(Promise.resolve('newId'));
 
-        sync.add()
+        return sync.add()
             .then(newSync => {
               expect(newSync.id).toEqual('newId');
               expect(newSync.path).toEqual(`${PREFIX}/${ID}/newId`);
 
               expect(Rpc.add).toHaveBeenCalledWith(`${PREFIX}/${ID}`);
-            })
-            .then(done);
+            });
       });
     });
 
     describe('remove', () => {
-      it('should remove the current object', done => {
+      it('should remove the current object', () => {
         spyOn(Rpc, 'remove').and.returnValue(Promise.resolve());
 
-        sync.remove()
+        return sync.remove()
             .then(() => {
               expect(Rpc.remove).toHaveBeenCalledWith(`${PREFIX}/${ID}`);
-            })
-            .then(done);
+            });
       });
     });
 
     describe('get', () => {
-      it('should retrieve the value from Rpc', done => {
+      it('should retrieve the value from Rpc', () => {
         spyOn(Rpc, 'get').and.returnValue(Promise.resolve(1));
 
-        sync.get()
+        return sync.get()
             .then(value => {
               expect(value).toEqual(1);
-            })
-            .then(done);
+            });
       });
     });
 
     describe('set', () => {
-      it('should set the value and returns itself', done => {
+      it('should set the value and returns itself', () => {
         spyOn(Rpc, 'set').and.returnValue(Promise.resolve());
 
-        sync.set('data')
+        return sync.set('data')
             .then(returnedSync => {
               expect(Rpc.set).toHaveBeenCalledWith(`${PREFIX}/${ID}`, 'data');
               expect(returnedSync).toEqual(sync);
-            })
-            .then(done);
+            });
       });
     });
 
