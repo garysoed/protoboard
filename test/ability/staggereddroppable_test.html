@@ -23,6 +23,7 @@ DIJS
 .run(require => {
 
   const $ = require('pb.JQuery');
+  const $registry = require('pb.$registry');
   const Chance = require('pb.Chance');
   const doc = require('doc');
   const Move = require('pb.ui.MoveService');
@@ -31,6 +32,10 @@ DIJS
 
   describe('ability.StaggeredDroppable', () => {
     let el;
+
+    beforeAll(() => {
+      $registry.register(doc);
+    });
 
     beforeEach(() => {
       el = doc.createElement('div');

@@ -16,11 +16,16 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
+  const $registry = require('pb.$registry');
   const doc = require('doc');
   const Toggleable = require('pb.ability.Toggleable');
 
   describe('ability.Toggleable', () => {
     let el;
+
+    beforeAll(() => {
+      $registry.register(doc);
+    });
 
     beforeEach(() => {
       el = doc.createElement('div');

@@ -1,6 +1,7 @@
 <base href=".">
 
 <link rel="import" href="bootstrap.html">
+<link rel="import" href="data/aclservice.html">
 <link rel="import" href="net/cachedio.html">
 <link rel="import" href="net/inmemoryio.html">
 <link rel="import" href="net/sessionservice.html">
@@ -88,6 +89,7 @@ DIJS
         DIJS
             .constant('pb.net.IO', this[__io__])
             .run(require => {
+              const AclService = require('pb.data.AclService');
               const Bootstrap = require('pb.Bootstrap');
               const SessionService = require('pb.net.SessionService');
               const StateService = require('pb.data.StateService');
@@ -131,6 +133,11 @@ DIJS
                   })
                   .then(values => {
                     let [gameData, ...rest] = values;
+
+                    // Set the current local player.
+                    if (this[__players__].length > 0) {
+                      AclService.currentPlayer = this[__players__][0].id;
+                    }
 
                     // Initialize the state service.
                     StateService.put('pb_playerCount', gameData.playerCount);

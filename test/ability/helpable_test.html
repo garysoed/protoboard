@@ -36,6 +36,10 @@ DIJS
   const Key = require('pb.trigger.Key');
 
   describe('ability.Helpable', () => {
+    beforeAll(() => {
+      $registry.register(doc);
+    });
+
     describe('#trigger', () => {
       it('should add the abilities as child of the display element and show the element', () => {
         let ability1 = new Droppable('ability', new Click());

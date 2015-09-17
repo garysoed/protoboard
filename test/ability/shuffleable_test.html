@@ -14,13 +14,11 @@
 <body>
 <script>
 DIJS
-.with('pb.$registry', require => {
-  const Registry = require('pb.ui.RegistryService');
-  return new Registry();
-})
+.with('pb.$registry', require => new (require('pb.ui.RegistryService'))())
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
+  const $registry = require('pb.$registry');
   const Chance = require('pb.Chance');
   const doc = require('doc');
   const Shuffleable = require('pb.ability.Shuffleable');
@@ -29,6 +27,10 @@ DIJS
   describe('ability.Shuffleable', () => {
     let el;
     let shuffleable;
+
+    beforeAll(() => {
+      $registry.register(doc);
+    });
 
     beforeEach(() => {
       el = doc.createElement('div');

@@ -4,6 +4,7 @@
   <base href=".">
   <title>Protoboard Unit Tests</title>
 
+  <link rel="import" href="data/aclservice.html">
   <link rel="import" href="protoboard.html">
   <link rel="import" href="testbase.html">
   <link rel="import" href="third_party/di.html">
@@ -67,6 +68,8 @@ DIJS
           .then(values => {
             let [require, root, ...templateData] = values;
             let [templatePlayerCount, templatePlayers, templateState] = templateData;
+
+            const AclService = require('pb.data.AclService');
             const StateService = require('pb.data.StateService');
             const TemplateService = require('pb.ui.TemplateService');
 
@@ -97,6 +100,7 @@ DIJS
               }
             });
 
+            expect(AclService.currentPlayer).toEqual(expectedPlayers[0].id);
             expect(StateService.get('pb_playerCount')).toEqual('2');
 
             expect(templatePlayerCount).toEqual(['pb_playerCount', 2]);
@@ -119,61 +123,64 @@ DIJS
         io.set('/(root)/0/state/randomSeed', 1234)
       ])
       .then(() => {
-        protoboard.withIo(io)
+        return protoboard.withIo(io)
             .forExistingGame('0')
             .join('playerId2', { name: 'Player 2' })
             .setup(setupFn)
-            .run(doc)
-            .then(require => {
-              const Rpc = require('pb.net.RpcService');
-              const TemplateService = require('pb.ui.TemplateService');
-              return Promise.all([
-                require,
-                Rpc.get('/(root)'),
-                TemplateService.get('pb_playerCount'),
-                TemplateService.get('pb_players'),
-                TemplateService.get('pb_state')
-              ]);
-            })
-            .then(values => {
-              let [require, root, ...templateData] = values;
-              let [templatePlayerCount, templatePlayers, templateState] = templateData;
-              const StateService = require('pb.data.StateService');
-              const TemplateService = require('pb.ui.TemplateService');
+            .run(doc);
+      })
+      .then(require => {
+        const Rpc = require('pb.net.RpcService');
+        const TemplateService = require('pb.ui.TemplateService');
+        return Promise.all([
+          require,
+          Rpc.get('/(root)'),
+          TemplateService.get('pb_playerCount'),
+          TemplateService.get('pb_players'),
+          TemplateService.get('pb_state')
+        ]);
+      })
+      .then(values => {
+        let [require, root, ...templateData] = values;
+        let [templatePlayerCount, templatePlayers, templateState] = templateData;
 
-              let expectedPlayers = {
-                0: {
-                  id: 'playerId',
-                  state: {
-                    name: 'Player 1'
-                  }
-                },
-                1: {
-                  id: 'playerId2',
-                  state: {
-                    name: 'Player 2'
-                  }
-                }
-              };
+        const AclService = require('pb.data.AclService');
+        const StateService = require('pb.data.StateService');
+        const TemplateService = require('pb.ui.TemplateService');
 
-              expect(setupFn).toHaveBeenCalledWith(require);
+        let expectedPlayers = {
+          0: {
+            id: 'playerId',
+            state: {
+              name: 'Player 1'
+            }
+          },
+          1: {
+            id: 'playerId2',
+            state: {
+              name: 'Player 2'
+            }
+          }
+        };
 
-              expect(root).toEqual({
-                0: {
-                  playerCount: 2,
-                  players: expectedPlayers,
-                  state: {
-                    randomSeed: 1234
-                  }
-                }
-              });
+        expect(setupFn).toHaveBeenCalledWith(require);
 
-              expect(StateService.get('pb_playerCount')).toEqual('2');
+        expect(root).toEqual({
+          0: {
+            playerCount: 2,
+            players: expectedPlayers,
+            state: {
+              randomSeed: 1234
+            }
+          }
+        });
 
-              expect(templatePlayerCount).toEqual(['pb_playerCount', 2]);
-              expect(templatePlayers).toEqual(['pb_players', expectedPlayers]);
-              expect(templateState).toEqual(['pb_state', { randomSeed: 1234 }]);
-            });
+        expect(AclService.currentPlayer).toEqual('playerId2');
+        expect(StateService.get('pb_playerCount')).toEqual('2');
+
+        expect(templatePlayerCount).toEqual(['pb_playerCount', 2]);
+        expect(templatePlayers).toEqual(['pb_players', expectedPlayers]);
+        expect(templateState).toEqual(['pb_state', { randomSeed: 1234 }]);
       });
     });
   });

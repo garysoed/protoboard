@@ -14,11 +14,12 @@
 <script>
 DIJS
 .constant('doc', document.currentScript.ownerDocument)
+.constant('pb.data.AclService', { currentPlayer: 'player' })
 .run(require => {
 
   const $ = require('pb.JQuery');
-
   const Ability = require('pb.ability.Ability');
+  const AclService = require('pb.data.AclService');
   const doc = require('doc');
   const FakeTrigger = require('pb.testing.FakeTrigger');
   const Log = require('pb.data.LogService');
@@ -127,7 +128,10 @@ DIJS
         ability.trigger(el);
 
         // TODO(gs): Test the order of the logs getting called.
-        expect(Log.log).toHaveBeenCalledWith(name, id, { phase: 'before' });
+        expect(Log.log).toHaveBeenCalledWith(name, id, {
+          phase: 'before',
+          player: AclService.currentPlayer
+        });
         expect(ability.isEnabled).toHaveBeenCalledWith(el);
 
         expect(ability.doTrigger).toHaveBeenCalledWith(el);
@@ -136,6 +140,11 @@ DIJS
             ability: ability
           }
         }));
+
+        expect(Log.log).toHaveBeenCalledWith(name, id, {
+          phase: 'after',
+          player: AclService.currentPlayer
+        });
       });
 
       it('should not call doTrigger if not enabled', () => {

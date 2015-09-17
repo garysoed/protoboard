@@ -28,6 +28,23 @@ window.it = function(description, runner, timeout) {
   }
 };
 
+window.fit = function(description, runner, timeout) {
+  if (runner.length > 0) {
+    jasmineEnv.fit(description, runner, timeout);
+  } else {
+    jasmineEnv.fit(description, done => {
+      let rv = runner();
+      if (rv instanceof Promise) {
+        rv
+            .then(done)
+            .catch(done.fail);
+      } else {
+        done();
+      }
+    }, timeout);
+  }
+};
+
 window.beforeEach = function(runner, timeout) {
   if (runner.length > 0) {
     jasmineEnv.beforeEach(runner, timeout);

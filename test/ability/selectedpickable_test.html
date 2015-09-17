@@ -20,12 +20,17 @@ DIJS
 .run(require => {
 
   const $ = require('pb.JQuery');
+  const $registry = require('pb.$registry');
   const doc = require('doc');
   const j = require('jasmine');
   const Move = require('pb.ui.MoveService');
   const SelectedPickable = require('pb.ability.SelectedPickable');
 
   describe('ability.SelectedPickable', () => {
+    beforeAll(() => {
+      $registry.register(doc);
+    });
+
     describe('#trigger', () => {
       let pickable;
       let selectFn;

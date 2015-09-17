@@ -1,6 +1,7 @@
 <html><head><base href="..">
 
 <link rel="import" href="check.html">
+<link rel="import" href="data/aclservice.html">
 <link rel="import" href="data/logservice.html">
 <link rel="import" href="third_party/di.html">
 <link rel="import" href="third_party/jquery.html">
@@ -18,6 +19,7 @@ DIJS.bind("CustomEvent", function () {
 }).bind("pb.ability.Ability", function (require) {
 
   var $ = require("pb.JQuery");
+  var AclService = require("pb.data.AclService");
   var Check = require("pb.Check");
   var CustomEvent = require("CustomEvent");
   var Log = require("pb.data.LogService");
@@ -68,14 +70,20 @@ DIJS.bind("CustomEvent", function () {
       trigger: {
         value: function trigger(el) {
           if (this.isEnabled(el)) {
-            Log.log(this.attrName, $(el).attr("pb-id"), { phase: "before" });
+            Log.log(this.attrName, $(el).attr("pb-id"), {
+              phase: "before",
+              player: AclService.currentPlayer
+            });
             this.doTrigger(el);
             el.dispatchEvent(new CustomEvent(this.attrName, {
               detail: {
                 ability: this
               }
             }));
-            Log.log(this.attrName, $(el).attr("pb-id"), { phase: "after" });
+            Log.log(this.attrName, $(el).attr("pb-id"), {
+              phase: "after",
+              player: AclService.currentPlayer
+            });
           }
         }
       },

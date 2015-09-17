@@ -1,6 +1,7 @@
 <html><head><base href=".">
 
 <link rel="import" href="bootstrap.html">
+<link rel="import" href="data/aclservice.html">
 <link rel="import" href="net/cachedio.html">
 <link rel="import" href="net/inmemoryio.html">
 <link rel="import" href="net/sessionservice.html">
@@ -57,6 +58,7 @@ DIJS.bind("pb.Protoboard.__runner__", function (require) {
 
           return new Promise(function (resolve, reject) {
             DIJS.constant("pb.net.IO", _this[__io__]).run(function (require) {
+              var AclService = require("pb.data.AclService");
               var Bootstrap = require("pb.Bootstrap");
               var SessionService = require("pb.net.SessionService");
               var StateService = require("pb.data.StateService");
@@ -125,6 +127,10 @@ DIJS.bind("pb.Protoboard.__runner__", function (require) {
                 var gameData = _values[0];
 
                 var rest = _values.slice(1);
+
+                if (_this[__players__].length > 0) {
+                  AclService.currentPlayer = _this[__players__][0].id;
+                }
 
                 StateService.put("pb_playerCount", gameData.playerCount);
               }).then(function () {

@@ -22,14 +22,20 @@ DIJS
 .run(require => {
 
   const $ = require('pb.JQuery');
+  const $registry = require('pb.$registry');
   const doc = require('doc');
   const Move = require('pb.ui.MoveService');
   const OrderedDroppable = require('pb.ability.OrderedDroppable');
   const Utils = require('pb.Utils');
 
   describe('ability.OrderedDroppable', () => {
+    beforeAll(() => {
+      $registry.register(doc);
+    });
+
     describe('#trigger', () => {
       let el;
+
       beforeEach(() => {
         el = doc.createElement('div');
       });

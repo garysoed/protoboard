@@ -19,12 +19,17 @@ DIJS
 .constant('doc', document.currentScript.ownerDocument)
 .run(require => {
 
+  const $registry = require('pb.$registry');
   const doc = require('doc');
   const Move = require('pb.ui.MoveService');
   const Pickable = require('pb.ability.Pickable');
 
   describe('ability.Pickable', () => {
     let el;
+
+    beforeAll(() => {
+      $registry.register(doc);
+    });
 
     beforeEach(() => {
       el = doc.createElement('div');
