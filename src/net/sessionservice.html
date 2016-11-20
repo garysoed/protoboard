@@ -62,6 +62,7 @@ DIJS
       return this[__rootSync__].add()
           .then(gameSync => {
             return gameSync.set({
+              actions: [],
               playerCount: playerCount,
               players: [],
               state: initialState

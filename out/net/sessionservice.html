@@ -48,6 +48,7 @@ DIJS.bind("pb.net.SessionService.__ctor__", function (require) {
 
         return this[__rootSync__].add().then(function (gameSync) {
           return gameSync.set({
+            actions: [],
             playerCount: playerCount,
             players: [],
             state: initialState

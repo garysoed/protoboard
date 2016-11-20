@@ -1,0 +1,35 @@
+<base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>
+DIJS
+.bind('pb.data.GameService.__ctor__', require => {
+
+  const __gameSync__ = Symbol('gameSync');
+
+  class GameService {
+    constructor() {
+      this[__gameSync__] = null;
+    }
+
+    end() {
+      return this[__gameSync__] ? this[__gameSync__].remove() : Promise.resolve();
+    }
+
+    sendAction(id, action, details) {
+
+    }
+
+    init(gameSync) {
+      this[__gameSync__] = gameSync;
+    }
+  }
+
+  return GameService;
+})
+.bind('pb.data.GameService', require => {
+  const GameService = require('pb.data.GameService.__ctor__');
+  return new GameService();
+});
+</script>

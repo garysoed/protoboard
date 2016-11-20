@@ -1,0 +1,46 @@
+<html><head><base href="..">
+
+<link rel="import" href="third_party/di.html">
+
+<script>"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+DIJS.bind("pb.data.GameService.__ctor__", function (require) {
+
+  var __gameSync__ = Symbol("gameSync");
+
+  var GameService = (function () {
+    function GameService() {
+      _classCallCheck(this, GameService);
+
+      this[__gameSync__] = null;
+    }
+
+    _createClass(GameService, {
+      end: {
+        value: function end() {
+          return this[__gameSync__] ? this[__gameSync__].remove() : Promise.resolve();
+        }
+      },
+      sendAction: {
+        value: function sendAction(id, action, details) {}
+      },
+      init: {
+        value: function init(gameSync) {
+          this[__gameSync__] = gameSync;
+        }
+      }
+    });
+
+    return GameService;
+  })();
+
+  return GameService;
+}).bind("pb.data.GameService", function (require) {
+  var GameService = require("pb.data.GameService.__ctor__");
+  return new GameService();
+});</script>
+</head><body></body></html>

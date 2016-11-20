@@ -12,6 +12,11 @@ DIJS.bind('jasmine', () => jasmine);
 let jasmineEnv = jasmine.getEnv();
 
 window.it = function(description, runner, timeout) {
+  if (!runner) {
+    jasmineEnv.it(description);
+    return;
+  }
+
   if (runner.length > 0) {
     jasmineEnv.it(description, runner, timeout);
   } else {
