@@ -151,6 +151,44 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/data/aclservice.html": {
+            "name": "src/data/aclservice.html",
+            "modules": {},
+            "classes": {
+                "data.Acl.Group": 1,
+                "service.Acl": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/data/configservice.html": {
+            "name": "src/data/configservice.html",
+            "modules": {},
+            "classes": {
+                "data.ConfigService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/data/logservice.html": {
+            "name": "src/data/logservice.html",
+            "modules": {},
+            "classes": {
+                "data.LogService.Entry": 1,
+                "data.LogService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/data/stateservice.html": {
+            "name": "src/data/stateservice.html",
+            "modules": {},
+            "classes": {
+                "data.StateService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/grid/grid.html": {
             "name": "src/grid/grid.html",
             "modules": {},
@@ -184,6 +222,76 @@
             "classes": {
                 "grid.TriangleGrid": 1
             },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/net/abstractio.html": {
+            "name": "src/net/abstractio.html",
+            "modules": {},
+            "classes": {
+                "net.AbstractIO": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/net/cachedio.html": {
+            "name": "src/net/cachedio.html",
+            "modules": {},
+            "classes": {
+                "net.CachedIO": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/net/inmemoryio.html": {
+            "name": "src/net/inmemoryio.html",
+            "modules": {},
+            "classes": {
+                "net.InMemoryIO": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/net/localstorageio.html": {
+            "name": "src/net/localstorageio.html",
+            "modules": {},
+            "classes": {
+                "net.LocalStorageIO": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/net/rpcservice.html": {
+            "name": "src/net/rpcservice.html",
+            "modules": {},
+            "classes": {
+                "net.RpcService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/net/sessionservice.html": {
+            "name": "src/net/sessionservice.html",
+            "modules": {},
+            "classes": {
+                "net.SessionService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/net/sync.html": {
+            "name": "src/net/sync.html",
+            "modules": {},
+            "classes": {
+                "pb.net.Sync": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/net/utils.html": {
+            "name": "src/net/utils.html",
+            "modules": {},
+            "classes": {},
             "fors": {},
             "namespaces": {}
         },
@@ -237,80 +345,6 @@
             "modules": {},
             "classes": {
                 "region.Region": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/service/acl.html": {
-            "name": "src/service/acl.html",
-            "modules": {},
-            "classes": {
-                "service.Acl.Group": 1,
-                "service.Acl": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/service/config.html": {
-            "name": "src/service/config.html",
-            "modules": {},
-            "classes": {
-                "service.Config": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/service/log.html": {
-            "name": "src/service/log.html",
-            "modules": {},
-            "classes": {
-                "service.Log.Entry": 1,
-                "service.Log": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/service/move.html": {
-            "name": "src/service/move.html",
-            "modules": {},
-            "classes": {
-                "service.Move": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/service/preview.html": {
-            "name": "src/service/preview.html",
-            "modules": {},
-            "classes": {
-                "service.Preview": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/service/registry.html": {
-            "name": "src/service/registry.html",
-            "modules": {},
-            "classes": {
-                "service.Registry": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/service/state.html": {
-            "name": "src/service/state.html",
-            "modules": {},
-            "classes": {
-                "service.State": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/service/template.html": {
-            "name": "src/service/template.html",
-            "modules": {},
-            "classes": {
-                "service.Template": 1
             },
             "fors": {},
             "namespaces": {}
@@ -379,6 +413,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/ui/moveservice.html": {
+            "name": "src/ui/moveservice.html",
+            "modules": {},
+            "classes": {
+                "ui.MoveService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/ui/preview.html": {
             "name": "src/ui/preview.html",
             "modules": {},
@@ -397,11 +440,38 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/ui/previewservice.html": {
+            "name": "src/ui/previewservice.html",
+            "modules": {},
+            "classes": {
+                "ui.PreviewService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/ui/registryservice.html": {
+            "name": "src/ui/registryservice.html",
+            "modules": {},
+            "classes": {
+                "ui.RegistryService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src/ui/shape.html": {
             "name": "src/ui/shape.html",
             "modules": {},
             "classes": {
                 "ui.Shape": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/ui/templateservice.html": {
+            "name": "src/ui/templateservice.html",
+            "modules": {},
+            "classes": {
+                "ui.TemplateService": 1
             },
             "fors": {},
             "namespaces": {}
@@ -453,6 +523,7 @@
             "name": "src/protoboard.html",
             "modules": {},
             "classes": {
+                "Protoboard.Runner": 1,
                 "Protoboard": 1
             },
             "fors": {},
@@ -473,7 +544,7 @@
                 "tutorial": 1
             },
             "classes": {
-                "1 Overview": 1
+                "01 Overview": 1
             },
             "fors": {},
             "namespaces": {}
@@ -482,7 +553,7 @@
             "name": "tutorial/02_prerequisites.js",
             "modules": {},
             "classes": {
-                "2 Prerequisites": 1
+                "02 Prerequisites": 1
             },
             "fors": {},
             "namespaces": {}
@@ -491,7 +562,7 @@
             "name": "tutorial/03_basic.js",
             "modules": {},
             "classes": {
-                "3 Basic Usage": 1
+                "03 Basic Usage": 1
             },
             "fors": {},
             "namespaces": {}
@@ -500,7 +571,7 @@
             "name": "tutorial/04_customize.js",
             "modules": {},
             "classes": {
-                "4 Customizing Components": 1
+                "04 Customizing Components": 1
             },
             "fors": {},
             "namespaces": {}
@@ -509,7 +580,7 @@
             "name": "tutorial/05_theme.js",
             "modules": {},
             "classes": {
-                "5 Theming": 1
+                "05 Theming": 1
             },
             "fors": {},
             "namespaces": {}
@@ -518,7 +589,7 @@
             "name": "tutorial/06_javascript.js",
             "modules": {},
             "classes": {
-                "6 JavaScript": 1
+                "06 JavaScript": 1
             },
             "fors": {},
             "namespaces": {}
@@ -527,7 +598,7 @@
             "name": "tutorial/07_custom_elements.js",
             "modules": {},
             "classes": {
-                "7 Custom Elements": 1
+                "07 Custom Elements": 1
             },
             "fors": {},
             "namespaces": {}
@@ -536,7 +607,7 @@
             "name": "tutorial/08_abilities.js",
             "modules": {},
             "classes": {
-                "8 Abilities": 1
+                "08 Abilities": 1
             },
             "fors": {},
             "namespaces": {}
@@ -545,7 +616,16 @@
             "name": "tutorial/09_triggers.js",
             "modules": {},
             "classes": {
-                "9 Triggers": 1
+                "09 Triggers": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "tutorial/10_net.js": {
+            "name": "tutorial/10_net.js",
+            "modules": {},
+            "classes": {
+                "10 Networked Games": 1
             },
             "fors": {},
             "namespaces": {}
@@ -581,26 +661,29 @@
                 "component.Dice.DiceFlippable": 1,
                 "component.Dice": 1,
                 "component.Token": 1,
+                "data.Acl.Group": 1,
+                "service.Acl": 1,
+                "data.ConfigService": 1,
+                "data.LogService.Entry": 1,
+                "data.LogService": 1,
+                "data.StateService": 1,
                 "grid.Grid": 1,
                 "grid.HexGrid": 1,
                 "grid.RectGrid": 1,
                 "grid.TriangleGrid": 1,
+                "net.AbstractIO": 1,
+                "net.CachedIO": 1,
+                "net.InMemoryIO": 1,
+                "net.LocalStorageIO": 1,
+                "net.RpcService": 1,
+                "net.SessionService": 1,
+                "pb.net.Sync": 1,
                 "region.Bag": 1,
                 "region.CubeTower": 1,
                 "region.Deck": 1,
                 "region.Hand": 1,
                 "region.Rect": 1,
                 "region.Region": 1,
-                "service.Acl.Group": 1,
-                "service.Acl": 1,
-                "service.Config": 1,
-                "service.Log.Entry": 1,
-                "service.Log": 1,
-                "service.Move": 1,
-                "service.Preview": 1,
-                "service.Registry": 1,
-                "service.State": 1,
-                "service.Template": 1,
                 "Hammer": 1,
                 "trigger.Click": 1,
                 "trigger.DoubleClick": 1,
@@ -609,12 +692,17 @@
                 "trigger.Trigger": 1,
                 "trigger.Triggers": 1,
                 "ui.Generate": 1,
+                "ui.MoveService": 1,
                 "ui.Preview": 1,
                 "ui.Previewer": 1,
+                "ui.PreviewService": 1,
+                "ui.RegistryService": 1,
                 "ui.Shape": 1,
+                "ui.TemplateService": 1,
                 "Bootstrap": 1,
                 "Check": 1,
                 "PbElement": 1,
+                "Protoboard.Runner": 1,
                 "Protoboard": 1,
                 "Utils": 1
             },
@@ -628,22 +716,23 @@
             "name": "tutorial",
             "submodules": {},
             "classes": {
-                "1 Overview": 1,
-                "2 Prerequisites": 1,
-                "3 Basic Usage": 1,
-                "4 Customizing Components": 1,
-                "5 Theming": 1,
-                "6 JavaScript": 1,
-                "7 Custom Elements": 1,
-                "8 Abilities": 1,
-                "9 Triggers": 1
+                "01 Overview": 1,
+                "02 Prerequisites": 1,
+                "03 Basic Usage": 1,
+                "04 Customizing Components": 1,
+                "05 Theming": 1,
+                "06 JavaScript": 1,
+                "07 Custom Elements": 1,
+                "08 Abilities": 1,
+                "09 Triggers": 1,
+                "10 Networked Games": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "tutorial/09_triggers.js",
+            "file": "tutorial/10_net.js",
             "line": 1,
-            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. {{#crossLink \"5 Theming\"}}Theme{{/crossLink}}: This library comes with some existing themes. You\ncan customize the color themes, and if you use CSS, you can customize in greater details.\n\nSome glossary of terminologies for the API:\n{{#html 'dl'}}\n  {{#html 'dt'}}{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}{{/html}}\n  {{#html 'dd'}}These are where the main logic happens. A Component can have several abilities,\n  each triggered with a Trigger.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"component.Component\"}}Component{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Components are the basic entity of a board. They provide main interaction with\n  the players. Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"region.Region\"}}Region{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Regions can contain other components. They cannot be moved and can contain one or\n  more components. Examples include: deck, bag, and hand.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Triggers listen to events in the document and triggers the ability it is\n  associated with. The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.{{/html}}\n\n  {{#html 'dt'}}UI{{/html}}\n  {{#html 'dd'}}This library also comes with several basic UI elements for convenience. These\n  elements do not have a real life counterpart.{{/html}}\n{{/html}}\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n   - `pb-c-` indicates a component\n   - `pb-r-` indicates a region\n   - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
+            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis tutorial will go through some concepts and how-tos for using Protoboard. It is recommended\nthat you read the tutorials in the order that they are presented.\n\nProtoboard aims to be customizable in different levels:\n\n1.  JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n1.  HTML: Developers can use preexisting HTML elements to write their own game.\n1.  {{#crossLink \"05 Theming\"}}Theme{{/crossLink}}: This library comes with some existing themes.\n    You can customize the color themes, and if you use CSS, you can customize in greater details.\n\nSome glossary of terminologies for the API:\n{{#html 'dl'}}\n  {{#html 'dt'}}{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}{{/html}}\n  {{#html 'dd'}}These are where the main logic happens. A Component can have several abilities,\n  each triggered with a Trigger.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"component.Component\"}}Component{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Components are the basic entity of a board. They provide main interaction with\n  the players. Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"region.Region\"}}Region{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Regions can contain other components. They cannot be moved and can contain one or\n  more components. Examples include: deck, bag, and hand.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Triggers listen to events in the document and triggers the ability it is\n  associated with. The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.{{/html}}\n\n  {{#html 'dt'}}UI{{/html}}\n  {{#html 'dd'}}This library also comes with several basic UI elements for convenience. These\n  elements do not have a real life counterpart.{{/html}}\n{{/html}}\n\nEvery element introduced in Protoboard has 3 parts of its name:\n\n1.  `pb-` is the prefix of every Protoboard element.\n1.  The second prefix indicates the type of element:\n    -   `pb-c-` indicates a component\n    -   `pb-r-` indicates a region\n    -   `pb-u-` indicates a UI element.\n1.  The last part is the name of the element.\n\nYou can use the above to figure out the corresponding API."
         }
     },
     "classes": {
@@ -1221,6 +1310,100 @@
             "description": "A simple movable component with only one state. Examples of token:\n- Chess piece\n- Cubes\n- Damage marker\n\nTo use this, create a `pb-c-token` element with one child element. This child element will be\ndisplayed as the token.\n\n```html\n<!-- Example: A square token -->\n<pb-c-token>\n  <div style=\"background: red; width: 50px; height: 50px;\"></div>\n<pb-c-token>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Pickable\"}}pickable{{/crossLink}}",
             "extends": "component.Component"
         },
+        "data.Acl.Group": {
+            "name": "data.Acl.Group",
+            "shortname": "data.Acl.Group",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/data/aclservice.html",
+            "line": 17,
+            "description": "Represents a group of players. A group may also contain other groups.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the group.",
+                    "type": "String"
+                }
+            ],
+            "access": "private",
+            "tagname": ""
+        },
+        "service.Acl": {
+            "name": "service.Acl",
+            "shortname": "service.Acl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/data/aclservice.html",
+            "line": 86,
+            "description": "Service that manages ACLs in the app. This allows you to show element differently depending on\nthe current player. To use this, you first need to register the elements to the service. Then,\nyou need to define the ACL as follows:\n```html\n<div id=\"acl\" pb-acl-readable=\"player1 player2\"></div>\n```\n```javascript\n  Protoboard\n      .setup(function(require) {\n        var AclService = require('pb.data.AclService');\n        AclService.registerElement(document.querySelector('#acl'));\n      })\n      .run(document);\n```\n\nIn the example above, the DIJSV element will be readable if and only if the current player is set\nto `player1` or `player2`. To set the current player, use the\n{{#crossLink \"service.Acl/currentPlayer:property\"}}{{/crossLink}} property. When the DIJSV is\nreadable, this service will add a `pb-acl-readable` class to the element. You can use CSS to\ndisplay the div differently depending on the current player.\n\nYou can specify any kind of action to the ACL, as long as you prepend it with `pb-acl-`.\n\nBeside player names, you can also specify group names. When you do this, you will need to\ndeclare the group's members. For instance:\n```html\n<div id=\"acl\" pb-acl-readable=\"corporation\"></div>\n```\n```javascript\n  Protoboard\n      .setup(function(require) {\n        var AclService = require('pb.data.AclService');\n        AclService\n            .registerElement(document.querySelector('#acl'))\n            .addGroup('corporation', 'weyland', 'jinteki', 'nbn');\n      })\n      .run(document);\n```\nThe element above will be readable if the current player is a member of the corporation group.\nGroups can contain other groups as members.\n\nWhen a registered element is a child of another registered element, the child element's\nability will only be enabled if the parent element allows that ability. For instance:\n```html\n<div id=\"section\" pb-acl-readable=\"corporation\">\n  <div id=\"acl\" pb-acl-readable=\"megacorp\"></div>\n</div>\n```\n\nThe `section` div will be readable by all members of corporation group. However, the `acl` div\nwill only be readable by members of megacorp and corporation group.\n\nYou can control abilities of elements by using the same action as the ability's name. For\nexample:\n```html\n<pb-c-card pb-acl-flip=\"player1\"></pb-c-card>\n```\n\nonly allows player1 to flip the card.",
+            "static": 1
+        },
+        "data.ConfigService": {
+            "name": "data.ConfigService",
+            "shortname": "data.ConfigService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/data/configservice.html",
+            "line": 10,
+            "description": "Service that manages ability registration for elements. When you create your custom elements,\nuse the Config service to register abilities to the element as follows:\n```javascript\nService.add('custom-element-name', new Droppable());\n```\n\nThis will add the Droppable ability during the registry phase.\n\nEvery {{#crossLink \"ability.Ability\"}}{{/crossLink}} allows you to change its default trigger.\nThe Config service lets you modify the default trigger for all abilities with the same name.\nFor example:\n```javascript\nService.setDefaultTrigger(new Click(), 'flip');\n```\nThe example above sets all `flip` abilities to be triggered by a Click by default.\n\nAlternatively, you can set the default trigger by element type:\n```javascript\nService.setDefaultTrigger(new Click(), 'flip', 'pb-card');\n```\nThe example above sets all `pb-card` `flip` ability to be triggered by a click.",
+            "static": 1
+        },
+        "data.LogService.Entry": {
+            "name": "data.LogService.Entry",
+            "shortname": "data.LogService.Entry",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/data/logservice.html",
+            "line": 8,
+            "description": "An object that contains log entry. You can add properties by using the\n{{#crossLink \"data.LogService.Entry/set:method\"}}set{{/crossLink}} method. To retrieve properties,\njust treat this as a JSON. Note that you cannot override existing properties.",
+            "since": "1.1.0"
+        },
+        "data.LogService": {
+            "name": "data.LogService",
+            "shortname": "data.LogService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/data/logservice.html",
+            "line": 43,
+            "description": "A service to log events and happenings in a game. Use this service to collect statistics about\na game session.\n\nBy default, the service records all triggers to every\n{{#crossLink \"ability.Ability\"}}abilities{{/crossLink}} loaded. The format of a log entry is:\n`<timestamp>: <category> - <value>`. For abilities, `category` is the ability's name, and the\n`value` is the value of `pb-id` of the element the ability acts on.\n\nFor every Protoboard component, region, and grid, you can customize the prefix of the id by\nspecifying the `pb-id` attribute. When the element is activated, Protoboard will append a\nnumber to the attribute to make sure that they are unique. For instance:\n```html\n<pb-c-card pb-id=\"attack\"></pb-c-card>\n```\nwill have its `pb-id` set to `attack-0`. So when the card is `flip`ped, this service will log\n`3/28/2015, 6:01:48 PM: flip - attack-0`.\n\nFor entries not handled by Abilities, you can also add log entries manually. Use the\n{{#crossLink \"data.LogService/log:method\"}}{{/crossLink}} method. For instance:\n```javascript\nProtoboard.setup(function(require) {\n  require('pb.data.LogService').log('player-count', 2);\n});\n```\nwill generate entry: `3/28/2015, 6:01:48 PM: player-count - 2`.\n\nYou can also customize the string output using the\n{{#crossLink \"data.LogService/addPrinter:method\"}}{{/crossLink}} and the\n{{#crossLink \"data.LogService/addPreprocessor:method\"}}{{/crossLink}} method. When a log entry is\nadded, it undergoes two phases:\n1. Preprocess: The entry goes through all preprocessors that have been registered to the\n   service. These preprocessors are used to add custom properties to the entry. Note that\n   properties cannot be deleted or modified.\n2. Printing: The entry then goes through all registered printers. The service will use the\n   non null value returned by the first printer.\n\nFor example:\n```javascript\nProtoboard.setup(function(require) {\n  var Log = require('pb.data.LogService');\n  Log\n      .addPreprocessor(function(entry) {\n        if (entry.category === 'player-count') {\n          entry.set('count', entry.value);\n        }\n      })\n      .addPrinter(function(entry) {\n        if (entry.category === 'player-count') {\n          return entry.timestamp.toLocaleString()\n              + ': ' + entry.category + ' on ' + entry.count;\n        } else {\n          return null;\n        }\n      })\n     .addPrinter(Log.defaultPrinter)\n     .log('player-count', 2)\n     .log('rng-seed', 1234);\n});\n```\nA preprocessor and printer are functions that takes a log\n{{#crossLink \"data.LogService.Entry\"}}Entry{{/crossLink}}. While a preprocessor only adds values\nto the Entry, a printer is expected to return a string, or a null.\n\nYou can specify more than one printer and preprocessors. These functions will be called in the\norder that they are added to the service. As soon as a printer returns a non null value, the\nvalues returned by the other printers in the chain will be ignored.\n\nSo the example above will generate:\n```\n3/28/2015, 6:21:47 PM: player-count on 2\n3/28/2015, 6:21:53 PM: rng-seed - 1234\n```\nThe custom preprocessor added the new `count` property to the entry, which was used by the\ncustom printer to generate the entry for `player-count`. The default printer was used to\ngenerate the one for `rng-seed`.\n\nYou can retrieve the entries using {{#crossLink \"data.LogService/blob:property\"}}{{/crossLink}} as\na blob, or {{#crossLink \"data.LogService/entries:property\"}}{{/crossLink}} as a string.",
+            "static": 1,
+            "since": "1.1.0"
+        },
+        "data.StateService": {
+            "name": "data.StateService",
+            "shortname": "data.StateService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/data/stateservice.html",
+            "line": 28,
+            "description": "Service that manages runtime state of the game. This service uses `pb-state` element to store\nthe state.\n\nYou can set the runtime state by modifying the `pb-state` element attributes, or by using this\nservice. Every attribute name of the `pb-state` element corresponds to the key, while its value\nis the associated value.",
+            "static": 1
+        },
         "grid.Grid": {
             "name": "grid.Grid",
             "shortname": "grid.Grid",
@@ -1277,6 +1460,154 @@
             "description": "A grid that lays out its children in a triangular grid. To use this, add attributes\n`row` and `col` to the element `pb-g-trianglegrid`. These are the number of rows and columns in\nthe grid.\n\nAdd the contents of the grid as children of this element. Use `pb-row` and `pb-col` attributes\non them to indicate their positions in the grid.\n\n```html\n<pb-g-trianglegrid row=\"2\" col=\"3\">\n  <!-- Third column is empty -->\n  <div pb-row=\"0\" pb-col=\"0\">Top Left</div>\n  <div pb-row=\"0\" pb-col=\"1\">Top Middle</div>\n  <div pb-row=\"1\" pb-col=\"0\">Bottom Left</div>\n  <div pb-row=\"1\" pb-col=\"1\">Bottom Middle</div>\n</pb-g-trianglegrid>\n```\n\nYou can use {{#crossLink \"ui.Shape\"}}`<pb-u-shape>`{{/crossLink}} to create triangle shapes.",
             "extends": "grid.Grid"
         },
+        "net.AbstractIO": {
+            "name": "net.AbstractIO",
+            "shortname": "net.AbstractIO",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/net/abstractio.html",
+            "line": 9,
+            "description": "Base IO class. Extend this class to provide your implementation of server - client\ncommunication."
+        },
+        "net.CachedIO": {
+            "name": "net.CachedIO",
+            "shortname": "net.CachedIO",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/net/cachedio.html",
+            "line": 27,
+            "description": "Implementation of AbstractIO with a cache.",
+            "extends": "net.AbstractIO",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "originalIo",
+                    "description": "The actual IO object.",
+                    "type": "net.AbstractIO"
+                },
+                {
+                    "name": "cacheIo",
+                    "description": "The cache IO object.",
+                    "type": "net.AbstractIO"
+                }
+            ]
+        },
+        "net.InMemoryIO": {
+            "name": "net.InMemoryIO",
+            "shortname": "net.InMemoryIO",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/net/inmemoryio.html",
+            "line": 17,
+            "description": "Implementation of net.AbstractIO that stores data in memory.",
+            "is_constructor": 1,
+            "extends": "net.AbstractIO"
+        },
+        "net.LocalStorageIO": {
+            "name": "net.LocalStorageIO",
+            "shortname": "net.LocalStorageIO",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/net/localstorageio.html",
+            "line": 24,
+            "description": "Implementation of net.AbstractIO that stores data in local store.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "localStorage",
+                    "description": "The LocalStorage object. Defaults to window.localStorage.",
+                    "type": "Storage",
+                    "optional": true
+                }
+            ],
+            "extends": "net.AbstractIO"
+        },
+        "net.RpcService": {
+            "name": "net.RpcService",
+            "shortname": "net.RpcService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/net/rpcservice.html",
+            "line": 28,
+            "description": "Wrapper class for net.IO.",
+            "since": "3.1.0",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "io",
+                    "description": "Implementation of {{#crossLink \"net.AbstractIO\"}}{{/crossLink}}.",
+                    "type": "net.IO"
+                }
+            ]
+        },
+        "net.SessionService": {
+            "name": "net.SessionService",
+            "shortname": "net.SessionService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/net/sessionservice.html",
+            "line": 23,
+            "description": "Service that manages game session.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "rootSync",
+                    "description": "Sync object of the root.",
+                    "type": "net.Sync"
+                }
+            ]
+        },
+        "pb.net.Sync": {
+            "name": "pb.net.Sync",
+            "shortname": "pb.net.Sync",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/net/sync.html",
+            "line": 27,
+            "description": "Represents a synchronized object.",
+            "since": "3.1.0",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "ID of the object.",
+                    "type": "String"
+                },
+                {
+                    "name": "prefix",
+                    "description": "Prefix of the object's path.",
+                    "type": "String"
+                }
+            ]
+        },
         "region.Bag": {
             "name": "region.Bag",
             "shortname": "region.Bag",
@@ -1315,7 +1646,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/region/deck.html",
-            "line": 67,
+            "line": 71,
             "description": "Represents a collection of items that can be sorted. To use this, create a `pb-r-deck` element.\nAny child elements of this class are considered to be in the deck.\n\n```html\n<!-- Example: Deck containing two cards -->\n<pb-r-deck>\n  <pb-c-card id=\"card1\">\n    <div pb-front>Front</div>\n    <div pb-back>Back</div>\n  </pb-c-card>\n  <pb-c-card id=\"card2\">\n    <div pb-front>Front</div>\n    <div pb-back>Back</div>\n  </pb-c-card>\n</pb-r-deck>\n```\n\nSupported abilities:\n- {{#crossLink \"ability.Droppable\"}}drop{{/crossLink}}\n- {{#crossLink \"ability.Shuffleable\"}}shuffle{{/crossLink}}",
             "extends": "region.Region"
         },
@@ -1360,156 +1691,6 @@
             "line": 38,
             "description": "Base class of all regions.",
             "extends": "PbElement"
-        },
-        "service.Acl.Group": {
-            "name": "service.Acl.Group",
-            "shortname": "service.Acl.Group",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/acl.html",
-            "line": 17,
-            "description": "Represents a group of players. A group may also contain other groups.",
-            "is_constructor": 1,
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Name of the group.",
-                    "type": "String"
-                }
-            ],
-            "access": "private",
-            "tagname": ""
-        },
-        "service.Acl": {
-            "name": "service.Acl",
-            "shortname": "service.Acl",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/acl.html",
-            "line": 86,
-            "description": "Service that manages ACLs in the app. This allows you to show element differently depending on\nthe current player. To use this, you first need to register the elements to the service. Then,\nyou need to define the ACL as follows:\n```html\n<div id=\"acl\" pb-acl-readable=\"player1 player2\"></div>\n```\n```javascript\n  Protoboard\n      .setup(function(require) {\n        var AclService = require('pb.service.Acl');\n        AclService.registerElement(document.querySelector('#acl'));\n      })\n      .run(document);\n```\n\nIn the example above, the DIJSV element will be readable if and only if the current player is set\nto `player1` or `player2`. To set the current player, use the\n{{#crossLink \"service.Acl/currentPlayer:property\"}}{{/crossLink}} property. When the DIJSV is\nreadable, this service will add a `pb-acl-readable` class to the element. You can use CSS to\ndisplay the div differently depending on the current player.\n\nYou can specify any kind of action to the ACL, as long as you prepend it with `pb-acl-`.\n\nBeside player names, you can also specify group names. When you do this, you will need to\ndeclare the group's members. For instance:\n```html\n<div id=\"acl\" pb-acl-readable=\"corporation\"></div>\n```\n```javascript\n  Protoboard\n      .setup(function(require) {\n        var AclService = require('pb.service.Acl');\n        AclService\n            .registerElement(document.querySelector('#acl'))\n            .addGroup('corporation', 'weyland', 'jinteki', 'nbn');\n      })\n      .run(document);\n```\nThe element above will be readable if the current player is a member of the corporation group.\nGroups can contain other groups as members.\n\nWhen a registered element is a child of another registered element, the child element's\nability will only be enabled if the parent element allows that ability. For instance:\n```html\n<div id=\"section\" pb-acl-readable=\"corporation\">\n  <div id=\"acl\" pb-acl-readable=\"megacorp\"></div>\n</div>\n```\n\nThe `section` div will be readable by all members of corporation group. However, the `acl` div\nwill only be readable by members of megacorp and corporation group.\n\nYou can control abilities of elements by using the same action as the ability's name. For\nexample:\n```html\n<pb-c-card pb-acl-flip=\"player1\"></pb-c-card>\n```\n\nonly allows player1 to flip the card.",
-            "static": 1
-        },
-        "service.Config": {
-            "name": "service.Config",
-            "shortname": "service.Config",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/config.html",
-            "line": 10,
-            "description": "Service that manages ability registration for elements. When you create your custom elements,\nuse the Config service to register abilities to the element as follows:\n```javascript\nService.add('custom-element-name', new Droppable());\n```\n\nThis will add the Droppable ability during the registry phase.\n\nEvery {{#crossLink \"ability.Ability\"}}{{/crossLink}} allows you to change its default trigger.\nThe Config service lets you modify the default trigger for all abilities with the same name.\nFor example:\n```javascript\nService.setDefaultTrigger(new Click(), 'flip');\n```\nThe example above sets all `flip` abilities to be triggered by a Click by default.\n\nAlternatively, you can set the default trigger by element type:\n```javascript\nService.setDefaultTrigger(new Click(), 'flip', 'pb-card');\n```\nThe example above sets all `pb-card` `flip` ability to be triggered by a click.",
-            "static": 1
-        },
-        "service.Log.Entry": {
-            "name": "service.Log.Entry",
-            "shortname": "service.Log.Entry",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/log.html",
-            "line": 8,
-            "description": "An object that contains log entry. You can add properties by using the\n{{#crossLink \"service.Log.Entry/set:method\"}}set{{/crossLink}} method. To retrieve properties,\njust treat this as a JSON. Note that you cannot override existing properties.",
-            "since": "1.1.0"
-        },
-        "service.Log": {
-            "name": "service.Log",
-            "shortname": "service.Log",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/log.html",
-            "line": 43,
-            "description": "A service to log events and happenings in a game. Use this service to collect statistics about\na game session.\n\nBy default, the service records all triggers to every\n{{#crossLink \"ability.Ability\"}}abilities{{/crossLink}} loaded. The format of a log entry is:\n`<timestamp>: <category> - <value>`. For abilities, `category` is the ability's name, and the\n`value` is the value of `pb-id` of the element the ability acts on.\n\nFor every Protoboard component, region, and grid, you can customize the prefix of the id by\nspecifying the `pb-id` attribute. When the element is activated, Protoboard will append a\nnumber to the attribute to make sure that they are unique. For instance:\n```html\n<pb-c-card pb-id=\"attack\"></pb-c-card>\n```\nwill have its `pb-id` set to `attack-0`. So when the card is `flip`ped, this service will log\n`3/28/2015, 6:01:48 PM: flip - attack-0`.\n\nFor entries not handled by Abilities, you can also add log entries manually. Use the\n{{#crossLink \"service.Log/log:method\"}}{{/crossLink}} method. For instance:\n```javascript\nProtoboard.setup(function(require) {\n  require('pb.service.Log').log('player-count', 2);\n});\n```\nwill generate entry: `3/28/2015, 6:01:48 PM: player-count - 2`.\n\nYou can also customize the string output using the\n{{#crossLink \"service.Log/addPrinter:method\"}}{{/crossLink}} and the\n{{#crossLink \"service.Log/addPreprocessor:method\"}}{{/crossLink}} method. When a log entry is\nadded, it undergoes two phases:\n1. Preprocess: The entry goes through all preprocessors that have been registered to the\n   service. These preprocessors are used to add custom properties to the entry. Note that\n   properties cannot be deleted or modified.\n2. Printing: The entry then goes through all registered printers. The service will use the\n   non null value returned by the first printer.\n\nFor example:\n```javascript\nProtoboard.setup(function(require) {\n  var Log = require('pb.service.Log');\n  Log\n      .addPreprocessor(function(entry) {\n        if (entry.category === 'player-count') {\n          entry.set('count', entry.value);\n        }\n      })\n      .addPrinter(function(entry) {\n        if (entry.category === 'player-count') {\n          return entry.timestamp.toLocaleString()\n              + ': ' + entry.category + ' on ' + entry.count;\n        } else {\n          return null;\n        }\n      })\n     .addPrinter(Log.defaultPrinter)\n     .log('player-count', 2)\n     .log('rng-seed', 1234);\n});\n```\nA preprocessor and printer are functions that takes a log\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}}. While a preprocessor only adds values\nto the Entry, a printer is expected to return a string, or a null.\n\nYou can specify more than one printer and preprocessors. These functions will be called in the\norder that they are added to the service. As soon as a printer returns a non null value, the\nvalues returned by the other printers in the chain will be ignored.\n\nSo the example above will generate:\n```\n3/28/2015, 6:21:47 PM: player-count on 2\n3/28/2015, 6:21:53 PM: rng-seed - 1234\n```\nThe custom preprocessor added the new `count` property to the entry, which was used by the\ncustom printer to generate the entry for `player-count`. The default printer was used to\ngenerate the one for `rng-seed`.\n\nYou can retrieve the entries using {{#crossLink \"service.Log/blob:property\"}}{{/crossLink}} as\na blob, or {{#crossLink \"service.Log/entries:property\"}}{{/crossLink}} as a string.",
-            "static": 1,
-            "since": "1.1.0"
-        },
-        "service.Move": {
-            "name": "service.Move",
-            "shortname": "service.Move",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/move.html",
-            "line": 68,
-            "description": "Service that handles moving elements around. Used by\n{{#crossLink \"ability.Droppable\"}}{{/crossLink}} and\n{{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\n\n```javascript\nMove.add(element);  // Sets the element as moved.\n\n// The element will be moved to a special container. To remove the element, just append it\n// somewhere else.\n```",
-            "static": 1
-        },
-        "service.Preview": {
-            "name": "service.Preview",
-            "shortname": "service.Preview",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/preview.html",
-            "line": 9,
-            "description": "Service that lets the user preview an element on mouse hover.",
-            "static": 1
-        },
-        "service.Registry": {
-            "name": "service.Registry",
-            "shortname": "service.Registry",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/registry.html",
-            "line": 20,
-            "description": "A service that collects functions to be ran at bootstrap.",
-            "is_constructor": 1
-        },
-        "service.State": {
-            "name": "service.State",
-            "shortname": "service.State",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/state.html",
-            "line": 28,
-            "description": "Service that manages runtime state of the game. This service uses `pb-state` element to store\nthe state.\n\nYou can set the runtime state by modifying the `pb-state` element attributes, or by using this\nservice. Every attribute name of the `pb-state` element corresponds to the key, while its value\nis the associated value.",
-            "static": 1
-        },
-        "service.Template": {
-            "name": "service.Template",
-            "shortname": "service.Template",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "api",
-            "file": "src/service/template.html",
-            "line": 18,
-            "description": "Service to manage templates in a ProtoBoard app. Use this service to register Handlebar\npartials and data to the template. For example:\n```javascript\nProtoboard.setup(function(require) {\n  var Template = require('pb.service.Template');\n\n  // Registers a partial. The partial value must be contained in the element passed into the\n  // service.\n  Template.addPartial('card', document.querySelector('template'));\n\n  // Registers data to the template.\n  Template.addData('cards', [\n    { value: 'A', suit: 'Spade' },\n    { value: 'A', suit: 'Club' },\n    { value: 'A', suit: 'Heart' },\n    { value: 'A', suit: 'Diamond' },\n  ]);\n});\n```\n\nThis class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for\nloop that copies the inner block several times. You can access the index of the loop using the\n`@index` variable.",
-            "static": 1
         },
         "Hammer": {
             "name": "Hammer",
@@ -1563,7 +1744,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/key.html",
-            "line": 29,
+            "line": 22,
             "description": "Helper service for detecting key press.",
             "static": 1,
             "access": "private",
@@ -1579,7 +1760,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/trigger/key.html",
-            "line": 172,
+            "line": 165,
             "description": "Triggers an ability when the given key is pressed while the mouse is over the registered\nelement.",
             "is_constructor": 1,
             "params": [
@@ -1630,8 +1811,22 @@
             "module": "api",
             "file": "src/ui/generate.html",
             "line": 26,
-            "description": "When this element is created, it will process a [Handlebars](http://handlebarsjs.com/) template\nwithin it and replace itself with the processed template.\n\nThe template must be enclosed within a {{#crossLink \"&lt;template&gt;\"}}{{/crossLink}} tag. For\nexample:\n```html\n<pb-u-generate>\n  <template>\n    Template's content.\n    \\{{#if hasCustom}}\n      You can call \\{{> customPartials}} too.\n    \\{{/if}}\n  </template>\n</pb-u-generate>\n```\n\nAll data in the template's scope must be declared in the `input` attribute. Specify a space\nseparated names of the variable names. These variables will be available in the template using\nthe same name. For example:\n```html\n<pb-u-generate input=\"cards game\">\n  <template>\n    Cards of game \"\\{{game.name}}\":\n    <ul>\n    \\{{#each cards}}\n      <li>{{name}}</li>\n    \\{{/each}}\n    </ul>\n  </template>\n</pb-u-generate>\n```\n\nAll data passed into the templates, or custom partials used must be registered using the\n{{#crossLink \"service.Template\"}}{{/crossLink}}. So in the example above, we can register the\ndata as follows:\n```javascript\nProtoboard\n    .setup(function(require) {\n      var Template = require('pb.service.Template');\n\n      Template\n          .addData('cards', [\n            { name: 'Apprentice' },\n            { name: 'Jack of All Trades' },\n            { name: 'Baker' },\n            { name: 'Bishop' }\n          ])\n          .addData('game', {\n            name: 'Awesome deck building game'\n          });\n    })\n    .run(document);\n```\n\nWith the above example, this will produce the following:\n```html\nCards of game \"Awesome deck building game\":\n<ul>\n  <li>Apprentice</li>\n  <li>Jack of All Trades</li>\n  <li>Baker</li>\n  <li>Bishop</li>\n</ul>\n```",
+            "description": "When this element is created, it will process a [Handlebars](http://handlebarsjs.com/) template\nwithin it and replace itself with the processed template.\n\nThe template must be enclosed within a {{#crossLink \"&lt;template&gt;\"}}{{/crossLink}} tag. For\nexample:\n```html\n<pb-u-generate>\n  <template>\n    Template's content.\n    \\{{#if hasCustom}}\n      You can call \\{{> customPartials}} too.\n    \\{{/if}}\n  </template>\n</pb-u-generate>\n```\n\nAll data in the template's scope must be declared in the `input` attribute. Specify a space\nseparated names of the variable names. These variables will be available in the template using\nthe same name. For example:\n```html\n<pb-u-generate input=\"cards game\">\n  <template>\n    Cards of game \"\\{{game.name}}\":\n    <ul>\n    \\{{#each cards}}\n      <li>{{name}}</li>\n    \\{{/each}}\n    </ul>\n  </template>\n</pb-u-generate>\n```\n\nAll data passed into the templates, or custom partials used must be registered using the\n{{#crossLink \"ui.TemplateService\"}}{{/crossLink}}. So in the example above, we can register the\ndata as follows:\n```javascript\nProtoboard\n    .setup(function(require) {\n      var Template = require('pb.ui.TemplateService');\n\n      Template\n          .addData('cards', [\n            { name: 'Apprentice' },\n            { name: 'Jack of All Trades' },\n            { name: 'Baker' },\n            { name: 'Bishop' }\n          ])\n          .addData('game', {\n            name: 'Awesome deck building game'\n          });\n    })\n    .run(document);\n```\n\nWith the above example, this will produce the following:\n```html\nCards of game \"Awesome deck building game\":\n<ul>\n  <li>Apprentice</li>\n  <li>Jack of All Trades</li>\n  <li>Baker</li>\n  <li>Bishop</li>\n</ul>\n```",
             "extends": "PbElement"
+        },
+        "ui.MoveService": {
+            "name": "ui.MoveService",
+            "shortname": "ui.MoveService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ui/moveservice.html",
+            "line": 68,
+            "description": "Service that handles moving elements around. Used by\n{{#crossLink \"ability.Droppable\"}}{{/crossLink}} and\n{{#crossLink \"ability.Pickable\"}}{{/crossLink}}.\n\n```javascript\nMove.add(element);  // Sets the element as moved.\n\n// The element will be moved to a special container. To remove the element, just append it\n// somewhere else.\n```",
+            "static": 1
         },
         "ui.Preview": {
             "name": "ui.Preview",
@@ -1658,8 +1853,36 @@
             "module": "api",
             "file": "src/ui/previewer.html",
             "line": 32,
-            "description": "Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered\nover. This works in tandem with {{#crossLink ui.Preview}}{{/crossLink}} and\n{{#crossLink service.Preview}}{{/crossLink}}.",
+            "description": "Element that displays the innerHTML of the `pb-u-preview` of element currently being hovered\nover. This works in tandem with {{#crossLink ui.Preview}}{{/crossLink}} and\n{{#crossLink ui.PreviewService}}{{/crossLink}}.",
             "extends": "PbElement"
+        },
+        "ui.PreviewService": {
+            "name": "ui.PreviewService",
+            "shortname": "ui.PreviewService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ui/previewservice.html",
+            "line": 9,
+            "description": "Service that lets the user preview an element on mouse hover.",
+            "static": 1
+        },
+        "ui.RegistryService": {
+            "name": "ui.RegistryService",
+            "shortname": "ui.RegistryService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ui/registryservice.html",
+            "line": 20,
+            "description": "A service that collects functions to be ran at bootstrap.",
+            "is_constructor": 1
         },
         "ui.Shape": {
             "name": "ui.Shape",
@@ -1671,9 +1894,23 @@
             "extension_for": [],
             "module": "api",
             "file": "src/ui/shape.html",
-            "line": 73,
-            "description": "Creates a shape. To create a shape, use the `pb-u-shape` element and specify the attribute\n`shape`. Some supported shapes:\n- circle\n- hexagon\n- square\n\n```html\n<!-- Creates a circle -->\n<pb-u-shape shape=\"circle\"></pb-u-shape>\n```\n\nThe created shape is an embedded SVG. So you can customize it using CSS. Use\n`pb-u-shape::shadow .pb-shape` to select the shape.",
+            "line": 79,
+            "description": "Creates a shape. To create a shape, use the `pb-u-shape` element and specify the attribute\n`shape`. Some supported shapes:\n- circle\n- hexagon\n- square\n\n```html\n<!-- Creates a circle -->\n<pb-u-shape shape=\"circle\"></pb-u-shape>\n```\n\nThe created shape is an embedded SVG. You can change its color by setting the `color`\nattribute. This takes any color that CSS takes.",
             "extends": "HTMLElement"
+        },
+        "ui.TemplateService": {
+            "name": "ui.TemplateService",
+            "shortname": "ui.TemplateService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "file": "src/ui/templateservice.html",
+            "line": 18,
+            "description": "Service to manage templates in a ProtoBoard app. Use this service to register Handlebar\npartials and data to the template. For example:\n```javascript\nProtoboard.setup(function(require) {\n  var Template = require('pb.ui.TemplateService');\n\n  // Registers a partial. The partial value must be contained in the element passed into the\n  // service.\n  Template.addPartial('card', document.querySelector('template'));\n\n  // Registers data to the template.\n  Template.addData('cards', [\n    { value: 'A', suit: 'Spade' },\n    { value: 'A', suit: 'Club' },\n    { value: 'A', suit: 'Heart' },\n    { value: 'A', suit: 'Diamond' },\n  ]);\n});\n```\n\nThis class also registers a `{{#pb-for <from> <to> <step>}}` block helper. This is a simple for\nloop that copies the inner block several times. You can access the index of the loop using the\n`@index` variable.",
+            "static": 1
         },
         "Bootstrap": {
             "name": "Bootstrap",
@@ -1685,7 +1922,7 @@
             "extension_for": [],
             "module": "api",
             "file": "src/bootstrap.html",
-            "line": 60,
+            "line": 51,
             "description": "Class responsible for bootstrapping the entire app. Call the\n{{#crossLink \"Bootstrap/run:method\"}}run{{/crossLink}} after doing all setting up logic.",
             "static": 1
         },
@@ -1735,6 +1972,33 @@
             "description": "Base class of all ProtoBoard elements.",
             "extends": "HTMLElement"
         },
+        "Protoboard.Runner": {
+            "name": "Protoboard.Runner",
+            "shortname": "Protoboard.Runner",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "api",
+            "namespace": "",
+            "file": "src/protoboard.html",
+            "line": 28,
+            "description": "Runs the Protoboard game.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "io",
+                    "description": "Implementation of AbstractIO to use.",
+                    "type": "net.AbstractIO"
+                },
+                {
+                    "name": "gameSyncPromise",
+                    "description": "Promise that will be resolved with a Game Sync object.",
+                    "type": "Promise"
+                }
+            ]
+        },
         "Protoboard": {
             "name": "Protoboard",
             "shortname": "Protoboard",
@@ -1746,7 +2010,7 @@
             "module": "api",
             "namespace": "",
             "file": "src/protoboard.html",
-            "line": 13,
+            "line": 187,
             "description": "The entry point to Protoboard. Use this class to setup the game and run it.",
             "static": 1
         },
@@ -1765,9 +2029,9 @@
             "description": "Various miscellaneous utilities. They are not meant for general usage, but feel free to use\nthem.",
             "static": 1
         },
-        "1 Overview": {
-            "name": "1 Overview",
-            "shortname": "1 Overview",
+        "01 Overview": {
+            "name": "01 Overview",
+            "shortname": "01 Overview",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1777,11 +2041,11 @@
             "namespace": "",
             "file": "tutorial/01_overview.js",
             "line": 1,
-            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis aims to be customizable in different levels:\n1. JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n2. HTML: Developers can use preexisting HTML elements to write their own game.\n3. {{#crossLink \"5 Theming\"}}Theme{{/crossLink}}: This library comes with some existing themes. You\ncan customize the color themes, and if you use CSS, you can customize in greater details.\n\nSome glossary of terminologies for the API:\n{{#html 'dl'}}\n  {{#html 'dt'}}{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}{{/html}}\n  {{#html 'dd'}}These are where the main logic happens. A Component can have several abilities,\n  each triggered with a Trigger.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"component.Component\"}}Component{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Components are the basic entity of a board. They provide main interaction with\n  the players. Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"region.Region\"}}Region{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Regions can contain other components. They cannot be moved and can contain one or\n  more components. Examples include: deck, bag, and hand.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Triggers listen to events in the document and triggers the ability it is\n  associated with. The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.{{/html}}\n\n  {{#html 'dt'}}UI{{/html}}\n  {{#html 'dd'}}This library also comes with several basic UI elements for convenience. These\n  elements do not have a real life counterpart.{{/html}}\n{{/html}}\n\nEvery element introduced in Protoboard has 3 parts of its name:\n1. `pb-` is the prefix of every Protoboard element.\n2. The second prefix indicates the type of element:\n   - `pb-c-` indicates a component\n   - `pb-r-` indicates a region\n   - `pb-u-` indicates a UI element.\n3. The last part is the name of the element."
+            "description": "Protoboard is a library to make prototyping boardgames easier. This is meant to be used for\nprototyping ideas and is therefore focused on ease and flexibility of creating different game\ncomponents. Aesthetics, performance, and correctness are outside the scope of this project,\nthough we do provide some basic support for theming.\n\nThis tutorial will go through some concepts and how-tos for using Protoboard. It is recommended\nthat you read the tutorials in the order that they are presented.\n\nProtoboard aims to be customizable in different levels:\n\n1.  JavaScript: Provides JavaScript API to make boardgame components easier (coming soon)\n1.  HTML: Developers can use preexisting HTML elements to write their own game.\n1.  {{#crossLink \"05 Theming\"}}Theme{{/crossLink}}: This library comes with some existing themes.\n    You can customize the color themes, and if you use CSS, you can customize in greater details.\n\nSome glossary of terminologies for the API:\n{{#html 'dl'}}\n  {{#html 'dt'}}{{#crossLink \"ability.Ability\"}}Ability{{/crossLink}}{{/html}}\n  {{#html 'dd'}}These are where the main logic happens. A Component can have several abilities,\n  each triggered with a Trigger.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"component.Component\"}}Component{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Components are the basic entity of a board. They provide main interaction with\n  the players. Every component has one or more abilities registered to it. Check the\n  {{#crossLink \"component.Component\"}}API reference{{/crossLink}} to see the ability names\n  registered to a component.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"region.Region\"}}Region{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Regions can contain other components. They cannot be moved and can contain one or\n  more components. Examples include: deck, bag, and hand.{{/html}}\n\n  {{#html 'dt'}}{{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}{{/html}}\n  {{#html 'dd'}}Triggers listen to events in the document and triggers the ability it is\n  associated with. The most common trigger that this library relies on by default is the\n  {{#crossLink \"trigger.Key\"}}Key{{/crossLink}} trigger. To trigger a component, point at the\n  component and press the appropriate key.{{/html}}\n\n  {{#html 'dt'}}UI{{/html}}\n  {{#html 'dd'}}This library also comes with several basic UI elements for convenience. These\n  elements do not have a real life counterpart.{{/html}}\n{{/html}}\n\nEvery element introduced in Protoboard has 3 parts of its name:\n\n1.  `pb-` is the prefix of every Protoboard element.\n1.  The second prefix indicates the type of element:\n    -   `pb-c-` indicates a component\n    -   `pb-r-` indicates a region\n    -   `pb-u-` indicates a UI element.\n1.  The last part is the name of the element.\n\nYou can use the above to figure out the corresponding API."
         },
-        "2 Prerequisites": {
-            "name": "2 Prerequisites",
-            "shortname": "2 Prerequisites",
+        "02 Prerequisites": {
+            "name": "02 Prerequisites",
+            "shortname": "02 Prerequisites",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1791,11 +2055,11 @@
             "namespace": "",
             "file": "tutorial/02_prerequisites.js",
             "line": 1,
-            "description": "1. Install [NPM](https://www.npmjs.com/).\n2. Unpack the binary in the directory, or install using [bower](http://bower.io/):\n   ```\n   bower install --save protoboard\n   ```\n3. Protoboard relies on\n   [HTML Import](http://www.html5rocks.com/en/tutorials/webcomponents/imports/). So you will need\n   an HTTP server serving static files. A simple one you can use is\n   [http-server](https://www.npmjs.com/package/http-server):\n   `npm install http-server`.\n4. Run `http-server` from the root directory of the project, and navigate to the file you want to\n   open. A good one to start is `ex/all/index.html`."
+            "description": "1. Install [NPM](https://www.npmjs.com/).\n1. Unpack the binary in the directory, or install using [bower](http://bower.io/):\n\n   ```\n   bower install --save protoboard\n   ```\n\n1. Protoboard relies on\n   [HTML Import](http://www.html5rocks.com/en/tutorials/webcomponents/imports/). So you will need\n   an HTTP server serving static files. A simple one you can use is\n   [http-server](https://www.npmjs.com/package/http-server):\n   `npm install http-server`.\n1. Run `http-server` from the root directory of the project, and navigate to the file you want to\n   open. A good one to start is `ex/all/index.html`."
         },
-        "3 Basic Usage": {
-            "name": "3 Basic Usage",
-            "shortname": "3 Basic Usage",
+        "03 Basic Usage": {
+            "name": "03 Basic Usage",
+            "shortname": "03 Basic Usage",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1805,11 +2069,11 @@
             "namespace": "",
             "file": "tutorial/03_basic.js",
             "line": 1,
-            "description": "To use this library, you will need to write an HTML file. You will need to do the following:\n1. Add the following code to the `<head>` block of the document:\n   ```html\n   <link rel=\"import\" href=\"path/to/protoboard/out/main.html\">\n   ```\n2. Add custom elements in the body. Be sure to import the appropriate files in the `<head>`\n   block. For example, to add a token:\n   ```html\n   <head>\n     <!-- Required -->\n     <link rel=\"import\" href=\"path/to/out/di.html\">\n     <link rel=\"import\" href=\"path/to/out/bootstrap.html\">\n\n     <!-- Import token -->\n     <link rel=\"import\" href=\"path/to/out/component/token.html\">\n\n     <!-- This should always come last -->\n     <link rel=\"import\" href=\"path/to/protoboard/out/main.html\">\n   </head>\n\n   <body>\n     <pb-c-token>\n       <div>Token Content</div>\n     </pb-c-token>\n   </body>\n   ```\n   Make sure that all dependencies are ABOVE the `main.html` import.\n\nTo help with debugging for missing imports, you can open the developer tools (Alt + &#8984; for\nChrome on Mac) and check the Console tab. It should tell you elements which are missing imports.\nFor instance `Element pb-r-bag is resolved` indicates that the import for `bag.html` is missing.\n\nMore information on using the element is in the API pages. You can also see\n[all/index.html](https://github.com/garysoed/protoboard/blob/master/ex/all/index.html) for\nexamples on how to use every element. You can also play around with every element on that page.\n\nSome example projects:\n- [Chess](https://github.com/garysoed/protoboard-chess)"
+            "description": "To use this library, you will need to write an HTML file. You will need to do the following:\n\n1.  Add the following code to the `<head>` block of the document:\n\n    ```html\n    <link rel=\"import\" href=\"path/to/protoboard/out/main.html\">\n    ```\n\n1.  Add custom elements in the body. Be sure to import the appropriate files in the `<head>`\n    block. For example, to add a token:\n\n    ```html\n    <head>\n      <!-- Required -->\n      <link rel=\"import\" href=\"path/to/out/di.html\">\n      <link rel=\"import\" href=\"path/to/out/bootstrap.html\">\n\n      <!-- Import token -->\n      <link rel=\"import\" href=\"path/to/out/component/token.html\">\n\n      <!-- This should always come last -->\n      <link rel=\"import\" href=\"path/to/protoboard/out/main.html\">\n    </head>\n\n    <body>\n      <pb-c-token>\n        <div>Token Content</div>\n      </pb-c-token>\n    </body>\n    ```\n\n    Make sure that all dependencies are ABOVE the `main.html` import.\n\nTo help with debugging for missing imports, you can open the developer tools (Alt + &#8984; for\nChrome on Mac) and check the Console tab. It should tell you elements which are missing imports.\nFor instance `Element pb-r-bag is resolved` indicates that the import for `bag.html` is missing.\n\nMore information on using the element is in the API pages. You can also see\n[all/index.html](https://github.com/garysoed/protoboard/blob/master/ex/all/index.html) for\nexamples on how to use every element. You can also play around with every element on that page.\n\nSome example projects:\n\n-   [Chess](https://github.com/garysoed/protoboard-chess)"
         },
-        "4 Customizing Components": {
-            "name": "4 Customizing Components",
-            "shortname": "4 Customizing Components",
+        "04 Customizing Components": {
+            "name": "04 Customizing Components",
+            "shortname": "04 Customizing Components",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1819,11 +2083,11 @@
             "namespace": "",
             "file": "tutorial/04_customize.js",
             "line": 1,
-            "description": "Every component and region has a set of abilities registered to them. You can view them from\ntheir respective API page. You can customize these abilities to suit your game needs.\n\nEvery ability support the following customization:\n- You can enable / disable the ability by setting the attribute of the component / region. For\n  example:\n  ```html\n  <pb-c-token pickable=\"false\">\n  ```\n  That makes the token non pickable.\n- You can change the trigger for each ability by setting the attribute of the component / region\n  with a `-on` prefix. For example:\n  ```html\n  <pb-c-token pickable-on=\"pb-key-p\">\n  ```\n  That sets the token to be picked when the user hovers over the token and presses `p`. Look at\n  classes extending {{#crossLink \"trigger.Trigger\"}}{{/crossLink}} for more triggers.\n\nMore additional customizations, check out the ability's API page."
+            "description": "Every component and region has a set of abilities registered to them. You can view them from\ntheir respective API page. You can customize these abilities to suit your game needs.\n\nEvery ability support the following customization:\n\n-   You can enable / disable the ability by setting the attribute of the component / region. For\n    example:\n\n    ```html\n    <pb-c-token pickable=\"false\">\n    ```\n\n    That makes the token non pickable.\n\n-   You can change the trigger for each ability by setting the attribute of the component /\n    region with a `-on` prefix. For example:\n\n    ```html\n    <pb-c-token pickable-on=\"pb-key-p\">\n    ```\n\n    That sets the token to be picked when the user hovers over the token and presses `p`. Look at\n    classes extending {{#crossLink \"trigger.Trigger\"}}{{/crossLink}} for more triggers.\n\nMore additional customizations, check out the ability's API page."
         },
-        "5 Theming": {
-            "name": "5 Theming",
-            "shortname": "5 Theming",
+        "05 Theming": {
+            "name": "05 Theming",
+            "shortname": "05 Theming",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1833,11 +2097,11 @@
             "namespace": "",
             "file": "tutorial/05_theme.js",
             "line": 1,
-            "description": "Protoboard supports basic theming using\n[CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables). However,\nsince CSS variables is not widely supported, Protoboard relies on [Myth](http://www.myth.io/) to\ncompile the variables.\n\nYou will need the source code. If you installed protoboard as a bower package, you will find all\nthe files you need under `bower_components/protoboard`. Run `npm install` in the source\ndirectory's root, and you can compile the source code by running:\n```bash\ngulp pack\n```\n\nThe script reads from JSON files in the `./themes` directory. By default, they use the\n`./themes/slateblue.json` theme. To change the colour theme to \"medium sea green\", you can run:\n```bash\ngulp pack --theme ./themes/strawberry.json\n```\n\nThough Protoboard comes with several themes, you can make your own theme. Create a json file with\ntwo keys: `base` and `vars`:\n```json\n{\n  \"base\": \"./bower_components/protoboard/themes/base.json\"\n  \"vars\": {\n      \"--color-primary\": \"#F44336\",\n      \"--color-dark-primary\": \"#B71C1C\",\n      \"--color-light-primary\": \"#FFCDD2\",\n      \"--color-accent\": \"#FFD600\"\n  }\n}\n```\n\nThe `vars` entry defines the colors used throughout the framework. You can see\n`./themes/base.json` for additional variables to override. This include transition time, shadow\nsize, border size, etc.\n\nThe `base` is a reference to another theme file. The path is relative to the location of the\nJSON file and should always start with `.` or `..`. The base theme file will be used for\nvariables that the framework uses but are not defined in your theme file. You can chain the\ndependencies for multiple levels, but it is recommended to always depend on `./themes/base.json`\nin the dependency chain, since new variables might be introduced, and might break your themes if\nyou did not set it in your theme file.\n\nIf you want to use the theme in your own CSS file, require the `loadtheme` in your Node JS. This\nis a function that accepts the file name of the theme JSON file."
+            "description": "Protoboard supports basic theming using\n[CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables). However,\nsince CSS variables is not widely supported, Protoboard relies on [Myth](http://www.myth.io/) to\ncompile the variables.\n\nYou will need the source code. If you installed protoboard as a bower package, you will find all\nthe files you need under `bower_components/protoboard`. Run `npm install` in the source\ndirectory's root, and you can compile the source code by running:\n\n```bash\ngulp pack\n```\n\nThe script reads from JSON files in the `./themes` directory. By default, they use the\n`./themes/cloudy_day.json` theme. To change the colour theme to \"strawberry\", you can run:\n\n```bash\ngulp pack --theme ./themes/strawberry.json\n```\n\nThough Protoboard comes with several themes, you can make your own theme. Create a json file with\ntwo keys: `base` and `vars`:\n\n```json\n{\n  \"base\": \"./bower_components/protoboard/themes/base.json\"\n  \"vars\": {\n      \"--color-primary\": \"#F44336\",\n      \"--color-dark-primary\": \"#B71C1C\",\n      \"--color-light-primary\": \"#FFCDD2\",\n      \"--color-accent\": \"#FFD600\"\n  }\n}\n```\n\nThe `vars` entry defines the colors used throughout the framework. You can see\n`./themes/base.json` for additional variables to override. This include transition time, shadow\nsize, border size, etc.\n\nThe `base` is a reference to another theme file. The path is relative to the location of the\nJSON file and should always start with `.` or `..`. The base theme file will be used for\nvariables that the framework uses but are not defined in your theme file. You can chain the\ndependencies for multiple levels, but it is recommended to always depend on `./themes/base.json`\nin the dependency chain, since new variables might be introduced, and might break your themes if\nyou did not set it in your theme file.\n\nIf you want to use the theme in your own CSS file, require the `loadtheme` in your Node JS. This\nis a function that accepts the file name of the theme JSON file."
         },
-        "6 JavaScript": {
-            "name": "6 JavaScript",
-            "shortname": "6 JavaScript",
+        "06 JavaScript": {
+            "name": "06 JavaScript",
+            "shortname": "06 JavaScript",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1847,11 +2111,12 @@
             "namespace": "",
             "file": "tutorial/06_javascript.js",
             "line": 1,
-            "description": "Protoboard exposes JavaScript API that you can use to customize your board game prototype. Some\nservices, such as the {{#crossLink \"service.Log\"}}Log Service{{/crossLink}}, requires you to call\nthe JavaScript API.\n\nIn order to access the API, you will to import the file containing the JavaScript you want to\nuse.\n\nAll of the JavaScript API is only accessible from within the Protoboard environment. You can\naccess them from the {{#crossLink \"Protoboard/setup:method\"}}{{/crossLink}} and the\n{{#crossLink \"Protoboard/run:method\"}}{{/crossLink}}:\n\n```javascript\nProtoboard.setup(function(require) {\n  require('pb.service.Log').log('category', 'value');\n});\n```\n\nProtoboard however, only allows one call of `Protoboard.run` to be called. Since `main.html`\nalready does this, you cannot import this file. `main.html` is responsible for bootstraping\nthe app, and without it, you will need to do this yourself. Bootstrapping the app is done calling\nthe {{#crossLink \"Protoboard/run:method\"}}{{/crossLink}}. For example:\n\n```javascript\nProtoboard\n    .setup(function(require) {\n      // Setup logic goes here\n    })\n    .run(document)\n    .then(function(require) {\n      // Logic that runs after the game is running goes here.\n    });\n```\n\nAll logic that requires the Protoboard elements, such as listening to event emitted by the\ncomponents, shuffling a deck, and getting references to DOM elements, should happen after the\nbootstrap. Any other logic should happen before the bootstrap logic."
+            "description": "Protoboard exposes JavaScript API that you can use to customize your board game prototype. Some\nservices, such as the {{#crossLink \"data.LogService\"}}Log Service{{/crossLink}}, requires you to call\nthe JavaScript API.\n\nIn order to access the API, you will to import the file containing the JavaScript you want to\nuse.\n\nAll of the JavaScript API is only accessible from within the Protoboard environment. You can\naccess them from the {{#crossLink \"Protoboard.Runner/setup:method\"}}setup method{{/crossLink}}\nand the Promise returned by the\n{{#crossLink \"Protoboard.Runner/run:method\"}}run method{{/crossLink}}:\n\n```javascript\nProtoboard\n    .forNewGame(2, {})\n    .setup(function(require) {\n      // Access the log service here.\n      require('pb.data.LogService').log('event', 'setting up');\n    })\n    .run(document)\n    .then(function(require) {\n      // You can also access the log service here.\n      require('pb.data.LogService').log('event', 'running');\n    });\n```\n\nProtoboard however, only allows one call of the run method to be called. Since `main.html`\nalready does this, you cannot import this file if you want to access Protoboard environment.\n`main.html` is responsible for bootstraping the app, and without it, you will need to do this\nyourself. The full bootstrapping process can be seen below:\n\n```javascript\nProtoboard\n    .forNewGame(2, {})                  // 1. Creates a new game.\n    .join('player1', { role: 'Medic' }) // 2. Adds players to the game\n    .setup(function(require) { })       // 3. Setup logic goes here.\n    .run(document)                      // 4. Runs the bootstrap logic.\n    .then(function(require) { });       // 5. Do some post bootstrap logic.\n```\n\nProtoboard's startup process happens in five stages:\n\n1.  First, Protoboard needs to know if the game it is running is an existing game, or a new game.\n    This becomes important in {{#crossLink \"10 Networked Games\"}}Networking{{/crossLink}} mode.\n    At this point, Protoboard figures out how many players are needed to start a game.\n1.  Protoboard then adds any local players to the game. It will then wait until there are\n    enough players for the game to start.\n1.  Once there are enough players to start a game, Protoboard runs the setup logic. Logic that\n    sets up Components, Regions, UIs, and other custom elements should be done here.\n1.  Protoboard then runs the bootstrap logic. At this point, all templates and custom elements\n    are resolved.\n1.  Finally, Protoboard runs post bootstrap logic. Any logic that requires the Protoboard\n    elements, such as listening to event emitted by the components, shuffling a deck, and getting\n    references to DOM elements, should happen here.\n\nIf you don't care about having multiple players, you can omit the arguments to `forNewGame`:\n\n```javascript\nProtoboard\n    .forNewGame()\n    .setup(function(require) { })\n    .run(document)\n    .then(function(require) { });\n```\n\nIf you don't care about the setup logic, you can call the\n{{#crossLink \"Protoboard/run:method\"}}{{/crossLink}} method:\n\n```javascript\nProtoboard\n    .run(document)\n    .then(function(require) { });\n```",
+            "since": "3.1.0"
         },
-        "7 Custom Elements": {
-            "name": "7 Custom Elements",
-            "shortname": "7 Custom Elements",
+        "07 Custom Elements": {
+            "name": "07 Custom Elements",
+            "shortname": "07 Custom Elements",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1861,11 +2126,11 @@
             "namespace": "",
             "file": "tutorial/07_custom_elements.js",
             "line": 1,
-            "description": "All elements in Protoboard are made out of\n[HTML Custom Element](http://www.html5rocks.com/en/tutorials/webcomponents/customelements/) with\nsome {{#crossLink \"ability.Ability\"}}Abilities{{/crossLink}} attached to them. The custom element\nhandles the rendering logic, while the abilities handles user interaction.\n\nAll custom elements should extend the {{#crossLink \"PbElement\"}}{{/crossLink}}. This class\nautomatically assigns a unique ID to the element, which will be used for logging and to uniquely\nidentify an element. If you are making a custom Component, you should extend\n{{#crossLink \"component.Component\"}}{{/crossLink}}. Likewise, if you are making a custom Region,\nyou should extend {{#crossLink \"region.Region\"}}{{/crossLink}}.\n\nAfter creating the custom element, you need to add abilities to it. To do this, use the Config\nservice's {{#crossLink \"service.Config/add:method\"}}add{{/crossLink}} method. For example:\n\n```javascript\nProtoboard\n    .setup(function(require) {\n      var Config = require('pb.service.Config');\n      var Pickable = require('pb.ability.Pickable');\n\n      Config.add('custom-element', new Pickable());\n    });\n```\n\nThis adds the {{#crossLink \"ability.Pickable\"}}{{/crossLink}} ability to the custom element with\nname `custom-element`.\n\nYou will also need to make Protoboard recognizes the new element. To do this, inject a\n`pb.$registry` instance and call its\n{{#crossLink \"service.Registry/add:method\"}}add{{/crossLink}} method:\n\n```javascript\nProtoboard.setup(function(require) {\n  var $registry = require('pb.$registry');\n  $registry.add('custom-element', CustomElement);\n});\n```\n\nNote that you need to do all of the above before calling\n{{#crossLink \"Bootstrap/run:method\"}}{{/crossLink}}."
+            "description": "All elements in Protoboard are made out of\n[HTML Custom Element](http://www.html5rocks.com/en/tutorials/webcomponents/customelements/) with\nsome {{#crossLink \"ability.Ability\"}}Abilities{{/crossLink}} attached to them. The custom element\nhandles the rendering logic, while the abilities handles user interaction.\n\nAll custom elements should extend the {{#crossLink \"PbElement\"}}{{/crossLink}}. This class\nautomatically assigns a unique ID to the element, which will be used for logging and to uniquely\nidentify an element. If you are making a custom Component, you should extend\n{{#crossLink \"component.Component\"}}{{/crossLink}}. Likewise, if you are making a custom Region,\nyou should extend {{#crossLink \"region.Region\"}}{{/crossLink}}.\n\nAfter creating the custom element, you need to add abilities to it. To do this, use the Config\nservice's {{#crossLink \"data.ConfigService/add:method\"}}add{{/crossLink}} method. For example:\n\n```javascript\nProtoboard\n    .forNewGame()\n    .setup(function(require) {\n      var Config = require('pb.data.ConfigService');\n      var Pickable = require('pb.ability.Pickable');\n\n      Config.add('custom-element', new Pickable());\n    });\n```\n\nThis adds the {{#crossLink \"ability.Pickable\"}}{{/crossLink}} ability to the custom element with\nname `custom-element`.\n\nYou will also need to make Protoboard recognizes the new element. To do this, inject a\n`pb.$registry` instance and call its\n{{#crossLink \"ui.RegistryService/add:method\"}}add{{/crossLink}} method:\n\n```javascript\nProtoboard.forNewGame().setup(function(require) {\n  var $registry = require('pb.$registry');\n  $registry.add('custom-element', CustomElement);\n});\n```\n\nNote that you need to do all of the above before calling\n{{#crossLink \"Bootstrap/run:method\"}}{{/crossLink}}."
         },
-        "8 Abilities": {
-            "name": "8 Abilities",
-            "shortname": "8 Abilities",
+        "08 Abilities": {
+            "name": "08 Abilities",
+            "shortname": "08 Abilities",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1875,11 +2140,11 @@
             "namespace": "",
             "file": "tutorial/08_abilities.js",
             "line": 1,
-            "description": "Protoboard has a built in platform for triggering abilities. Every interaction with a Protoboard\ncomponent will trigger an ability.\n\nAll abilities can be found under the `ability` directory. Every ability extends from the\n{{#crossLink \"ability.Ability\"}}{{/crossLink}} class. Extending this class provides the following\nfeatures:\n- Reacts to changes to configuration attribute(s) of this ability.\n- Hook into the {{#crossLink \"service.Log\"}}Logging service{{/crossLink}}\n- Customizable trigger\n\nEvery instance of an ability has a default configuration. When an element created, the ability\nwill check for any configuration attributes it knows, and apply any default configuration to the\nelement. Note that since the same instance of an ability is shared across multiple elements, you\nshould never store element specific state in an ability. Instead, use\n{{#crossLink Symbol}}{{/crossLink}} to decorate the element with the state.\n\nEvery ability is associated with a {{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}. A\ntrigger listens to events in the browser, and, if the event happens, triggers the ability. To\nimplement your own ability, implement the {{#crossLink ability.Ability}}{{/crossLink}} class.\nNote that most of the time, you will only need to implement the\n{{#crossLink \"ability.Ability/doTrigger:method\"}}doTrigger{{/crossLink}} method.\n\nEvery ability on an element can be customized by changing an attribute related to that ability.\nThese attributes are prefixed with `name-`, where `name` is the name of the ability. For example,\nthe `drop-on` attribute specifies the trigger for the `drop` ability. Hence, the following sets\nthe `drop` ability to be triggered when the user clicks on the deck:\n\n```html\n<pb-r-deck drop-on=\"click\"></pb-r-deck>\n```\n\nThe `-on` configuration can be found on every ability, and they all sets the ability's trigger.\nIf you want to add a configuration, you will need to implement the\n{{#crossLink \"ability.Ability/init:method\"}}init{{/crossLink}} method to set the default value of\nthe configuration on the element.\n\nNow that you have your custom ability, you can add it to an element using the\n{{#crossLink \"service.Config\"}}{{/crossLink}}. For example:\n\n```javascript\nProtoboard.setup(function(require) {\n  var Config = require('service.Config');\n  Config.add('pb-c-card', new CustomAbility());\n});\n```\nThe example above adds the CustomAbility to all `pb-c-card` elements."
+            "description": "Protoboard has a built in platform for triggering abilities. Every interaction with a Protoboard\ncomponent will trigger an ability.\n\nAll abilities can be found under the `ability` directory. Every ability extends from the\n{{#crossLink \"ability.Ability\"}}{{/crossLink}} class. Extending this class provides the following\nfeatures:\n- Reacts to changes to configuration attribute(s) of this ability.\n- Hook into the {{#crossLink \"data.LogService\"}}Logging service{{/crossLink}}\n- Customizable trigger\n\nEvery instance of an ability has a default configuration. When an element created, the ability\nwill check for any configuration attributes it knows, and apply any default configuration to the\nelement. Note that since the same instance of an ability is shared across multiple elements, you\nshould never store element specific state in an ability. Instead, use\n{{#crossLink Symbol}}{{/crossLink}} to decorate the element with the state.\n\nEvery ability is associated with a {{#crossLink \"trigger.Trigger\"}}Trigger{{/crossLink}}. A\ntrigger listens to events in the browser, and, if the event happens, triggers the ability. To\nimplement your own ability, implement the {{#crossLink ability.Ability}}{{/crossLink}} class.\nNote that most of the time, you will only need to implement the\n{{#crossLink \"ability.Ability/doTrigger:method\"}}doTrigger{{/crossLink}} method.\n\nEvery ability on an element can be customized by changing an attribute related to that ability.\nThese attributes are prefixed with `name-`, where `name` is the name of the ability. For example,\nthe `drop-on` attribute specifies the trigger for the `drop` ability. Hence, the following sets\nthe `drop` ability to be triggered when the user clicks on the deck:\n\n```html\n<pb-r-deck drop-on=\"click\"></pb-r-deck>\n```\n\nThe `-on` configuration can be found on every ability, and they all sets the ability's trigger.\nIf you want to add a configuration, you will need to implement the\n{{#crossLink \"ability.Ability/init:method\"}}init{{/crossLink}} method to set the default value of\nthe configuration on the element.\n\nNow that you have your custom ability, you can add it to an element using the\n{{#crossLink \"data.ConfigService\"}}{{/crossLink}}. For example:\n\n```javascript\nProtoboard.forNewGame().setup(function(require) {\n  var Config = require('data.ConfigService');\n  Config.add('pb-c-card', new CustomAbility());\n});\n```\nThe example above adds the CustomAbility to all `pb-c-card` elements."
         },
-        "9 Triggers": {
-            "name": "9 Triggers",
-            "shortname": "9 Triggers",
+        "09 Triggers": {
+            "name": "09 Triggers",
+            "shortname": "09 Triggers",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -1889,8 +2154,23 @@
             "namespace": "",
             "file": "tutorial/09_triggers.js",
             "line": 1,
-            "description": "Beside abilities, Protoboard also allows you to create your own Triggers. Triggers are the main\nway for Abilities to be executed. Examples of Triggers include the\n{{#crossLink \"trigger.Click\"}}Click{{/crossLink}} trigger, which triggers an ability on an\nelement when the user clicks that element.\n\nTo create a trigger, you need to implement the {{#crossLink \"trigger.Trigger\"}}{{/crossLink}}\nclass. You will then need to register a parser with the\n{{#crossLink \"trigger.Triggers\"}}{{/crossLink}} service, by calling the\n{{#crossLink \"trigger.Triggers/register:method\"}}register{{/crossLink}} method. For example:\n\n```javascript\nProtoboard.setup(function(require) {\n  var Events = require('Events');\n  var Trigger = require('trigger.Trigger');\n  var Triggers = require('trigger.Triggers');\n\n  var OnMouseUpTrigger = function() {};\n  OnMouseUpTrigger.prototype = Object.create(Trigger.prototype);\n\n  OnMouseUpTrigger.prototype.on = function(element, ability) {\n    Events.of(element, this)\n        .on('dom', 'mouseup', ability.trigger.bind(ability, element));\n  };\n\n  OnMouseUpTrigger.prototype.off = function(element) {\n  \t Events.of(element, this).off('dom', 'mouseup');\n  };\n\n  OnMouseUpTrigger.prototype.toString = function() {\n    return 'mouseup';\n  };\n\n  OnMouseUpTrigger.prototype.helpText = 'Triggers when mouse is unpressed on the element';\n\n  Triggers.register(function(string) {\n    return (string === 'mouseup') ? new OnMouseUpTrigger() : undefined;\n  });\n});\n```\n\nThe {{#crossLink \"Events\"}}{{/crossLink}} class is a utility class to make event registering and\nunregistering easier to manage.",
+            "description": "Beside abilities, Protoboard also allows you to create your own Triggers. Triggers are the main\nway for Abilities to be executed. Examples of Triggers include the\n{{#crossLink \"trigger.Click\"}}Click{{/crossLink}} trigger, which triggers an ability on an\nelement when the user clicks that element.\n\nTo create a trigger, you need to implement the {{#crossLink \"trigger.Trigger\"}}{{/crossLink}}\nclass. You will then need to register a parser with the\n{{#crossLink \"trigger.Triggers\"}}{{/crossLink}} service, by calling the\n{{#crossLink \"trigger.Triggers/register:method\"}}register{{/crossLink}} method. For example:\n\n```javascript\nProtoboard.forNewGame().setup(function(require) {\n  var Events = require('Events');\n  var Trigger = require('trigger.Trigger');\n  var Triggers = require('trigger.Triggers');\n\n  var OnMouseUpTrigger = function() {};\n  OnMouseUpTrigger.prototype = Object.create(Trigger.prototype);\n\n  OnMouseUpTrigger.prototype.on = function(element, ability) {\n    Events.of(element, this)\n        .on('dom', 'mouseup', ability.trigger.bind(ability, element));\n  };\n\n  OnMouseUpTrigger.prototype.off = function(element) {\n  \t Events.of(element, this).off('dom', 'mouseup');\n  };\n\n  OnMouseUpTrigger.prototype.toString = function() {\n    return 'mouseup';\n  };\n\n  OnMouseUpTrigger.prototype.helpText = 'Triggers when mouse is unpressed on the element';\n\n  Triggers.register(function(string) {\n    return (string === 'mouseup') ? new OnMouseUpTrigger() : undefined;\n  });\n});\n```\n\nThe {{#crossLink \"Events\"}}{{/crossLink}} class is a utility class to make event registering and\nunregistering easier to manage.",
             "since": "1.0.0"
+        },
+        "10 Networked Games": {
+            "name": "10 Networked Games",
+            "shortname": "10 Networked Games",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "tutorial",
+            "namespace": "",
+            "file": "tutorial/10_net.js",
+            "line": 1,
+            "description": "Protoboard allows you to have a networked game. To make a game networked, you will neeed to\nmodify the first two stages discussed in the\n{{#crossLink \"06 JavaScript\"}}JavaScript tutorial{{/crossLink}}.\n\nsteps are involved in creating a networked game:\n\n1.  Decide on the communication protocol between clients.\n1.  Setup the game.\n1.  Add player(s) to the game.\n\nFor deciding client - client communication protocol, you will need to create an object that\nimplements the {{#crossLink \"net.AbstractIO\"}}{{/crossLink}}. Pass this object to Protoboard\nusing the {{#crossLink \"Protoboard/withIo:method\"}}{{/crossLink}}:\n\n```javascript\nProtoboard.withIo(newIoObject)\n```\n\nProtoboard comes with some built in implementations of AbstractIO:\n\n-   {{#crossLink \"net.InMemoryIO\"}}{{/crossLink}} - this stores data in memory. Use this if you\n    don't care about communicating between two tabs.\n-   {{#crossLink \"net.LocalStorageIO\"}}{{/crossLink}} - this stores data in local storage. Use\n    this if you want to play games between two tabs, but in the same browser.\n-   {{#crossLink \"net.FirebaseIO\"}}{{/crossLink}} - this stores data in FireBase. Use this if\n    you want to play networked games.\n\nFor the next step, you will need to decide if you want to create a new game, or to join an\nexisting game. Use the `forNewGame` to create a new game, or `forExistingGame` to use an\nexisting game. For example, to join an existing game:\n\n```javascript\nProtoboard\n    .withIo(newIoObject)\n    .forExistingGame('gameId')\n```\n\nIf you decide to create a new game, you will need to decide on the number of players needed to\nstart the game and the initial state of the game.\n\nThe final step will be to add local players to the game using the\n{{#crossLink \"Protoboard.Runner/join:method\"}}join{{/crossLink}} method:\n\n```javascript\nProtoboard\n    .withIo(newIoObject)\n    .forExistingGame('gameId')\n    .join('player2', { role: 'Medic' })\n```\n\nAfter this step, Protoboard will wait until there are enough players joining the game. Once there\nare enough number of players, it will run the rest of the startup process.\n\nNote that Protoboard will make the game state available to the\n{{#crossLink \"ui.TemplateService\"}}TemplateService{{/crossLink}}. Look at the documentation of\n{{#crossLink \"Protoboard.Runner/run:method\"}}{{/crossLink}} for this.",
+            "since": "3.1.0"
         }
     },
     "classitems": [
@@ -2147,7 +2427,7 @@
         {
             "file": "src/ability/droppable.html",
             "line": 55,
-            "description": "Drops the next element added to {{#crossLink \"service.Move\"}}{{/crossLink}} as a child of the\ngiven element.",
+            "description": "Drops the next element added to {{#crossLink \"ui.MoveService\"}}{{/crossLink}} as a child of the\ngiven element.",
             "itemtype": "method",
             "name": "doTrigger",
             "params": [
@@ -2236,7 +2516,7 @@
         {
             "file": "src/ability/ordereddroppable.html",
             "line": 49,
-            "description": "Drops the element added to {{#crossLink \"service.Move\"}}{{/crossLink}} as a child of the\ngiven element. The position of the dropped child depends on the position of the mouse at the\ntrigger time relative to the other children.",
+            "description": "Drops the element added to {{#crossLink \"ui.MoveService\"}}{{/crossLink}} as a child of the\ngiven element. The position of the dropped child depends on the position of the mouse at the\ntrigger time relative to the other children.",
             "itemtype": "method",
             "name": "doTrigger",
             "params": [
@@ -2594,6 +2874,443 @@
             "class": "component.Token"
         },
         {
+            "file": "src/data/aclservice.html",
+            "line": 30,
+            "itemtype": "method",
+            "name": "contains",
+            "params": [
+                {
+                    "name": "candidate",
+                    "description": "Name of group or player to check the membership.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "True iff the given group or player is a member of the current group.",
+                "type": "Boolean"
+            },
+            "class": "data.Acl.Group"
+        },
+        {
+            "file": "src/data/aclservice.html",
+            "line": 50,
+            "description": "Adds the given member or group to the current group.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "member",
+                    "description": "The player or group to be added as a member of the\n   current group.",
+                    "type": "string|data.Acl.Group"
+                }
+            ],
+            "class": "data.Acl.Group"
+        },
+        {
+            "file": "src/data/aclservice.html",
+            "line": 157,
+            "description": "Resets the cache in the given element.",
+            "itemtype": "method",
+            "name": "__reset__",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element whose cache should be reset.",
+                    "type": "Element"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/data/aclservice.html",
+            "line": 170,
+            "description": "Updates the cache for the given element.",
+            "itemtype": "method",
+            "name": "__update__",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to run the update on.",
+                    "type": "Element"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/data/aclservice.html",
+            "line": 208,
+            "description": "Handler called when attribute on an element has been changed.",
+            "itemtype": "method",
+            "name": "__onMutation__",
+            "params": [
+                {
+                    "name": "records",
+                    "description": "Array of {{#crossLink \"MutationRecord\"}}{{/crossLink}}s.",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/data/aclservice.html",
+            "line": 225,
+            "description": "Registers the given element to watch for ACL changes.",
+            "itemtype": "method",
+            "name": "registerElement",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to be registered.",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "This service for chaining.",
+                "type": "service.Acl"
+            },
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/data/aclservice.html",
+            "line": 242,
+            "itemtype": "method",
+            "name": "isActionEnabled",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "The element to check if the action is enabled.",
+                    "type": "Element"
+                },
+                {
+                    "name": "actionName",
+                    "description": "The name of action to check.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will resolve to true iff the action is enabled on the given\n   element.",
+                "type": "Promise"
+            },
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/data/aclservice.html",
+            "line": 267,
+            "description": "Creates or updates a group to the service.",
+            "itemtype": "method",
+            "name": "addGroup",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name of the group to be created",
+                    "type": "String"
+                },
+                {
+                    "name": "members",
+                    "description": "Members of the group. This can be a group name, or a player's\n   name.",
+                    "type": "String",
+                    "multiple": true
+                }
+            ],
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/data/aclservice.html",
+            "line": 288,
+            "description": "The current player.",
+            "itemtype": "property",
+            "name": "currentPlayer",
+            "type": "{string}",
+            "class": "service.Acl"
+        },
+        {
+            "file": "src/data/configservice.html",
+            "line": 38,
+            "description": "Adds the given abilities to the given element name.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "elementName",
+                    "description": "The name of the element to add the abilities to.",
+                    "type": "String"
+                },
+                {
+                    "name": "abilities",
+                    "description": "Abilities to be added to the element.",
+                    "type": "ability.Ability",
+                    "multiple": true
+                }
+            ],
+            "return": {
+                "description": "This service for chaining.",
+                "type": "data.ConfigService"
+            },
+            "class": "data.ConfigService"
+        },
+        {
+            "file": "src/data/configservice.html",
+            "line": 58,
+            "itemtype": "method",
+            "name": "getAll",
+            "params": [
+                {
+                    "name": "elementName",
+                    "description": "Name of the element whose registered abilities should be\n   returned.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Set of abilities that have been registered to the given element or null if the\n   element has never been added to the service.",
+                "type": "Set"
+            },
+            "class": "data.ConfigService"
+        },
+        {
+            "file": "src/data/configservice.html",
+            "line": 69,
+            "description": "Sets the given trigger as the default trigger for abilities whose name matches the given\nname. Optionally, if the element is specified, only match abilities for that element.",
+            "itemtype": "method",
+            "name": "setDefaultTrigger",
+            "params": [
+                {
+                    "name": "trigger",
+                    "description": "The trigger to set.",
+                    "type": "trigger.Trigger"
+                },
+                {
+                    "name": "abilityName",
+                    "description": "Name of ability whose default trigger should be set.",
+                    "type": "String"
+                },
+                {
+                    "name": "elementName",
+                    "description": "Name of element to match. If not specified, this will\n   match all elements.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "null"
+                }
+            ],
+            "class": "data.ConfigService"
+        },
+        {
+            "file": "src/data/configservice.html",
+            "line": 91,
+            "description": "Removes all configurations that has been added to the service.",
+            "itemtype": "method",
+            "name": "reset",
+            "class": "data.ConfigService"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 18,
+            "description": "Adds a property to the entry.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "Key of the property to add.",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "Value associated with the property",
+                    "type": "Any"
+                }
+            ],
+            "class": "data.LogService.Entry"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 135,
+            "description": "Adds an entry to the log.",
+            "itemtype": "method",
+            "name": "log",
+            "params": [
+                {
+                    "name": "category",
+                    "description": "The category of the entry. Use this to identify the type of the log.\n   For instance, \"click\", \"flip\".",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The value of the category for the entry.",
+                    "type": "Any"
+                },
+                {
+                    "name": "extra",
+                    "description": "Extra data to be added to the entry. This defaults to empty object.",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "This service, for chaining.",
+                "type": "data.LogService"
+            },
+            "class": "data.LogService"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 181,
+            "description": "Adds a preprocessor to preprocess a log entry. A preprocessor is a function that takes an\n{{#crossLink \"data.LogService.Entry\"}}Entry{{/crossLink}}.",
+            "itemtype": "method",
+            "name": "addPreprocessor",
+            "params": [
+                {
+                    "name": "preprocessor",
+                    "description": "The preprocessor to be added.",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "This service, for chaining.",
+                "type": "data.LogService"
+            },
+            "class": "data.LogService"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 194,
+            "description": "Adds a printer to preprocess a log entry. A printer is a function that takes an\n{{#crossLink \"data.LogService.Entry\"}}Entry{{/crossLink}} and returns a string, or a null, if the\nprinter is not applicable to the entry.",
+            "itemtype": "method",
+            "name": "addPrinter",
+            "params": [
+                {
+                    "name": "printer",
+                    "description": "The printer to be added.",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "This service, for chaining.",
+                "type": "data.LogService"
+            },
+            "class": "data.LogService"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 208,
+            "description": "Removes all preprocessors and printers that have been added to this service.",
+            "itemtype": "method",
+            "name": "clearProcessors",
+            "return": {
+                "description": "This service, for chaining.",
+                "type": "data.LogService"
+            },
+            "deprecated": true,
+            "since": "1.1.0",
+            "class": "data.LogService"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 223,
+            "description": "Removes all entries that have been added to this service.",
+            "itemtype": "method",
+            "name": "clear",
+            "return": {
+                "description": "This service, for chaining.",
+                "type": "data.LogService"
+            },
+            "deprecated": true,
+            "class": "data.LogService"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 236,
+            "description": "The entries as a blob.",
+            "itemtype": "property",
+            "name": "blob",
+            "type": "Blob",
+            "final": 1,
+            "class": "data.LogService"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 247,
+            "description": "The entries as a string.",
+            "itemtype": "property",
+            "name": "entries",
+            "type": "string",
+            "final": 1,
+            "class": "data.LogService"
+        },
+        {
+            "file": "src/data/logservice.html",
+            "line": 258,
+            "description": "Default printer of the service. This printer is also used if no custom printers are  added.",
+            "itemtype": "property",
+            "name": "defaultPrinter",
+            "type": "Function",
+            "final": 1,
+            "class": "data.LogService"
+        },
+        {
+            "file": "src/data/stateservice.html",
+            "line": 45,
+            "itemtype": "method",
+            "name": "__getElement__",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "The key that the `pb-state` element should contain.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The `pb-state` element with the given key.",
+                "type": "!Element"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "data.StateService"
+        },
+        {
+            "file": "src/data/stateservice.html",
+            "line": 65,
+            "description": "Sets the value of the given key.",
+            "itemtype": "method",
+            "name": "put",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "The key corresponding to the value to be inserted.",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The value to set.",
+                    "type": "String"
+                }
+            ],
+            "class": "data.StateService"
+        },
+        {
+            "file": "src/data/stateservice.html",
+            "line": 76,
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "key",
+                    "description": "The key to retrieve the value of.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The value corresponding to the key.",
+                "type": "String"
+            },
+            "class": "data.StateService"
+        },
+        {
             "file": "src/grid/grid.html",
             "line": 38,
             "description": "Method called when the element is created.",
@@ -2819,6 +3536,813 @@
             "class": "grid.TriangleGrid"
         },
         {
+            "file": "src/net/abstractio.html",
+            "line": 17,
+            "description": "Registers the callback to listen for changes.",
+            "itemtype": "method",
+            "name": "listen",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Callback called when there is a change on the data. This will be\n   called with two arguments: path of the data changed, and the new value of the data.",
+                    "type": "Function"
+                }
+            ],
+            "class": "net.AbstractIO"
+        },
+        {
+            "file": "src/net/abstractio.html",
+            "line": 28,
+            "description": "Retrieves the data corresponding to the given path.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to be retrieved.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the retrieved data.",
+                "type": "Promise"
+            },
+            "class": "net.AbstractIO"
+        },
+        {
+            "file": "src/net/abstractio.html",
+            "line": 39,
+            "description": "Sets the data to the given path. If the objects in the path's ancestors don't exist, the\nimplementation should create those objects. Should also call listener callbacks that have\nbeen added.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to set the value of.",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "Data to set the path's value to. If set to null, you can safely\n   deallocate the space.",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when setting the value is successful.",
+                "type": "Promise"
+            },
+            "class": "net.AbstractIO"
+        },
+        {
+            "file": "src/net/cachedio.html",
+            "line": 42,
+            "description": "Handler called when the cache is updated.",
+            "itemtype": "method",
+            "name": "__onCacheUpdate__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path that was updated.",
+                    "type": "String"
+                },
+                {
+                    "name": "newValue",
+                    "description": "The new value corresponding to the path that was updated.",
+                    "type": "Object"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "net.CachedIO"
+        },
+        {
+            "file": "src/net/cachedio.html",
+            "line": 54,
+            "description": "Handler called when the original IO is updated.",
+            "itemtype": "method",
+            "name": "__onUpdate__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path that was updated.",
+                    "type": "String"
+                },
+                {
+                    "name": "newValue",
+                    "description": "The new value corresponding to the path that was updated.",
+                    "type": "Object"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "net.CachedIO"
+        },
+        {
+            "file": "src/net/cachedio.html",
+            "line": 68,
+            "description": "Triggers the callbacks that are listening to the io.",
+            "itemtype": "method",
+            "name": "__triggerCallbacks__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path that was updated.",
+                    "type": "String"
+                },
+                {
+                    "name": "newValue",
+                    "description": "The new value corresponding to the updated path.",
+                    "type": "Object"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "net.CachedIO"
+        },
+        {
+            "file": "src/net/cachedio.html",
+            "line": 82,
+            "description": "Listens to changes to this IO object.",
+            "itemtype": "method",
+            "name": "listen",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Callback called when there is a change on the data. This will be\n   called with two arguments: path of the data changed, and the new value of the data.",
+                    "type": "Function"
+                }
+            ],
+            "class": "net.CachedIO"
+        },
+        {
+            "file": "src/net/cachedio.html",
+            "line": 93,
+            "description": "Retrieves the data corresponding to the given path.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to be retrieved.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the retrieved data.",
+                "type": "Promise"
+            },
+            "class": "net.CachedIO"
+        },
+        {
+            "file": "src/net/cachedio.html",
+            "line": 106,
+            "description": "Sets the data to the given path. If the objects in the path's ancestors don't exist, the\nimplementation should create those objects. Should also call listener callbacks that have\nbeen added.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to set the value of.",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "Data to set the path's value to. If set to null, you can safely\n   deallocate the space.",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when setting the value is successful.",
+                "type": "Promise"
+            },
+            "class": "net.CachedIO"
+        },
+        {
+            "file": "src/net/inmemoryio.html",
+            "line": 29,
+            "description": "Calls all registered callbacks.",
+            "itemtype": "method",
+            "name": "__triggerUpdate__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path that was updated.",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "The new data in the updated path.",
+                    "type": "Any"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "net.InMemoryIO"
+        },
+        {
+            "file": "src/net/inmemoryio.html",
+            "line": 43,
+            "description": "Registers the callback to listen for changes.",
+            "itemtype": "method",
+            "name": "listen",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Callback called when there is a change on the data. This will be\n   called with two arguments: path of the data changed, and the new value of the data.",
+                    "type": "Function"
+                }
+            ],
+            "class": "net.InMemoryIO"
+        },
+        {
+            "file": "src/net/inmemoryio.html",
+            "line": 54,
+            "description": "Retrieves the data corresponding to the given path.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to be retrieved.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the retrieved data.",
+                "type": "Promise"
+            },
+            "class": "net.InMemoryIO"
+        },
+        {
+            "file": "src/net/inmemoryio.html",
+            "line": 66,
+            "description": "Sets the data to the given path. Should also call listener callbacks that have been added.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to set the value of.",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "Data to set the path's value to.",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when setting the value is successful.",
+                "type": "Promise"
+            },
+            "class": "net.InMemoryIO"
+        },
+        {
+            "file": "src/net/localstorageio.html",
+            "line": 40,
+            "description": "Handler called when the storage content has changed.",
+            "itemtype": "method",
+            "name": "__onStorageEvent__",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "The event object.",
+                    "type": "StorageEvent"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "net.LocalStorageIO"
+        },
+        {
+            "file": "src/net/localstorageio.html",
+            "line": 61,
+            "description": "Removes the prefix string from the given path.",
+            "itemtype": "method",
+            "name": "__unprefix__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path whose prefix should be removed.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Path with the prefix removed.",
+                "type": "String"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "net.LocalStorageIO"
+        },
+        {
+            "file": "src/net/localstorageio.html",
+            "line": 73,
+            "description": "Registers the callback to listen for changes.",
+            "itemtype": "method",
+            "name": "listen",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "Callback called when there is a change on the data. This will be\n   called with two arguments: path of the data changed, and the new value of the data.",
+                    "type": "Function"
+                }
+            ],
+            "class": "net.LocalStorageIO"
+        },
+        {
+            "file": "src/net/localstorageio.html",
+            "line": 84,
+            "description": "Retrieves the data corresponding to the given path.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to be retrieved.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the retrieved data.",
+                "type": "Promise"
+            },
+            "class": "net.LocalStorageIO"
+        },
+        {
+            "file": "src/net/localstorageio.html",
+            "line": 97,
+            "description": "Sets the data to the given path. Should also call listener callbacks that have been added.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to set the value of.",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "Data to set the path's value to.",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when setting the value is successful.",
+                "type": "Promise"
+            },
+            "class": "net.LocalStorageIO"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 39,
+            "description": "Retrieves the value in the given path, constructing an object if necessary.",
+            "itemtype": "method",
+            "name": "__get__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path whose value should be returned.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "Promise"
+            },
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 72,
+            "description": "Handler called when there is an update from the server.",
+            "itemtype": "method",
+            "name": "__onUpdate__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of resource that is updated.",
+                    "type": "String"
+                },
+                {
+                    "name": "newValue",
+                    "description": "The new updated value.",
+                    "type": "Any"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 85,
+            "description": "Removes the entry in the given path, and update the ancestor indexes.",
+            "itemtype": "method",
+            "name": "__remove__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path whose entry should be deleted.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when the removal is done.",
+                "type": "Promise"
+            },
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 116,
+            "description": "Sets the given data to the given path.",
+            "itemtype": "method",
+            "name": "__set__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path to store the data in.",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "Data to be stored. This should be a primitive, Object, or Array.",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when the set operation is completed.",
+                "type": "Promise"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 143,
+            "description": "Triggers updates on the given path, and all the ancestor paths.",
+            "itemtype": "method",
+            "name": "__triggerUpdates__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path to trigger updates on.",
+                    "type": "String"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 162,
+            "description": "Updates the ancestors in the given path to contain indexes.",
+            "itemtype": "method",
+            "name": "__updateAncestorIndexes__",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Ancestor path to update.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when the update operation is completed.",
+                "type": "Promise"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 195,
+            "description": "Adds a new object on the given path.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path to add a new object to.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the new object's ID when addition is\n   successful.",
+                "type": "Promise"
+            },
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 226,
+            "description": "Removes the object in the given path.",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "Path of the object to be removed.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when the object has been deleted.",
+                "type": "Promise"
+            },
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 237,
+            "description": "Retrieves the value corresponding to the given path. If the path points to an index, this\nwill compile all the paths into an object.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path whose value should be retrieved.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the value corresponding to the given\n   path.",
+                "type": "Promise"
+            },
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/rpcservice.html",
+            "line": 250,
+            "description": "Sets the value of the given path. If the data is a non array object, this will create\nan index object at the given path. This method will then store the object's keys in\nindividual entries. For example, suppose we store the following object in '/a':\n\n```json\n{\n  b: 1,\n  c: {\n    d: 2\n  }\n}\n```\n\nThis will result in the following mapping:\n\n```\n/a       -> (index)\n/a/b     -> 1\n/a/b/c   -> (index)\n/a/b/c/d -> 2\n```",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "path",
+                    "description": "The path to set the value to.",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "Data to set the path's value to. This should be a primitive, Object, or\n   Array.",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved when setting the value is successful.",
+                "type": "Promise"
+            },
+            "class": "net.RpcService"
+        },
+        {
+            "file": "src/net/sessionservice.html",
+            "line": 34,
+            "description": "Checks if there are enough players in the game.",
+            "itemtype": "method",
+            "name": "__checkPlayers__",
+            "params": [
+                {
+                    "name": "gameSync",
+                    "description": "Game sync object to check if there are enough players.",
+                    "type": "net.Sync"
+                },
+                {
+                    "name": "callback",
+                    "description": "Function called when there are enough players in the game.",
+                    "type": "Function"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "net.SessionService"
+        },
+        {
+            "file": "src/net/sessionservice.html",
+            "line": 52,
+            "description": "Creates a new game.",
+            "itemtype": "method",
+            "name": "create",
+            "params": [
+                {
+                    "name": "playerCount",
+                    "description": "Number of players required for this game.",
+                    "type": "Number"
+                },
+                {
+                    "name": "initialState",
+                    "description": "Initial state of the game. Defaults to empty object.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the game sync object when the game has\n   been created.",
+                "type": "Promise"
+            },
+            "class": "net.SessionService"
+        },
+        {
+            "file": "src/net/sessionservice.html",
+            "line": 72,
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "gameId",
+                    "description": "ID of the game sync object to return.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The game sync object with the given ID.",
+                "type": "net.Sync"
+            },
+            "class": "net.SessionService"
+        },
+        {
+            "file": "src/net/sessionservice.html",
+            "line": 81,
+            "description": "Joins the given game.",
+            "itemtype": "method",
+            "name": "join",
+            "params": [
+                {
+                    "name": "gameSync",
+                    "description": "Game sync object to join.",
+                    "type": "String"
+                },
+                {
+                    "name": "id",
+                    "description": "Display name of the player joining the game.",
+                    "type": "String"
+                },
+                {
+                    "name": "state",
+                    "description": "The initial state of the player joining the game.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the game sync when the join is\n   successful.",
+                "type": "Promise"
+            },
+            "class": "net.SessionService"
+        },
+        {
+            "file": "src/net/sessionservice.html",
+            "line": 106,
+            "description": "Waits the game to have enough players, then start it.",
+            "itemtype": "method",
+            "name": "start",
+            "params": [
+                {
+                    "name": "gameId",
+                    "description": "ID of the game to start.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with the game sync object when the game has\n   enough players.",
+                "type": "Promise"
+            },
+            "class": "net.SessionService"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 41,
+            "description": "Called when the object is updated.",
+            "itemtype": "method",
+            "name": "__onUpdated__",
+            "access": "private",
+            "tagname": "",
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 51,
+            "description": "Adds a new entry as a child of this object.",
+            "itemtype": "method",
+            "name": "add",
+            "return": {
+                "description": "Promise that will be resolved with the newly added entry.",
+                "type": "Promise"
+            },
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 64,
+            "description": "Removes the current object from the parent's entry.",
+            "itemtype": "method",
+            "name": "remove",
+            "return": {
+                "description": "Promise that will be resolved when the removal is successful.",
+                "type": "Promise"
+            },
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 74,
+            "description": "Gets this object's data.",
+            "itemtype": "method",
+            "name": "get",
+            "return": {
+                "description": "Promise that will be resolved with this object's data.",
+                "type": "Promise"
+            },
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 84,
+            "description": "Sets this object's data.",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "The data to set.",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolve with this object when setting the data is\n   successful.",
+                "type": "Promise"
+            },
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 99,
+            "description": "Retrives a synchronized object in the given path.",
+            "itemtype": "method",
+            "name": "sync",
+            "params": [
+                {
+                    "name": "subpath",
+                    "description": "Relative path to the synchronized object to return.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Sync object at the given path.",
+                "type": "pb.net.Sync"
+            },
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 113,
+            "description": "ID of this object.",
+            "type": "string",
+            "itemtype": "property",
+            "name": "id",
+            "final": 1,
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 124,
+            "description": "Full path to this object.",
+            "type": "string",
+            "itemtype": "property",
+            "name": "path",
+            "final": 1,
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/sync.html",
+            "line": 137,
+            "description": "Fired when the object's data has been updated.",
+            "itemtype": "event",
+            "name": "updated",
+            "class": "pb.net.Sync"
+        },
+        {
+            "file": "src/net/utils.html",
+            "line": 9,
+            "description": "Joins and normalize the given paths.",
+            "itemtype": "method",
+            "name": "normalize",
+            "params": [
+                {
+                    "name": "paths",
+                    "description": "Parts of the paths to be joined and normalized.",
+                    "type": "String",
+                    "multiple": true
+                }
+            ],
+            "return": {
+                "description": "The joined and normalized paths.",
+                "type": "String"
+            },
+            "class": "region.Bag"
+        },
+        {
             "file": "src/region/bag.html",
             "line": 118,
             "description": "Called when the element is created.",
@@ -2900,7 +4424,7 @@
         },
         {
             "file": "src/region/deck.html",
-            "line": 97,
+            "line": 101,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
@@ -2908,7 +4432,7 @@
         },
         {
             "file": "src/region/deck.html",
-            "line": 107,
+            "line": 111,
             "description": "The number of elements that users can pick out from the deck.",
             "itemtype": "property",
             "name": "pickableChildCount",
@@ -2918,7 +4442,7 @@
         },
         {
             "file": "src/region/deck.html",
-            "line": 119,
+            "line": 123,
             "description": "Node name of the deck.",
             "itemtype": "property",
             "name": "NODE_NAME",
@@ -3019,701 +4543,6 @@
             "type": "number",
             "readonly": "",
             "class": "region.Region"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 30,
-            "itemtype": "method",
-            "name": "contains",
-            "params": [
-                {
-                    "name": "candidate",
-                    "description": "Name of group or player to check the membership.",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "True iff the given group or player is a member of the current group.",
-                "type": "Boolean"
-            },
-            "class": "service.Acl.Group"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 50,
-            "description": "Adds the given member or group to the current group.",
-            "itemtype": "method",
-            "name": "add",
-            "params": [
-                {
-                    "name": "member",
-                    "description": "The player or group to be added as a member of the\n   current group.",
-                    "type": "string|service.Acl.Group"
-                }
-            ],
-            "class": "service.Acl.Group"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 157,
-            "description": "Resets the cache in the given element.",
-            "itemtype": "method",
-            "name": "__reset__",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element whose cache should be reset.",
-                    "type": "Element"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "service.Acl"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 170,
-            "description": "Updates the cache for the given element.",
-            "itemtype": "method",
-            "name": "__update__",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element to run the update on.",
-                    "type": "Element"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "service.Acl"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 204,
-            "description": "Handler called when attribute on an element has been changed.",
-            "itemtype": "method",
-            "name": "__onMutation__",
-            "params": [
-                {
-                    "name": "records",
-                    "description": "Array of {{#crossLink \"MutationRecord\"}}{{/crossLink}}s.",
-                    "type": "Array"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "service.Acl"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 221,
-            "description": "Registers the given element to watch for ACL changes.",
-            "itemtype": "method",
-            "name": "registerElement",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element to be registered.",
-                    "type": "Element"
-                }
-            ],
-            "return": {
-                "description": "This service for chaining.",
-                "type": "service.Acl"
-            },
-            "class": "service.Acl"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 238,
-            "itemtype": "method",
-            "name": "isActionEnabled",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "The element to check if the action is enabled.",
-                    "type": "Element"
-                },
-                {
-                    "name": "actionName",
-                    "description": "The name of action to check.",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "Promise that will resolve to true iff the action is enabled on the given\n   element.",
-                "type": "Promise"
-            },
-            "class": "service.Acl"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 263,
-            "description": "Creates or updates a group to the service.",
-            "itemtype": "method",
-            "name": "addGroup",
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Name of the group to be created",
-                    "type": "String"
-                },
-                {
-                    "name": "members",
-                    "description": "Members of the group. This can be a group name, or a player's\n   name.",
-                    "type": "String",
-                    "multiple": true
-                }
-            ],
-            "class": "service.Acl"
-        },
-        {
-            "file": "src/service/acl.html",
-            "line": 284,
-            "description": "The current player.",
-            "itemtype": "property",
-            "name": "currentPlayer",
-            "type": "{string}",
-            "class": "service.Acl"
-        },
-        {
-            "file": "src/service/config.html",
-            "line": 38,
-            "description": "Adds the given abilities to the given element name.",
-            "itemtype": "method",
-            "name": "add",
-            "params": [
-                {
-                    "name": "elementName",
-                    "description": "The name of the element to add the abilities to.",
-                    "type": "String"
-                },
-                {
-                    "name": "abilities",
-                    "description": "Abilities to be added to the element.",
-                    "type": "ability.Ability",
-                    "multiple": true
-                }
-            ],
-            "return": {
-                "description": "This service for chaining.",
-                "type": "service.Config"
-            },
-            "class": "service.Config"
-        },
-        {
-            "file": "src/service/config.html",
-            "line": 58,
-            "itemtype": "method",
-            "name": "getAll",
-            "params": [
-                {
-                    "name": "elementName",
-                    "description": "Name of the element whose registered abilities should be\n   returned.",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "Set of abilities that have been registered to the given element or null if the\n   element has never been added to the service.",
-                "type": "Set"
-            },
-            "class": "service.Config"
-        },
-        {
-            "file": "src/service/config.html",
-            "line": 69,
-            "description": "Sets the given trigger as the default trigger for abilities whose name matches the given\nname. Optionally, if the element is specified, only match abilities for that element.",
-            "itemtype": "method",
-            "name": "setDefaultTrigger",
-            "params": [
-                {
-                    "name": "trigger",
-                    "description": "The trigger to set.",
-                    "type": "trigger.Trigger"
-                },
-                {
-                    "name": "abilityName",
-                    "description": "Name of ability whose default trigger should be set.",
-                    "type": "String"
-                },
-                {
-                    "name": "elementName",
-                    "description": "Name of element to match. If not specified, this will\n   match all elements.",
-                    "type": "String",
-                    "optional": true,
-                    "optdefault": "null"
-                }
-            ],
-            "class": "service.Config"
-        },
-        {
-            "file": "src/service/config.html",
-            "line": 91,
-            "description": "Removes all configurations that has been added to the service.",
-            "itemtype": "method",
-            "name": "reset",
-            "class": "service.Config"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 18,
-            "description": "Adds a property to the entry.",
-            "itemtype": "method",
-            "name": "set",
-            "params": [
-                {
-                    "name": "key",
-                    "description": "Key of the property to add.",
-                    "type": "String"
-                },
-                {
-                    "name": "value",
-                    "description": "Value associated with the property",
-                    "type": "Any"
-                }
-            ],
-            "class": "service.Log.Entry"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 135,
-            "description": "Adds an entry to the log.",
-            "itemtype": "method",
-            "name": "log",
-            "params": [
-                {
-                    "name": "category",
-                    "description": "The category of the entry. Use this to identify the type of the log.\n   For instance, \"click\", \"flip\".",
-                    "type": "String"
-                },
-                {
-                    "name": "value",
-                    "description": "The value of the category for the entry.",
-                    "type": "Any"
-                },
-                {
-                    "name": "extra",
-                    "description": "Extra data to be added to the entry. This defaults to empty object.",
-                    "type": "Object",
-                    "optional": true
-                }
-            ],
-            "return": {
-                "description": "This service, for chaining.",
-                "type": "service.Log"
-            },
-            "class": "service.Log"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 181,
-            "description": "Adds a preprocessor to preprocess a log entry. A preprocessor is a function that takes an\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}}.",
-            "itemtype": "method",
-            "name": "addPreprocessor",
-            "params": [
-                {
-                    "name": "preprocessor",
-                    "description": "The preprocessor to be added.",
-                    "type": "Function"
-                }
-            ],
-            "return": {
-                "description": "This service, for chaining.",
-                "type": "service.Log"
-            },
-            "class": "service.Log"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 194,
-            "description": "Adds a printer to preprocess a log entry. A printer is a function that takes an\n{{#crossLink \"service.Log.Entry\"}}Entry{{/crossLink}} and returns a string, or a null, if the\nprinter is not applicable to the entry.",
-            "itemtype": "method",
-            "name": "addPrinter",
-            "params": [
-                {
-                    "name": "printer",
-                    "description": "The printer to be added.",
-                    "type": "Function"
-                }
-            ],
-            "return": {
-                "description": "This service, for chaining.",
-                "type": "service.Log"
-            },
-            "class": "service.Log"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 208,
-            "description": "Removes all preprocessors and printers that have been added to this service.",
-            "itemtype": "method",
-            "name": "clearProcessors",
-            "return": {
-                "description": "This service, for chaining.",
-                "type": "service.Log"
-            },
-            "deprecated": true,
-            "since": "1.1.0",
-            "class": "service.Log"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 223,
-            "description": "Removes all entries that have been added to this service.",
-            "itemtype": "method",
-            "name": "clear",
-            "return": {
-                "description": "This service, for chaining.",
-                "type": "service.Log"
-            },
-            "deprecated": true,
-            "class": "service.Log"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 236,
-            "description": "The entries as a blob.",
-            "itemtype": "property",
-            "name": "blob",
-            "type": "Blob",
-            "final": 1,
-            "class": "service.Log"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 247,
-            "description": "The entries as a string.",
-            "itemtype": "property",
-            "name": "entries",
-            "type": "string",
-            "final": 1,
-            "class": "service.Log"
-        },
-        {
-            "file": "src/service/log.html",
-            "line": 258,
-            "description": "Default printer of the service. This printer is also used if no custom printers are  added.",
-            "itemtype": "property",
-            "name": "defaultPrinter",
-            "type": "Function",
-            "final": 1,
-            "class": "service.Log"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 89,
-            "description": "Moves the container element to the last known location of the mouse.",
-            "itemtype": "method",
-            "name": "__moveContainer__",
-            "access": "private",
-            "tagname": "",
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 112,
-            "description": "Handles event when the mouse is moved.",
-            "itemtype": "method",
-            "name": "__onMouseMove__",
-            "params": [
-                {
-                    "name": "event",
-                    "description": "The corresponding mouse event.",
-                    "type": "MouseEvent"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 125,
-            "description": "Handles event when there is a mutation on the container element.",
-            "itemtype": "method",
-            "name": "__onContainerMutation__",
-            "params": [
-                {
-                    "name": "records",
-                    "description": "Array of mutation records.",
-                    "type": "Array"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 148,
-            "description": "Sets the given element as being moved.",
-            "itemtype": "method",
-            "name": "add",
-            "params": [
-                {
-                    "name": "el",
-                    "description": "Element to move.",
-                    "type": "Element"
-                }
-            ],
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 162,
-            "description": "The elements that are being moved.",
-            "itemtype": "property",
-            "name": "movedElements",
-            "type": "Set",
-            "final": 1,
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 173,
-            "description": "The next element to be moved.",
-            "itemtype": "property",
-            "name": "nextElement",
-            "type": "Element",
-            "final": 1,
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 184,
-            "description": "Last known X coordinate of the mouse in px.",
-            "itemtype": "property",
-            "name": "mouseX",
-            "type": "number",
-            "final": 1,
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 195,
-            "description": "Last known Y coordinate of the mouse in px.",
-            "itemtype": "property",
-            "name": "mouseY",
-            "type": "number",
-            "final": 1,
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/move.html",
-            "line": 208,
-            "description": "Fired when an element has been moved.",
-            "itemtype": "event",
-            "name": "move",
-            "class": "service.Move"
-        },
-        {
-            "file": "src/service/preview.html",
-            "line": 25,
-            "description": "Element that is being previewed, if any. If null, no element is being previewed.",
-            "itemtype": "property",
-            "name": "previewedEl",
-            "type": "Element|null",
-            "class": "service.Preview"
-        },
-        {
-            "file": "src/service/preview.html",
-            "line": 44,
-            "description": "Fired when the previewed element has been changed.",
-            "itemtype": "event",
-            "name": "element-changed",
-            "class": "service.Preview"
-        },
-        {
-            "file": "src/service/registry.html",
-            "line": 31,
-            "description": "Sets the given element name and prototype to be registered as custom element at bootstrap.",
-            "itemtype": "method",
-            "name": "add",
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Element name to register",
-                    "type": "Name"
-                },
-                {
-                    "name": "ctor",
-                    "description": "Constructor function of the custom element.",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "This object for chaining.",
-                "type": "!service.Registry"
-            },
-            "class": "service.Registry"
-        },
-        {
-            "file": "src/service/registry.html",
-            "line": 64,
-            "description": "Runs the given function at bootstrap.",
-            "itemtype": "method",
-            "name": "runAtRegister",
-            "params": [
-                {
-                    "name": "fn",
-                    "description": "The function to run. This function takes in a\n   {{#crossLink \"Document\"}}{{/crossLink}} and a\n   {{#crossLink \"service.Config\"}}{{/crossLink}}.",
-                    "type": "Function"
-                }
-            ],
-            "return": {
-                "description": "This object for chaining.",
-                "type": "!service.Registry"
-            },
-            "class": "service.Registry"
-        },
-        {
-            "file": "src/service/registry.html",
-            "line": 78,
-            "description": "Runs all the collected functions.",
-            "itemtype": "method",
-            "name": "register",
-            "params": [
-                {
-                    "name": "doc",
-                    "description": "Document object to run the functions in.",
-                    "type": "Document"
-                },
-                {
-                    "name": "Config",
-                    "description": "The configuration service to use.",
-                    "type": "service.Config"
-                }
-            ],
-            "return": {
-                "description": "This object for chaining.",
-                "type": "!service.Registry"
-            },
-            "class": "service.Registry"
-        },
-        {
-            "file": "src/service/state.html",
-            "line": 45,
-            "itemtype": "method",
-            "name": "__getElement__",
-            "params": [
-                {
-                    "name": "key",
-                    "description": "The key that the `pb-state` element should contain.",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "The `pb-state` element with the given key.",
-                "type": "!Element"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "service.State"
-        },
-        {
-            "file": "src/service/state.html",
-            "line": 65,
-            "description": "Sets the value of the given key.",
-            "itemtype": "method",
-            "name": "put",
-            "params": [
-                {
-                    "name": "key",
-                    "description": "The key corresponding to the value to be inserted.",
-                    "type": "String"
-                },
-                {
-                    "name": "value",
-                    "description": "The value to set.",
-                    "type": "String"
-                }
-            ],
-            "class": "service.State"
-        },
-        {
-            "file": "src/service/state.html",
-            "line": 76,
-            "itemtype": "method",
-            "name": "get",
-            "params": [
-                {
-                    "name": "key",
-                    "description": "The key to retrieve the value of.",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "The value corresponding to the key.",
-                "type": "String"
-            },
-            "class": "service.State"
-        },
-        {
-            "file": "src/service/template.html",
-            "line": 52,
-            "description": "Registers the given partial.",
-            "itemtype": "method",
-            "name": "addPartial",
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Name to use for the partial.",
-                    "type": "String"
-                },
-                {
-                    "name": "element",
-                    "description": "Element whose innerHTML contains the partial definition. Note that\n   while this class does not enforce it, this element's type should be\n   {{#crossLink \"&lt;template&gt;\"}}{{/crossLink}}. This is to deal with handling \">\" to\n   allow you to use HTML tags in the partial and calling other partials.",
-                    "type": "Element"
-                }
-            ],
-            "return": {
-                "description": "This service for chaining.",
-                "type": "service.Template"
-            },
-            "class": "service.Template"
-        },
-        {
-            "file": "src/service/template.html",
-            "line": 68,
-            "description": "Adds data to be inserted into the templates.",
-            "itemtype": "method",
-            "name": "addData",
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Name to add the data by.",
-                    "type": "String"
-                },
-                {
-                    "name": "data",
-                    "description": "Data to be added.",
-                    "type": "Any"
-                }
-            ],
-            "return": {
-                "description": "This service for chaining.",
-                "type": "service.Template"
-            },
-            "class": "service.Template"
-        },
-        {
-            "file": "src/service/template.html",
-            "line": 85,
-            "description": "Retrieves the data with the given key.",
-            "itemtype": "method",
-            "name": "get",
-            "params": [
-                {
-                    "name": "name",
-                    "description": "Key of the data to retrieve.",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "Promise that will be resolved with an array consisting of the key and the\n   data requested.",
-                "type": "Promise"
-            },
-            "class": "service.Template"
         },
         {
             "file": "src/third_party/hammer.html",
@@ -3900,7 +4729,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 42,
+            "line": 35,
             "description": "Handles event when a key press is detected.",
             "itemtype": "method",
             "name": "__onKeyPress__",
@@ -3917,7 +4746,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 83,
+            "line": 76,
             "description": "Initializes the service.",
             "itemtype": "method",
             "name": "init",
@@ -3932,7 +4761,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 95,
+            "line": 88,
             "description": "Registers the given element to trigger the given ability when the given key is pressed.",
             "itemtype": "method",
             "name": "add",
@@ -3957,7 +4786,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 116,
+            "line": 109,
             "description": "Unregisters the given element.",
             "itemtype": "method",
             "name": "remove",
@@ -3972,7 +4801,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 126,
+            "line": 119,
             "description": "Clears all registered elements.",
             "itemtype": "method",
             "name": "clear",
@@ -3980,7 +4809,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 135,
+            "line": 128,
             "description": "Map of elements to trigger the ability on. The key is the element, the value is a map of key\nto a set of abilities.",
             "itemtype": "property",
             "name": "hoveredEls",
@@ -3990,7 +4819,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 185,
+            "line": 178,
             "description": "Handles event called when mouse has entered the element.",
             "itemtype": "method",
             "name": "__onMouseEnter__",
@@ -4012,7 +4841,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 197,
+            "line": 190,
             "description": "Handles event called when mouse has left the element.",
             "itemtype": "method",
             "name": "__onMouseLeave__",
@@ -4029,7 +4858,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 208,
+            "line": 201,
             "description": "Registers the given element to trigger the given ability when a key is pressed while the\nmouse is hovering over the element.",
             "itemtype": "method",
             "name": "on",
@@ -4049,7 +4878,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 223,
+            "line": 216,
             "description": "Unregisters the given element from any listeners registered in the on method.",
             "itemtype": "method",
             "name": "off",
@@ -4064,7 +4893,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 234,
+            "line": 227,
             "itemtype": "method",
             "name": "toString",
             "return": {
@@ -4075,7 +4904,7 @@
         },
         {
             "file": "src/trigger/key.html",
-            "line": 243,
+            "line": 236,
             "description": "The help text to be displayed by {{#crossLink \"ability.Helpable\"}}{{/crossLink}}.",
             "itemtype": "property",
             "name": "helpText",
@@ -4181,6 +5010,113 @@
             "class": "ui.Generate"
         },
         {
+            "file": "src/ui/moveservice.html",
+            "line": 89,
+            "description": "Moves the container element to the last known location of the mouse.",
+            "itemtype": "method",
+            "name": "__moveContainer__",
+            "access": "private",
+            "tagname": "",
+            "class": "ui.MoveService"
+        },
+        {
+            "file": "src/ui/moveservice.html",
+            "line": 112,
+            "description": "Handles event when the mouse is moved.",
+            "itemtype": "method",
+            "name": "__onMouseMove__",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "The corresponding mouse event.",
+                    "type": "MouseEvent"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "ui.MoveService"
+        },
+        {
+            "file": "src/ui/moveservice.html",
+            "line": 125,
+            "description": "Handles event when there is a mutation on the container element.",
+            "itemtype": "method",
+            "name": "__onContainerMutation__",
+            "params": [
+                {
+                    "name": "records",
+                    "description": "Array of mutation records.",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "ui.MoveService"
+        },
+        {
+            "file": "src/ui/moveservice.html",
+            "line": 148,
+            "description": "Sets the given element as being moved.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "el",
+                    "description": "Element to move.",
+                    "type": "Element"
+                }
+            ],
+            "class": "ui.MoveService"
+        },
+        {
+            "file": "src/ui/moveservice.html",
+            "line": 162,
+            "description": "The elements that are being moved.",
+            "itemtype": "property",
+            "name": "movedElements",
+            "type": "Set",
+            "final": 1,
+            "class": "ui.MoveService"
+        },
+        {
+            "file": "src/ui/moveservice.html",
+            "line": 173,
+            "description": "The next element to be moved.",
+            "itemtype": "property",
+            "name": "nextElement",
+            "type": "Element",
+            "final": 1,
+            "class": "ui.MoveService"
+        },
+        {
+            "file": "src/ui/moveservice.html",
+            "line": 184,
+            "description": "Last known X coordinate of the mouse in px.",
+            "itemtype": "property",
+            "name": "mouseX",
+            "type": "number",
+            "final": 1,
+            "class": "ui.MoveService"
+        },
+        {
+            "file": "src/ui/moveservice.html",
+            "line": 195,
+            "description": "Last known Y coordinate of the mouse in px.",
+            "itemtype": "property",
+            "name": "mouseY",
+            "type": "number",
+            "final": 1,
+            "class": "ui.MoveService"
+        },
+        {
+            "file": "src/ui/moveservice.html",
+            "line": 208,
+            "description": "Fired when an element has been moved.",
+            "itemtype": "event",
+            "name": "move",
+            "class": "ui.MoveService"
+        },
+        {
             "file": "src/ui/preview.html",
             "line": 49,
             "description": "Callback called when the mouse has left the parent element.",
@@ -4259,16 +5195,194 @@
             "class": "ui.Previewer"
         },
         {
+            "file": "src/ui/previewservice.html",
+            "line": 25,
+            "description": "Element that is being previewed, if any. If null, no element is being previewed.",
+            "itemtype": "property",
+            "name": "previewedEl",
+            "type": "Element|null",
+            "class": "ui.PreviewService"
+        },
+        {
+            "file": "src/ui/previewservice.html",
+            "line": 44,
+            "description": "Fired when the previewed element has been changed.",
+            "itemtype": "event",
+            "name": "element-changed",
+            "class": "ui.PreviewService"
+        },
+        {
+            "file": "src/ui/registryservice.html",
+            "line": 31,
+            "description": "Sets the given element name and prototype to be registered as custom element at bootstrap.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Element name to register",
+                    "type": "Name"
+                },
+                {
+                    "name": "ctor",
+                    "description": "Constructor function of the custom element.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "This object for chaining.",
+                "type": "!ui.RegistryService"
+            },
+            "class": "ui.RegistryService"
+        },
+        {
+            "file": "src/ui/registryservice.html",
+            "line": 64,
+            "description": "Runs the given function at bootstrap.",
+            "itemtype": "method",
+            "name": "runAtRegister",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to run. This function takes in a\n   {{#crossLink \"Document\"}}{{/crossLink}} and a\n   {{#crossLink \"data.ConfigService\"}}{{/crossLink}}.",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "This object for chaining.",
+                "type": "!ui.RegistryService"
+            },
+            "class": "ui.RegistryService"
+        },
+        {
+            "file": "src/ui/registryservice.html",
+            "line": 78,
+            "description": "Runs all the collected functions.",
+            "itemtype": "method",
+            "name": "register",
+            "params": [
+                {
+                    "name": "doc",
+                    "description": "Document object to run the functions in.",
+                    "type": "Document"
+                },
+                {
+                    "name": "Config",
+                    "description": "The configuration service to use.",
+                    "type": "data.ConfigService"
+                }
+            ],
+            "return": {
+                "description": "This object for chaining.",
+                "type": "!ui.RegistryService"
+            },
+            "class": "ui.RegistryService"
+        },
+        {
             "file": "src/ui/shape.html",
-            "line": 93,
+            "line": 99,
+            "description": "Handler called when the mutation observer has detected a mutation.",
+            "itemtype": "method",
+            "name": "__onObserve__",
+            "params": [
+                {
+                    "name": "records",
+                    "description": "Arrays of record objects.",
+                    "type": "Array"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "ui.Shape"
+        },
+        {
+            "file": "src/ui/shape.html",
+            "line": 114,
+            "description": "Updates the color of the shape based on the attribute's value.",
+            "itemtype": "method",
+            "name": "__updateColor__",
+            "access": "private",
+            "tagname": "",
+            "class": "ui.Shape"
+        },
+        {
+            "file": "src/ui/shape.html",
+            "line": 124,
             "description": "Called when the element is created.",
             "itemtype": "method",
             "name": "createdCallback",
             "class": "ui.Shape"
         },
         {
+            "file": "src/ui/templateservice.html",
+            "line": 52,
+            "description": "Registers the given partial.",
+            "itemtype": "method",
+            "name": "addPartial",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name to use for the partial.",
+                    "type": "String"
+                },
+                {
+                    "name": "element",
+                    "description": "Element whose innerHTML contains the partial definition. Note that\n   while this class does not enforce it, this element's type should be\n   {{#crossLink \"&lt;template&gt;\"}}{{/crossLink}}. This is to deal with handling \">\" to\n   allow you to use HTML tags in the partial and calling other partials.",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "This service for chaining.",
+                "type": "ui.TemplateService"
+            },
+            "class": "ui.TemplateService"
+        },
+        {
+            "file": "src/ui/templateservice.html",
+            "line": 68,
+            "description": "Adds data to be inserted into the templates.",
+            "itemtype": "method",
+            "name": "addData",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Name to add the data by.",
+                    "type": "String"
+                },
+                {
+                    "name": "data",
+                    "description": "Data to be added.",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "This service for chaining.",
+                "type": "ui.TemplateService"
+            },
+            "class": "ui.TemplateService"
+        },
+        {
+            "file": "src/ui/templateservice.html",
+            "line": 85,
+            "description": "Retrieves the data with the given key.",
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "Key of the data to retrieve.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with an array consisting of the key and the\n   data requested.",
+                "type": "Promise"
+            },
+            "class": "ui.TemplateService"
+        },
+        {
             "file": "src/bootstrap.html",
-            "line": 69,
+            "line": 60,
             "description": "Runs the bootstrapping logic. All setup logic should occur before calling this.",
             "itemtype": "method",
             "name": "run",
@@ -4508,7 +5622,32 @@
         },
         {
             "file": "src/protoboard.html",
-            "line": 21,
+            "line": 40,
+            "description": "Joins the game locally.",
+            "itemtype": "method",
+            "name": "join",
+            "params": [
+                {
+                    "name": "id",
+                    "description": "ID of the player.",
+                    "type": "String"
+                },
+                {
+                    "name": "initialState",
+                    "description": "Initial state of the player.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "This object for chaining.",
+                "type": "Protoboard.Runner"
+            },
+            "class": "Protoboard.Runner",
+            "module": "api"
+        },
+        {
+            "file": "src/protoboard.html",
+            "line": 56,
             "description": "Registers a function to be ran before the game is ran.",
             "itemtype": "method",
             "name": "setup",
@@ -4523,26 +5662,169 @@
                 "description": "This object for chainin.",
                 "type": "Protoboard"
             },
+            "class": "Protoboard.Runner",
+            "module": "api"
+        },
+        {
+            "file": "src/protoboard.html",
+            "line": 69,
+            "description": "Runs the game on the given document object. Also makes available the following variables to\nthe templating system:\n\n-   `pb.playerCount`: Contains number of players in the game.\n-   `pb.players`: Array of player objects. Each player object is an object with:\n\n    -   id: ID of the player\n    -   state: The player's state\n\n-   `pb.state`: Contains the game state object.",
+            "itemtype": "method",
+            "name": "run",
+            "params": [
+                {
+                    "name": "doc",
+                    "description": "Document to run the game on. Defaults to the root document.",
+                    "type": "Document",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "Promise that will be resolved with a function when the game has started.\n   Use this function to retrieve Protoboard classes.",
+                "type": "Promise"
+            },
+            "class": "Protoboard.Runner",
+            "module": "api"
+        },
+        {
+            "file": "src/protoboard.html",
+            "line": 144,
+            "description": "Creates a runner for a new game.",
+            "itemtype": "method",
+            "name": "forNewGame",
+            "params": [
+                {
+                    "name": "io",
+                    "description": "AbstractIO implementation to use.",
+                    "type": "net.AbstractIO"
+                },
+                {
+                    "name": "playerCount",
+                    "description": "Number of players in the game.",
+                    "type": "Number"
+                },
+                {
+                    "name": "initialGameState",
+                    "description": "Initial state of the game.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The new instance of Protoboard.Runner.",
+                "type": "Protoboard.Runner"
+            },
+            "static": 1,
+            "class": "Protoboard.Runner",
+            "module": "api"
+        },
+        {
+            "file": "src/protoboard.html",
+            "line": 161,
+            "description": "Creates a runner for an existing game.",
+            "itemtype": "method",
+            "name": "forExistingGame",
+            "params": [
+                {
+                    "name": "io",
+                    "description": "AbstractIO implementation to use.",
+                    "type": "net.AbstractIO"
+                },
+                {
+                    "name": "gameId",
+                    "description": "ID of the game to use.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The new instance of Protoboard.Runner.",
+                "type": "Protoboard.Runner"
+            },
+            "static": 1,
+            "class": "Protoboard.Runner",
+            "module": "api"
+        },
+        {
+            "file": "src/protoboard.html",
+            "line": 199,
+            "description": "Sets the game to use the given IO.",
+            "itemtype": "method",
+            "name": "withIo",
+            "params": [
+                {
+                    "name": "io",
+                    "description": "Implementation of Abstract IO to use.",
+                    "type": "net.AbstractIO"
+                }
+            ],
+            "return": {
+                "description": "This object for chaining.",
+                "type": "Protoboard"
+            },
             "class": "Protoboard",
             "module": "api"
         },
         {
             "file": "src/protoboard.html",
-            "line": 34,
-            "description": "Runs the game on the given document object.",
+            "line": 211,
+            "description": "Creates a game based on an existing game.",
+            "itemtype": "method",
+            "name": "forExistingGame",
+            "params": [
+                {
+                    "name": "gameId",
+                    "description": "ID of game to use.",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The runner object.",
+                "type": "Protoboard.Runner"
+            },
+            "class": "Protoboard",
+            "module": "api"
+        },
+        {
+            "file": "src/protoboard.html",
+            "line": 222,
+            "description": "Creates a new game.",
+            "itemtype": "method",
+            "name": "forNewGame",
+            "params": [
+                {
+                    "name": "playerCount",
+                    "description": "Number of players that the game should have before starting.\n   Defaults to 0.",
+                    "type": "Number",
+                    "optional": true
+                },
+                {
+                    "name": "initialGameState",
+                    "description": "The initial state of the game. Defaults to empty string.",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The runner object.",
+                "type": "Protoboard.Runner"
+            },
+            "class": "Protoboard",
+            "module": "api"
+        },
+        {
+            "file": "src/protoboard.html",
+            "line": 235,
+            "description": "Runs Protoboard game with default settings.",
             "itemtype": "method",
             "name": "run",
             "params": [
                 {
-                    "name": "doc ",
-                    "description": "Document to run the game on. Defaults to the root document\n    if not specified.",
-                    "type": "Document",
-                    "optional": true,
-                    "optdefault": " document"
+                    "name": "doc",
+                    "description": "= document The Document to run the game in.",
+                    "type": "Document"
                 }
             ],
             "return": {
-                "description": "Promise that will be resolved with a function when the game has started. Use\n    this function to retrieve Protoboard classes.",
+                "description": "Promise that will be resolved with a function when the game has started.\n   Use this function to retrieve Protoboard classes.",
                 "type": "Promise"
             },
             "class": "Protoboard",

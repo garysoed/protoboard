@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#607D8B">
 
-  <title>api - Protoboard</title>
+  <title>src/net/rpcservice.html - Protoboard</title>
 
   <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
 
@@ -540,83 +540,307 @@
 </div>
 
 </section>
-    <section class="main-main">
-<h2>api</h2>
-<div class="intro"></div>
+    <section class="main-main"><h4>src/net/rpcservice.html</h4>
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        <p>This module has the following classes:</p>
-        <ul>
-            <li><a href="../classes/ability.Abilities.html">ability.Abilities</a></li>
-            <li><a href="../classes/ability.Abilities.Builder.html">ability.Abilities.Builder</a></li>
-            <li><a href="../classes/ability.Ability.html">ability.Ability</a></li>
-            <li><a href="../classes/ability.Droppable.html">ability.Droppable</a></li>
-            <li><a href="../classes/ability.FlexDroppable.html">ability.FlexDroppable</a></li>
-            <li><a href="../classes/ability.Helpable.html">ability.Helpable</a></li>
-            <li><a href="../classes/ability.OrderedDroppable.html">ability.OrderedDroppable</a></li>
-            <li><a href="../classes/ability.Pickable.html">ability.Pickable</a></li>
-            <li><a href="../classes/ability.SelectedPickable.html">ability.SelectedPickable</a></li>
-            <li><a href="../classes/ability.Shuffleable.html">ability.Shuffleable</a></li>
-            <li><a href="../classes/ability.StaggeredDroppable.html">ability.StaggeredDroppable</a></li>
-            <li><a href="../classes/ability.Toggleable.html">ability.Toggleable</a></li>
-            <li><a href="../classes/Bootstrap.html">Bootstrap</a></li>
-            <li><a href="../classes/Check.html">Check</a></li>
-            <li><a href="../classes/component.Card.html">component.Card</a></li>
-            <li><a href="../classes/component.Component.html">component.Component</a></li>
-            <li><a href="../classes/component.Dice.html">component.Dice</a></li>
-            <li><a href="../classes/component.Dice.DiceFlippable.html">component.Dice.DiceFlippable</a></li>
-            <li><a href="../classes/component.Dice.Rollable.html">component.Dice.Rollable</a></li>
-            <li><a href="../classes/component.Token.html">component.Token</a></li>
-            <li><a href="../classes/data.Acl.Group.html">data.Acl.Group</a></li>
-            <li><a href="../classes/data.ConfigService.html">data.ConfigService</a></li>
-            <li><a href="../classes/data.LogService.html">data.LogService</a></li>
-            <li><a href="../classes/data.LogService.Entry.html">data.LogService.Entry</a></li>
-            <li><a href="../classes/data.StateService.html">data.StateService</a></li>
-            <li><a href="../classes/grid.Grid.html">grid.Grid</a></li>
-            <li><a href="../classes/grid.HexGrid.html">grid.HexGrid</a></li>
-            <li><a href="../classes/grid.RectGrid.html">grid.RectGrid</a></li>
-            <li><a href="../classes/grid.TriangleGrid.html">grid.TriangleGrid</a></li>
-            <li><a href="../classes/Hammer.html">Hammer</a></li>
-            <li><a href="../classes/net.AbstractIO.html">net.AbstractIO</a></li>
-            <li><a href="../classes/net.CachedIO.html">net.CachedIO</a></li>
-            <li><a href="../classes/net.InMemoryIO.html">net.InMemoryIO</a></li>
-            <li><a href="../classes/net.LocalStorageIO.html">net.LocalStorageIO</a></li>
-            <li><a href="../classes/net.RpcService.html">net.RpcService</a></li>
-            <li><a href="../classes/net.SessionService.html">net.SessionService</a></li>
-            <li><a href="../classes/pb.net.Sync.html">pb.net.Sync</a></li>
-            <li><a href="../classes/PbElement.html">PbElement</a></li>
-            <li><a href="../classes/Protoboard.html">Protoboard</a></li>
-            <li><a href="../classes/Protoboard.Runner.html">Protoboard.Runner</a></li>
-            <li><a href="../classes/region.Bag.html">region.Bag</a></li>
-            <li><a href="../classes/region.CubeTower.html">region.CubeTower</a></li>
-            <li><a href="../classes/region.Deck.html">region.Deck</a></li>
-            <li><a href="../classes/region.Hand.html">region.Hand</a></li>
-            <li><a href="../classes/region.Rect.html">region.Rect</a></li>
-            <li><a href="../classes/region.Region.html">region.Region</a></li>
-            <li><a href="../classes/service.Acl.html">service.Acl</a></li>
-            <li><a href="../classes/trigger.Click.html">trigger.Click</a></li>
-            <li><a href="../classes/trigger.DoubleClick.html">trigger.DoubleClick</a></li>
-            <li><a href="../classes/trigger.Key.html">trigger.Key</a></li>
-            <li><a href="../classes/trigger.Key.Service.html">trigger.Key.Service</a></li>
-            <li><a href="../classes/trigger.Trigger.html">trigger.Trigger</a></li>
-            <li><a href="../classes/trigger.Triggers.html">trigger.Triggers</a></li>
-            <li><a href="../classes/ui.Generate.html">ui.Generate</a></li>
-            <li><a href="../classes/ui.MoveService.html">ui.MoveService</a></li>
-            <li><a href="../classes/ui.Preview.html">ui.Preview</a></li>
-            <li><a href="../classes/ui.Previewer.html">ui.Previewer</a></li>
-            <li><a href="../classes/ui.PreviewService.html">ui.PreviewService</a></li>
-            <li><a href="../classes/ui.RegistryService.html">ui.RegistryService</a></li>
-            <li><a href="../classes/ui.Shape.html">ui.Shape</a></li>
-            <li><a href="../classes/ui.TemplateService.html">ui.TemplateService</a></li>
-            <li><a href="../classes/Utils.html">Utils</a></li>
-        </ul>
-    </div>
-    <div class="yui3-u-1-2">
-    </div>
-</div>
-<br><br>
-<span class="foundat">Module description found: <a href="../../files/src_utils.html.html#l9"><code>src&#x2F;utils.html:9</code></a></span>
+<pre class="code prettyprint linenums">
+&lt;base href=&quot;..&quot;&gt;
+
+&lt;link rel=&quot;import&quot; href=&quot;net/utils.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;third_party/di.html&quot;&gt;
+&lt;link rel=&quot;import&quot; href=&quot;third_party/jquery.html&quot;&gt;
+
+&lt;script&gt;
+DIJS.bind(&#x27;pb.net.RpcService.__ctor__&#x27;, require =&gt; {
+
+  const $ = require(&#x27;pb.JQuery&#x27;);
+  const normalize = require(&#x27;pb.net.Utils&#x27;).normalize;
+
+  const __get__ = Symbol(&#x27;get&#x27;);
+  const __io__ = Symbol();
+  const __onUpdate__ = Symbol();
+  const __remove__ = Symbol(&#x27;remove&#x27;);
+  const __set__ = Symbol(&#x27;set&#x27;);
+  const __triggerUpdates__ = Symbol(&#x27;triggerUpdates&#x27;);
+  const __updateAncestorIndexes__ = Symbol(&#x27;updateAncestorIndexes&#x27;);
+
+  /**
+   * Wrapper class for net.IO.
+   *
+   * @class net.RpcService
+   * @since 3.1.0
+   */
+  class Rpc {
+    /**
+     * @constructor
+     * @class net.RpcService
+     * @param {net.IO} io Implementation of {{#crossLink &quot;net.AbstractIO&quot;}}{{/crossLink}}.
+     */
+    constructor(io) {
+      this[__io__] = io;
+
+      io.listen(this[__onUpdate__].bind(this));
+    }
+
+    /**
+     * Retrieves the value in the given path, constructing an object if necessary.
+     *
+     * @method __get__
+     * @param {string} path The path whose value should be returned.
+     * @return {Promise} [description]
+     */
+    [__get__](path) {
+      return this[__io__].get(path)
+          .then(data =&gt; {
+            if (data &amp;&amp; data.$index) {
+              let promises = [];
+              for (let key of data.keys) {
+                promises.push(this[__get__](normalize(path, key))
+                  .then((key, value) =&gt; {
+                    return [key, value];
+                  }.bind(null, key)));
+              }
+              return Promise.all(promises)
+                  .then(pairs =&gt; {
+                    let object = {};
+                    for (let pair of pairs) {
+                      let [key, value] = pair;
+                      object[key] = value;
+                    }
+                    return object;
+                  });
+            } else {
+              return Promise.resolve(data);
+            }
+          });
+    }
+
+    /**
+     * Handler called when there is an update from the server.
+     *
+     * @method __onUpdate__
+     * @param {string} path Path of resource that is updated.
+     * @param {Any} newValue The new updated value.
+     * @private
+     */
+    [__onUpdate__](path, newValue) {
+      let normalizedPath = normalize(path);
+      this[__triggerUpdates__](normalizedPath);
+    }
+
+    /**
+     * Removes the entry in the given path, and update the ancestor indexes.
+     *
+     * @method __remove__
+     * @param {string} path Path whose entry should be deleted.
+     * @return {promise} Promise that will be resolved when the removal is done.
+     */
+    [__remove__](path) {
+      let parts = path.split(&#x27;/&#x27;);
+      let id = parts.pop();
+
+      let promises = [this[__io__].set(path, null)];
+      if (parts.length &gt; 1) {
+        let parentPath = parts.join(&#x27;/&#x27;);
+        promises.push(this[__io__].get(parentPath)
+            .then(value =&gt; {
+              if (value &amp;&amp; value.$index &amp;&amp; value.keys.indexOf(id) &gt;= 0) {
+                value.keys.splice(value.keys.indexOf(id), 1);
+              }
+
+              if (value.keys.length === 0) {
+                return this[__remove__](parentPath);
+              } else {
+                return this[__io__].set(parentPath, value);
+              }
+            }));
+      }
+
+      return Promise.all(promises);
+    }
+
+    /**
+     * Sets the given data to the given path.
+     *
+     * @method __set__
+     * @param {string} path Path to store the data in.
+     * @param {Any} data Data to be stored. This should be a primitive, Object, or Array.
+     * @return {Promise} Promise that will be resolved when the set operation is completed.
+     * @private
+     */
+    [__set__](path, data) {
+      let promises = [];
+      if (data instanceof Object &amp;&amp; !(data instanceof Array)) {
+        promises.push(this[__io__].set(
+            path,
+            {
+              $index: true,
+              keys: Object.keys(data)
+            }));
+        for (let key in data) {
+          promises.push(this[__set__](normalize(path, key), data[key]));
+        }
+      } else {
+        promises.push(this[__io__].set(path, data));
+      }
+      return Promise.all(promises);
+    }
+
+    /**
+     * Triggers updates on the given path, and all the ancestor paths.
+     *
+     * @method __triggerUpdates__
+     * @param {string} path The path to trigger updates on.
+     * @private
+     */
+    [__triggerUpdates__](path) {
+      let parts = path.split(&#x27;/&#x27;);
+      while (parts.length &gt; 1) {
+        let triggerPath = parts.join(&#x27;/&#x27;);
+        if (triggerPath.length &gt; 0) {
+          $(this).trigger(parts.join(&#x27;/&#x27;));
+        }
+        parts.pop();
+      }
+    }
+
+
+    /**
+     * Updates the ancestors in the given path to contain indexes.
+     *
+     * @method __updateAncestorIndexes__
+     * @param {string} path Ancestor path to update.
+     * @return {Promise} Promise that will be resolved when the update operation is completed.
+     * @private
+     */
+    [__updateAncestorIndexes__](path) {
+      let ancestorPromises = [];
+      let parts = path.split(&#x27;/&#x27;);
+      let ancestorPath = normalize(parts.splice(0, 1)[0]);
+
+      for (let part of parts) {
+        ancestorPromises.push(this[__io__].get(ancestorPath)
+            .then((path, part, ancestor) =&gt; {
+              if (!ancestor || !ancestor.$index) {
+                ancestor = { $index: true, keys: [] };
+              }
+
+              if (ancestor.keys.indexOf(part) &lt; 0) {
+                ancestor.keys.push(part);
+              }
+
+              // Don&#x27;t use __set__ since we do not want to unravel the array.
+              return this[__io__].set(path, ancestor);
+            }.bind(null, ancestorPath, part)));
+        ancestorPath = normalize(ancestorPath, part);
+      }
+
+      return Promise.all(ancestorPromises);
+    }
+
+    /**
+     * Adds a new object on the given path.
+     *
+     * @method add
+     * @param {string} path Path to add a new object to.
+     * @return {Promise} Promise that will be resolved with the new object&#x27;s ID when addition is
+     *    successful.
+     */
+    add(path) {
+      let normalizedPath = normalize(path);
+      return this[__updateAncestorIndexes__](path)
+          .then(() =&gt; this[__io__].get(normalizedPath))
+          .then(index =&gt; {
+            if (!index || !index.$index) {
+              index = {
+                $index: true,
+                keys: []
+              };
+            }
+
+            // Find the first non existent key
+            let newId = 0;
+            while (index.keys.indexOf(&#x60;${newId}&#x60;) &gt;= 0) {
+              newId++;
+            }
+
+            return this.set(normalize(path, &#x60;${newId}&#x60;), {})
+                .then(() =&gt; &#x60;${newId}&#x60;);
+          });
+    }
+
+    /**
+     * Removes the object in the given path.
+     *
+     * @method remove
+     * @param {string} path Path of the object to be removed.
+     * @return {Promise} Promise that will be resolved when the object has been deleted.
+     */
+    remove(path) {
+      return this[__remove__](normalize(path));
+    }
+
+    /**
+     * Retrieves the value corresponding to the given path. If the path points to an index, this
+     * will compile all the paths into an object.
+     *
+     * @method get
+     * @param {string} path The path whose value should be retrieved.
+     * @return {Promise} Promise that will be resolved with the value corresponding to the given
+     *    path.
+     */
+    get(path) {
+      return this[__get__](normalize(path));
+    }
+
+    /**
+     * Sets the value of the given path. If the data is a non array object, this will create
+     * an index object at the given path. This method will then store the object&#x27;s keys in
+     * individual entries. For example, suppose we store the following object in &#x27;/a&#x27;:
+     *
+     * &#x60;&#x60;&#x60;json
+     * {
+     *   b: 1,
+     *   c: {
+     *     d: 2
+     *   }
+     * }
+     * &#x60;&#x60;&#x60;
+     *
+     * This will result in the following mapping:
+     *
+     * &#x60;&#x60;&#x60;
+     * /a       -&gt; (index)
+     * /a/b     -&gt; 1
+     * /a/b/c   -&gt; (index)
+     * /a/b/c/d -&gt; 2
+     * &#x60;&#x60;&#x60;
+     *
+     * @method set
+     * @param {string} path The path to set the value to.
+     * @param {Any} data Data to set the path&#x27;s value to. This should be a primitive, Object, or
+     *    Array.
+     * @return {Promise} Promise that will be resolved when setting the value is successful.
+     */
+    set(path, data) {
+      let normalizedPath = normalize(path);
+      return this[__updateAncestorIndexes__](normalizedPath)
+          .then(() =&gt; {
+            return this[__set__](normalizedPath, data);
+          });
+    }
+  }
+
+  return Rpc;
+})
+.bind(&#x27;pb.net.RpcService&#x27;, require =&gt; {
+  const IO = require(&#x27;pb.net.IO&#x27;);
+  const Rpc = require(&#x27;pb.net.RpcService.__ctor__&#x27;);
+  return new Rpc(IO);
+});
+&lt;/script&gt;
+
+</pre>
+
 </section>
   </section>
 </body>
